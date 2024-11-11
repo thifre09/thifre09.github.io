@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu site incrivel</title>
+    <link rel="stylesheet" href="css.css">
+    <link rel="stylesheet" href="python.css">
+</head>
+
+<body>
+    <h1 id="title"><a href="index.html">Meu site incrivel</a></h1>
+    <nav>
+        <h6><a href="#title">Python</a></h6>
+    </nav>
+
+    <br>
+    <br>
+
+
+    <details>
+        <summary>Sumario</summary>
+        <div class="sumario">
+            <ul>
+                <a href="#conceitos-basicos">Conceitos básicos</a>
+                <ul>
+                    <li><a href="#comentarios">Comentarios</a></li>
+                    <li><a href="#função-print">Função print</a></li>
+                    <li><a href="#sequênciadeescape">Sequências de escape</a></li>
+                </ul>
+
+                <a href="#variaveis">Variaveis</a>
+                <ul>
+                    <li><a href="#declarar-variaveis">Declarar variaveis</a></li>
+                    <li><a href="#tipos-primitivos">Tipos primitivos</a></li>
+                    <li><a href="#outros-tipos-de-valores">Outros tipos de valores</a></li>
+                    <li><a href="#operadores-relacionais">Operadores relacionais</a></li>
+                </ul>
+
+                <a href="#listupdic">Listas, Tuplas e dicionários</a>
+                <ul>
+                    <li><a href="#listas">Listas</a></li>
+                    <li><a href="#alterando-listas">Adicionando itens em uma listas</a></li>
+                    <li><a href="#tuplas">Tuplas</a></li>
+                    <li><a href="#dicionarios">Dicionários</a></li>
+                </ul>
+
+                <a href="#if-elif-else">if, elif e else</a>
+                <ul>
+                    <li><a href="#if">if</a></li>
+                    <li><a href="#elif">elif</a></li>
+                    <li><a href="#else">else</a></li>
+                    <li><a href="#if-e-elif">if e elif</a></li>
+                    <li><a href="#mais-exemplos">Mais exemplos</a></li>
+                </ul>
+
+                <a href="#Outras-funções-e-operadores-básicos">Outras funções e operadores básicos</a>
+                <ul>
+                    <li><a href="#and-or-e-not">and, or e not</a></li>
+                    <li><a href="#Parenteses-e-operações">Parênteses e operações</a></li>
+                    <li><a href="#len-e-range">len() e range()</a></li>
+                    <li><a href="#funções-de-conversão">Funções de conversão</a></li>
+                    <li><a href="#input">input()</a></li>
+                </ul>
+
+                <a href="#loops">Loops</a>
+                <ul>
+                    <li><a href="#for">for</a></li>
+                    <li><a href="#while">while</a></li>
+                    <li><a href="#break,-continue,-pass">break, continue, pass</a></li>
+                    <li><a href="#Exemplocomplexo">Exemplo complexo</a></li>
+                </ul>
+
+                <a href="#funções">Funções</a>
+                <ul>
+                    <li><a href="#Declarandoumafunção">Declarando uma função</a></li>
+                    <li><a href="#returneNone">return e None</a></li>
+                    <li><a href="#Global">Global</a></li>
+                    <li><a href="#Exemplo">Exemplo</a></li>
+                </ul>
+            </ul>
+        </div>
+    </details>
+
+
+    <h2 id="conceitos-basicos">Conceitos básicos</h2>
+    <div class="topico">
+        <div class="codigo">
+
+            <h3 id="comentarios">Comentários</h3>
+
+            <pre class="caixa">
+#comentário
+
+#comentário mais top
+
+#comentário 1
+#comentário 2
+
+#====================#
+#comentário chamativo#
+#====================#       
+            </pre>
+
+            <p>OBS: Os comentário serão utilizados para esclarecer um código.</p>
+        </div>
+
+        <div class="explicação">
+
+            <p>Para adicionar um comentário em python basta usar um "#" no começo da linha.</p>
+
+            <p>Não é necessário ter outro "#" no final da linha.</p>
+
+            <p>Comentários só tem uma linha, caso você queira um comentário maior, use dois "#", um para 
+                cada linha.
+            </p>
+
+            <p>Se você quiser fazer um comentário que se destaque dos outros, você pode fazer algo similar ao
+                ultimo exemplo.
+            </p>
+        </div>
+
+        <div class="codigo">
+
+            <h3 id="função-print">Função print</h3>
+
+            <pre class="caixa">
+print("ola")
+
+print(1) 
+
+print("eu tenho",15,"anos.") 
+            </pre>
+        </div>
+
+        <div class="explicação">
+            <p>print é uma função(será explicado mais adiante), para usa-la, basta digitar "print" seguido 
+                de parenteses, dentro do parenteses coloque o que você quer que seja imprimido.
+            </p>
+
+            <p>Se você quiser imprimir um texto, coloque ele entre aspas, se você quiser imprimir um número
+                ou um bool(vou explciar em breve), não coloque as aspas.
+            </p>
+
+            <p>Se você quiser misturar os dois casos, separe os diferente tipos de valores com virgulas.</p>
+
+            <p>No console, os exemplos aparecerão da seguinte forma respectivamente: ola, 1, eu tenho 15 
+                anos.
+            </p>
+        </div>
+
+        <div class="codigo">
+            <h3 id="sequênciadeescape">Sequências de escape</h3>
+
+            <pre class="caixa">
+print("Olá \nMundo!")
+print("Nome\tIdade")
+print("Este é um exemplo de barra invertida: \\")
+print('Ele disse: \"Olá!\"')
+print("\u2764")  # Coração
+
+print("""
+        olá 
+        pessoas
+        legais       
+""")
+            </pre>
+        </div>
+
+        <div class="explicação">
+            <p>Uma sequência de escape é uma combinação de caracteres que permite inserir caracteres
+                especiais ou realizar ações específicas em uma string de texto. Existem diversos tipos de
+                sequências de escape, vamos ver algumas delas.
+            </p>
+
+            <p>\n é possivelmente a mais comum, sua função é realizar uma quebra de linha(pular para a
+                proxima linha). \t Insere um caractere de tabulação(tab). \\ é usado para inserir uma
+                barra invertida literal. \" serve para inserir aspas duplas(há também \'). \uxxxx é usada
+                para representar caracteres Unicode, nesse caso, o xxxx é trocado por 2764, que representam
+                um coração. É importante mencionar que se você colocar um espaço depois da sequência de
+                escape, ela será interpretada pelo python.
+            </p>
+
+            <p>Você pode escrever em multiplas linhas se usar 3 aspas(simples ou duplas), dessa foma não
+                é necessário usar o \n para quebrar a linha.
+            </p>
+        </div>
+    </div>
+
+    <h2 id="variaveis">Variáveis</h2>
+
+    <div class="topico">
+
+        <div class="codigo">
+
+            <h3 id="declarar-variaveis">Declarar variaveis</h3>
+
+            <pre class="caixa">
+var = 1
+var2 = "batata"
+eu_odeio_jurandy = True
+professores_legais = ["Moisés","Cadu","Renan","Fernanda","Lavaniery"]
+
+num = 1
+num = 6
+
+x = 3
+y = 4
+x = y
+
+p1,p2,p3 = 1,2,3
+b1,b2,b3 = 10
+            </pre>
+        </div>
+
+        <div class="explicação">
+            <p>Para criar uma variavel e atribuir um valor a ela, digite o nome que você quer(não pode começar
+                com números ou caracteres especiais com exceção do _ ), digite =, e o valor que você quer 
+                dar para essa variavel.
+            </p>
+
+            <p>Você pode reatribuir um valor a uma varivael, como mostra o exemplo do "num", originalmente 
+                seu valor era 1, esse valor foi reatribuido e passou a ser 6.
+            </p>
+
+            <p>Você também pode atribuir o valor de uma variavel a outra variavel, no exemplo, x=3 e y=4, 
+                e depois o valor de y foi atribuido a x, resultado em x=4.
+            </p>
+
+            <p>Você também pode atribuir o valor a mais de uma variavel por vez, basta colocar uma virgula 
+                para cada elemento, então no exemplo, p1=1,p2=2,p3=3 e b1, b2 e b3 valem 10.
+            </p>
+        </div>
+
+        <div class="codigo">
+
+            <h3 id="tipos-primitivos">Tipos primitivos</h3>
+
+            <pre class="caixa">
+i = 1
+f = 1.0
+s = "Ola"
+b = True
+            </pre>
+
+            <p>OBS: 1 é diferente de 1.0.</p>
+            <p>OBS2: os tipos primitivos serão referidos como int, float, str e bool, respectivamente.</p>
+        </div>
+
+        <div class="explicação">
+            <p>Em python, existem 4 tipos primitivos, inteiros, float, string e booleano.</p>
+
+            <p>Os inteiros são todos os números que fazem parte do conjunto dos inteiros, e os floats são os
+                números que fazem parte do conjunto dos racionais, para escrever um float, escreva ele com um
+                ponto(não pode ser virgula), então no exemplo, "i" é um inteiro e "f" é um float.
+            </p>
+
+            <p>Os strings são basicamente texto, e para escreve-los é necessário coloca-los entre aspas.</p>
+
+            <p>E os bool são só 2, True e False, para escreve-los, não use aspas e comece com letra maiuscula,
+                além disso é possivel escreve-los usando operadores relacionais(sera explicado em breve).
+            </p>
+
+        </div>
+
+        <div class="codigo">
+
+            <h3 id="outros-tipos-de-valores">Outros tipos de valores</h3>
+
+            <pre class="caixa">
+lista = [1,2,3,4]
+tupla = (True, False, False, True)
+dicionario = {pernas: 2, olhos: 2, cabeça: 1, dedos: 20}
+            </pre>
+
+        </div>
+
+        <div class="explicação">
+            <p>Os itens mostrados acima são estruturas de dados composta, ou seja, armazenam mais de um
+                elemento.
+            </p>
+
+            <p>O primeiro é uma lista, o segundo uma tupla, e o terceiro um dicionário, para criar uma lista,
+                usa-se [], para uma tupla (), e para um dicionário {}, todos serão explicados mais detalhadamente
+                depois.
+            </p>
+
+            <p>Para separar os elementos, basta usar uma virgula.</p>
+        </div>
+
+        <div class="codigo">
+
+            <h3 id="operadores-relacionais">Operadores relacionais</h3>
+
+            <pre class="caixa">
+x = 1
+y = 2
+z = 5
+ex1 = 1 == 1 #True
+ex2 = x == 1 #True
+ex3 = y != 5 #True
+ex4 = 4 < z #True
+ex5 = x > z #False
+ex6 = x <= 0 #False
+ex7 = y >= 2 #True
+            </pre>
+        </div>
+
+        <div class="explicação">
+            <p>Para comparar dois valores, usa-se o operadore relacionais(jurandy ama isso), eles vão retornar
+                um bool True ou false dependendo do resultado, se a condição for versadeira como no ex2, 
+                retorna True, e ser for falso, como no ex5, retorna False.
+            </p>
+
+            <p>O primeiro e segundo exemplos mostra o comparador igual(==), que diz se dois valores são 
+                iguais, o terceiro exemplo mostra o diferente de(!=), que é o oposto do igual.
+            </p>
+
+            <p>O quarto e quinto exemplos mostram o menor que(<) e maior que(>), que indica se o valor é 
+                menor ou maior que o outro, e o sexto e setimo exemplos mostram o menor ou igual que(<=) 
+                e maior ou igual que(>=), que indica se um valor é maior, menor ou igual a outro.
+            </p>
+        </div>
+    </div>
+
+    <h2 id="listupdic">Listas, tuplas e dicionários</h2>
+
+    <div class="topico">
+
+        <div class="codigo">
+            <h3 id="listas">Listas</h3>
+            <pre class="caixa">
+lista = [1,2,3,4]
+print(lista) #aparecerá 1,2,3,4 no console
+print(lista[0]) #aparecerá 1 no console
+print(lista[-1]) #aparecerá 4 no console
+print(lista[-3]) #aparecerá 2 no console
+print(lista[6]) #aparecerá um erro
+print(lista[-10]) #aparecerá um erro
+print(lista[0:2]) #aparecerá 1,2
+print(lista[2:4]) #aparecerá 3,4
+            </pre>
+
+            <p>OBS: O básico de listas já foi explicado anteriormente.</p>
+        </div>
+
+        <div class="explicação">
+            <p>Para acessar uma lista, basta digitar seu nome, para acessar um item especifico da lista, 
+                você digita o nome da lista, um [], e o númeor do item da lista(os itens começam no 0).
+            </p>
+
+            <p>Então se você quiser acessar o primeiro item de uma lista, coloque 0 nos [], o segundo item 
+                de lista, coloque 1, e assim sucessivamente.
+            </p>
+
+            <p>Outra forma de acessar um item é usando um número negativo, então se você usar -1, será acessado
+                o ultimo item da lista, -2, o penultimo item da lista, -3, antipenultimo, e assim por diante.
+            </p>
+
+            <p>Se você tentar acessar um item que não existe, ocorrerá um erro.</p>
+
+            <p>Outra forma de chamar um item, é usando ":",da seguite forma: lista[começo:fim], no local 
+                indicado como "começo", coloque o indice do primeiro elemento que você quer chamar, e no 
+                local indicado "fim", coloque o elemento que você quer que pare de chamar, então se você 
+                colocar [0:3], os itens, 0,1 e 2 serão chamados.
+            </p>
+        </div>
+
+        <div class="codigo">
+            <h3 id="alterando-listas">Alterando listas</h3>
+
+            <pre class="caixa">
+lista = [1,2,3,4]
+lista.append(5)
+lista.insert(0,0)
+print(lista) #aparecerá 0,1,2,3,4,5
+
+numeros = [1,2,3,4,5,6,7,8,9,10]
+del numeros[3]
+del numeros[-1]
+print(numeros) #aparecerá 1,2,3,5,6,7,8,9
+del numeros
+            </pre>
+        </div>
+
+        <div class="explicação">
+            <p>As duas principais formas de adicionar itens em uma lista, são pelos métodos append, e insert,
+                para usar um método, coloque um ".", o nome do método, e um ().
+            </p>
+
+            <p>O método append simplismente coloca o que estiver dentro do () no final da lista, então no 
+                código exemplo, o "5" será colocado no final da lista.
+            </p>
+
+            <p>Já o método insert, permite que você escolha onde colocar o item, usando a seguinte lógica:
+                objeto.insert(localização, valor), no exemplo, o valor "0" será colocado no local 0(primeiro
+                item da lista).
+            </p>
+
+            <p>Para deletar um item de uma lista, ou uma lista toda, você usa a instrução del, como mostra 
+                o exemplo, para deletar um item especifico, basta dizer qual item você quer deletar, e 
+                para deletar a lista toda, basta colocar o nome da lista.
+            </p>
+        </div>
+
+        <div class="codigo">
+            <h3 id="tuplas">Tuplas</h3>
+
+            <pre class="caixa">
+tupla = (0,1,2,3,4,5)
+tupla.append #gerará um erro
+del tupla 
+            </pre>
+        </div>
+
+        <div class="explicação">
+            <p>Uma tupla é como uma lista, mas ela é imutavel, ou seja, não é possivel adicionar ou remover
+                itens, mas é possivivel deletar uma tupla inteira.
+            </p>
+
+            <p>Para chamar um item de uma tupla, é da mesma forma que em uma lista.</p>
+        </div>
+
+        <div class="codigo">
+            <h3 id="dicionarios">Dicionários</h3>
+
+            <pre class="caixa">
+dic = {
+    "Portugues": True, "Matematica": True, 
+    "Química": True, "I_programação": False, 
+    "Filosofia": False
+}
+dic["ETD"] = False
+dic.update({"Autoria_web": True, "E_fisica": True})
+del dic["Matematica"]
+print(dic["Portugues"]) #saída: True
+del dic #deleta todo o dicionário
+
+dic2 = {"a": 1, "b": 2, "c": 3}
+print(dic2) #saída:{"a": 1, "b": 2, "c": 3}
+
+            </pre>
+        </div>
+
+        <div class="explicação">
+            <p>Um dicionário é uma estrutura de dados que armazena pares de chave-valor, ou seja, tem um 
+                valor associado a uma chave. Ao chamar um item de um dicionário, use a chave, e a saída 
+                será o valor associado.
+            </p>
+
+            <p>Para adicionar um valor e uma chave a um dicionário, digite o nome do dicionário, depois digite
+                [], e dentro deles digite o nome da chave, e dpois, digite igual ao valor da chave. Outra forma
+                de adicionar itens em um dicionário é usando o método update, dentro do [], coloque o nome 
+                da chave, e seu valor.
+            </p>
+
+            <p>Para deletar um item, você pode usar o del, e o a chave associada a um valor, isso deletará, 
+                a chave e o valor associado.
+            </p>
+        </div>
+    </div>
+
+    <h2 id="if-elif-else">if, elif e else</h2>
+
+    <div class="topico">
+
+        <div class="codigo">
+            <h3 id="if">if</h3>
+
+            <pre class="caixa">
+x = 1
+y = 2
+if x == 1:
+    print("x vale 1")
+if y > 10:
+    print("y é maior que 10")
+            </pre>
+        </div>
+
+        <div class="explicação">
+            <p>Em python, para tomar decisões, usamos estruturas de controle de fluxo, if-elif-else. Veremos
+                cada um separadamente, então vamos começar com if.
+            </p>
+
+            <p>O comando "if" verifica se uma condição é verdadeira, se ela for, o código dentro do "if" 
+                é executado. No código ao lado, temos 2 exemplos, no primeiro, se "x" for igual a 1, a 
+                frase "x vale 1" será impressa, como a variavel x foi declarada com o valor 1, então a 
+                condição é verdadeira, e o código dentro do "if" será executado.
+            </p>
+
+            <p>No segundo exemplo, o código está verificando se "y" é maior que 10, se sim, a frase "y é 
+                maior que 10" será impressa, como "y" vale 2, a condição é falsa, logo, nada acontecerá.
+            </p>
+        </div>
+
+        <div class="codigo">
+            <h3 id="elif">elif</h3>
+
+            <pre class="caixa">
+x = 2
+y = 3
+if x == y:
+    print("ola")
+elif x < y:
+    print("Jurandy False")
+elif x != y:
+    print("batatas são incriveis")
+            </pre>
+        </div>
+
+        <div class="explicação">
+            <p>Elif serve para verificar se uma informação é verdadeira caso as anteriores sejam falsas, no
+                exemplo, se "x" for igual a "y", será impresso "ola", se não, se o "x" for menor que o y,
+                será impresso "Jurandy False", se não, se "x" for diferente de "y", será impresso "batatas
+                são incriveis".
+            </p>
+
+            <p>Como "x" vale 2 e "y" vale 3, a primeira condição é falsa, então o codigo irá testar a segunda
+                condição(x < y), como 2 é menor que 3, a condição é verdadeira, e o codigo será executado, 
+                como uma das condições já se mostrou verdadeira, a terceira condição(x !=y) não será testada.     
+            </p>
+        </div>
+
+        <div class="codigo">
+            <h3 id="else">else</h3>
+
+            <pre class="caixa">
+x = 1
+y = 3
+z = 9
+if y > z:
+    print("aaaaaa")
+elif x < 0:
+    print("bbbbbb")
+else:
+    print("cccccc")
+            </pre>
+        </div>
+
+        <div class="explicação">
+            <p>Else serve para executar um codigo caso todas as outras condições sejam falsas, o codigo vai
+                verificar o if, se ele for falso, vai verificar o(s) elifs, se todos forem falsos, será executado
+                o else.
+            </p>
+
+            <p>No exemplo, primeiro verifica se "y" é maior que "z", como é falso, será verificado se "x" é
+                menor que "0", como é falso e é o único elif, será executado o else, ou seja, aparecerá "cccccc"
+                no console.
+            </p>
+        </div>
+
+        <div class="codigo">
+            <h3 id="if-e-elif">if e elif</h3>
+
+            <pre class="caixa">
+x = 1
+y = 2
+if x == 1:
+    print("ola")
+elif x > 1:
+    print("ola2")
+if y == 2:
+    print("ola3")
+#Aparecerá "ola" e "ola3" no console
+            </pre>
+        </div>
+
+        <div class="explicação">
+            <p>Outra forma de usar os condicionais é se você quer que duas ou mais coisas aconteçam, por exemplo,
+                se você quer verificar se duas coisas são verdadeiras, você pode usar 2 if, mas porque não usar
+                o elif? Porque o elif só irá testar o código se a condição anterior for falsa.
+            </p>
+
+            <p>No código de exemplo, estamos verificando se x é igual a 1, que é verdade, logo, o código do elif
+                não vai acontecer, depois verificamos se y é igual a 2, que é verdade. Se em vez do segundo if,
+                tivessemos usado um elif, o código teria parado no "x == 1", e como consequência, apenas "ola"
+                teria sido impresso.
+            </p>
+        </div>
+
+        <div class="codigo">
+            <h3 id="mais-exemplos">Mais exemplos</h3>
+
+            <pre class="caixa">
+var1 = "ola"
+var2 = 7
+var3 = [1,3,5,7,9]
+var4 = True
+if var2 == var3[3]:
+    print("Teste 1 é verdade")
+else:
+    print("Teste 1 não é verdade")
+if var1 != "ola":
+    print("aaaaa")
+elif var2 > 5:
+    print("bbbbb")
+elif var4 == False:
+    print("nada")
+else:
+    print("nada é verdade")
+            </pre>
+        </div>
+
+        <div class="explicação">
+            <p>Nesse exemplo temos 4 variaveis, uma str("ola"), um int(7), uma lista([1,3,5,7,9]), e um bool(True).
+                Na primeira condição, verificamos se a var2 é igual ao 4° item da var3(lembre-se que o primeiro
+                item de uma lista tem indice 0), como var2 é 7, e o quarto item de var3 é 7, a condição é
+                verdadeira, logo, "Teste 1 é verdade" será impresso no console.
+            </p>
+
+            <p>Caso essa condição fosse falsa, "Teste 1 não é verdade" seria impresso no console, visto que ele
+                está dentro de um bloco else, que é executado caso nenhuma das condições sejam verdades.
+            </p>
+
+            <p>Na segunda condição, se var1 for diferente de "ola", a condição será verdade, como var1 é igual a
+                "ola", é falso. Depois é verificado se var2 é maior que 5, como var2 é igual a 7, é verdade, logo,
+                o código será executado, e "bbbbb" será impresso.
+            </p>
+
+            <p>Caso a condição fosse falsa, seria verificado se var4 é igual a False, o que não é verdade, visto
+                que var4 é igual a True. E por último, se nenhuma condição fosse verdadeira, o código print("nada
+                é verdade") seria executado.
+            </p>
+        </div>
+    </div>
+
+    <h2 id="Outras-funções-e-operadores-básicos">Outras funções e operadores básicos</h2>
+
+    <div class="topico">
+        <div class="codigo">
+            <h3 id="and-or-e-not">and, or e not </h3>
+
+            <pre class="caixa">
+if 1 == 1 and 2 > 0:
+    print("Verdade1")
+if not 1 > 4:
+    print("Verdade2")
+if 5 > 10 or 1 < 10:
+    print("Verdade3")
+            </pre>
+
+            <p>OBS: Pode haver mais de 2 condições, quantas você desejar.</p>
+        </div>
+
+        <div class="explicação">
+            <p>Outros operadores lógicos que podemos usar são o and, not e or. O "and" retornará True se as duas
+                condições forem verdadeiras. No exemplo, é verificado se 1 é igual a 1, e se 2 é maior que 0,
+                como as duas condições são verdadeiras, o resultado é True.
+            </p>
+
+            <p>O "or" funciona de maneira similar, mas em vez de retornar True se ambas as condições forem
+                verdadeiras, ele retorna True se pelo menos uma condição for verdade. E o "not" simplismente
+                inverte o resultado da operação, se for True, vira False, e se for False, vira True.
+            </p>
+
+            <p>Nos exemplos dados, os 3 "if" são verdadeiros.</p>
+        </div>
+
+        <div class="codigo">
+            <h3 id="Parenteses-e-operações">Parênteses e operações</h3>
+
+            <pre class="caixa">
+x = 1
+x = x + 1 #x vale 2
+x = (3+2)*2 #x vale 10
+y = 2**4 #y vale 16
+y = y // 3 #y vale 5
+z = 7 * (3-1) #z vale 14
+z = z % 7 #z vale 0
+print((x + z) / y) #aparecerá 2.0 no console
+            </pre>
+
+            <p>OBS: você pode fazer a raiz quadrada da seguinte forma: x**(1/2), onde x é o número dentro da
+                raiz.
+            </p>
+
+            <p>OBS2: Se você queiser que um número seja igual a ele mesmo mais outro número, é possivel
+                simplificar com +=. Isso também é possivel com todos os outros operadores.
+            </p>
+        </div>
+
+        <div class="explicação">
+            <p>Uma parte muito importante da programação, são as operações comuns, com elas, você pode atribuir
+                valores a variaveis ou fazer contas. Também há os parênteses, que adicionam prioridade aquela
+                conta.
+            </p>
+
+            <p>Os operadores são +(adição), -(subtração), *(multiplicação), /(divisão), //(divisão inteira),
+                %(resto), e **(potenciação).
+            </p>
+
+            <p>A divisão(/) é diferente da divisão inteira(//), a primeira retorna um float, enquanto o segundo
+                retorna um int. o resto(%) retorna o resto da divisão de um número por outro.
+            </p>
+
+            <p>Todas essas operações seguem a mesmas prioridade que na matemática.</p>
+        </div>
+
+        <div class="codigo">
+            <h3 id="len-e-range">len() e range()</h3>
+
+            <pre class="caixa">
+lista = [1,2,3,4,5]
+tamanho = len(lista) #vale 5
+len_palavra = len("ola")
+
+print(list(range(5)))
+print(list(range(1,10,2))) #[1,3,5,7,9]
+            </pre>
+
+            <p>OBS: len() não funciona com int e float.</p>
+        </div>
+
+        <div class="explicação">
+            <p>len() é uma função que retorna o tamanho de um objeto, se for uma lista por exemplo, ele vai
+                reornar o número de valores que tem na lista, se for uma str vai retornar o númerod e caracteres.
+            </p>
+
+            <p>range() é outra função, ela gera uma sequência de números de forma eficiente(eficiente significa
+                conforme o nescessário). Ela recebe até 3 argumentos, da seguinte forma: range(início, fim,
+                passo). O fim é obrigatório, enquanto o início e passo não. o fim indica onde irá parar de gerar,
+                sendo o ultimo número gerado o antecessor do número indicado em fimm ou seja, se você colocar 10,
+                o ultimo número gerado será 9. O início é onde começa a gerar, e o passo é A diferença entre
+                cada número consecutivo na sequência, o valor padrão é 1.
+            </p>
+        </div>
+
+        <div class="codigo">
+            <h3 id="funções-de-conversão">Funções de conversão</h3>
+
+            <pre class="caixa">
+inteiro = int("1")
+floattt = flaot("2.0")
+string = str(23)
+lista = list("ola")
+booleano = bool("re4fsdfreg")
+tupla = tuple([1, 2, 3])
+dicionario = dict([(1, 'a'), (2, 'b')])
+binario = bin(12)
+octal = oct(343)
+hexadecimal = hex(255)
+            </pre>
+        </div>
+
+        <div class="explicação">
+            <p>Funções de conversão são usadas para converter um valor para outro.</p>
+
+            <p>A seguir está um lista de algumas funções de conversões, o nome da função, e o valor para qual
+                ela converte entre parênteses: int(inteiro), float(float), str(string), bool(booleano), list(
+                lista), tuple(tupla), dic(dicionário), bin(número em binário), oct(número em octal), hex(
+                número em hexadecimal).
+            </p>
+        </div>
+
+        <div class="codigo">
+            <h3 id="in">in</h3>
+
+            <pre class="caixa">
+frutas = ["maçã", "banana", "laranja"]
+print("banana" in frutas)  # True
+print("uva" in frutas)     # False
+
+frase = "Olá, mundo!"
+print("mundo" in frase)  # True
+print("Python" in frase) # False
+            </pre>
+        </div>
+
+        <div class="explicação">
+            <p>in é uma palavra-chave que tem a função de verificar a pertinncia de um valor em sequencias
+                ou coleções, ou se algo contém outro. in também pode ser usado em um loop for(que será
+                falado mais adiante).
+            </p>
+
+            <p>Nos exemplos, vamos verificar se o valor "banana" está contido na lista de frutas, como
+                é verdade, retorna True, e como o valor "uva" não está contido na lista de frutas, retorna
+                False. No segundo exemplo, vamos verificar se o valor "mundo" está contido na string "Olá,
+                mundo!", como é verdade, retorna True, e como o valor "Python" não está contido na string,
+                retorna False.
+            </p>
+        </div>
+
+        <div class="codigo">
+            <h3 id="input">input()</h3>
+
+            <pre class="caixa">
+exemplo1 = input()
+nome = input("Digite seu nome:")
+idade = int(input("digite a sua idade:"))
+texto = str(input("Digite qualquer coisa:"))
+print("Você se chama ", nome, ",tem", idade, "anos de idade")
+            </pre>
+        </div>
+
+        <div class="explicação">
+            <p>input é uma função muito importante, é por meio dela que o usuário consegue se comunicar
+                com o código, o input serve para que o usuario insira uma informação, e a função retorna
+                ela, então se você digitar: olaaaa, o retorno será a string "olaaaa". Nós podemos atribuir
+                esses valores a uma variavel, colocando o valor da variavel como input(). Se você quiser 
+                colocar um texto antes do usuario inserir a informção, para esclarecer por exemplo, basta 
+                colocar o texto dentro dos parênteses como uma str.
+            </p>
+
+            <p>Se você quiser que o usuario só possa inserir um tipo especifico de valor, como um int ou str,
+                você pode colcoar o input detro da função do respectivo valor. É importante observar que por
+                padrão, todo valor inserido é um str.
+            </p>
+
+            <p>No código, a variavel idade receberá um int, caso o usuario tente colocar outra coisa, ocorrerá
+                um erro. Já a variavel texto recebe um str, qualquer coisa inserida será trnaformada em um 
+                str.
+            </p>
+        </div>
+    </div>
+
+    <h2 id="loops">Loops</h2>
+
+    <div class="topico">
+        <div class="codigo">
+            <h3 id="for">for</h3>
+
+            <pre class="caixa">
+for i in range(5):
+    print(i)
+
+frutas = ["maçã", "banana", "laranja"]
+for fruta in frutas:
+    print(fruta)
+
+for i in range(1, 10, 2):
+    print(i)
+                
+            </pre>
+
+            <p>OBS: Os exeplos mostrados só mostram a função print dentro do bloco for, mas é possivel
+                usar qualquer coisa dentro, inclusive outros loops.
+            </p>
+        </div>
+
+        <div class="explicação">
+            <p>loops são estruturas que permitem repetir um código várias vezes, até que uma condição ou
+                até que todos os itens de uma sequência sejam processados. Existem 2 tipos de loops, for
+                while. Começaremos falando do for.
+            </p>
+
+            <p>for é uma estrutura de controle usada para iterar sobre uma sequência(como uma lista,
+                tupla, string, ou qualquer objeto iterável), Com o for, você pode executar um bloco de
+                código várias vezes, uma para cada item na sequência. O loop for cria uma variavel, que
+                assume o valor de cada item da sequência. Depois que o for cria a variável que assume o
+                valor de cada item da sequência, o bloco de código dentro do loop é executado para cada
+                um desses itens. A cada iteração, a variável recebe um novo valor da sequência até que
+                todos os itens tenham sido processados.
+            </p>
+
+            <p>No primeiro exemplo,o range(5) gera uma sequência de números de 0 a 4, e o loop for itera
+                sobre esses valores. No segundo, o for cria a variável fruta, que assume o valor de cada
+                item da lista frutas, o loop irá imprimir cada fruta, uma de cada vez, até que a lista
+                inteira tenha sido percorrida. E no terceiro exemplo, o range(1, 10, 2) gera números de
+                1 a 9, com incrementos de 2 (1, 3, 5, 7, 9).
+            </p>
+        </div>
+
+        <div class="codigo">
+            <h3 id="while">while</h3>
+
+            <pre class="caixa">
+while True:
+    print("Olá, mundo!")
+
+i = 0
+while i < 5:
+    print(i)
+    i += 1
+            </pre>
+        </div>
+
+        <div class="explicação">
+            <p>while e um loop que executa um bloco de código enquanto uma condição for verdadeira, isso
+                pode causar alguns problemas, como loops infinitos, mas que não são muito difícis de resolver.
+            </p>
+
+            <p>Para usar o while, basta colocar while e a condição, seguido de dois pontos. Se você colocar
+                True como condição, o loop irá executar o bloco de código infinitamente. Então no exemplo,
+                seria imprimido "Olá, mundo!" até o código ser encerrado. Se você colocar False como condição,
+                o código não será executado.
+            </p>
+
+            <p>No segundo exemplo, há uma variavel "i = 0" e um loop, que executará o código enquanto o
+                valor de i for menor que 5. O código que é executado dentro do loop faz com que seja impresso
+                o valor de i e aumente o valor de i em 1. Caso não houvesse o "i += 1", o loop seria infinito,
+                já que i seria sempre menor que 5. Então como resultado do código, será impresso 0, 1,
+                2, 3, 4.
+            </p>
+        </div>
+
+        <div class="codigo">
+            <h3 id="break,-continue,-pass">break, continue, pass</h3>
+
+            <pre class="caixa">
+i = 0
+while True:
+    i += 1
+    if i == 5:
+        continue
+    if i == 10:
+        pass
+    if i == 15:
+        break
+    print(i)
+            </pre>
+        </div>
+
+        <div class="explicação">
+            <p>Break, continue e pass são instruções que controlam o fluxo de laços (loops) e blocos de
+                código. Break serve para interromperer um loop. Continue serve para pular o loop atual e
+                ir para o proximo, ou seja, tudo depois do continue ser usado será pulado, e o loop voltará
+                para a primeira linha. E pass não faz nada, é uma instrução "vazia", usada como um espaço 
+                reservado.
+            </p>
+
+            <p>No exemplo, se a variavel "i" for igual a 5, o loop voltará para a primeira linha, fazendo
+                com que o 5 não seja imprimido. Se "i" for 10, então nada acontecerá e o código acontecerá
+                normalmente, como se não houvesse um if, já que o pass não faz nada. E por ultimo, se "i"
+                for 15, o loop será encerrado devido à instrução break. No final, o código terá como saída:
+                1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14. Todos em linhas diferentes.
+            </p>
+        </div>
+
+        <div class="codigo">
+            <h3 id="Exemplocomplexo">Exemplo complexo</h3>
+
+            <pre class="caixa">
+#Contador até o 50
+num = 0
+while True:
+    num += 1
+    #verificar se é divisivel por 10
+    if num % 10 == 0 and num != 50:
+        print("O número", num, "é divisivel por 10")
+        continue
+    #verificar se está na metade da contagem
+    if num == 25:
+        print("Chegamos na metade, ou seja, estamos no número", num)
+        continue
+    #verificar se contou até 32
+    if num == 32:
+        pass #nada aqui, só botei o pass para mostrar na prática com funciona
+    #verificar se o contador chegou no 50
+    if num == 50:
+        print("Chegamos no final da contagem, contamos até o número", num)
+        break
+    print(num)
+            </pre>
+        </div>
+
+        <div class="explicação">
+            <p>Nesse exmplo, temos um loop que conta até o número 50, como diz o comentário, e a declaração 
+                de uma variavel chamada num com o valor 0. Depois é iniciado um loop que se repetira até 
+                houver um break, pois como condição, é dado True. Na primeira linha do loop, o valor de 
+                num é aumentado em 1.
+            </p>
+
+            <p>Depois há um if, ele verifica se num dividido por 10 tem resto 0(divisivel por 10) e se num 
+                é diferente de 50. Caso a condição seja verdadeira, será impresso o que está dentro da 
+                função print, e depois o loop reiniciará devido ao continue. No segundo if, o código verifica 
+                se num é igual a 25, se for, será executado o print, e depois um continue. No terceiro if, 
+                é verificado se num é igual a 32, se sim, nada acontece, pois dentro do bloco há um pass. 
+                E no ultimo if, se num for igual a 50, será executado o print dentro do bloco, e depois o 
+                loop será encerrado pelo break. Se nenhuma condição for verdadeira, num será impresso pelo 
+                print.
+            </p>
+
+            <p>Como resultado do código, teremos todos os números de 1 a 50 impressos em linhas separadas, 
+                com exceção de 10, 20, 25, 30, 40 e 50. Esses números serão impressos de uma forma diferente 
+                de acordo com o print dentro do if.
+            </p>
+        </div>
+    </div>
+
+    <h2 id="funções">Funções</h2>
+
+    <div class="topico">
+        <div class="codigo">
+            <h3 id="Declarandoumafunção">Declarando uma função</h3>
+
+            <pre class="caixa">
+def ola():
+    print("ola")
+
+def sucessor(num):
+    num += 1
+    return num
+
+def pessoa(idade=15,nome="Batata")
+    print("Eu me chamo", nome, "e tenho", idade, "anos de idade")
+    #Eu me chamo Batata e tenho 15 anos de idade
+            </pre>
+
+            <p>Para chamar uma função, basta digitar o nome da função, parênteses</p>
+        </div>
+
+        <div class="explicação">
+            <p>Funções são blocos de código reutilizáveis que realizam uma tarefa específica. Elas permitem 
+                que você organize seu código de forma modular e reutilize partes dele sem precisar duplicar 
+                o código.Para chamar uma função, basta digitar o nome da função, parênteses, e se houver 
+                algum parâmetro na função, digite ele dentro do parênteses.
+            </p>
+
+            <p>Para criar uma função usa a palavra "def", seguido do nome da função, parênteses e dois 
+                pontos. Depois, dentro da função, escreva o que você quer que ela faça. No primeiro exemplo, 
+                criamos uma função chamada ola, que quando é chamada, imprime "ola".
+            </p>
+
+            <p>Na segunda função, temos algo dentro do parênteses, é um parâmetro(Valores de entrada que 
+                a função pode usar), e no corpo da função esse parâmetro é somado a 1 e depois é usado o 
+                "return"(será visto em breve). Uma função pode ter quantos parâmetros for necessário, e 
+                para cada um, basta separa-los com virgula. Eles também podem ser predefinidos caso o usuario 
+                não insira eles, como no terceiro exemplo
+            </p>
+        </div>
+
+        <div class="codigo">
+            <h3 id="returneNone">return e None</h3>
+
+            <pre class="caixa">
+def antecessor(numero):
+    return numero - 1
+var1 = None
+def func(var,var2):
+    print(var)
+    return var2
+func(antecessor(4),var1)
+            </pre>
+        </div>
+
+        <div class="explicação">
+            <p>None é um valor especial que representa a "ausência de valor" ou "nada". Ao tentar usar 
+                esse valor, na maior parte das vezes, ocorrerá um erro. Quando não há um return em uma função 
+                a função retornará um valor None.
+            </p>
+
+            <p>return serve para especificar o valor que uma função deve retornar(devolver), como se fosse 
+                o resultado dessa função. Na primeira função, ela reotrna o parãmetro "numero" menos 1. 
+                Na segunda função, o valor do primeiro parâmetro é impresso, e o segundo é retornado, e 
+                quando a função é chamada, ela dá o "resultado" da função antecessor com o parâmetro 4 como 
+                parâmetro 1 da função "func" e var1 como segundo parâmetro. Como resultado disso, seria 
+                impresso 3, e retornado None.
+            </p>
+        </div>
+
+        <div class="codigo">
+            <h3 id="Global">Global</h3>
+
+            <pre class="caixa">
+var1 = 1
+ola = "ola"
+def incrivel():
+    global ola
+    ola = "não ola"
+    var1 = "batata"
+    print(var1, ola)
+incrivel()
+print(var1, ola)
+            </pre>
+        </div>
+
+        <div class="explicação">
+            <p>global é uma palavra-chave em python que serve para declarar dentro de um função se uma 
+                variavel existe fora dela, já que por padrão uma variavel declarada dentro da função, só 
+                existe dentro da função, então isso quer dizer que é possivel ter 2 variaveis com o mesmo 
+                nome? Não! A variavel declarada na função só pode ser usada dentro dela, então mesmo se 
+                ela tiver o mesmo nome de outra, fora da função ela terá o valor original. 
+            </p>
+
+            <p>No código de exemplo podemos ver isso com a variavel var1, dentro de "incrivel" é declarado uma variavel 
+                chamada var1, mas ela ja exite fora da função, então o que acontece quando tentamos imprimi-la? 
+                Se ela for impressa dentro da função, ela terá o valor "batata" e se for impressa fora da função, 
+                terá o valor 1.
+            </p>
+            
+            <p>Já a variavel ola, é definida como global dentro da função, então se ela for alterada dentro 
+                da função, também será alterada fora. Então como resultado do código, será impresso "batata 
+                não ola" na primeira linha, e 1 "não ola" na segunda.
+            </p>
+        </div>
+
+        <div class="codigo">
+            <h3 id="Exemplo">Exemplo</h3>
+
+            <pre class="caixa">
+def quinzena(dia):
+    if dia >= 1 and dia <= 15:
+        return "Primeira quinzena"
+    elif dia >= 16 and dia <= 31:
+        return "Segunda quinzena"
+    else:
+        return "Algo deu errado"
+print(quinzena(12))
+            </pre>
+        </div>
+
+        <div class="explicação">
+            <p>Nesse exemplo, estamos verificando qual é a quinzena do mês, e como parâmetro temos o dia. 
+                Se o dia for maior ou igual a 1 e menor ou igual a 15, a função retorna "Primeira quinzena", 
+                se não, se o dia for maior ou igual a 16 e menor ou igual a 31, retorna "Segunda quinzena", 
+                caso nenhuma condição for verdadeira, retorna "Algo deu errado"
+            </p>
+
+            <p>E por ultimo imprimimos o resultado da função quinzena com 12 como parâmetro. Usamos o print 
+                pois sozinho o return não imprime o valor. Como resultado teremos "Primeira quinzena".
+            </p>
+        </div>
+    </div>
+
+    <h1>Parece que você chegou ao fim, bom trabalho! Agora você sabe o básico de python</h1>
+</body>
+
+</html>

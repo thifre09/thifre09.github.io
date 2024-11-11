@@ -1,0 +1,134 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+}
+
+
+#main {
+    display: flex;
+    gap: 20px;
+    height: 455px;
+}
+
+
+/*esquerda */
+
+#esquerda {
+    background-color: #ffcccc;
+    width: 29%;
+    border: solid 1px;
+    border-radius: 10px;
+    text-align: center;
+    line-height: 0.85;
+}
+
+#nomeDiv {
+    display: flex;
+    justify-content: center;
+}
+
+#caneta {
+    margin-top: 11px;
+    max-width: 30px;
+    max-height: 30px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+#caneta:hover {
+    transform: scale(1.2); /* Aumenta ligeiramente o tamanho */
+}
+
+#ChooseName {
+    display: none;
+    line-height: 0.61;
+}
+
+#imagem {
+    max-width: 200px;
+    max-height: 200px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+#imagem:hover {
+    transform: scale(1.1); /* Aumenta ligeiramente o tamanho */
+}
+
+#envelhecer {
+    max-width: 80px;
+    max-height: 80px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+#envelhecer:hover {
+    transform: scale(1.1); /* Aumenta ligeiramente o tamanho */
+}
+
+/* centro */
+
+#centro {
+    background-color: #cceeff;
+    width: 39%;
+    border: solid 1px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+#ações {
+    max-height: 60%;
+    height: 60%;
+    overflow: auto; 
+}
+
+#stats {
+    height: 40%;
+    line-height: 0.7;
+}
+
+/* direita */
+
+#direita {
+    background-color: #fff5cc;
+    width: 29%;
+    border: solid 1px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-around;
+}
+
+div > h4 {
+    border: solid 1px;
+    border-radius: 5px;
+    width: fit-content;
+    padding: 20px;
+}
+
+div#centro-de-ações > div {
+    display: flex;
+    justify-content: center;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+div#centro-de-ações > div:hover {
+    transform: scale(1.1); /* Aumenta ligeiramente o tamanho */
+}
+
+#centro-de-ações {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Esconde os menus de opções inicialmente */
+.menu-opcoes {
+    display: none;
+    border: solid 1px;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+}

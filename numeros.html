@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu site incrivel</title>
+    <link rel="stylesheet" href="css.css">
+    <link rel="stylesheet" href="numeros.css">
+</head>
+
+<body>
+    <h1 id="title"><a href="index.html">Meu site incrivel</a></h1>
+    <nav>
+        <h6><a href="#title">Números</a></h6>
+    </nav>
+
+    <br>
+    <br>
+
+    <!-- Área de Pesquisa -->
+    <div id="search-area" style="text-align: center; margin-bottom: 20px;">
+        <input type="number" id="search-number" placeholder="Digite um número" style="padding: 5px; font-size: 16px;">
+        <button onclick="goToNumber()" style="padding: 5px 10px; font-size: 16px; cursor: pointer;">Ir</button>
+    </div>
+
+    <div id="principal">
+        <!-- Divs para números de 1 a 300 -->
+        <div id="1">
+            <h2>1</h2>
+            <p>É o primeiro número inteiro positivo</p>
+        </div>
+
+        <div id="2">
+            <h2>2</h2>
+            <p>O menor número primo e o único número primo par</p>
+        </div>
+
+        <div id="3">
+            <h2>3</h2>
+            <p>Primeiro número primo ímpar e um número triangular</p>
+        </div>
+
+        <div id="4">
+            <h2>4</h2>
+            <p>Exitem 4 numeros simetricos no eixo horizontal e vertical</p>
+        </div>
+
+        <div id="5">
+            <h2>5</h2>
+            <p>Existem 5 solidos platônicos</p>
+        </div>
+
+        <div id="6">
+            <h2>6</h2>
+            <p>É o menor número perfeito</p>
+        </div>
+
+        <div id="7">
+            <h2>7</h2>
+            <p>Uma semana tem 7 dias</p>
+        </div>
+
+        <div id="8">
+            <h2>8</h2>
+            <p>O sistema solar tem 8 planetas</p>
+        </div>
+
+        <div id="9">
+            <h2>9</h2>
+            <p>É 6 ao contrario</p>
+        </div>
+
+        <div id="10">
+            <h2>10</h2>
+            <p>Nós contamos em base 10</p>
+        </div>
+
+        <div id="11">
+            <h2>11</h2>
+            <p>É o primeiro número primo com 2 digitos</p>
+        </div>
+
+        <div id="12">
+            <h2>12</h2>
+            <p>Um relógio tem 12 números</p>
+        </div>
+
+        <div id="13">
+            <h2>13</h2>
+            <p>Um deck de baralho tem 13 cartas diferentes</p>
+        </div>
+
+        <div id="14">
+            <h2>14</h2>
+            <p>É o primeiro numero em romano com 3 simbolos diferentes</p>
+        </div>
+
+        <div id="15">
+            <h2>15</h2>
+            <p>É o número de bolas em um jogo de sinuca</p>
+        </div>
+
+        <div id="16">
+            <h2>16</h2>
+            <p>É um quarto de um pack</p>
+        </div>
+
+        <div id="17">
+            <h2>17</h2>
+            <p>2+3+5+7=17</p>
+        </div>
+
+        <div id="18">
+            <h2>18</h2>
+            <p>É quando você pode ser preso no Brasil</p>
+        </div>
+
+        <div id="19">
+            <h2>19</h2>
+            <p>Covid-19</p>
+        </div>
+
+        <div id="20">
+            <h2>20</h2>
+            <p>Um icosaedro tem 20 faces</p>
+        </div>
+
+        <div id="21">
+            <h2>21</h2>
+            <p>Estamos no 21° século</p>
+        </div>
+
+        <div id="22">
+            <h2>22</h2>
+            <p>2022 foi o ano que a rainha Elizabeth morreu</p>
+        </div>
+
+        <div id="23">
+            <h2>23</h2>
+            <p>É o número em milhões de cópias vendidas de God of War 2018</p>
+        </div>
+
+        <div id="24">
+            <h2>24</h2>
+            <p>Um número primo ao quadrado sempre será um multiplo de 24 mais 1, com exceção de 2 e 3</p>
+        </div>
+
+        <div id="25">
+            <h2>25</h2>
+            <p>Exitem 25 números primos abaixo de 100</p>
+        </div>
+
+        <div id="26">
+            <h2>26</h2>
+            <p>É o número de estados do Brasil</p>
+        </div>
+
+        <div id="27">
+            <h2>27</h2>
+            <p>Contando com o Distrido Federal</p>
+        </div>
+
+        <div id="28">
+            <h2>28</h2>
+            <p>Essa frase tem 28 caracteres</p>
+        </div>
+
+        <div id="29">
+            <h2>29</h2>
+            <p>2²+3²+4²=29, e é a quantidade de dias que fevereiro tem em um ano bissexto</p>
+        </div>
+
+        <div id="30">
+            <h2>30</h2>
+            <p>É o nivel máximo de encantamento no minecraft</p>
+        </div>
+
+        <div id="31">
+            <h2>31</h2>
+            <p>O fortnite tem 31 temporadas</p>
+        </div>
+
+        <div id="32">
+            <h2>32</h2>
+            <p>As orelhas de um gato tem 32 musculos</p>
+        </div>
+
+        <div id="33">
+            <h2>33</h2>
+            <p>É o número de estrelas na constelação de Scorpius</p>
+        </div>
+
+        <div id="34">
+            <h2>34</h2>
+            <p>Em um quadrado mágico, todas as linhas, colunas e diagonais somam em 34, assim como os 
+                quadrados 2x2, e as pontas dos quadrados 3x3</p>
+        </div>
+
+        <div id="35">
+            <h2>35</h2>
+            <p>É o hexadeciaml de 53</p>
+        </div>
+
+        <div id="36">
+            <h2>36</h2>
+            <p>As chances de rolar dois números iguais em 2 dados é de 1/36</p>
+        </div>
+
+        <div id="37">
+            <h2>37</h2>
+            <p>Hollow Knight tem 37 bosses</p>
+        </div>
+
+        <div id="38">
+            <h2>38</h2>
+            <p>O gato mais velho conhecido teve 28 anos</p>
+        </div>
+
+        <div id="39">
+            <h2>39</h2>
+            <p>É o nome de uma música dos Queen</p>
+        </div>
+
+        <div id="40">
+            <h2>40</h2>
+            <p>É o tempo estimado para platinar Horizon Forbidden West</p>
+        </div>
+
+        <div id="41">
+            <h2>41</h2>
+            <p>É o número mais malvado de todos</p>
+        </div>
+
+        <div id="42">
+            <h2>42</h2>
+            <p>É a resposta para tudo</p>
+        </div>
+
+        <div id="43">
+            <h2>43</h2>
+            <p>Um cubo mágico tem 43 quintilhões de possiveis combinações</p>
+        </div>
+
+        <div id="44">
+            <h2>44</h2>
+            <p>Julio Cesar foi assassinado 44 A.C</p>
+        </div>
+
+        <div id="45">
+            <h2>45</h2>
+            <p>É a metade de um ângulo reto</p>
+        </div>
+
+        <div id="46">
+            <h2>46</h2>
+            <p>pneumoultramicroscopicossilicovul- canoconiótico tem 46 letras</p>
+        </div>
+
+        <div id="47">
+            <h2>47</h2>
+            <p>É o número atômico da prata</p>
+        </div>
+
+        <div id="48">
+            <h2>48</h2>
+            <p>Batatas tem 48 cromossomos</p>
+        </div>
+
+        <div id="49">
+            <h2>49</h2>
+            <p>2² = 4, 3² = 9, juntos eles formam 49, que é 7²</p>
+        </div>
+
+        <div id="50">
+            <h2>50</h2>
+            <p>É a metade de 100, e em porcentagem, represena sempre a metade</p>
+        </div>
+
+        <div id="51">
+            <h2>51</h2>
+            <p>51 é o nome de uma base secreta dos EUA(Área 51)</p>
+        </div>
+
+        <div id="52">
+            <h2>52</h2>
+            <p>Um baralho tem 52 cartas</p>
+        </div>
+
+        <div id="53">
+            <h2>53</h2>
+            <p>Todo ano, um dia da semana aparece 53 vezes</p>
+        </div>
+        
+        <div id="54">
+            <h2>54</h2>
+            <p>A África tem 54 países</p>
+        </div>
+
+        <div id="55">
+            <h2>55</h2>
+            <p>1+2+3+4+5+6+7+8+9+10=55</p>
+        </div>
+
+        <div id="56">
+            <h2>56</h2>
+            <p>Existe um cidade chamada Fifty-six, que significa 56 em inglês</p>
+        </div>
+
+        <div id="57">
+            <h2>57</h2>
+            <p>A temperatura média da Terra é 57°F</p>
+        </div>
+
+        <div id="58">
+            <h2>58</h2>
+            <p>58°C é a maior temperatura atingida já registrada na Terra</p>
+        </div>
+
+        <div id="59">
+            <h2>59</h2>
+            <p>Em um relógio, o braço dos segundos e minutos se sobrepõem 59 vezes em 1 hora</p>
+        </div>
+        
+        <div id="60">
+            <h2>60</h2>
+            <p>Um minuto tem 60 segundos, e uma hora tem 60 minutos</p>
+        </div>
+
+        <div id="61">
+            <h2>61</h2>
+            <p>61 em hexadecimal é 3D</p>
+        </div>
+
+        <div id="62">
+            <h2>62</h2>
+            <p>Breaking Bad tem 62 episódios</p>
+        </div>
+
+        <div id="63">
+            <h2>63</h2>
+            <p>É o DDD de Tocantins</p>
+        </div>
+
+        <div id="64">
+            <h2>64</h2>
+            <p>Existe um console chamado Nintendo-64, fazendo referencia á 64 bits</p>
+        </div>
+
+        <div id="65">
+            <h2>65</h2>
+            <p>Dinossauros morreram à 65 milhões de anos atras</p>
+        </div>
+
+        <div id="66">
+            <h2>66</h2>
+            <p>Existe uma loja chamada Route 66, mas ela só tem 30 anos</p>
+        </div>
+
+        <div id="67">
+            <h2>67</h2>
+            <p>Se um asteroide de 500 metros de diâmetro caisse no meio do IFRN de Parnamirim, a um ângulo de 
+                45° graus, e 67 km/s, uma cratera de 540 metros de profundidade seria criada</p>
+        </div>
+
+        <div id="68">
+            <h2>68</h2>
+            <p>Um barulho de 68 decibes éequivalente a uma maquina de lavar louça</p>
+        </div>
+
+        <div id="69">
+            <h2>69</h2>
+            <p>Um grau de latitude tem 69 milhas</p>
+        </div>
+
+        <div id="70">
+            <h2>70</h2>
+            <p>Se você ficar parado, você se moverá 70 kilometros em 150, já que a terrá se move à 1675 km/h</p>
+        </div>
+
+        <div id="71">
+            <h2>71</h2>
+            <p>Em média nascem 319 bebes em 71 segundos</p>
+        </div>
+
+        <div id="72">
+            <h2>72</h2>
+            <p>Em média, os batimentos cardiacos em repouso por minuto é de 72</p>
+        </div>
+
+        <div id="73">
+            <h2>73</h2>
+            <p>O dia do Pi é comemorado no 73° dia do ano</p>
+        </div>
+
+        <div id="74">
+            <h2>74</h2>
+            <p>Uma pessoa que viveu por 74 anos, nasceu 74 anos atras </p>
+        </div>
+
+        <div id="75">
+            <h2>75</h2>
+            <p>75% é 3 quartos</p>
+        </div>
+
+        <div id="76">
+            <h2>76</h2>
+            <p>Toda potência de 76 acaba em 76</p>
+        </div>
+
+        <div id="77">
+            <h2>77</h2>
+            <p>Na maioria das telas, o cursor do mouse tem 77 pixels</p>
+        </div>
+
+        <div id="78">
+            <h2>78</h2>
+            <p>Em 1978 nasceu o primeiro bebe de proveta</p>
+        </div>
+
+        <div id="79">
+            <h2>79</h2>
+            <p>É o número atômico do Ouro</p>
+        </div>
+
+        <div id="80">
+            <h2>80</h2>
+            <p>A primavera começa no 80° dia do ano</p>
+        </div>
+
+        <div id="81">
+            <h2>81</h2>
+            <p>Um tabuleiro de sudoku compelto tem 81 quadrados</p>
+        </div>
+
+        <div id="82">
+            <h2>82</h2>
+            <p>A primeira temporada de Pokemon teve 82 episódios</p>
+        </div>
+
+        <div id="83">
+            <h2>83</h2>
+            <p>O primeiro telefone comercial foi vendido em 1983</p>
+        </div>
+
+        <div id="84">
+            <h2>84</h2>
+            <p>Um ano em uranos dura 84 anos terrestres</p>
+        </div>
+
+        <div id="85">
+            <h2>85</h2>
+            <p>Em 1685, o Sacro Imperador Romano Charles VI nasceu</p>
+        </div>
+
+        <div id="86">
+            <h2>86</h2>
+            <p>O acidente de Chernobyl aconteceu em 1986</p>
+        </div>
+
+        <div id="87">
+            <h2>87</h2>
+            <p>87% das pessoas acham que o certo é o papel higiênico ficar longe da parede em vez de perto, mas 
+                o certo é ele ficar em cima da privada
+            </p>
+        </div>
+
+        <div id="88">
+            <h2>88</h2>
+            <p>Cerca de 88% das pessoas preferem Star Wars em vez de Star Treck</p>
+        </div>
+
+        <div id="89">
+            <h2>89</h2>
+            <p>É proibido nomear seu filho como 89 na Nova Zelandia</p>
+        </div>
+
+        <div id="90">
+            <h2>90</h2>
+            <p>90° é um ângulo reto</p>
+        </div>
+
+        <div id="91">
+            <h2>91</h2>
+            <p>Em 1991 foi criado a proposta inicial de WWW</p>
+        </div>
+
+        <div id="92">
+            <h2>92</h2>
+            <p>Shrek 2 tem 92 minutos de duração</p>
+        </div>
+
+        <div id="93">
+            <h2>93</h2>
+            <p>O universo observavel tem 93 bilhões de anos luz</p>
+        </div>
+
+        <div id="94">
+            <h2>94</h2>
+            <p>A tabela periódica tem 94 metais</p>
+        </div>
+
+        <div id="95">
+            <h2>95</h2>
+            <p>O Relampago Mcqueen usa o número 95 nas corridas</p>
+        </div>
+
+        <div id="96">
+            <h2>96</h2>
+            <p>Um presidente vai servir por 96 meses se for eleito duas vezes</p>
+        </div>
+
+        <div id="97">
+            <h2>97</h2>
+            <p>É o ultimo número primo de 2 digitos</p>
+        </div>
+
+        <div id="98">
+            <h2>98</h2>
+            <p>O google foi criado em 1998</p>
+        </div>
+
+        <div id="99">
+            <h2>99</h2>
+            <p>É o nome de um aplicativo de transporte</p>
+        </div>
+
+        <div id="100">
+            <h2>100</h2>
+            <p>É o primeiro número com 3 dígitos</p>
+        </div>
+
+    <script src="numeros.js">
+
+    </script>
+</body>
+
+</html>
