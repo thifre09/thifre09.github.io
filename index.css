@@ -4,7 +4,7 @@ h1 {
 
 div#principal {
     display: flex;
-    gap: 10px; /* Espaço entre os blocos */
+    gap:0.5%; /* Espaço entre os blocos */
 }
 
 div.bloco {

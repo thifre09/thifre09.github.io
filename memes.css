@@ -7,7 +7,8 @@ h2 {
 }
 
 img {
-    border: solid 0.5px rgb(131, 131, 131)
+    border: solid 0.5px rgb(131, 131, 131);
+    max-width: 100%;
 }
 
 .meme {
@@ -16,10 +17,18 @@ img {
     text-align: center;
     padding: 10px;
     width: 31%;
+    margin-top: 0.5%;
+    margin-bottom: 0.5%;
 }
 
 .principal {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px
+    gap: 0.5%
+}
+
+@media (max-width: 600px) {
+    .meme {
+        width: 100%;
+    }
 }

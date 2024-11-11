@@ -44,7 +44,8 @@ pre.caixa {
     margin-left: 10px;
     margin-bottom: 10px;
     border:solid 2px ;
-    width: 600px;
+    min-width: 90%;
+    width: fit-content;
     background-color: #dddddd;
     border-radius: 5px;
     padding: 5px;
@@ -62,4 +63,11 @@ summary {
 div.sumario {
     max-height: 350px;
     overflow: auto;
+}
+
+@media (max-width: 600px) {
+    div.codigo,
+    div.explicação {
+        width: 100%;
+    }
 }
