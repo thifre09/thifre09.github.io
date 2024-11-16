@@ -1,0 +1,24 @@
+article {
+    border: solid 2px;
+    border-radius: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin: 20px;
+}
+
+h1 {
+    text-align: center;
+    width: 100%;
+}
+
+article p {
+    border: solid 1px;
+    border-radius: 5px;
+    width: 235px;
+    height: 100px;
+    overflow-y: auto;
+    margin: 10px;
+    padding: 4px;
+    text-align: justify;
+}
