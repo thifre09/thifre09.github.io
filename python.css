@@ -44,12 +44,14 @@ pre.caixa {
     margin-left: 10px;
     margin-bottom: 10px;
     border:solid 2px ;
-    min-width: 90%;
+    min-width: 85%;
+    max-width: 85%;
     width: fit-content;
     background-color: #dddddd;
     border-radius: 5px;
     padding: 5px;
     padding-bottom: 0;
+    overflow-x: auto;
 }
 
 ul > a:visited, li > a:visited {
