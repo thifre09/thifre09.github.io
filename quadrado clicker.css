@@ -1,0 +1,152 @@
+div#main {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #e0f7fa;
+}
+
+.separador {
+    padding: 0;
+    margin: 0;
+    width: 0.25%;
+    background-color: rgb(146, 66, 0);
+}
+
+#esquerda, #centro, #direita {
+    width: 32%;
+
+}
+
+[onclick] {
+    cursor: pointer;
+}
+
+/* esquerda */
+
+h1 {
+    text-align: center;
+}
+
+div#quadrado {
+    margin: auto;
+    width: 45%;
+    height: 45%;
+    border: solid 3px;
+    transition: 0.3s, transform 0.3s;
+}
+
+div#quadrado:hover {
+    transform: scale(1.15);
+    
+}
+
+/* centro */
+
+div#botoes {
+    margin-top: 1%;
+    margin-left: 1%;
+}
+
+/* direita */
+
+section#direita {
+    overflow-y: scroll;
+    height: 470px;
+    padding-left: 1px ;
+}
+
+div.construcao {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    background-color: #d4c4bd;
+    color: rgba(255, 255, 255, 0.658);
+    border: solid black;
+    margin: 5% 1%;
+    position: relative;
+    overflow: hidden;  
+    transition: 0.3s, transform 0.3s; 
+}
+
+div.construcao:hover {
+    transform: scale(1.02);
+}
+
+div h2 {
+    width: 100%;
+    text-align: center;
+    margin-top: 3%;
+    margin-bottom: 2%;
+    z-index: 2; /* Coloca o h2 acima do h4 */
+    position: relative;
+}
+
+div h4 {
+    position: absolute;
+    margin-top: 1%;
+    font-size: 500%;
+    color: #b0bec5;   /* Cor suave, mas visível */
+    z-index: 1;       /* Coloca o h4 por baixo dos outros elementos */
+    pointer-events: none; /* Faz com que o h4 não interfira com cliques nos elementos acima */
+}
+
+div h2, div h3 {
+    padding-left: 1%;
+}
+
+/* melhorias */
+
+td p {
+    padding-left: 1%;
+}
+
+td {
+    width: 600px;
+    justify-content: space-evenly;
+    background-color: #d4c4bd;
+    color: rgb(255, 255, 255);
+    border: solid black;
+    transition: 0.3s, transform 0.3s;
+}
+
+td:hover {
+    transform: scale(1.05);
+}
+
+#voltar {
+    text-align: center;
+    color: #f88c5d;
+}
+
+/* ajuda */
+section#ajuda {
+    width: 99%;
+}
+
+section#ajuda h2 {
+    text-align: start;
+}
+
+/* outros */
+
+section#outros {
+    height: 450px;
+    width: 100%;
+}
+
+div#botoesOutros {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+section#outros div h2 {
+    text-align: center;
+}
+
+section#outros div button {
+    font-size: larger;
+    width: 200px;
+    border: solid 1px;
+    border-radius: 5px;
+    margin: 10px;
+}

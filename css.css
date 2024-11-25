@@ -3,12 +3,10 @@ body {
 }
 
 h1#title {
-    transition: 0.3s, transform 0.3s;
-}
-
-h1#title {
     text-align: center;
     color:rgb(55, 120, 218);
+    background-color: white;
+    transition: 0.3s, transform 0.3s;
 }
 
 h1#title a:visited {

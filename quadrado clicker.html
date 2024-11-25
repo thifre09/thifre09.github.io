@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu site incrivel</title>
+    <link rel="stylesheet" href="css.css">
+    <link rel="stylesheet" href="quadrado clicker.css">
+</head>
+<body>
+
+    <h1 id="title"><a href="index.html">Meu site incrivel</a></h1>
+    <nav>
+        <h6><a href="#title">Quadrado clicker</a></h6>
+    </nav>
+
+
+
+    <div id="main">
+        <section id="esquerda">
+            <h1 id="quadradotext">Quadrados: 0</h1>
+
+            <div id="quadrado" onclick="clique()"></div>
+        </section>
+
+        <div class="separador"></div>
+
+        <section id="centro">
+            <div id="botoes">
+                <button onclick="mudarMelhorias()">Melhorias</button>
+                <button onclick="mudarOutros()">Outros</button>
+                <button onclick="mudarAjuda()" >Ajuda</button>
+            </div>
+
+            <h1 id="quadradosporclickText">Quadrados por click: 1</h1>
+
+            <h1 id="triangulotext">Triângulos: 0</h1>
+
+        </section>
+
+        <div class="separador"></div>
+
+        <section id="direita">
+            <div class="construcao" onclick="comprarCur()">
+                <h2>Cursores</h2>
+                <h3 id="vCur">Preço: 100</h3>
+                <h3 id="aCur">Aumento: 1</h3>
+                <h4 id="nCur">0</h4>
+            </div>
+
+            <div class="construcao" onclick="comprarPro()">
+                <h2>Professores</h2>
+                <h3 id="vPro">Preço: 5k</h3>
+                <h3 id="aPro">Aumento: 10</h3>
+                <h4 id="nPro">0</h4>
+            </div>
+
+            <div class="construcao" onclick="comprarMat()">
+                <h2>Matemáticos</h2>
+                <h3 id="vMat">Preço: 130k</h3>
+                <h3 id="aMat">Aumento: 50</h3>
+                <h4 id="nMat">0</h4>
+            </div>
+
+            <div class="construcao" onclick="comprarQua()">
+                <h2>Quadros</h2>
+                <h3 id="vQua">Preço: 9mi</h3>
+                <h3 id="aQua">Aumento: 500</h3>
+                <h4 id="nQua">0</h4>
+            </div>
+
+            <div class="construcao" onclick="comprarFab()">
+                <h2>Fábricas</h2>
+                <h3 id="vFab">Preço: 650mi</h3>
+                <h3 id="aFab">Aumento: 10k</h3>
+                <h4 id="nFab">0</h4>
+            </div>
+        </section>
+        
+
+        <section id="melhorias" style="display: none;">
+            <table>
+                <tr>
+                    <td id="voltar" colspan="3"><button onclick="mudarMain()">Voltar</button></td>
+                </tr>
+                <tr>
+                    <td onclick="comprarMelhorias('Clique duplo', event)">
+                        <h2>Click duplo</h2>
+                        <p>O click base é 2x mais eficiente</p>
+                        <h3>Preço: 70</h3>
+                    </td>
+                    <td onclick="comprarMelhorias('Super clique', event)">
+                        <h2>Super click</h2>
+                        <p>O click base é 300x mais eficiente</p>
+                        <h3>Preço: 300k</h3>
+                    </td>
+                    <td onclick="comprarMelhorias('Mega clique', event)">
+                        <h2>Mega click</h2>
+                        <p>O click base é 100x mais eficiente</p>
+                        <h3>Preço: 20m</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td onclick="comprarMelhorias('Cursores duplos', event)">
+                        <h2>Cursores duplos</h2>
+                        <p>Cursores são 2x mais eficientes</p>
+                        <h3>Preço: 750</h3>
+                    </td>
+                    <td onclick="comprarMelhorias('Multiplos cursores', event)">
+                        <h2>Multiplos cursores</h2>
+                        <p>Cursores são 5x mais eficientes</p>
+                        <h3>Preço: 75k</h3>
+                    </td>
+                    <td onclick="comprarMelhorias('Super cursores', event)">
+                        <h2>Super cursores</h2>
+                        <p>Cursores são 20x mais eficientes</p>
+                        <h3>Preço: 10m</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td onclick="comprarMelhorias('Professores duplos', event)">
+                        <h2>Professores duplos</h2>
+                        <p>Professores são 2x mais eficientes</p>
+                        <h3>Preço: 25k</h3>
+                    </td>
+                    <td onclick="comprarMelhorias('Escola', event)">
+                        <h2>Escola</h2>
+                        <p>Professores são 5x mais eficientes</p>
+                        <h3>Preço: 600k</h3>
+                    </td>
+                    <td onclick="comprarMelhorias('Super professores', event)">
+                        <h2>Super professores</h2>
+                        <p>Professores são 20x mais eficientes</p>
+                        <h3>Preço: 90m</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td onclick="comprarMelhorias('Matematica dupla', event)">
+                        <h2>Matematica dupla</h2>
+                        <p>Matemáticos são 2x mais eficientes</p>
+                        <h3>Preço: 600k</h3>
+                    </td>
+                    <td onclick="comprarMelhorias('Conjunto de matematicos', event)">
+                        <h2>Conjunto de matematicos</h2>
+                        <p>Matemáticos são 5x mais eficientes</p>
+                        <h3>Preço: 20m</h3>
+                    </td>
+                    <td onclick="comprarMelhorias('Super matematicos', event)">
+                        <h2>Super matematicos</h2>
+                        <p>Matemáticos são 20x mais eficientes</p>
+                        <h3>Preço: 100m</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td onclick="comprarMelhorias('Dois quadros', event)">
+                        <h2>Dois quadros</h2>
+                        <p>Quadros são 2x mais eficientes</p>
+                        <h3>Preço: 30m</h3>
+                    </td>
+                    <td onclick="comprarMelhorias('Quadrão', event)">
+                        <h2>Quadrão</h2>
+                        <p>Quadros são 5x mais eficientes</p>
+                        <h3>Preço: 75m</h3>
+                    </td>
+                    <td onclick="comprarMelhorias('Quadros poderosos', event)">
+                        <h2>Quadros poderosos</h2>
+                        <p>Quadros são 20x mais eficientes</p>
+                        <h3>Preço: 300m</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td onclick="comprarMelhorias('Duas fabricas', event)">
+                        <h2>Duas fabricas</h2>
+                        <p>Fabricas são 2x mais eficientes</p>
+                        <h3>Preço: 2,5b</h3>
+                    </td>
+                    <td onclick="comprarMelhorias('Começo da revolução', event)">
+                        <h2>Começo da revolução</h2>
+                        <p>Fabricas são 5x mais eficientes</p>
+                        <h3>Preço: 5b</h3>
+                    </td>
+                    <td onclick="comprarMelhorias('Super fabricas', event)">
+                        <h2>Super fabricas</h2>
+                        <p>Fabricas são 20x mais eficientes</p>
+                        <h3>Preço: 175b</h3>
+                    </td>
+                </tr>
+
+            </table>
+        </section>
+
+        <section id="ajuda" style="display: none;">
+            <button onclick="mudarMain()">Voltar</button>
+
+            <h1>Ajuda</h1>
+
+            <h2>Básico:</h2>
+            
+            <ul>
+                <li>Para ganhar "quadrados", clique no quadrado na esquerda</li>
+                <li>A quantidade de "quadrados" ganhos por clique é indicada pelo numero em "Quadrados por click"</li>
+                <li>Existem, atualmente, 5 contruçoes diferentes: "cursores","professores","matematicos","quadros", e "fabricas", para compra-las basta ter o numero de quadrados indicado pelo "preço"</li>
+            </ul>
+
+            <h2>Melhorias:</h2>
+
+            <ul>
+                <li>Existem 6 tipos de melhorias: 1 para cada contrução e 1 para o clique base(começa como 1)</li>
+                <li>Cada tipo de melhoria possui 3 melhorias, quanto mais alto o nivel da melhoria, mais caro e melhor fica a construção</li>
+            </ul>
+
+            <h2>Triângulos:</h2>
+
+            <ul>
+                <li>Triângulos são uma moeda rara que podem ser usadas para obter melhorias especiais</li>
+                <li>Para obter triângulos, você precisa conseguir uma determinada quantidade de quadrados. O numero de quadrados necessarios para conseguir um triângulo começa com 1000, depois 100000, depois multiplicando por 100 para cada triângulo</li>
+                <li>Esse numero reseta para 1000 ao renascer</li>
+                <li>Toda a loja do menu "triângulos" está com o preço em triângulos</li>
+            </ul>
+
+            <h2>Renascimentos:</h2>
+
+            <ul>
+                <li>Renascer fará com que você perca todos os seus quadrados, melhorias e construções</li>
+                <li>Renascer te dará um bônus de 10% de forma somativa para cada "quadrado ascendente" que você tiver</li>
+                <li>Você obtém quadrados ascendentes ao conseguir determinado numero de quadrados normais</li>
+                <li>Você pode renascer quando tiver conseguido no minimo 1 quadrado ascendente</li>
+                <li>Você começa a produzir quadrados ascendentes a partir de 100000000 de quadrados normais</li>
+            </ul>
+
+            <h2>Minijogos:</h2>
+
+            <ul>
+                <li>Existem 3 minijogos, cada um adiciona algo diferente ao jogo base, para desbloquea-los, é necessario compra-los com triângulos, todos os minijogos custam 3 triangulos</li>
+                <li>Máquina da sorte: você pode apostar dinheiro nesse modo, se ganhar, a quantidade apostada é dobrada, se perder, perde todos os quadrados. Você pode apostar quantos quadrados quiser, basta digitar quantos deseja</li>
+                <li>Livro magico: Nesse minijogo você verá a descrição de 4 feitiços, cada feitiço usa mana, você consegue 1 de mana a cada 1000 cliques, a magia de multiplicação so pode ser usada 1 vez por nascimento</li>
+                <li>Quiz matemático: Nele você vai receber 1 pergunta alatoria sobre matematica, se você acertar a pergunta, você ganha 20% dos seus quadrados, se você errar, você perde 20%</li>
+            </ul>
+            
+        </section>
+
+        <section id="outros" style="display: none;">
+
+            <button onclick="mudarMain()">Voltar</button>
+
+            <div id="botoesOutros">
+
+                <h2>Outros menus</h2>
+                
+                <button onclick="mudarTriângulos()">Triângulos</button>
+
+                <button onclick="mudarRenascer()">Renascer</button>
+
+                <button style="display: none;">Máquina da sorte</button>
+
+                <button style="display: none;">Livro mágico</button>
+
+                <button style="display: none;">Quiz matemático</button>
+
+            </div>
+        </section>
+
+        <section id="triangulos">
+            <table>
+                <tr>
+                    <td id="voltar" colspan="3"><button onclick="mudarMain()">Voltar</button></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <h2>Produtividade dobrada</h2>
+                        <p>Dobra seus quadrados por clique</p>
+                        <h3>Preço:2</h3>
+                    </td>
+                    <td>
+                        <h2>Clique crítico</h2>
+                        <p>Há uma pequena chance de conseguir um clique crítico, que dá 5x quadrados</p>
+                        <h3>Preço:1</h3>
+                    </td>
+                    <td>
+                        <h2>Crítico melhorado</h2>
+                        <p>(Necessita do clique crítico desbloqueado)</p>
+                        <p>O crítico tem 2x mais chance de ocorrer e gera 15x mais quadrados em vez de 5x</p>
+                        <h3>Preço:1</h3>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <h2>Superprodução</h2>
+                        <p>Todas as construçôes são 100% mais eficientes</p>
+                        <h3>Preço:2</h3>
+                    </td>
+                    <td>
+                        <h2>Maquina da sorte</h2>
+                        <p>Adiciona um minijogo em que você pode apostar seus quadrados</p>
+                        <h3>Preço:3</h3>
+                    </td>
+                    <td>
+                        <h2>Livro magico</h2>
+                        <p>Adiciona um mini jogo em que você pode usar feitiços que ajudam no jogo principal</p>
+                        <h3>Preço:3</h3>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <h2></h2>
+                        <p></p>
+                        <h3></h3>
+                    </td>
+                    <td>
+                        <h2>Quiz matemático</h2>
+                        <p>Adiciona um mini jogo em que você responde um quiz, se acertar ganha recompensas</p>
+                        <h3>Preço:3</h3>
+                    </td>
+                    <td>
+                        <h2></h2>
+                        <p></p>
+                        <h3></h3>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="renascer"style="display: none;">
+
+        </section>
+
+        <section id="maquina-da-sorte" style="display: none;">
+
+        </section>
+
+        <section id="livro-magico" style="display: none;">
+
+        </section>
+
+        <section id="quiz-matematico" style="display: none;">
+
+        </section>
+    </div>
+
+    <script src="quadrado clicker.js"></script>
+</body>
+</html>
