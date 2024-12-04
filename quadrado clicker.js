@@ -1,5 +1,7 @@
+//variaveis
+
 let quadrados = 0;
-let base = 1000;
+let base = 1000000;
 
 let nCur = 0;
 let nPro = 0;
@@ -28,6 +30,18 @@ let melhorias = {
     Fab: {f1: false, f2: false, f3: false}
 }
 
+let melhoriasTri = {
+    pd1: false,
+    cc1: false,
+    cm1: false,
+    sp1: false,
+    ms1: false,
+    lm1: false,
+    sq1: false,
+    qm1: false
+}
+a_pd1 = 1
+
 let triangulos = 0;
 let tri = {
     tr1: false,
@@ -42,35 +56,69 @@ let tri = {
     tr10: false
 }
 
-let click = base + (nCur * aCur) + (nPro *aPro) + (nMat *aMat) + (nQua * aQua) + (nFab * aFab);
+let mana = 10;
+let nclicks = 0;
+let magiaselecionada = null;
+
+let renasceu = false;
+let quadrados_ascendentes = 0;
+let valorParaGanhar1QuadradoAscendente = 100000000;
+
+let click = (base + (nCur * aCur) + (nPro *aPro) + (nMat *aMat) + (nQua * aQua) + (nFab * aFab)) * a_pd1;
+
+//variaveis
+
+//principais funções
 
 function formatar(numero) {
     if (numero >= 1 && numero < 1000) {
         return numero
     } else if (numero >= 1000 && numero < 1000000) {
         return arredondar(2,numero / 1000) + "k"
-    } else if (numero >= 1000000 && 1000000000) {
+    } else if (numero >= 1000000 && numero < 1000000000) {
         return arredondar(2,numero / 1000000) + "mi"
-    } else if (numero >= 1000000000 && 1000000000000) {
-        return arredondar(2,numero / 1000000) + "bi"
-    } else if (numero >= 1000000000000 && 1000000000000000) {
-        return arredondar(2,numero / 1000000) + "t"
+    } else if (numero >= 1000000000 && numero < 1000000000000) {
+        return arredondar(2,numero / 1000000000) + "bi"
+    } else if (numero >= 1000000000000 && numero < 1000000000000000) {
+        return arredondar(2,numero / 1000000000000) + "t"
+    } else if (numero === 0) {
+        return 0
     }
 }
 
 function clique() {
-    quadrados += click;
-    
-    //mudar tamanho ao clicar
-    const elemento = document.getElementById("quadrado");
-    elemento.style.width = "50%";
-    elemento.style.height = "50%";
+    if (window.innerWidth < 600) {
+        quadrados += click;
+        nclicks++;
+        
+        // Mudar tamanho ao clicar
+        const elemento = document.getElementById("quadrado");
+        elemento.style.width = "100px";
+        elemento.style.height = "100px";
 
-    setTimeout(() => {
-        elemento.style.width = "45%";
-        elemento.style.height = "45%";
-    }, 100);
+        setTimeout(() => {
+            elemento.style.width = "80px";
+            elemento.style.height = "80px";
+        }, 100);
+    } else if (window.innerWidth >= 600) {
+        quadrados += click;
+        nclicks++;
+        
+        // Mudar tamanho ao clicar
+        const elemento = document.getElementById("quadrado");
+        elemento.style.width = "230px";
+        elemento.style.height = "230px";
+
+        setTimeout(() => {
+            elemento.style.width = "200px";
+            elemento.style.height = "200px";
+        }, 100);
+    }
+
+    verificarQuadradosAscendentes()
     verificarTriangulos()
+    cliqueCritico()
+    verificarMana()
     alterar()
 }
 
@@ -78,7 +126,7 @@ function alterar() {
     let quadradosText = document.getElementById("quadradotext");
     let triangulosText = document.getElementById("triangulotext")
     quadradosText.innerText = "Quadrados: " + formatar(quadrados);
-    triangulosText.innerText = "Triângulos: " + triangulos
+    triangulosText.innerText = "Triângulos: " + triangulos;
 
     let nCurText = document.getElementById("nCur")
     let nProText = document.getElementById("nPro")
@@ -113,7 +161,20 @@ function alterar() {
     aQuaText.innerText = "Aumento: " + formatar(aQua)
     aFabText.innerText = "Aumento: " + formatar(aFab)
 
-    click = base + (nCur * aCur) + (nPro *aPro) + (nMat *aMat) + (nQua * aQua) + (aFab * nFab);
+    let quadrados_ascendentesText = document.getElementById("quadrados-ascendentes");
+    quadrados_ascendentesText.innerText = "Você possui " + quadrados_ascendentes + " quadrados ascendentes"
+    let quadrados_ascendentesFaltantesText = document.getElementById("quadrados-ascendentes-faltantes");
+    quadrados_ascendentesFaltantesText.innerText = "Consiga " + formatar(valorParaGanhar1QuadradoAscendente) + " quadrados para o proximo quadrado ascendente"
+
+    let manaText = document.getElementById("mana")
+    manaText.innerText = "Mana: " + mana
+
+    click = (base + (nCur * aCur) + (nPro *aPro) + (nMat *aMat) + (nQua * aQua) + (nFab * aFab)) * a_pd1;
+
+    if (renasceu === true) {
+        click = (base + (nCur * aCur) + (nPro *aPro) + (nMat *aMat) + (nQua * aQua) + (nFab * aFab)) * a_pd1 * (1 + quadrados_ascendentes/10);
+    }
+    
 
     let quadradosporclickText = document.getElementById("quadradosporclickText")
     quadradosporclickText.innerText = "Quadrados por click: " + formatar(click)
@@ -121,6 +182,81 @@ function alterar() {
 
 function arredondar(casasDecimais, variavel) {
     return variavel = Math.round(variavel * 10**casasDecimais) / 10**casasDecimais;
+}
+
+function renascer() {
+    if (quadrados_ascendentes >= 1) {
+        renasceu = true
+
+        quadrados = 0
+        base = 1000
+
+        nCur = 0;
+        nPro = 0;
+        nMat = 0;
+        nQua = 0;
+        nFab = 0;
+        aCur = 1;
+        aPro = 10;
+        aMat = 50;
+        aQua = 500;
+        aFab = 1000;
+        vCur = 100;
+        vPro = 5000;
+        vMat = 130000;
+        vQua = 9000000;
+        vFab = 650000000;
+
+        for (let categoria in melhorias) {
+            for (let chave in melhorias[categoria]) {
+                melhorias[categoria][chave] = false;
+            }
+        }
+
+        for (let pegoutri in tri) {
+            tri[pegoutri] = false
+        }
+
+        let celulas = document.querySelectorAll('#melhorias td');
+
+        celulas.forEach(function(celula) {
+            celula.style.backgroundColor = "#d4c4bd";
+        });
+
+        document.getElementById("renascer").style.backgroundColor = "#e0f7fa"
+        alterar()
+        mudarMain()
+    } else if (quadrados_ascendentes < 1) {
+        let consiga1quadradoText = document.getElementById("consiga1quadrado")
+        consiga1quadradoText.innerText = "Consiga pelo menos 1 quadrado ascendente para renascer"
+    }
+}
+
+function verificarQuadradosAscendentes() {
+    if (quadrados >= valorParaGanhar1QuadradoAscendente) {
+        quadrados_ascendentes++;
+        valorParaGanhar1QuadradoAscendente = Math.round(valorParaGanhar1QuadradoAscendente * 1.2)
+    }
+}
+
+//principais funções
+
+//triangulos
+
+function cliqueCritico() {
+    if (melhoriasTri.cc1 === true && melhoriasTri.cm1 === false) {
+        let valorRandom = Math.random()
+
+        if (valorRandom <= 0.03) {
+            quadrados += click * 4
+        }
+    } else if (melhoriasTri.cc1 === true && melhoriasTri.cm1 === true) {
+        let valorRandom = Math.random()
+
+        if (valorRandom <= 0.06) {
+            quadrados += click * 14
+        }
+    }
 }
 
 function verificarTriangulos() {
@@ -165,6 +301,98 @@ function verificarTriangulos() {
         tri.tr10 = true; 
     }
 }
+
+function apostar() {
+    // Obtém o valor do input
+    let valorAposta = document.getElementById('valor-aposta').value;
+    
+    // Verifica se o valor é válido
+    if (valorAposta.trim() === '' || isNaN(valorAposta) || Number(valorAposta) <= 0) {
+        let TextoEmergencia = document.getElementById("textoEmergencia")
+        TextoEmergencia.innerText = "Insira um valor válido"
+    } else {
+        let TextoEmergencia = document.getElementById("textoEmergencia")
+        TextoEmergencia.innerText = ""
+
+        //aposta
+        if (valorAposta <= quadrados) {
+            let resultadoAposta = Math.random()
+            if (resultadoAposta < 0.5) {
+                quadrados += Number(valorAposta)
+                let resultadoText = document.getElementById("resultado-maquina")
+                resultadoText.innerText = "Ganhou"
+            } else if (resultadoAposta > 0.5) {
+                quadrados -= valorAposta
+                let resultadoText = document.getElementById("resultado-maquina")
+                resultadoText.innerText = "Perdeu"
+            }
+        } else if (valorAposta > quadrados) {
+            let TextoEmergencia = document.getElementById("textoEmergencia")
+            TextoEmergencia.innerText = "Insira um valor menor ou igual que seus quadrados"
+        }
+    }
+
+    alterar()
+};
+
+function usarmagias() {
+    if (!magiaSelecionada) {
+            
+    } else if (magiaselecionada === "Constructo") {
+
+    } else if (magiaselecionada === "Quadramentio") {
+
+    } else if (magiaselecionada === "Trianglusio") {
+
+    } else if (magiaselecionada === "Multiplicos quadrados") {
+
+    }
+}
+
+function verificarMana() {
+    if (nclicks >= 1000) {
+        nclicks = 0;
+        mana++
+        if (mana >= 10) {
+            mana = 10;
+        }
+    }
+}
+
+function mostrarFeitico(id) {
+    const feiticos = {
+        Constructo: {
+            titulo: "Constructo",
+            descricao: "Essa magia te da uma construção aleatoria, mesmo que você nao tenha nenhuma dela",
+            mana: "Mana:3",
+        },
+        Quadramentio: {
+            titulo: "Quadramentio",
+            descricao: "Essa magia te da 25% dos seus quadrados atuais",
+            mana: "Mana:3",
+        },
+        Trianglusio: {
+            titulo: "Trianglusio",
+            descricao: "Essa magia tem uma chance muito baixa de gerar um triangulo",
+            mana: "Mana:2",
+        },
+        "Multiplicos quadrados": {
+            titulo: "Multiplicos quadrados",
+            descricao: "Essa magia multiplica seu numero de quadrados por 20, mas ela é tão poderosa, que so pode ser usada uma vez por renascimento",
+            mana: "Mana:10",
+        },
+    };
+    const feitico = feiticos[id];
+    if (feitico) {
+        document.getElementById("titulo-feitico").textContent = feitico.titulo;
+        document.getElementById("descricao-feitico").textContent = feitico.descricao;
+        document.getElementById("custo-mana").textContent = feitico.mana;
+
+        magiaselecionada = id;
+    }
+}
+
+//triangulos
 
 // menus
 
@@ -226,39 +454,33 @@ function mudarRenascer() {
         separadores[i].style.display = "none";
     }
 
-    document.getElementById("renascer").style.display = "block";
+    document.getElementById("renascer").style.display = "flex";
+    document.getElementById("renascer").style.flexWrap = "wrap";
 }
 
-function mudarTrMaquinadasorte() {
+function confirmarRenascer() {
+    document.getElementById("confirmarRenascer").style.display = "block";
+    document.getElementById("renascer").style.backgroundColor = "#737575"
+}
+
+function mudarMaquinadasorte() {
     document.getElementById("outros").style.display = "none";
-
-    const separadores = document.getElementsByClassName("separador");
-    for (let i = 0; i < separadores.length; i++) {
-        separadores[i].style.display = "none";
-    }
-
-    document.getElementById("maquina-da-sorte").style.display = "block";
+    document.getElementById("maquina-da-sorte").style.display = "flex";
+    document.getElementById("maquina-da-sorte").style.justifyContent = "center"
 }
 
 function mudarLivromagico() {
     document.getElementById("outros").style.display = "none";
-
-    const separadores = document.getElementsByClassName("separador");
-    for (let i = 0; i < separadores.length; i++) {
-        separadores[i].style.display = "none";
-    }
-
-    document.getElementById("livro-magico").style.display = "block";
+    document.getElementById("livro-magico").style.display = "flex";
 }
 
 function mudarQuizmatematico() {
     document.getElementById("outros").style.display = "none";
+    document.getElementById("quiz-matematico").style.display = "block";
+}
 
-    const separadores = document.getElementsByClassName("separador");
-    for (let i = 0; i < separadores.length; i++) {
-        separadores[i].style.display = "none";
-    }
-
+function mudarSkinquadrado() {
+    document.getElementById("outros").style.display = "none";
     document.getElementById("quiz-matematico").style.display = "block";
 }
 
@@ -276,14 +498,19 @@ function mudarMain() {
     document.getElementById("ajuda").style.display = "none";
     document.getElementById("outros").style.display = "none";
     document.getElementById("triangulos").style.display = "none";
-    document.getElementById("Renascer").style.display = "none";
-    document.getElementById("Maquina-da-sorte").style.display = "none";
+    document.getElementById("renascer").style.display = "none";
+    document.getElementById("confirmarRenascer").style.display = "none";
+    document.getElementById("maquina-da-sorte").style.display = "none";
     document.getElementById("livro-magico").style.display = "none";
     document.getElementById("quiz-matematico").style.display = "none";
-
+    document.getElementById("renascer").style.backgroundColor = "#e0f7fa";
+    let consiga1quadradoText = document.getElementById("consiga1quadrado")
+    consiga1quadradoText.innerText = ""
 }
 
 //menus
+
+//compras
 
 function comprarCur() {
     if (quadrados >= vCur) {
@@ -461,9 +688,9 @@ function comprarMelhorias(melhoria, evento) {
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Super Fábricas
-    if (melhoria === "Super fabricas" && melhorias.Fab.f3 === false && quadrados >= 10000000000) {
+    if (melhoria === "Super fabricas" && melhorias.Fab.f3 === false && quadrados >= 100000000000) {
         melhorias.Fab.f3 = true;
-        quadrados -= 10000000000;
+        quadrados -= 100000000000;
         aFab *= 20;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
@@ -472,5 +699,60 @@ function comprarMelhorias(melhoria, evento) {
 }
 
 function comprarMelhoriasTriangulos(melhoria, evento) {
-    
+    if (melhoria === 'Produtividade dobrada' && melhoriasTri.pd1 === false && triangulos >= 2) {
+        melhoriasTri.pd1 = true;
+        triangulos -= 2
+        a_pd1 = 2
+        evento.target.closest("td").style.backgroundColor = "#f88c5d";
+    }
+    if (melhoria === 'Clique crítico' && melhoriasTri.pd1 === false && triangulos >= 1) {
+        melhoriasTri.cc1 = true;
+        triangulos -= 1
+
+        evento.target.closest("td").style.backgroundColor = "#f88c5d";
+    }
+    if (melhoria === 'Crítico melhorado' && melhoriasTri.pd1 === false && triangulos >= 1) {
+        melhoriasTri.cm1 = true;
+        triangulos -= 1
+
+        evento.target.closest("td").style.backgroundColor = "#f88c5d";
+    }
+    if (melhoria === 'Superprodução' && melhoriasTri.pd1 === false && triangulos >= 2) {
+        melhoriasTri.sp1 = true;
+        triangulos -= 2
+        aCur *= 2
+        aPro *= 2
+        aMat *= 2
+        aQua *= 2
+        aFab *= 2
+        evento.target.closest("td").style.backgroundColor = "#f88c5d";
+    }
+    if (melhoria === 'Maquina da sorte' && melhoriasTri.pd1 === false && triangulos >= 3) {
+        melhoriasTri.ms1 = true;
+        triangulos -= 3
+        document.getElementById("maquinadasorte").style.display = "block"
+        evento.target.closest("td").style.backgroundColor = "#f88c5d";
+    }
+    if (melhoria === 'Livro magico' && melhoriasTri.pd1 === false && triangulos >= 3) {
+        melhoriasTri.lm1 = true;
+        triangulos -= 3;
+        document.getElementById("livromagico").style.display = "block";
+        evento.target.closest("td").style.backgroundColor = "#f88c5d";
+    }
+    if (melhoria === 'Quiz matemático' && melhoriasTri.pd1 === false && triangulos >= 3) {
+        melhoriasTri.qm1 = true;
+        triangulos -= 3
+        document.getElementById("quizmatematico").style.display = "block"
+        evento.target.closest("td").style.backgroundColor = "#f88c5d";
+    }
+    if (melhoria === 'Skin quadrado' && melhoriasTri.sq1 === false && triangulos >= 1) {
+        melhoriasTri.sq1 = true;
+        triangulos -= 1;
+        document.getElementById("skinquadrado")
+        evento.target.closest("td").style.backgroundColor = "#f88c5d";
+    }
+
+    alterar()
 }
+
+//compras

@@ -21,7 +21,7 @@ nav {
     background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet, red); /* Gradiente duplicado */
     background-size: 300% 100%; /* Aumenta o tamanho do gradiente */
     animation: rainbow 10s linear infinite; /* Animação contínua */
-    width: auto;
+    min-height: auto;
     padding: 15px 30px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;

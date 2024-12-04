@@ -2,6 +2,8 @@ div#main {
     display: flex;
     flex-wrap: wrap;
     background-color: #e0f7fa;
+    min-height: 75vh;
+    height: fit-content;
 }
 
 .separador {
@@ -28,10 +30,17 @@ h1 {
 
 div#quadrado {
     margin: auto;
-    width: 45%;
-    height: 45%;
+    width: 200px;
+    height: 200px;
     border: solid 3px;
     transition: 0.3s, transform 0.3s;
+}
+
+@media (max-width: 600px) {
+    div#quadrado {
+        width: 100px;
+        height: 100px;
+    }
 }
 
 div#quadrado:hover {
@@ -50,7 +59,7 @@ div#botoes {
 
 section#direita {
     overflow-y: scroll;
-    height: 470px;
+    height: 75vh;
     padding-left: 1px ;
 }
 
@@ -71,7 +80,7 @@ div.construcao:hover {
     transform: scale(1.02);
 }
 
-div h2 {
+section#direita div h2 {
     width: 100%;
     text-align: center;
     margin-top: 3%;
@@ -80,7 +89,11 @@ div h2 {
     position: relative;
 }
 
-div h4 {
+section#direita div h3 {
+    z-index: 2;
+}
+
+section#direita div h4 {
     position: absolute;
     margin-top: 1%;
     font-size: 500%;
@@ -89,11 +102,15 @@ div h4 {
     pointer-events: none; /* Faz com que o h4 não interfira com cliques nos elementos acima */
 }
 
-div h2, div h3 {
+section#direita div h2, section#direita div h3 {
     padding-left: 1%;
 }
 
 /* melhorias */
+
+section#melhorias, section#triangulos {
+    overflow-x: scroll;
+}
 
 td p {
     padding-left: 1%;
@@ -124,16 +141,24 @@ section#ajuda {
 
 section#ajuda h2 {
     text-align: start;
+    z-index: 0;
 }
 
 /* outros */
 
 section#outros {
+    display: flex;
+    flex-wrap: wrap;
     height: 450px;
     width: 100%;
 }
 
-div#botoesOutros {
+section#outros h2 {
+    width: 100%;
+    text-align: center;
+}
+
+#botoesOutros {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -149,4 +174,239 @@ section#outros div button {
     border: solid 1px;
     border-radius: 5px;
     margin: 10px;
+}
+
+/* renascer */
+section#renascer {
+    height: 75vh;
+    width: 100%;
+    flex-direction: column;
+}
+
+section#renascer * {
+    width: 100%;
+    height: fit-content;
+}
+
+section#renascer div button {
+    width: 100px;
+    height: 40px;
+    border-radius: 10px;
+}
+
+div#confirmarRenascer {
+    border: solid 2px;
+    border-radius: 5px;
+    padding: 20px 10px;
+    background-color: #93f2ff;
+    width: fit-content;
+    position: absolute;
+    top: 52%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+section#renascer *:not(button:nth-of-type(1)) {
+    text-align: center;
+}
+
+/* Maquina da sorte */
+
+
+#maquina-da-sorte {
+    justify-content: center;
+    height: fit-content;
+    font-family: Arial, sans-serif;
+    gap: 20px; 
+}
+
+#maquina {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 80%;
+    height: fit-content;
+    max-width: 400px;
+    padding: 20px;
+    margin: 30px 20px 50px 20px;
+    background: white;
+    border: 2px solid #6a11cb;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+#resultado-maquina {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    min-width: 100px; /* Tamanho mínimo */
+    max-width: 100%; /* Tamanho máximo */
+    border: 2px solid #2575fc;
+    border-radius: 8px;
+    background: #f0f8ff;
+    color: #333;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.2rem;
+    word-wrap: break-word; /* Adapta texto longo */
+    overflow: hidden;
+}
+
+#botao-maquina {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#botao-apostar {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+#botao-apostar:hover {
+    background: linear-gradient(135deg, #2575fc, #6a11cb);
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+#form-aposta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+#form-aposta label {
+    font-weight: bold;
+    color: #333;
+}
+
+#form-aposta input {
+    width: 80%;
+    max-width: 300px;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.explicacao {
+    margin-left: 10%;
+}
+
+.explicacao h2 {
+    text-align: center;
+}
+
+.explicacao h1 {
+    margin-top: 20%;
+}
+
+
+/* Responsividade */
+@media (max-width: 600px) {
+    #maquina-da-sorte {
+        flex-direction: column;
+    }
+
+    #botao-apostar {
+        font-size: 0.9rem;
+    }
+
+    #resultado-maquina {
+        font-size: 1rem;
+    }
+}
+
+/* livro magico */
+
+section#livro-magico {
+    overflow: auto;
+}
+
+#livro {
+    background: #f8f4e6;
+    border: 3px solid #5a3d2b;
+    border-radius: 10px;
+    padding: 20px;
+    width: fit-content;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin: 10px;
+    overflow: auto;
+}
+
+#livro h1 {
+    color: #5a3d2b;
+    margin-bottom: 20px;
+}
+
+#feiticos {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.feitico {
+    flex: 1;
+    background: #d4af37;
+    border: 2px solid #5a3d2b;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.feitico:hover {
+    transform: scale(1.1);
+    background: #ffc107;
+}
+
+#detalhes-feitico {
+    margin-top: 20px;
+    background: #fff;
+    border: 2px solid #5a3d2b;
+    border-radius: 5px;
+    padding: 15px;
+    text-align: center;
+}
+
+#titulo-feitico {
+    color: #5a3d2b;
+    margin-bottom: 10px;
+}
+
+#usar-feitiço {
+    margin-top: 40px;
+    border-radius: 1000px;
+    border: none;
+    background: linear-gradient(90deg,#d4af37, #ffc107);
+    font-size: xx-large;
+}
+
+p#mana {
+    text-align: center;
+    font-size: xx-large;
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    #livro-magico {
+        flex-direction: column;
+    }   
 }
