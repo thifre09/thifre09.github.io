@@ -1,7 +1,7 @@
 //variaveis
 
 let quadrados = 0;
-let base = 1000000;
+let base = 1000;
 
 let nCur = 0;
 let nPro = 0;
@@ -40,9 +40,6 @@ let melhoriasTri = {
     sq1: false,
     qm1: false
 }
-a_pd1 = 1
-
-let triangulos = 0;
 let tri = {
     tr1: false,
     tr2: false,
@@ -55,10 +52,117 @@ let tri = {
     tr9: false,
     tr10: false
 }
+let triangulos = 0;
+a_pd1 = 1
 
 let mana = 10;
 let nclicks = 0;
 let magiaselecionada = null;
+let usoumultiplicus = false;
+
+let perguntaescolhida = null
+let perguntas = [
+    "Quanto é 1+1?",
+    "Quanto é 5-3?",
+    "Quanto é 5x5?",
+    "Quanto é 36/6?",
+    "Quanto é 4²?",
+    "Quais são os 3 primeiros dígitos de π?",
+    "Quanto é 335-229?",
+    "Quanto é 542+6534?",
+    "Quanto vale a área de um quadrado com lado = 3?",
+    "Qual é a área de um triângulo com base = 5 e altura = 6?",
+    "Quanto é 2x3+7/1-5?",
+    "Quanto é 5x2,5?",
+    "Quanto é 550-1000?",
+    "Quanto é 5³?",
+    "Qual é o nome do número que é 1^100?",
+    "Quantos subconjuntos do conjunto {1,2,3,...,30} têm a propriedade de que a soma dos elementos do subconjunto é divisível por 5?",
+    "Qual é o nome da forma geométrica que possui 3 lados?",
+    "Qual é o nome do número que é 10^googol?",
+    "Qual é a circunferência de um círculo que possui raio = 8,4 e π = 3?",
+    "Esse jogo é legal?",
+    "Resolva a equação para x no conjunto dos números reais: x³-6x²+11x-6=0",
+    "Quanto é 9 + 10?",
+    "Qual é a soma dos ângulos internos de um triângulo?",
+    "Qual é o resultado de 100 ÷ 25?",
+    "Quanto é a raiz quadrada de 81?",
+    "Quanto é 50% de 200?",
+    "Quanto é 10³?",
+    "Quanto é a raiz cúbica de 27?",
+    "Qual é a soma dos ângulos internos de um quadrado?",
+    "Qual é o valor do logaritmo de 100 na base 10?",
+    "Qual é o seno de 30 graus?",
+    "Qual é a tangente de 45 graus?"
+];
+let opçoes = [
+    ["2", "3", "4", "1"], // Quanto é 1+1?
+    ["2", "3", "5", "1"], // Quanto é 5-3?
+    ["25", "20", "15", "30"], // Quanto é 5x5?
+    ["6", "7", "8", "9"], // Quanto é 36/6?
+    ["16", "8", "4", "12"], // Quanto é 4²?
+    ["3.14", "3.15", "3.13", "3.12"], // Quais são os 3 primeiros dígitos de π?
+    ["106", "110", "105", "100"], // Quanto é 335-229?
+    ["7076", "7074", "7067", "7066"], // Quanto é 542+6534?
+    ["9", "6", "3", "12"], // Quanto vale a área de um quadrado com lado = 3?
+    ["15", "10", "20", "12"], // Qual é a área de um triângulo com base = 5 e altura = 6?
+    ["8", "11", "13", "9"], // Quanto é 2x3+7/1-5?
+    ["12.5", "13", "14", "11.5"], // Quanto é 5x2,5?
+    ["-450", "-400", "-500", "-550"], // Quanto é 550-1000?
+    ["125", "150", "25", "100"], // Quanto é 5³?
+    ["um", "googolplex", "googol", "número um"], // Qual é o nome do número que é 1^100?
+    ["59049", "90000", "60503", "59050"], // Quantos subconjuntos têm soma divisível por 5?
+    ["Triângulo", "Quadrado", "Retângulo", "Círculo"], // Qual é a forma geométrica de 3 lados?
+    ["googolplex", "googol", "milhão", "trilhão"], // Qual é o número 10^googol?
+    ["50.4", "48", "52", "45.6"], // Qual é a circunferência do círculo com raio 8.4 e π = 3?
+    ["sim", "não", "talvez", "depende"], // Esse jogo é legal?
+    ["1, 2 e 3", "1 e 3", "1, 3 e 6", "2, 3 e 6"], // Resolva x³-6x²+11x-6=0
+    ["19", "21", "18", "20"], // Quanto é 9 + 10?
+    ["180", "360", "90", "120"], // Qual é a soma dos ângulos internos de um triângulo?
+    ["4", "5", "2", "6"], // Qual é o resultado de 100 ÷ 25?
+    ["9", "6", "8", "7"], // Quanto é a raiz quadrada de 81?
+    ["100", "50", "25", "200"], // Quanto é 50% de 200?
+    ["1000", "100", "10", "10000"], // Quanto é 10³?
+    ["3", "9", "27", "1"], // Quanto é a raiz cúbica de 27?
+    ["360", "180", "90", "720"], // Qual é a soma dos ângulos internos de um quadrado?
+    ["2", "0", "1", "100"], // Qual é o logaritmo de 100 na base 10?
+    ["0.5", "0.707", "1", "0"], // Qual é o seno de 30 graus?
+    ["1", "0", "0.707", "1.5"] // Qual é a tangente de 45 graus?
+];
+let respostasCorretas = [
+    "2", // Quanto é 1+1?
+    "2", // Quanto é 5-3?
+    "25", // Quanto é 5x5?
+    "6", // Quanto é 36/6?
+    "16", // Quanto é 4²?
+    "3.14", // Quais são os 3 primeiros dígitos de π?
+    "106", // Quanto é 335-229?
+    "7076", // Quanto é 542+6534?
+    "9", // Quanto vale a área de um quadrado com lado = 3?
+    "15", // Qual é a área de um triângulo com base = 5 e altura = 6?
+    "9", // Quanto é 2x3+7/1-5?
+    "12.5", // Quanto é 5x2,5?
+    "-450", // Quanto é 550-1000?
+    "125", // Quanto é 5³?
+    "um", // Qual é o nome do número que é 1^100?
+    "59049", // Quantos subconjuntos do conjunto {1,2,3,...,30} têm soma divisível por 5?
+    "Triângulo", // Qual é o nome da forma geométrica que possui 3 lados?
+    "googolplex", // Qual é o nome do número que é 10^googol?
+    "50.4", // Qual é a circunferência de um círculo com raio = 8,4 e π = 3?
+    "sim", // Esse jogo é legal? Digite sim ou não
+    "1, 2 e 3", // Resolva x³-6x²+11x-6=0
+    "19", // Quanto é 9 + 10?
+    "180", // Qual é a soma dos ângulos internos de um triângulo?
+    "4", // Qual é o resultado de 100 ÷ 25?
+    "9", // Quanto é a raiz quadrada de 81?
+    "100", // Quanto é 50% de 200?
+    "1000", // Quanto é 10³?
+    "3", // Quanto é a raiz cúbica de 27?
+    "360", // Qual é a soma dos ângulos internos de um quadrado?
+    "2", // Qual é o valor do logaritmo de 100 na base 10?
+    "0.5", // Qual é o seno de 30 graus?
+    "1" // Qual é a tangente de 45 graus?
+];
 
 let renasceu = false;
 let quadrados_ascendentes = 0;
@@ -66,9 +170,86 @@ let valorParaGanhar1QuadradoAscendente = 100000000;
 
 let click = (base + (nCur * aCur) + (nPro *aPro) + (nMat *aMat) + (nQua * aQua) + (nFab * aFab)) * a_pd1;
 
+
+
 //variaveis
 
 //principais funções
+
+function salvarDados() {
+    const estado = {
+        quadrados,
+        base,
+        nCur, nPro, nMat, nQua, nFab,
+        vCur, vPro, vMat, vQua, vFab,
+        aCur, aPro, aMat, aQua, aFab,
+        melhorias,
+        melhoriasTri,
+        tri,
+        triangulos,
+        a_pd1,
+        mana,
+        nclicks,
+        magiaselecionada,
+        usoumultiplicus,
+        perguntaescolhida,
+        renasceu,
+        quadrados_ascendentes,
+        valorParaGanhar1QuadradoAscendente,
+    };
+
+    localStorage.setItem("estadoJogo", JSON.stringify(estado));
+}
+
+function carregarDados() {
+    const estadoSalvo = localStorage.getItem("estadoJogo");
+
+    if (estadoSalvo) {
+        const estado = JSON.parse(estadoSalvo);
+
+        // Restaura os valores salvos
+        quadrados = estado.quadrados;
+        base = estado.base;
+        nCur = estado.nCur;
+        nPro = estado.nPro;
+        nMat = estado.nMat;
+        nQua = estado.nQua;
+        nFab = estado.nFab;
+        vCur = estado.vCur;
+        vPro = estado.vPro;
+        vMat = estado.vMat;
+        vQua = estado.vQua;
+        vFab = estado.vFab;
+        aCur = estado.aCur;
+        aPro = estado.aPro;
+        aMat = estado.aMat;
+        aQua = estado.aQua;
+        aFab = estado.aFab;
+        melhorias = estado.melhorias;
+        melhoriasTri = estado.melhoriasTri;
+        tri = estado.tri;
+        triangulos = estado.triangulos;
+        a_pd1 = estado.a_pd1;
+        mana = estado.mana;
+        nclicks = estado.nclicks;
+        magiaselecionada = estado.magiaselecionada;
+        usoumultiplicus = estado.usoumultiplicus;
+        perguntaescolhida = estado.perguntaescolhida;
+        renasceu = estado.renasceu;
+        quadrados_ascendentes = estado.quadrados_ascendentes;
+        valorParaGanhar1QuadradoAscendente = estado.valorParaGanhar1QuadradoAscendente;
+    }
+    for (let categoria in melhorias) {
+        for (let melhoria in melhorias[categoria]) {
+            if (melhorias[categoria][melhoria]) {
+                const td = document.querySelector(`[data-melhoria="${melhoria}"]`);
+                if (td) {
+                    td.style.backgroundColor = "#f88c5d";
+                }
+            }
+        }
+    }
+}
 
 function formatar(numero) {
     if (numero >= 1 && numero < 1000) {
@@ -81,8 +262,14 @@ function formatar(numero) {
         return arredondar(2,numero / 1000000000) + "bi"
     } else if (numero >= 1000000000000 && numero < 1000000000000000) {
         return arredondar(2,numero / 1000000000000) + "t"
+    } else if (numero >= 1000000000000000 && numero < 1000000000000000000) {
+        return arredondar(2,numero / 1000000000000000) + "Qa"
+    } else if (numero >= 1000000000000000000 && numero < 1000000000000000000000) {
+        return arredondar(2,numero / 1000000000000000000) + "Qi"
     } else if (numero === 0) {
         return 0
+    } else {
+        return "esse numero é muito grande"
     }
 }
 
@@ -115,11 +302,13 @@ function clique() {
         }, 100);
     }
 
-    verificarQuadradosAscendentes()
-    verificarTriangulos()
-    cliqueCritico()
-    verificarMana()
-    alterar()
+    salvarDados();
+    carregarDados();
+    verificarQuadradosAscendentes();
+    verificarTriangulos();
+    cliqueCritico();
+    verificarMana();
+    alterar();
 }
 
 function alterar() {
@@ -288,15 +477,15 @@ function verificarTriangulos() {
         triangulos++;
         tri.tr7 = true;
     }
-    if (quadrados >= 100000000000000000 && tri.tr8 === false) {
+    if (quadrados >= 100000000000000000n && tri.tr8 === false) {
         triangulos++;
         tri.tr8 = true; 
     }
-    if (quadrados >= 10000000000000000000 && tri.tr9 === false) {
+    if (quadrados >= 10000000000000000000n && tri.tr9 === false) {
         triangulos++;
         tri.tr9 = true; 
     }
-    if (quadrados >= 1000000000000000000000 && tri.tr10 === false) {
+    if (quadrados >= 1000000000000000000000n && tri.tr10 === false) {
         triangulos++;
         tri.tr10 = true; 
     }
@@ -308,10 +497,10 @@ function apostar() {
     
     // Verifica se o valor é válido
     if (valorAposta.trim() === '' || isNaN(valorAposta) || Number(valorAposta) <= 0) {
-        let TextoEmergencia = document.getElementById("textoEmergencia")
+        let TextoEmergencia = document.getElementById("textoEmergenciamaquina")
         TextoEmergencia.innerText = "Insira um valor válido"
     } else {
-        let TextoEmergencia = document.getElementById("textoEmergencia")
+        let TextoEmergencia = document.getElementById("textoEmergenciamaquina")
         TextoEmergencia.innerText = ""
 
         //aposta
@@ -336,17 +525,67 @@ function apostar() {
 };
 
 function usarmagias() {
-    if (!magiaSelecionada) {
-            
+    let textomenssagens = document.getElementById("textoEmergencialivro")
+    if (!magiaselecionada) {
+        textomenssagens.innerText = "Selecione um poder"
     } else if (magiaselecionada === "Constructo") {
-
+        if (mana >= 3) {
+            mana -= 3
+            let numeroRandom = Math.random()
+            if (numeroRandom <= 0.2) {
+                nCur++ 
+                textomenssagens.innerText = "Você ganhou 1 cursor"
+            } else if (numeroRandom <= 0.4) {
+                nPro++
+                textomenssagens.innerText = "Você ganhou 1 professor"
+            } else if (numeroRandom <= 0.6) {
+                nMat++
+                textomenssagens.innerText = "Você ganhou 1 matemático"
+            } else if (numeroRandom <= 0.8) {
+                nQua++
+                textomenssagens.innerText = "Você ganhou 1 quadro"
+            } else if (numeroRandom <= 1) {
+                nFab++
+                textomenssagens.innerText = "Você ganhou 1 fabrica"
+            }
+        } else if (mana < 3) {
+            textomenssagens.innerText = "Você não tem mana suficiente"
+        }
     } else if (magiaselecionada === "Quadramentio") {
-
+        if (mana >= 3) {
+            mana -= 3
+            quadrados *= 1.25
+            textomenssagens.innerText = "Mais 25% de quadrados"
+        } else if (mana <3) {
+            textomenssagens.innerText = "Você não tem mana suficiente"
+        }
     } else if (magiaselecionada === "Trianglusio") {
-
+        if (mana >= 2) {
+            mana -= 2
+            let numeroRandom = Math.random()
+            if (numeroRandom <= 0.05) {
+                triangulos++
+                textomenssagens.innerText = "Você ganhou 1 triangulo"
+            } else {
+                textomenssagens.innerText = "Mais sorte na próxima vez"
+            }
+        } else if (mana < 2) {
+            textomenssagens.innerText = "Você não tem mana suficiente"
+        }
     } else if (magiaselecionada === "Multiplicos quadrados") {
-
+        if (mana >= 10 && usoumultiplicus === false) {
+            mana -= 10;
+            quadrados *= 20;
+            usoumultiplicus = true;
+            textomenssagens.innerText = "Multiplicos foi usado"
+        } else if (mana < 10) {
+            textomenssagens.innerText = "Você não tem mana suficiente"
+        } else if (usoumultiplicus === true) {
+            textomenssagens.innerText = "Essa mágia só pode ser usada uma vez por renascimento"
+        }
     }
+
+    alterar()
 }
 
 function verificarMana() {
@@ -392,6 +631,100 @@ function mostrarFeitico(id) {
     }
 }
 
+function comecarquiz() {
+    document.getElementById("comecarquiz").style.display = "none";
+    perguntaescolhida = perguntas[Math.floor(Math.random() * perguntas.length)];
+    document.getElementById("pergunta").innerText = perguntaescolhida;
+
+    let opçao1 = document.getElementById("opção1");
+    let opçao2 = document.getElementById("opção2");
+    let opçao3 = document.getElementById("opção3");
+    let opçao4 = document.getElementById("opção4");
+
+    for (let i = 0; i < perguntas.length; i++) {
+        if (perguntaescolhida === perguntas[i]) {
+            opçao1.innerText = opçoes[i][0]
+            opçao2.innerText = opçoes[i][1]
+            opçao3.innerText = opçoes[i][2]
+            opçao4.innerText = opçoes[i][3]
+        }
+    }
+}
+
+function verificarQuiz(numerobotao) {
+    let acertou = null;
+    let numeropergunta = null
+    for (let i = 0; i < perguntas.length; i++) {
+        if (perguntaescolhida === perguntas[i]) {
+            numeropergunta = i;
+        }         
+    }
+    if (numerobotao === 1) {
+        if (opçoes[numeropergunta][0] === respostasCorretas[numeropergunta]) {
+            acertou = true;
+        } else {
+            acertou = false;
+        }
+    } else if (numerobotao === 2) {
+        if (opçoes[numeropergunta][1] === respostasCorretas[numeropergunta]) {
+            acertou = true;
+        } else {
+            acertou = false;
+        }
+    } else if (numerobotao === 3) {
+        if (opçoes[numeropergunta][2] === respostasCorretas[numeropergunta]) {
+            acertou = true;
+        } else {
+            acertou = false;
+        }
+    } else if (numerobotao === 4) {
+        if (opçoes[numeropergunta][3] === respostasCorretas[numeropergunta]) {
+            acertou = true;
+        } else {
+            acertou = false;
+        }
+    }
+
+    if (acertou === true) {
+        quadrados *= 1.15;
+    } else {
+        quadrados *= 0.85;
+    }  
+
+    mudarMain();
+    comecarquiz();
+    alterar();
+
+}
+
+function skinquadrado(tipo) {
+    let quadradoprincipal = document.getElementById('quadrado');
+    if (tipo === "texto") {
+        let textoinput = document.getElementById('textoQuadrado').value;
+        quadradoprincipal.innerText = textoinput;
+    } else if (tipo === "fundo") {
+        let fundoinput = document.getElementById("fundoQuadrado").value;
+        quadradoprincipal.style.backgroundColor = fundoinput;
+    } else if (tipo === "corborda") {
+        let corbordainput = document.getElementById("bordaQuadrado").value;
+        quadradoprincipal.style.borderColor = corbordainput;
+    } else if(tipo === "tipoborda") {
+        const radios = document.querySelectorAll('#skin-quadrado input[type="radio"]');
+        let tipobordainput = Array.from(radios).find(radio => radio.checked).value;
+        quadradoprincipal.style.borderStyle = tipobordainput;
+    } else if (tipo === "original") {
+        quadradoprincipal.innerText = "";
+        quadradoprincipal.style.backgroundColor = "#E0F7FA";
+        quadradoprincipal.style.borderColor = "black";
+    } else {
+        alert("como você fez isso?")
+    }
+
+
+
+    alterar()
+}
+    
 //triangulos
 
 // menus
@@ -466,7 +799,6 @@ function confirmarRenascer() {
 function mudarMaquinadasorte() {
     document.getElementById("outros").style.display = "none";
     document.getElementById("maquina-da-sorte").style.display = "flex";
-    document.getElementById("maquina-da-sorte").style.justifyContent = "center"
 }
 
 function mudarLivromagico() {
@@ -476,12 +808,12 @@ function mudarLivromagico() {
 
 function mudarQuizmatematico() {
     document.getElementById("outros").style.display = "none";
-    document.getElementById("quiz-matematico").style.display = "block";
+    document.getElementById("quiz-matematico").style.display = "flex";
 }
 
 function mudarSkinquadrado() {
     document.getElementById("outros").style.display = "none";
-    document.getElementById("quiz-matematico").style.display = "block";
+    document.getElementById("skin-quadrado").style.display = "block";
 }
 
 function mudarMain() {
@@ -503,9 +835,13 @@ function mudarMain() {
     document.getElementById("maquina-da-sorte").style.display = "none";
     document.getElementById("livro-magico").style.display = "none";
     document.getElementById("quiz-matematico").style.display = "none";
+    document.getElementById("skin-quadrado").style.display = "none";
     document.getElementById("renascer").style.backgroundColor = "#e0f7fa";
-    let consiga1quadradoText = document.getElementById("consiga1quadrado")
-    consiga1quadradoText.innerText = ""
+    let consiga1quadradoText = document.getElementById("consiga1quadrado");
+    consiga1quadradoText.innerText = "";
+
+    salvarDados();
+    carregarDados();
 }
 
 //menus
@@ -756,3 +1092,6 @@ function comprarMelhoriasTriangulos(melhoria, evento) {
 }
 
 //compras
+
+window.addEventListener("beforeunload", salvarDados);
+window.addEventListener("load", carregarDados);

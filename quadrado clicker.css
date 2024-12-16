@@ -34,6 +34,9 @@ div#quadrado {
     height: 200px;
     border: solid 3px;
     transition: 0.3s, transform 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 @media (max-width: 600px) {
@@ -215,10 +218,12 @@ section#renascer *:not(button:nth-of-type(1)) {
 
 
 #maquina-da-sorte {
-    justify-content: center;
     height: fit-content;
     font-family: Arial, sans-serif;
-    gap: 20px; 
+}
+
+#maquinaeform {
+    width: 48%;
 }
 
 #maquina {
@@ -230,13 +235,12 @@ section#renascer *:not(button:nth-of-type(1)) {
     height: fit-content;
     max-width: 400px;
     padding: 20px;
-    margin: 30px 20px 50px 20px;
+    margin: 30px 20px 50px 50px;
     background: white;
     border: 2px solid #6a11cb;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
 
 #resultado-maquina {
     display: flex;
@@ -306,6 +310,9 @@ section#renascer *:not(button:nth-of-type(1)) {
 
 .explicacao {
     margin-left: 10%;
+    min-width: 30%;
+    width: 48%;
+    max-width: 48%;
 }
 
 .explicacao h2 {
@@ -409,4 +416,111 @@ p#mana {
     #livro-magico {
         flex-direction: column;
     }   
+    .explicacao {
+        width: 95%;
+    }
+}
+
+
+/* quiz matematico */
+
+#quiz {
+    margin: 5px;
+    border: solid 2px;
+    border-radius: 10px;
+    width: 58%;
+    background-color: rgb(255, 232, 232);
+}
+
+#pergunta {
+    margin: 2px;
+    width: 100%;
+    height: 55vh;
+    text-align: center;
+    overflow-y: auto;
+    font-size: larger;
+}
+
+#opçoes {
+    margin: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around
+}
+
+#opçoes button {
+    margin: 5px;
+    width: 35%;
+    height: 5vh;
+}
+
+#divcomecarquiz {
+    text-align: center;
+}
+
+#comecarquiz {
+    font-size: 40px;
+    border-radius: 10px ;
+}
+
+@media (max-width: 600px) {
+    #quiz-matematico {
+        flex-direction: column;
+    }   
+    #quiz {
+        width: 95%;
+    }
+    .explicacao {
+        max-width: 95%;
+    }
+}
+
+/* skin */
+
+#skin-quadrado {
+    width: 100%;
+}
+
+#skin-quadrado h2 {
+    width: 100%;
+    text-align: center;
+}
+
+#skin-quadrado div#form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 1%;
+}
+
+div.tipocustom {
+    min-height: fit-content;
+    width: 30%;
+    border: dashed 2px;
+    padding: 5px;
+    margin: 10px;
+    text-align: center;
+    background-color: #f0f8ff;
+    border-color: #00b3ff;
+}
+
+div.tipocustom div {
+    margin: 10px;
+}
+
+button#voltaroriginal {
+    margin: 20px;
+    padding: 10px;
+    width: fit-content;
+    height: fit-content;
+    font-size: x-large;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #0099ff, #ff1e1e);
+}
+
+@media (max-width: 600px) {
+    div.tipocustom {
+        min-width: fit-content;
+    }
 }
