@@ -72,8 +72,8 @@ div.construcao {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
-    background-color: #d4c4bd;
-    color: rgba(255, 255, 255, 0.658);
+    background-color: #fd6321;
+    color: rgb(0, 0, 0);
     border: solid black;
     margin: 5% 1%;
     position: relative;
@@ -102,7 +102,7 @@ section#direita div h4 {
     position: absolute;
     margin-top: 1%;
     font-size: 500%;
-    color: #b0bec5;   /* Cor suave, mas visível */
+    color: #a1d9f5;   /* Cor suave, mas visível */
     z-index: 1;       /* Coloca o h4 por baixo dos outros elementos */
     pointer-events: none; /* Faz com que o h4 não interfira com cliques nos elementos acima */
 }
@@ -124,8 +124,8 @@ td p {
 td {
     width: 600px;
     justify-content: space-evenly;
-    background-color: #d4c4bd;
-    color: rgb(255, 255, 255);
+    background-color: #fd6321;
+    color: rgb(0, 0, 0);
     border: solid black;
     transition: 0.3s, transform 0.3s;
 }
