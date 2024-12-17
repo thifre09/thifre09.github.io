@@ -1,7 +1,7 @@
 //variaveis
 
 let quadrados = 0;
-let base = 1000;
+let base = 1;
 
 let nCur = 0;
 let nPro = 0;
@@ -37,8 +37,8 @@ let melhoriasTri = {
     sp1: false,
     ms1: false,
     lm1: false,
-    sq1: false,
-    qm1: false
+    qm1: false,
+    sq1: false
 }
 let tri = {
     tr1: false,
@@ -53,7 +53,7 @@ let tri = {
     tr10: false
 }
 let triangulos = 0;
-a_pd1 = 1
+let a_pd1 = 1
 
 let mana = 10;
 let nclicks = 0;
@@ -170,7 +170,9 @@ let valorParaGanhar1QuadradoAscendente = 100000000;
 
 let click = (base + (nCur * aCur) + (nPro *aPro) + (nMat *aMat) + (nQua * aQua) + (nFab * aFab)) * a_pd1;
 
-
+if (renasceu === true) {
+    click = (base + (nCur * aCur) + (nPro *aPro) + (nMat *aMat) + (nQua * aQua) + (nFab * aFab)) * a_pd1 * (1 + quadrados_ascendentes/10);
+}
 
 //variaveis
 
@@ -239,6 +241,7 @@ function carregarDados() {
         quadrados_ascendentes = estado.quadrados_ascendentes;
         valorParaGanhar1QuadradoAscendente = estado.valorParaGanhar1QuadradoAscendente;
     }
+
     for (let categoria in melhorias) {
         for (let melhoria in melhorias[categoria]) {
             if (melhorias[categoria][melhoria]) {
@@ -249,6 +252,235 @@ function carregarDados() {
             }
         }
     }
+
+    let celulapd1 = document.getElementById("pd1");
+    let celulacc1 = document.getElementById("cc1");
+    let celulacm1 = document.getElementById("cm1");
+    let celulasp1 = document.getElementById("sp1");
+    let celulams1 = document.getElementById("ms1");
+    let botaoms1 = document.getElementById("maquinadasorte");
+    let celulalm1 = document.getElementById("lm1");
+    let botaolm1 = document.getElementById("livromagico");
+    let celulaqm1 = document.getElementById("qm1");
+    let botaoqm1 = document.getElementById("quizmatematico");
+    let celulasq1 = document.getElementById("sq1");
+    let botaosq1 = document.getElementById("skinquadrado");
+    if (melhoriasTri.pd1) {
+        celulapd1.style.backgroundColor = "#f88c5d";
+    }
+    if (melhoriasTri.cc1) {
+        celulacc1.style.backgroundColor = "#f88c5d";
+    }
+    if (melhoriasTri.cm1) {
+        celulacm1.style.backgroundColor = "#f88c5d";
+    }
+    if (melhoriasTri.sp1) {
+        celulasp1.style.backgroundColor = "#f88c5d";
+    }
+    if (melhoriasTri.ms1) {
+        celulams1.style.backgroundColor = "#f88c5d";
+        botaoms1.style.display = "block";
+    }
+    if (melhoriasTri.lm1) {
+        celulalm1.style.backgroundColor = "#f88c5d";
+        botaolm1.style.display = "block";
+    }
+    if (melhoriasTri.qm1) {
+        celulaqm1.style.backgroundColor = "#f88c5d";
+        botaoqm1.style.display = "block";
+    }
+    if (melhoriasTri.sq1) {
+        celulasq1.style.backgroundColor = "#f88c5d";
+        botaosq1.style.display = "block";
+    }
+    
+    
+}
+
+function salvarJson() {
+    // Todas as variáveis do jogo
+    const estadoJogo = {
+        quadrados,
+        base,
+        nCur,
+        nPro,
+        nMat,
+        nQua,
+        nFab,
+        vCur,
+        vPro,
+        vMat,
+        vQua,
+        vFab,
+        aCur,
+        aPro,
+        aMat,
+        aQua,
+        aFab,
+        melhorias,
+        melhoriasTri,
+        tri,
+        triangulos,
+        a_pd1,
+        mana,
+        nclicks,
+        magiaselecionada,
+        usoumultiplicus,
+        perguntaescolhida,
+        perguntas,
+        opçoes,
+        respostasCorretas,
+        renasceu,
+        quadrados_ascendentes,
+        valorParaGanhar1QuadradoAscendente,
+        click
+    };
+
+    // Converte o estado para JSON
+    const dadosJSON = JSON.stringify(estadoJogo, null, 4);
+
+    // Criação de um elemento <a> para simular o download
+    const elemento = document.createElement('a');
+    const arquivoBlob = new Blob([dadosJSON], { type: 'application/json' });
+
+    // Configura o download do arquivo
+    elemento.href = URL.createObjectURL(arquivoBlob);
+    elemento.download = 'estado_jogo.json';
+
+    // Simula o clique para baixar o arquivo
+    document.body.appendChild(elemento);
+    elemento.click();
+
+    // Remove o elemento <a> depois de usá-lo
+    document.body.removeChild(elemento);
+}
+
+function carregarJson() {
+    // Cria um input do tipo file para o usuário selecionar o arquivo
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'application/json';
+
+    // Define o que acontece quando o arquivo é selecionado
+    input.onchange = (evento) => {
+        const arquivo = evento.target.files[0]; // Seleciona o arquivo
+
+        if (arquivo) {
+            const leitor = new FileReader(); // Cria um FileReader para ler o arquivo
+
+            leitor.onload = (e) => {
+                try {
+                    const dadosCarregados = JSON.parse(e.target.result); // Converte JSON para objeto
+
+                    // Atualiza todas as variáveis do jogo
+                    quadrados = dadosCarregados.quadrados;
+                    base = dadosCarregados.base;
+                    nCur = dadosCarregados.nCur;
+                    nPro = dadosCarregados.nPro;
+                    nMat = dadosCarregados.nMat;
+                    nQua = dadosCarregados.nQua;
+                    nFab = dadosCarregados.nFab;
+
+                    vCur = dadosCarregados.vCur;
+                    vPro = dadosCarregados.vPro;
+                    vMat = dadosCarregados.vMat;
+                    vQua = dadosCarregados.vQua;
+                    vFab = dadosCarregados.vFab;
+
+                    aCur = dadosCarregados.aCur;
+                    aPro = dadosCarregados.aPro;
+                    aMat = dadosCarregados.aMat;
+                    aQua = dadosCarregados.aQua;
+                    aFab = dadosCarregados.aFab;
+
+                    melhorias = dadosCarregados.melhorias;
+                    melhoriasTri = dadosCarregados.melhoriasTri;
+                    tri = dadosCarregados.tri;
+
+                    triangulos = dadosCarregados.triangulos;
+                    a_pd1 = dadosCarregados.a_pd1;
+
+                    mana = dadosCarregados.mana;
+                    nclicks = dadosCarregados.nclicks;
+                    magiaselecionada = dadosCarregados.magiaselecionada;
+                    usoumultiplicus = dadosCarregados.usoumultiplicus;
+
+                    perguntaescolhida = dadosCarregados.perguntaescolhida;
+                    perguntas = dadosCarregados.perguntas;
+                    opçoes = dadosCarregados.opçoes;
+                    respostasCorretas = dadosCarregados.respostasCorretas;
+
+                    renasceu = dadosCarregados.renasceu;
+                    quadrados_ascendentes = dadosCarregados.quadrados_ascendentes;
+                    valorParaGanhar1QuadradoAscendente = dadosCarregados.valorParaGanhar1QuadradoAscendente;
+
+                    click = dadosCarregados.click;
+
+                    for (let categoria in melhorias) {
+                        for (let melhoria in melhorias[categoria]) {
+                            if (melhorias[categoria][melhoria]) {
+                                const td = document.querySelector(`[data-melhoria="${melhoria}"]`);
+                                if (td) {
+                                    td.style.backgroundColor = "#f88c5d";
+                                }
+                            }
+                        }
+                    }
+                
+                    let celulapd1 = document.getElementById("pd1");
+                    let celulacc1 = document.getElementById("cc1");
+                    let celulacm1 = document.getElementById("cm1");
+                    let celulasp1 = document.getElementById("sp1");
+                    let celulams1 = document.getElementById("ms1");
+                    let botaoms1 = document.getElementById("maquinadasorte");
+                    let celulalm1 = document.getElementById("lm1");
+                    let botaolm1 = document.getElementById("livromagico");
+                    let celulaqm1 = document.getElementById("qm1");
+                    let botaoqm1 = document.getElementById("quizmatematico");
+                    let celulasq1 = document.getElementById("sq1");
+                    let botaosq1 = document.getElementById("skinquadrado");
+                    if (melhoriasTri.pd1) {
+                        celulapd1.style.backgroundColor = "#f88c5d";
+                    }
+                    if (melhoriasTri.cc1) {
+                        celulacc1.style.backgroundColor = "#f88c5d";
+                    }
+                    if (melhoriasTri.cm1) {
+                        celulacm1.style.backgroundColor = "#f88c5d";
+                    }
+                    if (melhoriasTri.sp1) {
+                        celulasp1.style.backgroundColor = "#f88c5d";
+                    }
+                    if (melhoriasTri.ms1) {
+                        celulams1.style.backgroundColor = "#f88c5d";
+                        botaoms1.style.display = "block";
+                    }
+                    if (melhoriasTri.lm1) {
+                        celulalm1.style.backgroundColor = "#f88c5d";
+                        botaolm1.style.display = "block";
+                    }
+                    if (melhoriasTri.qm1) {
+                        celulaqm1.style.backgroundColor = "#f88c5d";
+                        botaoqm1.style.display = "block";
+                    }
+                    if (melhoriasTri.sq1) {
+                        celulasq1.style.backgroundColor = "#f88c5d";
+                        botaosq1.style.display = "block";
+                    }
+
+                    alert("Estado do jogo carregado com sucesso!");
+                } catch (erro) {
+                    console.error("Erro ao carregar o arquivo:", erro);
+                    alert("O arquivo selecionado não é válido.");
+                }
+            };
+
+            leitor.readAsText(arquivo); // Lê o conteúdo do arquivo
+        }
+    };
+
+    // Simula o clique no input para abrir o seletor de arquivos
+    input.click();
 }
 
 function formatar(numero) {
@@ -302,8 +534,6 @@ function clique() {
         }, 100);
     }
 
-    salvarDados();
-    carregarDados();
     verificarQuadradosAscendentes();
     verificarTriangulos();
     cliqueCritico();
@@ -378,7 +608,7 @@ function renascer() {
         renasceu = true
 
         quadrados = 0
-        base = 1000
+        base = 1
 
         nCur = 0;
         nPro = 0;
@@ -768,6 +998,19 @@ function mudarOutros() {
     document.getElementById("outros").style.display = "block";
 }
 
+function mudarSalvamento() {
+    document.getElementById("esquerda").style.display = "none";
+    document.getElementById("centro").style.display = "none";
+    document.getElementById("direita").style.display = "none";
+
+    const separadores = document.getElementsByClassName("separador");
+    for (let i = 0; i < separadores.length; i++) {
+        separadores[i].style.display = "none";
+    }
+
+    document.getElementById("salvar").style.display = "block";
+}
+
 function mudarTriângulos() {
     document.getElementById("outros").style.display = "none";
 
@@ -829,6 +1072,7 @@ function mudarMain() {
     document.getElementById("melhorias").style.display = "none";
     document.getElementById("ajuda").style.display = "none";
     document.getElementById("outros").style.display = "none";
+    document.getElementById("salvar").style.display = "none";
     document.getElementById("triangulos").style.display = "none";
     document.getElementById("renascer").style.display = "none";
     document.getElementById("confirmarRenascer").style.display = "none";
@@ -839,9 +1083,6 @@ function mudarMain() {
     document.getElementById("renascer").style.backgroundColor = "#e0f7fa";
     let consiga1quadradoText = document.getElementById("consiga1quadrado");
     consiga1quadradoText.innerText = "";
-
-    salvarDados();
-    carregarDados();
 }
 
 //menus
@@ -1041,19 +1282,22 @@ function comprarMelhoriasTriangulos(melhoria, evento) {
         a_pd1 = 2
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
-    if (melhoria === 'Clique crítico' && melhoriasTri.pd1 === false && triangulos >= 1) {
+    if (melhoria === 'Clique crítico' && melhoriasTri.cc1 === false && triangulos >= 1) {
         melhoriasTri.cc1 = true;
         triangulos -= 1
-
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
-    if (melhoria === 'Crítico melhorado' && melhoriasTri.pd1 === false && triangulos >= 1) {
-        melhoriasTri.cm1 = true;
-        triangulos -= 1
-
-        evento.target.closest("td").style.backgroundColor = "#f88c5d";
+    if (melhoria === 'Crítico melhorado' && melhoriasTri.cm1 === false && triangulos >= 1) {
+        if (melhoriasTri.cc1 === true) {
+            melhoriasTri.cm1 = true;
+            triangulos -= 1
+            evento.target.closest("td").style.backgroundColor = "#f88c5d";
+        } else {
+            alert('Precisa de Clique Critico primeiro')
+        }
+            
     }
-    if (melhoria === 'Superprodução' && melhoriasTri.pd1 === false && triangulos >= 2) {
+    if (melhoria === 'Superprodução' && melhoriasTri.sp1 === false && triangulos >= 2) {
         melhoriasTri.sp1 = true;
         triangulos -= 2
         aCur *= 2
@@ -1063,19 +1307,19 @@ function comprarMelhoriasTriangulos(melhoria, evento) {
         aFab *= 2
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
-    if (melhoria === 'Maquina da sorte' && melhoriasTri.pd1 === false && triangulos >= 3) {
+    if (melhoria === 'Maquina da sorte' && melhoriasTri.ms1 === false && triangulos >= 3) {
         melhoriasTri.ms1 = true;
         triangulos -= 3
         document.getElementById("maquinadasorte").style.display = "block"
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
-    if (melhoria === 'Livro magico' && melhoriasTri.pd1 === false && triangulos >= 3) {
+    if (melhoria === 'Livro magico' && melhoriasTri.lm1 === false && triangulos >= 3) {
         melhoriasTri.lm1 = true;
         triangulos -= 3;
         document.getElementById("livromagico").style.display = "block";
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
-    if (melhoria === 'Quiz matemático' && melhoriasTri.pd1 === false && triangulos >= 3) {
+    if (melhoria === 'Quiz matemático' && melhoriasTri.qm1 === false && triangulos >= 3) {
         melhoriasTri.qm1 = true;
         triangulos -= 3
         document.getElementById("quizmatematico").style.display = "block"
@@ -1086,12 +1330,14 @@ function comprarMelhoriasTriangulos(melhoria, evento) {
         triangulos -= 1;
         document.getElementById("skinquadrado")
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
+        document.getElementById("skinquadrado").style.display = "block";
     }
 
     alterar()
 }
 
 //compras
+
 
 window.addEventListener("beforeunload", salvarDados);
 window.addEventListener("load", carregarDados);

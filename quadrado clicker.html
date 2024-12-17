@@ -28,6 +28,7 @@
                 <button onclick="mudarMelhorias()">Melhorias</button>
                 <button onclick="mudarOutros()">Outros</button>
                 <button onclick="mudarAjuda()" >Ajuda</button>
+                <button onclick="mudarSalvamento()">Salvar</button>
             </div>
 
             <h1 id="quadradosporclickText">Quadrados por click: 1</h1>
@@ -196,6 +197,7 @@
                 <li>Para ganhar "quadrados", clique no quadrado na esquerda</li>
                 <li>A quantidade de "quadrados" ganhos por clique é indicada pelo numero em "Quadrados por click"</li>
                 <li>Existem, atualmente, 5 contruçoes diferentes: "cursores", "professores", "matematicos", "quadros", e "fabricas", para compra-las basta ter o numero de quadrados indicado pelo "preço"</li>
+                <li>O jogo salva altomaticamente(OBS: é necessario clicar uma vez no quadrado para carregar o save), mas é possivel salvar manualmente(que é mais seguro)</li>
             </ul>
 
             <h2>Melhorias:</h2>
@@ -248,14 +250,28 @@
 
                 <button onclick="mudarRenascer()">Renascer</button>
 
-                <button  id="maquinadasorte" onclick="mudarMaquinadasorte()">Máquina da sorte</button>
+                <button id="maquinadasorte" onclick="mudarMaquinadasorte()" style="display: none;">Máquina da sorte</button>
 
-                <button id="livromagico" onclick="mudarLivromagico()">Livro mágico</button>
+                <button id="livromagico" onclick="mudarLivromagico()" style="display: none;">Livro mágico</button>
 
-                <button  id="quizmatematico" onclick="mudarQuizmatematico()">Quiz matemático</button>
+                <button id="quizmatematico" onclick="mudarQuizmatematico()" style="display: none;">Quiz matemático</button>
 
-                <button  id="skinquadrado" onclick="mudarSkinquadrado()">Skin do quadrado</button>
+                <button id="skinquadrado" onclick="mudarSkinquadrado()" style="display: none;">Skin do quadrado</button>
 
+            </div>
+        </section>
+
+        <section id="salvar" style="display: none;">
+            <button onclick="mudarMain()" style="width: fit-content; height: fit-content;">Voltar</button>
+
+            <h2>Salvar</h2>
+
+            <p>O salvamento é feito altomanticamente, mas se ocorrer algum erro, é sempre bom ter um arquivo reserva</p>
+            <p>Clicar em salavr irá baixar um arquivo que pode ser usado para acessar seu save de qualquer dispositivo</p>
+
+            <div>
+                <button onclick="salvarJson()">Salvar</button>
+                <button onclick="carregarJson()">Carregar</button>
             </div>
         </section>
 
@@ -266,17 +282,17 @@
                 </tr>
 
                 <tr>
-                    <td onclick="comprarMelhoriasTriangulos('Produtividade dobrada', event)">
+                    <td id="pd1" onclick="comprarMelhoriasTriangulos('Produtividade dobrada', event)">
                         <h2>Produtividade dobrada</h2>
                         <p>Dobra seus quadrados por clique</p>
                         <h3>Preço:2</h3>
                     </td>
-                    <td onclick="comprarMelhoriasTriangulos('Clique crítico', event)">
+                    <td id="cc1" onclick="comprarMelhoriasTriangulos('Clique crítico', event)">
                         <h2>Clique crítico</h2>
                         <p>Há uma pequena chance de conseguir um clique crítico, que dá 5x quadrados</p>
                         <h3>Preço:1</h3>
                     </td>
-                    <td onclick="comprarMelhoriasTriangulos('Crítico melhorado', event)">
+                    <td id="cm1" onclick="comprarMelhoriasTriangulos('Crítico melhorado', event)">
                         <h2>Crítico melhorado</h2>
                         <p>(Necessita do clique crítico desbloqueado)</p>
                         <p>O crítico tem 2x mais chance de ocorrer e gera 15x mais quadrados em vez de 5x</p>
@@ -285,17 +301,17 @@
                 </tr>
 
                 <tr>
-                    <td onclick="comprarMelhoriasTriangulos('Superprodução', event)">
+                    <td id="sp1" onclick="comprarMelhoriasTriangulos('Superprodução', event)">
                         <h2>Superprodução</h2>
                         <p>Todas as construçôes são 100% mais eficientes</p>
                         <h3>Preço:2</h3>
                     </td>
-                    <td onclick="comprarMelhoriasTriangulos('Maquina da sorte', event)">
+                    <td id="ms1" onclick="comprarMelhoriasTriangulos('Maquina da sorte', event)">
                         <h2>Maquina da sorte</h2>
                         <p>Adiciona um minijogo em que você pode apostar seus quadrados</p>
                         <h3>Preço:3</h3>
                     </td>
-                    <td onclick="comprarMelhoriasTriangulos('Livro magico', event)">
+                    <td id="lm1" onclick="comprarMelhoriasTriangulos('Livro magico', event)">
                         <h2>Livro magico</h2>
                         <p>Adiciona um mini jogo em que você pode usar feitiços que ajudam no jogo principal</p>
                         <h3>Preço:3</h3>
@@ -303,12 +319,12 @@
                 </tr>
 
                 <tr>
-                    <td onclick="comprarMelhoriasTriangulos('Quiz matemático', event)">
+                    <td id="qm1" onclick="comprarMelhoriasTriangulos('Quiz matemático', event)">
                         <h2>Quiz matemático</h2>
                         <p>Adiciona um mini jogo em que você responde um quiz, se acertar ganha recompensas</p>
                         <h3>Preço:3</h3>
                     </td>
-                    <td onclick="comprarMelhoriasTriangulos('Skin quadrado', event)">
+                    <td id="sq1" onclick="comprarMelhoriasTriangulos('Skin quadrado', event)">
                         <h2>Skin do quadrado</h2>
                         <p>Adiciona a opção de mudar o quadrado principal</p>
                         <h3>Preço:1</h3>
@@ -458,19 +474,19 @@
 
                 <div class="tipocustom">
                     <h2>Tipo da borda</h2>
-                    <input type="radio" name="bordatipo" value="solid">
+                    <input id="solid" type="radio" name="bordatipo" value="solid">
                     <label for="solid">Solid</label>
 
-                    <input type="radio" name="bordatipo" value="dotted">
+                    <input id="dotted" type="radio" name="bordatipo" value="dotted">
                     <label for="dotted">Dotted</label>
 
-                    <input type="radio" name="bordatipo" value="dashed">
+                    <input id="dashed" type="radio" name="bordatipo" value="dashed">
                     <label for="dashed">Dashed</label>
 
-                    <input type="radio" name="bordatipo" value="double">
+                    <input id="double" type="radio" name="bordatipo" value="double">
                     <label for="double">Double</label>
 
-                    <input type="radio" name="bordatipo" value="groove">
+                    <input id="groove" type="radio" name="bordatipo" value="groove">
                     <label for="groove">Groove</label>
 
                     <button onclick="skinquadrado('tipoborda')">Mudar tipo da borda</button>
