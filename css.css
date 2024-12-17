@@ -3,12 +3,10 @@ body {
 }
 
 h1#title {
-    transition: 0.3s, transform 0.3s;
-}
-
-h1#title {
     text-align: center;
     color:rgb(55, 120, 218);
+    background-color: white;
+    transition: 0.3s, transform 0.3s;
 }
 
 h1#title a:visited {
@@ -23,7 +21,7 @@ nav {
     background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet, red); /* Gradiente duplicado */
     background-size: 300% 100%; /* Aumenta o tamanho do gradiente */
     animation: rainbow 10s linear infinite; /* Animação contínua */
-    width: auto;
+    min-height: auto;
     padding: 15px 30px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -55,3 +53,5 @@ a {
 }
 
 
+/* hydra:009891 */
+/* porque você está olhando isso?*/
