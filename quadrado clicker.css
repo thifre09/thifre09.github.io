@@ -44,6 +44,10 @@ div#quadrado {
         width: 70px;
         height: 70px;
     }
+
+    #esquerda h1, #centro h1 {
+        font-size: x-large;
+    }
 }
 
 div#quadrado:hover {
