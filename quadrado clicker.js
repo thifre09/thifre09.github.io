@@ -512,12 +512,12 @@ function clique() {
         
         // Mudar tamanho ao clicar
         const elemento = document.getElementById("quadrado");
-        elemento.style.width = "100px";
-        elemento.style.height = "100px";
+        elemento.style.width = "90px";
+        elemento.style.height = "90px";
 
         setTimeout(() => {
-            elemento.style.width = "80px";
-            elemento.style.height = "80px";
+            elemento.style.width = "70px";
+            elemento.style.height = "70px";
         }, 100);
     } else if (window.innerWidth >= 600) {
         quadrados += click;
