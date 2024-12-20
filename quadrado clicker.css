@@ -46,7 +46,8 @@ div#quadrado {
     }
 
     #esquerda h1, #centro h1 {
-        font-size: large;
+        font-size: medium;
+        color: blue;
     }
 }
 
