@@ -6,7 +6,7 @@ h2 {
     text-align: center;
 }
 
-img {
+div.meme img {
     border: solid 0.5px rgb(131, 131, 131);
     max-width: 100%;
 }

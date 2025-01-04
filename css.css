@@ -1,5 +1,11 @@
 body {
     color:#333;
+    padding: 0;
+}
+
+html {
+    margin: 0;
+    padding: 0;
 }
 
 h1#title {
@@ -17,7 +23,7 @@ h1#title:hover {
     transform: scale(1.25);
 }
 
-nav {
+nav#barra-main {
     background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet, red); /* Gradiente duplicado */
     background-size: 300% 100%; /* Aumenta o tamanho do gradiente */
     animation: rainbow 10s linear infinite; /* Animação contínua */
@@ -25,20 +31,53 @@ nav {
     padding: 15px 30px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
-    justify-content: center;
     position: sticky;
     top: 0;
 }
 
-h6 {
+nav#barra-main div img {
+    width: 36px;
+    position: absolute;
+}
+
+nav#barra-main div {
+    width: fit-content;
+    height: fit-content;
+}
+
+h6#titulo {
     font-size: xx-large;
     margin: 0;
     color: white;
     text-align: center;
+    width: 100%;
 }
 
-h6 > a {
+h6#titulo > a {
     color: white;
+}
+
+aside#menu-lateral {
+    z-index: 100;
+    display: flex;
+    position: fixed;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.637);
+    width: 30%;
+    top: 0;
+
+}
+
+
+@keyframes abrirMenu {
+    from {right: 100%;}
+    to {right: 70%;}
+
+}
+
+@keyframes fecharMenu {
+    from {right: 70%;}
+    to {right: 100%;}
 }
 
 @keyframes rainbow {
