@@ -13,10 +13,19 @@ h1#title {
     color:rgb(55, 120, 218);
     background-color: white;
     transition: 0.3s, transform 0.3s;
+    text-decoration:none;
+    text-align: center;
+}
+
+h1#title a {
+    text-decoration:none;
+    text-align: center;
 }
 
 h1#title a:visited {
     color: rgb(55, 120, 218);
+    text-decoration:none;
+    text-align: center;
 }
 
 h1#title:hover {
@@ -33,11 +42,17 @@ nav#barra-main {
     display: flex;
     position: sticky;
     top: 0;
+    color: white;
 }
 
 nav#barra-main div img {
     width: 36px;
     position: absolute;
+    transition: 0.3s, transform 0.3s;
+}
+
+nav#barra-main div img:hover {
+    transform: scale(1.25);
 }
 
 nav#barra-main div {
@@ -51,28 +66,19 @@ h6#titulo {
     color: white;
     text-align: center;
     width: 100%;
+    text-decoration:none;
+    text-align: center;
 }
 
 h6#titulo > a {
     color: white;
+    text-decoration:none;
+    text-align: center;
 }
-
-aside#menu-lateral {
-    z-index: 100;
-    display: flex;
-    position: fixed;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.637);
-    width: 30%;
-    top: 0;
-
-}
-
 
 @keyframes abrirMenu {
     from {right: 100%;}
     to {right: 70%;}
-
 }
 
 @keyframes fecharMenu {
@@ -85,12 +91,85 @@ aside#menu-lateral {
     100% { background-position: 150%; } /* Move até o final */
 }
 
+/* barra lateral */
 
-a {
-    text-decoration:none;
+aside#menu-lateral {
+    z-index: 100;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.637);
+    width: 30%;
+    top: 0;
+}
+
+#fechar-menu-lateral {
+    width: 100%;
+    height: fit-content;
+    margin: 0;
+    padding: 0;
+}
+
+aside#menu-lateral button {
+    border: none;
+    border-radius: 100px;
+    font-size: larger;
+    padding: 3px;
+    margin: 3%;
+    width: fit-content;
+    background: linear-gradient(40deg, #66BB6A, #00ff0d);
+    transition: 0.3s, transform 0.3s;
+    box-shadow: 4px 4px 4px #8ca38d;
+}
+
+aside#menu-lateral button:hover {
+    transform: scale(1.25);
+    cursor: pointer;
+    box-shadow: 4px 4px 4px #96da99;
+    background: linear-gradient(40deg, #a6e9aa, #00ff0d);
+}
+
+/* notas da atualização */
+div#updates {
+    width: 30%;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border: solid 3px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box; /* Inclui padding e border no tamanho total */
+    overflow: auto; /* Adiciona barra de rolagem se necessário */
+    max-height: 500px; /* Define uma altura máxima para evitar crescimento excessivo */
+    position: fixed;
+    top: 20px; /* Posição inicial */
+    left: 20px; /* Posição inicial */
+    cursor: default; /* Exibe o cursor de movimento */
+}
+
+div#updates > h3 {
     text-align: center;
 }
 
+div#updates:active {
+    cursor: move;
+}
 
-/* hydra:009891 */
-/* porque você está olhando isso?*/
+div#updates > div > img:hover {
+    transform: scale(1.25);
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    nav#barra-main div img {
+        width: 36px;
+        position: static;
+    }
+
+    div#updates {
+        width: 50%;
+    }
+}
+

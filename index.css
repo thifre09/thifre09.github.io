@@ -8,7 +8,7 @@ div#principal {
 }
 
 div.bloco {
-    width: 30%;
+    width: 50%;
     padding: 10px; /* Adiciona espaço interno */
     background-color: #dfdfdf; /* Cor de fundo leve */
     border-radius: 10px; /* Bordas arredondadas */
@@ -27,7 +27,7 @@ textarea {
 }
 
 div.central {
-    width: 40%;
+    width: 50%;
     padding: 10px;
     box-sizing: border-box; /* Inclui padding e border no tamanho total */
 }
@@ -49,22 +49,6 @@ div.central {
 .links:hover {
     background-color: #81C784; /* Cor ao passar o mouse */
     transform: scale(1.05); /* Aumenta ligeiramente o tamanho */
-}
-
-div.updates {
-    width: 30%;
-    padding: 10px;
-    background-color: #f4f4f4;
-    border: solid 3px ;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box; /* Inclui padding e border no tamanho total */
-    overflow: auto; /* Adiciona barra de rolagem se necessário */
-    max-height: 500px; /* Define uma altura máxima para evitar crescimento excessivo */
-}
-
-div > h3 {
-    text-align: center;
 }
 
 textarea {

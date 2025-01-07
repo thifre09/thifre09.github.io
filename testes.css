@@ -1,88 +1,35 @@
-/* Reset básico */
-* {
-    margin: 0;
+div#calculadora {
+    border: solid 2px rgb(172, 172, 172);
+    width: fit-content;
+    height: fit-content;
+    font-family: sans-serif,Arial, Helvetica, sans-serif
+}
+
+div#calculadora img {
+    width: 30px;
+}
+
+td#visor {
+    text-align: right;
+    font-size: 300%;
+    border: solid 1px rgb(172, 172, 172);
+    background-color: aliceblue;
+    height: 50px;
+}
+
+table#botoes tr td:not(#visor) {
+    width: 40px;
+    height: 35px;
     padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-  }
-  
-  header {
-    background-color: #4CAF50;
-    color: white;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .container {
+    
+}
+
+table#botoes button {
+    width: 60px;
+    height: 50px;
+    font-size: x-large;
+    margin: 3px;
     display: flex;
-    margin: 20px;
-  }
-  
-  /* Barra lateral (informações do jogador) */
-  .sidebar {
-    width: 25%;
-    background-color: #f0fff0;
-    padding: 20px;
-    border-right: 2px solid #ddd;
-  }
-  
-  .sidebar h2 {
-    margin-bottom: 20px;
-  }
-  
-  .sidebar p {
-    margin-bottom: 10px;
-    font-size: 16px;
-  }
-  
-  /* Área principal do jogo */
-  .game-area {
-    flex: 1;
-    padding: 20px;
-  }
-  
-  .game-area h2 {
-    margin-bottom: 20px;
-  }
-  
-  .progress {
-    margin-bottom: 30px;
-  }
-  
-  .actions {
-    margin-top: 20px;
-  }
-  
-  .action-button {
-    display: inline-block;
-    padding: 10px 20px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .action-button:hover {
-    background-color: #45a049;
-  }
-  
-  footer {
-    text-align: center;
-    padding: 10px;
-    background-color: #333;
-    color: white;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-  }
-  
+    justify-content: center;
+    align-items: center;
+}

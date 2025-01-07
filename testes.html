@@ -1,44 +1,57 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jogo da Vida</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="testes.css">
 </head>
 <body>
-  <header>
-    <h1>Jogo da Vida</h1>
-  </header>
+    <div id="calculadora">
 
-  <div class="container">
-    <!-- Barra Lateral com Informações do Jogador -->
-    <aside class="sidebar">
-      <h2>Jogador</h2>
-      <p><strong>Nome:</strong> João</p>
-      <p><strong>Idade:</strong> 20 anos</p>
-      <p><strong>Dinheiro:</strong> $1000</p>
-      <p><strong>Itens:</strong> Nenhum</p>
-    </aside>
+        <table id="botoes">
+            <tr>
+                <td id="visor" colspan="4">0</td>
+            </tr>
+            <tr>
+                <td><button><img src="icones/tempo-passado.png"></button></td>
+                <td><button>%</button></td>
+                <td><button onclick="apagar('tudo')">C</button></td>
+                <td><button onclick="apagar('um')"><img src="icones/excluir.png"></button></td>
+            </tr>
+            <tr>
+                <td><button>1/x</button></td>
+                <td><button>X²</button></td>
+                <td><button><img src="icones/raiz-quadrada.png"></button></td>
+                <td><button><img src="icones/dividir.png"></button></td>
+            </tr>
+            <tr>
+                <td><button onclick="numbers(7)">7</button></td>
+                <td><button onclick="numbers(8)">8</button></td>
+                <td><button onclick="numbers(9)">9</button></td>
+                <td><button>x</button></td>
+            </tr>
+            <tr>
+                <td><button onclick="numbers(4)">4</button></td>
+                <td><button onclick="numbers(5)">5</button></td>
+                <td><button onclick="numbers(6)">6</button></td>
+                <td><button>-</button></td>
+            </tr>
+            <tr>
+                <td><button onclick="numbers(1)">1</button></td>
+                <td><button onclick="numbers(2)">2</button></td>
+                <td><button onclick="numbers(3)">3</button></td>
+                <td><button>+</button></td>
+            </tr>
+            <tr>
+                <td><button>+/-</button></td>
+                <td><button>0</button></td>
+                <td><button>,</button></td>
+                <td><button>=</button></td>
+            </tr>
+        </table>
+    </div>
 
-    <!-- Seção Principal com Ações -->
-    <main class="game-area">
-      <h2>Progresso</h2>
-      <div class="progress">
-        <p>Você tem 20 anos. Escolha o que fazer a seguir:</p>
-      </div>
-
-      <div class="actions">
-        <h3>Ações Disponíveis</h3>
-        <button class="action-button">Envelhecer</button>
-        <button class="action-button">Trabalhar</button>
-        <button class="action-button">Comprar Item</button>
-      </div>
-    </main>
-  </div>
-
-  <footer>
-    <p>Desenvolvido por [Seu Nome]</p>
-  </footer>
+    <script src="testes.js"></script>
 </body>
 </html>
