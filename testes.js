@@ -1,56 +1,138 @@
-let num1 = 0
-let num2 = 0
-let numAtivo = "1"
-let operador =  []
+let num1 = 0;
+let numeroAtivo = 0;
+let operador =  "";
+let virgulaAtivo = false;
+let clicksVirgula =  1;
 
-let visor = document.getElementById('visor')
+let visor = document.getElementById('visor');
 
 function numbers(numero) {
-    if (numAtivo == "1") {
-        num1 *= 10
-        num1 += numero 
-        visor.innerHTML = num1
-    } else if (numAtivo == "2") {
-        num2 *= 10
-        num2 += numero
-        nclicks += 1
-        visor.innerHTML = num2
+    if (virgulaAtivo === false) {
+        numeroAtivo *= 10;
+        numeroAtivo += numero;
+        visor.innerHTML = numeroAtivo;
+    } else if (virgulaAtivo === true) {
+        numeroAtivo += (numero / 10**clicksVirgula)
+        clicksVirgula++
+        if (numero === 0) {
+            visor.innerHTML = numeroAtivo.toLocaleString("pt-BR", {maximumFractionDigits:8}) + ",0";
+        } else {
+            visor.innerText = numeroAtivo.toLocaleString("pt-BR", {maximumFractionDigits:8});
+        }
+        
     }
+        
 }
 
 function simbolos(simbolo) {
-    if (simbolo == "+") {
-        operador.push("+")
-    } else if (simbolo == "-") {
-        operador.push("-")
-    } else if (simbolo == "x") {
-        operador.push("x")
-    } else if (simbolo == "/") {
-        operador.push("/")
-    } else if (simbolo == "**") {
-        operador.push("**")
-    } else if (simbolo == "srqt") {
-        operador.push("srqt")
-    } else if (simbolo == "1/x") {
-        operador.push("1/x")
+    if (operador === "") {
+        num1 += numeroAtivo;
+        numeroAtivo = 0;
+        clicksVirgula = 1;
+        virgulaAtivo = false;
+        visor.innerHTML = numeroAtivo;
+    } else if (operador !== "") {
+        num1 += numeroAtivo;
+        numeroAtivo =  0;
+        clicksVirgula = 1
+        virgulaAtivo = false
+        visor.innerHTML = num1;
     }
+        
 
-    numAtivo = "2"
-    visor.innerHTML = 0
+    if (simbolo === "+") {
+        operador = "+"
+    } else if (simbolo === "-") {
+        operador = "-"
+    } else if (simbolo === "x") {
+       operador = "x"
+    } else if (simbolo === "/") {
+        operador = "/"
+    }
 }
 
-function apagar(tipo) {
-    if (tipo == "tudo") {
-        num1 = 0
-        num2 = 0
-        visor.innerHTML = 0
-    } else if (tipo == "um") {
-        if (numAtivo == "1") {
-            num1 = Math.floor(num1 / 10)
-            visor.innerHTML = num1
-        } else if (numAtivo == "2") {
-            num2 = Math.floor(num2 / 10)
-            visor.innerHTML = num2
+function simbolosInstantaneos(simbolo) {
+    if (simbolo === "**") {
+        numeroAtivo **= 2;
+        visor.innerHTML = numeroAtivo;
+        operador = "**"
+    } else if (simbolo === "sqrt") {
+        numeroAtivo = Math.sqrt(numeroAtivo)
+        visor.innerHTML = numeroAtivo
+        operador = "sqrt"
+    } else if (simbolo === "+/-") {
+        numeroAtivo *= -1;
+        visor.innerHTML = numeroAtivo;
+    } else if (simbolo === "1/x") {
+        numeroAtivo = 1/numeroAtivo;
+        visor.innerHTML = numeroAtivo;
+    } else if (simbolo === "%") {
+        if (num1 === 0) {
+            numeroAtivo = 0;
+            visor.innerHTML = numeroAtivo;
+        } else {
+            numeroAtivo = (num1/100) * numeroAtivo;
+            visor.innerHTML = numeroAtivo
         }
     }
 }
+
+function apagar(tipo) {
+    if (tipo === "tudo") {
+        numeroAtivo = 0;
+        num1 = 0;
+        operador = "";
+        virgulaAtivo = false;
+        clicksVirgula = 1;
+        visor.innerHTML = numeroAtivo;
+    } else if (tipo === "parcial") {
+        numeroAtivo = 0;
+        visor.innerHTML = numeroAtivo;
+    } else if (tipo === "um") {
+        if (virgulaAtivo === false) {
+            numeroAtivo = Math.floor(numeroAtivo / 10);
+            visor.innerHTML = numeroAtivo;
+        } else if (virgulaAtivo === true) {
+            numeroAtivo = Math.round(numeroAtivo * (10**(clicksVirgula-1))) / 10
+            numeroAtivo = Math.floor(numeroAtivo)
+            numeroAtivo = numeroAtivo / (10**(clicksVirgula-2))
+            clicksVirgula -= 1
+    
+            visor.innerHTML = numeroAtivo.toLocaleString("pt-BR", {maximumFractionDigits:8});
+        }
+        if (numeroAtivo === 0) {
+            visor.innerHTML = num1
+        }
+    }
+}
+
+function virgula() {
+    virgulaAtivo = true;
+    visor.innerHTML = String(numeroAtivo) + ","
+}
+
+function calcular() {
+
+    if (operador == "+") {
+        num1 += numeroAtivo
+    } else if (operador == "-") {
+        num1 -= numeroAtivo
+    } else if (operador == "x") {
+        num1 *= numeroAtivo
+    } else if (operador == "/") {
+        num1 /= numeroAtivo
+    } else {
+        num1 = numeroAtivo
+    }
+
+    operador = ""
+
+    numeroAtivo = 0
+
+    num1 = Math.round(num1 * (10**(clicksVirgula-1)))
+    num1 = Math.floor(num1)
+    num1 = num1 / (10**(clicksVirgula-2)) / 10
+
+    visor.innerHTML = num1.toLocaleString("pt-BR", {maximumFractionDigits:8});
+}
+
