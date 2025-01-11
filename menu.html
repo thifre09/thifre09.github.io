@@ -2,7 +2,7 @@
     <div id="fechar-menu-lateral">
         <img src="icones/cruz.png" style="width: 50px;" onclick="abrirMenu(true)">
     </div>
-    <button>Calculadora</button>
+    <button onclick="calculadora(false)">Calculadora</button>
     <button onclick="NotasAtualizacao(false)">Notas da atualização</button>
 </aside>
 
@@ -14,8 +14,8 @@
 </nav>
 
 <div id="updates" style="display: none;">
-    <div>
-        <img src="icones/cruz.png" style="width: 30px;" onclick="NotasAtualizacao(true)">
+    <div class="fechar-container">
+        <img src="icones/cruz.png" class="fechar" onclick="NotasAtualizacao(true)">
     </div>
 
     <h5>Ver. Beta 1.3</h5>
@@ -129,6 +129,52 @@
         
 </div>
 
-<div id="Calculadora">
-    
+<div id="calculadora" style="display: none;">
+    <div class="fechar-container">
+        <img src="icones/cruz.png" class="fechar" onclick="calculadora(true)">
+    </div>
+
+    <table id="botoes">
+        <tr>
+            <td id="visor-container" colspan="4">
+                <div id="visor">0</div>
+            </td>
+        </tr>
+        <tr>
+            <td><button onclick="apagar('parcial')">CE</button></td>
+            <td><button onclick="simbolosInstantaneos('%')">%</button></td>
+            <td><button onclick="apagar('tudo')">C</button></td>
+            <td><button onclick="apagar('um')"><img src="icones/excluir.png"></button></td>
+        </tr>
+        <tr>
+            <td><button onclick="simbolosInstantaneos('1/x')">1/x</button></td>
+            <td><button onclick="simbolosInstantaneos('**')">X²</button></td>
+            <td><button onclick="simbolosInstantaneos('sqrt')"><img src="icones/raiz-quadrada.png"></button></td>
+            <td><button onclick="simbolos('/')"><img src="icones/dividir.png"></button></td>
+        </tr>
+        <tr>
+            <td><button onclick="numbers(7)">7</button></td>
+            <td><button onclick="numbers(8)">8</button></td>
+            <td><button onclick="numbers(9)">9</button></td>
+            <td><button onclick="simbolos('x')">x</button></td>
+        </tr>
+        <tr>
+            <td><button onclick="numbers(4)">4</button></td>
+            <td><button onclick="numbers(5)">5</button></td>
+            <td><button onclick="numbers(6)">6</button></td>
+            <td><button onclick="simbolos('-')">-</button></td>
+        </tr>
+        <tr>
+            <td><button onclick="numbers(1)">1</button></td>
+            <td><button onclick="numbers(2)">2</button></td>
+            <td><button onclick="numbers(3)">3</button></td>
+            <td><button onclick="simbolos('+')">+</button></td>
+        </tr>
+        <tr>
+            <td><button onclick="simbolosInstantaneos('+/-')">+/-</button></td>
+            <td><button onclick="numbers(0)">0</button></td>
+            <td><button onclick="virgula()">,</button></td>
+            <td><button onclick="calcular()">=</button></td>
+        </tr>
+    </table>
 </div>

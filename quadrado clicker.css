@@ -126,7 +126,7 @@ td p {
     padding-left: 1%;
 }
 
-td {
+section#melhorias td {
     width: 600px;
     justify-content: space-evenly;
     background-color: #fd6321;
@@ -135,7 +135,7 @@ td {
     transition: 0.3s, transform 0.3s;
 }
 
-td:hover {
+section#melhorias td:hover {
     transform: scale(1.05);
 }
 
