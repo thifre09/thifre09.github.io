@@ -1,21 +1,22 @@
 <aside id="menu-lateral" style="display: none;">
     <div id="fechar-menu-lateral">
-        <img src="icones/cruz.png" style="width: 50px;" onclick="abrirMenu(true)">
+        <img src="assets/images/icones/cruz.png" style="width: 50px;" onclick="abrirMenu(true)">
     </div>
-    <button onclick="calculadora(false)">Calculadora</button>
     <button onclick="NotasAtualizacao(false)">Notas da atualização</button>
+    <button onclick="calculadora(false)">Calculadora</button>
+    <button onclick="blocoNotas(false)">Bloco de notas</button>
 </aside>
 
 <h1 id="title"><a href="index.html">Meu site incrível</a></h1>
 
 <nav id="barra-main">
-    <div onclick="abrirMenu(false)" id="botao-menu-lateral"><img src="icones/menu.png"></div>
+    <div onclick="abrirMenu(false)" id="botao-menu-lateral"><img src="assets/images/icones/menu.png"></div>
     <h6 id="titulo"><a href="#title">Bem vindo ao incrível site</a></h6>
 </nav>
 
 <div id="updates" style="display: none;">
     <div class="fechar-container">
-        <img src="icones/cruz.png" class="fechar" onclick="NotasAtualizacao(true)">
+        <img src="assets/images/icones/cruz.png" class="fechar" onclick="NotasAtualizacao(true)">
     </div>
 
     <h5>Ver. Beta 1.3</h5>
@@ -131,7 +132,7 @@
 
 <div id="calculadora" style="display: none;">
     <div class="fechar-container">
-        <img src="icones/cruz.png" class="fechar" onclick="calculadora(true)">
+        <img src="assets/images/icones/cruz.png" class="fechar" onclick="calculadora(true)">
     </div>
 
     <table id="botoes">
@@ -144,13 +145,13 @@
             <td><button onclick="apagar('parcial')">CE</button></td>
             <td><button onclick="simbolosInstantaneos('%')">%</button></td>
             <td><button onclick="apagar('tudo')">C</button></td>
-            <td><button onclick="apagar('um')"><img src="icones/excluir.png"></button></td>
+            <td><button onclick="apagar('um')"><img src="assets/images/icones/excluir.png"></button></td>
         </tr>
         <tr>
             <td><button onclick="simbolosInstantaneos('1/x')">1/x</button></td>
             <td><button onclick="simbolosInstantaneos('**')">X²</button></td>
-            <td><button onclick="simbolosInstantaneos('sqrt')"><img src="icones/raiz-quadrada.png"></button></td>
-            <td><button onclick="simbolos('/')"><img src="icones/dividir.png"></button></td>
+            <td><button onclick="simbolosInstantaneos('sqrt')"><img src="assets/images/icones/raiz-quadrada.png"></button></td>
+            <td><button onclick="simbolos('/')"><img src="assets/images/icones/dividir.png"></button></td>
         </tr>
         <tr>
             <td><button onclick="numbers(7)">7</button></td>
@@ -177,4 +178,16 @@
             <td><button onclick="calcular()">=</button></td>
         </tr>
     </table>
+</div>
+
+<div id="bloco" style="display: none;">
+    <div class="fechar-container">
+        <img src="assets/images/icones/cruz.png" class="fechar" onclick="blocoNotas(true)">
+    </div>
+    <h2>Notas</h2>
+    <textarea id="newNoteText" rows="4" placeholder="Digite sua nova nota aqui..."></textarea>
+    <button onclick="addNote()">Adicionar Nota</button>
+    <div id="noteContainer" class="note-container">
+        <!-- Notas serão adicionadas aqui -->
+    </div>
 </div>

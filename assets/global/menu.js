@@ -1,11 +1,14 @@
 // carega o menu lateral e a barra de navegação
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('menu.html')
+    fetch('assets/global/menu.html')
         .then(response => response.text())
         .then(data => {
+            
+
             // Insere o conteúdo de menu.html diretamente no início do body
             document.body.insertAdjacentHTML('afterbegin', data);
-            let visor = document.getElementById("visor");
+
+            let visor = document.getElementById("visor"); // Adiciona a variável visor para a calculadora
 
             // Personaliza o título do menu
             const pageTitle = document.body.getAttribute('data-title');
@@ -14,9 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 titleElement.textContent = pageTitle;
             }
 
-            // Lógica para arrastar a div#updates
+            // Lógica para arrastar as divs
             const updates = document.getElementById('updates');
             const calculadora = document.getElementById('calculadora');
+            const blocoNotas = document.getElementById('bloco')
+
             let draggedElement = null;
 
             updates.addEventListener('mousedown', (e) => {
@@ -70,8 +75,50 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.removeEventListener('mousemove', onMouseMove);
                 }, { once: true });
             });
+
+            blocoNotas.addEventListener('mousedown', (e) => {
+                draggedElement = blocoNotas;
+                const rect = draggedElement.getBoundingClientRect();
+                const shiftX = e.clientX - rect.left;
+                const shiftY = e.clientY - rect.top;
+
+                // Função para mover o painel
+                const moveAt = (pageX, pageY) => {
+                    draggedElement.style.left = `${pageX - shiftX - window.scrollX}px`;
+                    draggedElement.style.top = `${pageY - shiftY - window.scrollY}px`;
+                };
+
+                const onMouseMove = (event) => {
+                    moveAt(event.pageX, event.pageY);
+                };
+
+                // Começa a mover com o mouse
+                document.addEventListener('mousemove', onMouseMove);
+
+                // Solta o painel ao soltar o mouse
+                document.addEventListener('mouseup', () => {
+                    draggedElement = null;
+                    document.removeEventListener('mousemove', onMouseMove);
+                }, { once: true });
+            });
+
+            // Carrega as notas do localStorage quando a página é carregada
+            const savedNotes = JSON.parse(localStorage.getItem('notes')) || [];
+            const noteContainer = document.getElementById('noteContainer');
+            savedNotes.forEach(noteText => {
+                const note = document.createElement('div');
+                note.className = 'note';
+                note.innerHTML = `
+                    <textarea readonly>${noteText}</textarea>
+                    <button class="edit" onclick="editNote(this)">Editar</button>
+                    <button class="delete" onclick="deleteNote(this)">Excluir</button>
+                `;
+                noteContainer.appendChild(note);
+            });
         })
-        .catch(error => console.error('Erro ao carregar o menu:', error));
+     
+        .catch(error => console.error('Erro ao carregar o menu:', error)); // Exibe um erro no console caso haja algum problema ao carregar o menu
+        
 });
 
 function abrirMenu(estado) {
@@ -105,6 +152,15 @@ function calculadora(estado) {
         calculadora.style.display = "none";
     } else if (estado === false) {
         calculadora.style.display = "block";
+    }
+}
+
+function blocoNotas(estado) {
+    let blocoNotas = document.getElementById("bloco");
+    if (estado === true) {
+        blocoNotas.style.display = "none";
+    } else if (estado === false) {
+        blocoNotas.style.display = "block";
     }
 }
 
@@ -222,3 +278,57 @@ function calcular() {
 
 
 /* todo o javascript da calculadora */
+
+
+/* bloco de notas */
+function addNote() {
+    const noteText = document.getElementById('newNoteText').value;
+    if (noteText.trim() === '') return;
+
+    const noteContainer = document.getElementById('noteContainer');
+    const note = document.createElement('div');
+    note.className = 'note';
+
+    note.innerHTML = `
+        <textarea readonly>${noteText}</textarea>
+        <button class="edit" onclick="editNote(this)">Editar</button>
+        <button class="delete" onclick="deleteNote(this)">Excluir</button>
+    `;
+
+    noteContainer.appendChild(note);
+    document.getElementById('newNoteText').value = '';
+
+    // Salva a nova nota no localStorage
+    saveNotes();
+}
+
+function editNote(button) {
+    const note = button.parentElement;
+    const textarea = note.querySelector('textarea');
+
+    if (button.textContent === 'Editar') {
+        textarea.removeAttribute('readonly');
+        button.textContent = 'Salvar';
+    } else {
+        textarea.setAttribute('readonly', '');
+        button.textContent = 'Editar';
+
+        // Salva as alterações no localStorage
+        saveNotes();
+    }
+}
+
+function deleteNote(button) {
+    const note = button.parentElement;
+    note.remove();
+
+    // Salva as alterações no localStorage
+    saveNotes();
+}
+
+function saveNotes() {
+    const noteContainer = document.getElementById('noteContainer');
+    const notes = Array.from(noteContainer.children).map(note => note.querySelector('textarea').value);
+    localStorage.setItem('notes', JSON.stringify(notes));
+}
+/* bloco de notas */

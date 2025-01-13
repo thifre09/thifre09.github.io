@@ -126,7 +126,7 @@ td p {
     padding-left: 1%;
 }
 
-section#melhorias td {
+section#melhorias td, section#triangulos td {
     width: 600px;
     justify-content: space-evenly;
     background-color: #fd6321;
