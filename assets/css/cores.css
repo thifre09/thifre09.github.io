@@ -1,0 +1,23 @@
+.cor {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: aliceblue;
+    border: none;
+    border-radius: 5px;
+    width: fit-content;
+    height: fit-content;
+    padding: 7px;
+}
+
+.quadrado {
+    width: 150px;
+    height: 150px;
+    margin: 5px;
+    background-color: #f00;
+    border: 1px solid #000;
+}
+
+.text {
+    padding: 5px;
+    box-shadow: 0px 0px 6px rgb(0, 0, 0);
+}

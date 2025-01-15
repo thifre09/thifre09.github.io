@@ -5,80 +5,342 @@ h1 {
 div#principal {
     display: flex;
     gap:0.5%; /* Espaço entre os blocos */
+    background-color: aliceblue;
 }
 
-
-
-div.central {
-    width: 50%;
+div#central {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5%;
+    width: 100%;
     padding: 10px;
     box-sizing: border-box; /* Inclui padding e border no tamanho total */
 }
 
 .links {
+    width: 48%;
     display: block; /* Transforma os links em blocos, ocupando uma linha inteira */
-    border: 2px solid #FFFFFF;
+    border: 2px solid #000000;
     border-radius: 10px;
-    padding: 20px 0;
+    padding: 50px 0;
     color: white;
     text-decoration: none;
-    background-color: #66BB6A;
     transition: background-color 0.3s, transform 0.3s;
     font-family: Arial, sans-serif;
-    text-align: center; /* Centraliza o texto dos links */
-    margin-bottom: 10px; /* Adiciona um espaçamento entre os links */
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#batatas {
+    background: no-repeat center;
+    animation: mudarBatatas 40s infinite linear;
+}
+
+#curiosidades {
+    background: no-repeat center;
+    animation: mudarCuriosidades 40s infinite linear;
+}
+
+#review-jogos {
+    background: no-repeat center;
+    animation: mudarJogosReviews 40s infinite linear;
+}
+
+#memes {
+    background: no-repeat center;
+    animation: mudarMemes 40s infinite linear;
+}
+
+#numeros {
+    background: no-repeat center;
+    animation: mudarNumeros 40s infinite linear;
+}
+
+#python {
+    background: no-repeat center;
+    animation: mudarPython 40s infinite linear;
+}
+
+#quadrado-clicker {
+    background: no-repeat center;
+    animation: mudarQuadradoClicker 40s infinite linear;
 }
 
 .links:hover {
-    background-color: #81C784; /* Cor ao passar o mouse */
+    background: #81C784; /* Cor ao passar o mouse */
     transform: scale(1.05); /* Aumenta ligeiramente o tamanho */
 }
 
-textarea {
-    width: 100%;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 10px;
-    box-sizing: border-box;
+@keyframes mudarBatatas {
+    0% {
+        background-image: url('../images/links/batatas/batata1.jpg');
+        background-size: cover;
+    }
+    12.5% {
+        background-image: url('../images/links/batatas/batata2.jpg');
+        background-size: cover;
+    }
+    25% {
+        background-image: url('../images/links/batatas/batata3.jpg');
+        background-size: cover;
+    }
+    37.5% {
+        background-image: url('../images/links/batatas/batata4.jpg');
+        background-size: cover;
+    }
+    50% {
+        background-image: url('../images/links/batatas/batata5.jpg');
+        background-size: cover;
+    }
+    62.5% {
+        background-image: url('../images/links/batatas/batata6.jpg');
+        background-size: cover;
+    }
+    75% {
+        background-image: url('../images/links/batatas/batata7.jpg');
+        background-size: cover;
+    }
+    87.5% {
+        background-image: url('../images/links/batatas/batata8.jpg');
+        background-size: cover;
+    }
+    100% {
+        background-image: url('../images/links/batatas/batata1.jpg');
+        background-size: cover;
+    }
 }
 
-.note-container {
-    margin-top: 10px;
+@keyframes mudarCuriosidades {
+    0% {
+        background-image: url('../images/links/curiosidades/curi1.jpg');
+        background-size: cover;
+    }
+    12.5% {
+        background-image: url('../images/links/curiosidades/curi2.jpg');
+        background-size: cover;
+    }
+    25% {
+        background-image: url('../images/links/curiosidades/curi3.png');
+        background-size: cover;
+    }
+    37.5% {
+        background-image: url('../images/links/curiosidades/curi4.png');
+        background-size: cover;
+    }
+    50% {
+        background-image: url('../images/links/curiosidades/curi5.png');
+        background-size: cover;
+    }
+    62.5% {
+        background-image: url('../images/links/curiosidades/curi6.jpg');
+        background-size: cover;
+    }
+    75% {
+        background-image: url('../images/links/curiosidades/curi7.png');
+        background-size: cover;
+    }
+    87.5% {
+        background-image: url('../images/links/curiosidades/curi8.jpg');
+        background-size: cover;
+    }
+    100% {
+        background-image: url('../images/links/curiosidades/curi1.jpg');
+        background-size: cover;
+    }
 }
 
-.note {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 10px;
-    position: relative;
+@keyframes mudarJogosReviews {
+    0% {
+        background-image: url('../images/links/jogos-reviews/jr1.jpg');
+        background-size: cover;
+    }
+    12.5% {
+        background-image: url('../images/links/jogos-reviews/jr2.jpg');
+        background-size: cover;
+    }
+    25% {
+        background-image: url('../images/links/jogos-reviews/jr3.jpg');
+        background-size: cover;
+    }
+    37.5% {
+        background-image: url('../images/links/jogos-reviews/jr4.jpg');
+        background-size: cover;
+    }
+    50% {
+        background-image: url('../images/links/jogos-reviews/jr5.jpg');
+        background-size: cover;
+    }
+    62.5% {
+        background-image: url('../images/links/jogos-reviews/jr6.jpg');
+        background-size: cover;
+    }
+    75% {
+        background-image: url('../images/links/jogos-reviews/jr7.jpg');
+        background-size: cover;
+    }
+    87.5% {
+        background-image: url('../images/links/jogos-reviews/jr8.jpg');
+        background-size: cover;
+    }
+    100% {
+        background-image: url('../images/links/jogos-reviews/jr1.jpg');
+        background-size: cover;
+    }
 }
 
-.note button {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    border: none;
-    background: #eee;
-    cursor: pointer;
+@keyframes mudarMemes {
+    0% {
+        background-image: url('../images/links/memes/memes1.jpg');
+        background-size: cover;
+    }
+    12.5% {
+        background-image: url('../images/links/memes/memes2.jpeg');
+        background-size: cover;
+    }
+    25% {
+        background-image: url('../images/links/memes/memes3.jpeg');
+        background-size: cover;
+    }
+    37.5% {
+        background-image: url('../images/links/memes/memes4.jpeg');
+        background-size: cover;
+    }
+    50% {
+        background-image: url('../images/links/memes/memes5.jpeg');
+        background-size: cover;
+    }
+    62.5% {
+        background-image: url('../images/links/memes/memes6.jpeg');
+        background-size: cover;
+    }
+    75% {
+        background-image: url('../images/links/memes/memes7.jpg');
+        background-size: cover;
+    }
+    87.5% {
+        background-image: url('../images/links/memes/memes8.png');
+        background-size: cover;
+    }
+    100% {
+        background-image: url('../images/links/memes/memes1.jpg');
+        background-size: cover;
+    }
 }
 
-.note button.edit {
-    right: 40px;
+@keyframes mudarNumeros {
+    0% {
+        background-image: url('../images/links/numeros/num1.png');
+        background-size: cover;
+    }
+    12.5% {
+        background-image: url('../images/links/numeros/num2.jpg');
+        background-size: cover;
+    }
+    25% {
+        background-image: url('../images/links/numeros/num3.png');
+        background-size: cover;
+    }
+    37.5% {
+        background-image: url('../images/links/numeros/num4.jpg');
+        background-size: cover;
+    }
+    50% {
+        background-image: url('../images/links/numeros/num5.jpg');
+        background-size: cover;
+    }
+    62.5% {
+        background-image: url('../images/links/numeros/num6.png');
+        background-size: cover;
+    }
+    75% {
+        background-image: url('../images/links/numeros/num7.jpg');
+        background-size: cover;
+    }
+    87.5% {
+        background-image: url('../images/links/numeros/num8.png');
+        background-size: cover;
+    }
+    100% {
+        background-image: url('../images/links/numeros/num1.png');
+        background-size: cover;
+    }
 }
 
-.note button:hover {
-    background: #ddd;
+@keyframes mudarPython {
+    0% {
+        background-image: url('../images/links/python/py1.jpg');
+        background-size: cover;
+    }
+    12.5% {
+        background-image: url('../images/links/python/py2.jpg');
+        background-size: cover;
+    }
+    25% {
+        background-image: url('../images/links/python/py3.png');
+        background-size: cover;
+    }
+    37.5% {
+        background-image: url('../images/links/python/py4.jpg');
+        background-size: cover;
+    }
+    50% {
+        background-image: url('../images/links/python/py5.jpg');
+        background-size: cover;
+    }
+    62.5% {
+        background-image: url('../images/links/python/py6.jpg');
+        background-size: cover;
+    }
+    75% {
+        background-image: url('../images/links/python/py7.png');
+        background-size: cover;
+    }
+    87.5% {
+        background-image: url('../images/links/python/py8.png');
+        background-size: cover;
+    }
+    100% {
+        background-image: url('../images/links/python/py1.jpg');
+        background-size: cover;
+    }
 }
 
-.note button.delete {
-    color: red;
-}
-
-.note textarea {
-    width: calc(100% - 20px); /* Ajusta a largura para incluir padding e borda */
-    border: none;
-    background: transparent;
-    resize: none;
+@keyframes mudarQuadradoClicker {
+    0% {
+        background-image: url('../images/links/quadrado-clicker/qc1.png');
+        background-size: cover;
+    }
+    12.5% {
+        background-image: url('../images/links/quadrado-clicker/qc2.jpg');
+        background-size: cover;
+    }
+    25% {
+        background-image: url('../images/links/quadrado-clicker/qc3.jpg');
+        background-size: cover;
+    }
+    37.5% {
+        background-image: url('../images/links/quadrado-clicker/qc4.jpg');
+        background-size: cover;
+    }
+    50% {
+        background-image: url('../images/links/quadrado-clicker/qc5.png');
+        background-size: cover;
+    }
+    62.5% {
+        background-image: url('../images/links/quadrado-clicker/qc6.png');
+        background-size: cover;
+    }
+    75% {
+        background-image: url('../images/links/quadrado-clicker/qc7.png');
+        background-size: cover;
+    }
+    87.5% {
+        background-image: url('../images/links/quadrado-clicker/qc8.png');
+        background-size: cover;
+    }
+    100% {
+        background-image: url('../images/links/quadrado-clicker/qc1.png');
+        background-size: cover;
+    }
 }

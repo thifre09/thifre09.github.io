@@ -277,4 +277,54 @@ div#bloco textarea {
 div#bloco .edit {
     margin-right: 20px;
 }
+
+textarea {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.note-container {
+    margin-top: 10px;
+}
+
+.note {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.note button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    border: none;
+    background: #eee;
+    cursor: pointer;
+}
+
+.note button.edit {
+    right: 40px;
+}
+
+.note button:hover {
+    background: #ddd;
+}
+
+.note button.delete {
+    color: red;
+}
+
+.note textarea {
+    width: calc(100% - 20px); /* Ajusta a largura para incluir padding e borda */
+    border: none;
+    background: transparent;
+    resize: none;
+}
+
 /* bloco de notas*/
