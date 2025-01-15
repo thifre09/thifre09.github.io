@@ -1,0 +1,33 @@
+div#container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+form#codificador {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    padding: 10px;
+    border: 3px solid;
+    border-radius: 5px;
+    margin: 20px;
+}
+
+form#codificador > label {
+    font-size: x-large;
+    margin: 20px;
+}
+
+form > div#botoes  {
+    margin: 20px;
+}
+
+form > div#botoes > button {
+    padding: 10px;
+    border: none;
+    border-radius: 100px;
+    background-color: rgb(109, 109, 109);
+}

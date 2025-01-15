@@ -23,7 +23,7 @@ div#central {
     border: 2px solid #000000;
     border-radius: 10px;
     padding: 50px 0;
-    color: white;
+    color: rgb(0, 0, 0);
     text-decoration: none;
     transition: background-color 0.3s, transform 0.3s;
     font-family: Arial, sans-serif;
@@ -35,6 +35,11 @@ div#central {
 #batatas {
     background: no-repeat center;
     animation: mudarBatatas 40s infinite linear;
+}
+
+#cores {
+    background: no-repeat center;
+    animation: mudarCores 40s infinite linear;
 }
 
 #curiosidades {
@@ -107,6 +112,45 @@ div#central {
     }
     100% {
         background-image: url('../images/links/batatas/batata1.jpg');
+        background-size: cover;
+    }
+}
+
+@keyframes mudarCores {
+    0% {
+        background-image: url('../images/links/cores/cores1.jpg');
+        background-size: cover;
+    }
+    12.5% {
+        background-image: url('../images/links/cores/cores2.jpg');
+        background-size: cover;
+    }
+    25% {
+        background-image: url('../images/links/cores/cores3.jpg');
+        background-size: cover;
+    }
+    37.5% {
+        background-image: url('../images/links/cores/cores4.jpg');
+        background-size: cover;
+    }
+    50% {
+        background-image: url('../images/links/cores/cores5.jpg');
+        background-size: cover;
+    }
+    62.5% {
+        background-image: url('../images/links/cores/cores6.png');
+        background-size: cover;
+    }
+    75% {
+        background-image: url('../images/links/cores/cores7.jpg');
+        background-size: cover;
+    }
+    87.5% {
+        background-image: url('../images/links/cores/cores8.png');
+        background-size: cover;
+    }
+    100% {
+        background-image: url('../images/links/cores/cores1.jpg');
         background-size: cover;
     }
 }

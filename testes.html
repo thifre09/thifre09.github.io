@@ -1,60 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" type="text/css" href="assets/global/menu.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/testes.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Botão com Vídeo ao Passar o Mouse</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+
+    .button-container {
+      position: relative;
+      width: 200px;
+      height: 60px;
+      overflow: hidden;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .button-container video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .button-container:hover video {
+      opacity: 1;
+    }
+
+    .button-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: uppercase;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .button-container:hover .button-text {
+      opacity: 0; /* Esconde o texto ao passar o mouse */
+    }
+  </style>
 </head>
 <body>
-    <div id="calculadora">
-
-        <table id="botoes">
-            <tr>
-                <td id="visor-container" colspan="4">
-                    <div id="visor">0</div>
-                </td>
-            </tr>
-            <tr>
-                <td><button onclick="apagar('parcial')">CE</button></td>
-                <td><button onclick="simbolosInstantaneos('%')">%</button></td>
-                <td><button onclick="apagar('tudo')">C</button></td>
-                <td><button onclick="apagar('um')"><img src="icones/excluir.png"></button></td>
-            </tr>
-            <tr>
-                <td><button onclick="simbolosInstantaneos('1/x')">1/x</button></td>
-                <td><button onclick="simbolosInstantaneos('**')">X²</button></td>
-                <td><button onclick="simbolosInstantaneos('sqrt')"><img src="icones/raiz-quadrada.png"></button></td>
-                <td><button onclick="simbolos('/')"><img src="icones/dividir.png"></button></td>
-            </tr>
-            <tr>
-                <td><button onclick="numbers(7)">7</button></td>
-                <td><button onclick="numbers(8)">8</button></td>
-                <td><button onclick="numbers(9)">9</button></td>
-                <td><button onclick="simbolos('x')">x</button></td>
-            </tr>
-            <tr>
-                <td><button onclick="numbers(4)">4</button></td>
-                <td><button onclick="numbers(5)">5</button></td>
-                <td><button onclick="numbers(6)">6</button></td>
-                <td><button onclick="simbolos('-')">-</button></td>
-            </tr>
-            <tr>
-                <td><button onclick="numbers(1)">1</button></td>
-                <td><button onclick="numbers(2)">2</button></td>
-                <td><button onclick="numbers(3)">3</button></td>
-                <td><button onclick="simbolos('+')">+</button></td>
-            </tr>
-            <tr>
-                <td><button onclick="simbolosInstantaneos('+/-')">+/-</button></td>
-                <td><button onclick="numbers(0)">0</button></td>
-                <td><button onclick="virgula()">,</button></td>
-                <td><button onclick="calcular()">=</button></td>
-            </tr>
-        </table>
-    </div>
-
-    <script src="assets/js/testes.js"></script>
+  <div class="button-container">
+    <video muted loop>
+      <source src="cadeado.mp4" type="video/mp4">
+      Seu navegador não suporta vídeos em HTML5.
+    </video>
+    <div class="button-text">Clique Aqui</div>
+  </div>
 </body>
 </html>
