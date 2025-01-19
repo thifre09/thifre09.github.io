@@ -4,7 +4,7 @@ h1 {
 
 div#principal {
     display: flex;
-    gap:0.5%; /* Espaço entre os blocos */
+    gap: 0.5%;
     background-color: aliceblue;
 }
 
@@ -14,15 +14,15 @@ div#central {
     gap: 0.5%;
     width: 100%;
     padding: 10px;
-    box-sizing: border-box; /* Inclui padding e border no tamanho total */
+    box-sizing: border-box;
 }
 
 .links {
-    width: 48%;
-    display: block; /* Transforma os links em blocos, ocupando uma linha inteira */
+    width: 32%;
+    display: block; 
     border: 2px solid #000000;
     border-radius: 10px;
-    padding: 50px 0;
+    padding: 60px 0;
     color: rgb(0, 0, 0);
     text-decoration: none;
     transition: background-color 0.3s, transform 0.3s;
@@ -32,44 +32,91 @@ div#central {
     margin-bottom: 10px;
 }
 
+@media (max-width: 600px) {
+    .links {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .links {
+        font-size: 1.5rem;
+    }
+}
+
+@keyframes texto {
+    0% {
+        color: red;
+    }
+    12.5% {
+        color: orange;
+    }
+    25% {
+        color: yellow;
+    }
+    37.5% {
+        color: green;
+    }
+    50% {
+        color: blue;
+    }
+    62.5% {
+        color: indigo;
+    }
+    75% {
+        color: violet;
+    }
+    87.5% {
+        color: rgb(0, 0, 0);
+    }
+    100% {
+        color: red;
+    }
+}
+
 #batatas {
     background: no-repeat center;
-    animation: mudarBatatas 40s infinite linear;
+    animation: mudarBatatas 40s infinite linear, texto 10s infinite;
+}
+
+#codificador {
+    background: no-repeat center;
+    animation: mudarCodificador 40s infinite linear, texto 10s infinite;
 }
 
 #cores {
     background: no-repeat center;
-    animation: mudarCores 40s infinite linear;
+    animation: mudarCores 40s infinite linear, texto 10s infinite;
 }
 
 #curiosidades {
     background: no-repeat center;
-    animation: mudarCuriosidades 40s infinite linear;
+    animation: mudarCuriosidades 40s infinite linear, texto 10s infinite;
 }
 
 #review-jogos {
     background: no-repeat center;
-    animation: mudarJogosReviews 40s infinite linear;
+    animation: mudarJogosReviews 40s infinite linear, texto 10s infinite;
 }
 
 #memes {
     background: no-repeat center;
-    animation: mudarMemes 40s infinite linear;
+    animation: mudarMemes 40s infinite linear, texto 10s infinite;
 }
 
 #numeros {
     background: no-repeat center;
-    animation: mudarNumeros 40s infinite linear;
+    animation: mudarNumeros 40s infinite linear, texto 10s infinite;
 }
 
 #python {
     background: no-repeat center;
-    animation: mudarPython 40s infinite linear;
+    animation: mudarPython 40s infinite linear, texto 10s infinite;
 }
 
 #quadrado-clicker {
     background: no-repeat center;
-    animation: mudarQuadradoClicker 40s infinite linear;
+    animation: mudarQuadradoClicker 40s infinite linear, texto 10s infinite;
 }
 
 .links:hover {
