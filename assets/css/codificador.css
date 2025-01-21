@@ -32,6 +32,11 @@ form > div#botoes > button {
     background-color: rgb(109, 109, 109);
 }
 
+#criptografar:hover, #descriptografar:hover {
+    background-color: rgb(156, 156, 156);
+    cursor: pointer;
+}
+
 #mensagem {
     width: 30%;
 }
