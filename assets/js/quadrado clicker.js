@@ -654,7 +654,7 @@ function renascer() {
 function verificarQuadradosAscendentes() {
     if (quadrados >= valorParaGanhar1QuadradoAscendente) {
         quadrados_ascendentes++;
-        valorParaGanhar1QuadradoAscendente = Math.round(valorParaGanhar1QuadradoAscendente * 1.2)
+        valorParaGanhar1QuadradoAscendente = Math.round(valorParaGanhar1QuadradoAscendente * 1.05)
     }
 }
 
@@ -946,11 +946,20 @@ function skinquadrado(tipo) {
         quadradoprincipal.innerText = "";
         quadradoprincipal.style.backgroundColor = "#E0F7FA";
         quadradoprincipal.style.borderColor = "black";
+        quadradoprincipal.style.backgroundImage = "none"
+    } else if (tipo === "imagem") {
+        let imagemInput = document.getElementById('imagem').files[0];
+        if (imagemInput) {
+            let imageURL = URL.createObjectURL(imagemInput);
+            quadradoprincipal.style.backgroundImage = `url('${imageURL}')`;
+            quadradoprincipal.style.backgroundSize = "cover"; // Ajusta o tamanho da imagem
+            quadradoprincipal.style.backgroundPosition = "center"; // Centraliza a imagem
+        } else {
+            alert("Nenhuma imagem foi selecionada.");
+        }
     } else {
-        alert("como você fez isso?")
+        alert("Como você fez isso?");
     }
-
-
 
     alterar()
 }
