@@ -31,3 +31,26 @@ form > div#botoes > button {
     border-radius: 100px;
     background-color: rgb(109, 109, 109);
 }
+
+#mensagem {
+    width: 30%;
+}
+
+#mensagem > h1 {
+    font-size: large;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    div#container {
+        flex-direction: column;
+    }
+
+    form#codificador {
+        max-width: 100%;
+    }
+
+    #mensagem {
+        width: 100%;
+    }
+}

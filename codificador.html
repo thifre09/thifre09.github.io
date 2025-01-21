@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,13 +8,14 @@
     <link rel="stylesheet" href="assets/global/menu.css">
     <link rel="stylesheet" href="assets/css/codificador.css">
 </head>
+
 <body data-title="Codificador">
     <script src="assets/global/menu.js"></script>
 
     <div id="container">
         <form id="codificador">
             <label for="input">Digite o texto que deseja codificar</label>
-            <textarea id="input" rows="4" placeholder="Digite o que deseja criptografar"></textarea>
+            <textarea id="input" rows="4" placeholder="Digite o que deseja criptografar ou descriptografar"></textarea>
 
             <label for="ajuste">Digite o valor do ajuste</label>
             <input id="ajuste" type="number">
@@ -23,8 +25,19 @@
                 <button id="descriptografar">Descriptografar</button>
             </div>
 
-            <h2>Resultado</h2>
+            <h2 id="resultado">Resultado</h2>
         </form>
+
+        <div id="mensagem">
+            <h1>Digite o que deseja criptografar, e o resultado criptografado aparecerá ao apertar em "criptografar"
+            </h1>
+            <h1>Se quiser descriptografar, basta colocar o texto fornecido e clicar em "descriptografar"</h1>
+        </div>
     </div>
+
+
+
+    <script src="assets/js/codificador.js"></script>
 </body>
+
 </html>
