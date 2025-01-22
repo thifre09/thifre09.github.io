@@ -1,0 +1,37 @@
+h1 {
+    text-align: center;
+}
+
+div#principal div h2 {
+    font-size: xx-large;
+}
+
+div#principal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    background-color: #e6f7ff;
+    justify-content: space-around;
+    padding: 10px;
+}
+
+div#principal > div {
+    border: solid 2px;
+    border-radius: 10px;
+    text-align: center;
+    padding: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    background-color: white;
+    max-width: 250px;
+}
+
+div#principal > div:hover {
+    transform: scale(1.2); /* Efeito de zoom ao passar o mouse */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Sombra mais intensa ao passar o mouse */
+}
+
+input#search-number {
+    width: 250px;
+}
+

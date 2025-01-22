@@ -1,44 +1,69 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jogo da Vida</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Botão com Vídeo ao Passar o Mouse</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+
+    .button-container {
+      position: relative;
+      width: 200px;
+      height: 60px;
+      overflow: hidden;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .button-container video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .button-container:hover video {
+      opacity: 1;
+    }
+
+    .button-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: uppercase;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .button-container:hover .button-text {
+      opacity: 0; /* Esconde o texto ao passar o mouse */
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <h1>Jogo da Vida</h1>
-  </header>
-
-  <div class="container">
-    <!-- Barra Lateral com Informações do Jogador -->
-    <aside class="sidebar">
-      <h2>Jogador</h2>
-      <p><strong>Nome:</strong> João</p>
-      <p><strong>Idade:</strong> 20 anos</p>
-      <p><strong>Dinheiro:</strong> $1000</p>
-      <p><strong>Itens:</strong> Nenhum</p>
-    </aside>
-
-    <!-- Seção Principal com Ações -->
-    <main class="game-area">
-      <h2>Progresso</h2>
-      <div class="progress">
-        <p>Você tem 20 anos. Escolha o que fazer a seguir:</p>
-      </div>
-
-      <div class="actions">
-        <h3>Ações Disponíveis</h3>
-        <button class="action-button">Envelhecer</button>
-        <button class="action-button">Trabalhar</button>
-        <button class="action-button">Comprar Item</button>
-      </div>
-    </main>
+  <div class="button-container">
+    <video muted loop>
+      <source src="cadeado.mp4" type="video/mp4">
+      Seu navegador não suporta vídeos em HTML5.
+    </video>
+    <div class="button-text">Clique Aqui</div>
   </div>
-
-  <footer>
-    <p>Desenvolvido por [Seu Nome]</p>
-  </footer>
 </body>
 </html>

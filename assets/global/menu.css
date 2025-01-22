@@ -1,0 +1,331 @@
+body {
+    color:#333;
+    padding: 0;
+    margin: 0;
+}
+
+html {
+    margin: 0;
+    padding: 0;
+}
+
+h1#title {
+    text-align: center;
+    color:rgb(55, 120, 218);
+    background-color: white;
+    transition: 0.3s, transform 0.3s;
+    text-decoration:none;
+    text-align: center;
+}
+
+h1#title a {
+    text-decoration:none;
+    text-align: center;
+}
+
+h1#title a:visited {
+    color: rgb(55, 120, 218);
+    text-decoration:none;
+    text-align: center;
+}
+
+h1#title:hover {
+    transform: scale(1.25);
+}
+
+nav#barra-main {
+    background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet, red); /* Gradiente duplicado */
+    background-size: 300% 100%; /* Aumenta o tamanho do gradiente */
+    animation: rainbow 10s linear infinite; /* Animação contínua */
+    min-height: auto;
+    padding: 15px 30px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    position: sticky;
+    top: 0;
+    color: white;
+    z-index: 100;
+}
+
+nav#barra-main div img {
+    width: 36px;
+    position: absolute;
+    transition: 0.3s, transform 0.3s;
+}
+
+nav#barra-main div img:hover {
+    transform: scale(1.25);
+}
+
+nav#barra-main div {
+    width: fit-content;
+    height: fit-content;
+}
+
+h6#titulo {
+    font-size: xx-large;
+    margin: 0;
+    color: white;
+    text-align: center;
+    width: 100%;
+    text-decoration:none;
+    text-align: center;
+}
+
+h6#titulo > a {
+    color: white;
+    text-decoration:none;
+    text-align: center;
+}
+
+@keyframes abrirMenu {
+    from {right: 100%;}
+    to {right: 70%;}
+}
+
+@keyframes fecharMenu {
+    from {right: 70%;}
+    to {right: 100%;}
+}
+
+@keyframes rainbow {
+    0% { background-position: 0%; }   /* Começa na posição inicial */
+    100% { background-position: 150%; } /* Move até o final */
+}
+
+/* barra lateral */
+
+aside#menu-lateral {
+    z-index: 101;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.637);
+    width: 30%;
+    top: 0;
+}
+
+#fechar-menu-lateral {
+    width: 100%;
+    height: fit-content;
+    margin: 0;
+    padding: 0;
+}
+
+aside#menu-lateral button {
+    border: none;
+    border-radius: 100px;
+    font-size: larger;
+    padding: 3px;
+    margin: 3%;
+    width: fit-content;
+    background: linear-gradient(40deg, #66BB6A, #00ff0d);
+    transition: 0.3s, transform 0.3s;
+    box-shadow: 4px 4px 4px #8ca38d;
+}
+
+aside#menu-lateral button:hover {
+    transform: scale(1.25);
+    cursor: pointer;
+    box-shadow: 4px 4px 4px #96da99;
+    background: linear-gradient(40deg, #a6e9aa, #00ff0d);
+}
+
+img.fechar {
+    width: 30px;
+    margin: 5px;
+}
+
+img.fechar:hover {
+    transform: scale(1.25);
+    cursor: pointer;
+}
+
+
+
+
+
+/* notas da atualização */
+div#updates {
+    width: 30%;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border: solid 3px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box; /* Inclui padding e border no tamanho total */
+    overflow: auto; /* Adiciona barra de rolagem se necessário */
+    max-height: 500px; /* Define uma altura máxima para evitar crescimento excessivo */
+    position: fixed;
+    top: 20px; /* Posição inicial */
+    left: 20px; /* Posição inicial */
+    cursor: default; /* Exibe o cursor de movimento */
+    z-index: 101;
+}
+
+div#updates > h3 {
+    text-align: center;
+}
+
+div#updates:active, div#calculadora:active {
+    cursor: move;
+    user-select: none;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    nav#barra-main div img {
+        width: 36px;
+        position: static;
+    }
+
+    div#updates {
+        width: 50%;
+    }
+}
+
+/* notas da atualização */
+
+
+
+
+
+/* calculadora */
+div#calculadora {
+    border: solid 2px rgb(172, 172, 172);
+    border-radius: 5px;
+    width: fit-content;
+    height: fit-content;
+    font-family: sans-serif,Arial, Helvetica, sans-serif;
+    position: fixed;
+    background-color: #f4f4f4;
+    z-index: 101;
+}
+
+div#calculadora img {
+    width: 30px;
+}
+
+td#visor-container {
+    text-align: right;
+    font-size: 2rem;
+    border: solid 1px rgb(172, 172, 172);
+    background-color: aliceblue;
+    height: 50px;
+    max-width: 270px;
+}
+
+div#visor {
+    overflow-x: auto;
+    overflow-y: hidden;
+    height: 50px;
+}
+
+table#botoes tr td:not(#visor) {
+    width: 40px;
+    height: 35px;
+    padding: 0;
+    
+}
+
+table#botoes button {
+    width: 60px;
+    height: 50px;
+    font-size: x-large;
+    margin: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* calculadora */
+
+
+
+
+
+/* bloco de notas */
+div#bloco {
+    display: flex;
+    width: 40%;
+    padding: 10px; /* Adiciona espaço interno */
+    background-color: #dfdfdf; /* Cor de fundo leve */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra leve */
+    box-sizing: border-box; /* Inclui padding e border no tamanho total */
+    position: fixed;
+    z-index: 101;
+}
+
+div#bloco:active {
+    cursor: move;
+    user-select: none; /* Impede a seleção de texto */
+}
+
+div#bloco h2 {
+    text-align: center;
+    color: black;
+}
+
+div#bloco textarea {
+    resize: none; /* Impede o redimensionamento do textarea */
+    width: 100%; /* Faz o textarea ocupar toda a largura do contêiner */
+    box-sizing: border-box; /* Inclui padding e borda no tamanho total */
+}
+
+div#bloco .edit {
+    margin-right: 20px;
+}
+
+textarea {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.note-container {
+    margin-top: 10px;
+}
+
+.note {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.note button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    border: none;
+    background: #eee;
+    cursor: pointer;
+}
+
+.note button.edit {
+    right: 40px;
+}
+
+.note button:hover {
+    background: #ddd;
+}
+
+.note button.delete {
+    color: red;
+}
+
+.note textarea {
+    width: calc(100% - 20px); /* Ajusta a largura para incluir padding e borda */
+    border: none;
+    background: transparent;
+    resize: none;
+}
+
+/* bloco de notas*/

@@ -1,0 +1,61 @@
+div#container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+form#codificador {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    padding: 10px;
+    border: 3px solid;
+    border-radius: 5px;
+    margin: 20px;
+}
+
+form#codificador > label {
+    font-size: x-large;
+    margin: 20px;
+}
+
+form > div#botoes  {
+    margin: 20px;
+}
+
+form > div#botoes > button {
+    padding: 10px;
+    border: none;
+    border-radius: 100px;
+    background-color: rgb(109, 109, 109);
+}
+
+#criptografar:hover, #descriptografar:hover {
+    background-color: rgb(156, 156, 156);
+    cursor: pointer;
+}
+
+#mensagem {
+    width: 30%;
+}
+
+#mensagem > h1 {
+    font-size: large;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    div#container {
+        flex-direction: column;
+    }
+
+    form#codificador {
+        max-width: 100%;
+    }
+
+    #mensagem {
+        width: 100%;
+    }
+}
