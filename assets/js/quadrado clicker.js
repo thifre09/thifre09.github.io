@@ -18,8 +18,8 @@ let vFab = 650000000;
 let aCur = 1;
 let aPro = 10;
 let aMat = 50;
-let aQua = 500;
-let aFab = 10000;
+let aQua = 750;
+let aFab = 15000;
 
 let melhorias = {
     Bas: {b1: false, b2: false, b3: false},
@@ -485,7 +485,7 @@ function carregarJson() {
 
 function formatar(numero) {
     if (numero >= 1 && numero < 1000) {
-        return numero
+        return arredondar(2,numero)
     } else if (numero >= 1000 && numero < 1000000) {
         return arredondar(2,numero / 1000) + "k"
     } else if (numero >= 1000000 && numero < 1000000000) {
@@ -673,7 +673,7 @@ function cliqueCritico() {
         let valorRandom = Math.random()
 
         if (valorRandom <= 0.06) {
-            quadrados += click * 14
+            quadrados += click * 9
         }
     }
 }
@@ -1159,14 +1159,14 @@ function comprarMelhorias(melhoria, evento) {
     // Super Clique
     if (melhoria === "Super clique" && melhorias.Bas.b2 === false && quadrados >= 300000) {
         melhorias.Bas.b2 = true;
-        quadrados -= 300000;
+        quadrados -= 500000;
         base *= 300;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Mega Clique
     if (melhoria === "Mega clique" && melhorias.Bas.b3 === false && quadrados >= 20000000) {
         melhorias.Bas.b3 = true;
-        quadrados -= 20000000;
+        quadrados -= 40000000;
         base *= 100;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
@@ -1181,14 +1181,14 @@ function comprarMelhorias(melhoria, evento) {
     // Múltiplos Cursores
     if (melhoria === "Multiplos cursores" && melhorias.Cur.c2 === false && quadrados >= 75000) {
         melhorias.Cur.c2 = true;
-        quadrados -= 75000;
+        quadrados -= 100_000;
         aCur *= 5;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Super Cursores
     if (melhoria === "Super cursores" && melhorias.Cur.c3 === false && quadrados >= 10000000) {
         melhorias.Cur.c3 = true;
-        quadrados -= 10000000;
+        quadrados -= 30_000_000;
         aCur *= 20;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
@@ -1196,21 +1196,21 @@ function comprarMelhorias(melhoria, evento) {
     // Professores Duplos
     if (melhoria === "Professores duplos" && melhorias.Pro.p1 === false && quadrados >= 25000) {
         melhorias.Pro.p1 = true;
-        quadrados -= 25000;
+        quadrados -= 25_000;
         aPro *= 2;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Escola
     if (melhoria === "Escola" && melhorias.Pro.p2 === false && quadrados >= 600000) {
         melhorias.Pro.p2 = true;
-        quadrados -= 600000;
+        quadrados -= 1_800_000;
         aPro *= 5;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Super Professores
     if (melhoria === "Super professores" && melhorias.Pro.p3 === false && quadrados >= 90000000) {
         melhorias.Pro.p3 = true;
-        quadrados -= 90000000;
+        quadrados -= 180_000_000;
         aPro *= 20;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
@@ -1218,21 +1218,21 @@ function comprarMelhorias(melhoria, evento) {
     // Matemática Dupla
     if (melhoria === "Matematica dupla" && melhorias.Mat.m1 === false && quadrados >= 600000) {
         melhorias.Mat.m1 = true;
-        quadrados -= 600000;
+        quadrados -= 600_000;
         aMat *= 2;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Conjunto de Matemáticos
     if (melhoria === "Conjunto de matematicos" && melhorias.Mat.m2 === false && quadrados >= 20000000) {
         melhorias.Mat.m2 = true;
-        quadrados -= 20000000;
+        quadrados -= 80_000_000;
         aMat *= 5;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Super Matemáticos
     if (melhoria === "Super matematicos" && melhorias.Mat.m3 === false && quadrados >= 100000000) {
         melhorias.Mat.m3 = true;
-        quadrados -= 100000000;
+        quadrados -= 1_00_000_000;
         aMat *= 20;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
@@ -1240,21 +1240,21 @@ function comprarMelhorias(melhoria, evento) {
     // Dois Quadros
     if (melhoria === "Dois quadros" && melhorias.Qua.q1 === false && quadrados >= 30000000) {
         melhorias.Qua.q1 = true;
-        quadrados -= 30000000;
+        quadrados -= 30_000_000;
         aQua *= 2;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Quadrão
     if (melhoria === "Quadrão" && melhorias.Qua.q2 === false && quadrados >= 75000000) {
         melhorias.Qua.q2 = true;
-        quadrados -= 75000000;
+        quadrados -= 200_000_000;
         aQua *= 5;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Quadros Poderosos
     if (melhoria === "Quadros poderosos" && melhorias.Qua.q3 === false && quadrados >= 300000000) {
         melhorias.Qua.q3 = true;
-        quadrados -= 300000000;
+        quadrados -= 10_000_000_000;
         aQua *= 20;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
@@ -1262,21 +1262,21 @@ function comprarMelhorias(melhoria, evento) {
     // Duas Fábricas
     if (melhoria === "Duas fabricas" && melhorias.Fab.f1 === false && quadrados >= 2500000000) {
         melhorias.Fab.f1 = true;
-        quadrados -= 2500000000;
+        quadrados -= 2_500_000_000;
         aFab *= 2;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Começo da Revolução
     if (melhoria === "Começo da revolução" && melhorias.Fab.f2 === false && quadrados >= 5000000000) {
         melhorias.Fab.f2 = true;
-        quadrados -= 5000000000;
+        quadrados -= 15_000_000_000;
         aFab *= 5;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Super Fábricas
     if (melhoria === "Super fabricas" && melhorias.Fab.f3 === false && quadrados >= 100000000000) {
         melhorias.Fab.f3 = true;
-        quadrados -= 100000000000;
+        quadrados -= 1_000_000_000_000;
         aFab *= 20;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }

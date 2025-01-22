@@ -24,15 +24,15 @@ article p {
     text-align: justify;
 }
 
+body[data-title="curiosidades"] article p {
+    background-color: white;
+    color: black;
+}
+
 #leis {
     background-color: #c97200;
     color: rgb(58, 199, 255);
     
-}
-
-#leis p {
-    background-color: white;
-    color: black;
 }
 
 #recordes {
@@ -40,19 +40,9 @@ article p {
     color: rgb(255, 255, 86);
 }
 
-#recordes p {
-    background-color: white;
-    color: black;
-}
-
 #universo {
     background-color: rgb(26, 32, 116);
     color: rgb(139, 3, 139);
-}
-
-#universo p {
-    background-color: white;
-    color: black;
 }
 
 #natureza {
@@ -60,7 +50,8 @@ article p {
     color: greenyellow;
 }
 
-#natureza p {
-    background-color: white;
-    color: black;
+#objetos {
+    background-color: #FF8C00;
+    color: #573000;
 }
+

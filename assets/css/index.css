@@ -11,6 +11,7 @@ div#principal {
 div#central {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-evenly;
     gap: 0.5%;
     width: 100%;
     padding: 10px;

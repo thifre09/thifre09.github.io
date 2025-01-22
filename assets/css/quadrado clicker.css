@@ -14,7 +14,7 @@ div#main {
 }
 
 #esquerda, #centro, #direita {
-    width: 32%;
+    width: 33%;
 
 }
 
@@ -70,7 +70,7 @@ div#botoes {
 section#direita {
     overflow-y: scroll;
     height: 75vh;
-    padding-left: 1px ;
+    padding-left: 1px;
 }
 
 div.construcao {
