@@ -14,7 +14,6 @@
     width: 100%;
     max-width: 1100px;
     justify-content: space-around;
-    font-family: Georgia, 'Times New Roman', Times, serif, Helvetica, sans-serif;
 }
 
 h2 {
@@ -22,7 +21,7 @@ h2 {
     width: 100%;
 }
 
-h3 {
+.comentario > h3 {
     text-align: center;
 }
 
@@ -37,7 +36,6 @@ div.jogo img {
     border-collapse: collapse; /* Remove espaçamento entre as bordas das células */
     margin: 50px 20px;
     font-size: 15px;
-    font-family: Arial, sans-serif;
     text-align: center;
     border: solid 2px;
     border-radius: 10px;
@@ -83,7 +81,6 @@ div.jogo img {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-    font-family: Georgia, 'Times New Roman', Times, serif, Helvetica, sans-serif;
     overflow-y: auto;
 }
 

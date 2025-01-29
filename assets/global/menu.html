@@ -6,14 +6,17 @@
     <button onclick="calculadora(false)">Calculadora</button>
     <button onclick="blocoNotas(false)">Bloco de notas</button>
     <button>Conquistas(Em breve)</button>
+    <button onclick="configuracoes(false)">Configurações</button>
 </aside>
 
 <h1 id="title"><a href="index.html">Meu site incrível</a></h1>
 
 <nav id="barra-main">
-    <div onclick="abrirMenu(false)" id="botao-menu-lateral"><img src="assets/images/icones/menu.png"></div>
+    <div onclick="abrirMenu(false)" class="botao-menu-lateral"><img src="assets/images/icones/menu.png"></div>
     <h6 id="titulo"><a href="#title">Bem vindo ao incrível site</a></h6>
 </nav>
+
+<div onclick="abrirMenu(false)" class="botao-menu-lateral" id="botao-menu-lateral-reserva" style="display: none;"><img src="assets/images/icones/menu.png"></div>
 
 <div id="updates" style="display: none;">
     <div class="fechar-container">
@@ -201,5 +204,28 @@
     <button onclick="addNote()">Adicionar Nota</button>
     <div id="noteContainer" class="note-container">
         <!-- Notas serão adicionadas aqui -->
+    </div>
+</div>
+
+<div id="configuracoes" style="display: none;">
+    <div class="fechar-container">
+        <img src="assets/images/icones/cruz.png" class="fechar" onclick="configuracoes(true)">
+    </div>
+    <h2>Configurações</h2>
+
+    <h3>Desativar a barra principal</h3>
+    <div class="switch">
+        <label>
+            <input type="checkbox" class="toggleSwitch" onclick="desativarBarra()">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <h3>Desativar o efeito arco-íris da barra principal</h3>
+    <div class="switch">
+        <label>
+            <input type="checkbox" class="toggleSwitch" onclick="desativarArcoIris()">
+            <span class="slider"></span>
+        </label>
     </div>
 </div>

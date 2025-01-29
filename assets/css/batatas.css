@@ -19,6 +19,6 @@ label {
     margin: 10px;
 }
 
-h3 {
+section#resultados > h3 {
     text-align: center;
 }

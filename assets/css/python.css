@@ -7,7 +7,7 @@ h2:not(:first-child) {
     color: #ff320e
 }
 
-h3 {
+div.codigo > h3 {
     width: 100%;
     color: rgb(46, 156, 219)
 }
@@ -38,7 +38,6 @@ div.explicação {
     padding: 3px;
     background-color: #f0fff0;
     border-color: #32CD32;
-    font-family: Georgia, 'Times New Roman', Times, serif, Helvetica, sans-serif;
 }
 
 pre.caixa {

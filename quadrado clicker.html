@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu site incrivel</title>
+    <title>Meu site incrível</title>
     <link rel="stylesheet" href="assets/global/menu.css">
     <link rel="stylesheet" href="assets/css/quadrado clicker.css">
 </head>
@@ -74,6 +74,8 @@
         </section>
         
         <section id="melhorias" style="display: none;">
+            <h1 id="quadradotextMelhorias">Quadrados: 0</h1>
+
             <table>
                 <tr>
                     <td id="voltar" colspan="3"><button onclick="mudarMain()">Voltar</button></td>
@@ -263,8 +265,8 @@
 
             <h2>Salvar</h2>
 
-            <p>O salvamento é feito altomanticamente, mas se ocorrer algum erro, é sempre bom ter um arquivo reserva</p>
-            <p>Clicar em salavr irá baixar um arquivo que pode ser usado para acessar seu save de qualquer dispositivo</p>
+            <p>O salvamento é feito automaticamente, mas se ocorrer algum erro, é sempre bom ter um arquivo reserva</p>
+            <p>Clicar em salvar irá baixar um arquivo que pode ser usado para acessar seu save de qualquer dispositivo</p>
 
             <div>
                 <button onclick="salvarJson()">Salvar</button>
@@ -273,6 +275,8 @@
         </section>
 
         <section id="triangulos" style="display: none;">
+            <h1 id="triangulotextMelhorias">Triângulos: 0</h1>
+
             <table>
                 <tr>
                     <td id="voltar" colspan="3"><button onclick="mudarMain()">Voltar</button></td>
@@ -306,12 +310,12 @@
                     <td id="ms1" onclick="comprarMelhoriasTriangulos('Maquina da sorte', event)">
                         <h2>Maquina da sorte</h2>
                         <p>Adiciona um minijogo em que você pode apostar seus quadrados</p>
-                        <h3>Preço:3</h3>
+                        <h3>Preço:2</h3>
                     </td>
                     <td id="lm1" onclick="comprarMelhoriasTriangulos('Livro magico', event)">
                         <h2>Livro magico</h2>
                         <p>Adiciona um mini jogo em que você pode usar feitiços que ajudam no jogo principal</p>
-                        <h3>Preço:3</h3>
+                        <h3>Preço:2</h3>
                     </td>
                 </tr>
 
@@ -319,17 +323,17 @@
                     <td id="qm1" onclick="comprarMelhoriasTriangulos('Quiz matemático', event)">
                         <h2>Quiz matemático</h2>
                         <p>Adiciona um mini jogo em que você responde um quiz, se acertar ganha recompensas</p>
-                        <h3>Preço:3</h3>
+                        <h3>Preço:2</h3>
                     </td>
                     <td id="sq1" onclick="comprarMelhoriasTriangulos('Skin quadrado', event)">
                         <h2>Skin do quadrado</h2>
                         <p>Adiciona a opção de mudar o quadrado principal</p>
                         <h3>Preço:1</h3>
                     </td>
-                    <td>
-                        <h2></h2>
-                        <p></p>
-                        <h3></h3>
+                    <td id="pa1" onclick="comprarMelhoriasTriangulos('Produção automatizada', event)">
+                        <h2>Produção automatizada</h2>
+                        <p>Gera automaticamente 10% dos seus quadrados por click por segundo</p>
+                        <h3>Preço:3</h3>
                     </td>
                 </tr>
             </table>

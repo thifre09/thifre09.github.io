@@ -13,6 +13,22 @@ div#main {
     background-color: rgb(146, 66, 0);
 }
 
+button[onclick="mudarMain()"] {
+    background-color: #228B22;
+    border: none;
+    border-radius: 5px;
+    font-size: large;
+    padding: 5px 10px;
+    color: white;
+    transition: 0.3s;
+    margin: 2px;
+}
+
+button[onclick="mudarMain()"]:hover {
+    background-color: #1eb61e;
+    transform: scale(1.05, 1.05);
+}
+
 #esquerda, #centro, #direita {
     width: 33%;
 
@@ -63,6 +79,21 @@ div#botoes {
     justify-content: space-around;
     margin-top: 1%;
     margin-left: 1%;
+}
+
+div#botoes > button {
+    background-color: #0B5ED7;
+    border: none;
+    border-radius: 5px;
+    font-size: large;
+    padding: 5px 10px;
+    color: white;
+    transition: 0.3s;
+}
+
+div#botoes > button:hover {
+    background-color: #0066ff;
+    transform: scale(1.05, 1.05);
 }
 
 /* direita */
@@ -135,7 +166,7 @@ section#melhorias td, section#triangulos td {
     transition: 0.3s, transform 0.3s;
 }
 
-section#melhorias td:hover {
+section#melhorias td:hover, section#triangulos td:hover {
     transform: scale(1.05);
 }
 
@@ -145,6 +176,7 @@ section#melhorias td:hover {
 }
 
 /* ajuda */
+
 section#ajuda {
     width: 99%;
 }
@@ -172,6 +204,12 @@ section#outros h2 {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+}
+
+#botoesOutros > button {
+    border: solid 3px;
+    background-color: #ffc107;
+    padding: 5px;
 }
 
 section#outros div h2 {
@@ -255,7 +293,6 @@ section#renascer *:not(button:nth-of-type(1)) {
 
 #maquina-da-sorte {
     height: fit-content;
-    font-family: Arial, sans-serif;
 }
 
 #maquinaeform {

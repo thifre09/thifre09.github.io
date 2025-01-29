@@ -1,4 +1,4 @@
-//variaveis
+//variáveis
 
 let quadrados = 0;
 let base = 1;
@@ -38,7 +38,8 @@ let melhoriasTri = {
     ms1: false,
     lm1: false,
     qm1: false,
-    sq1: false
+    sq1: false,
+    pa1: false
 }
 let tri = {
     tr1: false,
@@ -174,7 +175,7 @@ if (renasceu === true) {
     click = (base + (nCur * aCur) + (nPro *aPro) + (nMat *aMat) + (nQua * aQua) + (nFab * aFab)) * a_pd1 * (1 + quadrados_ascendentes/10);
 }
 
-//variaveis
+//variáveis
 
 //principais funções
 
@@ -253,48 +254,32 @@ function carregarDados() {
         }
     }
 
-    let celulapd1 = document.getElementById("pd1");
-    let celulacc1 = document.getElementById("cc1");
-    let celulacm1 = document.getElementById("cm1");
-    let celulasp1 = document.getElementById("sp1");
-    let celulams1 = document.getElementById("ms1");
-    let botaoms1 = document.getElementById("maquinadasorte");
-    let celulalm1 = document.getElementById("lm1");
-    let botaolm1 = document.getElementById("livromagico");
-    let celulaqm1 = document.getElementById("qm1");
-    let botaoqm1 = document.getElementById("quizmatematico");
-    let celulasq1 = document.getElementById("sq1");
-    let botaosq1 = document.getElementById("skinquadrado");
-    if (melhoriasTri.pd1) {
-        celulapd1.style.backgroundColor = "#f88c5d";
-    }
-    if (melhoriasTri.cc1) {
-        celulacc1.style.backgroundColor = "#f88c5d";
-    }
-    if (melhoriasTri.cm1) {
-        celulacm1.style.backgroundColor = "#f88c5d";
-    }
-    if (melhoriasTri.sp1) {
-        celulasp1.style.backgroundColor = "#f88c5d";
-    }
-    if (melhoriasTri.ms1) {
-        celulams1.style.backgroundColor = "#f88c5d";
-        botaoms1.style.display = "block";
-    }
-    if (melhoriasTri.lm1) {
-        celulalm1.style.backgroundColor = "#f88c5d";
-        botaolm1.style.display = "block";
-    }
-    if (melhoriasTri.qm1) {
-        celulaqm1.style.backgroundColor = "#f88c5d";
-        botaoqm1.style.display = "block";
-    }
-    if (melhoriasTri.sq1) {
-        celulasq1.style.backgroundColor = "#f88c5d";
-        botaosq1.style.display = "block";
-    }
+    const elementos = [
+        { id: "pd1", melhoria: "pd1" },
+        { id: "cc1", melhoria: "cc1" },
+        { id: "cm1", melhoria: "cm1" },
+        { id: "sp1", melhoria: "sp1" },
+        { id: "ms1", melhoria: "ms1", botaoId: "maquinadasorte" },
+        { id: "lm1", melhoria: "lm1", botaoId: "livromagico" },
+        { id: "qm1", melhoria: "qm1", botaoId: "quizmatematico" },
+        { id: "sq1", melhoria: "sq1", botaoId: "skinquadrado" },
+        { id: "pa1", melhoria: "pa1" }
+    ];
     
-    
+    elementos.forEach(({ id, melhoria, botaoId }) => {
+        const celula = document.getElementById(id);
+        if (melhoriasTri[melhoria]) {
+            celula.style.backgroundColor = "#f88c5d";
+            if (botaoId) {
+                const botao = document.getElementById(botaoId);
+                botao.style.display = "block";
+            }
+        }
+    });
+
+    if (pa1) {
+        producaoAutomatizada()
+    }
 }
 
 function salvarJson() {
@@ -427,45 +412,31 @@ function carregarJson() {
                         }
                     }
                 
-                    let celulapd1 = document.getElementById("pd1");
-                    let celulacc1 = document.getElementById("cc1");
-                    let celulacm1 = document.getElementById("cm1");
-                    let celulasp1 = document.getElementById("sp1");
-                    let celulams1 = document.getElementById("ms1");
-                    let botaoms1 = document.getElementById("maquinadasorte");
-                    let celulalm1 = document.getElementById("lm1");
-                    let botaolm1 = document.getElementById("livromagico");
-                    let celulaqm1 = document.getElementById("qm1");
-                    let botaoqm1 = document.getElementById("quizmatematico");
-                    let celulasq1 = document.getElementById("sq1");
-                    let botaosq1 = document.getElementById("skinquadrado");
-                    if (melhoriasTri.pd1) {
-                        celulapd1.style.backgroundColor = "#f88c5d";
-                    }
-                    if (melhoriasTri.cc1) {
-                        celulacc1.style.backgroundColor = "#f88c5d";
-                    }
-                    if (melhoriasTri.cm1) {
-                        celulacm1.style.backgroundColor = "#f88c5d";
-                    }
-                    if (melhoriasTri.sp1) {
-                        celulasp1.style.backgroundColor = "#f88c5d";
-                    }
-                    if (melhoriasTri.ms1) {
-                        celulams1.style.backgroundColor = "#f88c5d";
-                        botaoms1.style.display = "block";
-                    }
-                    if (melhoriasTri.lm1) {
-                        celulalm1.style.backgroundColor = "#f88c5d";
-                        botaolm1.style.display = "block";
-                    }
-                    if (melhoriasTri.qm1) {
-                        celulaqm1.style.backgroundColor = "#f88c5d";
-                        botaoqm1.style.display = "block";
-                    }
-                    if (melhoriasTri.sq1) {
-                        celulasq1.style.backgroundColor = "#f88c5d";
-                        botaosq1.style.display = "block";
+                    const elementos = [
+                        { id: "pd1", melho: "pd1" },
+                        { id: "cc1", melho: "cc1" },
+                        { id: "cm1", melho: "cm1" },
+                        { id: "sp1", melho: "sp1" },
+                        { id: "ms1", melho: "ms1", botaoId: "maquinadasorte" },
+                        { id: "lm1", melho: "lm1", botaoId: "livromagico" },
+                        { id: "qm1", melho: "qm1", botaoId: "quizmatematico" },
+                        { id: "sq1", melho: "sq1", botaoId: "skinquadrado" },
+                        { id: "pa1", melho: "pa1" }
+                    ];
+                    
+                    elementos.forEach(({ id, melho, botaoId }) => {
+                        const celula = document.getElementById(id);
+                        if (melhoriasTri[melho]) {
+                            celula.style.backgroundColor = "#f88c5d";
+                            if (botaoId) {
+                                const botao = document.getElementById(botaoId);
+                                botao.style.display = "block";
+                            }
+                        }
+                    });
+
+                    if (pa1) {
+                        producaoAutomatizada()
                     }
 
                     alert("Estado do jogo carregado com sucesso!");
@@ -484,25 +455,13 @@ function carregarJson() {
 }
 
 function formatar(numero) {
-    if (numero >= 1 && numero < 1000) {
-        return arredondar(2,numero)
-    } else if (numero >= 1000 && numero < 1000000) {
-        return arredondar(2,numero / 1000) + "k"
-    } else if (numero >= 1000000 && numero < 1000000000) {
-        return arredondar(2,numero / 1000000) + "mi"
-    } else if (numero >= 1000000000 && numero < 1000000000000) {
-        return arredondar(2,numero / 1000000000) + "bi"
-    } else if (numero >= 1000000000000 && numero < 1000000000000000) {
-        return arredondar(2,numero / 1000000000000) + "t"
-    } else if (numero >= 1000000000000000 && numero < 1000000000000000000) {
-        return arredondar(2,numero / 1000000000000000) + "Qa"
-    } else if (numero >= 1000000000000000000 && numero < 1000000000000000000000) {
-        return arredondar(2,numero / 1000000000000000000) + "Qi"
-    } else if (numero === 0) {
-        return 0
-    } else {
-        return "esse numero é muito grande"
+    const sufixos = ["", "k", "mi", "bi", "t", "Qa", "Qi","Sx","Sp","Oc","No","De"];
+    let i = 0;
+    while (numero >= 1000 && i < sufixos.length - 1) {
+        numero /= 1000;
+        i++;
     }
+    return numero === 0 ? 0 : (numero >= 1 ? arredondar(2, numero) : "esse numero é muito grande") + sufixos[i];
 }
 
 function clique() {
@@ -547,46 +506,52 @@ function alterar() {
     quadradosText.innerText = "Quadrados: " + formatar(quadrados);
     triangulosText.innerText = "Triângulos: " + triangulos;
 
-    let nCurText = document.getElementById("nCur")
-    let nProText = document.getElementById("nPro")
-    let nMatText = document.getElementById("nMat")
-    let nQuaText = document.getElementById("nQua")
-    let nFabText = document.getElementById("nFab")
-    nCurText.innerText = nCur
-    nProText.innerText = nPro
-    nMatText.innerText = nMat
-    nQuaText.innerText = nQua
-    nFabText.innerText = nFab
+    let triangulosTextMelhorias = document.getElementById("triangulotextMelhorias");
+    triangulosTextMelhorias.innerText = formatar(triangulos);
 
-    let vCurText = document.getElementById("vCur")
-    let vProText = document.getElementById("vPro")
-    let vMatText = document.getElementById("vMat")
-    let vQuaText = document.getElementById("vQua")
-    let vFabText = document.getElementById("vFab")
-    vCurText.innerText = "Preço: " + formatar(vCur)
-    vProText.innerText = "Preço: " + formatar(vPro)
-    vMatText.innerText = "Preço: " + formatar(vMat)
-    vQuaText.innerText = "Preço: " + formatar(vQua)
-    vFabText.innerText = "Preço: " + formatar(vFab)
+    let quadradotextMelhorias = document.getElementById("quadradotextMelhorias");
+    quadradotextMelhorias.innerText = formatar(quadrados);
 
-    let aCurText = document.getElementById("aCur")
-    let aProText = document.getElementById("aPro")
-    let aMatText = document.getElementById("aMat")
-    let aQuaText = document.getElementById("aQua")
-    let aFabText = document.getElementById("aFab")
-    aCurText.innerText = "Aumento: " + formatar(aCur)
-    aProText.innerText = "Aumento: " + formatar(aPro)
-    aMatText.innerText = "Aumento: " + formatar(aMat)
-    aQuaText.innerText = "Aumento: " + formatar(aQua)
-    aFabText.innerText = "Aumento: " + formatar(aFab)
+    let nCurText = document.getElementById("nCur");
+    let nProText = document.getElementById("nPro");
+    let nMatText = document.getElementById("nMat");
+    let nQuaText = document.getElementById("nQua");
+    let nFabText = document.getElementById("nFab");
+    nCurText.innerText = nCur;
+    nProText.innerText = nPro;
+    nMatText.innerText = nMat;
+    nQuaText.innerText = nQua;
+    nFabText.innerText = nFab;
+
+    let vCurText = document.getElementById("vCur");
+    let vProText = document.getElementById("vPro");
+    let vMatText = document.getElementById("vMat");
+    let vQuaText = document.getElementById("vQua");
+    let vFabText = document.getElementById("vFab");
+    vCurText.innerText = "Preço: " + formatar(vCur);
+    vProText.innerText = "Preço: " + formatar(vPro);
+    vMatText.innerText = "Preço: " + formatar(vMat);
+    vQuaText.innerText = "Preço: " + formatar(vQua);
+    vFabText.innerText = "Preço: " + formatar(vFab);
+
+    let aCurText = document.getElementById("aCur");
+    let aProText = document.getElementById("aPro");
+    let aMatText = document.getElementById("aMat");
+    let aQuaText = document.getElementById("aQua");
+    let aFabText = document.getElementById("aFab");
+    aCurText.innerText = "Aumento: " + formatar(aCur);
+    aProText.innerText = "Aumento: " + formatar(aPro);
+    aMatText.innerText = "Aumento: " + formatar(aMat);
+    aQuaText.innerText = "Aumento: " + formatar(aQua);
+    aFabText.innerText = "Aumento: " + formatar(aFab);
 
     let quadrados_ascendentesText = document.getElementById("quadrados-ascendentes");
-    quadrados_ascendentesText.innerText = "Você possui " + quadrados_ascendentes + " quadrados ascendentes"
+    quadrados_ascendentesText.innerText = "Você possui " + quadrados_ascendentes + " quadrados ascendentes";
     let quadrados_ascendentesFaltantesText = document.getElementById("quadrados-ascendentes-faltantes");
-    quadrados_ascendentesFaltantesText.innerText = "Consiga " + formatar(valorParaGanhar1QuadradoAscendente) + " quadrados para o proximo quadrado ascendente"
+    quadrados_ascendentesFaltantesText.innerText = "Consiga " + formatar(valorParaGanhar1QuadradoAscendente) + " quadrados para o proximo quadrado ascendente";
 
-    let manaText = document.getElementById("mana")
-    manaText.innerText = "Mana: " + mana
+    let manaText = document.getElementById("mana");
+    manaText.innerText = "Mana: " + mana;
 
     click = (base + (nCur * aCur) + (nPro *aPro) + (nMat *aMat) + (nQua * aQua) + (nFab * aFab)) * a_pd1;
 
@@ -963,6 +928,13 @@ function skinquadrado(tipo) {
 
     alterar()
 }
+
+function producaoAutomatizada() {
+    setInterval(() => {
+        quadrados += click * 0.1
+        alterar()
+    }, 1000);
+}
     
 //triangulos
 
@@ -1102,7 +1074,7 @@ function comprarCur() {
     if (quadrados >= vCur) {
         nCur++
         quadrados -= vCur
-        vCur *= 1.1
+        vCur *= 1.15
         vCur = arredondar(0,vCur)
         alterar()
     }
@@ -1112,7 +1084,7 @@ function comprarPro() {
     if (quadrados >= vPro) {
         nPro++
         quadrados -= vPro
-        vPro *= 1.1
+        vPro *= 1.15
         vPro = arredondar(0,vPro)
         alterar()
     }
@@ -1122,7 +1094,7 @@ function comprarMat() {
     if (quadrados >= vMat) {
         nMat++
         quadrados -= vMat
-        vMat *= 1.1
+        vMat *= 1.15
         vMat = arredondar(0, vMat)
         alterar()
     }
@@ -1132,7 +1104,7 @@ function comprarQua() {
     if (quadrados >= vQua) {
         nQua++
         quadrados -= vQua
-        vQua *= 1.1
+        vQua *= 1.15
         vQua = arredondar(0, vQua)
         alterar()
     }
@@ -1142,7 +1114,7 @@ function comprarFab() {
     if (quadrados >= vFab) {
         nFab++
         quadrados -= vFab
-        vFab *= 1.1
+        vFab *= 1.15
         vFab = arredondar(0, vFab)
         alterar()
     }
@@ -1285,6 +1257,7 @@ function comprarMelhorias(melhoria, evento) {
 }
 
 function comprarMelhoriasTriangulos(melhoria, evento) {
+
     if (melhoria === 'Produtividade dobrada' && melhoriasTri.pd1 === false && triangulos >= 2) {
         melhoriasTri.pd1 = true;
         triangulos -= 2
@@ -1318,28 +1291,33 @@ function comprarMelhoriasTriangulos(melhoria, evento) {
     }
     if (melhoria === 'Maquina da sorte' && melhoriasTri.ms1 === false && triangulos >= 3) {
         melhoriasTri.ms1 = true;
-        triangulos -= 3
+        triangulos -= 2
         document.getElementById("maquinadasorte").style.display = "block"
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     if (melhoria === 'Livro magico' && melhoriasTri.lm1 === false && triangulos >= 3) {
         melhoriasTri.lm1 = true;
-        triangulos -= 3;
+        triangulos -= 2;
         document.getElementById("livromagico").style.display = "block";
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     if (melhoria === 'Quiz matemático' && melhoriasTri.qm1 === false && triangulos >= 3) {
         melhoriasTri.qm1 = true;
-        triangulos -= 3
+        triangulos -= 2;
         document.getElementById("quizmatematico").style.display = "block"
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     if (melhoria === 'Skin quadrado' && melhoriasTri.sq1 === false && triangulos >= 1) {
         melhoriasTri.sq1 = true;
         triangulos -= 1;
-        document.getElementById("skinquadrado")
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
         document.getElementById("skinquadrado").style.display = "block";
+    }
+    if (melhoria === 'Produção automatizada' && melhoriasTri.pa1 === false && triangulos >= 3) {
+        melhoriasTri.pa1 = true;
+        triangulos -= 3;
+        evento.target.closest("td").style.backgroundColor = "#f88c5d";
+        producaoAutomatizada()
     }
 
     alterar()
