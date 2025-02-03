@@ -1020,6 +1020,18 @@ function confirmarRenascer() {
     document.getElementById("renascer").style.backgroundColor = "#737575"
 }
 
+function mudarConquistas() {
+    document.getElementById("outros").style.display = "none";
+
+    const separadores = document.getElementsByClassName("separador");
+    for (let i = 0; i < separadores.length; i++) {
+        separadores[i].style.display = "none";
+    }
+
+    document.getElementById("conquistas").style.display = "flex";
+    document.getElementById("conquistas").style.flexWrap = "wrap";
+}
+
 function mudarMaquinadasorte() {
     document.getElementById("outros").style.display = "none";
     document.getElementById("maquina-da-sorte").style.display = "flex";
@@ -1057,6 +1069,7 @@ function mudarMain() {
     document.getElementById("triangulos").style.display = "none";
     document.getElementById("renascer").style.display = "none";
     document.getElementById("confirmarRenascer").style.display = "none";
+    document.getElementById("conquistas").style.display = "none";
     document.getElementById("maquina-da-sorte").style.display = "none";
     document.getElementById("livro-magico").style.display = "none";
     document.getElementById("quiz-matematico").style.display = "none";
@@ -1328,3 +1341,4 @@ function comprarMelhoriasTriangulos(melhoria, evento) {
 
 window.addEventListener("beforeunload", salvarDados);
 window.addEventListener("load", carregarDados);
+
