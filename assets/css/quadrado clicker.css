@@ -253,6 +253,7 @@ section#outros div button {
     border: dashed 1px;
     background-color: #14fcca ;
 }
+
 /* renascer */
 
 section#renascer {
@@ -261,9 +262,9 @@ section#renascer {
     flex-direction: column;
 }
 
-section#renascer * {
+section#renascer {
     width: 100%;
-    height: fit-content;
+    height: 75vh;
 }
 
 section#renascer div button {
@@ -285,54 +286,43 @@ div#confirmarRenascer {
     text-align: center;
 }
 
-section#renascer *:not(button:nth-of-type(1)) {
+section#renascer:not(button:nth-of-type(1)) {
     text-align: center;
 }
 
 /* conquistas */
 
-section#conquistas {
+#conquistas {
+    min-height: 75vh;
     height: 75vh;
     width: 100%;
-    flex-direction: column;
 }
 
 section#conquistas > h2 {
     text-align: center;
     width: 100%;
+    margin: 0 0 30px 0;
 }
 
-section#conquistas > div#lista-conquistas {
-    width: 100%;
-    background-color: rgb(214, 219, 233);
+#container-conquistas {
+    display: flex;
+    justify-content: center;
 }
 
-.conquista-img {
-    background-color: #04AA6D;
-    color: white;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
+#lista-conquistas {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #C0C0C0;
+    width: 90%;
+    padding: 5px;
+    border: dashed 2px;
+    border-radius: 15px;
 }
   
 .conquista {
-    position: relative;
-    display: inline-block;
+    padding: 5px;
+    box-sizing: border-box;
 }
-  
-.descricao-conquista {
-    display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-}
-  
-.conquista:hover .descricao-conquista {display: block;}
-  
-.conquista:hover .conquista-img {background-color: #3e8e41;}
-
 
 /* Maquina da sorte */
 

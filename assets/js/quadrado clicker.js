@@ -616,6 +616,10 @@ function renascer() {
     }
 }
 
+function verificarConquistas() {
+    
+}
+
 function verificarQuadradosAscendentes() {
     if (quadrados >= valorParaGanhar1QuadradoAscendente) {
         quadrados_ascendentes++;
@@ -1023,13 +1027,9 @@ function confirmarRenascer() {
 function mudarConquistas() {
     document.getElementById("outros").style.display = "none";
 
-    const separadores = document.getElementsByClassName("separador");
-    for (let i = 0; i < separadores.length; i++) {
-        separadores[i].style.display = "none";
-    }
-
-    document.getElementById("conquistas").style.display = "flex";
+    document.getElementById("conquistas").style.display = "block";
     document.getElementById("conquistas").style.flexWrap = "wrap";
+
 }
 
 function mudarMaquinadasorte() {
