@@ -165,6 +165,20 @@ let respostasCorretas = [
     "1" // Qual é a tangente de 45 graus?
 ];
 
+let conquistasDescricao = {
+    "Primeiro click": "Clique pela priemira vez",
+    "10 quadrados": "Consiga 10 quadrados",
+    "100 quadrados": "Consiga 100 quadrados",
+    "1000 quadrados": "Consiga 1000 quadrados"
+}
+
+let conquistasObtidas = {
+    "Primeiro click": true,
+    "10 quadrados": true,
+    "100 quadrados": false,
+    "1000 quadrados": false
+}
+
 let renasceu = false;
 let quadrados_ascendentes = 0;
 let valorParaGanhar1QuadradoAscendente = 100000000;
@@ -259,11 +273,12 @@ function carregarDados() {
         { id: "cc1", melhoria: "cc1" },
         { id: "cm1", melhoria: "cm1" },
         { id: "sp1", melhoria: "sp1" },
+        { id: "pa1", melhoria: "pa1" },
         { id: "ms1", melhoria: "ms1", botaoId: "maquinadasorte" },
         { id: "lm1", melhoria: "lm1", botaoId: "livromagico" },
         { id: "qm1", melhoria: "qm1", botaoId: "quizmatematico" },
-        { id: "sq1", melhoria: "sq1", botaoId: "skinquadrado" },
-        { id: "pa1", melhoria: "pa1" }
+        { id: "sq1", melhoria: "sq1", botaoId: "skinquadrado" }
+        
     ];
     
     elementos.forEach(({ id, melhoria, botaoId }) => {
@@ -277,7 +292,7 @@ function carregarDados() {
         }
     });
 
-    if (pa1) {
+    if (melhoriasTri[pa1]) {
         producaoAutomatizada()
     }
 }
@@ -497,7 +512,9 @@ function clique() {
     verificarTriangulos();
     cliqueCritico();
     verificarMana();
+    producaoAutomatizada()
     alterar();
+    window.alert(melhoriasTri[sq1])
 }
 
 function alterar() {
@@ -614,9 +631,30 @@ function renascer() {
         let consiga1quadradoText = document.getElementById("consiga1quadrado")
         consiga1quadradoText.innerText = "Consiga pelo menos 1 quadrado ascendente para renascer"
     }
+
 }
 
-function verificarConquistas() {
+function AdicionarConquistas() {
+    let listaConquistas = document.getElementById("lista-conquistas");
+    listaConquistas.innerHTML = "";
+
+    for (let conquista in conquistasDescricao) {
+        let div = document.createElement("div");
+        div.className = conquistasObtidas[conquista] ? "conquista-ativa col-3" : "conquista-inativa col-3";
+        
+        let titulo = document.createElement("h3");
+        titulo.textContent = conquista;
+        
+        let descricao = document.createElement("p");
+        descricao.textContent = conquistasDescricao[conquista];
+        
+        div.appendChild(titulo);
+        div.appendChild(descricao);
+        listaConquistas.appendChild(div);
+    }
+}
+
+function VerificarConquistas() {
     
 }
 
@@ -934,10 +972,13 @@ function skinquadrado(tipo) {
 }
 
 function producaoAutomatizada() {
-    setInterval(() => {
-        quadrados += click * 0.1
-        alterar()
-    }, 1000);
+    if (melhoriasTri.pa1) {
+        setInterval(() => {
+            quadrados += click * 0.1
+            alterar()
+        }, 1000);
+    }
+    
 }
     
 //triangulos
@@ -1029,6 +1070,8 @@ function mudarConquistas() {
 
     document.getElementById("conquistas").style.display = "block";
     document.getElementById("conquistas").style.flexWrap = "wrap";
+
+    AdicionarConquistas()
 
 }
 
@@ -1330,7 +1373,7 @@ function comprarMelhoriasTriangulos(melhoria, evento) {
         melhoriasTri.pa1 = true;
         triangulos -= 3;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
-        producaoAutomatizada()
+
     }
 
     alterar()

@@ -318,10 +318,20 @@ section#conquistas > h2 {
     border: dashed 2px;
     border-radius: 15px;
 }
+
+#lista-conquistas > div > h3, #lista-conquistas > div > p {
+    text-align: center;
+}
   
-.conquista {
+.conquista-ativa {
     padding: 5px;
     box-sizing: border-box;
+    background-color: rgb(255, 255, 255);
+    border: solid 1px;
+}
+
+.conquista-inativa {
+    
 }
 
 /* Maquina da sorte */
