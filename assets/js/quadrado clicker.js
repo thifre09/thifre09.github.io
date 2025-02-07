@@ -273,11 +273,11 @@ function carregarDados() {
         { id: "cc1", melhoria: "cc1" },
         { id: "cm1", melhoria: "cm1" },
         { id: "sp1", melhoria: "sp1" },
-        { id: "pa1", melhoria: "pa1" },
         { id: "ms1", melhoria: "ms1", botaoId: "maquinadasorte" },
         { id: "lm1", melhoria: "lm1", botaoId: "livromagico" },
         { id: "qm1", melhoria: "qm1", botaoId: "quizmatematico" },
-        { id: "sq1", melhoria: "sq1", botaoId: "skinquadrado" }
+        { id: "sq1", melhoria: "sq1", botaoId: "skinquadrado" },
+        { id: "pa1", melhoria: "pa1" }
         
     ];
     
@@ -292,7 +292,7 @@ function carregarDados() {
         }
     });
 
-    if (melhoriasTri[pa1]) {
+    if (melhoriasTri["pa1"]) {
         producaoAutomatizada()
     }
 }
@@ -450,7 +450,7 @@ function carregarJson() {
                         }
                     });
 
-                    if (pa1) {
+                    if (melhoriasTri["pa1"]) {
                         producaoAutomatizada()
                     }
 
@@ -512,9 +512,7 @@ function clique() {
     verificarTriangulos();
     cliqueCritico();
     verificarMana();
-    producaoAutomatizada()
     alterar();
-    window.alert(melhoriasTri[sq1])
 }
 
 function alterar() {
