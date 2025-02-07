@@ -173,8 +173,8 @@ let conquistasDescricao = {
 }
 
 let conquistasObtidas = {
-    "Primeiro click": true,
-    "10 quadrados": true,
+    "Primeiro click": false,
+    "10 quadrados": false,
     "100 quadrados": false,
     "1000 quadrados": false
 }
@@ -210,6 +210,7 @@ function salvarDados() {
         magiaselecionada,
         usoumultiplicus,
         perguntaescolhida,
+        conquistasObtidas,
         renasceu,
         quadrados_ascendentes,
         valorParaGanhar1QuadradoAscendente,
@@ -252,6 +253,7 @@ function carregarDados() {
         magiaselecionada = estado.magiaselecionada;
         usoumultiplicus = estado.usoumultiplicus;
         perguntaescolhida = estado.perguntaescolhida;
+        conquistasObtidas = estado.conquistasObtidas;
         renasceu = estado.renasceu;
         quadrados_ascendentes = estado.quadrados_ascendentes;
         valorParaGanhar1QuadradoAscendente = estado.valorParaGanhar1QuadradoAscendente;
@@ -983,10 +985,69 @@ function producaoAutomatizada() {
 
 // menus
 
+function mudarMenu(menu) {
+    switch(menu) {
+        case "melhorias":
+            document.getElementById("principal").style.display = "none";
+            document.getElementById("melhorias").style.display = "block";
+            break;
+        case "ajuda":
+            document.getElementById("principal").style.display = "none";
+            document.getElementById("ajuda").style.display = "block";
+            break;
+        case "outros":
+            document.getElementById("principal").style.display = "none";
+            document.getElementById("outros").style.display = "block";
+            break;
+        case "salvamento":
+            document.getElementById("principal").style.display = "none";
+            document.getElementById("salvar").style.display = "block";
+            break;
+        case "triangulos":
+            document.getElementById("principal").style.display = "none";
+            document.getElementById("triangulos").style.display = "block";
+            break;
+        case "renascer":
+            document.getElementById("principal").style.display = "none";
+            document.getElementById("renascer").style.display = "block";
+            break;
+        case "confirmarRenascer":
+            document.getElementById("confirmarRenascer").style.display = "block";
+            document.getElementById("renascer").style.backgroundColor = "#737575"
+            break;
+        case "conquistas":
+            document.getElementById("principal").style.display = "none";
+            document.getElementById("conquistas").style.display = "block";
+            break;
+        case "maquinadasorte":
+            document.getElementById("principal").style.display = "none";
+            document.getElementById("maquina-da-sorte").style.display = "block";
+            break;
+        case "livromagico":
+            document.getElementById("principal").style.display = "none";
+            document.getElementById("livro-magico").style.display = "block";
+            break;
+        case "quizmatematico":
+            document.getElementById("principal").style.display = "none";
+            document.getElementById("quiz-matematico").style.display = "block";
+            break;
+        case "skinquadrado":
+            document.getElementById("principal").style.display = "none";
+            document.getElementById("skin-quadrado").style.display = "block";
+            break;
+        case "main":
+            document.getElementById("principal").style.display = "none";
+            document.getElementById("melhorias").style.display = "block";
+            break;
+
+    }
+}
+
 function mudarMelhorias() {
     document.getElementById("esquerda").style.display = "none";
     document.getElementById("centro").style.display = "none";
     document.getElementById("direita").style.display = "none";
+    document.getElementById("principal").style.display = "none"
 
     const separadores = document.getElementsByClassName("separador");
     for (let i = 0; i < separadores.length; i++) {
@@ -1186,7 +1247,7 @@ function comprarMelhorias(melhoria, evento) {
     if (melhoria === "Super clique" && melhorias.Bas.b2 === false && quadrados >= 300000) {
         melhorias.Bas.b2 = true;
         quadrados -= 500000;
-        base *= 300;
+        base *= 900;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Mega Clique

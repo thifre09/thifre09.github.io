@@ -11,69 +11,78 @@
     <script src="assets/global/menu.js"></script>
 
     <div id="main">
-        <section id="esquerda">
-            <h1 id="quadradotext">Quadrados: 0</h1>
-
-            <div id="quadrado" onclick="clique()"></div>
-        </section>
-
-        <div class="separador"></div>
-
-        <section id="centro">
-            <div id="botoes">
-                <button onclick="mudarMelhorias()">Melhorias</button>
-                <button onclick="mudarOutros()">Outros</button>
-                <button onclick="mudarAjuda()" >Ajuda</button>
-                <button onclick="mudarSalvamento()">Salvar</button>
-            </div>
-
-            <h1 id="quadradosporclickText">Quadrados por click: 1</h1>
-
-            <h1 id="triangulotext">Triângulos: 0</h1>
-
-        </section>
-
-        <div class="separador"></div>
-
-        <section id="direita">
-            <div class="construcao" onclick="comprarCur()">
-                <h2>Cursores</h2>
-                <h3 id="vCur">Preço: 100</h3>
-                <h3 id="aCur">Aumento: 1</h3>
-                <h4 id="nCur">0</h4>
-            </div>
-
-            <div class="construcao" onclick="comprarPro()">
-                <h2>Professores</h2>
-                <h3 id="vPro">Preço: 5k</h3>
-                <h3 id="aPro">Aumento: 10</h3>
-                <h4 id="nPro">0</h4>
-            </div>
-
-            <div class="construcao" onclick="comprarMat()">
-                <h2>Matemáticos</h2>
-                <h3 id="vMat">Preço: 130k</h3>
-                <h3 id="aMat">Aumento: 50</h3>
-                <h4 id="nMat">0</h4>
-            </div>
-
-            <div class="construcao" onclick="comprarQua()">
-                <h2>Quadros</h2>
-                <h3 id="vQua">Preço: 9mi</h3>
-                <h3 id="aQua">Aumento: 500</h3>
-                <h4 id="nQua">0</h4>
-            </div>
-
-            <div class="construcao" onclick="comprarFab()">
-                <h2>Fábricas</h2>
-                <h3 id="vFab">Preço: 650mi</h3>
-                <h3 id="aFab">Aumento: 10k</h3>
-                <h4 id="nFab">0</h4>
-            </div>
+        <section id="principal">
+            <section id="esquerda">
+                <h1 id="quadradotext">Quadrados: 0</h1>
+    
+                <div id="quadrado" onclick="clique()"></div>
+            </section>
+    
+            <div class="separador"></div>
+    
+            <section id="centro">
+                <div id="botoes">
+                    <button onclick="mudarMelhorias()">Melhorias</button>
+                    <button onclick="mudarOutros()">Outros</button>
+                    <button onclick="mudarAjuda()" >Ajuda</button>
+                    <button onclick="mudarSalvamento()">Salvar</button>
+                </div>
+    
+                <h1 id="quadradosporclickText">Quadrados por click: 1</h1>
+    
+                <h1 id="triangulotext">Triângulos: 0</h1>
+    
+            </section>
+    
+            <div class="separador"></div>
+    
+            <section id="direita">
+                <div class="construcao" onclick="comprarCur()">
+                    <h2>Cursores</h2>
+                    <h3 id="vCur">Preço: 100</h3>
+                    <h3 id="aCur">Aumento: 1</h3>
+                    <h4 id="nCur">0</h4>
+                </div>
+    
+                <div class="construcao" onclick="comprarPro()">
+                    <h2>Professores</h2>
+                    <h3 id="vPro">Preço: 5k</h3>
+                    <h3 id="aPro">Aumento: 10</h3>
+                    <h4 id="nPro">0</h4>
+                </div>
+    
+                <div class="construcao" onclick="comprarMat()">
+                    <h2>Matemáticos</h2>
+                    <h3 id="vMat">Preço: 130k</h3>
+                    <h3 id="aMat">Aumento: 50</h3>
+                    <h4 id="nMat">0</h4>
+                </div>
+    
+                <div class="construcao" onclick="comprarQua()">
+                    <h2>Quadros</h2>
+                    <h3 id="vQua">Preço: 9mi</h3>
+                    <h3 id="aQua">Aumento: 500</h3>
+                    <h4 id="nQua">0</h4>
+                </div>
+    
+                <div class="construcao" onclick="comprarFab()">
+                    <h2>Fábricas</h2>
+                    <h3 id="vFab">Preço: 650mi</h3>
+                    <h3 id="aFab">Aumento: 10k</h3>
+                    <h4 id="nFab">0</h4>
+                </div>
+            </section>
         </section>
         
         <section id="melhorias" style="display: none;">
             <h1 id="quadradotextMelhorias">Quadrados: 0</h1>
+
+            <div class="cores">
+                <div class="quadrado-pequeno" style="background-color: #fd6321;"></div>
+                <p>Não comprado</p>
+                <div class="quadrado-pequeno" style="background-color: #F88C5C;"></div>
+                <p>Comprado</p>
+            </div>
 
             <table>
                 <tr>
@@ -87,7 +96,7 @@
                     </td>
                     <td data-melhoria="b2" onclick="comprarMelhorias('Super clique', event)">
                         <h2>Super click</h2>
-                        <p>O click base é 300x mais eficiente</p>
+                        <p>O click base é 900x mais eficiente</p>
                         <h3>Preço: 500k</h3>
                     </td>
                     <td data-melhoria="b3" onclick="comprarMelhorias('Mega clique', event)">
@@ -277,6 +286,13 @@
 
         <section id="triangulos" style="display: none;">
             <h1 id="triangulotextMelhorias">Triângulos: 0</h1>
+
+            <div class="cores">
+                <div class="quadrado-pequeno" style="background-color: #fd6321;"></div>
+                <p>Não comprado</p>
+                <div class="quadrado-pequeno" style="background-color: #F88C5C;"></div>
+                <p>Comprado</p>
+            </div>
 
             <table>
                 <tr>
