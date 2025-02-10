@@ -13,7 +13,7 @@ div#main {
     background-color: rgb(146, 66, 0);
 }
 
-button[onclick="mudarMain()"] {
+button[onclick="mudarMenu('main')"] {
     background-color: #228B22;
     border: none;
     border-radius: 5px;
@@ -24,7 +24,7 @@ button[onclick="mudarMain()"] {
     margin: 2px;
 }
 
-button[onclick="mudarMain()"]:hover {
+button[onclick="mudarMenu('main')"]:hover {
     background-color: #1eb61e;
     transform: scale(1.05, 1.05);
 }
@@ -48,8 +48,9 @@ section#principal {
 
 /* esquerda */
 
-h1 {
+h1#quadradotext {
     text-align: center;
+    font-size: x-large
 }
 
 div#quadrado {
@@ -102,6 +103,10 @@ div#botoes > button {
 div#botoes > button:hover {
     background-color: #0066ff;
     transform: scale(1.05, 1.05);
+}
+
+section#centro > h1 {
+    text-align: center;
 }
 
 /* direita */
@@ -332,7 +337,7 @@ section#conquistas > h2 {
 #lista-conquistas {
     display: flex;
     flex-wrap: wrap;
-    background-color: #C0C0C0;
+    background-color: #f5f5f5;
     width: 90%;
     padding: 5px;
     border: dashed 2px;
@@ -346,12 +351,21 @@ section#conquistas > h2 {
 .conquista-ativa {
     padding: 5px;
     box-sizing: border-box;
-    background-color: rgb(255, 255, 255);
+    background-color: #ffc107;
     border: solid 1px;
 }
 
 .conquista-inativa {
-    
+    box-sizing: border-box;
+    border: solid 1px;
+}
+
+@media (max-width: 600px) {
+    #lista-conquistas > div > h3 {
+        font-size: medium;
+    }
+
+
 }
 
 /* Maquina da sorte */

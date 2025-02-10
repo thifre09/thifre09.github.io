@@ -22,10 +22,10 @@
     
             <section id="centro">
                 <div id="botoes">
-                    <button onclick="mudarMelhorias()">Melhorias</button>
-                    <button onclick="mudarOutros()">Outros</button>
-                    <button onclick="mudarAjuda()" >Ajuda</button>
-                    <button onclick="mudarSalvamento()">Salvar</button>
+                    <button onclick="mudarMenu('melhorias')">Melhorias</button>
+                    <button onclick="mudarMenu('outros')">Outros</button>
+                    <button onclick="mudarMenu('ajuda')" >Ajuda</button>
+                    <button onclick="mudarMenu('salvamento')">Salvar</button>
                 </div>
     
                 <h1 id="quadradosporclickText">Quadrados por click: 1</h1>
@@ -37,35 +37,35 @@
             <div class="separador"></div>
     
             <section id="direita">
-                <div class="construcao" onclick="comprarCur()">
+                <div class="construcao" onclick="comprarConstrucao('cur')">
                     <h2>Cursores</h2>
                     <h3 id="vCur">Preço: 100</h3>
                     <h3 id="aCur">Aumento: 1</h3>
                     <h4 id="nCur">0</h4>
                 </div>
     
-                <div class="construcao" onclick="comprarPro()">
+                <div class="construcao" onclick="comprarConstrucao('pro')">
                     <h2>Professores</h2>
                     <h3 id="vPro">Preço: 5k</h3>
                     <h3 id="aPro">Aumento: 10</h3>
                     <h4 id="nPro">0</h4>
                 </div>
     
-                <div class="construcao" onclick="comprarMat()">
+                <div class="construcao" onclick="comprarConstrucao('mat')">
                     <h2>Matemáticos</h2>
                     <h3 id="vMat">Preço: 130k</h3>
                     <h3 id="aMat">Aumento: 50</h3>
                     <h4 id="nMat">0</h4>
                 </div>
     
-                <div class="construcao" onclick="comprarQua()">
+                <div class="construcao" onclick="comprarConstrucao('qua')">
                     <h2>Quadros</h2>
                     <h3 id="vQua">Preço: 9mi</h3>
                     <h3 id="aQua">Aumento: 500</h3>
                     <h4 id="nQua">0</h4>
                 </div>
     
-                <div class="construcao" onclick="comprarFab()">
+                <div class="construcao" onclick="comprarConstrucao('fab')">
                     <h2>Fábricas</h2>
                     <h3 id="vFab">Preço: 650mi</h3>
                     <h3 id="aFab">Aumento: 10k</h3>
@@ -86,7 +86,7 @@
 
             <table>
                 <tr>
-                    <td id="voltar" colspan="3"><button onclick="mudarMain()">Voltar</button></td>
+                    <td id="voltar" colspan="3"><button onclick="mudarMenu('main')">Voltar</button></td>
                 </tr>
                 <tr>
                     <td data-melhoria="b1" onclick="comprarMelhorias('Clique duplo', event)">
@@ -194,7 +194,7 @@
         </section>
 
         <section id="ajuda" style="display: none;">
-            <button onclick="mudarMain()">Voltar</button>
+            <button onclick="mudarMenu('main')">Voltar</button>
 
             <h1>Ajuda</h1>
 
@@ -247,31 +247,31 @@
 
         <section id="outros" style="display: none;">
 
-            <button onclick="mudarMain()">Voltar</button>
+            <button onclick="mudarMenu('main')">Voltar</button>
 
             <h2>Outros menus</h2>
 
             <div id="botoesOutros">
                 
-                <button onclick="mudarTriângulos()">Triângulos</button>
+                <button onclick="mudarMenu('triangulos')">Triângulos</button>
 
-                <button onclick="mudarRenascer()">Renascer</button>
+                <button onclick="mudarMenu('renascer')">Renascer</button>
 
-                <button onclick="mudarConquistas()">Conquistas</button>
+                <button onclick="mudarMenu('conquistas')">Conquistas</button>
 
-                <button id="maquinadasorte" onclick="mudarMaquinadasorte()" style="display: none;">Máquina da sorte</button>
+                <button id="maquinadasorte" onclick="mudarMenu('maquinadasorte')" style="display: none;">Máquina da sorte</button>
 
-                <button id="livromagico" onclick="mudarLivromagico()" style="display: none;">Livro mágico</button>
+                <button id="livromagico" onclick="mudarMenu('livromagico')" style="display: none;">Livro mágico</button>
 
-                <button id="quizmatematico" onclick="mudarQuizmatematico()" style="display: none;">Quiz matemático</button>
+                <button id="quizmatematico" onclick="mudarMenu('quizmatematico')" style="display: none;">Quiz matemático</button>
 
-                <button id="skinquadrado" onclick="mudarSkinquadrado()" style="display: none;">Skin do quadrado</button>
+                <button id="skinquadrado" onclick="mudarMenu('skinquadrado')" style="display: none;">Skin do quadrado</button>
 
             </div>
         </section>
 
         <section id="salvar" style="display: none;">
-            <button onclick="mudarMain()" style="width: fit-content; height: fit-content;">Voltar</button>
+            <button onclick="mudarMenu('main')" style="width: fit-content; height: fit-content;">Voltar</button>
 
             <h2>Salvar</h2>
 
@@ -296,7 +296,7 @@
 
             <table>
                 <tr>
-                    <td id="voltar" colspan="3"><button onclick="mudarMain()">Voltar</button></td>
+                    <td id="voltar" colspan="3"><button onclick="mudarMenu('main')">Voltar</button></td>
                 </tr>
 
                 <tr>
@@ -357,7 +357,7 @@
         </section>
 
         <section id="renascer" style="display: none;">
-            <button onclick="mudarMain()" style="width: fit-content;">Voltar</button>
+            <button onclick="mudarMenu('main')" style="width: fit-content;">Voltar</button>
 
             <h2>Renascer</h2>
 
@@ -366,19 +366,26 @@
 
             <p>Ao renascer você perderá todos os seus quadrados, melhorias e construções</p>
 
-            <div><button onclick="confirmarRenascer()">Renascer</button></div>
+            <div><button onclick="mudarMenu('confirmarRenascer')">Renascer</button></div>
 
             <div id="confirmarRenascer" style="display: none;">
                 <h2>Você tem certeza que deseja renascer?</h2>
                 <p id="consiga1quadrado"></p>
                 <button onclick="renascer()">Renascer</button>
-                <button onclick="mudarMain()">Cancelar</button>
+                <button onclick="mudarMenu('main')">Cancelar</button>
             </div>
 
         </section>
 
         <section id="conquistas" style="display: none;">
-            <button onclick="mudarMain()" style="width: fit-content; height: fit-content;">Voltar</button>
+            <button onclick="mudarMenu('main')" style="width: fit-content; height: fit-content;">Voltar</button>
+
+            <div class="cores">
+                <div class="quadrado-pequeno" style="background-color: white;"></div>
+                <p>Não conquistado</p>
+                <div class="quadrado-pequeno" style="background-color: #ffc107;"></div>
+                <p>Conquistado</p>
+            </div>
 
             <h2>Conquistas</h2>
             <div id="container-conquistas">
@@ -388,7 +395,7 @@
         </section>
 
         <section id="maquina-da-sorte" style="display: none;">
-            <button onclick="mudarMain()" style="width: fit-content; height: fit-content;">Voltar</button>
+            <button onclick="mudarMenu('main')" style="width: fit-content; height: fit-content;">Voltar</button>
 
                 <div id="maquinaeform">
                     <div id="maquina">
@@ -414,7 +421,7 @@
         </section>
 
         <section id="livro-magico" style="display: none;">
-            <button onclick="mudarMain()" style="width: fit-content; height: fit-content;">Voltar</button>
+            <button onclick="mudarMenu('main')" style="width: fit-content; height: fit-content;">Voltar</button>
 
             <div id="livro">
                 <div id="feiticos">
@@ -450,7 +457,7 @@
         </section>
 
         <section id="quiz-matematico" style="display: none;">
-            <button onclick="mudarMain()" style="width: fit-content; height: fit-content;">Voltar</button>
+            <button onclick="mudarMenu('main')" style="width: fit-content; height: fit-content;">Voltar</button>
             
             <div id="quiz">
                 <h2 id="pergunta">Comece o quiz para receber a pergunta</h2>
@@ -475,7 +482,7 @@
         </section>
 
         <section id="skin-quadrado" style="display: none;">
-            <button onclick="mudarMain()" style="width: fit-content; height: fit-content;">Voltar</button>
+            <button onclick="mudarMenu('main')" style="width: fit-content; height: fit-content;">Voltar</button>
 
             <h2>Escolha a Skin</h2>
 
