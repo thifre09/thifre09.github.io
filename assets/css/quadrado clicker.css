@@ -162,6 +162,10 @@ section#direita div h2, section#direita div h3 {
 
 /* melhorias */
 
+#quadradotextMelhorias, #triangulotextMelhorias {
+    text-align: center;
+}
+
 section#melhorias, section#triangulos {
     overflow-x: scroll;
     width: 100%;

@@ -4,24 +4,6 @@ let quadrados = 0;
 let quadradosTotais = 0;
 let base = 1;
 
-let nCur = 0;
-let nPro = 0;
-let nMat = 0;
-let nQua = 0;
-let nFab = 0;
-
-let vCur = 100 * (1.15 ** nCur);
-let vPro = 5_000 * (1.15 ** nPro);
-let vMat = 130_000 * (1.15 ** nMat);
-let vQua = 9_000_000 * (1.15 ** nQua);
-let vFab = 650_000_000 * (1.15 ** nFab);
-
-let aCur = 1;
-let aPro = 10;
-let aMat = 50;
-let aQua = 750;
-let aFab = 15000;
-
 let melhorias = {
     Bas: {b1: false, b2: false, b3: false},
     Cur: {c1: false, c2: false, c3: false},
@@ -231,8 +213,6 @@ let renasceu = false;
 let quadrados_ascendentes = 0;
 let valorParaGanhar1QuadradoAscendente = 100000000;
 
-let click = (base + (cur.n * cur.a) + (pro.n * pro.a) + (mat.n * mat.a) + (qua.n * qua.a) + (qua.n * qua.a)) * a_pd1;
-
 //variáveis
 
 //classes
@@ -242,11 +222,11 @@ class Construcao {
         this.n = 0;
         this.valorBase = valorBase;
         this.a = aumento;
-        this.v = valorBase * (1.15 ** this.numero);
+        this.v = valorBase * (1.15 ** this.n);
     }
 
     update() {
-        this.valor = valorBase * (1.15 ** this.numero);
+        this.valor = valorBase * (1.15 ** this.n);
     }
 }
 
@@ -255,6 +235,9 @@ let pro = new Construcao(5000, 10);
 let mat = new Construcao(130_000, 50);
 let qua = new Construcao(9_000_000, 750);
 let fab = new Construcao(650_000_000, 15_000);
+
+let click = (base + (cur.n * cur.a) + (pro.n * pro.a) + (mat.n * mat.a) + (qua.n * qua.a) + (qua.n * qua.a)) * a_pd1;
+
 
 //classes
 
@@ -265,9 +248,11 @@ function salvarDados() {
         quadrados,
         quadradosTotais,
         base,
-        nCur, nPro, nMat, nQua, nFab,
-        vCur, vPro, vMat, vQua, vFab,
-        aCur, aPro, aMat, aQua, aFab,
+        cur,
+        pro,
+        mat,
+        qua,
+        fab,
         melhorias,
         melhoriasTri,
         tri,
@@ -297,21 +282,11 @@ function carregarDados() {
         quadrados = estado.quadrados;
         quadradosTotais = estado.quadradosTotais;
         base = estado.base;
-        nCur = estado.nCur;
-        nPro = estado.nPro;
-        nMat = estado.nMat;
-        nQua = estado.nQua;
-        nFab = estado.nFab;
-        vCur = estado.vCur;
-        vPro = estado.vPro;
-        vMat = estado.vMat;
-        vQua = estado.vQua;
-        vFab = estado.vFab;
-        aCur = estado.aCur;
-        aPro = estado.aPro;
-        aMat = estado.aMat;
-        aQua = estado.aQua;
-        aFab = estado.aFab;
+        cur = estado.cur;
+        pro = estado.pro;
+        mat = estado.mat;
+        qua = estado.mat;
+        fab = estado.fab;
         melhorias = estado.melhorias;
         melhoriasTri = estado.melhoriasTri;
         tri = estado.tri;
@@ -374,21 +349,11 @@ function salvarJson() {
         quadrados,
         quadradosTotais,
         base,
-        nCur,
-        nPro,
-        nMat,
-        nQua,
-        nFab,
-        vCur,
-        vPro,
-        vMat,
-        vQua,
-        vFab,
-        aCur,
-        aPro,
-        aMat,
-        aQua,
-        aFab,
+        cur,
+        pro,
+        mat,
+        qua,
+        fab,
         melhorias,
         melhoriasTri,
         tri,
@@ -446,23 +411,12 @@ function carregarJson() {
                     quadrados = dadosCarregados.quadrados;
                     quadradosTotais = dadosCarregados.quadradosTotais;
                     base = dadosCarregados.base;
-                    nCur = dadosCarregados.nCur;
-                    nPro = dadosCarregados.nPro;
-                    nMat = dadosCarregados.nMat;
-                    nQua = dadosCarregados.nQua;
-                    nFab = dadosCarregados.nFab;
-
-                    vCur = dadosCarregados.vCur;
-                    vPro = dadosCarregados.vPro;
-                    vMat = dadosCarregados.vMat;
-                    vQua = dadosCarregados.vQua;
-                    vFab = dadosCarregados.vFab;
-
-                    aCur = dadosCarregados.aCur;
-                    aPro = dadosCarregados.aPro;
-                    aMat = dadosCarregados.aMat;
-                    aQua = dadosCarregados.aQua;
-                    aFab = dadosCarregados.aFab;
+                    
+                    cur = dadosCarregados.cur;
+                    pro = dadosCarregados.pro;
+                    mat = dadosCarregados.mat;
+                    qua = dadosCarregados.mat;
+                    fab = dadosCarregados.fab;
 
                     melhorias = dadosCarregados.melhorias;
                     melhoriasTri = dadosCarregados.melhoriasTri;
@@ -640,11 +594,11 @@ function alterar() {
     let aMatText = document.getElementById("aMat");
     let aQuaText = document.getElementById("aQua");
     let aFabText = document.getElementById("aFab");
-    aCurText.innerText = "Aumento: " + formatar(aCur);
-    aProText.innerText = "Aumento: " + formatar(aPro);
-    aMatText.innerText = "Aumento: " + formatar(aMat);
-    aQuaText.innerText = "Aumento: " + formatar(aQua);
-    aFabText.innerText = "Aumento: " + formatar(aFab);
+    aCurText.innerText = "Aumento: " + formatar(cur.a);
+    aProText.innerText = "Aumento: " + formatar(pro.a);
+    aMatText.innerText = "Aumento: " + formatar(mat.a);
+    aQuaText.innerText = "Aumento: " + formatar(qua.a);
+    aFabText.innerText = "Aumento: " + formatar(fab.a);
 
     let quadrados_ascendentesText = document.getElementById("quadrados-ascendentes");
     quadrados_ascendentesText.innerText = "Você possui " + quadrados_ascendentes + " quadrados ascendentes";
@@ -654,10 +608,10 @@ function alterar() {
     let manaText = document.getElementById("mana");
     manaText.innerText = "Mana: " + mana;
 
-    click = (base + (nCur * aCur) + (nPro *aPro) + (nMat *aMat) + (nQua * aQua) + (nFab * aFab)) * a_pd1;
+    click = (base + (cur.n * cur.a) + (pro.n * pro.a) + (mat.n * mat.a) + (qua.n * qua.a) + (qua.n * qua.a)) * a_pd1;
 
     if (renasceu === true) {
-        click = (base + (nCur * aCur) + (nPro *aPro) + (nMat *aMat) + (nQua * aQua) + (nFab * aFab)) * a_pd1 * (1 + quadrados_ascendentes/10);
+        click = (base + (cur.n * cur.a) + (pro.n * pro.a) + (mat.n * mat.a) + (qua.n * qua.a) + (qua.n * qua.a)) * a_pd1 * (1 + quadrados_ascendentes/10);
     }
     
     let quadradosporclickText = document.getElementById("quadradosporclickText")
@@ -674,22 +628,6 @@ function renascer() {
 
         quadrados = 0
         base = 1
-
-        nCur = 0;
-        nPro = 0;
-        nMat = 0;
-        nQua = 0;
-        nFab = 0;
-        aCur = 1;
-        aPro = 10;
-        aMat = 50;
-        aQua = 500;
-        aFab = 1000;
-        vCur = 100;
-        vPro = 5000;
-        vMat = 130000;
-        vQua = 9000000;
-        vFab = 650000000;
 
         for (let categoria in melhorias) {
             for (let chave in melhorias[categoria]) {
@@ -980,19 +918,19 @@ function usarmagias() {
             mana -= 3
             let numeroRandom = Math.random()
             if (numeroRandom <= 0.2) {
-                nCur++ 
+                cur.n++ 
                 textomenssagens.innerText = "Você ganhou 1 cursor"
             } else if (numeroRandom <= 0.4) {
-                nPro++
+                pro.n++
                 textomenssagens.innerText = "Você ganhou 1 professor"
             } else if (numeroRandom <= 0.6) {
-                nMat++
+                mat.n++
                 textomenssagens.innerText = "Você ganhou 1 matemático"
             } else if (numeroRandom <= 0.8) {
-                nQua++
+                qua.n++
                 textomenssagens.innerText = "Você ganhou 1 quadro"
             } else if (numeroRandom <= 1) {
-                nFab++
+                fab.n++
                 textomenssagens.innerText = "Você ganhou 1 fabrica"
             }
         } else if (mana < 3) {
@@ -1200,34 +1138,34 @@ function producaoAutomatizada() {
 
 function comprarConstrucao(construcao) {
     if (construcao === "cur") {
-        if (quadrados >= vCur) {
-            nCur++;
-            quadrados -= vCur;
-            vCur = arredondar(0,100 * (1.15 ** nCur));
+        if (quadrados >= cur.v) {
+            cur.n++;
+            quadrados -= cur.v;
+            cur.v = arredondar(0,100 * (1.15 ** cur.n));
         }
     } else if (construcao === "pro") {
-        if (quadrados >= vPro){
-            nPro++;
-            quadrados -= vPro;
-            vCur = arredondar(0,5_000 * (1.15 ** nPro));
+        if (quadrados >= pro.v){
+            pro.n++;
+            quadrados -= pro.v;
+            pro.v = arredondar(0,5_000 * (1.15 ** pro.n));
         }  
     } else if (construcao === "mat") {
-        if (quadrados >= vMat) {
-            nMat++
-            quadrados -= vMat;
-            vPro = arredondar(0,130_000 * (1.15 ** nMat));
+        if (quadrados >= mat.v) {
+            mat.n++
+            quadrados -= mat.v;
+            mat.v = arredondar(0,130_000 * (1.15 ** mat.n));
         }
     } else if (construcao === "qua") {
-        if (quadrados >= vQua) {
-            nQua++;
-            quadrados -= vQua;
-            vQua = arredondar(0,9_000_000 * (1.15 ** nQua));
+        if (quadrados >= qua.v) {
+            qua.n++;
+            quadrados -= qua.v;
+            qua.v = arredondar(0,9_000_000 * (1.15 ** qua.n));
         }
     } else if (construcao === "fab") {
-        if (quadrados >= vFab) {
-            nFab++;
-            quadrados -= vFab;
-            vFab = arredondar(0,650_000_000 * (1.15 ** nFab));
+        if (quadrados >= fab.v) {
+            fab.n++;
+            quadrados -= fab.v;
+            fab.v = arredondar(0,650_000_000 * (1.15 ** fab.n));
         }  
     }
 
@@ -1261,21 +1199,21 @@ function comprarMelhorias(melhoria, evento) {
     if (melhoria === "Cursores duplos" && melhorias.Cur.c1 === false && quadrados >= 750) {
         melhorias.Cur.c1 = true;
         quadrados -= 750;
-        aCur *= 2;
+        cur.a *= 2;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Múltiplos Cursores
     if (melhoria === "Multiplos cursores" && melhorias.Cur.c2 === false && quadrados >= 75000) {
         melhorias.Cur.c2 = true;
         quadrados -= 100_000;
-        aCur *= 5;
+        cur.a *= 5;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Super Cursores
     if (melhoria === "Super cursores" && melhorias.Cur.c3 === false && quadrados >= 10000000) {
         melhorias.Cur.c3 = true;
         quadrados -= 30_000_000;
-        aCur *= 20;
+        cur.a *= 20;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
 
@@ -1283,21 +1221,21 @@ function comprarMelhorias(melhoria, evento) {
     if (melhoria === "Professores duplos" && melhorias.Pro.p1 === false && quadrados >= 25000) {
         melhorias.Pro.p1 = true;
         quadrados -= 25_000;
-        aPro *= 2;
+        pro.a *= 2;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Escola
     if (melhoria === "Escola" && melhorias.Pro.p2 === false && quadrados >= 600000) {
         melhorias.Pro.p2 = true;
         quadrados -= 1_800_000;
-        aPro *= 5;
+        pro.a *= 5;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Super Professores
     if (melhoria === "Super professores" && melhorias.Pro.p3 === false && quadrados >= 90000000) {
         melhorias.Pro.p3 = true;
         quadrados -= 180_000_000;
-        aPro *= 20;
+        pro.a *= 20;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
 
@@ -1305,21 +1243,21 @@ function comprarMelhorias(melhoria, evento) {
     if (melhoria === "Matematica dupla" && melhorias.Mat.m1 === false && quadrados >= 600000) {
         melhorias.Mat.m1 = true;
         quadrados -= 600_000;
-        aMat *= 2;
+        mat.a *= 2;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Conjunto de Matemáticos
     if (melhoria === "Conjunto de matematicos" && melhorias.Mat.m2 === false && quadrados >= 20000000) {
         melhorias.Mat.m2 = true;
         quadrados -= 80_000_000;
-        aMat *= 5;
+        mat.a *= 5;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Super Matemáticos
     if (melhoria === "Super matematicos" && melhorias.Mat.m3 === false && quadrados >= 100000000) {
         melhorias.Mat.m3 = true;
         quadrados -= 1_00_000_000;
-        aMat *= 20;
+        mat.a *= 20;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
 
@@ -1327,21 +1265,21 @@ function comprarMelhorias(melhoria, evento) {
     if (melhoria === "Dois quadros" && melhorias.Qua.q1 === false && quadrados >= 30000000) {
         melhorias.Qua.q1 = true;
         quadrados -= 30_000_000;
-        aQua *= 2;
+        qua.a *= 2;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Quadrão
     if (melhoria === "Quadrão" && melhorias.Qua.q2 === false && quadrados >= 75000000) {
         melhorias.Qua.q2 = true;
         quadrados -= 200_000_000;
-        aQua *= 5;
+        qua.a *= 5;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Quadros Poderosos
     if (melhoria === "Quadros poderosos" && melhorias.Qua.q3 === false && quadrados >= 300000000) {
         melhorias.Qua.q3 = true;
         quadrados -= 10_000_000_000;
-        aQua *= 20;
+        qua.a *= 20;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
 
@@ -1349,21 +1287,21 @@ function comprarMelhorias(melhoria, evento) {
     if (melhoria === "Duas fabricas" && melhorias.Fab.f1 === false && quadrados >= 2500000000) {
         melhorias.Fab.f1 = true;
         quadrados -= 2_500_000_000;
-        aFab *= 2;
+        fab.a *= 2;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Começo da Revolução
     if (melhoria === "Começo da revolução" && melhorias.Fab.f2 === false && quadrados >= 5000000000) {
         melhorias.Fab.f2 = true;
         quadrados -= 15_000_000_000;
-        aFab *= 5;
+        fab.a *= 5;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Super Fábricas
     if (melhoria === "Super fabricas" && melhorias.Fab.f3 === false && quadrados >= 100000000000) {
         melhorias.Fab.f3 = true;
         quadrados -= 1_000_000_000_000;
-        aFab *= 20;
+        fab.a *= 20;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
 
@@ -1396,11 +1334,11 @@ function comprarMelhoriasTriangulos(melhoria, evento) {
     if (melhoria === 'Superprodução' && melhoriasTri.sp1 === false && triangulos >= 2) {
         melhoriasTri.sp1 = true;
         triangulos -= 2
-        aCur *= 2
-        aPro *= 2
-        aMat *= 2
-        aQua *= 2
-        aFab *= 2
+        cur.a *= 2
+        pro.a *= 2
+        mat.a *= 2
+        qua.a *= 2
+        fab.a *= 2
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     if (melhoria === 'Maquina da sorte' && melhoriasTri.ms1 === false && triangulos >= 3) {
