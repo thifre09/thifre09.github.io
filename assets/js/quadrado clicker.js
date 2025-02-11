@@ -13,6 +13,7 @@ let melhorias = {
     Fab: {f1: false, f2: false, f3: false}
 }
 
+let triangulos = 0;
 let melhoriasTri = {
     pd1: false,
     cc1: false,
@@ -36,7 +37,6 @@ let tri = {
     tr9: false,
     tr10: false
 }
-let triangulos = 0;
 let a_pd1 = 1
 
 let mana = 10;
@@ -44,179 +44,12 @@ let nclicks = 0;
 let magiaselecionada = null;
 let usoumultiplicus = false;
 
-let perguntaescolhida = null
-let perguntas = [
-    "Quanto é 1+1?",
-    "Quanto é 5-3?",
-    "Quanto é 5x5?",
-    "Quanto é 36/6?",
-    "Quanto é 4²?",
-    "Quais são os 3 primeiros dígitos de π?",
-    "Quanto é 335-229?",
-    "Quanto é 542+6534?",
-    "Quanto vale a área de um quadrado com lado = 3?",
-    "Qual é a área de um triângulo com base = 5 e altura = 6?",
-    "Quanto é 2x3+7/1-5?",
-    "Quanto é 5x2,5?",
-    "Quanto é 550-1000?",
-    "Quanto é 5³?",
-    "Qual é o nome do número que é 1^100?",
-    "Quantos subconjuntos do conjunto {1,2,3,...,30} têm a propriedade de que a soma dos elementos do subconjunto é divisível por 5?",
-    "Qual é o nome da forma geométrica que possui 3 lados?",
-    "Qual é o nome do número que é 10^googol?",
-    "Qual é a circunferência de um círculo que possui raio = 8,4 e π = 3?",
-    "Esse jogo é legal?",
-    "Resolva a equação para x no conjunto dos números reais: x³-6x²+11x-6=0",
-    "Quanto é 9 + 10?",
-    "Qual é a soma dos ângulos internos de um triângulo?",
-    "Qual é o resultado de 100 ÷ 25?",
-    "Quanto é a raiz quadrada de 81?",
-    "Quanto é 50% de 200?",
-    "Quanto é 10³?",
-    "Quanto é a raiz cúbica de 27?",
-    "Qual é a soma dos ângulos internos de um quadrado?",
-    "Qual é o valor do logaritmo de 100 na base 10?",
-    "Qual é o seno de 30 graus?",
-    "Qual é a tangente de 45 graus?"
-];
-let opçoes = [
-    ["2", "3", "4", "1"], // Quanto é 1+1?
-    ["2", "3", "5", "1"], // Quanto é 5-3?
-    ["25", "20", "15", "30"], // Quanto é 5x5?
-    ["6", "7", "8", "9"], // Quanto é 36/6?
-    ["16", "8", "4", "12"], // Quanto é 4²?
-    ["3.14", "3.15", "3.13", "3.12"], // Quais são os 3 primeiros dígitos de π?
-    ["106", "110", "105", "100"], // Quanto é 335-229?
-    ["7076", "7074", "7067", "7066"], // Quanto é 542+6534?
-    ["9", "6", "3", "12"], // Quanto vale a área de um quadrado com lado = 3?
-    ["15", "10", "20", "12"], // Qual é a área de um triângulo com base = 5 e altura = 6?
-    ["8", "11", "13", "9"], // Quanto é 2x3+7/1-5?
-    ["12.5", "13", "14", "11.5"], // Quanto é 5x2,5?
-    ["-450", "-400", "-500", "-550"], // Quanto é 550-1000?
-    ["125", "150", "25", "100"], // Quanto é 5³?
-    ["um", "googolplex", "googol", "número um"], // Qual é o nome do número que é 1^100?
-    ["59049", "90000", "60503", "59050"], // Quantos subconjuntos têm soma divisível por 5?
-    ["Triângulo", "Quadrado", "Retângulo", "Círculo"], // Qual é a forma geométrica de 3 lados?
-    ["googolplex", "googol", "milhão", "trilhão"], // Qual é o número 10^googol?
-    ["50.4", "48", "52", "45.6"], // Qual é a circunferência do círculo com raio 8.4 e π = 3?
-    ["sim", "não", "talvez", "depende"], // Esse jogo é legal?
-    ["1, 2 e 3", "1 e 3", "1, 3 e 6", "2, 3 e 6"], // Resolva x³-6x²+11x-6=0
-    ["19", "21", "18", "20"], // Quanto é 9 + 10?
-    ["180", "360", "90", "120"], // Qual é a soma dos ângulos internos de um triângulo?
-    ["4", "5", "2", "6"], // Qual é o resultado de 100 ÷ 25?
-    ["9", "6", "8", "7"], // Quanto é a raiz quadrada de 81?
-    ["100", "50", "25", "200"], // Quanto é 50% de 200?
-    ["1000", "100", "10", "10000"], // Quanto é 10³?
-    ["3", "9", "27", "1"], // Quanto é a raiz cúbica de 27?
-    ["360", "180", "90", "720"], // Qual é a soma dos ângulos internos de um quadrado?
-    ["2", "0", "1", "100"], // Qual é o logaritmo de 100 na base 10?
-    ["0.5", "0.707", "1", "0"], // Qual é o seno de 30 graus?
-    ["1", "0", "0.707", "1.5"] // Qual é a tangente de 45 graus?
-];
-let respostasCorretas = [
-    "2", // Quanto é 1+1?
-    "2", // Quanto é 5-3?
-    "25", // Quanto é 5x5?
-    "6", // Quanto é 36/6?
-    "16", // Quanto é 4²?
-    "3.14", // Quais são os 3 primeiros dígitos de π?
-    "106", // Quanto é 335-229?
-    "7076", // Quanto é 542+6534?
-    "9", // Quanto vale a área de um quadrado com lado = 3?
-    "15", // Qual é a área de um triângulo com base = 5 e altura = 6?
-    "9", // Quanto é 2x3+7/1-5?
-    "12.5", // Quanto é 5x2,5?
-    "-450", // Quanto é 550-1000?
-    "125", // Quanto é 5³?
-    "um", // Qual é o nome do número que é 1^100?
-    "59049", // Quantos subconjuntos do conjunto {1,2,3,...,30} têm soma divisível por 5?
-    "Triângulo", // Qual é o nome da forma geométrica que possui 3 lados?
-    "googolplex", // Qual é o nome do número que é 10^googol?
-    "50.4", // Qual é a circunferência de um círculo com raio = 8,4 e π = 3?
-    "sim", // Esse jogo é legal? Digite sim ou não
-    "1, 2 e 3", // Resolva x³-6x²+11x-6=0
-    "19", // Quanto é 9 + 10?
-    "180", // Qual é a soma dos ângulos internos de um triângulo?
-    "4", // Qual é o resultado de 100 ÷ 25?
-    "9", // Quanto é a raiz quadrada de 81?
-    "100", // Quanto é 50% de 200?
-    "1000", // Quanto é 10³?
-    "3", // Quanto é a raiz cúbica de 27?
-    "360", // Qual é a soma dos ângulos internos de um quadrado?
-    "2", // Qual é o valor do logaritmo de 100 na base 10?
-    "0.5", // Qual é o seno de 30 graus?
-    "1" // Qual é a tangente de 45 graus?
-];
-
-let conquistasDescricao = {
-    //Quadrados
-    "Primeiro click": "Clique pela primeira vez",
-    "10 quadrados": "Consiga 10 quadrados",
-    "100 quadrados": "Consiga 100 quadrados",
-    "Milhar": "Consiga 1k quadrados",
-    "10000 quadrados": "Consiga 10k quadrados",
-    "10^5": "Consiga 100k quadrados",
-    "Milhão": "Consiga 1mi quadrados",
-    "Um numero um pouco maior": "Consiga 1bi quadrados",
-    "O grande t": "Consiga 1t quadrados",
-    "Qa-drados": "Consiga 1Qa quadrados",
-    "Ainda pode ficar maior": "Consiga 1Qi quadrados",
-    "É sextilhão, não sexta": "Consiga 1Sx quadrados",
-    "Não consegui pensar num nome legal": "Consiga 1Sp quadrados",
-    "Você acha esse número grande?": "Consiga 1Oc quadrados",
-    "Império de quadrados": "Consiga 1No quadrados",
-    "Você chegou ao 10-lhão": "Consiga 1De quadrados",
-
-    //Construções
-    "Cursor": "Compre 1 cursor",
-    "Muitos cursores": "Compre 100 cursores",
-    "Professor": "Compre 1 professor",
-    "Vários professores": "Compre 100 professores",
-    "Matemático": "Compre 1 matemático",
-    "Comissão de matemáticos": "Compre 100 matemáticos",
-    "Quadro": "Compre 1 quadro",
-    "Pra que tantos quadros": "Compre 100 quadros",
-    "Fábrica": "Compre 1 fábrica",
-    "Conglomerado": "Compre 100 fábricas",
-
-    //Triângulos
-    "Triangulo 1": "Consiga o primeiro triangulo",
-    "10 triângulos": "Consiga 10 triângulos",
-    "Força triangular": "Compre todas as melhorias de triângulos",
-
-    //Melhorias
-    "Melhoria básica": "Compre uma melhoria base",
-    "Cursores melhorados": "Compre 1 melhoria de cursores",
-    "Cursores no total": "Compre todas as melhorias de cursores",
-    "Bom professor": "Compre 1 melhoria de professores",
-    "Professores top": "Compre todas as melhorias de professores",
-    "Matemática básica": "Compre 1 melhoria de matemáticos",
-    "Matemática avançada": "Compre todas as melhorias de matemáticos",
-    "Quadros melhores": "Compre 1 melhoria de quadros",
-    "Lousa": "Compre todas as melhorias de quadros",
-    "Fabricação intensa": "Compre 1 melhoria de fabricas",
-    "Fabricas no topo": "Compre todas as melhorias de fabricas",
-    "Tudo feito": "Compre todas as melhorias",
-
-    //Outros
-    "Apostador": "Aposte 1 vez na maquina da sorte",
-    "Mágico aprendiz": "Use uma magia",
-    "Estilista": "Mude a skin do quadrado 1 vez",
-    "Aluno": "Responda 1 pergunta do quiz de matemática",
-}
-let conquistasObtidas = {}
-for (conquista in conquistasDescricao) {
-    conquistasObtidas[conquista] = false;
-}
-
 let renasceu = false;
 let quadrados_ascendentes = 0;
 let valorParaGanhar1QuadradoAscendente = 100000000;
 
-//variáveis
 
-//classes
-
+//construções
 class Construcao {
     constructor(valorBase,aumento) {
         this.n = 0;
@@ -225,10 +58,7 @@ class Construcao {
         this.v = valorBase * (1.15 ** this.n);
     }
 
-    update() {
-        this.valor = valorBase * (1.15 ** this.n);
-    }
-}
+};
 
 let cur = new Construcao(100, 1);
 let pro = new Construcao(5000, 10);
@@ -236,10 +66,162 @@ let mat = new Construcao(130_000, 50);
 let qua = new Construcao(9_000_000, 750);
 let fab = new Construcao(650_000_000, 15_000);
 
+
+//perguntas
+class Pergunta {
+    static numPerguntas = 0;
+    static respondidas = 0;
+    static acertos = 0;
+    static erros = 0;
+
+    constructor(pergunta, opçoes, resposta) {
+        this.pergunta = pergunta;
+        this.opçoes = opçoes;
+        this.resposta = resposta;
+        Pergunta.numPerguntas++
+    }
+
+    static maisPergunta() {
+        Pergunta.respondidas++;
+    }
+
+    static maisAcerto() {
+        Pergunta.acertos++;
+    }
+
+    static maisErro() {
+        Pergunta.erros++;
+    }
+};
+
+const perguntas = [
+    new Pergunta("Quanto é 1+1?", ["2", "3", "4", "1"], "2"),
+    new Pergunta("Quanto é 5-3?", ["2", "3", "5", "1"], "2"),
+    new Pergunta("Quanto é 5x5?", ["25", "20", "15", "30"], "25"),
+    new Pergunta("Quanto é 36/6?", ["6", "7", "8", "9"], "6"),
+    new Pergunta("Quanto é 4²?", ["16", "8", "4", "12"], "16"),
+    new Pergunta("Quais são os 3 primeiros dígitos de π?", ["3.14", "3.15", "3.13", "3.12"], "3.14"),
+    new Pergunta("Quanto é 335-229?", ["106", "110", "105", "100"], "106"),
+    new Pergunta("Quanto é 542+6534?", ["7076", "7074", "7067", "7066"], "7076"),
+    new Pergunta("Quanto vale a área de um quadrado com lado = 3?", ["9", "6", "3", "12"], "9"),
+    new Pergunta("Qual é a área de um triângulo com base = 5 e altura = 6?", ["15", "10", "20", "12"], "15"),
+    new Pergunta("Quanto é 2x3+7/1-5?", ["8", "11", "13", "9"], "9"),
+    new Pergunta("Quanto é 5x2,5?", ["12.5", "13", "14", "11.5"], "12.5"),
+    new Pergunta("Quanto é 550-1000?", ["-450", "-400", "-500", "-550"], "-450"),
+    new Pergunta("Quanto é 5³?", ["125", "150", "25", "100"], "125"),
+    new Pergunta("Qual é o nome do número que é 1^100?", ["um", "googolplex", "googol", "número um"], "um"),
+    new Pergunta("Quantos subconjuntos do conjunto {1,2,3,...,30} têm a propriedade de que a soma dos elementos do subconjunto é divisível por 5?", ["59049", "90000", "60503", "59050"], "59049"),
+    new Pergunta("Qual é o nome da forma geométrica que possui 3 lados?", ["Triângulo", "Quadrado", "Retângulo", "Círculo"], "Triângulo"),
+    new Pergunta("Qual é o nome do número que é 10^googol?", ["googolplex", "googol", "milhão", "trilhão"], "googolplex"),
+    new Pergunta("Qual é a circunferência de um círculo que possui raio = 8,4 e π = 3?", ["50.4", "48", "52", "45.6"], "50.4"),
+    new Pergunta("Esse jogo é legal?", ["sim", "não", "talvez", "depende"], "sim"),
+    new Pergunta("Resolva a equação para x no conjunto dos números reais: x³-6x²+11x-6=0", ["1, 2 e 3", "1 e 3", "1, 3 e 6", "2, 3 e 6"], "1, 2 e 3"),
+    new Pergunta("Quanto é 9 + 10?", ["19", "21", "18", "20"], "19"),
+    new Pergunta("Qual é a soma dos ângulos internos de um triângulo?", ["180", "360", "90", "120"], "180"),
+    new Pergunta("Qual é o resultado de 100 ÷ 25?", ["4", "5", "2", "6"], "4"),
+    new Pergunta("Quanto é a raiz quadrada de 81?", ["9", "6", "8", "7"], "9"),
+    new Pergunta("Quanto é 50% de 200?", ["100", "50", "25", "200"], "100"),
+    new Pergunta("Quanto é 10³?", ["1000", "100", "10", "10000"], "1000"),
+    new Pergunta("Quanto é a raiz cúbica de 27?", ["3", "9", "27", "1"], "3"),
+    new Pergunta("Qual é a soma dos ângulos internos de um quadrado?", ["360", "180", "90", "720"], "360"),
+    new Pergunta("Qual é o valor do logaritmo de 100 na base 10?", ["2", "0", "1", "100"], "2"),
+    new Pergunta("Qual é o seno de 30 graus?", ["0.5", "0.707", "1", "0"], "0.5"),
+    new Pergunta("Qual é a tangente de 45 graus?", ["1", "0", "0.707", "1.5"], "1"),
+    new Pergunta("Quanto é 7x8?", ["56", "48", "64", "49"], "56"),
+    new Pergunta("Quanto é 100 ÷ 4?", ["25", "20", "30", "40"], "25"),
+    new Pergunta("Quanto é 2^5?", ["32", "16", "64", "25"], "32"),
+    new Pergunta("Qual é a raiz quadrada de 144?", ["12", "14", "10", "16"], "12"),
+    new Pergunta("Quanto é 81 ÷ 9?", ["9", "8", "7", "10"], "9"),
+    new Pergunta("Qual é o maior número primo abaixo de 20?", ["19", "17", "13", "11"], "19"),
+    new Pergunta("Quanto é 15% de 200?", ["30", "25", "40", "35"], "30"),
+    new Pergunta("Quanto é a raiz cúbica de 64?", ["4", "6", "8", "3"], "4"),
+    new Pergunta("Qual é o resultado de 7 + 3 x 2?", ["13", "17", "20", "10"], "13"),
+    new Pergunta("Quanto é 1000 - 750?", ["250", "300", "200", "150"], "250"),
+    new Pergunta("Quanto é 6!", ["720", "120", "600", "24"], "720"),
+    new Pergunta("Qual é o nome do polígono com 6 lados?", ["Hexágono", "Pentágono", "Heptágono", "Octógono"], "Hexágono"),
+    new Pergunta("Quanto é 2³ x 3²?", ["72", "36", "54", "108"], "72"),
+    new Pergunta("Qual é o valor de log₂(16)?", ["4", "3", "5", "2"], "4"),
+];
+
+let perguntaescolhida = null;
+
+class Conquista {
+    static conquistasObtidas = 0;
+
+    constructor(nome, descricao) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.obtida = false;
+    }
+};
+
+const conquistas = [
+    // Quadrados
+    new Conquista("Primeiro click", "Clique pela primeira vez"),
+    new Conquista("10 quadrados", "Consiga 10 quadrados"),
+    new Conquista("100 quadrados", "Consiga 100 quadrados"),
+    new Conquista("Milhar", "Consiga 1k quadrados"),
+    new Conquista("10000 quadrados", "Consiga 10k quadrados"),
+    new Conquista("10^5", "Consiga 100k quadrados"),
+    new Conquista("Milhão", "Consiga 1mi quadrados"),
+    new Conquista("Um numero um pouco maior", "Consiga 1bi quadrados"),
+    new Conquista("O grande t", "Consiga 1t quadrados"),
+    new Conquista("Qa-drados", "Consiga 1Qa quadrados"),
+    new Conquista("Ainda pode ficar maior", "Consiga 1Qi quadrados"),
+    new Conquista("É sextilhão, não sexta", "Consiga 1Sx quadrados"),
+    new Conquista("Não consegui pensar num nome legal", "Consiga 1Sp quadrados"),
+    new Conquista("Você acha esse número grande?", "Consiga 1Oc quadrados"),
+    new Conquista("Império de quadrados", "Consiga 1No quadrados"),
+    new Conquista("Você chegou ao 10-lhão", "Consiga 1De quadrados"),
+
+    // Construções
+    new Conquista("Cursor", "Compre 1 cursor"),
+    new Conquista("Muitos cursores", "Compre 100 cursores"),
+    new Conquista("Professor", "Compre 1 professor"),
+    new Conquista("Vários professores", "Compre 100 professores"),
+    new Conquista("Matemático", "Compre 1 matemático"),
+    new Conquista("Comissão de matemáticos", "Compre 100 matemáticos"),
+    new Conquista("Quadro", "Compre 1 quadro"),
+    new Conquista("Pra que tantos quadros", "Compre 100 quadros"),
+    new Conquista("Fábrica", "Compre 1 fábrica"),
+    new Conquista("Conglomerado", "Compre 100 fábricas"),
+
+    // Triângulos
+    new Conquista("Triangulo 1", "Consiga o primeiro triângulo"),
+    new Conquista("10 triângulos", "Consiga 10 triângulos"),
+    new Conquista("Força triangular", "Compre todas as melhorias de triângulos"),
+
+    // Melhorias
+    new Conquista("Melhoria básica", "Compre uma melhoria base"),
+    new Conquista("Cursores melhorados", "Compre 1 melhoria de cursores"),
+    new Conquista("Cursores no total", "Compre todas as melhorias de cursores"),
+    new Conquista("Bom professor", "Compre 1 melhoria de professores"),
+    new Conquista("Professores top", "Compre todas as melhorias de professores"),
+    new Conquista("Matemática básica", "Compre 1 melhoria de matemáticos"),
+    new Conquista("Matemática avançada", "Compre todas as melhorias de matemáticos"),
+    new Conquista("Quadros melhores", "Compre 1 melhoria de quadros"),
+    new Conquista("Lousa", "Compre todas as melhorias de quadros"),
+    new Conquista("Fabricação intensa", "Compre 1 melhoria de fábricas"),
+    new Conquista("Fábricas no topo", "Compre todas as melhorias de fábricas"),
+    new Conquista("Tudo feito", "Compre todas as melhorias"),
+    
+    // Outros
+    new Conquista("Apostador", "Aposte 1 vez na máquina da sorte"),
+    new Conquista("Grande apostador", "Aposte 10 vezes na máquina da sorte"),
+    new Conquista("Viciado em apostas", "Aposte 100 vezes na máquina da sorte"),
+    new Conquista("Mágico aprendiz", "Use uma magia"),
+    new Conquista("Mestre da magia", "Use 10 magias"),
+    new Conquista("Estilista", "Mude a skin do quadrado 1 vez"),
+    new Conquista("Fashionista", "Mude a skin do quadrado 10 vezes"),
+    new Conquista("Aluno", "Responda 1 pergunta do quiz de matemática"),
+    new Conquista("Bom aluno", "Responda 10 perguntas do quiz de matemática"),
+    new Conquista("Gênio da matemática", "Responda 50 perguntas do quiz de matemática")
+];
+
+
 let click = (base + (cur.n * cur.a) + (pro.n * pro.a) + (mat.n * mat.a) + (qua.n * qua.a) + (qua.n * qua.a)) * a_pd1;
 
-
-//classes
+//variáveis
 
 //principais funções
 
@@ -890,7 +872,7 @@ function apostar() {
         //aposta
         if (valorAposta <= quadrados) {
             let resultadoAposta = Math.random()
-            if (resultadoAposta < 0.5) {
+            if (resultadoAposta <= 0.5) {
                 quadrados += Number(valorAposta);
                 quadradosTotais += Number(valorAposta);
                 let resultadoText = document.getElementById("resultado-maquina")
@@ -1020,52 +1002,43 @@ function mostrarFeitico(id) {
 
 function comecarquiz() {
     document.getElementById("comecarquiz").style.display = "none";
-    perguntaescolhida = perguntas[Math.floor(Math.random() * perguntas.length)];
-    document.getElementById("pergunta").innerText = perguntaescolhida;
+    perguntaescolhida = perguntas[Math.round(Math.random() * Pergunta.numPerguntas)];
+    document.getElementById("pergunta").innerText = perguntaescolhida.pergunta;
 
     let opçao1 = document.getElementById("opção1");
     let opçao2 = document.getElementById("opção2");
     let opçao3 = document.getElementById("opção3");
     let opçao4 = document.getElementById("opção4");
 
-    for (let i = 0; i < perguntas.length; i++) {
-        if (perguntaescolhida === perguntas[i]) {
-            opçao1.innerText = opçoes[i][0]
-            opçao2.innerText = opçoes[i][1]
-            opçao3.innerText = opçoes[i][2]
-            opçao4.innerText = opçoes[i][3]
-        }
-    }
+    opçao1.innerText = perguntaescolhida.opçoes[0]
+    opçao2.innerText = perguntaescolhida.opçoes[1]
+    opçao3.innerText = perguntaescolhida.opçoes[2]
+    opçao4.innerText = perguntaescolhida.opçoes[3]
 }
 
 function verificarQuiz(numerobotao) {
     let acertou = null;
-    let numeropergunta = null
-    for (let i = 0; i < perguntas.length; i++) {
-        if (perguntaescolhida === perguntas[i]) {
-            numeropergunta = i;
-        }         
-    }
+
     if (numerobotao === 1) {
-        if (opçoes[numeropergunta][0] === respostasCorretas[numeropergunta]) {
+        if (perguntaescolhida.opçoes[0] === perguntaescolhida.resposta) {
             acertou = true;
         } else {
             acertou = false;
         }
     } else if (numerobotao === 2) {
-        if (opçoes[numeropergunta][1] === respostasCorretas[numeropergunta]) {
+        if (perguntaescolhida.opçoes[1] === perguntaescolhida.resposta) {
             acertou = true;
         } else {
             acertou = false;
         }
     } else if (numerobotao === 3) {
-        if (opçoes[numeropergunta][2] === respostasCorretas[numeropergunta]) {
+        if (perguntaescolhida.opçoes[2] === perguntaescolhida.resposta) {
             acertou = true;
         } else {
             acertou = false;
         }
     } else if (numerobotao === 4) {
-        if (opçoes[numeropergunta][3] === respostasCorretas[numeropergunta]) {
+        if (perguntaescolhida.opçoes[3] === perguntaescolhida.resposta) {
             acertou = true;
         } else {
             acertou = false;
@@ -1074,11 +1047,15 @@ function verificarQuiz(numerobotao) {
 
     if (acertou === true) {
         quadrados *= 1.15;
+        Pergunta.maisAcerto();
     } else {
         quadrados *= 0.85;
+        Pergunta.maisErro();
     }  
 
-    mudarMain();
+    Pergunta.maisPergunta()
+
+    mudarMenu("main");
     comecarquiz();
     alterar();
 
@@ -1147,25 +1124,25 @@ function comprarConstrucao(construcao) {
         if (quadrados >= pro.v){
             pro.n++;
             quadrados -= pro.v;
-            pro.v = arredondar(0,5_000 * (1.15 ** pro.n));
+            pro.v = arredondar(0,5_000* (1.15 ** pro.n));
         }  
     } else if (construcao === "mat") {
         if (quadrados >= mat.v) {
             mat.n++
             quadrados -= mat.v;
-            mat.v = arredondar(0,130_000 * (1.15 ** mat.n));
+            mat.v = arredondar(0,130_000* (1.15 ** mat.n));
         }
     } else if (construcao === "qua") {
         if (quadrados >= qua.v) {
             qua.n++;
             quadrados -= qua.v;
-            qua.v = arredondar(0,9_000_000 * (1.15 ** qua.n));
+            qua.v = arredondar(0,9_000_000* (1.15 ** qua.n));
         }
     } else if (construcao === "fab") {
         if (quadrados >= fab.v) {
             fab.n++;
             quadrados -= fab.v;
-            fab.v = arredondar(0,650_000_000 * (1.15 ** fab.n));
+            fab.v = arredondar(0,650_000_000* (1.15 ** fab.n));
         }  
     }
 
@@ -1341,19 +1318,19 @@ function comprarMelhoriasTriangulos(melhoria, evento) {
         fab.a *= 2
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
-    if (melhoria === 'Maquina da sorte' && melhoriasTri.ms1 === false && triangulos >= 3) {
+    if (melhoria === 'Maquina da sorte' && melhoriasTri.ms1 === false && triangulos >= 2) {
         melhoriasTri.ms1 = true;
         triangulos -= 2
         document.getElementById("maquinadasorte").style.display = "block"
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
-    if (melhoria === 'Livro magico' && melhoriasTri.lm1 === false && triangulos >= 3) {
+    if (melhoria === 'Livro magico' && melhoriasTri.lm1 === false && triangulos >= 2) {
         melhoriasTri.lm1 = true;
         triangulos -= 2;
         document.getElementById("livromagico").style.display = "block";
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
-    if (melhoria === 'Quiz matemático' && melhoriasTri.qm1 === false && triangulos >= 3) {
+    if (melhoria === 'Quiz matemático' && melhoriasTri.qm1 === false && triangulos >= 2) {
         melhoriasTri.qm1 = true;
         triangulos -= 2;
         document.getElementById("quizmatematico").style.display = "block"
