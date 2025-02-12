@@ -1,19 +1,19 @@
 //variáveis
 
-let quadrados = 0;
+let quadrados = 10000;
 let quadradosTotais = 0;
 let base = 1;
 
 let melhorias = {
-    Bas: {b1: false, b2: false, b3: false},
-    Cur: {c1: false, c2: false, c3: false},
-    Pro: {p1: false, p2: false, p3: false},
-    Mat: {m1: false, m2: false, m3: false},
-    Qua: {q1: false, q2: false, q3: false},
-    Fab: {f1: false, f2: false, f3: false}
+    Bas: { b1: false, b2: false, b3: false },
+    Cur: { c1: false, c2: false, c3: false },
+    Pro: { p1: false, p2: false, p3: false },
+    Mat: { m1: false, m2: false, m3: false },
+    Qua: { q1: false, q2: false, q3: false },
+    Fab: { f1: false, f2: false, f3: false }
 }
 
-let triangulos = 0;
+let triangulos = 100;
 let melhoriasTri = {
     pd1: false,
     cc1: false,
@@ -39,10 +39,14 @@ let tri = {
 }
 let a_pd1 = 1
 
+let nApostas = 0;
+
 let mana = 10;
 let nclicks = 0;
 let magiaselecionada = null;
 let usoumultiplicus = false;
+let magiasUsadas = 0;
+let cliques10x = 0;
 
 let renasceu = false;
 let quadrados_ascendentes = 0;
@@ -51,7 +55,7 @@ let valorParaGanhar1QuadradoAscendente = 100000000;
 
 //construções
 class Construcao {
-    constructor(valorBase,aumento) {
+    constructor(valorBase, aumento) {
         this.n = 0;
         this.valorBase = valorBase;
         this.a = aumento;
@@ -62,16 +66,18 @@ class Construcao {
         if (quadrados >= this.v) {
             this.n++;
             quadrados -= this.v;
-            this.v = arredondar(0,100 * (1.15 ** cur.n));
-        }   
+            this.v = arredondar(0, this.valorBase * (1.15 ** this.n));
+        }
     }
 };
 
 let cur = new Construcao(100, 1);
 let pro = new Construcao(5000, 10);
-let mat = new Construcao(130_000, 50);
+let mat = new Construcao(130_000, 75);
 let qua = new Construcao(9_000_000, 750);
 let fab = new Construcao(650_000_000, 15_000);
+let eng = new Construcao(50_000_000_000,200_000);
+
 
 
 //perguntas
@@ -148,10 +154,41 @@ const perguntas = [
     new Pergunta("Qual é o nome do polígono com 6 lados?", ["Hexágono", "Pentágono", "Heptágono", "Octógono"], "Hexágono"),
     new Pergunta("Quanto é 2³ x 3²?", ["72", "36", "54", "108"], "72"),
     new Pergunta("Qual é o valor de log₂(16)?", ["4", "3", "5", "2"], "4"),
+    new Pergunta("Quanto é 11 x 11?", ["121", "112", "111", "122"], "121"),
+    new Pergunta("Qual é o maior número primo abaixo de 50?", ["47", "43", "41", "37"], "47"),
+    new Pergunta("Se um círculo tem diâmetro 10, qual é seu raio?", ["5", "10", "15", "20"], "5"),
+    new Pergunta("Quanto é 8! (8 fatorial)?", ["40320", "5040", "362880", "720"], "40320"),
+    new Pergunta("Qual é a soma dos ângulos internos de um pentágono?", ["540", "360", "450", "600"], "540"),
+    new Pergunta("Qual é o maior divisor comum entre 48 e 18?", ["6", "12", "18", "24"], "6"),
+    new Pergunta("Quanto é 2 elevado a 10?", ["1024", "512", "2048", "256"], "1024"),
+    new Pergunta("Se um quadrado tem perímetro de 40, qual é o comprimento do seu lado?", ["10", "8", "12", "16"], "10"),
+    new Pergunta("Quantos lados tem um dodecágono?", ["12", "10", "14", "8"], "12"),
+    new Pergunta("Qual é o logaritmo de 1000 na base 10?", ["3", "2", "1", "10"], "3"),
+    new Pergunta("Qual é a raiz quadrada de 225?", ["15", "20", "25", "12"], "15"),
+    new Pergunta("Se um número for divisível por 6, ele também é divisível por?", ["2 e 3", "3 e 4", "2 e 4", "5 e 2"], "2 e 3"),
+    new Pergunta("Quanto é 0.5 + 0.75?", ["1.25", "1.5", "1", "0.85"], "1.25"),
+    new Pergunta("Qual é a equação da reta que passa pelos pontos (0,3) e (2,7)?", ["y = 2x + 3", "y = x + 3", "y = 3x + 2", "y = 7x - 2"], "y = 2x + 3"),
+    new Pergunta("Se um prisma tem 6 faces, 12 arestas e 8 vértices, ele é um:", ["Cubo", "Tetraedro", "Octaedro", "Prisma triangular"], "Cubo"),
+    new Pergunta("Qual é o resultado de 144 ÷ 12?", ["12", "14", "10", "16"], "12"),
+    new Pergunta("Quanto é 5^4?", ["625", "125", "1024", "256"], "625"),
+    new Pergunta("O que significa a notação Σ em matemática?", ["Soma", "Multiplicação", "Fatorial", "Integral"], "Soma"),
+    new Pergunta("Se um triângulo tem lados de 5, 12 e 13, ele é um:", ["Triângulo retângulo", "Triângulo equilátero", "Triângulo isósceles", "Triângulo escaleno"], "Triângulo retângulo"),
+    new Pergunta("Quanto vale 1/2 + 1/4?", ["3/4", "1/3", "2/4", "1/2"], "3/4"),
+    new Pergunta("Se x + 3 = 10, quanto vale x?", ["7", "3", "10", "13"], "7"),
+    new Pergunta("Quantos vértices tem um icosaedro?", ["12", "20", "30", "60"], "12"),
+    new Pergunta("Qual é a derivada de x²?", ["2x", "x", "x²", "1"], "2x"),
+    new Pergunta("O número 121 é um:", ["Quadrado perfeito", "Número primo", "Número ímpar", "Número composto"], "Quadrado perfeito"),
+    new Pergunta("Qual é o único número primo par?", ["2", "3", "5", "7"], "2"),
+    new Pergunta("Qual é a fração equivalente a 0.75?", ["3/4", "2/5", "4/5", "1/2"], "3/4"),
+    new Pergunta("Quanto é 3√27?", ["3", "6", "9", "4"], "3"),
+    new Pergunta("Qual é o seno de 90 graus?", ["1", "0", "0.5", "√2/2"], "1"),
+    new Pergunta("Quanto é a integral de 2x dx?", ["x² + C", "2x + C", "x³ + C", "x + C"], "x² + C")
 ];
 
 let perguntaescolhida = null;
 
+
+//conquistas
 class Conquista {
     static conquistasObtidas = 0;
 
@@ -195,11 +232,12 @@ const conquistas = [
 
     // Triângulos
     new Conquista("Triangulo 1", "Consiga o primeiro triângulo"),
-    new Conquista("10 triângulos", "Consiga 10 triângulos"),
+    new Conquista("10 triângulos", "Tenha 10 triângulos ao mesmo tempo"),
     new Conquista("Força triangular", "Compre todas as melhorias de triângulos"),
 
     // Melhorias
     new Conquista("Melhoria básica", "Compre uma melhoria base"),
+    new Conquista("Click poderoso", "Compre todas as melhorias básicas"),
     new Conquista("Cursores melhorados", "Compre 1 melhoria de cursores"),
     new Conquista("Cursores no total", "Compre todas as melhorias de cursores"),
     new Conquista("Bom professor", "Compre 1 melhoria de professores"),
@@ -211,21 +249,25 @@ const conquistas = [
     new Conquista("Fabricação intensa", "Compre 1 melhoria de fábricas"),
     new Conquista("Fábricas no topo", "Compre todas as melhorias de fábricas"),
     new Conquista("Tudo feito", "Compre todas as melhorias"),
-    
+
     // Outros
     new Conquista("Apostador", "Aposte 1 vez na máquina da sorte"),
     new Conquista("Grande apostador", "Aposte 10 vezes na máquina da sorte"),
     new Conquista("Viciado em apostas", "Aposte 100 vezes na máquina da sorte"),
+    new Conquista("Rei do cassino", "Aposte 777 vezes na máquina da sorte"),
     new Conquista("Mágico aprendiz", "Use uma magia"),
-    new Conquista("Mestre da magia", "Use 10 magias"),
+    new Conquista("Mestre da magia", "Use 30 magias"),
+    new Conquista("O mago supremo", "Use 250 magias"),
     new Conquista("Estilista", "Mude a skin do quadrado 1 vez"),
-    new Conquista("Fashionista", "Mude a skin do quadrado 10 vezes"),
     new Conquista("Aluno", "Responda 1 pergunta do quiz de matemática"),
     new Conquista("Bom aluno", "Responda 10 perguntas do quiz de matemática"),
-    new Conquista("Gênio da matemática", "Responda 50 perguntas do quiz de matemática")
+    new Conquista("Gênio da matemática", "Responda 100 perguntas do quiz de matemática corretamente"),
+    new Conquista("Fracasso total", "Erre 200 perguntas no quiz de matemática"),
+
+    new Conquista("Obrigado por jogar Quadrado Clicker", "Consiga todas as conquistas"),
 ];
 
-let click = (base + (cur.n * cur.a) + (pro.n * pro.a) + (mat.n * mat.a) + (qua.n * qua.a) + (qua.n * qua.a)) * a_pd1;
+let click = (base + (cur.n * cur.a) + (pro.n * pro.a) + (mat.n * mat.a) + (qua.n * qua.a) + (fab.n * fab.a)) * a_pd1;
 
 //variáveis
 
@@ -273,7 +315,7 @@ function carregarDados() {
         cur = estado.cur;
         pro = estado.pro;
         mat = estado.mat;
-        qua = estado.mat;
+        qua = estado.qua;
         fab = estado.fab;
         melhorias = estado.melhorias;
         melhoriasTri = estado.melhoriasTri;
@@ -312,9 +354,9 @@ function carregarDados() {
         { id: "qm1", melhoria: "qm1", botaoId: "quizmatematico" },
         { id: "sq1", melhoria: "sq1", botaoId: "skinquadrado" },
         { id: "pa1", melhoria: "pa1" }
-        
+
     ];
-    
+
     elementos.forEach(({ id, melhoria, botaoId }) => {
         const celula = document.getElementById(id);
         if (melhoriasTri[melhoria]) {
@@ -399,7 +441,7 @@ function carregarJson() {
                     quadrados = dadosCarregados.quadrados;
                     quadradosTotais = dadosCarregados.quadradosTotais;
                     base = dadosCarregados.base;
-                    
+
                     cur = dadosCarregados.cur;
                     pro = dadosCarregados.pro;
                     mat = dadosCarregados.mat;
@@ -437,7 +479,7 @@ function carregarJson() {
                             }
                         }
                     }
-                
+
                     const elementos = [
                         { id: "pd1", melho: "pd1" },
                         { id: "cc1", melho: "cc1" },
@@ -449,7 +491,7 @@ function carregarJson() {
                         { id: "sq1", melho: "sq1", botaoId: "skinquadrado" },
                         { id: "pa1", melho: "pa1" }
                     ];
-                    
+
                     elementos.forEach(({ id, melho, botaoId }) => {
                         const celula = document.getElementById(id);
                         if (melhoriasTri[melho]) {
@@ -482,11 +524,11 @@ function carregarJson() {
 
 function formatar(numero) {
     const sufixos = [
-        "", "k", 
-        "mi"    , "bi"    , "t"      , "Qa"    , "Qi"    , "Sx"    , "Sp"    , "Oc"    , "No"    , "De"  ,
-        "UnDe"  , "DuDe"  , "TreDe"  , "QaDe"  , "QiDe"  , "SxDe"  , "SpDe"  , "OcDe"  , "NoDe"  , "Vi"  ,
-        "UnVi"  , "DuVi"  , "TreVi"  , "QaVi"  , "QiVi"  , "SxVi"  , "SpVi"  , "OcVi"  , "NoVi"  , "Tre" ,
-        "UnTre" , "DuTre" , "TreTre" , "QaTre" , "QiTre" , "SxTre" , "SpTre" , "OcTre" , "NoTre" , "Quat",
+        "", "k",
+        "mi", "bi", "t", "Qa", "Qi", "Sx", "Sp", "Oc", "No", "De",
+        "UnDe", "DuDe", "TreDe", "QaDe", "QiDe", "SxDe", "SpDe", "OcDe", "NoDe", "Vi",
+        "UnVi", "DuVi", "TreVi", "QaVi", "QiVi", "SxVi", "SpVi", "OcVi", "NoVi", "Tre",
+        "UnTre", "DuTre", "TreTre", "QaTre", "QiTre", "SxTre", "SpTre", "OcTre", "NoTre", "Quat",
         "UnQuat", "DuQuat", "TreQuat", "QaQuat", "QiQuat", "SxQuat", "SpQuat", "OcQuat", "NoQuat", "Quit",
         "UnQuit", "DuQuit", "TreQuit", "QaQuit", "QiQuit", "SxQuit", "SpQuit", "OcQuit", "NoQuit", "Sexa",
         "UnSexa", "DuSexa", "TreSexa", "QaSexa", "QiSexa", "SxSexa", "SpSexa", "OcSexa", "NoSexa", "Sept",
@@ -496,23 +538,22 @@ function formatar(numero) {
     ];
 
     let i = 0;
-    
-    // Conta quantos grupos de 1000 cabem no número
-    while (numero >= 1000 && i < sufixos.length - 1) {
+
+    while (numero >= 1000) {
+        numero = Math.round(numero)
         numero /= 1000;
         i++;
     }
 
-    return arredondar(2, numero) + sufixos[i];
+    return i <= sufixos.length ? arredondar(2,numero) + sufixos[i] : "Você ta de hack, só pode";
 }
-
 
 function clique() {
     if (window.innerWidth < 600) {
         quadrados += click;
         quadradosTotais += click;
         nclicks++;
-        
+
         // Mudar tamanho ao clicar
         const elemento = document.getElementById("quadrado");
         elemento.style.width = "90px";
@@ -526,7 +567,7 @@ function clique() {
         quadrados += click;
         quadradosTotais += click;
         nclicks++;
-        
+
         // Mudar tamanho ao clicar
         const elemento = document.getElementById("quadrado");
         elemento.style.width = "230px";
@@ -541,7 +582,7 @@ function clique() {
     verificarQuadradosAscendentes();
     verificarTriangulos();
     cliqueCritico();
-    verificarMana();
+    verificarMagias();
     alterar();
 }
 
@@ -598,18 +639,18 @@ function alterar() {
     let manaText = document.getElementById("mana");
     manaText.innerText = "Mana: " + mana;
 
-    click = (base + (cur.n * cur.a) + (pro.n * pro.a) + (mat.n * mat.a) + (qua.n * qua.a) + (qua.n * qua.a)) * a_pd1;
+    click = (base + (cur.n * cur.a) + (pro.n * pro.a) + (mat.n * mat.a) + (qua.n * qua.a) + (fab.n * fab.a)) * a_pd1;
 
     if (renasceu === true) {
-        click = (base + (cur.n * cur.a) + (pro.n * pro.a) + (mat.n * mat.a) + (qua.n * qua.a) + (qua.n * qua.a)) * a_pd1 * (1 + quadrados_ascendentes/10);
+        click = (base + (cur.n * cur.a) + (pro.n * pro.a) + (mat.n * mat.a) + (qua.n * qua.a) + (fab.n * fab.a)) * a_pd1 * (1 + quadrados_ascendentes / 10);
     }
-    
+
     let quadradosporclickText = document.getElementById("quadradosporclickText")
     quadradosporclickText.innerText = "Quadrados por click: " + formatar(click)
 }
 
 function arredondar(casasDecimais, variavel) {
-    return variavel = Math.round(variavel * 10**casasDecimais) / 10**casasDecimais;
+    return variavel = Math.round(variavel * 10 ** casasDecimais) / 10 ** casasDecimais;
 }
 
 function renascer() {
@@ -631,7 +672,7 @@ function renascer() {
 
         let celulas = document.querySelectorAll('#melhorias td');
 
-        celulas.forEach(function(celula) {
+        celulas.forEach(function (celula) {
             celula.style.backgroundColor = "#d4c4bd";
         });
 
@@ -649,20 +690,49 @@ function adicionarConquistas() {
     let listaConquistas = document.getElementById("lista-conquistas");
     listaConquistas.innerHTML = "";
 
-    for (let i = 0; i <= conquistas.length; i++) {
+    for (let i = 0; i <= conquistas.length-2; i++) {
         let div = document.createElement("div");
         div.className = conquistas[i].obtida ? "conquista-ativa" : "conquista-inativa";
-        
+
         let titulo = document.createElement("h3");
         titulo.textContent = conquistas[i].nome;
-        
+
         let descricao = document.createElement("p");
         descricao.textContent = conquistas[i].descricao;
-        
+
         div.appendChild(titulo);
         div.appendChild(descricao);
         listaConquistas.appendChild(div);
     }
+
+    if (conquistas[conquistas.length-1].obtida) {
+        let div = document.createElement("div");
+        div.className = conquistas[conquistas.length-1].obtida ? "conquista-ativa" : "conquista-inativa";
+
+        let titulo = document.createElement("h3");
+        titulo.textContent = conquistas[conquistas.length-1].nome;
+
+        let descricao = document.createElement("p");
+        descricao.textContent = conquistas[conquistas.length-1].descricao;
+
+        div.appendChild(titulo);
+        div.appendChild(descricao);
+        listaConquistas.appendChild(div);
+    } else {
+        let div = document.createElement("div");
+        div.className = conquistas[conquistas.length-1].obtida ? "conquista-ativa" : "conquista-inativa";
+
+        let titulo = document.createElement("h3");
+        titulo.textContent = "???";
+
+        let descricao = document.createElement("p");
+        descricao.textContent = "???";
+
+        div.appendChild(titulo);
+        div.appendChild(descricao);
+        listaConquistas.appendChild(div);
+    }
+        
 }
 
 function verificarConquistas(callback) {
@@ -715,8 +785,130 @@ function verificarConquistas(callback) {
     if (quadradosTotais >= 1e33) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Você chegou ao 10-lhão")].obtida = true;
     }
-    
-    
+
+    //Construções
+    if (cur.n >= 1) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Cursor")].obtida = true;
+    }
+    if (cur >= 100) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Muitos cursores")].obtida = true;
+    }
+    if (pro.n >= 1) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Professor")].obtida = true;
+    }
+    if (pro.n >= 100) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Vários professores")].obtida = true;
+    }
+    if (mat.n >= 1) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Matemático")].obtida = true;
+    }
+    if (mat.n >= 100) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Comissão de matemáticos")].obtida = true;
+    }
+    if (qua.n >= 1) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Quadro")].obtida = true;
+    }
+    if (qua.n >= 100) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Pra que tantos quadros")].obtida = true;
+    }
+    if (fab.n >= 1) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Fábrica")].obtida = true;
+    }
+    if (fab.n >= 100) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Conglomerado")].obtida = true;
+    }
+
+    //Triângulos
+    if (triangulos >= 1) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Triangulo 1")].obtida = true;
+    }
+    if (triangulos >= 10) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "10 triângulos")].obtida = true;
+    }
+    if (Object.values(melhoriasTri).every(valor => valor === true)) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Força triangular")].obtida = true;
+    }
+
+    //Melhorias
+    if (Object.values(melhorias["Bas"]).some(valor => valor === true)) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Melhoria básica")].obtida = true;
+    }
+    if (Object.values(melhorias["Bas"]).every(valor => valor === true)) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Click poderoso")].obtida = true;
+    }
+    if (Object.values(melhorias["Cur"]).some(valor => valor === true)) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Cursores melhorados")].obtida = true;
+    }
+    if (Object.values(melhorias["Cur"]).every(valor => valor === true)) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Cursores no total")].obtida = true;
+    }
+    if (Object.values(melhorias["Pro"]).some(valor => valor === true)) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Bom professor")].obtida = true;
+    }
+    if (Object.values(melhorias["Pro"]).every(valor => valor === true)) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Professores top")].obtida = true;
+    }
+    if (Object.values(melhorias["Mat"]).some(valor => valor === true)) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Matemática básica")].obtida = true;
+    }
+    if (Object.values(melhorias["Mat"]).every(valor => valor === true)) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Matemática avançada")].obtida = true;
+    }
+    if (Object.values(melhorias["Qua"]).some(valor => valor === true)) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Quadros melhores")].obtida = true;
+    }
+    if (Object.values(melhorias["Qua"]).every(valor => valor === true)) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Lousa")].obtida = true;
+    }
+    if (Object.values(melhorias["Fab"]).some(valor => valor === true)) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Fabricação intensa")].obtida = true;
+    }
+    if (Object.values(melhorias["Fab"]).every(valor => valor === true)) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Fábricas no topo")].obtida = true;
+    }
+    if (Object.values(melhorias).every(categoria => Object.values(categoria).every(valor => valor === true))) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Tudo feito")].obtida = true;
+    }
+
+    //Outros
+    if (nApostas >= 1) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Apostador")].obtida = true;
+    }
+    if (nApostas >= 10) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Grande apostador")].obtida = true;
+    }
+    if (nApostas >= 100) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Viciado em apostas")].obtida = true;
+    }
+    if (nApostas >= 777) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Rei do cassino")].obtida = true;
+    }
+    if (magiasUsadas >= 1) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Mágico aprendiz")].obtida = true;
+    }
+    if (magiasUsadas >= 30) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Mestre da magia")].obtida = true;
+    }
+    if (magiasUsadas >= 250) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "O mago supremo")].obtida = true;
+    }
+    //estilista está na função de mudar a skin
+    if (Pergunta.respondidas >= 1) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Aluno")].obtida = true;
+    }
+    if (Pergunta.respondidas >= 10) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Bom aluno")].obtida = true;
+    }
+    if (Pergunta.acertos >= 100) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Gênio da matemática")].obtida = true;
+    }
+    if (Pergunta.erros >= 200) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Fracasso total")].obtida = true;
+    }
+
+    if (conquistas.filter(c => c.obtida).length >= conquistas.length - 1) {
+        conquistas.find(c => c.nome === "Obrigado por jogar Quadrado Clicker").obtida = true;
+    }
     callback()
 }
 
@@ -728,7 +920,7 @@ function verificarQuadradosAscendentes() {
 }
 
 function mudarMenu(menu) {
-    switch(menu) {
+    switch (menu) {
         case "melhorias":
             document.getElementById("principal").style.display = "none";
             document.getElementById("melhorias").style.display = "block";
@@ -825,19 +1017,19 @@ function cliqueCritico() {
 function verificarTriangulos() {
     if (quadrados >= 1000 && tri.tr1 === false) {
         triangulos++;
-        tri.tr1 = true; 
+        tri.tr1 = true;
     }
     if (quadrados >= 100000 && tri.tr2 === false) {
         triangulos++;
-        tri.tr2 = true; 
+        tri.tr2 = true;
     }
     if (quadrados >= 10000000 && tri.tr3 === false) {
         triangulos++;
-        tri.tr3 = true; 
+        tri.tr3 = true;
     }
     if (quadrados >= 1000000000 && tri.tr4 === false) {
         triangulos++;
-        tri.tr4 = true; 
+        tri.tr4 = true;
     }
     if (quadrados >= 100000000000 && tri.tr5 === false) {
         triangulos++;
@@ -853,46 +1045,44 @@ function verificarTriangulos() {
     }
     if (quadrados >= 100000000000000000n && tri.tr8 === false) {
         triangulos++;
-        tri.tr8 = true; 
+        tri.tr8 = true;
     }
     if (quadrados >= 10000000000000000000n && tri.tr9 === false) {
         triangulos++;
-        tri.tr9 = true; 
+        tri.tr9 = true;
     }
     if (quadrados >= 1000000000000000000000n && tri.tr10 === false) {
         triangulos++;
-        tri.tr10 = true; 
+        tri.tr10 = true;
     }
 }
 
 function apostar() {
     // Obtém o valor do input
     let valorAposta = document.getElementById('valor-aposta').value;
-    
-    // Verifica se o valor é válido
-    if (valorAposta.trim() === '' || isNaN(valorAposta) || Number(valorAposta) <= 0) {
-        let TextoEmergencia = document.getElementById("textoEmergenciamaquina")
-        TextoEmergencia.innerText = "Insira um valor válido"
-    } else {
-        let TextoEmergencia = document.getElementById("textoEmergenciamaquina")
-        TextoEmergencia.innerText = ""
 
+    // Verifica se o valor é válido
+    let textoEmergencia = document.getElementById("textoEmergenciamaquina")
+    if (valorAposta.trim() === '' || isNaN(valorAposta) || Number(valorAposta) <= 0) {
+        textoEmergencia.innerText = "Insira um valor válido"
+    } else {
+        textoEmergencia.innerText = "";
         //aposta
         if (valorAposta <= quadrados) {
+            nApostas++;
             let resultadoAposta = Math.random()
             if (resultadoAposta <= 0.5) {
                 quadrados += Number(valorAposta);
                 quadradosTotais += Number(valorAposta);
-                let resultadoText = document.getElementById("resultado-maquina")
-                resultadoText.innerText = "Ganhou"
+                let resultadoText = document.getElementById("resultado-maquina");
+                resultadoText.innerText = "Ganhou";
             } else if (resultadoAposta > 0.5) {
-                quadrados -= valorAposta
-                let resultadoText = document.getElementById("resultado-maquina")
-                resultadoText.innerText = "Perdeu"
+                quadrados -= Number(valorAposta);
+                let resultadoText = document.getElementById("resultado-maquina");
+                resultadoText.innerText = "Perdeu";
             }
         } else if (valorAposta > quadrados) {
-            let TextoEmergencia = document.getElementById("textoEmergencia")
-            TextoEmergencia.innerText = "Insira um valor menor ou igual que seus quadrados"
+            textoEmergencia.innerText = "Insira um valor menor ou igual que seus quadrados";
         }
     }
 
@@ -903,12 +1093,20 @@ function usarmagias() {
     let textomenssagens = document.getElementById("textoEmergencialivro")
     if (!magiaselecionada) {
         textomenssagens.innerText = "Selecione um poder"
+    } else if (magiaselecionada === "Aresto clicum") {
+        if (mana >= 1) {
+            mana--;
+            cliques10x += 20;
+            magiasUsadas++;
+        } else if (mana <= 1) {
+            textomenssagens.innerText = "Você não tem mana suficiente"
+        }
     } else if (magiaselecionada === "Constructo") {
         if (mana >= 3) {
             mana -= 3
             let numeroRandom = Math.random()
             if (numeroRandom <= 0.2) {
-                cur.n++ 
+                cur.n++
                 textomenssagens.innerText = "Você ganhou 1 cursor"
             } else if (numeroRandom <= 0.4) {
                 pro.n++
@@ -923,6 +1121,7 @@ function usarmagias() {
                 fab.n++
                 textomenssagens.innerText = "Você ganhou 1 fabrica"
             }
+            magiasUsadas++;
         } else if (mana < 3) {
             textomenssagens.innerText = "Você não tem mana suficiente"
         }
@@ -932,7 +1131,8 @@ function usarmagias() {
             quadrados *= 1.25
             quadradosTotais += quadrados * 0.25
             textomenssagens.innerText = "Mais 25% de quadrados"
-        } else if (mana <3) {
+            magiasUsadas++;
+        } else if (mana < 3) {
             textomenssagens.innerText = "Você não tem mana suficiente"
         }
     } else if (magiaselecionada === "Trianglusio") {
@@ -945,6 +1145,7 @@ function usarmagias() {
             } else {
                 textomenssagens.innerText = "Mais sorte na próxima vez"
             }
+            magiasUsadas++;
         } else if (mana < 2) {
             textomenssagens.innerText = "Você não tem mana suficiente"
         }
@@ -955,6 +1156,7 @@ function usarmagias() {
             quadradosTotais += quadrados * 20
             usoumultiplicus = true;
             textomenssagens.innerText = "Multiplicos foi usado"
+            magiasUsadas++;
         } else if (mana < 10) {
             textomenssagens.innerText = "Você não tem mana suficiente"
         } else if (usoumultiplicus === true) {
@@ -965,18 +1167,29 @@ function usarmagias() {
     alterar()
 }
 
-function verificarMana() {
+function verificarMagias() {
     if (nclicks >= 1000) {
         nclicks = 0;
-        mana++
+        mana++;
         if (mana >= 10) {
             mana = 10;
         }
+    }
+
+    if (cliques10x >= 1) {
+        cliques10x--;
+        quadrados += click * 9;
+        quadradosTotais += click *9;
     }
 }
 
 function mostrarFeitico(id) {
     const feiticos = {
+        "Aresto clicum": {
+            titulo: "Aresto clicum",
+            descricao: "Seus proximo 20 cliques dão 10x mais clicks",
+            mana: "Mana:1"
+        },
         Constructo: {
             titulo: "Constructo",
             descricao: "Essa magia te da uma construção aleatoria, mesmo que você nao tenha nenhuma dela",
@@ -1059,7 +1272,7 @@ function verificarQuiz(numerobotao) {
     } else {
         quadrados *= 0.85;
         Pergunta.maisErro();
-    }  
+    }
 
     Pergunta.maisPergunta()
 
@@ -1070,6 +1283,7 @@ function verificarQuiz(numerobotao) {
 }
 
 function skinquadrado(tipo) {
+    conquistas[conquistas.findIndex((elemento) => elemento.nome === "Estilista")].obtida = true;
     let quadradoprincipal = document.getElementById('quadrado');
     if (tipo === "texto") {
         let textoinput = document.getElementById('textoQuadrado').value;
@@ -1080,7 +1294,7 @@ function skinquadrado(tipo) {
     } else if (tipo === "corborda") {
         let corbordainput = document.getElementById("bordaQuadrado").value;
         quadradoprincipal.style.borderColor = corbordainput;
-    } else if(tipo === "tipoborda") {
+    } else if (tipo === "tipoborda") {
         const radios = document.querySelectorAll('#skin-quadrado input[type="radio"]');
         let tipobordainput = Array.from(radios).find(radio => radio.checked).value;
         quadradoprincipal.style.borderStyle = tipobordainput;
@@ -1114,9 +1328,9 @@ function producaoAutomatizada() {
             alterar()
         }, 1000);
     }
-    
+
 }
-    
+
 //triangulos
 
 //compras
@@ -1134,6 +1348,8 @@ function comprarConstrucao(construcao) {
         fab.comprar();
     }
 
+    console.log(fab);
+
     alterar()
 }
 
@@ -1143,17 +1359,17 @@ function comprarMelhorias(melhoria, evento) {
         melhorias.Bas.b1 = true;
         quadrados -= 70;
         base *= 2;
-        evento.target.closest("td").style.backgroundColor = "#f88c5d";   
+        evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Super Clique
-    if (melhoria === "Super clique" && melhorias.Bas.b2 === false && quadrados >= 300000) {
+    if (melhoria === "Super clique" && melhorias.Bas.b2 === false && quadrados >= 500000) {
         melhorias.Bas.b2 = true;
         quadrados -= 500000;
         base *= 900;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Mega Clique
-    if (melhoria === "Mega clique" && melhorias.Bas.b3 === false && quadrados >= 20000000) {
+    if (melhoria === "Mega clique" && melhorias.Bas.b3 === false && quadrados >= 40000000) {
         melhorias.Bas.b3 = true;
         quadrados -= 40000000;
         base *= 100;
@@ -1168,14 +1384,14 @@ function comprarMelhorias(melhoria, evento) {
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Múltiplos Cursores
-    if (melhoria === "Multiplos cursores" && melhorias.Cur.c2 === false && quadrados >= 75000) {
+    if (melhoria === "Multiplos cursores" && melhorias.Cur.c2 === false && quadrados >= 100_000) {
         melhorias.Cur.c2 = true;
         quadrados -= 100_000;
         cur.a *= 5;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Super Cursores
-    if (melhoria === "Super cursores" && melhorias.Cur.c3 === false && quadrados >= 10000000) {
+    if (melhoria === "Super cursores" && melhorias.Cur.c3 === false && quadrados >= 30_000_000) {
         melhorias.Cur.c3 = true;
         quadrados -= 30_000_000;
         cur.a *= 20;
@@ -1183,21 +1399,21 @@ function comprarMelhorias(melhoria, evento) {
     }
 
     // Professores Duplos
-    if (melhoria === "Professores duplos" && melhorias.Pro.p1 === false && quadrados >= 25000) {
+    if (melhoria === "Professores duplos" && melhorias.Pro.p1 === false && quadrados >= 25_000) {
         melhorias.Pro.p1 = true;
         quadrados -= 25_000;
         pro.a *= 2;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Escola
-    if (melhoria === "Escola" && melhorias.Pro.p2 === false && quadrados >= 600000) {
+    if (melhoria === "Escola" && melhorias.Pro.p2 === false && quadrados >= 1_800_000) {
         melhorias.Pro.p2 = true;
         quadrados -= 1_800_000;
         pro.a *= 5;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Super Professores
-    if (melhoria === "Super professores" && melhorias.Pro.p3 === false && quadrados >= 90000000) {
+    if (melhoria === "Super professores" && melhorias.Pro.p3 === false && quadrados >= 180_000_000) {
         melhorias.Pro.p3 = true;
         quadrados -= 180_000_000;
         pro.a *= 20;
@@ -1205,43 +1421,43 @@ function comprarMelhorias(melhoria, evento) {
     }
 
     // Matemática Dupla
-    if (melhoria === "Matematica dupla" && melhorias.Mat.m1 === false && quadrados >= 600000) {
+    if (melhoria === "Matematica dupla" && melhorias.Mat.m1 === false && quadrados >= 600_000) {
         melhorias.Mat.m1 = true;
         quadrados -= 600_000;
         mat.a *= 2;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Conjunto de Matemáticos
-    if (melhoria === "Conjunto de matematicos" && melhorias.Mat.m2 === false && quadrados >= 20000000) {
+    if (melhoria === "Conjunto de matematicos" && melhorias.Mat.m2 === false && quadrados >= 80_000_000) {
         melhorias.Mat.m2 = true;
         quadrados -= 80_000_000;
         mat.a *= 5;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Super Matemáticos
-    if (melhoria === "Super matematicos" && melhorias.Mat.m3 === false && quadrados >= 100000000) {
+    if (melhoria === "Super matematicos" && melhorias.Mat.m3 === false && quadrados >= 100_000_000) {
         melhorias.Mat.m3 = true;
-        quadrados -= 1_00_000_000;
+        quadrados -= 100_000_000;
         mat.a *= 20;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
 
     // Dois Quadros
-    if (melhoria === "Dois quadros" && melhorias.Qua.q1 === false && quadrados >= 30000000) {
+    if (melhoria === "Dois quadros" && melhorias.Qua.q1 === false && quadrados >= 30_000_000) {
         melhorias.Qua.q1 = true;
         quadrados -= 30_000_000;
         qua.a *= 2;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Quadrão
-    if (melhoria === "Quadrão" && melhorias.Qua.q2 === false && quadrados >= 75000000) {
+    if (melhoria === "Quadrão" && melhorias.Qua.q2 === false && quadrados >= 200_000_000) {
         melhorias.Qua.q2 = true;
         quadrados -= 200_000_000;
         qua.a *= 5;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Quadros Poderosos
-    if (melhoria === "Quadros poderosos" && melhorias.Qua.q3 === false && quadrados >= 300000000) {
+    if (melhoria === "Quadros poderosos" && melhorias.Qua.q3 === false && quadrados >= 10_000_000_000) {
         melhorias.Qua.q3 = true;
         quadrados -= 10_000_000_000;
         qua.a *= 20;
@@ -1249,21 +1465,21 @@ function comprarMelhorias(melhoria, evento) {
     }
 
     // Duas Fábricas
-    if (melhoria === "Duas fabricas" && melhorias.Fab.f1 === false && quadrados >= 2500000000) {
+    if (melhoria === "Duas fabricas" && melhorias.Fab.f1 === false && quadrados >= 2_500_000_000) {
         melhorias.Fab.f1 = true;
         quadrados -= 2_500_000_000;
         fab.a *= 2;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Começo da Revolução
-    if (melhoria === "Começo da revolução" && melhorias.Fab.f2 === false && quadrados >= 5000000000) {
+    if (melhoria === "Começo da revolução" && melhorias.Fab.f2 === false && quadrados >= 15_000_000_000) {
         melhorias.Fab.f2 = true;
         quadrados -= 15_000_000_000;
         fab.a *= 5;
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Super Fábricas
-    if (melhoria === "Super fabricas" && melhorias.Fab.f3 === false && quadrados >= 100000000000) {
+    if (melhoria === "Super fabricas" && melhorias.Fab.f3 === false && quadrados >= 1_000_000_000_000) {
         melhorias.Fab.f3 = true;
         quadrados -= 1_000_000_000_000;
         fab.a *= 20;
@@ -1294,7 +1510,7 @@ function comprarMelhoriasTriangulos(melhoria, evento) {
         } else {
             alert('Precisa de Clique Critico primeiro')
         }
-            
+
     }
     if (melhoria === 'Superprodução' && melhoriasTri.sp1 === false && triangulos >= 2) {
         melhoriasTri.sp1 = true;

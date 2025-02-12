@@ -42,7 +42,7 @@ button[onclick="mudarMenu('main')"]:hover {
 
 section#principal {
     width: 100%;
-    height: fit-content;
+    height: 75vh;
     display: flex;
 }
 
