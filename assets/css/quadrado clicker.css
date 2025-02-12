@@ -42,7 +42,7 @@ button[onclick="mudarMenu('main')"]:hover {
 
 section#principal {
     width: 100%;
-    height: 75vh;
+    height: fit-content;
     display: flex;
 }
 
@@ -113,7 +113,6 @@ section#centro > h1 {
 
 section#direita {
     overflow-y: scroll;
-    height: 75vh;
     padding-left: 1px;
 }
 
@@ -258,7 +257,7 @@ section#outros div button {
 #salvar {
     width: 100%;
     min-height: 75vh;
-    height: 75vh;
+    height: fit-content;
 }
 
 #salvar h2 {
@@ -286,7 +285,8 @@ section#outros div button {
 /* renascer */
 
 section#renascer {
-    height: 75vh;
+    min-height: 75vh;
+    height: fit-content;
     width: 100%;
     flex-direction: column;
 }
@@ -323,7 +323,7 @@ section#renascer:not(button:nth-of-type(1)) {
 
 #conquistas {
     min-height: 75vh;
-    height: 75vh;
+    height: fit-content;
     width: 100%;
 }
 
@@ -357,11 +357,13 @@ section#conquistas > h2 {
     box-sizing: border-box;
     background-color: #ffc107;
     border: solid 1px;
+    width: 25%;
 }
 
 .conquista-inativa {
     box-sizing: border-box;
     border: solid 1px;
+    width: 25%;
 }
 
 @media (max-width: 600px) {
@@ -369,13 +371,16 @@ section#conquistas > h2 {
         font-size: medium;
     }
 
-
+    .conquista-ativa, .conquista-inativa {
+        width: 50%;
+    }
 }
 
 /* Maquina da sorte */
 
 
 #maquina-da-sorte {
+    min-height: 75vh;
     height: fit-content;
 }
 
