@@ -1,6 +1,6 @@
 //variáveis
 
-let quadrados = 10000;
+let quadrados = 1000000;
 let quadradosTotais = 0;
 let base = 1;
 
@@ -55,11 +55,15 @@ let valorParaGanhar1QuadradoAscendente = 100000000;
 
 //construções
 class Construcao {
-    constructor(valorBase, aumento) {
+    constructor(nome,valorBase, aumento, melhorias, nomes) {
+        this.nome = nome;
         this.n = 0;
         this.valorBase = valorBase;
         this.a = aumento;
         this.v = valorBase * (1.15 ** this.n);
+        this.m1 = new Melhoria(melhorias[0], nomes[0]);
+        this.m2 = new Melhoria(melhorias[1], nomes[1]);
+        this.m3 = new Melhoria(melhorias[2], nomes[2]);
     }
 
     comprar() {
@@ -69,14 +73,86 @@ class Construcao {
             this.v = arredondar(0, this.valorBase * (1.15 ** this.n));
         }
     }
+
+    comprarMelhorias(melhoria) {
+        if (melhoria === 1 && !this.m1.possui && quadrados >= this.m1.preco) {
+            this.m1.possui = true;
+            this.a *= 2
+            quadrados -= this.m1.preco;
+        } else if (melhoria === 2 && !this.m2.possui && quadrados >= this.m2.preco) {
+            this.m2.possui = true;
+            this.a *= 5;
+            quadrados -= this.m2.preco;
+        } else if (melhoria === 3 && !this.m3.possui && quadrados >= this.m3.preco) {
+            this.m3.possui = true;
+            this.a *= 20;
+            quadrados -= this.m3.preco;
+        }
+    }
+
+    adicionarMelhorias() {
+        const tabela = document.getElementById("tabela-melhorias");
+        let tr = document.createElement("tr");
+        let td1 = document.createElement("td");
+        let td2 = document.createElement("td");
+        let td3 = document.createElement("td");
+
+        let td1h2 = document.createElement("h2");
+        let td1p = document.createElement("p");
+        let td1h3 = document.createElement("h3");
+        td1h2.textContent = this.m1.nome;
+        td1p.textContent = this.nome + " 2X mais eficiente";
+        td1h3.textContent = "Preço: " + formatar(this.m1.preco);
+        td1.appendChild(td1h2);
+        td1.appendChild(td1p);
+        td1.appendChild(td1h3);
+        td1.id = this.nome + 1
+
+        let td2h2 = document.createElement("h2");
+        let td2p = document.createElement("p");
+        let td2h3 = document.createElement("h3");
+        td2h2.textContent = this.m2.nome;
+        td2p.textContent = this.nome + " 5X mais eficiente";
+        td2h3.textContent = "Preço: " + formatar(this.m2.preco);
+        td2.appendChild(td2h2);
+        td2.appendChild(td2p);
+        td2.appendChild(td2h3);
+        td2.id = this.nome + 2
+
+        let td3h2 = document.createElement("h2");
+        let td3p = document.createElement("p");
+        let td3h3 = document.createElement("h3");
+        td3h2.textContent = this.m3.nome;
+        td3p.textContent = this.nome + " 20X mais eficiente";
+        td3h3.textContent = "Preço: " + formatar(this.m3.preco);
+        td3.appendChild(td3h2);
+        td3.appendChild(td3p);
+        td3.appendChild(td3h3);
+        td3.id = this.nome + 3
+
+        tr.appendChild(td1)
+        tr.appendChild(td2)
+        tr.appendChild(td3)
+
+        tabela.appendChild(tr)
+    }
 };
 
-let cur = new Construcao(100, 1);
-let pro = new Construcao(5000, 10);
-let mat = new Construcao(130_000, 75);
-let qua = new Construcao(9_000_000, 750);
-let fab = new Construcao(650_000_000, 15_000);
-let eng = new Construcao(50_000_000_000,200_000);
+class Melhoria {
+    constructor (preco, nome) {
+        this.preco = preco;
+        this.nome = nome;
+        this.possui = false;
+    }
+}
+
+let cur = new Construcao("Cursores",100, 1, [750, 100_000, 30_000_000],["Cursores duplos", "Múltiplos cursores", "Super cursores"]);
+cur.adicionarMelhorias()
+let pro = new Construcao("Professores",5000, 10, [750, 100_000, 30_000_000],["Professores duplos", "Múltiplos professores", "Super professores"]);
+let mat = new Construcao("Matemáticos",130_000, 75, [750, 100_000, 30_000_000],["Matemáticos duplos", "Múltiplos matemáticos", "Super matemáticos"]);
+let qua = new Construcao("Quadros",9_000_000, 750, [750, 100_000, 30_000_000],["Quadros duplos", "Múltiplos quadros", "Super quadros"]);
+let fab = new Construcao("Fábricas",650_000_000, 15_000, [750, 100_000, 30_000_000],["Fábricas duplas", "Múltiplas fábricas", "Super fabricas"]);
+let eng = new Construcao("Engenheiros",50_000_000_000,200_000, [750, 100_000, 30_000_000],["Engenheiros duplos", "Múltiplas engenheiros", "Super engenheiros"]);
 
 
 
@@ -692,7 +768,7 @@ function adicionarConquistas() {
 
     for (let i = 0; i <= conquistas.length-2; i++) {
         let div = document.createElement("div");
-        div.className = conquistas[i].obtida ? "conquista-ativa" : "conquista-inativa";
+        div.className = conquistas[i].obtida ? "conquista-ativa": "conquista-inativa";
 
         let titulo = document.createElement("h3");
         titulo.textContent = conquistas[i].nome;
@@ -1348,14 +1424,11 @@ function comprarConstrucao(construcao) {
         fab.comprar();
     }
 
-    console.log(fab);
-
     alterar()
 }
-
 function comprarMelhorias(melhoria, evento) {
     // Clique Duplo
-    if (melhoria === "Clique duplo" && melhorias.Bas.b1 === false && quadrados >= 70) {
+    if (melhoria === "Clique duplo") {
         melhorias.Bas.b1 = true;
         quadrados -= 70;
         base *= 2;
@@ -1377,10 +1450,8 @@ function comprarMelhorias(melhoria, evento) {
     }
 
     // Cursores Duplos
-    if (melhoria === "Cursores duplos" && melhorias.Cur.c1 === false && quadrados >= 750) {
-        melhorias.Cur.c1 = true;
-        quadrados -= 750;
-        cur.a *= 2;
+    if (melhoria === "Cursores duplos") {
+        cur.comprarMelhorias(1)
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     // Múltiplos Cursores
