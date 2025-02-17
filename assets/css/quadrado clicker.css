@@ -98,6 +98,7 @@ div#botoes > button {
     padding: 5px 10px;
     color: white;
     transition: 0.3s;
+    margin: 5px;
 }
 
 div#botoes > button:hover {
@@ -131,6 +132,7 @@ div.construcao {
 
 div.construcao:hover {
     transform: scale(1.02);
+    cursor: pointer;
 }
 
 section#direita div h2 {
@@ -188,11 +190,13 @@ td p {
 
 section#melhorias td, section#triangulos td {
     width: 1%;
+    box-sizing: border-box;
     justify-content: space-evenly;
     background-color: #fd6321;
     color: rgb(0, 0, 0);
     border: solid black;
     transition: 0.3s, transform 0.3s;
+    cursor: pointer;
 }
 
 section#melhorias td:hover, section#triangulos td:hover {
@@ -207,6 +211,10 @@ section#melhorias td:hover, section#triangulos td:hover {
 
 section#ajuda {
     width: 99%;
+}
+
+section#ajuda > h1 {
+    text-align: center;
 }
 
 section#ajuda h2 {

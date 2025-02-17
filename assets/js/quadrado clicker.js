@@ -1,19 +1,10 @@
 //variáveis
 
-let quadrados = 1000000;
+let quadrados = 0;
 let quadradosTotais = 0;
 let base = 1;
 
-let melhorias = {
-    Bas: { b1: false, b2: false, b3: false },
-    Cur: { c1: false, c2: false, c3: false },
-    Pro: { p1: false, p2: false, p3: false },
-    Mat: { m1: false, m2: false, m3: false },
-    Qua: { q1: false, q2: false, q3: false },
-    Fab: { f1: false, f2: false, f3: false }
-}
-
-let triangulos = 100;
+let triangulos = 0;
 let melhoriasTri = {
     pd1: false,
     cc1: false,
@@ -49,6 +40,7 @@ let magiasUsadas = 0;
 let cliques10x = 0;
 
 let renasceu = false;
+let conseguiu1QuadradosAscendente = false;
 let quadrados_ascendentes = 0;
 let valorParaGanhar1QuadradoAscendente = 100000000;
 
@@ -64,6 +56,8 @@ class Construcao {
         this.m1 = new Melhoria(melhorias[0], nomes[0]);
         this.m2 = new Melhoria(melhorias[1], nomes[1]);
         this.m3 = new Melhoria(melhorias[2], nomes[2]);
+        this.adicionarMelhorias()
+        this.adicionarConstrucao()
     }
 
     comprar() {
@@ -71,22 +65,26 @@ class Construcao {
             this.n++;
             quadrados -= this.v;
             this.v = arredondar(0, this.valorBase * (1.15 ** this.n));
+            alterar()
         }
     }
 
-    comprarMelhorias(melhoria) {
+    comprarMelhorias(melhoria, evento) {
         if (melhoria === 1 && !this.m1.possui && quadrados >= this.m1.preco) {
             this.m1.possui = true;
             this.a *= 2
             quadrados -= this.m1.preco;
+            evento.target.closest("td").style.backgroundColor = "#f88c5d";
         } else if (melhoria === 2 && !this.m2.possui && quadrados >= this.m2.preco) {
             this.m2.possui = true;
             this.a *= 5;
             quadrados -= this.m2.preco;
+            evento.target.closest("td").style.backgroundColor = "#f88c5d";
         } else if (melhoria === 3 && !this.m3.possui && quadrados >= this.m3.preco) {
             this.m3.possui = true;
             this.a *= 20;
             quadrados -= this.m3.preco;
+            evento.target.closest("td").style.backgroundColor = "#f88c5d";
         }
     }
 
@@ -106,7 +104,8 @@ class Construcao {
         td1.appendChild(td1h2);
         td1.appendChild(td1p);
         td1.appendChild(td1h3);
-        td1.id = this.nome + 1
+        td1.id = this.nome + 1;
+        td1.addEventListener("click", () => this.comprarMelhorias(1,event));
 
         let td2h2 = document.createElement("h2");
         let td2p = document.createElement("p");
@@ -117,7 +116,8 @@ class Construcao {
         td2.appendChild(td2h2);
         td2.appendChild(td2p);
         td2.appendChild(td2h3);
-        td2.id = this.nome + 2
+        td2.id = this.nome + 2;
+        td2.addEventListener("click", () => this.comprarMelhorias(2,event));
 
         let td3h2 = document.createElement("h2");
         let td3p = document.createElement("p");
@@ -128,13 +128,41 @@ class Construcao {
         td3.appendChild(td3h2);
         td3.appendChild(td3p);
         td3.appendChild(td3h3);
-        td3.id = this.nome + 3
+        td3.id = this.nome + 3;
+        td3.addEventListener("click", () => this.comprarMelhorias(3,event));
 
-        tr.appendChild(td1)
-        tr.appendChild(td2)
-        tr.appendChild(td3)
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
 
-        tabela.appendChild(tr)
+        tabela.appendChild(tr);
+    }
+
+    adicionarConstrucao() {
+        const direita = document.getElementById("direita");
+        let div = document.createElement("div");
+        div.className = "construcao"
+
+        let h2 = document.createElement("h2");
+        h2.textContent = this.nome
+        let valortext = document.createElement("h3");
+        valortext.id = "v" + this.nome;
+        
+        let aumentotext = document.createElement("h3");
+        aumentotext.id = "a" + this.nome;
+
+        let numerotext = document.createElement("h4");
+        numerotext.id = "n" + this.nome;
+
+        div.appendChild(h2);
+        div.appendChild(valortext);
+        div.appendChild(aumentotext);
+        div.appendChild(numerotext);
+        div.addEventListener("click", () => {
+            this.comprar()
+        });
+
+        direita.appendChild(div)
     }
 };
 
@@ -146,15 +174,15 @@ class Melhoria {
     }
 }
 
-let cur = new Construcao("Cursores",100, 1, [750, 100_000, 30_000_000],["Cursores duplos", "Múltiplos cursores", "Super cursores"]);
-cur.adicionarMelhorias()
-let pro = new Construcao("Professores",5000, 10, [750, 100_000, 30_000_000],["Professores duplos", "Múltiplos professores", "Super professores"]);
-let mat = new Construcao("Matemáticos",130_000, 75, [750, 100_000, 30_000_000],["Matemáticos duplos", "Múltiplos matemáticos", "Super matemáticos"]);
-let qua = new Construcao("Quadros",9_000_000, 750, [750, 100_000, 30_000_000],["Quadros duplos", "Múltiplos quadros", "Super quadros"]);
-let fab = new Construcao("Fábricas",650_000_000, 15_000, [750, 100_000, 30_000_000],["Fábricas duplas", "Múltiplas fábricas", "Super fabricas"]);
-let eng = new Construcao("Engenheiros",50_000_000_000,200_000, [750, 100_000, 30_000_000],["Engenheiros duplos", "Múltiplas engenheiros", "Super engenheiros"]);
-
-
+co = {
+    cur: new Construcao("Cursores"     , 10e1   ,1      , [50e1   , 35e3   , 28e5   ], ["Cursores duplos", "Múltiplos cursores", "Super cursores"]),
+    pro: new Construcao("Professores"  , 3e3    ,10     , [15e3   , 10.5e5 , 8.4e7  ], ["Professores duplos", "Múltiplos professores", "Super professores"]),
+    mat: new Construcao("Matemáticos"  , 1.3e5  ,44     , [6.5e5  , 4.55e7 , 3.64e9 ], ["Matemáticos duplos", "Múltiplos matemáticos", "Super matemáticos"]),
+    qua: new Construcao("Quadros"      , 0.9e7  ,305    , [4.5e7  , 3.15e9 , 2.52e11], ["Quadros duplos", "Múltiplos quadros", "Super quadros"]),
+    fab: new Construcao("Fábricas"     , 1.5e9  ,5070   , [7.5e9  , 5.25e11, 4.2e13 ], ["Fábricas duplas", "Múltiplas fábricas", "Super fabricas"]),
+    eng: new Construcao("Engenheiros"  , 2e11   ,674e2  , [10e11  , 7e13   , 5.6e15 ], ["Engenheiros duplos", "Múltiplas engenheiros", "Super engenheiros"]),
+    pog: new Construcao("Programadores", 2.5e13 ,8425e2 , [12.5e13, 8.75e15, 7e17   ], ["Programadores duplos", "Múltiplos programadores", "Super programadores"]),
+}
 
 //perguntas
 class Pergunta {
@@ -343,7 +371,7 @@ const conquistas = [
     new Conquista("Obrigado por jogar Quadrado Clicker", "Consiga todas as conquistas"),
 ];
 
-let click = (base + (cur.n * cur.a) + (pro.n * pro.a) + (mat.n * mat.a) + (qua.n * qua.a) + (fab.n * fab.a)) * a_pd1;
+let click = 1
 
 //variáveis
 
@@ -354,12 +382,7 @@ function salvarDados() {
         quadrados,
         quadradosTotais,
         base,
-        cur,
-        pro,
-        mat,
-        qua,
-        fab,
-        melhorias,
+        co,
         melhoriasTri,
         tri,
         triangulos,
@@ -388,12 +411,7 @@ function carregarDados() {
         quadrados = estado.quadrados;
         quadradosTotais = estado.quadradosTotais;
         base = estado.base;
-        cur = estado.cur;
-        pro = estado.pro;
-        mat = estado.mat;
-        qua = estado.qua;
-        fab = estado.fab;
-        melhorias = estado.melhorias;
+        co = estado.co,
         melhoriasTri = estado.melhoriasTri;
         tri = estado.tri;
         triangulos = estado.triangulos;
@@ -455,12 +473,7 @@ function salvarJson() {
         quadrados,
         quadradosTotais,
         base,
-        cur,
-        pro,
-        mat,
-        qua,
-        fab,
-        melhorias,
+        co,
         melhoriasTri,
         tri,
         triangulos,
@@ -518,13 +531,8 @@ function carregarJson() {
                     quadradosTotais = dadosCarregados.quadradosTotais;
                     base = dadosCarregados.base;
 
-                    cur = dadosCarregados.cur;
-                    pro = dadosCarregados.pro;
-                    mat = dadosCarregados.mat;
-                    qua = dadosCarregados.mat;
-                    fab = dadosCarregados.fab;
+                    co = dadosCarregados.co,
 
-                    melhorias = dadosCarregados.melhorias;
                     melhoriasTri = dadosCarregados.melhoriasTri;
                     tri = dadosCarregados.tri;
 
@@ -674,38 +682,14 @@ function alterar() {
     let quadradotextMelhorias = document.getElementById("quadradotextMelhorias");
     quadradotextMelhorias.innerText = formatar(quadrados);
 
-    let nCurText = document.getElementById("nCur");
-    let nProText = document.getElementById("nPro");
-    let nMatText = document.getElementById("nMat");
-    let nQuaText = document.getElementById("nQua");
-    let nFabText = document.getElementById("nFab");
-    nCurText.innerText = cur.n;
-    nProText.innerText = pro.n;
-    nMatText.innerText = mat.n;
-    nQuaText.innerText = qua.n;
-    nFabText.innerText = fab.n;
-
-    let vCurText = document.getElementById("vCur");
-    let vProText = document.getElementById("vPro");
-    let vMatText = document.getElementById("vMat");
-    let vQuaText = document.getElementById("vQua");
-    let vFabText = document.getElementById("vFab");
-    vCurText.innerText = "Preço: " + formatar(cur.v);
-    vProText.innerText = "Preço: " + formatar(pro.v);
-    vMatText.innerText = "Preço: " + formatar(mat.v);
-    vQuaText.innerText = "Preço: " + formatar(qua.v);
-    vFabText.innerText = "Preço: " + formatar(fab.v);
-
-    let aCurText = document.getElementById("aCur");
-    let aProText = document.getElementById("aPro");
-    let aMatText = document.getElementById("aMat");
-    let aQuaText = document.getElementById("aQua");
-    let aFabText = document.getElementById("aFab");
-    aCurText.innerText = "Aumento: " + formatar(cur.a);
-    aProText.innerText = "Aumento: " + formatar(pro.a);
-    aMatText.innerText = "Aumento: " + formatar(mat.a);
-    aQuaText.innerText = "Aumento: " + formatar(qua.a);
-    aFabText.innerText = "Aumento: " + formatar(fab.a);
+    for (key in co) {
+        let nCoText = document.getElementById("n" + co[key].nome);
+        let vCoText = document.getElementById("v" + co[key].nome);
+        let aCoText = document.getElementById("a" + co[key].nome);
+        nCoText.innerText = co[key].n
+        vCoText.innerText = "Preço: " + formatar(co[key].v)
+        aCoText.innerText = "Aumento: " + formatar(co[key].a)
+    }
 
     let quadrados_ascendentesText = document.getElementById("quadrados-ascendentes");
     quadrados_ascendentesText.innerText = "Você possui " + quadrados_ascendentes + " quadrados ascendentes";
@@ -715,10 +699,10 @@ function alterar() {
     let manaText = document.getElementById("mana");
     manaText.innerText = "Mana: " + mana;
 
-    click = (base + (cur.n * cur.a) + (pro.n * pro.a) + (mat.n * mat.a) + (qua.n * qua.a) + (fab.n * fab.a)) * a_pd1;
+    click = (base + (co.cur.n * co.cur.a) + (co.pro.n * co.pro.a) + (co.mat.n * co.mat.a) + (co.qua.n * co.qua.a) + (co.fab.n * co.fab.a) + (co.eng.n * co.eng.a) + (co.pog.n * co.pog.a)) * a_pd1;
 
     if (renasceu === true) {
-        click = (base + (cur.n * cur.a) + (pro.n * pro.a) + (mat.n * mat.a) + (qua.n * qua.a) + (fab.n * fab.a)) * a_pd1 * (1 + quadrados_ascendentes / 10);
+        click = (base + (co.cur.n * co.cur.a) + (co.pro.n * co.pro.a) + (co.mat.n * co.mat.a) + (co.qua.n * co.qua.a) + (co.fab.n * co.fab.a) + (co.eng.n * co.eng.a) + (co.pog.n * co.pog.a)) * a_pd1 * (1 + quadrados_ascendentes / 10);
     }
 
     let quadradosporclickText = document.getElementById("quadradosporclickText")
@@ -730,16 +714,21 @@ function arredondar(casasDecimais, variavel) {
 }
 
 function renascer() {
-    if (quadrados_ascendentes >= 1) {
+    if (conseguiu1QuadradosAscendente === true) {
         renasceu = true
+        conseguiu1QuadradosAscendente = false;
 
         quadrados = 0
         base = 1
 
-        for (let categoria in melhorias) {
-            for (let chave in melhorias[categoria]) {
-                melhorias[categoria][chave] = false;
-            }
+        co = {
+            cur: new Construcao("Cursores",100, 1, [500,],["Cursores duplos", "Múltiplos cursores", "Super cursores"]),
+            pro: new Construcao("Professores",3e3, 10, [15e3,],["Professores duplos", "Múltiplos professores", "Super professores"]),
+            mat: new Construcao("Matemáticos",1.3e5, 44, [6.5e5,],["Matemáticos duplos", "Múltiplos matemáticos", "Super matemáticos"]),
+            qua: new Construcao("Quadros",0.9e7, 305, [4.5e7,],["Quadros duplos", "Múltiplos quadros", "Super quadros"]),
+            fab: new Construcao("Fábricas",1.5e9, 5070, [7.5e9,],["Fábricas duplas", "Múltiplas fábricas", "Super fabricas"]),
+            eng: new Construcao("Engenheiros",2e11,674e2, [10e11,],["Engenheiros duplos", "Múltiplas engenheiros", "Super engenheiros"]),
+            pog: new Construcao("Programadores",2.5e13,8425e2,[12.5e13,],["Programadores duplos", "Múltiplos programadores", "Super programadores"]),
         }
 
         for (let pegoutri in tri) {
@@ -755,7 +744,7 @@ function renascer() {
         document.getElementById("renascer").style.backgroundColor = "#e0f7fa"
         alterar()
         mudarMain()
-    } else if (quadrados_ascendentes < 1) {
+    } else  {
         let consiga1quadradoText = document.getElementById("consiga1quadrado")
         consiga1quadradoText.innerText = "Consiga pelo menos 1 quadrado ascendente para renascer"
     }
@@ -990,6 +979,7 @@ function verificarConquistas(callback) {
 
 function verificarQuadradosAscendentes() {
     if (quadrados >= valorParaGanhar1QuadradoAscendente) {
+        conseguiu1QuadradosAscendente = true;
         quadrados_ascendentes++;
         valorParaGanhar1QuadradoAscendente = Math.round(valorParaGanhar1QuadradoAscendente * 1.05)
     }
@@ -1064,6 +1054,7 @@ function mudarMenu(menu) {
             document.getElementById("renascer").style.backgroundColor = "#e0f7fa";
             let consiga1quadradoText = document.getElementById("consiga1quadrado");
             consiga1quadradoText.innerText = "";
+            alterar()
             break;
     }
 }
@@ -1413,151 +1404,18 @@ function producaoAutomatizada() {
 
 function comprarConstrucao(construcao) {
     if (construcao === "cur") {
-        cur.comprar();
+        co.cur.comprar();
     } else if (construcao === "pro") {
-        pro.comprar();
+        co.pro.comprar();
     } else if (construcao === "mat") {
-        mat.comprar();
+        co.mat.comprar();
     } else if (construcao === "qua") {
-        qua.comprar();
+        co.qua.comprar();
     } else if (construcao === "fab") {
-        fab.comprar();
+        co.fab.comprar();
     }
 
     alterar()
-}
-function comprarMelhorias(melhoria, evento) {
-    // Clique Duplo
-    if (melhoria === "Clique duplo") {
-        melhorias.Bas.b1 = true;
-        quadrados -= 70;
-        base *= 2;
-        evento.target.closest("td").style.backgroundColor = "#f88c5d";
-    }
-    // Super Clique
-    if (melhoria === "Super clique" && melhorias.Bas.b2 === false && quadrados >= 500000) {
-        melhorias.Bas.b2 = true;
-        quadrados -= 500000;
-        base *= 900;
-        evento.target.closest("td").style.backgroundColor = "#f88c5d";
-    }
-    // Mega Clique
-    if (melhoria === "Mega clique" && melhorias.Bas.b3 === false && quadrados >= 40000000) {
-        melhorias.Bas.b3 = true;
-        quadrados -= 40000000;
-        base *= 100;
-        evento.target.closest("td").style.backgroundColor = "#f88c5d";
-    }
-
-    // Cursores Duplos
-    if (melhoria === "Cursores duplos") {
-        cur.comprarMelhorias(1)
-        evento.target.closest("td").style.backgroundColor = "#f88c5d";
-    }
-    // Múltiplos Cursores
-    if (melhoria === "Multiplos cursores" && melhorias.Cur.c2 === false && quadrados >= 100_000) {
-        melhorias.Cur.c2 = true;
-        quadrados -= 100_000;
-        cur.a *= 5;
-        evento.target.closest("td").style.backgroundColor = "#f88c5d";
-    }
-    // Super Cursores
-    if (melhoria === "Super cursores" && melhorias.Cur.c3 === false && quadrados >= 30_000_000) {
-        melhorias.Cur.c3 = true;
-        quadrados -= 30_000_000;
-        cur.a *= 20;
-        evento.target.closest("td").style.backgroundColor = "#f88c5d";
-    }
-
-    // Professores Duplos
-    if (melhoria === "Professores duplos" && melhorias.Pro.p1 === false && quadrados >= 25_000) {
-        melhorias.Pro.p1 = true;
-        quadrados -= 25_000;
-        pro.a *= 2;
-        evento.target.closest("td").style.backgroundColor = "#f88c5d";
-    }
-    // Escola
-    if (melhoria === "Escola" && melhorias.Pro.p2 === false && quadrados >= 1_800_000) {
-        melhorias.Pro.p2 = true;
-        quadrados -= 1_800_000;
-        pro.a *= 5;
-        evento.target.closest("td").style.backgroundColor = "#f88c5d";
-    }
-    // Super Professores
-    if (melhoria === "Super professores" && melhorias.Pro.p3 === false && quadrados >= 180_000_000) {
-        melhorias.Pro.p3 = true;
-        quadrados -= 180_000_000;
-        pro.a *= 20;
-        evento.target.closest("td").style.backgroundColor = "#f88c5d";
-    }
-
-    // Matemática Dupla
-    if (melhoria === "Matematica dupla" && melhorias.Mat.m1 === false && quadrados >= 600_000) {
-        melhorias.Mat.m1 = true;
-        quadrados -= 600_000;
-        mat.a *= 2;
-        evento.target.closest("td").style.backgroundColor = "#f88c5d";
-    }
-    // Conjunto de Matemáticos
-    if (melhoria === "Conjunto de matematicos" && melhorias.Mat.m2 === false && quadrados >= 80_000_000) {
-        melhorias.Mat.m2 = true;
-        quadrados -= 80_000_000;
-        mat.a *= 5;
-        evento.target.closest("td").style.backgroundColor = "#f88c5d";
-    }
-    // Super Matemáticos
-    if (melhoria === "Super matematicos" && melhorias.Mat.m3 === false && quadrados >= 100_000_000) {
-        melhorias.Mat.m3 = true;
-        quadrados -= 100_000_000;
-        mat.a *= 20;
-        evento.target.closest("td").style.backgroundColor = "#f88c5d";
-    }
-
-    // Dois Quadros
-    if (melhoria === "Dois quadros" && melhorias.Qua.q1 === false && quadrados >= 30_000_000) {
-        melhorias.Qua.q1 = true;
-        quadrados -= 30_000_000;
-        qua.a *= 2;
-        evento.target.closest("td").style.backgroundColor = "#f88c5d";
-    }
-    // Quadrão
-    if (melhoria === "Quadrão" && melhorias.Qua.q2 === false && quadrados >= 200_000_000) {
-        melhorias.Qua.q2 = true;
-        quadrados -= 200_000_000;
-        qua.a *= 5;
-        evento.target.closest("td").style.backgroundColor = "#f88c5d";
-    }
-    // Quadros Poderosos
-    if (melhoria === "Quadros poderosos" && melhorias.Qua.q3 === false && quadrados >= 10_000_000_000) {
-        melhorias.Qua.q3 = true;
-        quadrados -= 10_000_000_000;
-        qua.a *= 20;
-        evento.target.closest("td").style.backgroundColor = "#f88c5d";
-    }
-
-    // Duas Fábricas
-    if (melhoria === "Duas fabricas" && melhorias.Fab.f1 === false && quadrados >= 2_500_000_000) {
-        melhorias.Fab.f1 = true;
-        quadrados -= 2_500_000_000;
-        fab.a *= 2;
-        evento.target.closest("td").style.backgroundColor = "#f88c5d";
-    }
-    // Começo da Revolução
-    if (melhoria === "Começo da revolução" && melhorias.Fab.f2 === false && quadrados >= 15_000_000_000) {
-        melhorias.Fab.f2 = true;
-        quadrados -= 15_000_000_000;
-        fab.a *= 5;
-        evento.target.closest("td").style.backgroundColor = "#f88c5d";
-    }
-    // Super Fábricas
-    if (melhoria === "Super fabricas" && melhorias.Fab.f3 === false && quadrados >= 1_000_000_000_000) {
-        melhorias.Fab.f3 = true;
-        quadrados -= 1_000_000_000_000;
-        fab.a *= 20;
-        evento.target.closest("td").style.backgroundColor = "#f88c5d";
-    }
-
-    alterar();
 }
 
 function comprarMelhoriasTriangulos(melhoria, evento) {
@@ -1586,11 +1444,9 @@ function comprarMelhoriasTriangulos(melhoria, evento) {
     if (melhoria === 'Superprodução' && melhoriasTri.sp1 === false && triangulos >= 2) {
         melhoriasTri.sp1 = true;
         triangulos -= 2
-        cur.a *= 2
-        pro.a *= 2
-        mat.a *= 2
-        qua.a *= 2
-        fab.a *= 2
+        for (key in co) {
+            co[key].a *= 2
+        }
         evento.target.closest("td").style.backgroundColor = "#f88c5d";
     }
     if (melhoria === 'Maquina da sorte' && melhoriasTri.ms1 === false && triangulos >= 2) {
