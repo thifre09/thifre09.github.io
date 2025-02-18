@@ -340,8 +340,6 @@ const conquistas = [
     new Conquista("Força triangular", "Compre todas as melhorias de triângulos"),
 
     // Melhorias
-    new Conquista("Melhoria básica", "Compre uma melhoria base"),
-    new Conquista("Click poderoso", "Compre todas as melhorias básicas"),
     new Conquista("Cursores melhorados", "Compre 1 melhoria de cursores"),
     new Conquista("Cursores no total", "Compre todas as melhorias de cursores"),
     new Conquista("Bom professor", "Compre 1 melhoria de professores"),
@@ -852,34 +850,34 @@ function verificarConquistas(callback) {
     }
 
     //Construções
-    if (cur.n >= 1) {
+    if (co.cur.n >= 1) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Cursor")].obtida = true;
     }
-    if (cur >= 100) {
+    if (co.cur >= 100) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Muitos cursores")].obtida = true;
     }
-    if (pro.n >= 1) {
+    if (co.pro.n >= 1) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Professor")].obtida = true;
     }
-    if (pro.n >= 100) {
+    if (co.pro.n >= 100) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Vários professores")].obtida = true;
     }
-    if (mat.n >= 1) {
+    if (co.mat.n >= 1) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Matemático")].obtida = true;
     }
-    if (mat.n >= 100) {
+    if (co.mat.n >= 100) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Comissão de matemáticos")].obtida = true;
     }
-    if (qua.n >= 1) {
+    if (co.qua.n >= 1) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Quadro")].obtida = true;
     }
-    if (qua.n >= 100) {
+    if (co.qua.n >= 100) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Pra que tantos quadros")].obtida = true;
     }
-    if (fab.n >= 1) {
+    if (co.fab.n >= 1) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Fábrica")].obtida = true;
     }
-    if (fab.n >= 100) {
+    if (co.fab.n >= 100) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Conglomerado")].obtida = true;
     }
 
@@ -895,16 +893,10 @@ function verificarConquistas(callback) {
     }
 
     //Melhorias
-    if (Object.values(melhorias["Bas"]).some(valor => valor === true)) {
-        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Melhoria básica")].obtida = true;
-    }
-    if (Object.values(melhorias["Bas"]).every(valor => valor === true)) {
-        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Click poderoso")].obtida = true;
-    }
-    if (Object.values(melhorias["Cur"]).some(valor => valor === true)) {
+    if (co.cur.m1.possui || co.cur.m2.possui || co.cur.m3.possui) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Cursores melhorados")].obtida = true;
     }
-    if (Object.values(melhorias["Cur"]).every(valor => valor === true)) {
+    if (co.cur.m1.possui && co.cur.m2.possui && co.cur.m3.possui) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Cursores no total")].obtida = true;
     }
     if (Object.values(melhorias["Pro"]).some(valor => valor === true)) {
