@@ -330,9 +330,13 @@ const conquistas = [
     new Conquista("Matemático", "Compre 1 matemático"),
     new Conquista("Comissão de matemáticos", "Compre 100 matemáticos"),
     new Conquista("Quadro", "Compre 1 quadro"),
-    new Conquista("Pra que tantos quadros", "Compre 100 quadros"),
+    new Conquista("Para que tantos quadros", "Compre 100 quadros"),
     new Conquista("Fábrica", "Compre 1 fábrica"),
     new Conquista("Conglomerado", "Compre 100 fábricas"),
+    new Conquista("Engenheiro","Compre 1 engenheiro"),
+    new Conquista("Construtora","Compre 100 engenheiros"),
+    new Conquista("Programador","Compre 1 programador"),
+    new Conquista("Programação quadratica","Compre 100 programadores"),
 
     // Triângulos
     new Conquista("Triangulo 1", "Consiga o primeiro triângulo"),
@@ -350,6 +354,10 @@ const conquistas = [
     new Conquista("Lousa", "Compre todas as melhorias de quadros"),
     new Conquista("Fabricação intensa", "Compre 1 melhoria de fábricas"),
     new Conquista("Fábricas no topo", "Compre todas as melhorias de fábricas"),
+    new Conquista("Lápis e papel","Compre 1 melhoria de engenheiro"),
+    new Conquista("Melhores engenheiros existentes","Compre todas as melhorias de engenheiros"),
+    new Conquista("PC melhor","Compre 1 melhoria de programador"),
+    new Conquista("Hacker de quadrados","Compre todas as melhorias de programadores"),
     new Conquista("Tudo feito", "Compre todas as melhorias"),
 
     // Outros
@@ -880,6 +888,18 @@ function verificarConquistas(callback) {
     if (co.fab.n >= 100) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Conglomerado")].obtida = true;
     }
+    if (co.eng.n >= 1) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Engenheiro")].obtida = true;
+    }
+    if (co.eng.n >= 100) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Construtora")].obtida = true;
+    }
+    if (co.pog.n >= 1) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Programador")].obtida = true;
+    }
+    if (co.pog.n >= 100) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Programação quadratica")].obtida = true;
+    }
 
     //Triângulos
     if (triangulos >= 1) {
@@ -893,37 +913,68 @@ function verificarConquistas(callback) {
     }
 
     //Melhorias
-    if (co.cur.m1.possui || co.cur.m2.possui || co.cur.m3.possui) {
+    function verificarConquistasMelhorias(construcao, n) {
+        let melhoriasConquistas = [construcao.m1.possui, construcao.m2.possui, construcao.m3.possui]
+        if (n === 1) {
+            if (melhoriasConquistas.includes(true)) {
+                return true
+            };
+        } else if (n === 2) {
+            if (melhoriasConquistas.filter((elemento) => { return elemento === true }).length === 3) {
+                return true
+            }
+        } else {
+            melhoriasConquistas = []
+            for (key in co) {
+                key = co[key]
+                melhoriasConquistas.push(key.m1.possui, key.m2.possui, key.m3.possui)
+            }
+            return melhoriasConquistas.filter(e => e === true).length === Object.keys(co).length * 3;
+        }
+    }
+    if (verificarConquistasMelhorias(co.cur, 1)) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Cursores melhorados")].obtida = true;
     }
-    if (co.cur.m1.possui && co.cur.m2.possui && co.cur.m3.possui) {
+    if (verificarConquistasMelhorias(co.cur, 2)) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Cursores no total")].obtida = true;
     }
-    if (Object.values(melhorias["Pro"]).some(valor => valor === true)) {
+    if (verificarConquistasMelhorias(co.pro, 1)) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Bom professor")].obtida = true;
     }
-    if (Object.values(melhorias["Pro"]).every(valor => valor === true)) {
+    if (verificarConquistasMelhorias(co.pro, 2)) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Professores top")].obtida = true;
     }
-    if (Object.values(melhorias["Mat"]).some(valor => valor === true)) {
+    if (verificarConquistasMelhorias(co.mat, 1)) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Matemática básica")].obtida = true;
     }
-    if (Object.values(melhorias["Mat"]).every(valor => valor === true)) {
+    if (verificarConquistasMelhorias(co.mat, 2)) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Matemática avançada")].obtida = true;
     }
-    if (Object.values(melhorias["Qua"]).some(valor => valor === true)) {
+    if (verificarConquistasMelhorias(co.qua, 1)) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Quadros melhores")].obtida = true;
     }
-    if (Object.values(melhorias["Qua"]).every(valor => valor === true)) {
+    if (verificarConquistasMelhorias(co.qua, 2)) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Lousa")].obtida = true;
     }
-    if (Object.values(melhorias["Fab"]).some(valor => valor === true)) {
+    if (verificarConquistasMelhorias(co.fab, 1)) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Fabricação intensa")].obtida = true;
     }
-    if (Object.values(melhorias["Fab"]).every(valor => valor === true)) {
+    if (verificarConquistasMelhorias(co.fab, 2)) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Fábricas no topo")].obtida = true;
     }
-    if (Object.values(melhorias).every(categoria => Object.values(categoria).every(valor => valor === true))) {
+    if (verificarConquistasMelhorias(co.eng, 1)) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Lápis e papel")].obtida = true;
+    }
+    if (verificarConquistasMelhorias(co.eng, 2)) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Melhores engenheiros existentes")].obtida = true;
+    }
+    if (verificarConquistasMelhorias(co.pog, 1)) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "PC melhor")].obtida = true;
+    }
+    if (verificarConquistasMelhorias(co.pog, 2)) {
+        conquistas[conquistas.findIndex((elemento) => elemento.nome === "Hacker de quadrados")].obtida = true;
+    }
+    if (verificarConquistasMelhorias(co.cur, 3)) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Tudo feito")].obtida = true;
     }
 
