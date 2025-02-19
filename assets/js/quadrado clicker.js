@@ -46,8 +46,8 @@ let valorParaGanhar1QuadradoAscendente = 100000000;
 
 
 //construções
-class Construcao {
-    constructor(nome,valorBase, aumento, melhorias, nomes) {
+class Gerador {
+    constructor(nome, valorBase, aumento, melhorias, nomes) {
         this.nome = nome;
         this.n = 0;
         this.valorBase = valorBase;
@@ -57,7 +57,7 @@ class Construcao {
         this.m2 = new Melhoria(melhorias[1], nomes[1]);
         this.m3 = new Melhoria(melhorias[2], nomes[2]);
         this.adicionarMelhorias()
-        this.adicionarConstrucao()
+        this.adicionarGerador()
     }
 
     comprar() {
@@ -138,7 +138,7 @@ class Construcao {
         tabela.appendChild(tr);
     }
 
-    adicionarConstrucao() {
+    adicionarGerador() {
         const direita = document.getElementById("direita");
         let div = document.createElement("div");
         div.className = "construcao"
@@ -175,13 +175,14 @@ class Melhoria {
 }
 
 co = {
-    cur: new Construcao("Cursores"     , 10e1   ,1      , [50e1   , 35e3   , 28e5   ], ["Cursores duplos", "Múltiplos cursores", "Super cursores"]),
-    pro: new Construcao("Professores"  , 3e3    ,10     , [15e3   , 10.5e5 , 8.4e7  ], ["Professores duplos", "Múltiplos professores", "Super professores"]),
-    mat: new Construcao("Matemáticos"  , 1.3e5  ,44     , [6.5e5  , 4.55e7 , 3.64e9 ], ["Matemáticos duplos", "Múltiplos matemáticos", "Super matemáticos"]),
-    qua: new Construcao("Quadros"      , 0.9e7  ,305    , [4.5e7  , 3.15e9 , 2.52e11], ["Quadros duplos", "Múltiplos quadros", "Super quadros"]),
-    fab: new Construcao("Fábricas"     , 1.5e9  ,5070   , [7.5e9  , 5.25e11, 4.2e13 ], ["Fábricas duplas", "Múltiplas fábricas", "Super fabricas"]),
-    eng: new Construcao("Engenheiros"  , 2e11   ,674e2  , [10e11  , 7e13   , 5.6e15 ], ["Engenheiros duplos", "Múltiplas engenheiros", "Super engenheiros"]),
-    pog: new Construcao("Programadores", 2.5e13 ,8425e2 , [12.5e13, 8.75e15, 7e17   ], ["Programadores duplos", "Múltiplos programadores", "Super programadores"]),
+    cur: new Gerador("Cursores"     , 10e1   , 1      , [50e1   , 35e3    , 28e5    ], ["Cursores duplos", "Múltiplos cursores", "Super cursores"]),
+    pro: new Gerador("Professores"  , 3e3    , 10     , [15e3   , 10.5e5  , 8.4e7   ], ["Professores duplos", "Múltiplos professores", "Super professores"]),
+    mat: new Gerador("Matemáticos"  , 1.3e5  , 44     , [6.5e5  , 4.55e7  , 3.64e9  ], ["Matemáticos duplos", "Múltiplos matemáticos", "Super matemáticos"]),
+    qua: new Gerador("Quadros"      , 0.9e7  , 305    , [4.5e7  , 3.15e9  , 2.52e11 ], ["Quadros duplos", "Múltiplos quadros", "Super quadros"]),
+    imp: new Gerador("Impressoras"  , 1.5e9  , 5070   , [7.5e9  , 5.25e11 , 4.2e13  ], ["Impressoras duplas", "Múltiplas impressoras", "Super impressoras"]),
+    fab: new Gerador("Fábricas"     , 2e11   , 674e2  , [10e11  , 7e13    , 5.6e15  ], ["Fábricas duplas", "Múltiplas fábricas", "Super fabricas"]),
+    eng: new Gerador("Engenheiros"  , 2.5e13 , 8425e2 , [12.5e13, 8.75e15 , 7e17    ], ["Engenheiros duplos", "Múltiplas engenheiros", "Super engenheiros"]),
+    pog: new Gerador("Programadores", 3.7e15 , 1246e4 , [18.5e15, 12.95e17, 10.36e19], ["Programadores duplos", "Múltiplos programadores", "Super programadores"]),
 }
 
 //perguntas
@@ -211,7 +212,7 @@ class Pergunta {
     }
 };
 
-const perguntas = [
+let perguntas = [
     new Pergunta("Quanto é 1+1?", ["2", "3", "4", "1"], "2"),
     new Pergunta("Quanto é 5-3?", ["2", "3", "5", "1"], "2"),
     new Pergunta("Quanto é 5x5?", ["25", "20", "15", "30"], "25"),
@@ -303,7 +304,7 @@ class Conquista {
     }
 };
 
-const conquistas = [
+let conquistas = [
     // Quadrados
     new Conquista("Primeiro click", "Clique pela primeira vez"),
     new Conquista("10 quadrados", "Consiga 10 quadrados"),
@@ -331,6 +332,8 @@ const conquistas = [
     new Conquista("Comissão de matemáticos", "Compre 100 matemáticos"),
     new Conquista("Quadro", "Compre 1 quadro"),
     new Conquista("Para que tantos quadros", "Compre 100 quadros"),
+    new Conquista("Impressora", "Compre 1 impressora"),
+    new Conquista("Impressionante", "Compre 100 impressoras"),
     new Conquista("Fábrica", "Compre 1 fábrica"),
     new Conquista("Conglomerado", "Compre 100 fábricas"),
     new Conquista("Engenheiro","Compre 1 engenheiro"),
@@ -352,6 +355,8 @@ const conquistas = [
     new Conquista("Matemática avançada", "Compre todas as melhorias de matemáticos"),
     new Conquista("Quadros melhores", "Compre 1 melhoria de quadros"),
     new Conquista("Lousa", "Compre todas as melhorias de quadros"),
+    new Conquista("Tinta de qualidade", "Compre 1 melhoria de impressoras"),
+    new Conquista("Melhor que impressora 3D", "Compre todas as melhorias de impressoras"),
     new Conquista("Fabricação intensa", "Compre 1 melhoria de fábricas"),
     new Conquista("Fábricas no topo", "Compre todas as melhorias de fábricas"),
     new Conquista("Lápis e papel","Compre 1 melhoria de engenheiro"),
@@ -388,23 +393,30 @@ function salvarDados() {
         quadrados,
         quadradosTotais,
         base,
-        co,
-        melhoriasTri,
-        tri,
         triangulos,
+        melhoriasTri,
+        tri, 
         a_pd1,
+        nApostas,
         mana,
         nclicks,
         magiaselecionada,
         usoumultiplicus,
-        perguntaescolhida,
-        conquistasObtidas,
+        magiasUsadas,
+        cliques10x,
         renasceu,
+        conseguiu1QuadradosAscendente,
         quadrados_ascendentes,
         valorParaGanhar1QuadradoAscendente,
+        co,
+        perguntas,
+        perguntaescolhida,
+        conquistas,
+        click
     };
 
     localStorage.setItem("estadoJogo", JSON.stringify(estado));
+    window.alert("Salvo")
 }
 
 function carregarDados() {
@@ -417,30 +429,39 @@ function carregarDados() {
         quadrados = estado.quadrados;
         quadradosTotais = estado.quadradosTotais;
         base = estado.base;
-        co = estado.co,
+        triangulos = estado.triangulos;
         melhoriasTri = estado.melhoriasTri;
         tri = estado.tri;
-        triangulos = estado.triangulos;
         a_pd1 = estado.a_pd1;
+        nApostas = estado.nApostas;
         mana = estado.mana;
         nclicks = estado.nclicks;
         magiaselecionada = estado.magiaselecionada;
         usoumultiplicus = estado.usoumultiplicus;
-        perguntaescolhida = estado.perguntaescolhida;
-        conquistasObtidas = estado.conquistasObtidas;
+        magiasUsadas = estado.magiasUsadas;
+        cliques10x = estado.cliques10x;
         renasceu = estado.renasceu;
+        conseguiu1QuadradosAscendente = estado.conseguiu1QuadradosAscendente;
         quadrados_ascendentes = estado.quadrados_ascendentes;
         valorParaGanhar1QuadradoAscendente = estado.valorParaGanhar1QuadradoAscendente;
+        co = estado.co;
+        perguntas = estado.perguntas;
+        perguntaescolhida = estado.perguntaescolhida;
+        conquistas = estado.conquistas;
+        click = estado.click;
+
     }
 
-    for (let categoria in melhorias) {
-        for (let melhoria in melhorias[categoria]) {
-            if (melhorias[categoria][melhoria]) {
-                const td = document.querySelector(`[data-melhoria="${melhoria}"]`);
-                if (td) {
-                    td.style.backgroundColor = "#f88c5d";
-                }
-            }
+    for (let key in co) {
+        let gerador = co[key];  // Obtém o gerador
+        if (gerador.m1.possui) {
+            document.getElementById(gerador.nome + 1).style.backgroundColor = "#f88c5d"; 
+        }
+        if (gerador.m2.possui) {
+            document.getElementById(gerador.nome + 2).style.backgroundColor = "#f88c5d"; 
+        }
+        if (gerador.m3.possui) {
+            document.getElementById(gerador.nome + 1).style.backgroundColor = "#f88c5d"; 
         }
     }
 
@@ -559,14 +580,16 @@ function carregarJson() {
 
                     click = dadosCarregados.click;
 
-                    for (let categoria in melhorias) {
-                        for (let melhoria in melhorias[categoria]) {
-                            if (melhorias[categoria][melhoria]) {
-                                const td = document.querySelector(`[data-melhoria="${melhoria}"]`);
-                                if (td) {
-                                    td.style.backgroundColor = "#f88c5d";
-                                }
-                            }
+                    for (let key in co) {
+                        let gerador = co[key];  // Obtém o gerador
+                        if (gerador.m1.possui) {
+                            document.getElementById(gerador.nome + 1).style.backgroundColor = "#f88c5d"; 
+                        }
+                        if (gerador.m2.possui) {
+                            document.getElementById(gerador.nome + 2).style.backgroundColor = "#f88c5d"; 
+                        }
+                        if (gerador.m3.possui) {
+                            document.getElementById(gerador.nome + 1).style.backgroundColor = "#f88c5d"; 
                         }
                     }
 
@@ -705,10 +728,10 @@ function alterar() {
     let manaText = document.getElementById("mana");
     manaText.innerText = "Mana: " + mana;
 
-    click = (base + (co.cur.n * co.cur.a) + (co.pro.n * co.pro.a) + (co.mat.n * co.mat.a) + (co.qua.n * co.qua.a) + (co.fab.n * co.fab.a) + (co.eng.n * co.eng.a) + (co.pog.n * co.pog.a)) * a_pd1;
+    click = (base + (co.cur.n * co.cur.a) + (co.pro.n * co.pro.a) + (co.mat.n * co.mat.a) + (co.qua.n * co.qua.a) + (co.imp.n * co.imp.a) + (co.fab.n * co.fab.a) + (co.eng.n * co.eng.a) + (co.pog.n * co.pog.a)) * a_pd1;
 
     if (renasceu === true) {
-        click = (base + (co.cur.n * co.cur.a) + (co.pro.n * co.pro.a) + (co.mat.n * co.mat.a) + (co.qua.n * co.qua.a) + (co.fab.n * co.fab.a) + (co.eng.n * co.eng.a) + (co.pog.n * co.pog.a)) * a_pd1 * (1 + quadrados_ascendentes / 10);
+        click = (base + (co.cur.n * co.cur.a) + (co.pro.n * co.pro.a) + (co.mat.n * co.mat.a) + (co.qua.n * co.qua.a) + (co.imp.n * co.imp.a) + (co.fab.n * co.fab.a) + (co.eng.n * co.eng.a) + (co.pog.n * co.pog.a)) * a_pd1 * (1 + quadrados_ascendentes / 10);
     }
 
     let quadradosporclickText = document.getElementById("quadradosporclickText")
@@ -728,13 +751,13 @@ function renascer() {
         base = 1
 
         co = {
-            cur: new Construcao("Cursores",100, 1, [500,],["Cursores duplos", "Múltiplos cursores", "Super cursores"]),
-            pro: new Construcao("Professores",3e3, 10, [15e3,],["Professores duplos", "Múltiplos professores", "Super professores"]),
-            mat: new Construcao("Matemáticos",1.3e5, 44, [6.5e5,],["Matemáticos duplos", "Múltiplos matemáticos", "Super matemáticos"]),
-            qua: new Construcao("Quadros",0.9e7, 305, [4.5e7,],["Quadros duplos", "Múltiplos quadros", "Super quadros"]),
-            fab: new Construcao("Fábricas",1.5e9, 5070, [7.5e9,],["Fábricas duplas", "Múltiplas fábricas", "Super fabricas"]),
-            eng: new Construcao("Engenheiros",2e11,674e2, [10e11,],["Engenheiros duplos", "Múltiplas engenheiros", "Super engenheiros"]),
-            pog: new Construcao("Programadores",2.5e13,8425e2,[12.5e13,],["Programadores duplos", "Múltiplos programadores", "Super programadores"]),
+            cur: new Gerador("Cursores",100, 1, [500,],["Cursores duplos", "Múltiplos cursores", "Super cursores"]),
+            pro: new Gerador("Professores",3e3, 10, [15e3,],["Professores duplos", "Múltiplos professores", "Super professores"]),
+            mat: new Gerador("Matemáticos",1.3e5, 44, [6.5e5,],["Matemáticos duplos", "Múltiplos matemáticos", "Super matemáticos"]),
+            qua: new Gerador("Quadros",0.9e7, 305, [4.5e7,],["Quadros duplos", "Múltiplos quadros", "Super quadros"]),
+            fab: new Gerador("Fábricas",1.5e9, 5070, [7.5e9,],["Fábricas duplas", "Múltiplas fábricas", "Super fabricas"]),
+            eng: new Gerador("Engenheiros",2e11,674e2, [10e11,],["Engenheiros duplos", "Múltiplas engenheiros", "Super engenheiros"]),
+            pog: new Gerador("Programadores",2.5e13,8425e2,[12.5e13,],["Programadores duplos", "Múltiplos programadores", "Super programadores"]),
         }
 
         for (let pegoutri in tri) {
@@ -913,8 +936,8 @@ function verificarConquistas(callback) {
     }
 
     //Melhorias
-    function verificarConquistasMelhorias(construcao, n) {
-        let melhoriasConquistas = [construcao.m1.possui, construcao.m2.possui, construcao.m3.possui]
+    function verificarConquistasMelhorias(Gerador, n) {
+        let melhoriasConquistas = [Gerador.m1.possui, Gerador.m2.possui, Gerador.m3.possui]
         if (n === 1) {
             if (melhoriasConquistas.includes(true)) {
                 return true
@@ -1445,16 +1468,16 @@ function producaoAutomatizada() {
 
 //compras
 
-function comprarConstrucao(construcao) {
-    if (construcao === "cur") {
+function comprarGerador(Gerador) {
+    if (Gerador === "cur") {
         co.cur.comprar();
-    } else if (construcao === "pro") {
+    } else if (Gerador === "pro") {
         co.pro.comprar();
-    } else if (construcao === "mat") {
+    } else if (Gerador === "mat") {
         co.mat.comprar();
-    } else if (construcao === "qua") {
+    } else if (Gerador === "qua") {
         co.qua.comprar();
-    } else if (construcao === "fab") {
+    } else if (Gerador === "fab") {
         co.fab.comprar();
     }
 

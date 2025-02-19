@@ -75,7 +75,7 @@
             <h2>Melhorias:</h2>
 
             <ul>
-                <li>Existem 6 tipos de melhorias: 1 para cada construção</li>
+                <li>Existem 1 tipo de melhoria para cada gerador</li>
                 <li>Cada tipo de melhoria possui 3 melhorias, quanto mais alto o nível da melhoria, mais caro e melhor fica a construção</li>
             </ul>
 
@@ -94,7 +94,7 @@
                 <li>Renascer fará com que você perca todos os seus quadrados, melhorias e construções</li>
                 <li>Renascer te dará um bônus de 10% de forma somativa para cada "quadrado ascendente" que você tiver</li>
                 <li>Você obtém quadrados ascendentes ao conseguir determinado numero de quadrados normais</li>
-                <li>Você pode renascer quando tiver conseguido no mínimo 1 quadrado ascendente</li>
+                <li>Você pode renascer quando tiver conseguido no mínimo 1 quadrado ascendente no renascimento atual</li>
                 <li>Você começa a produzir quadrados ascendentes a partir de 100mi de quadrados normais</li>
                 <li>As únicas coisas que você mantém são triângulos e melhorias de triângulos</li>
             </ul>
@@ -140,12 +140,17 @@
 
             <h2>Salvar</h2>
 
-            <p>O salvamento é feito automaticamente, mas se ocorrer algum erro, é sempre bom ter um arquivo reserva</p>
+            <p>O salvamento é feito automaticamente a cada minuto, mas se ocorrer algum erro, é sempre bom ter um arquivo reserva</p>
             <p>Clicar em salvar irá baixar um arquivo que pode ser usado para acessar seu save de qualquer dispositivo</p>
 
             <div>
-                <button onclick="salvarJson()">Salvar</button>
-                <button onclick="carregarJson()">Carregar</button>
+                <button onclick="salvarDados()">Salvar</button>
+                <button onclick="carregarDados()">Carregar</button>
+            </div>
+            <h2>Salvar em arquivo</h2>
+            <div>
+                <button onclick="salvarJson()">Exportar</button>
+                <button onclick="carregarJson()">Importar</button>
             </div>
         </section>
 
