@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu site incrivel</title>
-    <link rel="stylesheet" href="assets/global/menu.css">
+    <title>Meu site incrível</title>
     <link rel="stylesheet" href="assets/css/quadrado clicker.css">
 </head>
 <body data-title="Quadrado clicker">
@@ -12,179 +11,55 @@
     <script src="assets/global/menu.js"></script>
 
     <div id="main">
-        <section id="esquerda">
-            <h1 id="quadradotext">Quadrados: 0</h1>
-
-            <div id="quadrado" onclick="clique()"></div>
-        </section>
-
-        <div class="separador"></div>
-
-        <section id="centro">
-            <div id="botoes">
-                <button onclick="mudarMelhorias()">Melhorias</button>
-                <button onclick="mudarOutros()">Outros</button>
-                <button onclick="mudarAjuda()" >Ajuda</button>
-                <button onclick="mudarSalvamento()">Salvar</button>
-            </div>
-
-            <h1 id="quadradosporclickText">Quadrados por click: 1</h1>
-
-            <h1 id="triangulotext">Triângulos: 0</h1>
-
-        </section>
-
-        <div class="separador"></div>
-
-        <section id="direita">
-            <div class="construcao" onclick="comprarCur()">
-                <h2>Cursores</h2>
-                <h3 id="vCur">Preço: 100</h3>
-                <h3 id="aCur">Aumento: 1</h3>
-                <h4 id="nCur">0</h4>
-            </div>
-
-            <div class="construcao" onclick="comprarPro()">
-                <h2>Professores</h2>
-                <h3 id="vPro">Preço: 5k</h3>
-                <h3 id="aPro">Aumento: 10</h3>
-                <h4 id="nPro">0</h4>
-            </div>
-
-            <div class="construcao" onclick="comprarMat()">
-                <h2>Matemáticos</h2>
-                <h3 id="vMat">Preço: 130k</h3>
-                <h3 id="aMat">Aumento: 50</h3>
-                <h4 id="nMat">0</h4>
-            </div>
-
-            <div class="construcao" onclick="comprarQua()">
-                <h2>Quadros</h2>
-                <h3 id="vQua">Preço: 9mi</h3>
-                <h3 id="aQua">Aumento: 500</h3>
-                <h4 id="nQua">0</h4>
-            </div>
-
-            <div class="construcao" onclick="comprarFab()">
-                <h2>Fábricas</h2>
-                <h3 id="vFab">Preço: 650mi</h3>
-                <h3 id="aFab">Aumento: 10k</h3>
-                <h4 id="nFab">0</h4>
-            </div>
+        <section id="principal">
+            <section id="esquerda">
+                <h1 id="quadradotext">Quadrados: 0</h1>
+    
+                <div id="quadrado" onclick="clique()"></div>
+            </section>
+    
+            <div class="separador"></div>
+    
+            <section id="centro">
+                <div id="botoes">
+                    <button onclick="mudarMenu('melhorias')">Melhorias</button>
+                    <button onclick="mudarMenu('outros')">Outros</button>
+                    <button onclick="mudarMenu('ajuda')" >Ajuda</button>
+                    <button onclick="mudarMenu('salvamento')">Salvar</button>
+                </div>
+    
+                <h1 id="quadradosporclickText">Quadrados por click: 1</h1>
+    
+                <h1 id="triangulotext">Triângulos: 0</h1>
+    
+            </section>
+    
+            <div class="separador"></div>
+    
+            <section id="direita">
+                
+            </section>
         </section>
         
         <section id="melhorias" style="display: none;">
-            <table>
+            <h1 id="quadradotextMelhorias">Quadrados: 0</h1>
+
+            <div class="cores">
+                <div class="quadrado-pequeno" style="background-color: #fd6321;"></div>
+                <p>Não comprado</p>
+                <div class="quadrado-pequeno" style="background-color: #F88C5C;"></div>
+                <p>Comprado</p>
+            </div>
+
+            <table id="tabela-melhorias">
                 <tr>
-                    <td id="voltar" colspan="3"><button onclick="mudarMain()">Voltar</button></td>
-                </tr>
-                <tr>
-                    <td data-melhoria="b1" onclick="comprarMelhorias('Clique duplo', event)">
-                        <h2>Click duplo</h2>
-                        <p>O click base é 2x mais eficiente</p>
-                        <h3>Preço: 70</h3>
-                    </td>
-                    <td data-melhoria="b2" onclick="comprarMelhorias('Super clique', event)">
-                        <h2>Super click</h2>
-                        <p>O click base é 300x mais eficiente</p>
-                        <h3>Preço: 500k</h3>
-                    </td>
-                    <td data-melhoria="b3" onclick="comprarMelhorias('Mega clique', event)">
-                        <h2>Mega click</h2>
-                        <p>O click base é 100x mais eficiente</p>
-                        <h3>Preço: 40m</h3>
-                    </td>
-                </tr>
-                <tr>
-                    <td data-melhoria="c1" onclick="comprarMelhorias('Cursores duplos', event)">
-                        <h2>Cursores duplos</h2>
-                        <p>Cursores são 2x mais eficientes</p>
-                        <h3>Preço: 750</h3>
-                    </td>
-                    <td data-melhoria="c2" onclick="comprarMelhorias('Multiplos cursores', event)">
-                        <h2>Múltiplos cursores</h2>
-                        <p>Cursores são 5x mais eficientes</p>
-                        <h3>Preço: 100k</h3>
-                    </td>
-                    <td data-melhoria="c3" onclick="comprarMelhorias('Super cursores', event)">
-                        <h2>Super cursores</h2>
-                        <p>Cursores são 20x mais eficientes</p>
-                        <h3>Preço: 30m</h3>
-                    </td>
-                </tr>
-                <tr>
-                    <td data-melhoria="p1" onclick="comprarMelhorias('Professores duplos', event)">
-                        <h2>Professores duplos</h2>
-                        <p>Professores são 2x mais eficientes</p>
-                        <h3>Preço: 25k</h3>
-                    </td>
-                    <td data-melhoria="p2" onclick="comprarMelhorias('Escola', event)">
-                        <h2>Escola</h2>
-                        <p>Professores são 5x mais eficientes</p>
-                        <h3>Preço: 1,8m</h3>
-                    </td>
-                    <td data-melhoria="p3" onclick="comprarMelhorias('Super professores', event)">
-                        <h2>Super professores</h2>
-                        <p>Professores são 20x mais eficientes</p>
-                        <h3>Preço: 180m</h3>
-                    </td>
-                </tr>
-                <tr>
-                    <td data-melhoria="m1" onclick="comprarMelhorias('Matematica dupla', event)">
-                        <h2>Matemática dupla</h2>
-                        <p>Matemáticos são 2x mais eficientes</p>
-                        <h3>Preço: 600k</h3>
-                    </td>
-                    <td data-melhoria="m2" onclick="comprarMelhorias('Conjunto de matematicos', event)">
-                        <h2>Conjunto de matemáticos</h2>
-                        <p>Matemáticos são 5x mais eficientes</p>
-                        <h3>Preço: 80m</h3>
-                    </td>
-                    <td data-melhoria="m3" onclick="comprarMelhorias('Super matematicos', event)">
-                        <h2>Super matemáticos</h2>
-                        <p>Matemáticos são 20x mais eficientes</p>
-                        <h3>Preço: 1b</h3>
-                    </td>
-                </tr>
-                <tr>
-                    <td data-melhoria="q1" onclick="comprarMelhorias('Dois quadros', event)">
-                        <h2>Dois quadros</h2>
-                        <p>Quadros são 2x mais eficientes</p>
-                        <h3>Preço: 30m</h3>
-                    </td>
-                    <td data-melhoria="q2" onclick="comprarMelhorias('Quadrão', event)">
-                        <h2>Quadrão</h2>
-                        <p>Quadros são 5x mais eficientes</p>
-                        <h3>Preço: 200m</h3>
-                    </td>
-                    <td data-melhoria="q3" onclick="comprarMelhorias('Quadros poderosos', event)">
-                        <h2>Quadros poderosos</h2>
-                        <p>Quadros são 20x mais eficientes</p>
-                        <h3>Preço: 10b</h3>
-                    </td>
-                </tr>
-                <tr>
-                    <td data-melhoria="f1" onclick="comprarMelhorias('Duas fabricas', event)">
-                        <h2>Duas fabricas</h2>
-                        <p>Fabricas são 2x mais eficientes</p>
-                        <h3>Preço: 2,5b</h3>
-                    </td>
-                    <td data-melhoria="f2" onclick="comprarMelhorias('Começo da revolução', event)">
-                        <h2>Começo da revolução</h2>
-                        <p>Fabricas são 5x mais eficientes</p>
-                        <h3>Preço: 15b</h3>
-                    </td>
-                    <td data-melhoria="f3" onclick="comprarMelhorias('Super fabricas', event)">
-                        <h2>Super fabricas</h2>
-                        <p>Fabricas são 20x mais eficientes</p>
-                        <h3>Preço: 1t</h3>
-                    </td>
+                    <td id="voltar" colspan="3"><button onclick="mudarMenu('main')">Voltar</button></td>
                 </tr>
             </table>
         </section>
 
         <section id="ajuda" style="display: none;">
-            <button onclick="mudarMain()">Voltar</button>
+            <button onclick="mudarMenu('main')">Voltar</button>
 
             <h1>Ajuda</h1>
 
@@ -200,7 +75,7 @@
             <h2>Melhorias:</h2>
 
             <ul>
-                <li>Existem 6 tipos de melhorias: 1 para cada construção e 1 para o clique base(começa como 1)</li>
+                <li>Existem 1 tipo de melhoria para cada gerador</li>
                 <li>Cada tipo de melhoria possui 3 melhorias, quanto mais alto o nível da melhoria, mais caro e melhor fica a construção</li>
             </ul>
 
@@ -219,7 +94,7 @@
                 <li>Renascer fará com que você perca todos os seus quadrados, melhorias e construções</li>
                 <li>Renascer te dará um bônus de 10% de forma somativa para cada "quadrado ascendente" que você tiver</li>
                 <li>Você obtém quadrados ascendentes ao conseguir determinado numero de quadrados normais</li>
-                <li>Você pode renascer quando tiver conseguido no mínimo 1 quadrado ascendente</li>
+                <li>Você pode renascer quando tiver conseguido no mínimo 1 quadrado ascendente no renascimento atual</li>
                 <li>Você começa a produzir quadrados ascendentes a partir de 100mi de quadrados normais</li>
                 <li>As únicas coisas que você mantém são triângulos e melhorias de triângulos</li>
             </ul>
@@ -237,45 +112,61 @@
 
         <section id="outros" style="display: none;">
 
-            <button onclick="mudarMain()">Voltar</button>
+            <button onclick="mudarMenu('main')">Voltar</button>
 
             <h2>Outros menus</h2>
 
             <div id="botoesOutros">
                 
-                <button onclick="mudarTriângulos()">Triângulos</button>
+                <button onclick="mudarMenu('triangulos')">Triângulos</button>
 
-                <button onclick="mudarRenascer()">Renascer</button>
+                <button onclick="mudarMenu('renascer')">Renascer</button>
 
-                <button id="maquinadasorte" onclick="mudarMaquinadasorte()" style="display: none;">Máquina da sorte</button>
+                <button onclick="mudarMenu('conquistas')">Conquistas</button>
 
-                <button id="livromagico" onclick="mudarLivromagico()" style="display: none;">Livro mágico</button>
+                <button id="maquinadasorte" onclick="mudarMenu('maquinadasorte')" style="display: none;">Máquina da sorte</button>
 
-                <button id="quizmatematico" onclick="mudarQuizmatematico()" style="display: none;">Quiz matemático</button>
+                <button id="livromagico" onclick="mudarMenu('livromagico')" style="display: none;">Livro mágico</button>
 
-                <button id="skinquadrado" onclick="mudarSkinquadrado()" style="display: none;">Skin do quadrado</button>
+                <button id="quizmatematico" onclick="mudarMenu('quizmatematico')" style="display: none;">Quiz matemático</button>
+
+                <button id="skinquadrado" onclick="mudarMenu('skinquadrado')" style="display: none;">Skin do quadrado</button>
 
             </div>
         </section>
 
         <section id="salvar" style="display: none;">
-            <button onclick="mudarMain()" style="width: fit-content; height: fit-content;">Voltar</button>
+            <button onclick="mudarMenu('main')" style="width: fit-content; height: fit-content;">Voltar</button>
 
             <h2>Salvar</h2>
 
-            <p>O salvamento é feito altomanticamente, mas se ocorrer algum erro, é sempre bom ter um arquivo reserva</p>
-            <p>Clicar em salavr irá baixar um arquivo que pode ser usado para acessar seu save de qualquer dispositivo</p>
+            <p>O salvamento é feito automaticamente a cada minuto, mas se ocorrer algum erro, é sempre bom ter um arquivo reserva</p>
+            <p>Clicar em salvar irá baixar um arquivo que pode ser usado para acessar seu save de qualquer dispositivo</p>
 
             <div>
-                <button onclick="salvarJson()">Salvar</button>
-                <button onclick="carregarJson()">Carregar</button>
+                <button onclick="salvarDados()">Salvar</button>
+                <button onclick="carregarDados()">Carregar</button>
+            </div>
+            <h2>Salvar em arquivo</h2>
+            <div>
+                <button onclick="salvarJson()">Exportar</button>
+                <button onclick="carregarJson()">Importar</button>
             </div>
         </section>
 
         <section id="triangulos" style="display: none;">
+            <h1 id="triangulotextMelhorias">Triângulos: 0</h1>
+
+            <div class="cores">
+                <div class="quadrado-pequeno" style="background-color: #fd6321;"></div>
+                <p>Não comprado</p>
+                <div class="quadrado-pequeno" style="background-color: #F88C5C;"></div>
+                <p>Comprado</p>
+            </div>
+
             <table>
                 <tr>
-                    <td id="voltar" colspan="3"><button onclick="mudarMain()">Voltar</button></td>
+                    <td id="voltar" colspan="3"><button onclick="mudarMenu('main')">Voltar</button></td>
                 </tr>
 
                 <tr>
@@ -306,12 +197,12 @@
                     <td id="ms1" onclick="comprarMelhoriasTriangulos('Maquina da sorte', event)">
                         <h2>Maquina da sorte</h2>
                         <p>Adiciona um minijogo em que você pode apostar seus quadrados</p>
-                        <h3>Preço:3</h3>
+                        <h3>Preço:2</h3>
                     </td>
                     <td id="lm1" onclick="comprarMelhoriasTriangulos('Livro magico', event)">
                         <h2>Livro magico</h2>
                         <p>Adiciona um mini jogo em que você pode usar feitiços que ajudam no jogo principal</p>
-                        <h3>Preço:3</h3>
+                        <h3>Preço:2</h3>
                     </td>
                 </tr>
 
@@ -319,24 +210,24 @@
                     <td id="qm1" onclick="comprarMelhoriasTriangulos('Quiz matemático', event)">
                         <h2>Quiz matemático</h2>
                         <p>Adiciona um mini jogo em que você responde um quiz, se acertar ganha recompensas</p>
-                        <h3>Preço:3</h3>
+                        <h3>Preço:2</h3>
                     </td>
                     <td id="sq1" onclick="comprarMelhoriasTriangulos('Skin quadrado', event)">
                         <h2>Skin do quadrado</h2>
                         <p>Adiciona a opção de mudar o quadrado principal</p>
                         <h3>Preço:1</h3>
                     </td>
-                    <td>
-                        <h2></h2>
-                        <p></p>
-                        <h3></h3>
+                    <td id="pa1" onclick="comprarMelhoriasTriangulos('Produção automatizada', event)">
+                        <h2>Produção automatizada</h2>
+                        <p>Gera automaticamente 10% dos seus quadrados por click por segundo</p>
+                        <h3>Preço:3</h3>
                     </td>
                 </tr>
             </table>
         </section>
 
         <section id="renascer" style="display: none;">
-            <button onclick="mudarMain()" style="width: fit-content;">Voltar</button>
+            <button onclick="mudarMenu('main')" style="width: fit-content;">Voltar</button>
 
             <h2>Renascer</h2>
 
@@ -345,19 +236,36 @@
 
             <p>Ao renascer você perderá todos os seus quadrados, melhorias e construções</p>
 
-            <div><button onclick="confirmarRenascer()">Renascer</button></div>
+            <div><button onclick="mudarMenu('confirmarRenascer')">Renascer</button></div>
 
             <div id="confirmarRenascer" style="display: none;">
                 <h2>Você tem certeza que deseja renascer?</h2>
                 <p id="consiga1quadrado"></p>
                 <button onclick="renascer()">Renascer</button>
-                <button onclick="mudarMain()">Cancelar</button>
+                <button onclick="mudarMenu('main')">Cancelar</button>
             </div>
 
         </section>
 
+        <section id="conquistas" style="display: none;">
+            <button onclick="mudarMenu('main')" style="width: fit-content; height: fit-content;">Voltar</button>
+
+            <div class="cores">
+                <div class="quadrado-pequeno" style="background-color: white;"></div>
+                <p>Não conquistado</p>
+                <div class="quadrado-pequeno" style="background-color: #ffc107;"></div>
+                <p>Conquistado</p>
+            </div>
+
+            <h2>Conquistas</h2>
+            <div id="container-conquistas">
+                <div id="lista-conquistas">                    
+                </div>
+            </div>
+        </section>
+
         <section id="maquina-da-sorte" style="display: none;">
-            <button onclick="mudarMain()" style="width: fit-content; height: fit-content;">Voltar</button>
+            <button onclick="mudarMenu('main')" style="width: fit-content; height: fit-content;">Voltar</button>
 
                 <div id="maquinaeform">
                     <div id="maquina">
@@ -383,10 +291,13 @@
         </section>
 
         <section id="livro-magico" style="display: none;">
-            <button onclick="mudarMain()" style="width: fit-content; height: fit-content;">Voltar</button>
+            <button onclick="mudarMenu('main')" style="width: fit-content; height: fit-content;">Voltar</button>
 
             <div id="livro">
                 <div id="feiticos">
+                    <div class="feitico" onclick="mostrarFeitico('Aresto clicum')">
+                        <h2>Aresto clicum</h2>
+                    </div>
                     <div class="feitico" onclick="mostrarFeitico('Constructo')">
                         <h2>Constructo</h2>
                     </div>
@@ -419,7 +330,7 @@
         </section>
 
         <section id="quiz-matematico" style="display: none;">
-            <button onclick="mudarMain()" style="width: fit-content; height: fit-content;">Voltar</button>
+            <button onclick="mudarMenu('main')" style="width: fit-content; height: fit-content;">Voltar</button>
             
             <div id="quiz">
                 <h2 id="pergunta">Comece o quiz para receber a pergunta</h2>
@@ -444,7 +355,7 @@
         </section>
 
         <section id="skin-quadrado" style="display: none;">
-            <button onclick="mudarMain()" style="width: fit-content; height: fit-content;">Voltar</button>
+            <button onclick="mudarMenu('main')" style="width: fit-content; height: fit-content;">Voltar</button>
 
             <h2>Escolha a Skin</h2>
 

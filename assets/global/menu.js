@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const updates = document.getElementById('updates');
             const calculadora = document.getElementById('calculadora');
             const blocoNotas = document.getElementById('bloco')
+            const configuracoes = document.getElementById('configuracoes');
 
             let draggedElement = null;
 
@@ -78,6 +79,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
             blocoNotas.addEventListener('mousedown', (e) => {
                 draggedElement = blocoNotas;
+                const rect = draggedElement.getBoundingClientRect();
+                const shiftX = e.clientX - rect.left;
+                const shiftY = e.clientY - rect.top;
+
+                // Função para mover o painel
+                const moveAt = (pageX, pageY) => {
+                    draggedElement.style.left = `${pageX - shiftX - window.scrollX}px`;
+                    draggedElement.style.top = `${pageY - shiftY - window.scrollY}px`;
+                };
+
+                const onMouseMove = (event) => {
+                    moveAt(event.pageX, event.pageY);
+                };
+
+                // Começa a mover com o mouse
+                document.addEventListener('mousemove', onMouseMove);
+
+                // Solta o painel ao soltar o mouse
+                document.addEventListener('mouseup', () => {
+                    draggedElement = null;
+                    document.removeEventListener('mousemove', onMouseMove);
+                }, { once: true });
+            });
+
+            configuracoes.addEventListener('mousedown', (e) => {
+                draggedElement = configuracoes;
                 const rect = draggedElement.getBoundingClientRect();
                 const shiftX = e.clientX - rect.left;
                 const shiftY = e.clientY - rect.top;
@@ -161,6 +188,15 @@ function blocoNotas(estado) {
         blocoNotas.style.display = "none";
     } else if (estado === false) {
         blocoNotas.style.display = "block";
+    }
+}
+
+function configuracoes(estado) {
+    let configuracoes = document.getElementById("configuracoes");
+    if (estado === true) {
+        configuracoes.style.display = "none";
+    } else if (estado === false) {
+        configuracoes.style.display = "block";
     }
 }
 
@@ -332,3 +368,41 @@ function saveNotes() {
     localStorage.setItem('notes', JSON.stringify(notes));
 }
 /* bloco de notas */
+
+/* Configurações */
+
+estadoBarra = true;
+estadoArcoIris = true;
+
+function desativarBarra() {
+    let titulo = document.getElementById("title");
+    let barra = document.getElementById("barra-main");
+    let botaoMenu = document.getElementById("botao-menu-lateral-reserva");
+    
+    if (estadoBarra) {
+        titulo.style.display = "none";
+        barra.style.display = "none";
+        botaoMenu.style.display = "block";
+        estadoBarra = false;
+    } else if (estadoBarra === false) {
+        titulo.style.display = "block";
+        barra.style.display = "flex";
+        botaoMenu.style.display = "none";
+        estadoBarra = true;
+    }
+}
+
+function desativarArcoIris() {
+    let barra = document.getElementById("barra-main");
+
+    if (estadoArcoIris) {
+        barra.style.background = "green";
+        estadoArcoIris = false;
+    } else if (estadoArcoIris === false) {
+        barra.style.background = "linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet, red)";
+        barra.style.backgroundSize = "300% 100%";
+        estadoArcoIris = true;
+    }
+
+}
+/* Configurações */

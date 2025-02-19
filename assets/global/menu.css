@@ -2,6 +2,7 @@ body {
     color:#333;
     padding: 0;
     margin: 0;
+    font-family: sans-serif;
 }
 
 html {
@@ -47,19 +48,23 @@ nav#barra-main {
     z-index: 100;
 }
 
-nav#barra-main div img {
+.botao-menu-lateral img {
     width: 36px;
     position: absolute;
     transition: 0.3s, transform 0.3s;
 }
 
-nav#barra-main div img:hover {
+.botao-menu-lateral img:hover {
     transform: scale(1.25);
 }
 
-nav#barra-main div {
+.botao-menu-lateral {
     width: fit-content;
     height: fit-content;
+}
+
+#botao-menu-lateral-reserva {
+    margin-left: 10px;
 }
 
 h6#titulo {
@@ -329,3 +334,86 @@ textarea {
 }
 
 /* bloco de notas*/
+
+/* configurações */
+
+div#configuracoes {
+    left: 20%;
+    display: flex;
+    width: 40%;
+    padding: 10px; /* Adiciona espaço interno */
+    background-color: #dfdfdf; /* Cor de fundo leve */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra leve */
+    box-sizing: border-box; /* Inclui padding e border no tamanho total */
+    position: fixed;
+    z-index: 101;
+}
+
+div#configuracoes:active {
+    cursor: move;
+    user-select: none; /* Impede a seleção de texto */
+}
+
+div#configuracoes h2 {
+    text-align: center;
+    color: black;
+}
+
+div#configuracoes h3 {
+    font-size: medium;
+    color: black;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 25px;
+}
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 25px;
+}
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 17px;
+    width: 17px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+input:checked + .slider {
+    background-color: #4CAF50;
+}
+input:checked + .slider:before {
+    transform: translateX(25px);
+}
+
+@keyframes moverBola {
+    from {
+        left: 0;
+        color: white;
+    }
+    to {
+        left: 60%;
+        color: black;
+    }
+}
+
+/* configurações */

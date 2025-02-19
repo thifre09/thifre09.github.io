@@ -1,3 +1,8 @@
+<head>
+    <link rel="stylesheet" href="assets/global/menu.css">
+    <link rel="stylesheet" href="assets/global/global.css">
+</head>
+
 <aside id="menu-lateral" style="display: none;">
     <div id="fechar-menu-lateral">
         <img src="assets/images/icones/cruz.png" style="width: 50px;" onclick="abrirMenu(true)">
@@ -6,23 +11,33 @@
     <button onclick="calculadora(false)">Calculadora</button>
     <button onclick="blocoNotas(false)">Bloco de notas</button>
     <button>Conquistas(Em breve)</button>
+    <button onclick="configuracoes(false)">Configurações</button>
 </aside>
 
 <h1 id="title"><a href="index.html">Meu site incrível</a></h1>
 
 <nav id="barra-main">
-    <div onclick="abrirMenu(false)" id="botao-menu-lateral"><img src="assets/images/icones/menu.png"></div>
+    <div onclick="abrirMenu(false)" class="botao-menu-lateral"><img src="assets/images/icones/menu.png"></div>
     <h6 id="titulo"><a href="#title">Bem vindo ao incrível site</a></h6>
 </nav>
+
+<div onclick="abrirMenu(false)" class="botao-menu-lateral" id="botao-menu-lateral-reserva" style="display: none;"><img src="assets/images/icones/menu.png"></div>
 
 <div id="updates" style="display: none;">
     <div class="fechar-container">
         <img src="assets/images/icones/cruz.png" class="fechar" onclick="NotasAtualizacao(true)">
     </div>
 
-    <h5>Ver. Beta 2.0</h5>
+    <h5>Ver. Beta 2.1</h5>
 
     <h3>Notas da atualização</h3>
+
+    <h4>Beta 2.1</h4>
+    <ul>
+        <li>Quadrado clicker: grande atualização</li>
+        <li>Pequenas mudanças no layout de algumas páginas</li>
+        <li>Correção de pequenos bugs</li>
+    </ul>
 
     <h4>Beta 2.0</h4>
     <ul>
@@ -37,7 +52,6 @@
         <li>Curiosidades: adicionadas curiosidades sobre objetos</li>
         <li>Review de jogos: adicionado a review de 1 jogo, e mudanças no sumário</li>
         <li>Criação da aba codificador e cores</li>
-        <li>Concluído a aba  codificador e cores</li>
         <li>Mudança na mensagem exibida no menu principal</li>
         <li>Correção de diversão erros gramaticais</li>
     </ul>
@@ -201,5 +215,28 @@
     <button onclick="addNote()">Adicionar Nota</button>
     <div id="noteContainer" class="note-container">
         <!-- Notas serão adicionadas aqui -->
+    </div>
+</div>
+
+<div id="configuracoes" style="display: none;">
+    <div class="fechar-container">
+        <img src="assets/images/icones/cruz.png" class="fechar" onclick="configuracoes(true)">
+    </div>
+    <h2>Configurações</h2>
+
+    <h3>Desativar a barra principal</h3>
+    <div class="switch">
+        <label>
+            <input type="checkbox" class="toggleSwitch" onclick="desativarBarra()">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <h3>Desativar o efeito arco-íris da barra principal</h3>
+    <div class="switch">
+        <label>
+            <input type="checkbox" class="toggleSwitch" onclick="desativarArcoIris()">
+            <span class="slider"></span>
+        </label>
     </div>
 </div>
