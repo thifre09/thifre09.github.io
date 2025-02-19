@@ -416,7 +416,6 @@ function salvarDados() {
     };
 
     localStorage.setItem("estadoJogo", JSON.stringify(estado));
-    window.alert("Salvo")
 }
 
 function carregarDados() {
@@ -1549,5 +1548,6 @@ function comprarMelhoriasTriangulos(melhoria, evento) {
     alterar()
 }
 
+setInterval(salvarDados, 60000);
 //compras
 
