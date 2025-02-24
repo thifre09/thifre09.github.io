@@ -1,6 +1,5 @@
 <head>
     <link rel="stylesheet" href="assets/global/menu.css">
-    <link rel="stylesheet" href="assets/global/global.css">
 </head>
 
 <aside id="menu-lateral" style="display: none;">
@@ -28,131 +27,157 @@
         <img src="assets/images/icones/cruz.png" class="fechar" onclick="NotasAtualizacao(true)">
     </div>
 
+    <div class="dropdown">
+        <button>Geral</button>
+        <div class="dropdown-content">
+            <button onclick="mudarNotasAtualizacao('geral')">Geral</button>
+            <button onclick="mudarNotasAtualizacao('quadrado-clicker')">Quadrado clicker</button>
+        </div>
+    </div>
+
     <h5>Ver. Beta 2.1</h5>
 
     <h3>Notas da atualização</h3>
 
-    <h4>Beta 2.1</h4>
-    <ul>
-        <li>Quadrado clicker: grande atualização</li>
-        <li>Pequenas mudanças no layout de algumas páginas</li>
-        <li>Correção de pequenos bugs</li>
-    </ul>
+    <div id="geral-updates">
+        
+        <h4>Beta 2.1</h4>
+        <ul>
+            <li><span onclick="mudarNotasAtualizacao('quadrado-clicker')">Quadrado clicker</span>: grande atualização</li>
+            <li>Pequenas mudanças no layout de algumas páginas</li>
+            <li>Correção de pequenos bugs</li>
+        </ul>
 
-    <h4>Beta 2.0</h4>
-    <ul>
-        <li>Mudanças no layout de quase todas as páginas</li>
-        <li>Padronização do menu</li>
-        <li>Criação	de um menu lateral no menu</li>
-        <li>Criação de uma calculadora</li>
-        <li>Remoção do bloco de notas e notas de atualização do menu principal e adicionado à barra lateral</li>
-        <li>Quadrado clicker: adição de uma opção para colocar imagens no quadrado e balanceamento de algumas melhorias</li>
-        <li>Menu principal: O layout da página foi completamente refeito</li>
-        <li>Memes: adicionado 4 memes</li>
-        <li>Curiosidades: adicionadas curiosidades sobre objetos</li>
-        <li>Review de jogos: adicionado a review de 1 jogo, e mudanças no sumário</li>
-        <li>Criação da aba codificador e cores</li>
-        <li>Mudança na mensagem exibida no menu principal</li>
-        <li>Correção de diversão erros gramaticais</li>
-    </ul>
+        <h4>Beta 2.0</h4>
+        <ul>
+            <li>Mudanças no layout de quase todas as páginas</li>
+            <li>Padronização do menu</li>
+            <li>Criação	de um menu lateral no menu</li>
+            <li>Criação de uma calculadora</li>
+            <li>Remoção do bloco de notas e notas de atualização do menu principal e adicionado à barra lateral</li>
+            <li>Quadrado clicker: adição de uma opção para colocar imagens no quadrado e balanceamento de algumas melhorias</li>
+            <li>Menu principal: O layout da página foi completamente refeito</li>
+            <li>Memes: adicionado 4 memes</li>
+            <li>Curiosidades: adicionadas curiosidades sobre objetos</li>
+            <li>Review de jogos: adicionado a review de 1 jogo, e mudanças no sumário</li>
+            <li>Criação da aba codificador e cores</li>
+            <li>Mudança na mensagem exibida no menu principal</li>
+            <li>Correção de diversão erros gramaticais</li>
+        </ul>
 
-    <h4>Beta 1.3</h4>
-    <uL>
-        <li>Criação da aba quadrado clicker</li>
-        <li>Quadrado clicker: Criação do jogo todo</li>
-        <li>Review de jogos: Adicionado novas reviews</li>
-    </uL>
+        <h4>Beta 1.3</h4>
+        <uL>
+            <li>Criação da aba quadrado clicker</li>
+            <li>Quadrado clicker: Criação do jogo todo</li>
+            <li>Review de jogos: Adicionado novas reviews</li>
+        </uL>
 
-    <h4>Beta 1.2</h4>
-    <ul>
-        <li>Criação da aba curiosidades</li>
-        <li>curiosidades: Adição de 4 categorias de curiosidades</li>
-        <li>Python: Agora a aba se ajusta corretamente no celular</li>
-        <li>Memes: Adicionado 3 memes</li>
-    </ul>
+        <h4>Beta 1.2</h4>
+        <ul>
+            <li>Criação da aba curiosidades</li>
+            <li>curiosidades: Adição de 4 categorias de curiosidades</li>
+            <li>Python: Agora a aba se ajusta corretamente no celular</li>
+            <li>Memes: Adicionado 3 memes</li>
+        </ul>
 
-    <h4>Beta 1.1</h4>
-    <ul>
-        <li>Criação da aba Batatas</li>
-        <li>Batatas: Adição de um quiz sobre curiosidades aleatórias</li>
-        <li>Batatas: Adição de um botão para verificar seus acertos</li>
-        <li>Agora a "barra de navegação" desce junto com o resto da página</li>
-        <li>Mudança no layout de algumas abas para se ajustar melhor em celulares</li>
-    </ul>
+        <h4>Beta 1.1</h4>
+        <ul>
+            <li>Criação da aba Batatas</li>
+            <li>Batatas: Adição de um quiz sobre curiosidades aleatórias</li>
+            <li>Batatas: Adição de um botão para verificar seus acertos</li>
+            <li>Agora a "barra de navegação" desce junto com o resto da página</li>
+            <li>Mudança no layout de algumas abas para se ajustar melhor em celulares</li>
+        </ul>
 
-    <br>
+        <br>
 
-    <h4>Beta 1.0</h4>
-    <ul>
-        <li>Pequenas mudanças no layout de algumas páginas</li>
-        <li>Review de jogos: Adição de mais jogos</li>
-        <li>Python: Criação do tópico "funções"</li>
-        <li>Python: Criação das explicações "for", "while", "break, continue, pass", "Exemplo complexo", "Declarando uma função", "return e None", "Global" e "Exemplo"</li>
-        <li>Python: Adicionado uma mensagem no final da página</li>
-    </ul>
+        <h4>Beta 1.0</h4>
+        <ul>
+            <li>Pequenas mudanças no layout de algumas páginas</li>
+            <li>Review de jogos: Adição de mais jogos</li>
+            <li>Python: Criação do tópico "funções"</li>
+            <li>Python: Criação das explicações "for", "while", "break, continue, pass", "Exemplo complexo", "Declarando uma função", "return e None", "Global" e "Exemplo"</li>
+            <li>Python: Adicionado uma mensagem no final da página</li>
+        </ul>
 
-    <br>
+        <br>
 
-    <h4>Alfa 5.1</h4>
-    <ul>
-        <li>Removido o menu de navegação, agora ele fica apenas no menu principal</li>
-        <li>Adicionado a parte central no menu principal</li>
-        <li>Agora no local que o menu de navegação ficava, há uma faixa colorida dando boas vindas</li>
-        <li>Corrigido um bug em que as palavras "editar" e "salvar" não apareciam por completo nas notas</li>
-    </ul>
+        <h4>Alfa 5.1</h4>
+        <ul>
+            <li>Removido o menu de navegação, agora ele fica apenas no menu principal</li>
+            <li>Adicionado a parte central no menu principal</li>
+            <li>Agora no local que o menu de navegação ficava, há uma faixa colorida dando boas vindas</li>
+            <li>Corrigido um bug em que as palavras "editar" e "salvar" não apareciam por completo nas notas</li>
+        </ul>
 
-    <br>
+        <br>
 
-    <h4>Alfa 5.0</h4>
-    <ul>
-        <li>Números: Adição dos números até o 100</li>
-        <li>Python: Adição das explicações "len() e range()", "Funções de conversão" e "input()"</li>
-        <li>Python: Criação do tópico "Loops"</li>
-        <li>Memes: Criação do modelo para todos os memes</li>
-        <li>Memes: Adição de 6 memes</li>
-    </ul>
+        <h4>Alfa 5.0</h4>
+        <ul>
+            <li>Números: Adição dos números até o 100</li>
+            <li>Python: Adição das explicações "len() e range()", "Funções de conversão" e "input()"</li>
+            <li>Python: Criação do tópico "Loops"</li>
+            <li>Memes: Criação do modelo para todos os memes</li>
+            <li>Memes: Adição de 6 memes</li>
+        </ul>
 
-    <br>
+        <br>
 
-    <h4>Alfa 4.0</h4>
-    <ul>
-        <li>Python: Criação do tópico "if, elif e else" e "Outras funções e operadores básicos"</li>
-        <li>Python: Adição das explicações "Tuplas", "Dicionários", "if", "elif", "else", "if e elif", "Mais exemplos", "and, or e not" e "Parenteses e operações" </li>
-        <li>Criação da aba Review de jogos</li>
-        <li>Review de jogos: Criação do modelo da review de todos os jogos</li>
-        <li>Review de jogos: Adição da review de 21 jogos</li>
-        <li>Números: Adição das descrições dos números até o 61</li>
-        <li>Review de jogos: Criação de um sumário</li>
-    </ul>
+        <h4>Alfa 4.0</h4>
+        <ul>
+            <li>Python: Criação do tópico "if, elif e else" e "Outras funções e operadores básicos"</li>
+            <li>Python: Adição das explicações "Tuplas", "Dicionários", "if", "elif", "else", "if e elif", "Mais exemplos", "and, or e not" e "Parenteses e operações" </li>
+            <li>Criação da aba Review de jogos</li>
+            <li>Review de jogos: Criação do modelo da review de todos os jogos</li>
+            <li>Review de jogos: Adição da review de 21 jogos</li>
+            <li>Números: Adição das descrições dos números até o 61</li>
+            <li>Review de jogos: Criação de um sumário</li>
+        </ul>
 
-    <br>
+        <br>
 
-    <h4>Alfa 3.0</h4>
-    <ul>
-        <li>Python: Exclusão do tópico "valores primitivos" e criação do tópico "variáveis"</li>
-        <li>Python: Adição das explicações "função print", "declarar variáveis", "tipos primitivos", "outros tipos de valores" e "operadores relacionais"</li>
-        <li>Números: Criação do modelo para cada número</li>
-        <li>Números: Adição das descrições dos números até o 50</li>
-        <li>Python: Criação do tópico "Listas, tuplas e dicionários" e adição das explicações "Listas" e "Alterando listas"</li>
-    </ul>
+        <h4>Alfa 3.0</h4>
+        <ul>
+            <li>Python: Exclusão do tópico "valores primitivos" e criação do tópico "variáveis"</li>
+            <li>Python: Adição das explicações "função print", "declarar variáveis", "tipos primitivos", "outros tipos de valores" e "operadores relacionais"</li>
+            <li>Números: Criação do modelo para cada número</li>
+            <li>Números: Adição das descrições dos números até o 50</li>
+            <li>Python: Criação do tópico "Listas, tuplas e dicionários" e adição das explicações "Listas" e "Alterando listas"</li>
+        </ul>
 
-    <br>
+        <br>
 
-    <h4>Alfa 2.0</h4>
-    <ul>
-        <li>Criação das abas: Números e Python</li>
-        <li>Criação de um bloco de notas</li>
-        <li>Python: Adição dos tópicos "conceitos básicos" e "valores primitivos"</li>
-        <li>Python: Adição da explicação "comentários"</li>
-    </ul>
+        <h4>Alfa 2.0</h4>
+        <ul>
+            <li>Criação das abas: Números e Python</li>
+            <li>Criação de um bloco de notas</li>
+            <li>Python: Adição dos tópicos "conceitos básicos" e "valores primitivos"</li>
+            <li>Python: Adição da explicação "comentários"</li>
+        </ul>
 
-    <br>
+        <br>
 
-    <h4>Alfa 1.0</h4>
-    <ul>
-        <li>Criação do site</li>
-        <li>Criação da aba Memes</li>
-    </ul>
+        <h4>Alfa 1.0</h4>
+        <ul>
+            <li>Criação do site</li>
+            <li>Criação da aba Memes</li>
+        </ul>
+    </div>
+
+    <div id="quadrado-clicker-updates" style="display: none;">
+        <h4>Beta 2.1</h4>
+        <ul>
+            <li>Adicionado um sistema de conquistas</li>
+            <li>Adicionado uma melhoria de triângulo que gera quadrados automaticamente</li>
+            <li>Adicionado 3 novos geradores</li>
+            <li>Mudanças nos preços dos geradores e melhorias</li>
+            <li>Melhorado o sistema de salvamento</li>
+            <li>Melhorias visuais</li>
+            <li>Mais perguntas no quiz matemático</li>
+            <li>Aumentado o limite de quadrados</li>
+            <li>Correção de pequenos bugs</li>
+        </ul>
+    </div>
         
 </div>
 

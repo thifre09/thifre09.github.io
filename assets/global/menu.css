@@ -149,11 +149,63 @@ img.fechar:hover {
     cursor: pointer;
 }
 
+@media (max-width: 600px) {
+    aside#menu-lateral {
+        width: 50%;
+    }
 
+    @keyframes abrirMenu {
+        from {right: 100%;}
+        to {right: 50%;}
+    }
+    
+    @keyframes fecharMenu {
+        from {right: 50%;}
+        to {right: 100%;}
+    }
+}
 
 
 
 /* notas da atualização */
+
+.dropdown {
+    display: block;
+    width: fit-content;
+}
+
+.dropdown > button {
+    width: fit-content;
+    margin: 10px 0 0 0;
+    border: none;
+    font-size: larger;
+    background: linear-gradient(40deg, #66BB6A, #00ff0d);
+}
+
+.dropdown-content {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    background-color: rgba(199, 199, 199, 0.950);
+    min-width: 40%;
+    max-height: 30vh;
+    padding: 5px;
+    box-shadow: 2px 2px 3px;
+    overflow: auto;
+}
+
+.dropdown-content button {
+    width: fit-content;
+    border: none;
+    background: linear-gradient(40deg, #66BB6A, #00ff0d);
+    margin: 2px;
+    font-size: large;
+}
+
+.dropdown:hover .dropdown-content {
+    display: flex;
+}
+
 div#updates {
     width: 30%;
     padding: 10px;
@@ -169,6 +221,12 @@ div#updates {
     left: 20px; /* Posição inicial */
     cursor: default; /* Exibe o cursor de movimento */
     z-index: 101;
+}
+
+div#updates li > span {
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 div#updates > h3 {
