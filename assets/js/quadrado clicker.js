@@ -295,8 +295,6 @@ let perguntaescolhida = null;
 
 //conquistas
 class Conquista {
-    static conquistasObtidas = 0;
-
     constructor(nome, descricao) {
         this.nome = nome;
         this.descricao = descricao;
@@ -389,6 +387,9 @@ let click = 1
 //principais funções
 
 function salvarDados() {
+    let respondidas = Pergunta.respondidas;
+    let acertos = Pergunta.acertos;
+    let erros = Pergunta.erros;
     const estado = {
         quadrados,
         quadradosTotais,
@@ -412,7 +413,11 @@ function salvarDados() {
         perguntas,
         perguntaescolhida,
         conquistas,
-        click
+        click,
+
+        respondidas,
+        acertos,
+        erros
     };
 
     localStorage.setItem("estadoJogo", JSON.stringify(estado));
@@ -448,6 +453,10 @@ function carregarDados() {
         perguntaescolhida = estado.perguntaescolhida;
         conquistas = estado.conquistas;
         click = estado.click;
+
+        Pergunta.respondidas = estado.respondidas;
+        Pergunta.acertos = estado.acertos;
+        Pergunta.erros = estado.erros;
 
     }
 
@@ -495,6 +504,10 @@ function carregarDados() {
 
 function salvarJson() {
     // Todas as variáveis do jogo
+
+    let respondidas = Pergunta.respondidas;
+    let acertos = Pergunta.acertos;
+    let erros = Pergunta.erros;
     const estadoJogo = {
         quadrados,
         quadradosTotais,
@@ -509,11 +522,14 @@ function salvarJson() {
         magiaselecionada,
         usoumultiplicus,
         perguntaescolhida,
-        conquistasObtidas,
         renasceu,
         quadrados_ascendentes,
         valorParaGanhar1QuadradoAscendente,
-        click
+        click,
+
+        respondidas,
+        acertos,
+        erros
     };
 
     // Converte o estado para JSON
@@ -572,12 +588,15 @@ function carregarJson() {
 
                     perguntaescolhida = dadosCarregados.perguntaescolhida;
 
-                    conquistasObtidas = dadosCarregados.conquistasObtidas;
                     renasceu = dadosCarregados.renasceu;
                     quadrados_ascendentes = dadosCarregados.quadrados_ascendentes;
                     valorParaGanhar1QuadradoAscendente = dadosCarregados.valorParaGanhar1QuadradoAscendente;
 
                     click = dadosCarregados.click;
+
+                    Pergunta.respondidas = dadosCarregados.respondidas;
+                    Pergunta.acertos = dadosCarregados.acertos;
+                    Pergunta.erros = dadosCarregados.erros;
 
                     for (let key in co) {
                         let gerador = co[key];  // Obtém o gerador
