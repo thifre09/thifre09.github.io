@@ -179,6 +179,9 @@ function mudarNotasAtualizacao(divId) {
     divs[0].style.display = "block"
     divs[1].style.display = "block"
     document.getElementById(divId+"-updates").style.display = "block"
+
+    let button = document.getElementById("dropdown-button")
+    button.innerText = (divId.charAt(0).toUpperCase() + divId.slice(1)).replace("-"," ");
 }
 
 function calculadora(estado) {

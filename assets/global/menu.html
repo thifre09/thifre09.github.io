@@ -28,18 +28,24 @@
     </div>
 
     <div class="dropdown">
-        <button>Geral</button>
+        <button id="dropdown-button">Geral</button>
         <div class="dropdown-content">
             <button onclick="mudarNotasAtualizacao('geral')">Geral</button>
             <button onclick="mudarNotasAtualizacao('quadrado-clicker')">Quadrado clicker</button>
         </div>
     </div>
 
-    <h5>Ver. Beta 2.1</h5>
+    <h5>Ver. Beta 2.1.1</h5>
 
     <h3>Notas da atualização</h3>
 
     <div id="geral-updates">
+
+        <h4>Beta 2.1.1</h4>
+        <ul>
+            <li>Mudança nas notas da atualização</li>
+            <li>Atualização no <span onclick="mudarNotasAtualizacao('quadrado-clicker')">Quadrado clicker</span></li>
+        </ul>
         
         <h4>Beta 2.1</h4>
         <ul>
@@ -165,6 +171,11 @@
     </div>
 
     <div id="quadrado-clicker-updates" style="display: none;">
+        <h4>Beta 2.1.1</h4>
+        <ul>
+            <li>Correção de alguns bugs</li>
+        </ul>
+
         <h4>Beta 2.1</h4>
         <ul>
             <li>Adicionado um sistema de conquistas</li>
