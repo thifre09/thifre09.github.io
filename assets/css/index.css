@@ -111,6 +111,11 @@ div#central {
     animation: mudarNumeros 40s infinite linear, texto 10s infinite;
 }
 
+#poder-do-css {
+    background: no-repeat center;
+    animation: mudarPoderDoCss 40s infinite linear, texto 10s infinite;
+}
+
 #python {
     background: no-repeat center;
     animation: mudarPython 40s infinite linear, texto 10s infinite;
@@ -395,6 +400,45 @@ div#central {
     }
     100% {
         background-image: url('../images/links/numeros/num1.png');
+        background-size: cover;
+    }
+}
+
+@keyframes mudarPoderDoCss {
+    0% {
+        background-image: url('../images/links/poder-do-css/pcs1.png');
+        background-size: cover;
+    }
+    12.5% {
+        background-image: url('../images/links/poder-do-css/pcs2.png');
+        background-size: cover;
+    }
+    25% {
+        background-image: url('../images/links/poder-do-css/pcs3.jfif');
+        background-size: cover;
+    }
+    37.5% {
+        background-image: url('../images/links/poder-do-css/pcs4.png');
+        background-size: cover;
+    }
+    50% {
+        background-image: url('../images/links/poder-do-css/pcs5.jfif');
+        background-size: cover;
+    }
+    62.5% {
+        background-image: url('../images/links/poder-do-css/pcs6.jfif');
+        background-size: cover;
+    }
+    75% {
+        background-image: url('../images/links/poder-do-css/pcs7.jfif');
+        background-size: cover;
+    }
+    87.5% {
+        background-image: url('../images/links/poder-do-css/pcs8.jfif');
+        background-size: cover;
+    }
+    100% {
+        background-image: url('../images/links/poder-do-css/pcs1.png');
         background-size: cover;
     }
 }

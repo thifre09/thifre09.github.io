@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function abrirMenu(estado) {
     let barra = document.getElementById("menu-lateral");
-    let botao = document.getElementById("botao-menu-lateral");
+    let botao = document.querySelector(".botao-menu-lateral");
     if (estado === true) {
         barra.style.animation = "fecharMenu 0.7s normal";
         setTimeout(() => {
@@ -171,6 +171,17 @@ function NotasAtualizacao(estado) {
     } else if (estado === false) {
         NotasAtu.style.display = "block";
     }
+}
+
+function mudarNotasAtualizacao(divId) {
+    let divs = document.querySelectorAll("div#updates > div")
+    divs.forEach((div) => div.style.display = "none")
+    divs[0].style.display = "block"
+    divs[1].style.display = "block"
+    document.getElementById(divId+"-updates").style.display = "block"
+
+    let button = document.getElementById("dropdown-button")
+    button.innerText = (divId.charAt(0).toUpperCase() + divId.slice(1)).replace("-"," ");
 }
 
 function calculadora(estado) {
