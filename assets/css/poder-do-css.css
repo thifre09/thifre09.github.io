@@ -43,14 +43,18 @@
 }
 
 #texto4 {
+    height: 2rem;
+}
+#texto4 > p {
     transition: transform 1s;
     text-align: center;
 }
-#texto4:hover {
+#texto4:hover > p {
     transform: rotateZ(360deg) rotateX(45deg) rotateY(45deg);
 }
 
-#div1 {
+
+#div1 > div {
     width: 200px;
     height: 200px;
     border: double 2px;
@@ -61,13 +65,12 @@
     align-items: center;
     transition: transform 2s;
 }
-
-#div1:hover {
+#div1:hover > div {
     transform: rotateZ(45deg) rotateY(150deg) rotateX(30deg);
 }
 
 #tabela1 {
-    border: solid 1px;
+
     border-collapse: collapse;
     margin-left: 50%;
     transform: translate(-50%);
@@ -79,5 +82,123 @@
     cursor: pointer;
 }
 #tabela1 td:hover {
-    transform: scale(1.3) translate(300%);
+    transform: scale(1.5);
+}
+
+#texto5 {
+    font-size: 2rem;
+    background: linear-gradient(90deg,blue, green, red);
+    overflow: hidden;
+}
+#texto5 > p {
+    position: relative;
+    animation: moverDireitaEsquerda 5s infinite linear;
+    color: black;
+}
+@keyframes moverDireitaEsquerda {
+    0% {
+        left: -50%; /* Começa totalmente fora da div */
+    }
+    100% {
+        left: 100%; /* Vai totalmente para fora do outro lado */
+    }
+}
+
+#button1 {
+    display: flex;
+    justify-content: center;
+}
+#button1 > button {
+    border: none;
+    border-radius: 35px;
+    font-size: x-large;
+    background: linear-gradient(135deg, red, blue);
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+#button1 > button:hover {
+    transition: 2s;
+    transform: scale(1.3);
+}
+#button1 > button:active {
+    transition: 2s;
+    transform: scale(2.5);
+    rotate: 360deg;
+    background: linear-gradient(45deg, blue, red);
+    box-shadow: 3px 3px 3px black;
+}
+
+#button2 {
+    display: flex;
+    justify-content: center;
+}
+#button2 > button {
+    position: relative;
+    border: none;
+    border-radius: 35px;
+    font-size: x-large;
+    background-image: url("/assets/images/jogos\ reviews\ img/among us.jpeg");
+    background-size: cover;
+    background-position: center;
+    height: 7rem;
+    width: 20rem;
+    cursor: pointer;
+    overflow: hidden;
+} 
+#button2 > button:active {
+    left: 50%;
+}
+
+#div2 {
+    display: flex;
+    justify-content: center;
+}
+#div2 > div{
+    width: 90%;
+    display: flex;
+    border: solid 3px;
+}
+#div2 > div > div:first-child {
+    background-color: rgb(106, 106, 255);
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#div2 > div > div:nth-of-type(2) {
+    background-color: rgb(106, 255, 198);
+    width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+#div2 > div > div:nth-of-type(2) > h1 {
+    width: 100%;
+    text-align: end;
+}
+
+#tabela2 {
+    border-collapse: collapse;
+    width: 400px;
+    height: 400px;
+    margin: 0 auto;
+}
+
+#tabela2 td {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #000;
+}
+
+#tabela2 tr:nth-child(odd) td:nth-child(even),
+#tabela2 tr:nth-child(even) td:nth-child(odd) {
+    background-color: black;
+}
+
+#tabela2 tr:nth-child(odd) td:nth-child(odd),
+#tabela2 tr:nth-child(even) td:nth-child(even) {
+    background-color: white;
 }

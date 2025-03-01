@@ -1,6 +1,6 @@
 let btn = document.getElementById("botao-css");
 let estado = true;
-let estilo = document.querySelector('link[href="assets/css/poder do css.css"]');
+let estilo = document.getElementById("linkcss");
 
 btn.style.border = "none";
 btn.style.borderRadius = "15px";
@@ -16,17 +16,16 @@ btn.style.padding = "10px";
 btn.style.color = "white";
 btn.style.zIndex = "2"
 
-
 function clique() {
     if (estado) {
         estado = false;
         btn.style.backgroundColor = "green";
         btn.innerText = "Ativar CSS";
-        estilo.disabled = true;
+        estilo.href = "";
     } else {
         estado = true;
         btn.style.backgroundColor = "red";
         btn.innerText = "Desativar CSS";
-        estilo.disabled = false;
+        estilo.href = "assets/css/poder-do-css.css";
     }
 }

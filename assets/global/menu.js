@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch('assets/global/menu.html')
         .then(response => response.text())
         .then(data => {
-            
+
 
             // Insere o conteúdo de menu.html diretamente no início do body
             document.body.insertAdjacentHTML('afterbegin', data);
@@ -18,116 +18,39 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Lógica para arrastar as divs
-            const updates = document.getElementById('updates');
-            const calculadora = document.getElementById('calculadora');
-            const blocoNotas = document.getElementById('bloco')
-            const configuracoes = document.getElementById('configuracoes');
-
+            function mover(objeto) {
+                objeto.addEventListener('mousedown', (e) => {
+                    draggedElement = objeto;
+                    const rect = draggedElement.getBoundingClientRect();
+                    const shiftX = e.clientX - rect.left;
+                    const shiftY = e.clientY - rect.top;
+    
+                    // Função para mover o painel
+                    const moveAt = (pageX, pageY) => {
+                        draggedElement.style.left = `${pageX - shiftX - window.scrollX}px`;
+                        draggedElement.style.top = `${pageY - shiftY - window.scrollY}px`;
+                    };
+    
+                    const onMouseMove = (event) => {
+                        moveAt(event.pageX, event.pageY);
+                    };
+    
+                    // Começa a mover com o mouse
+                    document.addEventListener('mousemove', onMouseMove);
+    
+                    // Solta o painel ao soltar o mouse
+                    document.addEventListener('mouseup', () => {
+                        draggedElement = null;
+                        document.removeEventListener('mousemove', onMouseMove);
+                    }, { once: true });
+                });
+            }
             let draggedElement = null;
 
-            updates.addEventListener('mousedown', (e) => {
-                draggedElement = updates;
-                const rect = draggedElement.getBoundingClientRect();
-                const shiftX = e.clientX - rect.left;
-                const shiftY = e.clientY - rect.top;
-
-                // Função para mover o painel
-                const moveAt = (pageX, pageY) => {
-                    draggedElement.style.left = `${pageX - shiftX - window.scrollX}px`;
-                    draggedElement.style.top = `${pageY - shiftY - window.scrollY}px`;
-                };
-
-                const onMouseMove = (event) => {
-                    moveAt(event.pageX, event.pageY);
-                };
-
-                // Começa a mover com o mouse
-                document.addEventListener('mousemove', onMouseMove);
-
-                // Solta o painel ao soltar o mouse
-                document.addEventListener('mouseup', () => {
-                    draggedElement = null;
-                    document.removeEventListener('mousemove', onMouseMove);
-                }, { once: true });
-            });
-
-            calculadora.addEventListener('mousedown', (e) => {
-                draggedElement = calculadora;
-                const rect = draggedElement.getBoundingClientRect();
-                const shiftX = e.clientX - rect.left;
-                const shiftY = e.clientY - rect.top;
-
-                // Função para mover o painel
-                const moveAt = (pageX, pageY) => {
-                    draggedElement.style.left = `${pageX - shiftX - window.scrollX}px`;
-                    draggedElement.style.top = `${pageY - shiftY - window.scrollY}px`;
-                };
-
-                const onMouseMove = (event) => {
-                    moveAt(event.pageX, event.pageY);
-                };
-
-                // Começa a mover com o mouse
-                document.addEventListener('mousemove', onMouseMove);
-
-                // Solta o painel ao soltar o mouse
-                document.addEventListener('mouseup', () => {
-                    draggedElement = null;
-                    document.removeEventListener('mousemove', onMouseMove);
-                }, { once: true });
-            });
-
-            blocoNotas.addEventListener('mousedown', (e) => {
-                draggedElement = blocoNotas;
-                const rect = draggedElement.getBoundingClientRect();
-                const shiftX = e.clientX - rect.left;
-                const shiftY = e.clientY - rect.top;
-
-                // Função para mover o painel
-                const moveAt = (pageX, pageY) => {
-                    draggedElement.style.left = `${pageX - shiftX - window.scrollX}px`;
-                    draggedElement.style.top = `${pageY - shiftY - window.scrollY}px`;
-                };
-
-                const onMouseMove = (event) => {
-                    moveAt(event.pageX, event.pageY);
-                };
-
-                // Começa a mover com o mouse
-                document.addEventListener('mousemove', onMouseMove);
-
-                // Solta o painel ao soltar o mouse
-                document.addEventListener('mouseup', () => {
-                    draggedElement = null;
-                    document.removeEventListener('mousemove', onMouseMove);
-                }, { once: true });
-            });
-
-            configuracoes.addEventListener('mousedown', (e) => {
-                draggedElement = configuracoes;
-                const rect = draggedElement.getBoundingClientRect();
-                const shiftX = e.clientX - rect.left;
-                const shiftY = e.clientY - rect.top;
-
-                // Função para mover o painel
-                const moveAt = (pageX, pageY) => {
-                    draggedElement.style.left = `${pageX - shiftX - window.scrollX}px`;
-                    draggedElement.style.top = `${pageY - shiftY - window.scrollY}px`;
-                };
-
-                const onMouseMove = (event) => {
-                    moveAt(event.pageX, event.pageY);
-                };
-
-                // Começa a mover com o mouse
-                document.addEventListener('mousemove', onMouseMove);
-
-                // Solta o painel ao soltar o mouse
-                document.addEventListener('mouseup', () => {
-                    draggedElement = null;
-                    document.removeEventListener('mousemove', onMouseMove);
-                }, { once: true });
-            });
+            mover(document.getElementById('updates'));
+            mover(document.getElementById('calculadora'))
+            mover(document.getElementById('bloco'))
+            mover(document.getElementById('configuracoes'))
 
             // Carrega as notas do localStorage quando a página é carregada
             const savedNotes = JSON.parse(localStorage.getItem('notes')) || [];
@@ -143,9 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 noteContainer.appendChild(note);
             });
         })
-     
+
         .catch(error => console.error('Erro ao carregar o menu:', error)); // Exibe um erro no console caso haja algum problema ao carregar o menu
-        
+
 });
 
 function abrirMenu(estado) {
@@ -178,10 +101,10 @@ function mudarNotasAtualizacao(divId) {
     divs.forEach((div) => div.style.display = "none")
     divs[0].style.display = "block"
     divs[1].style.display = "block"
-    document.getElementById(divId+"-updates").style.display = "block"
+    document.getElementById(divId + "-updates").style.display = "block"
 
     let button = document.getElementById("dropdown-button")
-    button.innerText = (divId.charAt(0).toUpperCase() + divId.slice(1)).replace("-"," ");
+    button.innerText = (divId.charAt(0).toUpperCase() + divId.slice(1)).replace("-", " ");
 }
 
 function calculadora(estado) {
@@ -389,7 +312,7 @@ function desativarBarra() {
     let titulo = document.getElementById("title");
     let barra = document.getElementById("barra-main");
     let botaoMenu = document.getElementById("botao-menu-lateral-reserva");
-    
+
     if (estadoBarra) {
         titulo.style.display = "none";
         barra.style.display = "none";
