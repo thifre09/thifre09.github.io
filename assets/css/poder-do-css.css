@@ -186,19 +186,367 @@
     height: 400px;
     margin: 0 auto;
 }
-
 #tabela2 td {
     width: 50px;
     height: 50px;
     border: 1px solid #000;
 }
-
+@media (max-width: 600px) {
+    #tabela2 {
+        width: 300px;
+        height: 300px;
+    }
+    #tabela2 td {
+        width: 37.5px;
+        height: 37.5px;
+    }
+}
 #tabela2 tr:nth-child(odd) td:nth-child(even),
 #tabela2 tr:nth-child(even) td:nth-child(odd) {
     background-color: black;
 }
-
 #tabela2 tr:nth-child(odd) td:nth-child(odd),
 #tabela2 tr:nth-child(even) td:nth-child(even) {
     background-color: white;
+}
+
+#div3 {
+    border: solid 2px;
+    display: flex;
+    flex-wrap: wrap;
+}
+#div3 > nav {
+    background-color: tomato;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 7px;
+}
+#div3 > nav > a {
+    border: none;
+    border-radius: 5px;
+    background-color: greenyellow;
+    padding: 5px;
+    font-size: large;
+}
+#div3 > section {
+    width: 75%;
+    background-color: antiquewhite;
+    max-height: 400px;
+    overflow: auto;
+}
+#div3 > section > h1 {
+    text-align: center;
+    font-size: xx-large;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+#div3 > section > p {
+    text-align: center;
+}
+#div3 > aside {
+    width: 25%;
+    background-color: rgb(255, 207, 144);
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    max-height: 400px;
+}
+#div3 > aside > h2 {
+    text-align: center;
+}
+#div3 > aside > div {
+    border: solid 2px;
+    margin: 10px;
+}
+#div3 > aside > div > h3, #div3 > aside > div > p {
+    text-align: center;
+}
+
+#div4 {
+    text-align: center;
+    background-color: #000;
+}
+#div4 > h1 {
+    cursor: pointer;
+    font-size: 4rem;
+    color: #fff;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff00de, 0 0 40px #ff00de, 0 0 80px #ff00de;
+    transition: text-shadow 0.5s ease, color 0.5s ease;
+}
+#div4 > h1:hover {
+    color: #ff33e4;
+    text-shadow: 0 0 10px #ff00de, 0 0 20px #ff00de, 0 0 40px #ff00de, 0 0 80px #ff00de, 0 0 120px #ff00de;
+}
+
+#div5{
+    width: 300px;
+    height: 400px;
+    perspective: 1000px; /* Cria a perspectiva 3D */
+    margin-left: 50%;
+    transform: translate(-50%);
+}
+#div5 > div {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d; /* Mantém o efeito 3D */
+    transition: transform 0.8s; /* Animação suave */
+}
+#div5:hover > div {
+    transform: rotateY(180deg); /* Gira o card 180 graus */
+}
+.card-front, .card-back {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    backface-visibility: hidden; /* Esconde o verso do card */
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+.card-front {
+    background-color: #a3a3a3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.card-back {
+    background-color: #3498db;
+    color: white;
+    transform: rotateY(180deg); /* Inicia virado */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+}
+.card-back h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+.card-back p {
+    font-size: 16px;
+}
+
+#div6 {
+    width: 80%;
+    border: solid 2px;
+    height: 500px;
+    overflow: auto;
+    margin-left: 50%;
+    transform: translate(-50%);
+}
+#div6 > div {
+    height: 1000px;
+}
+#div6 > div > div {
+    position: sticky;
+    height: 2%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#div6 > div > div:nth-child(1) {
+    background-color: rgb(89, 89, 250);
+    top: 0;
+}
+#div6 > div > div:nth-child(2) {
+    background-color: rgb(0, 255, 0);
+    top: 4%;
+}
+#div6 > div > div:nth-child(3) {
+    background-color: rgb(229, 255, 0);
+    top: 8%;
+}
+#div6 > div > div:nth-child(4) {
+    background-color: rgb(255, 0, 0);
+    top: 12%;
+    width: 25%;
+    left: 0;
+    height: 8%;
+}
+#div6 > div > div:nth-child(5) {
+    background-color: rgb(0, 255, 0);
+    top: 12%;
+    width: 25%;
+    left: 50%;
+    height: 8%;
+}
+#div6 > div > div:nth-child(6) {
+    background-color: rgb(0, 247, 255);
+    top: 12%;
+    width: 25%;
+    left: 25%;
+    height: 8%;
+}
+#div6 > div > div:nth-child(7) {
+    background-color: rgb(255, 0, 212);
+    top: 12%;
+    width: 25%;
+    left: 75%;
+    height: 8%;
+}
+#div6 > div > div:nth-child(8) {
+    background-color: #3498db;
+    top: 28%;
+    width: 60%;
+    height: 10%;
+    left: 20%;
+}
+#div6 > div > div:nth-child(9) {
+    background-color: burlywood;
+    top: 28%;
+    width: 20%;
+    height: 5%;
+}
+#div6 > div > div:nth-child(10) {
+    background-color: beige;
+    top: 28%;
+    width: 20%;
+    height: 3%;
+    left: 80%;
+}
+#div6 > div > div:nth-child(11) {
+    background: linear-gradient(45deg,green, yellow);
+    top: 38%;
+    width: 20%;
+    height: 5%;
+}
+#div6 > div > div:nth-child(12) {
+    background: linear-gradient(25deg, rgb(255, 0, 179), blue);
+    top: 34%;
+    width: 20%;
+    height: 7%;
+    left: 80%;
+    color: white;
+}
+@media (max-width: 600px) {
+    #div6 > div > div {
+        font-size: x-small;
+    }
+}
+
+#div7 {
+    display: flex;
+    justify-content: center;
+}
+#div7 > textarea {
+    width: 80%;
+    box-shadow: 2px 2px 2px black, -2px -2px 2px black;
+}
+
+#div8 {
+    display: flex;
+    justify-content: center;
+}
+#div8 > div {
+    width: 300px;
+    height: 300px;
+    position: relative;
+    transform-style: preserve-3d; /* Mantém o efeito 3D */
+    animation: girar 10s infinite linear;
+}
+#div8 > div::before,
+#div8 > div::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px solid #00ffcc;
+    box-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc, 0 0 30px #00ffcc;
+}
+#div8 > div::before {
+    transform: rotateX(90deg);
+    
+}
+#div8 > div::after {
+    transform: rotateY(90deg);
+}
+@keyframes girar {
+    0% {
+        transform: rotateX(0deg) rotateY(0deg);
+    }
+    100% {
+        transform: rotateX(360deg) rotateY(360deg);
+    }
+}
+
+#div9 {
+    width: 300px;
+    height: 300px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+    background-color: #111;
+    box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
+    margin-left: 50%;
+    transform: translate(-50%);
+}
+#div9 > div > p {
+    color: white;
+    font-size: large;
+    transform: translate(45%, 200%);
+}
+#div9 > div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, transparent 50%, #00ffcc 70%);
+    opacity: 0;
+    animation: onda-animacao 3s infinite;
+}
+#div9 > div:nth-child(1) {
+    animation-delay: 0s;
+}
+#div9 > div:nth-child(2) {
+    animation-delay: 1s;
+}
+#div9 > div:nth-child(3) {
+    animation-delay: 2s;
+}
+@keyframes onda-animacao {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+#div10 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: gray;
+}
+#div10 > h1 {
+    font-size: 4rem;
+    color: #eeff00;
+    display: flex;
+}
+#div10 > h1 > span {
+    display: inline-block;
+    animation: desmontar 3s infinite ease-in-out;
+    margin: 3px;
+}
+@keyframes desmontar {
+    0%, 100% {
+        transform: translateY(0) rotate(0);
+        opacity: 1;
+    }
+    25% {
+        transform: translateY(-50px) translateX(50%) rotate(-20deg);
+        opacity: 0.5;
+    }
+    50% {
+        transform: translateY(50px) translateX(-50%) rotate(20deg);
+        opacity: 1;
+    }
+    75% {
+        transform: translateY(50px) translateX(50%) rotate(-20deg);
+        opacity: 0.5;
+    }
 }
