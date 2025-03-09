@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.text())
         .then(data => {
 
-
             // Insere o conteúdo de menu.html diretamente no início do body
             document.body.insertAdjacentHTML('afterbegin', data);
 
@@ -50,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mover(document.getElementById('updates'));
             mover(document.getElementById('calculadora'))
             mover(document.getElementById('bloco'))
+            mover(document.getElementById('conquistas'))
             mover(document.getElementById('configuracoes'))
 
             // Carrega as notas do localStorage quando a página é carregada
@@ -125,6 +125,16 @@ function blocoNotas(estado) {
     }
 }
 
+function conquistas(estado) {
+    let conquistas = document.getElementById("conquistas");
+    if (estado === true) {
+        conquistas.style.display = "none";
+    } else if (estado === false) {
+        conquistas.style.display = "block";
+        adicionarConquistas()
+    }
+}
+
 function configuracoes(estado) {
     let configuracoes = document.getElementById("configuracoes");
     if (estado === true) {
@@ -134,6 +144,8 @@ function configuracoes(estado) {
     }
 }
 
+
+
 /* todo o javascript da calculadora */
 
 let num1 = 0;
@@ -142,8 +154,6 @@ let operador = "";
 let calcularFoiUltimoUsado = false;
 let virgulaAtivo = false;
 let clicksVirgula = 1;
-
-
 
 function numbers(numero) {
 
@@ -246,11 +256,12 @@ function calcular() {
     visor.innerHTML = num1.toLocaleString("pt-BR");
 }
 
-
 /* todo o javascript da calculadora */
 
 
+
 /* bloco de notas */
+
 function addNote() {
     const noteText = document.getElementById('newNoteText').value;
     if (noteText.trim() === '') return;
@@ -301,12 +312,97 @@ function saveNotes() {
     const notes = Array.from(noteContainer.children).map(note => note.querySelector('textarea').value);
     localStorage.setItem('notes', JSON.stringify(notes));
 }
+
 /* bloco de notas */
+
+
+
+/* Conquistas */
+
+class Conquista {
+    constructor(img="", descricao="") {
+        this.img = img;
+        this.descricao = descricao;
+        this.funcao;
+        this.possui = false;
+    }
+}
+
+let conquistasLista = [];
+window.conquistasLista = conquistasLista
+
+let img = [];
+const path = "assets/images/conquistas-geral/";
+for (let i = 1; i <= 9; i++) {
+    img.push("conquista"+i+".png");
+}
+img.forEach((imageName) => {
+    const imagem = new Image();
+    imagem.src = path + imageName; 
+    conquistasLista.push(new Conquista(imagem));
+});
+
+function adicionarConquistas() {
+
+    const conquistasContainer = document.getElementById("conquistas-container");
+    conquistasContainer.innerHTML = ""; 
+
+    const descricao = [
+        "Responda o quiz de batatas", 
+        "Use o codificador 1 vez", 
+        "Clique na cor secreta", 
+        "Clique no botão secreto do menu principal", 
+        "Clique no jogo com a menor nota", 
+        "Clique no número 63", 
+        "Desative o css 1 vez", 
+        "Veja todo o mini curso de python",
+        "Consiga todas as conquistas do Quadrado clicker"
+    ];
+
+    try { 
+        descricao.forEach((d, index) => { conquistasLista[index].descricao = d }); 
+    } catch(error) {
+        console.error(error)
+    }
+    
+
+    conquistasLista.forEach(element => {
+        const div = document.createElement("div");
+
+        const imag = document.createElement("img");
+        imag.src = element.img.src;
+
+        const div2 = document.createElement("div");
+        div2.classList.add("descricao-conquista");
+        div2.innerHTML = `<p>${element.descricao}</p>`;
+        
+        div.appendChild(imag);
+        div.appendChild(div2);
+        div.classList.add("conquista");
+        conquistasContainer.appendChild(div);
+        verificarConquistas()
+        if (element.possui) {
+            imag.style = "filter: grayscale(0)"
+        }
+    });
+}
+
+function verificarConquistas() {
+    document.getElementById("footerBotaoSecreto").addEventListener("click", botaoSecreto)
+    function botaoSecreto() {
+        conquistasLista[3].possui = true
+    }
+    
+}
+
+/* Conquistas */
+
+
 
 /* Configurações */
 
-estadoBarra = true;
-estadoArcoIris = true;
+let estadoBarra = true;
+let estadoArcoIris = true;
 
 function desativarBarra() {
     let titulo = document.getElementById("title");

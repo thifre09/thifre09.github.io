@@ -9,7 +9,7 @@
     <button onclick="NotasAtualizacao(false)">Notas da atualização</button>
     <button onclick="calculadora(false)">Calculadora</button>
     <button onclick="blocoNotas(false)">Bloco de notas</button>
-    <button>Conquistas(Em breve)</button>
+    <button onclick="conquistas(false)">Conquistas(Em breve)</button>
     <button onclick="configuracoes(false)">Configurações</button>
 </aside>
 
@@ -252,6 +252,15 @@
     <div id="noteContainer" class="note-container">
         <!-- Notas serão adicionadas aqui -->
     </div>
+</div>
+
+<div id="conquistas" style="display: none;">
+    <div class="fechar-container">
+        <img src="assets/images/icones/cruz.png" class="fechar" onclick="conquistas(true)">
+    </div>
+
+    <h2>Conquistas</h2>
+    <div id="conquistas-container"></div>
 </div>
 
 <div id="configuracoes" style="display: none;">
