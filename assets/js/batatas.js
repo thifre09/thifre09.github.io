@@ -5,8 +5,9 @@ function enviar() {
     const resultadoTexto = document.getElementById("resultadoTexto");
     
     // Exibe o número de caixas marcadas
-    resultadoTexto.textContent = `Você accertou ${numMarcados}/30 curiosidades.`;
+    resultadoTexto.textContent = `Você acertou ${numMarcados}/30 curiosidades.`;
     resultadoTexto.style.textAlign = "center"
     resultadoTexto.style.fontSize = "x-Large"
     section.style.display = "block"; // Mostra a seção de resultados
+    window.conquistasLista[0].possui = true
 }

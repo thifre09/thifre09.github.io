@@ -25,6 +25,7 @@ criptografarbtn.addEventListener("click", function (event) {
     }
 
     resultado.innerHTML = resultadoTexto; // Exibe o texto criptografado
+    
 });
 
 // Função para descriptografar

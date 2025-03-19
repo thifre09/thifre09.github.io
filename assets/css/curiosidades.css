@@ -16,14 +16,9 @@ article p {
     border: solid 1px;
     border-radius: 5px;
     width: 235px;
-    height: 100px;
-    overflow-y: auto;
     margin: 10px;
     padding: 4px;
     text-align: justify;
-}
-
-body[data-title="curiosidades"] article p {
     background-color: white;
     color: black;
 }
@@ -54,3 +49,7 @@ body[data-title="curiosidades"] article p {
     color: #573000;
 }
 
+#historia {
+    background-color: rgb(181, 76, 181);
+    color: rgb(88, 44, 0);
+}

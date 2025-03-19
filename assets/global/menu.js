@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch('assets/global/menu.html')
         .then(response => response.text())
         .then(data => {
-            
 
             // Insere o conteúdo de menu.html diretamente no início do body
             document.body.insertAdjacentHTML('afterbegin', data);
@@ -18,116 +17,40 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Lógica para arrastar as divs
-            const updates = document.getElementById('updates');
-            const calculadora = document.getElementById('calculadora');
-            const blocoNotas = document.getElementById('bloco')
-            const configuracoes = document.getElementById('configuracoes');
+            function mover(objeto) {
+                objeto.addEventListener('mousedown', (e) => {
+                    draggedElement = objeto;
+                    const rect = draggedElement.getBoundingClientRect();
+                    const shiftX = e.clientX - rect.left;
+                    const shiftY = e.clientY - rect.top;
 
+                    // Função para mover o painel
+                    const moveAt = (pageX, pageY) => {
+                        draggedElement.style.left = `${pageX - shiftX - window.scrollX}px`;
+                        draggedElement.style.top = `${pageY - shiftY - window.scrollY}px`;
+                    };
+
+                    const onMouseMove = (event) => {
+                        moveAt(event.pageX, event.pageY);
+                    };
+
+                    // Começa a mover com o mouse
+                    document.addEventListener('mousemove', onMouseMove);
+
+                    // Solta o painel ao soltar o mouse
+                    document.addEventListener('mouseup', () => {
+                        draggedElement = null;
+                        document.removeEventListener('mousemove', onMouseMove);
+                    }, { once: true });
+                });
+            }
             let draggedElement = null;
 
-            updates.addEventListener('mousedown', (e) => {
-                draggedElement = updates;
-                const rect = draggedElement.getBoundingClientRect();
-                const shiftX = e.clientX - rect.left;
-                const shiftY = e.clientY - rect.top;
-
-                // Função para mover o painel
-                const moveAt = (pageX, pageY) => {
-                    draggedElement.style.left = `${pageX - shiftX - window.scrollX}px`;
-                    draggedElement.style.top = `${pageY - shiftY - window.scrollY}px`;
-                };
-
-                const onMouseMove = (event) => {
-                    moveAt(event.pageX, event.pageY);
-                };
-
-                // Começa a mover com o mouse
-                document.addEventListener('mousemove', onMouseMove);
-
-                // Solta o painel ao soltar o mouse
-                document.addEventListener('mouseup', () => {
-                    draggedElement = null;
-                    document.removeEventListener('mousemove', onMouseMove);
-                }, { once: true });
-            });
-
-            calculadora.addEventListener('mousedown', (e) => {
-                draggedElement = calculadora;
-                const rect = draggedElement.getBoundingClientRect();
-                const shiftX = e.clientX - rect.left;
-                const shiftY = e.clientY - rect.top;
-
-                // Função para mover o painel
-                const moveAt = (pageX, pageY) => {
-                    draggedElement.style.left = `${pageX - shiftX - window.scrollX}px`;
-                    draggedElement.style.top = `${pageY - shiftY - window.scrollY}px`;
-                };
-
-                const onMouseMove = (event) => {
-                    moveAt(event.pageX, event.pageY);
-                };
-
-                // Começa a mover com o mouse
-                document.addEventListener('mousemove', onMouseMove);
-
-                // Solta o painel ao soltar o mouse
-                document.addEventListener('mouseup', () => {
-                    draggedElement = null;
-                    document.removeEventListener('mousemove', onMouseMove);
-                }, { once: true });
-            });
-
-            blocoNotas.addEventListener('mousedown', (e) => {
-                draggedElement = blocoNotas;
-                const rect = draggedElement.getBoundingClientRect();
-                const shiftX = e.clientX - rect.left;
-                const shiftY = e.clientY - rect.top;
-
-                // Função para mover o painel
-                const moveAt = (pageX, pageY) => {
-                    draggedElement.style.left = `${pageX - shiftX - window.scrollX}px`;
-                    draggedElement.style.top = `${pageY - shiftY - window.scrollY}px`;
-                };
-
-                const onMouseMove = (event) => {
-                    moveAt(event.pageX, event.pageY);
-                };
-
-                // Começa a mover com o mouse
-                document.addEventListener('mousemove', onMouseMove);
-
-                // Solta o painel ao soltar o mouse
-                document.addEventListener('mouseup', () => {
-                    draggedElement = null;
-                    document.removeEventListener('mousemove', onMouseMove);
-                }, { once: true });
-            });
-
-            configuracoes.addEventListener('mousedown', (e) => {
-                draggedElement = configuracoes;
-                const rect = draggedElement.getBoundingClientRect();
-                const shiftX = e.clientX - rect.left;
-                const shiftY = e.clientY - rect.top;
-
-                // Função para mover o painel
-                const moveAt = (pageX, pageY) => {
-                    draggedElement.style.left = `${pageX - shiftX - window.scrollX}px`;
-                    draggedElement.style.top = `${pageY - shiftY - window.scrollY}px`;
-                };
-
-                const onMouseMove = (event) => {
-                    moveAt(event.pageX, event.pageY);
-                };
-
-                // Começa a mover com o mouse
-                document.addEventListener('mousemove', onMouseMove);
-
-                // Solta o painel ao soltar o mouse
-                document.addEventListener('mouseup', () => {
-                    draggedElement = null;
-                    document.removeEventListener('mousemove', onMouseMove);
-                }, { once: true });
-            });
+            mover(document.getElementById('updates'));
+            mover(document.getElementById('calculadora'))
+            mover(document.getElementById('bloco'))
+            mover(document.getElementById('conquistasGeral'))
+            mover(document.getElementById('configuracoes'))
 
             // Carrega as notas do localStorage quando a página é carregada
             const savedNotes = JSON.parse(localStorage.getItem('notes')) || [];
@@ -143,9 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 noteContainer.appendChild(note);
             });
         })
-     
+
         .catch(error => console.error('Erro ao carregar o menu:', error)); // Exibe um erro no console caso haja algum problema ao carregar o menu
-        
+
 });
 
 function abrirMenu(estado) {
@@ -164,7 +87,7 @@ function abrirMenu(estado) {
     }
 }
 
-function NotasAtualizacao(estado) {
+function abrirNotasAtualizacao(estado) {
     let NotasAtu = document.getElementById("updates");
     if (estado === true) {
         NotasAtu.style.display = "none";
@@ -173,18 +96,18 @@ function NotasAtualizacao(estado) {
     }
 }
 
-function mudarNotasAtualizacao(divId) {
+function abrirMudarNotasAtualizacao(divId) {
     let divs = document.querySelectorAll("div#updates > div")
     divs.forEach((div) => div.style.display = "none")
     divs[0].style.display = "block"
     divs[1].style.display = "block"
-    document.getElementById(divId+"-updates").style.display = "block"
+    document.getElementById(divId + "-updates").style.display = "block"
 
     let button = document.getElementById("dropdown-button")
-    button.innerText = (divId.charAt(0).toUpperCase() + divId.slice(1)).replace("-"," ");
+    button.innerText = (divId.charAt(0).toUpperCase() + divId.slice(1)).replace("-", " ");
 }
 
-function calculadora(estado) {
+function abrirCalculadora(estado) {
     let calculadora = document.getElementById("calculadora");
     if (estado === true) {
         calculadora.style.display = "none";
@@ -193,7 +116,7 @@ function calculadora(estado) {
     }
 }
 
-function blocoNotas(estado) {
+function abrirBlocoNotas(estado) {
     let blocoNotas = document.getElementById("bloco");
     if (estado === true) {
         blocoNotas.style.display = "none";
@@ -202,7 +125,19 @@ function blocoNotas(estado) {
     }
 }
 
-function configuracoes(estado) {
+function abrirConquistas(estado) {
+
+    let con = document.getElementById("conquistasGeral");
+    if (estado === true) {
+        con.style.display = "none";
+    } else if (estado === false) {
+        con.style.display = "block";
+        adicionarConquistasGeral()
+    }
+    salvarConquistasGeral()
+}
+
+function abrirConfiguracoes(estado) {
     let configuracoes = document.getElementById("configuracoes");
     if (estado === true) {
         configuracoes.style.display = "none";
@@ -210,6 +145,8 @@ function configuracoes(estado) {
         configuracoes.style.display = "block";
     }
 }
+
+
 
 /* todo o javascript da calculadora */
 
@@ -219,8 +156,6 @@ let operador = "";
 let calcularFoiUltimoUsado = false;
 let virgulaAtivo = false;
 let clicksVirgula = 1;
-
-
 
 function numbers(numero) {
 
@@ -323,11 +258,12 @@ function calcular() {
     visor.innerHTML = num1.toLocaleString("pt-BR");
 }
 
-
 /* todo o javascript da calculadora */
 
 
+
 /* bloco de notas */
+
 function addNote() {
     const noteText = document.getElementById('newNoteText').value;
     if (noteText.trim() === '') return;
@@ -378,18 +314,139 @@ function saveNotes() {
     const notes = Array.from(noteContainer.children).map(note => note.querySelector('textarea').value);
     localStorage.setItem('notes', JSON.stringify(notes));
 }
+
 /* bloco de notas */
+
+
+
+/* Conquistas */
+
+class ConquistaGeral {
+    constructor(img = "", descricao = "", possui = false) {
+        this.img = img;
+        this.descricao = descricao;
+        this.possui = possui;
+    }
+}
+
+let conquistasLista = [];
+window.conquistasLista = conquistasLista
+
+let imagens = [];
+const path = "assets/images/conquistas-geral/";
+for (let i = 1; i <= 9; i++) {
+    imagens.push("conquista" + i + ".png");
+}
+imagens.forEach((imageName) => {
+    const imagem = new Image();
+    imagem.src = path + imageName;
+    conquistasLista.push(new ConquistaGeral(imagem));
+});
+
+function adicionarConquistasGeral() {
+
+    const conquistasContainer = document.getElementById("conquistas-container");
+    conquistasContainer.innerHTML = "";
+
+    const descricao = [
+        "Responda o quiz de batatas",
+        "Use o codificador 1 vez",
+        "Clique na cor secreta",
+        "Clique no botão secreto do menu principal",
+        "Clique no jogo com a menor nota",
+        "Clique no número 63",
+        "Desative o css 1 vez",
+        "Veja todo o mini curso de python",
+        "Consiga todas as conquistas do Quadrado clicker"
+    ];
+
+    try {
+        descricao.forEach((d, index) => { conquistasLista[index].descricao = d });
+    } catch (error) {
+        console.error(error)
+    }
+
+
+    conquistasLista.forEach(element => {
+        const div = document.createElement("div");
+
+        const imag = document.createElement("img");
+        imag.src = element.img.src;
+
+        const div2 = document.createElement("div");
+        div2.classList.add("descricao-conquista");
+        div2.innerHTML = `<p>${element.descricao}</p>`;
+
+        div.appendChild(imag);
+        div.appendChild(div2);
+        div.classList.add("conquista");
+        conquistasContainer.appendChild(div);
+        verificarConquistasGeral()
+        if (element.possui) {
+            imag.style = "filter: grayscale(0)"
+        }
+    });
+}
+
+function verificarConquistasGeral() {
+
+    function tryCatchFunc(id, index) {
+        try {
+            document.getElementById(id).addEventListener("click", () => conquistasLista[index].possui = true)
+        }
+        catch (error) {
+
+        }
+    }
+
+    tryCatchFunc("criptografar",1)
+    tryCatchFunc("descriptografar",1)
+    tryCatchFunc("corBotaoSecreto", 2)
+    tryCatchFunc("footerBotaoSecreto", 3)
+    tryCatchFunc("jogoBotaoSecreto", 4)
+    tryCatchFunc("63", 5)
+    tryCatchFunc("botao-css",6)
+    tryCatchFunc("pythonBotaoSecreto", 7)
+
+}
+
+function salvarConquistasGeral() {
+    const estadoConquistas = conquistasLista
+
+    localStorage.setItem("ECS", JSON.stringify(estadoConquistas));
+}
+
+function carregarConquistasGeral() {
+    const estadoConquistasSalvas = localStorage.getItem("ECS");
+
+    const estado = JSON.parse(estadoConquistasSalvas);
+    conquistasLista = []
+    estado.forEach(element => {
+        conquistasLista.push(new ConquistaGeral(img = "", descricao = element.descricao, possui = element.possui))
+    });
+    imagens.forEach((imageName, index) => {
+        const imagem = new Image();
+        imagem.src = path + imageName;
+        conquistasLista[index].img = imagem
+    })
+}
+
+carregarConquistasGeral()
+
+/* Conquistas */
+
+
 
 /* Configurações */
 
-estadoBarra = true;
-estadoArcoIris = true;
+let estadoBarra = true;
+let estadoArcoIris = true;
 
 function desativarBarra() {
     let titulo = document.getElementById("title");
     let barra = document.getElementById("barra-main");
     let botaoMenu = document.getElementById("botao-menu-lateral-reserva");
-    
+
     if (estadoBarra) {
         titulo.style.display = "none";
         barra.style.display = "none";

@@ -1,3 +1,5 @@
+import("../global/menu.js", conquistasLista) //importa a variavel conquistasLista de menu.js
+
 //variáveis
 
 let quadrados = 0;
@@ -847,7 +849,7 @@ function adicionarConquistas() {
         
 }
 
-function verificarConquistas(callback) {
+function verificarConquistas() {
     //Quadrados
     if (quadradosTotais >= 1e0) {
         conquistas[conquistas.findIndex((elemento) => elemento.nome === "Primeiro click")].obtida = true;
@@ -1057,8 +1059,9 @@ function verificarConquistas(callback) {
 
     if (conquistas.filter(c => c.obtida).length >= conquistas.length - 1) {
         conquistas.find(c => c.nome === "Obrigado por jogar Quadrado Clicker").obtida = true;
+        conquistasLista[8].possui = true
     }
-    callback()
+    adicionarConquistas()
 }
 
 function verificarQuadradosAscendentes() {
@@ -1103,7 +1106,7 @@ function mudarMenu(menu) {
         case "conquistas":
             document.getElementById("outros").style.display = "none";
             document.getElementById("conquistas").style.display = "block";
-            verificarConquistas(adicionarConquistas);
+            verificarConquistas();
             break;
         case "maquinadasorte":
             document.getElementById("outros").style.display = "none";
