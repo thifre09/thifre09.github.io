@@ -329,15 +329,13 @@ class ConquistaGeral {
     }
 }
 
-let conquistasLista = [];
-window.conquistasLista = conquistasLista
-
-let imagens = [];
+const conquistasLista = [];
+const imagens = [];
 const path = "assets/images/conquistas-geral/";
 
 function adicionarImgConquistas() {
     for (let i = 1; i <= 9; i++) {
-        imagens.push("conquista" + i + ".png");
+        imagens.push(`conquista${i}.png`);
     }
     imagens.forEach((imageName) => {
         const imagem = new Image();
@@ -345,14 +343,13 @@ function adicionarImgConquistas() {
         conquistasLista.push(new ConquistaGeral(imagem));
     });
 }
-adicionarImgConquistas()
 
 function adicionarConquistasGeral() {
-
     const conquistasContainer = document.getElementById("conquistas-container");
     conquistasContainer.innerHTML = "";
+        
 
-    const descricao = [
+    const descricoes = [
         "Responda o quiz de batatas",
         "Use o codificador 1 vez",
         "Clique na cor secreta",
@@ -364,78 +361,76 @@ function adicionarConquistasGeral() {
         "Consiga todas as conquistas do Quadrado clicker"
     ];
 
-    try {
-        descricao.forEach((d, index) => { conquistasLista[index].descricao = d });
-    } catch (error) {
-        console.error(error)
-    }
+    descricoes.forEach((descricao, index) => {
+        conquistasLista[index].descricao = descricao;
+    });
 
-
-    conquistasLista.forEach(element => {
+    conquistasLista.forEach((element) => {
         const div = document.createElement("div");
-
-        const imag = document.createElement("img");
-        imag.src = element.img.src;
-
-        const div2 = document.createElement("div");
-        div2.classList.add("descricao-conquista");
-        div2.innerHTML = `<p>${element.descricao}</p>`;
-
-        div.appendChild(imag);
-        div.appendChild(div2);
         div.classList.add("conquista");
-        conquistasContainer.appendChild(div);
-        verificarConquistasGeral()
+
+        const img = document.createElement("img");
+        img.src = element.img.src;
         if (element.possui) {
-            imag.style = "filter: grayscale(0)"
+            img.style.filter = "grayscale(0)";
+        }
+
+        const divDescricao = document.createElement("div");
+        divDescricao.classList.add("descricao-conquista");
+        divDescricao.innerHTML = `<p>${element.descricao}</p>`;
+
+        div.appendChild(img);
+        div.appendChild(divDescricao);
+        conquistasContainer.appendChild(div);
+    });
+
+    verificarConquistasGeral();
+}
+
+function verificarConquistasGeral() {
+    const eventos = [
+        { id: "criptografar", index: 1 },
+        { id: "descriptografar", index: 1 },
+        { id: "corBotaoSecreto", index: 2 },
+        { id: "footerBotaoSecreto", index: 3 },
+        { id: "jogoBotaoSecreto", index: 4 },
+        { id: "63", index: 5 },
+        { id: "botao-css", index: 6 },
+        { id: "pythonBotaoSecreto", index: 7 }
+    ];
+
+    eventos.forEach((evento) => {
+        const elemento = document.getElementById(evento.id);
+        if (elemento) {
+            elemento.addEventListener("click", () => {
+                conquistasLista[evento.index].possui = true;
+                salvarConquistasGeral();
+                adicionarConquistasGeral();
+            });
         }
     });
 }
 
-function verificarConquistasGeral() {
-
-    function tryCatchFunc(id, index) {
-        try {
-            document.getElementById(id).addEventListener("click", () => conquistasLista[index].possui = true)
-        }
-        catch (error) {
-
-        }
-    }
-
-    tryCatchFunc("criptografar",1)
-    tryCatchFunc("descriptografar",1)
-    tryCatchFunc("corBotaoSecreto", 2)
-    tryCatchFunc("footerBotaoSecreto", 3)
-    tryCatchFunc("jogoBotaoSecreto", 4)
-    tryCatchFunc("63", 5)
-    tryCatchFunc("botao-css",6)
-    tryCatchFunc("pythonBotaoSecreto", 7)
-
-}
-
 function salvarConquistasGeral() {
-    const estadoConquistas = conquistasLista
-
-    localStorage.setItem("ECS", JSON.stringify(estadoConquistas));
+    localStorage.setItem("ECS", JSON.stringify(conquistasLista));
 }
 
 function carregarConquistasGeral() {
     const estadoConquistasSalvas = localStorage.getItem("ECS");
-
-    const estado = JSON.parse(estadoConquistasSalvas);
-    conquistasLista = []
-    estado.forEach(element => {
-        conquistasLista.push(new ConquistaGeral(img = "", descricao = element.descricao, possui = element.possui))
-    });
-    imagens.forEach((imageName, index) => {
-        const imagem = new Image();
-        imagem.src = path + imageName;
-        conquistasLista[index].img = imagem
-    })
+    if (estadoConquistasSalvas) {
+        const estado = JSON.parse(estadoConquistasSalvas);
+        conquistasLista.length = 0; // Limpa a lista atual
+        estado.forEach((element, index) => {
+            const imagem = new Image();
+            imagem.src = path + imagens[index];
+            conquistasLista.push(new ConquistaGeral(imagem, element.descricao, element.possui));
+        });
+    }
 }
 
-carregarConquistasGeral()
+// Inicialização
+adicionarImgConquistas();
+carregarConquistasGeral();
 
 /* Conquistas */
 
