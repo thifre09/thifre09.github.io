@@ -361,8 +361,8 @@ function adicionarConquistasGeral() {
         "Consiga todas as conquistas do Quadrado clicker"
     ];
 
-    descricoes.forEach((descricao, index) => {
-        conquistasLista[index].descricao = descricao;
+    descricoes.forEach((d, index) => {
+        conquistasLista[index].descricao = d;
     });
 
     conquistasLista.forEach((element) => {
