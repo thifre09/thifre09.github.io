@@ -334,14 +334,18 @@ window.conquistasLista = conquistasLista
 
 let imagens = [];
 const path = "assets/images/conquistas-geral/";
-for (let i = 1; i <= 9; i++) {
-    imagens.push("conquista" + i + ".png");
+
+function adicionarImgConquistas() {
+    for (let i = 1; i <= 9; i++) {
+        imagens.push("conquista" + i + ".png");
+    }
+    imagens.forEach((imageName) => {
+        const imagem = new Image();
+        imagem.src = path + imageName;
+        conquistasLista.push(new ConquistaGeral(imagem));
+    });
 }
-imagens.forEach((imageName) => {
-    const imagem = new Image();
-    imagem.src = path + imageName;
-    conquistasLista.push(new ConquistaGeral(imagem));
-});
+adicionarImgConquistas()
 
 function adicionarConquistasGeral() {
 
