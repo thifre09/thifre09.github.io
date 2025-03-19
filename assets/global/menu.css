@@ -395,7 +395,7 @@ textarea {
 
 /* Conquistas */
 
-#conquistas {
+#conquistasGeral {
     display: flex;
     position: fixed;
     left: 20%;
@@ -407,12 +407,18 @@ textarea {
     z-index: 101;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+@media (max-width: 600px) {
+    #conquistasGeral {
+        left: 10%;
+        width: 80%;
+    }
+}
 
-#conquistas > h2 {
+#conquistasGeral > h2 {
     text-align: center;
 }
 
-#conquistas div#conquistas-container {
+#conquistasGeral div#conquistas-container {
     overflow: auto;
     height: 400px;
     display: flex;
@@ -421,7 +427,9 @@ textarea {
 }
 
 .conquista {
-    display: block;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
     width: fit-content;
     width: 32%;
 }
@@ -430,6 +438,8 @@ textarea {
     width: fit-content;
     margin: 10px 0 0 0;
     filter: grayscale(1);
+    width: 64px;
+    height: 64px;
 }
 
 .descricao-conquista {

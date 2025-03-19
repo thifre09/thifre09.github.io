@@ -23,20 +23,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     const rect = draggedElement.getBoundingClientRect();
                     const shiftX = e.clientX - rect.left;
                     const shiftY = e.clientY - rect.top;
-    
+
                     // Função para mover o painel
                     const moveAt = (pageX, pageY) => {
                         draggedElement.style.left = `${pageX - shiftX - window.scrollX}px`;
                         draggedElement.style.top = `${pageY - shiftY - window.scrollY}px`;
                     };
-    
+
                     const onMouseMove = (event) => {
                         moveAt(event.pageX, event.pageY);
                     };
-    
+
                     // Começa a mover com o mouse
                     document.addEventListener('mousemove', onMouseMove);
-    
+
                     // Solta o painel ao soltar o mouse
                     document.addEventListener('mouseup', () => {
                         draggedElement = null;
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mover(document.getElementById('updates'));
             mover(document.getElementById('calculadora'))
             mover(document.getElementById('bloco'))
-            mover(document.getElementById('conquistas'))
+            mover(document.getElementById('conquistasGeral'))
             mover(document.getElementById('configuracoes'))
 
             // Carrega as notas do localStorage quando a página é carregada
@@ -87,7 +87,7 @@ function abrirMenu(estado) {
     }
 }
 
-function NotasAtualizacao(estado) {
+function abrirNotasAtualizacao(estado) {
     let NotasAtu = document.getElementById("updates");
     if (estado === true) {
         NotasAtu.style.display = "none";
@@ -96,7 +96,7 @@ function NotasAtualizacao(estado) {
     }
 }
 
-function mudarNotasAtualizacao(divId) {
+function abrirMudarNotasAtualizacao(divId) {
     let divs = document.querySelectorAll("div#updates > div")
     divs.forEach((div) => div.style.display = "none")
     divs[0].style.display = "block"
@@ -107,7 +107,7 @@ function mudarNotasAtualizacao(divId) {
     button.innerText = (divId.charAt(0).toUpperCase() + divId.slice(1)).replace("-", " ");
 }
 
-function calculadora(estado) {
+function abrirCalculadora(estado) {
     let calculadora = document.getElementById("calculadora");
     if (estado === true) {
         calculadora.style.display = "none";
@@ -116,7 +116,7 @@ function calculadora(estado) {
     }
 }
 
-function blocoNotas(estado) {
+function abrirBlocoNotas(estado) {
     let blocoNotas = document.getElementById("bloco");
     if (estado === true) {
         blocoNotas.style.display = "none";
@@ -125,17 +125,19 @@ function blocoNotas(estado) {
     }
 }
 
-function conquistas(estado) {
-    let conquistas = document.getElementById("conquistas");
+function abrirConquistas(estado) {
+
+    let con = document.getElementById("conquistasGeral");
     if (estado === true) {
-        conquistas.style.display = "none";
+        con.style.display = "none";
     } else if (estado === false) {
-        conquistas.style.display = "block";
-        adicionarConquistas()
+        con.style.display = "block";
+        adicionarConquistasGeral()
     }
+    salvarConquistasGeral()
 }
 
-function configuracoes(estado) {
+function abrirConfiguracoes(estado) {
     let configuracoes = document.getElementById("configuracoes");
     if (estado === true) {
         configuracoes.style.display = "none";
@@ -319,52 +321,51 @@ function saveNotes() {
 
 /* Conquistas */
 
-class Conquista {
-    constructor(img="", descricao="") {
+class ConquistaGeral {
+    constructor(img = "", descricao = "", possui = false) {
         this.img = img;
         this.descricao = descricao;
-        this.funcao;
-        this.possui = false;
+        this.possui = possui;
     }
 }
 
 let conquistasLista = [];
 window.conquistasLista = conquistasLista
 
-let img = [];
+let imagens = [];
 const path = "assets/images/conquistas-geral/";
 for (let i = 1; i <= 9; i++) {
-    img.push("conquista"+i+".png");
+    imagens.push("conquista" + i + ".png");
 }
-img.forEach((imageName) => {
+imagens.forEach((imageName) => {
     const imagem = new Image();
-    imagem.src = path + imageName; 
-    conquistasLista.push(new Conquista(imagem));
+    imagem.src = path + imageName;
+    conquistasLista.push(new ConquistaGeral(imagem));
 });
 
-function adicionarConquistas() {
+function adicionarConquistasGeral() {
 
     const conquistasContainer = document.getElementById("conquistas-container");
-    conquistasContainer.innerHTML = ""; 
+    conquistasContainer.innerHTML = "";
 
     const descricao = [
-        "Responda o quiz de batatas", 
-        "Use o codificador 1 vez", 
-        "Clique na cor secreta", 
-        "Clique no botão secreto do menu principal", 
-        "Clique no jogo com a menor nota", 
-        "Clique no número 63", 
-        "Desative o css 1 vez", 
+        "Responda o quiz de batatas",
+        "Use o codificador 1 vez",
+        "Clique na cor secreta",
+        "Clique no botão secreto do menu principal",
+        "Clique no jogo com a menor nota",
+        "Clique no número 63",
+        "Desative o css 1 vez",
         "Veja todo o mini curso de python",
         "Consiga todas as conquistas do Quadrado clicker"
     ];
 
-    try { 
-        descricao.forEach((d, index) => { conquistasLista[index].descricao = d }); 
-    } catch(error) {
+    try {
+        descricao.forEach((d, index) => { conquistasLista[index].descricao = d });
+    } catch (error) {
         console.error(error)
     }
-    
+
 
     conquistasLista.forEach(element => {
         const div = document.createElement("div");
@@ -375,25 +376,62 @@ function adicionarConquistas() {
         const div2 = document.createElement("div");
         div2.classList.add("descricao-conquista");
         div2.innerHTML = `<p>${element.descricao}</p>`;
-        
+
         div.appendChild(imag);
         div.appendChild(div2);
         div.classList.add("conquista");
         conquistasContainer.appendChild(div);
-        verificarConquistas()
+        verificarConquistasGeral()
         if (element.possui) {
             imag.style = "filter: grayscale(0)"
         }
     });
 }
 
-function verificarConquistas() {
-    document.getElementById("footerBotaoSecreto").addEventListener("click", botaoSecreto)
-    function botaoSecreto() {
-        conquistasLista[3].possui = true
+function verificarConquistasGeral() {
+
+    function tryCatchFunc(id, index) {
+        try {
+            document.getElementById(id).addEventListener("click", () => conquistasLista[index].possui = true)
+        }
+        catch (error) {
+
+        }
     }
-    
+
+    tryCatchFunc("criptografar",1)
+    tryCatchFunc("descriptografar",1)
+    tryCatchFunc("corBotaoSecreto", 2)
+    tryCatchFunc("footerBotaoSecreto", 3)
+    tryCatchFunc("jogoBotaoSecreto", 4)
+    tryCatchFunc("63", 5)
+    tryCatchFunc("botao-css",6)
+    tryCatchFunc("pythonBotaoSecreto", 7)
+
 }
+
+function salvarConquistasGeral() {
+    const estadoConquistas = conquistasLista
+
+    localStorage.setItem("ECS", JSON.stringify(estadoConquistas));
+}
+
+function carregarConquistasGeral() {
+    const estadoConquistasSalvas = localStorage.getItem("ECS");
+
+    const estado = JSON.parse(estadoConquistasSalvas);
+    conquistasLista = []
+    estado.forEach(element => {
+        conquistasLista.push(new ConquistaGeral(img = "", descricao = element.descricao, possui = element.possui))
+    });
+    imagens.forEach((imageName, index) => {
+        const imagem = new Image();
+        imagem.src = path + imageName;
+        conquistasLista[index].img = imagem
+    })
+}
+
+carregarConquistasGeral()
 
 /* Conquistas */
 

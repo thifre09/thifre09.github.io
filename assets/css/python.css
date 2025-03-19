@@ -16,13 +16,13 @@ div.topico {
     display: flex;
     background-color: #f4f4f4;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 0.3%;
     margin: 5px;
     background-color: #f0f8ff;
 }
 
 div.codigo {
-    width: 49%;
+    width: 48.5%;
     border: solid 1px;
     border-radius: 10px;
     padding: 3px;
@@ -31,7 +31,7 @@ div.codigo {
 }
 
 div.explicação {
-    width: 49%;
+    width: 48.5%;
     border: solid 1px;
     border-radius: 10px;
     line-height: 1.3;
