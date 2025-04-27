@@ -389,6 +389,7 @@ function adicionarConquistasGeral() {
 
 function verificarConquistasGeral() {
     const eventos = [
+        { id: "botao", index: 0},
         { id: "criptografar", index: 1 },
         { id: "descriptografar", index: 1 },
         { id: "corBotaoSecreto", index: 2 },

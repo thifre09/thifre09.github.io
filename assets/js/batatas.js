@@ -9,5 +9,4 @@ function enviar() {
     resultadoTexto.style.textAlign = "center"
     resultadoTexto.style.fontSize = "x-Large"
     section.style.display = "block"; // Mostra a seção de resultados
-    window.conquistasLista[0].possui = true
 }
