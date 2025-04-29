@@ -86,6 +86,11 @@ div#central {
     animation: mudarCodificador 40s infinite linear, texto 10s infinite;
 }
 
+#conversa {
+    background: no-repeat center;
+    animation: mudarConversa 40s infinite linear, texto 10s infinite;
+}
+
 #cores {
     background: no-repeat center;
     animation: mudarCores 40s infinite linear, texto 10s infinite;
@@ -171,6 +176,45 @@ div#central {
 }
 
 @keyframes mudarCodificador {
+    0% {
+        background-image: url('../images/links/codificador/cod1.png');
+        background-size: cover;
+    }
+    12.5% {
+        background-image: url('../images/links/codificador/cod2.jfif');
+        background-size: cover;
+    }
+    25% {
+        background-image: url('../images/links/codificador/cod3.jfif');
+        background-size: cover;
+    }
+    37.5% {
+        background-image: url('../images/links/codificador/cod4.png');
+        background-size: cover;
+    }
+    50% {
+        background-image: url('../images/links/codificador/cod5.jfif');
+        background-size: cover;
+    }
+    62.5% {
+        background-image: url('../images/links/codificador/cod6.jfif');
+        background-size: cover;
+    }
+    75% {
+        background-image: url('../images/links/codificador/cod7.jfif');
+        background-size: cover;
+    }
+    87.5% {
+        background-image: url('../images/links/codificador/cod8.jfif');
+        background-size: cover;
+    }
+    100% {
+        background-image: url('../images/links/codificador/cod1.png');
+        background-size: cover;
+    }
+}
+
+@keyframes mudarConversa {
     0% {
         background-image: url('../images/links/codificador/cod1.png');
         background-size: cover;
