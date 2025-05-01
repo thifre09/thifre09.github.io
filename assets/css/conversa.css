@@ -40,40 +40,92 @@
     }
 }
 
-jogo {
+div#jogo {
     height: 100vh;
+    background-color: aliceblue;
+    min-height: fit-content;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
 }
 
 #ia {
-    width: 30%;
+    width: 40%;
     height: 90vh;
-    background-color: rgb(168, 168, 168);
+    background-color: rgb(255, 255, 255);
     border: solid 1px;
     border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: auto;
+}
+
+#texto {
+    display: flex;
+    flex-direction: column;
+}
+
+.fala-ia {
+    text-align: center;
+}
+
+.fala-player {
+    max-width: 70%;
+    padding: 1%;
+    background-color: rgb(235, 235, 235);
+    border-radius: 15px;
+    align-self: flex-end;
+}
+
+#prompt {
+    width: 100%;
+    margin: 1%;
+    padding-left: 2%;
+    padding-top: 2%; 
+    padding-bottom: 2%;
+    font-size: x-large;
+    border-radius: 15px;
+    background-color: rgb(215, 215, 215);
 }
 
 #opcoes {
     max-width: 30%;
+    max-height: 90vh;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
+    overflow: auto;
+    background-color: rgb(214, 236, 255);
+    border-radius: 15px;
 }
 
 #opcoes > button {
+    font-size: medium;
     width: 100%;
-    margin: 10%;
+    margin: 7%;
+    border: none;
+    border-radius: 10px;
+    background-color: rgb(156, 215, 208);
 }
 
 @media (max-width:600px) {
-    jogo {
+    div#jogo {
         flex-direction: column;
     }
 
     #ia {
+        margin-top: 10%;
         width: 90%;
         height: 59%;
+    }
+
+    #opcoes {
+        margin-top: 5%;
+        max-width: 90%;
+    }
+
+    #opcoes > button{
+        width: 40%;
+        margin: 3%;
     }
 }
