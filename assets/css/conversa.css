@@ -28,6 +28,7 @@
 }
 
 #menu-principal > h3 {
+    margin: 0;
     height: 5vh;
     text-align: center;
     font-size: larger;
@@ -57,16 +58,22 @@ div#jogo {
     border-radius: 10px;
     display: flex;
     flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: space-between;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 #texto {
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .fala-ia {
     text-align: center;
+    overflow-x: auto;
+    max-width: 100%;
 }
 
 .fala-player {
@@ -78,9 +85,11 @@ div#jogo {
 }
 
 #prompt {
-    width: 100%;
+    box-sizing: border-box;
+    width: 98%;
+    height: fit-content;
     margin: 1%;
-    padding-left: 2%;
+    padding-left: 1%;
     padding-top: 2%; 
     padding-bottom: 2%;
     font-size: x-large;
@@ -89,12 +98,13 @@ div#jogo {
 }
 
 #opcoes {
-    max-width: 30%;
-    max-height: 90vh;
+    width: 30%;
+    height: 90vh;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
-    overflow: auto;
+    align-items: center;
+    overflow-y: auto;
     background-color: rgb(214, 236, 255);
     border-radius: 15px;
 }
@@ -102,10 +112,12 @@ div#jogo {
 #opcoes > button {
     font-size: medium;
     width: 100%;
+    height: fit-content;
     margin: 7%;
     border: none;
     border-radius: 10px;
     background-color: rgb(156, 215, 208);
+    cursor: pointer;
 }
 
 @media (max-width:600px) {
@@ -128,4 +140,16 @@ div#jogo {
         width: 40%;
         margin: 3%;
     }
+}
+
+.typewriter {
+    font-family: monospace;
+    border-right: 2px solid #000; /* Cursor */
+    overflow: hidden;
+    animation: blink 0.7s infinite;
+}
+  
+@keyframes blink {
+    from { border-right-color: transparent; }
+    to { border-right-color: #000; }
 }
