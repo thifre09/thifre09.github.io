@@ -57,7 +57,6 @@ div#jogo {
     border: solid 1px;
     border-radius: 10px;
     display: flex;
-    flex-wrap: wrap;
     flex-direction: column;
     justify-content: space-between;
     overflow-y: auto;
@@ -102,18 +101,30 @@ div#jogo {
     height: 90vh;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
-    align-items: center;
-    overflow-y: auto;
+    justify-content: center;
     background-color: rgb(214, 236, 255);
     border-radius: 15px;
 }
 
 #opcoes > button {
+    width: 50%;
+    height: 5%;
+}
+
+#opcoes > div {
+    height: 95%;
+    width: 100%;
+    padding: 5%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+#opcoes > div > button {
     font-size: medium;
     width: 100%;
     height: fit-content;
-    margin: 7%;
     border: none;
     border-radius: 10px;
     background-color: rgb(156, 215, 208);
@@ -131,25 +142,13 @@ div#jogo {
         height: 59%;
     }
 
-    #opcoes {
+    #opcoes > div {
         margin-top: 5%;
         max-width: 90%;
     }
 
-    #opcoes > button{
+    #opcoes > div > button{
         width: 40%;
         margin: 3%;
     }
-}
-
-.typewriter {
-    font-family: monospace;
-    border-right: 2px solid #000; /* Cursor */
-    overflow: hidden;
-    animation: blink 0.7s infinite;
-}
-  
-@keyframes blink {
-    from { border-right-color: transparent; }
-    to { border-right-color: #000; }
 }
