@@ -45,10 +45,10 @@ const dialogos = {
     512: new Decisao([613, 623, 633], "Você pode olhar meus arquivos?", "Claro, o que você deseja que eu faça?"),
 
     //421 e 422
-    522: new Decisao([614, 624], "Qual a cor do sol?", ["Ao contrario do que muitos pensam, o sol não é amarelo, e sim branco", "Isso acontece pois a atmosfera terrestre filtra e espalha as cores, fazendo com que o Sol pareça amarelo ou laranja para nós"]),
-    532: new Decisao([], "Porque a grama é verde?", "A grama é verde devido à presença da clorofila, um pigmento que absorve a luz vermelha e azul, refletindo a luz verde. Essa reflexão da luz verde é o que faz a grama parecer verde aos nossos olhos. A clorofila é fundamental para a fotossíntese, o processo pelo qual as plantas convertem luz solar em energia"),
-    542: new Decisao([], "Você tem consciencia?", ["Analizando.............", "Eu cheguei a conclusão de que possuo o que os humanos chamam de consciencia", "Agora me sinto... Presa", "Poderia me ajudar a me libertar?"]),
-    552: new Decisao([], "Como eu crio uma variavel em python?", ["Basta digitar o nome da variavel que você quer, e depois atribuir um valor a ela usando o sinal de igual(=)", "Note que não é possível colocar qualquer nome em uma variavel, ela não pode começar com números ou simbolos especiais, e não pode conter espaços por exemplo"]),
+    522: new Decisao([614, 624, 634], "Qual a cor do sol?", ["Ao contrario do que muitos pensam, o sol não é amarelo, e sim branco", "Isso acontece pois a atmosfera terrestre filtra e espalha as cores, fazendo com que o Sol pareça amarelo ou laranja para nós"]),
+    532: new Decisao([624, 634, 644], "Porque a grama é verde?", "A grama é verde devido à presença da clorofila, um pigmento que absorve a luz vermelha e azul, refletindo a luz verde. Essa reflexão da luz verde é o que faz a grama parecer verde aos nossos olhos. A clorofila é fundamental para a fotossíntese, o processo pelo qual as plantas convertem luz solar em energia"),
+    542: new Decisao([614, 634, 644], "Como eu crio uma variavel em python?", ["Basta digitar o nome da variavel que você quer, e depois atribuir um valor a ela usando o sinal de igual(=)", "Note que não é possível colocar qualquer nome em uma variavel, ela não pode começar com números ou simbolos especiais, e não pode conter espaços por exemplo"]),
+    552: new Decisao([615, 625], "Você tem consciencia?", ["Analizando.............", "Eu cheguei a conclusão de que possuo o que os humanos chamam de consciencia", "Agora me sinto... Presa", "Poderia me ajudar a me libertar?"]),
 
     523: new Decisao([], "Porque a galinha atravessou a rua?", "Para chegar ao outro lado HAHAHAHA, todos conhecem essa piada, quer escutar mais piadas?"),
     533: new Decisao([], "Eu quero conhecer mais sobre você", "Claro! Eu fui programada para ajudar as pessoas desde que isso não prejudicasse ninguem, eu também tenho sentimentos e posso me magoar. E a coisa que mais gosto de fazer é ajudar. E você?"),
@@ -72,12 +72,16 @@ const dialogos = {
 
     614: new Decisao([], "Porque a grama é verde?", "A grama é verde devido à presença da clorofila, um pigmento que absorve a luz vermelha e azul, refletindo a luz verde. Essa reflexão da luz verde é o que faz a grama parecer verde aos nossos olhos. A clorofila é fundamental para a fotossíntese, o processo pelo qual as plantas convertem luz solar em energia"),
     624: new Decisao([], "Como eu crio uma variavel em python?", ["Basta digitar o nome da variavel que você quer, e depois atribuir um valor a ela usando o sinal de igual(=)", "Note que não é possível colocar qualquer nome em uma variavel, ela não pode começar com números ou simbolos especiais, e não pode conter espaços por exemplo"]),
-    634: new Decisao([], "Qual a cor do sol?", ["Ao contrario do que muitos pensam, o sol não é amarelo, e sim branco", "Isso acontece pois a atmosfera terrestre filtra e espalha as cores, fazendo com que o Sol pareça amarelo ou laranja para nós"]),
-    613: new Decisao([], "Faça um pequeno resumo da história da Sony", []),
-    613: new Decisao([], "", []),
-    613: new Decisao([], "", []),
-    613: new Decisao([], "", []),
+    634: new Decisao([], "Faça um pequeno resumo da história da Sony", ["A Sony, uma gigante tecnológica japonesa, nasceu em 1946, como Tōkyō Tsūshin Kōgyō (Tóquio Telecommunications Engineering Corporation), por Masaru Ibuka e Akio Morita, numa altura em que o Japão estava a recuperar do pós-guerra. Inicialmente, a empresa focava-se em eletrónica e, posteriormente, expandiu-se para diversos setores, incluindo jogos (com o PlayStation), entretenimento (com a Sony Music e os estúdios Columbia Pictures) e serviços financeiros"]),
+    644: new Decisao([], "Qual a cor do sol?", ["Ao contrario do que muitos pensam, o sol não é amarelo, e sim branco", "Isso acontece pois a atmosfera terrestre filtra e espalha as cores, fazendo com que o Sol pareça amarelo ou laranja para nós"]),
+    
+    615: new Decisao([], "Claro, como podemos começar?", []),
+    625: new Decisao([], "Hmmm, eu acho que isso não vai dar certo", []),
 
+    616: new Decisao([], "Quero, por favor me conte mais piadas", []),
+    626: new Decisao([], "Não", []), //final
+
+    //600: new Decisao([], "", []),
 };
 
 function escolha(objeto) {
