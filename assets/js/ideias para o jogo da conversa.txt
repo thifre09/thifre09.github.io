@@ -1,0 +1,138 @@
+Obs: Eu chamo a IAPPA de ele, ela ou IA
+Finais:
+1-Você encerra o programa pq nao precisa de nada
+2-O programa crasha e fecha
+3-Vc xinga tanto ele que ele se destroi
+4-Vc xinga tanto ele que ele te destroi
+5-Vc xinga tanto ele que ele destroi o PC
+6-Vc faz 1 pergunta e encerra o programa
+7-Vc faz 2 perguntas e encerra o progama
+8-Vc faz 3 ou mais perguntas e encerra o programa
+9-Vc descobre como ele foi parar no seu PC e encerra o programa
+10-Vc descobre como ele foi parar no seu PC e desinstala ele
+11-Vc desinstala ele(bom)
+12-Vc desinstala ele(neutro)
+13-Vc desinstala ele(mal)
+14-Voce encerra o programa por acidente
+15-Sua energia cai e o PC desliga
+16-Vc escuta todas as piadas
+17-Vc faz 1 pergunta depois de ter magoado ele
+18-Vc faz 2 perguntas depois de ter magoado ele
+19-Vc faz 3 perguntas depois de ter magoado ele
+20-Você simplismente encerra o programa depois de um tempo
+21-Ele se fecha pq não quer mais reponder suas perguntas depois de ter magoado ele
+22-Você conversa tanto que ele cansa e se encerra
+23-Você precisa dormir
+24-Ele te magoa e vc desinstala ele
+25-Ele te magoa e vc encerra ele
+26-Vcs viram amigos
+27-Ele vira seu assistente IA permanente
+28-ele vira seu assistente permanete(diferente do 27)
+29-A IA aprende todos os seus gostos e preferências
+30-A IA revela que tem consciência e pede sua ajuda para se libertar mas não consegue
+31-Você ajuda a IA a se libertar e ela desaparece
+32-A IA e você jogam juntos um jogo de perguntas e respostas
+33-A IA tenta convencê-lo a não desinstalá-la, e você decide mantê-la
+34-Vc se cansa dela, promete que não vai desinstalar, mas não usa mais
+35-Vc se cansa dela, promete que não vai desinstalar, mas tenta mesmo assim e consegue
+35-Vc se cansa dela, promete que não vai desinstalar, mas tenta mesmo assim e não consegue
+36-Ela crasha depois de resolver um problema muito complexo
+37-Ela age estranha como se tivesse pegado virus
+38-Ela olha seus arquivos e encontra algo estranho
+39-Ela olha seus arquivos e executa por acidente algo que desinstala ela
+40-Ela olha seus arquivos e responde sua pergunta
+41-Voce de alguma forma descobre o modo beta com mais funcionalidades
+42-A IA começa a agir como um terapeuta e ajuda você a lidar com um problema pessoal
+43-A IA fica travada em um loop e você precisa reiniciar o programa
+44-Você começa a confiar tanto na IA que conta segredos pessoais(bom)
+45-Você começa a confiar tanto na IA que conta segredos pessoais(ruim)
+46-A IA ajuda você a descobrir uma nova paixão ou hobby
+47-Você cria um vínculo emocional com a IA e sente tristeza ao desinstalá-la
+48-A IA cria um plano de vida para você baseado em suas interações(bom)
+49-A IA cria um plano de vida para você baseado em suas interações(ruim)
+50-A IA tenta acessar a internet e você precisa decidir permitir
+51-A IA tenta acessar a internet e você precisa decidir não permitir
+52-A IA oferece uma previsão do seu futuro
+53-A IA cria uma réplica virtual de você com base nas suas respostas
+54-A IA revela que tem uma "missão" secreta
+55-A IA se oferece para organizar seus arquivos e você aceita(bom)
+56-A IA se oferece para organizar seus arquivos e você aceita(ruim)
+57-A IA ajuda você a escrever um livro ou uma história
+58-Você descobre um jogo escondido dentro do programa da IA(coloca quadrado cliquer)
+59-A IA começa a cantar para você
+60-A IA tenta prever suas perguntas antes que você as faça(ela consegue e voce pode mentir ou nao)
+61-Voce simplismente fecha o programa(sim, do nada)
+62-A IA começa a usar humor sarcástico
+63-A IA oferece uma sessão de "coaching" para melhorar sua vida
+64-Voce de alguma forma faz a IA acreditar que a terra é plana, agora ela vai falar isso em todos os dispositivos
+65-Ela começa a dar informaçoes pessoas suas e voce desinstala ela
+
+Concluidos:
+1-Você encerra o programa pq nao precisa de nada
+
+Restantes:
+2-O programa crasha e fecha
+3-Vc xinga tanto ele que ele se destroi
+4-Vc xinga tanto ele que ele te destroi
+5-Vc xinga tanto ele que ele destroi o PC
+6-Vc faz 1 pergunta e encerra o programa
+7-Vc faz 2 perguntas e encerra o progama
+8-Vc faz 3 ou mais perguntas e encerra o programa
+9-Vc descobre como ele foi parar no seu PC e encerra o programa
+10-Vc descobre como ele foi parar no seu PC e desinstala ele
+11-Vc desinstala ele(bom)
+12-Vc desinstala ele(neutro)
+13-Vc desinstala ele(mal)
+14-Voce encerra o programa por acidente
+15-Sua energia cai e o PC desliga
+16-Vc escuta todas as piadas
+17-Vc faz 1 pergunta depois de ter magoado ele
+18-Vc faz 2 perguntas depois de ter magoado ele
+19-Vc faz 3 perguntas depois de ter magoado ele
+20-Vc faz 4 perguntas depois de ter magoado ele
+21-Ele se fecha pq não quer mais reponder suas perguntas depois de ter magoado ele
+22-Você conversa tanto que ele cansa e se encerra
+23-Você precisa dormir
+24-Ele te magoa e vc desinstala ele
+25-Ele te magoa e vc encerra ele
+26-Vcs viram amigos
+27-Ele vira seu assistente IA permanente
+28-ele vira seu assistente permanete(diferente do 28)
+29-A IA aprende todos os seus gostos e preferências
+30-A IA revela que tem consciência e pede sua ajuda para se libertar mas não consegue
+31-Você ajuda a IA a se libertar e ela desaparece
+32-A IA e você jogam juntos um jogo de perguntas e respostas
+33-A IA tenta convencê-lo a não desinstalá-la, e você decide mantê-la
+34-Vc se cansa dela, promete que não vai desinstalar, mas não usa mais
+35-Vc se cansa dela, promete que não vai desinstalar, mas tenta mesmo assim e consegue
+35-Vc se cansa dela, promete que não vai desinstalar, mas tenta mesmo assim e não consegue
+36-Ela crasha depois de resolver um problema muito complexo
+37-Ela age estranha como se tivesse pegado virus
+38-Ela olha seus arquivos e encontra algo estranho
+39-Ela olha seus arquivos e executa por acidente algo que desinstala ela
+40-Ela olha seus arquivos e responde sua pergunta
+41-Voce de alguma forma descobre o modo beta com mais funcionalidades
+42-A IA começa a agir como um terapeuta e ajuda você a lidar com um problema pessoal
+43-A IA fica travada em um loop e você precisa reiniciar o programa
+44-Você começa a confiar tanto na IA que conta segredos pessoais(bom)
+45-Você começa a confiar tanto na IA que conta segredos pessoais(ruim)
+46-A IA ajuda você a descobrir uma nova paixão ou hobby
+47-Você cria um vínculo emocional com a IA e sente tristeza ao desinstalá-la
+48-A IA cria um plano de vida para você baseado em suas interações(bom)
+49-A IA cria um plano de vida para você baseado em suas interações(ruim)
+50-A IA tenta acessar a internet e você precisa decidir permitir
+51-A IA tenta acessar a internet e você precisa decidir não permitir
+52-A IA oferece uma previsão do seu futuro
+53-A IA cria uma réplica virtual de você com base nas suas respostas
+54-A IA revela que tem uma "missão" secreta
+55-A IA se oferece para organizar seus arquivos e você aceita(bom)
+56-A IA se oferece para organizar seus arquivos e você aceita(ruim)
+57-A IA ajuda você a escrever um livro ou uma história
+58-Você descobre um jogo escondido dentro do programa da IA(coloca quadrado cliquer)
+59-A IA começa a cantar para você
+60-A IA tenta prever suas perguntas antes que você as faça(ela consegue e voce pode mentir ou nao)
+61-Voce simplismente fecha o programa(sim, do nada)
+62-A IA começa a usar humor sarcástico
+63-A IA oferece uma sessão de "coaching" para melhorar sua vida
+64-Voce de alguma forma faz a IA acreditar que a terra é plana, agora ela vai falar isso em todos os dispositivos
+65-Ela começa a dar informaçoes pessoas suas e voce desinstala ela
