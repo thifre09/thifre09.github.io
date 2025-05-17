@@ -1,4 +1,3 @@
-
 1-Você encerra o programa pq nao precisa de nada
 2-Final das perguntas
 3-Vc descobre como ele foi parar no seu PC e encerra o programa
@@ -19,7 +18,7 @@
 
 18-Vcs viram amigos
 19-Ele vira seu assistente IA permanente
-20-ele vira seu assistente permanete(diferente do 19)
+20-ele vira seu assistente permanente(diferente do 19)
 21-A IA aprende todos os seus gostos e preferências
 22-A IA e você jogam juntos um jogo de perguntas e respostas
 23-A IA tenta convencê-lo a não desinstalá-la, e você decide mantê-la
@@ -43,9 +42,9 @@
 39-A IA oferece uma sessão de "coaching" para melhorar sua vida
 
 40-O programa crasha e fecha
-41-Vc xinga tanto ele que ele se destroi
-42-Vc xinga tanto ele que ele te destroi
-43-Vc xinga tanto ele que ele destroi o PC
+41-Vc xinga tanto ele que ele se destrói
+42-Vc xinga tanto ele que ele te destrói
+43-Vc xinga tanto ele que ele destrói o PC
 44-Ela crasha depois de resolver um problema muito complexo
 45-Ela age estranha como se tivesse pegado virus
 46-Ela olha seus arquivos e encontra algo estranho
@@ -59,6 +58,9 @@
 54-A IA tenta prever suas perguntas antes que você as faça
 55-A IA começa a usar humor sarcástico
 56-Voce de alguma forma faz a IA acreditar que a terra é plana, agora ela vai falar isso em todos os dispositivos
-57-Ela começa a dar informaçoes pessoas suas e voce desinstala ela
+57-Ela começa a dar informações pessoas suas e voce desinstala ela
 
 58-A IA te xinga e vc fecha ela
+59-Um final relacionado a batatas
+60-Você descobre que você é a IA
+61-Você abandona tudo para ir comer uma tangerina em Taiwan

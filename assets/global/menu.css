@@ -246,7 +246,7 @@ div#updates:active, div#calculadora:active {
     }
 
     div#updates {
-        width: 50%;
+        width: 70%;
     }
 }
 
@@ -320,6 +320,12 @@ div#bloco {
     box-sizing: border-box; /* Inclui padding e border no tamanho total */
     position: fixed;
     z-index: 101;
+}
+
+@media (max-width: 600px) {
+    div#bloco {
+        width: 70%;
+    }
 }
 
 div#bloco:active {
@@ -544,6 +550,13 @@ input:checked + .slider:before {
     to {
         left: 60%;
         color: black;
+    }
+}
+
+@media (max-width: 600px) {
+    div#configuracoes {
+        left: 10%;
+        width: 80%;
     }
 }
 

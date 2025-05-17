@@ -107,8 +107,13 @@ div#jogo {
 }
 
 #opcoes > button {
-    width: 50%;
-    height: 5%;
+    width: fit-content;
+    height: fit-content;
+    margin: 3%;
+    border: none;
+    border-radius: 10px;
+    background-color: rgb(255, 76, 76);
+    font-size: x-large;
 }
 
 #opcoes > div {
@@ -117,7 +122,6 @@ div#jogo {
     padding: 5%;
     display: flex;
     flex-wrap: wrap;
-    flex-direction: column;
     justify-content: space-around;
 }
 
@@ -142,13 +146,28 @@ div#jogo {
         height: 59%;
     }
 
-    #opcoes > div {
+    #texto {
+        font-size: 1.3rem;
+    }
+
+    #opcoes {
         margin-top: 5%;
-        max-width: 90%;
+        width: 90%;
+        height: fit-content;
+    }
+
+    #opcoes > button {
+        width: fit-content;
+        height: fit-content;
+    }
+
+    #opcoes > div {
+        height: fit-content;
     }
 
     #opcoes > div > button{
         width: 40%;
         margin: 3%;
+        font-size: 1.3rem;
     }
 }
