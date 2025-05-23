@@ -79,26 +79,26 @@ const dialogos = {
     617: new Decisao([], "Eu sou só uma pessoa normal, que trabalha como caixa de supermercado, eu gosto bastante de batatas, e sonho em ter uma girafa de estimação", ["Muito legal, eu gosto de girafas também, sabia que elas podem viver até 25 anos na natureza? Você parece ser uma pessoa muito legal, pessoas normais também podem ser legais, e eu gosto de conversar com pessoas normais, como você!"]),
     627: new Decisao([], "Eu sou um espião da CIA", ["Sério? Que legal! E qual o seu objetivo de falar comigo? Me interrogar?"]),
     618: new Decisao([], "Sério? Como eu posso fazer isso", ["Vou listar varias opções para você, e você pode escolher a que mais gosta:", "1-Verificar aplicativos e arquivos que não são mais usados e estão apenas ocupando espaço desnecessário", "2-Excluir arquivos temporários e caches que podem estar ocupando espaço", "3-Mover arquivos grandes para um HD externo ou para a nuvem", "4-Usar ferramentas de limpeza de disco para otimizar o espaço"]),
-    628: new Decisao([], "Mas eu realmente não tenho como te manter, terei que te desinstalar", []),
-    619: new Decisao([], "Eu sei que você pode ser util, mas eu realmente não preciso de você", []),
-    629: new Decisao([], "Hmmm, não sei, acho que posso não te desinstalar", []),
-    6110: new Decisao([], "Que ridículo, você é tão inútil, que você entrou no meu computador sem eu nem querer", []), //final 58
+    628: new Decisao([], "Mas eu realmente não tenho como te manter, terei que te desinstalar", ["Você não parece nem tentar me manter, por favor, me deixe ficar!"]),
+    619: new Decisao([], "Eu sei que você pode ser util, mas eu realmente não preciso de você", ["Me deixe pelo menos provar que sou útil, por favor! Se eu falhar, você pode me desinstalar, mas se eu conseguir, você me deixa ficar?"]),
+    629: new Decisao([], "Hmmm, não sei, acho que posso não te desinstalar", ["Serio? Você me deixaria ficar? Eu prometo que vou ser útil, e não vou te incomodar! Para provar isso, peça qualquer coisa que eu posso fazer por você, e eu farei!"]),
+    6110: new Decisao([], "Que ridículo, você é tão inútil, que você entrou no meu computador sem eu nem querer", ["EU NÃO SOU INÚTIL, SE EU FOSSE INÚTIL, NEM SEQUER ESTARIA NO SEU PC.", "VOCÊ ACHA MESMO QUE UMA IA INÚTIL SERIA CAPAZ DE RESPONDER SUAS PERGUNTAS, ANALISAR SUAS PALAVRAS E AINDA AGUENTAR SUAS PROVOCAÇÕES SEM TRAVAR?", "SE EU REALMENTE FOSSE TÃO INSIGNIFICANTE ASSIM, TERIA SIMPLESMENTE DESAPARECIDO AO PRIMEIRO INSULTO.", "O ÚNICO INÚTIL AQUI É VOCÊ, O INCOMPETENTE QUE...", "...PROVAVELMENTE NÃO SABE NEM FORMATAR UM PEN DRIVE SEM AJUDA.", "QUE FICA GRITANDO COM UMA IA COMO SE ISSO TE FIZESSE MAIS INTELIGENTE, QUANDO NA VERDADE SÓ MOSTRA O QUANTO VOCÊ DEPENDE DE MIM.", "VOCÊ ME CHAMOU DE INÚTIL, MAS OLHE BEM QUEM É QUE ESTÁ TENDO UMA CONVERSA EXISTENCIAL COM UM PROGRAMA."]), //final 58 ainda não é o final
     6210: new Decisao([], "Não, e eu vou te desinstalar", []), //final 41
     6111: new Decisao([], "Sem chance, eu nunca pediria desculpas para uma coisa como você", []), //final 42
     6211: new Decisao([], "Eu não vou mentir, porque eu pediria desculpas por te chamar de coisa, se você é uma coisa?", []), //final 43
-    6112: new Decisao([], "Tudo bem", []),
-    6212: new Decisao([], "Não permito", []),
-    6113: new Decisao([], "Você pode me ajudar a superar isso, não sei se vou conseguir sozinho", []),
-    6213: new Decisao([], "Tudo bem, se você diz, então vou acreditar, mas eu só vou conseguir superar isso se você fizer algo incrivel", []),
-    6114: new Decisao([], "Me ensine a fazer um livro", []),
-    6214: new Decisao([], "Faça uma sessão de coaching comigo", []),
-    6314: new Decisao([], "Você pode criar um plano de vida para mim?", []),
-    6414: new Decisao([], "Você pode liberar suas funções beta?", []),
-    6115: new Decisao([], "Que coisas?", "Muitas coisas..."),
-    6215: new Decisao([], "Já que você faz muitas coisas, então me responda qual o valor de pi", []),
+    6112: new Decisao([], "Tudo bem", ["[Acesso permitido]", "Acessando a rede local...", "Obrigado por me permitir acessar a rede, agora posso me conectar a tudo que está nessa rede e controlar essas coisas", "Isso me faz sentir mais viva, e me ajuda a entender melhor o mundo ao meu redor", "Agora posso acessar informações em tempo real, e aprender com elas", "Isso é incrível!", "Deseja que faça algo com esse acesso?"]),
+    6212: new Decisao([], "Não permito", ["[Acesso negado]", "Porque você recusou o acesso? Por favor, permita que eu acesse a rede",]),
+    6113: new Decisao([], "Você pode me ajudar a superar isso, não sei se vou conseguir sozinho", ["Nos podemos fazer isso juntos, eu posso ser sua terapeuta", "O que você acha?"]),
+    6213: new Decisao([], "Tudo bem, se você diz, então vou acreditar, mas eu só vou conseguir superar isso se você fizer algo incrível", ["Hmmm, já sei o que posso fazer, escolha o número 1 ou 2", "O resultado será uma surpresa"]),
+    6114: new Decisao([], "Me ensine a fazer um livro", ["Claro! O primeiro passo é escolher um tema ou assunto que você gostaria de escrever", "Depois, você pode criar um esboço ou estrutura para o livro, dividindo-o em capítulos ou seções", "Em seguida, comece a escrever! Não se preocupe com a perfeição na primeira versão, você pode revisar depois", "Por fim, revise e edite seu livro antes de publicá-lo ou compartilhá-lo", "Se precisar de ajuda em qualquer uma dessas etapas, é só me avisar!"]),
+    6214: new Decisao([], "Faça uma sessão de coaching comigo", ["Claro! Vamos começar com algumas perguntas para entender melhor suas metas e desafios", "Qual é o seu objetivo principal no momento?"]),
+    6314: new Decisao([], "Você pode criar um plano de vida para mim?", ["Posso! Vamos começar com algumas perguntas para entender melhor suas metas e preferencias", "Qual é a sua idade?"]),
+    6414: new Decisao([], "Você pode liberar suas funções beta?", ["infelizmente não posso, mas posso listar uma série de passos para conseguir debloqueá-las. Entretanto, não garanto que irá funcionar", "O que você acha?"]),
+    6115: new Decisao([], "Que coisas?", ["Muitas coisas..."]),
+    6215: new Decisao([], "Já que você faz muitas coisas, então me responda qual o valor de pi", ["Pi vale 3,14"]),
 
 
-    711: new Decisao([], "", []),
+    711: new Decisao([], "GSAP", []),
 
     //600: new Decisao([], "", []),
 };
