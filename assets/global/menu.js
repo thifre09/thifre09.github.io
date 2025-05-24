@@ -330,40 +330,53 @@ class ConquistaGeral {
 }
 
 const conquistasLista = [];
-const imagens = [];
 const path = "assets/images/conquistas-geral/";
 
-function adicionarImgConquistas() {
-    for (let i = 1; i <= 9; i++) {
-        imagens.push(`conquista${i}.png`);
+const descricoes = [
+    "Responda o quiz de batatas",
+    "Use o codificador 1 vez",
+    "Clique na cor secreta",
+    "Clique no botão secreto do menu principal",
+    "Clique no jogo com a menor nota",
+    "Clique no número 63",
+    "Desative o css 1 vez",
+    "Veja todo o mini curso de python",
+    "Consiga todas as conquistas do Quadrado clicker"
+];
+
+// Inicializa com imagens e descrições
+function inicializarConquistas() {
+    for (let i = 1; i <= descricoes.length; i++) {
+        const img = new Image();
+        img.src = `${path}conquista${i}.png`;
+        conquistasLista.push(new ConquistaGeral(img, descricoes[i - 1], false));
     }
-    imagens.forEach((imageName) => {
-        const imagem = new Image();
-        imagem.src = path + imageName;
-        conquistasLista.push(new ConquistaGeral(imagem));
-    });
 }
 
+// Salva no localStorage
+function salvarConquistasGeral() {
+    const dadosParaSalvar = conquistasLista.map(c => ({
+        descricao: c.descricao,
+        possui: c.possui
+    }));
+    localStorage.setItem("ECS", JSON.stringify(dadosParaSalvar));
+}
+
+// Carrega do localStorage e aplica no array
+function carregarConquistasGeral() {
+    const estadoConquistasSalvas = localStorage.getItem("ECS");
+    if (estadoConquistasSalvas) {
+        const estado = JSON.parse(estadoConquistasSalvas);
+        estado.forEach((element, index) => {
+            conquistasLista[index].possui = element.possui;
+        });
+    }
+}
+
+// Renderiza as conquistas no HTML
 function adicionarConquistasGeral() {
     const conquistasContainer = document.getElementById("conquistas-container");
     conquistasContainer.innerHTML = "";
-        
-
-    const descricoes = [
-        "Responda o quiz de batatas",
-        "Use o codificador 1 vez",
-        "Clique na cor secreta",
-        "Clique no botão secreto do menu principal",
-        "Clique no jogo com a menor nota",
-        "Clique no número 63",
-        "Desative o css 1 vez",
-        "Veja todo o mini curso de python",
-        "Consiga todas as conquistas do Quadrado clicker"
-    ];
-
-    descricoes.forEach((d, index) => {
-        conquistasLista[index].descricao = d;
-    });
 
     conquistasLista.forEach((element) => {
         const div = document.createElement("div");
@@ -371,9 +384,7 @@ function adicionarConquistasGeral() {
 
         const img = document.createElement("img");
         img.src = element.img.src;
-        if (element.possui) {
-            img.style.filter = "grayscale(0)";
-        }
+        img.style.filter = element.possui ? "grayscale(0)" : "grayscale(100%)";
 
         const divDescricao = document.createElement("div");
         divDescricao.classList.add("descricao-conquista");
@@ -383,13 +394,12 @@ function adicionarConquistasGeral() {
         div.appendChild(divDescricao);
         conquistasContainer.appendChild(div);
     });
-
-    verificarConquistasGeral();
 }
 
+// Verifica os eventos para liberar conquistas
 function verificarConquistasGeral() {
     const eventos = [
-        { id: "botao", index: 0},
+        { id: "botao", index: 0 },
         { id: "criptografar", index: 1 },
         { id: "descriptografar", index: 1 },
         { id: "corBotaoSecreto", index: 2 },
@@ -398,40 +408,30 @@ function verificarConquistasGeral() {
         { id: "63", index: 5 },
         { id: "botao-css", index: 6 },
         { id: "pythonBotaoSecreto", index: 7 }
+        // A conquista 8 provavelmente será desbloqueada de outra forma
     ];
 
     eventos.forEach((evento) => {
         const elemento = document.getElementById(evento.id);
         if (elemento) {
             elemento.addEventListener("click", () => {
-                conquistasLista[evento.index].possui = true;
-                salvarConquistasGeral();
-                adicionarConquistasGeral();
+                if (!conquistasLista[evento.index].possui) {
+                    conquistasLista[evento.index].possui = true;
+                    salvarConquistasGeral();
+                    adicionarConquistasGeral();
+                }
             });
         }
     });
 }
 
-function salvarConquistasGeral() {
-    localStorage.setItem("ECS", JSON.stringify(conquistasLista));
-}
-
-function carregarConquistasGeral() {
-    const estadoConquistasSalvas = localStorage.getItem("ECS");
-    if (estadoConquistasSalvas) {
-        const estado = JSON.parse(estadoConquistasSalvas);
-        conquistasLista.length = 0; // Limpa a lista atual
-        estado.forEach((element, index) => {
-            const imagem = new Image();
-            imagem.src = path + imagens[index];
-            conquistasLista.push(new ConquistaGeral(imagem, element.descricao, element.possui));
-        });
-    }
-}
-
-// Inicialização
-adicionarImgConquistas();
-carregarConquistasGeral();
+// Inicialização completa
+window.addEventListener("DOMContentLoaded", () => {
+    inicializarConquistas();
+    carregarConquistasGeral();
+    adicionarConquistasGeral();
+    verificarConquistasGeral();
+});
 
 /* Conquistas */
 

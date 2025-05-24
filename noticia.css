@@ -1,0 +1,164 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-family: 'Arial Narrow', Arial, sans-serif;
+}
+
+.header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    padding: 10px;
+    background-color: rgb(6, 121, 6);
+    padding: 0.8em 0;
+    margin-bottom: 7em;
+    height: fit-content;
+}
+.logo{
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: fit-content;
+}
+
+.logo:visited {
+    color: black;
+}
+
+.logo h1{
+    font-size: 200%;
+}
+
+.logo img {
+    width: 10%;
+}
+#search {
+    resize: none;
+    padding: 0.5rem;
+    font-size: 1rem;
+    text-align: center;
+    background-color: rgb(89, 254, 89);
+}
+
+#search:focus {
+    outline: none;
+}
+
+label {
+    position: relative;
+}
+
+label::after {
+    content: url("https://img.icons8.com/ios-glyphs/30/search--v1.png");
+    position: absolute;
+    padding: 0.1rem;
+    width: 1rem;
+    right: 1rem;
+    transition-property: transform, opacity;
+    transition-duration: 0.3s;
+    transition-timing-function: cubic-bezier(.76, .09, .6, .4);
+}
+
+label:has(input:focus)::after{
+    transform: translateX(200%);
+    opacity: 0;
+}
+
+main {
+    padding: 20%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
+.title {
+    text-align: justify;
+    font-size: 2.7em;
+}
+
+.subtitle {
+    font-size: 1.7em;
+    color: rgb(92, 92, 92);
+    text-align: justify;
+}
+
+.autors {
+    font-size: 1em;
+	color: rgb(136, 136, 136);
+}
+
+.date {
+    font-size: 0.9rem;
+}
+
+article {
+    margin-bottom: 3%;
+}
+
+main > h3{
+    margin: 2%;
+    margin-left: 0;
+}
+
+.content p {
+    text-align: justify;
+    font-size: 1.5em;
+	line-height: 1.2em;
+    margin-top: 5%;
+}
+.bibliografia{
+    border: 2px solid black;
+    padding: 4%;
+    border-radius: 5px;
+}
+.bibliografia h2{
+    margin-bottom: 1.5rem;
+}
+
+.bibliografia li{
+    margin-bottom: 1rem;
+    border-bottom: 2px solid black;
+    padding-bottom: 0.4rem;
+    list-style-type: none;
+}
+
+.bibliografia a{
+    text-decoration: none;
+}
+@media (max-width: 768px) {
+    .header {
+        padding: 10px;
+        margin-bottom: 5em;
+    }
+
+    .logo {
+        font-size: 2em;
+    }
+
+    .if-logo {
+        max-width: 7%;
+    }
+
+    main {
+        padding: 10%;
+        padding-top: 2%;
+    }
+
+    .title {
+        font-size: 2em;
+    }
+
+    .subtitle {
+        font-size: 1.5em;
+    }
+
+    .content p {
+        font-size: 1.2em;
+    }
+
+    .bibliografia {
+        padding: 10%;
+    }
+}
