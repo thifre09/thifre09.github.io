@@ -126,6 +126,7 @@ function abrirBlocoNotas(estado) {
 }
 
 function abrirConquistas(estado) {
+    verificarConquistasGeral()
 
     let con = document.getElementById("conquistasGeral");
     if (estado === true) {
