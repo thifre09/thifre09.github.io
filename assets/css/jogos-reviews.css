@@ -30,6 +30,8 @@ div.jogo img {
     border: solid;
     border-radius: 5px;
     margin: 10px;
+    max-width: 300px;
+    max-height: 300px;
 }
 
 .tabela {
