@@ -7,21 +7,19 @@
     <link rel="stylesheet" href="assets/css/mayor-simulator.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Acme&family=Jersey+10&display=swap" rel="stylesheet">
+
     <title>Mayor Simulator</title>
 </head>
 
 <body>
     <header>
-        <div id="btn-return" class="goback">
-            <img src="assets/images/mayor-simulator/return.png" alt="return">
-        </div>
-        <h1>Mayor Simulator</h1>
+        <h1 id="btn-return">Mayor Simulator</h1>
 
     </header>
 
     <!--Tela inicial-->
-    <section id="tela-inicial">
+    <!-- <section id="tela-inicial">
         <div class="game-btns">
 
             <div class="bnt-ord" id="btn-tutorial">
@@ -40,10 +38,10 @@
             </div>
 
         </div>
-    </section>
+    </section> -->
 
     <!--Gameplay-->
-    <section id="jogo" style="display: none;">
+    <section id="jogo">
         <div id="left">
             <div id="news" class="new">
                 <img src="assets/images/mayor-simulator/news.png" alt="news">
@@ -57,17 +55,112 @@
             </div>
         </div>
 
+
         <div id="center">
-            <div id="noticias">
-                <p>ola</p>
+            <div id="propostas" style="display: block;">
+                <div id="proposta">
+                    <h1 id="tituloProposta">Anderson é um safadinho</h1>
+                    <p id="textoProposta">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Incidunt, saepe quae veniam eveniet mollitia similique. Tenetur suscipit eaque temporibus natus dolor, mollitia ipsa aliquid reprehenderit dolores minus, qui provident debitis. Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium voluptatum doloremque animi eaque odit, laudantium nostrum dolore repellendus minima nam nemo nobis, rerum aliquid cupiditate explicabo, dignissimos at sequi quam. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Possimus, earum repudiandae? Corrupti odio totam culpa illum dolorum dicta neque odit voluptas praesentium rerum, quo ad molestiae maiores dolores ut exercitationem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Error amet numquam iste suscipit illo asperiores atque quod aspernatur odio. Animi accusantium minima provident labore nisi esse quia eos incidunt ducimus?</p>
+                </div>
+
+                <div id="buttons-propose">
+                    <div><img src="assets/images/mayor-simulator/yes.png" alt="aceitar" id="btnAceitar"></div>
+                    <div><img src="assets/images/mayor-simulator/no.png" alt="recusar" id="btnRecusar"></div>
+                </div>
             </div>
-            <div id="propostas">
+
+            <div id="noticias" style="display: none;">
+                <div class="noticia">
+                    <h1>JANDUIR EGITO QUEBRA O GOOGLE APóÓS DIZER ""OK google!!!" VÁRIAS VEZES M = N/V
+                    </h1>
+                    <p>Ok google, preparar solução volátil.</p>
+                </div>
+                <div class="noticia">
+                    <h1>APARECIDA CAVOU UMA FALTA NOO JOGO CONTRAA HITLER :/</h1>
+                    <p>caio deu logo foi uma rasteira nessa véia cebosa kkkk</p>
+                </div>
+
+                <div class="noticia">
+                    <h1>RENNER RUFINO DE PAIVA É LIMPINHO NO BUBUM GRÁVIDO... TRISTE FIM DO FURRY</h1>
+                    <p>A DALVA CHUPA CAVALOS. CAIO DAMASCENO É O MESTRE DA SARRADA NEGRA. O HOMEM EM QUESTÃO FOI
+                        ENCONTRADO NUM </p>
+                </div>
+
+                <div class="noticia">
+                    <h1>Prefeito safado rouba brawl stars</h1>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas perferendis, vel laborum omnis
+                        perspiciatis hic voluptatibus dolores quia consequatur laudantium quis asperiores nesciunt quae.
+                        Nesciunt provident consequatur minima delectus aliquam.</p>
+                </div>
+
+                <div class="noticia">
+                    <h1></h1>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas perferendis, vel laborum omnis
+                        perspiciatis hic voluptatibus dolores quia consequatur laudantium quis asperiores nesciunt quae.
+                        Nesciunt provident consequatur minima delectus aliquam.</p>
+                </div>
+
+                <div class="noticia">
+                    <h1>ANDERSON COME ARTHUR NO CV DNV</h1>
+                    <p>Novamente acontece a blasfêmia, dessa vez o casal usou camisinha. Mas pelo visto tava furada</p>
+                </div>
 
             </div>
+
         </div>
 
         <div id="right">
-            <p>ola</p>
+            <div>
+                <h1>Estatísticas</h1>
+                <div id="geral">
+                    <p id="cidade">Cidade: Rolândia</p>
+                    <p id="dinheiro">Dinheiro: R$ 1000</p>
+                    <p id="populacao">População: 1000</p>
+                    <p id="satisfacao">Satisfação da população: 50%</p>
+                </div>
+            </div>
+
+            <div id="populacao">
+                <table>
+                    <thead>
+                        <th>Dados</th>
+                        <th>Estatística</th>
+                    </thead>
+                    <tr>
+                        <td>Saúde</td>
+                        <td>Média</td>
+                    </tr>
+                    <tr>
+                        <td>Alegria</td>
+                        <td>Média</td>
+                    </tr>
+                    <tr>
+                        <td>Segurança</td>
+                        <td>Média</td>
+                    </tr>
+                    <tr>
+                        <td>Educação</td>
+                        <td>Média</td>
+                    </tr>
+                    <tr>
+                        <td>Fome</td>
+                        <td>5%</td>
+                    </tr>
+                    <tr>
+                        <td>Economia</td>
+                        <td>Médio</td>
+                    </tr>
+                    <tr>
+                        <td>Desemprego</td>
+                        <td>5%</td>
+                    </tr>
+                    <tr>
+                        <td>Infraestrutura</td>
+                        <td>Média</td>
+                    </tr>
+                </table>
+                <!--alternar entre 8 valores: Condenável, péssimo, muito ruim, ruim, médio, bom, muito bom, ótimo, PERFEITO-->
+            </div>
         </div>
 
     </section>
@@ -80,32 +173,36 @@
     <!--Créditos-->
     <section id="creditos" style="display: none;">
         <div class="img-credits">
-            <img src="" alt="Pedao">
+            <img src="assets/images/mayor-simulator/pedro.jpeg" alt="Pedao">
+            <h2>Pedão</h2>
         </div>
 
         <div class="img-credits">
-            <img src="" alt="Caioba">
+            <img src="assets/images/mayor-simulator/" alt="Caioba">
+            <h2>Caioba</h2>
         </div>
 
         <div class="img-credits">
-            <img src="" alt="Lucas">
+            <!-- <img src="assets/images/mayor-simulator/lucas.jpeg" alt="Lucas"> -->
+            <h2>Lucacete</h2>
         </div>
 
         <div class="img-credits">
-            <img src="" alt="Thiago">
+            <img src="assets/images/mayor-simulator/thiago.jpeg" alt="Thiago">
+            <h2>Thiago</h2>
         </div>
 
         <div class="img-credits">
-            <img src="" alt="Silas">
+            <!-- <img src="assets/images/mayor-simulator/silas.jpeg" alt="Silas"> -->
+            <h2>SilasCar</h2>
         </div>
-        <div class="img-credits">
-            <p>tralelo tralala, Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci nostrum amet
-                cupiditate fugiat odio, voluptate rerum magni facere sint eos sit reprehenderit dicta quae, harum maxime
-                iusto similique quas nisi!</p>
+
+        <div class="img-credits" style="text-align: center;">
+            <p><mark>Mayor Simulator</mark> é uma produção de: Thiago Freitas, Lucas Luz, Caio Damasceno, Pedro Maciel e
+                Silas de Freitas.
+        </div>p>
         </div>
     </section>
-
     <script src="assets/js/mayor-simulator.js"></script>
 </body>
-
 </html>

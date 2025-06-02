@@ -1,8 +1,7 @@
-.pixelify-sans-pixel {
-    font-family: "Pixelify Sans", sans-serif;   
-    font-optical-sizing: auto;
-    font-weight: 400px;
-    font-style: normal;
+.jersey-10-regular {
+  font-family: "Jersey 10", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 * {
@@ -11,8 +10,8 @@
 }
 
 body {
-    font-family: "Pixelify Sans", sans-serif;
-    background: linear-gradient(to left, #dbdada, rgb(215, 214, 211)0, #dadad7);
+    font-family: "Jersey 10", sans-serif;
+    background: linear-gradient(to left, #dbdada, rgb(215, 214, 211)0, #e4e4e4);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -20,7 +19,7 @@ body {
 }
 
 header {
-    background: linear-gradient(to right, #eed66e, #ecd777, #f0e19e);
+    background: linear-gradient(to right, rgb(240, 215, 105), #ecd777, rgb(228, 206, 108));
     color: rgb(252, 236, 236);
     display: flex;
     align-items: center;
@@ -32,6 +31,7 @@ header {
 header h1 {
     text-align: center;
     color: black;
+    cursor: pointer;
 }
 
 #tela-inicial {
@@ -43,11 +43,8 @@ header h1 {
 
 .game-btns {
     display: flex;
-    border: solid 2px #000000;
-    border-radius: 10px;
     justify-content: space-around;
     padding: 20% 25% 20% 25%;
-    background: linear-gradient(to right, rgb(184, 151, 0), #c9a500, #edc200);
     gap: 3%;
 }
 
@@ -82,14 +79,31 @@ header h1 {
     align-items: center;
     gap: 2rem;
     height: 90vh;
-    max-width: 800px;
+    width: 800px;
     box-sizing: border-box;
+
 }
 
-.img-credits{
+.img-credits {
     width: 200px;
     height: 200px;
     border: 5px solid;
+    display: flex;
+}
+
+.img-credits img {
+    width: 100%;
+    height: 100%;
+}
+
+.img-credits h2 {
+    display: none;
+    background-color: #ffbe5d94;
+}
+
+.img-credits:hover h2 {
+    display: block;
+    position: absolute;
 }
 
 #jogo {
@@ -115,63 +129,175 @@ header h1 {
 #center {
     width: 40%;
     height: 90vh;
+    padding: 0;
     box-sizing: border-box;
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+table{
+    height: 250px;
+    width: 250px;
+}
+
+#propostas {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    font-size: 1.3em;
+}
+
+.noticia {
+    margin: 5%;
+    padding: 1%; /*Latuff é judeu XD*/
+}
+
+.noticia, #proposta {
+    overflow: auto;
+    height: auto; /* XD */  /*Deu certo*/
+    background-color: white;
+}
+
+#buttons-propose{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#buttons-propose div{
+    width: fit-content;
+    
+}
+
+#buttons-propose img{
+    width: 70%;
+}
+
+#center-img {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#buttons-propose{
+    margin: 20px;
+}
+
+#center-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 #right {
     width: 30%;
     height: 90vh;
     box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
-.new{
+table{
+    height: 250px;
+    width: 250px;
+}
+
+#right table{
+    border-collapse: collapse;
+    font-size: 0.8rem;
+}
+
+#right table, tr, td, th{
+    border: 2px solid;
+    padding: 0 0.5rem;
+    font-size: 1.3rem;
+    text-align: center;
+}
+.new {
     position: relative;
     width: fit-content;
     flex-direction: column;
     display: flex;
 }
 
-.new img:nth-child(2){
+.new img:nth-child(2) {
     position: absolute;
     top: -10px;
     right: -10px;
     /* display: none; */
 }
-.new p{
+
+.new p {
     text-align: center;
     font-size: 1.7rem;
 }
 
-.goback{
-    scale: 0.25;
-    cursor: pointer;
-    
-}
-
 @media (max-width: 700px) {
     .game-btns {
-        flex-direction: column;  
+        flex-direction: column;
     }
 
     .game-btns div {
         margin: 5%;
     }
 
+    .bnt-ord,
+    .bnt-ord img,
+    .bnt-ord button {
+        width: 120px;
+        font-size: 1.3rem;
+    }
+
+    .bnt-ord img {
+        height: 120px;
+    }
+
     #jogo {
         flex-direction: column-reverse;
     }
-    
-    #left{
+
+    #left {
         flex-direction: row;
     }
 
-    #left, #right {
+    td {
+        font-size: 0.9rem;
+    }
+
+    table{
+    height: 10vh;
+    width: 10vh;
+}
+
+    #left,
+    #right {
         width: 100%;
         height: 27vh;
     }
-
+    #right{
+        flex-direction: row;
+    }
     #center {
         width: 100%;
         height: 36vh;
+    }
+
+    #creditos {
+        width: 100%;
+        height: 100%;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .img-credits img {
+        max-width: 200px;
     }
 }
