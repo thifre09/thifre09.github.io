@@ -1,7 +1,7 @@
 .jersey-10-regular {
-  font-family: "Jersey 10", sans-serif;
-  font-weight: 400;
-  font-style: normal;
+    font-family: "Jersey 10", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 * {
@@ -78,9 +78,10 @@ header h1 {
     justify-content: center;
     align-items: center;
     gap: 2rem;
-    height: 90vh;
+    height: 85vh;
     width: 800px;
     box-sizing: border-box;
+    background-color: white;
 
 }
 
@@ -88,17 +89,30 @@ header h1 {
     width: 200px;
     height: 200px;
     border: 5px solid;
-    display: flex;
+    overflow: hidden;
+    position: relative;
 }
-
 .img-credits img {
     width: 100%;
-    height: 100%;
+    display: block;
+    opacity: .5;
+    transition: opacity 0.3s ease-in-out;
 }
 
 .img-credits h2 {
-    display: none;
     background-color: #ffbe5d94;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    transform: translateY(100%);
+    transition: transform 0.3s ease-in-out;
+}
+.img-credits:hover h2{
+    transform: translateY(0%);
+}
+.img-credits:hover img{
+    opacity: 1;
 }
 
 .img-credits:hover h2 {
@@ -130,16 +144,12 @@ header h1 {
     width: 40%;
     height: 90vh;
     padding: 0;
+    padding-top: 1%;
     box-sizing: border-box;
     overflow: auto;
     display: flex;
     align-items: center;
     flex-direction: column;
-}
-
-table{
-    height: 250px;
-    width: 250px;
 }
 
 #propostas {
@@ -152,27 +162,31 @@ table{
 
 .noticia {
     margin: 5%;
-    padding: 1%; /*Latuff é judeu XD*/
+    padding: 1%;
+    /*Latuff é judeu XD*/
 }
 
-.noticia, #proposta {
+.noticia,
+#proposta {
     overflow: auto;
-    height: auto; /* XD */  /*Deu certo*/
+    height: auto;
+    /* XD */
+    /*Deu certo*/
     background-color: white;
 }
 
-#buttons-propose{
+#buttons-propose {
     display: flex;
     align-items: center;
     justify-content: space-around;
 }
 
-#buttons-propose div{
+#buttons-propose div {
     width: fit-content;
-    
+
 }
 
-#buttons-propose img{
+#buttons-propose img {
     width: 70%;
 }
 
@@ -184,7 +198,7 @@ table{
     align-items: center;
 }
 
-#buttons-propose{
+#buttons-propose {
     margin: 20px;
 }
 
@@ -203,24 +217,29 @@ table{
     align-items: center;
     flex-direction: column;
     gap: 1.5rem;
+    font-size: 1.6em;
 }
 
-table{
-    height: 250px;
-    width: 250px;
-}
-
-#right table{
-    border-collapse: collapse;
-    font-size: 0.8rem;
-}
-
-#right table, tr, td, th{
-    border: 2px solid;
-    padding: 0 0.5rem;
-    font-size: 1.3rem;
+#right div h1 {
     text-align: center;
 }
+
+#geral {
+    text-align: center;
+}
+
+#right table {
+    border-collapse: collapse;
+    font-size: 0.7rem;
+}
+
+#right table, tr, td, th {
+    border: 2px solid;
+    padding: 0 0.5rem;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
 .new {
     position: relative;
     width: fit-content;
@@ -272,19 +291,21 @@ table{
         font-size: 0.9rem;
     }
 
-    table{
-    height: 10vh;
-    width: 10vh;
-}
+    table {
+        height: 10vh;
+        width: 15vw;
+    }
 
     #left,
     #right {
         width: 100%;
         height: 27vh;
     }
-    #right{
+
+    #right {
         flex-direction: row;
     }
+
     #center {
         width: 100%;
         height: 36vh;
@@ -295,6 +316,7 @@ table{
         height: 100%;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
     }
 
     .img-credits img {

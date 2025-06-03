@@ -9,13 +9,14 @@ let fome = 50;
 let economia = 50;
 let desemprego = 50;
 let infraestrutura = 50;
+let imposto = 50
 
 let satisfacaoPopulacao = 50;
 let IndexPropostaAtual = null;
 
 class Proposta {
 
-    constructor(titulo, descricao, aceitarResultado, recusarResultado) {
+    constructor(titulo, descricao, aceitarResultado = new Estatistica(), recusarResultado = new Estatistica()) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.aceitarResultado = aceitarResultado; //Estatistica
@@ -32,7 +33,8 @@ class Proposta {
         economia = this.aceitarResultado.economia;
         desemprego = this.aceitarResultado.desemprego;
         infraestrutura = this.aceitarResultado.infraestrutura;
-        populacao *= this.aceitarResultado.populacao; // A população aumenta se a proposta for aceita
+        imposto = this.aceitarResultado.imposto
+        populacao *= this.aceitarResultado.populacao;
     }
 
     recusar() {
@@ -45,12 +47,13 @@ class Proposta {
         economia = this.recusarResultado.economia;
         desemprego = this.recusarResultado.desemprego;
         infraestrutura = this.recusarResultado.infraestrutura;
-        populacao *= this.recusarResultado.populacao; // A população diminui se a proposta for recusada
+        imposto = this.recusarResultado.imposto
+        populacao *= this.recusarResultado.populacao;
     }
 }
 
 class Estatistica {
-    constructor(dinheiro, saude, alegria, seguranca, educacao, fome, economia, desemprego, infraestrutura, populacao, noticia) {
+    constructor(dinheiro = 0, saude = 0, alegria = 0, seguranca = 0, educacao = 0, fome = 0, economia = 0, desemprego = 0, infraestrutura = 0, imposto = 0, populacao = 1, noticia = "") {
         this.dinheiro = dinheiro;
         this.saude = saude;
         this.alegria = alegria;
@@ -60,6 +63,7 @@ class Estatistica {
         this.economia = economia;
         this.desemprego = desemprego;
         this.infraestrutura = infraestrutura;
+        this.imposto = imposto
         this.populacao = populacao;
         this.noticia = noticia;
     }
@@ -73,7 +77,7 @@ const listaPropostas = [
 ];
 
 function escolherProposta() {
-    const randomIndex = Math.floor(Math.random() * listaPropostas.length);
+    let randomIndex = Math.floor(Math.random() * listaPropostas.length);
     while (randomIndex === IndexPropostaAtual) {
         // Garante que a proposta escolhida seja diferente da atual
         randomIndex = Math.floor(Math.random() * listaPropostas.length);
@@ -84,10 +88,18 @@ function escolherProposta() {
 escolherProposta();
 
 function atualizarTela() {
-    satisfacaoPopulacao = (saude+ rendaMedia + seguranca + educacao)/4;
+    satisfacaoPopulacao = (saude + alegria + seguranca + educacao + (100 - fome) + economia + (100 - desemprego) + infraestrutura) / 8;
     document.getElementById('dinheiro').innerText = `Dinheiro: R$ ${dinheiro}`;
     document.getElementById('satisfacao').innerText = `Satisfação da População: ${satisfacaoPopulacao}%`;
     document.getElementById('populacao').innerText = `População: ${populacao}`;
+    document.getElementById('saude').innerText = `${saude}%`;
+    document.getElementById('alegria').innerText = `${alegria}%`;
+    document.getElementById('seguranca').innerText = `${seguranca}%`;
+    document.getElementById('educacao').innerText = `${educacao}%`;
+    document.getElementById('fome').innerText = `${fome}%`;
+    document.getElementById('economia').innerText = `${economia}%`;
+    document.getElementById('desemprego').innerText = `${desemprego}%`;
+    document.getElementById('infraestrutura').innerText = `${infraestrutura}%`;
 }
 
 const btnPlay = document.getElementById('btn-play');
@@ -97,20 +109,20 @@ const btnReturn = document.getElementById('btn-return');
 const btnNews = document.getElementById('news');
 const btnPropostas = document.getElementById('proposals');
 
-// btnPlay.addEventListener("click", () => {
-//     document.getElementById('tela-inicial').style.display = 'none';
-//     document.getElementById('jogo').style.display = 'flex';
-// });
+btnPlay.addEventListener("click", () => {
+    document.getElementById('tela-inicial').style.display = 'none';
+    document.getElementById('jogo').style.display = 'flex';
+});
 
-// btnTutorial.addEventListener("click", () => {
-//     document.getElementById('tela-inicial').style.display = 'none';
-//     document.getElementById('tutorial').style.display = 'flex';
-// });
+btnTutorial.addEventListener("click", () => {
+    document.getElementById('tela-inicial').style.display = 'none';
+    document.getElementById('tutorial').style.display = 'flex';
+});
 
-// btnCredits.addEventListener("click", () => {
-//     document.getElementById('tela-inicial').style.display = 'none';
-//     document.getElementById('creditos').style.display = 'flex';
-// });
+btnCredits.addEventListener("click", () => {
+    document.getElementById('tela-inicial').style.display = 'none';
+    document.getElementById('creditos').style.display = 'flex';
+});
 
 btnReturn.addEventListener("click", () => {
     document.getElementById('tela-inicial').style.display = 'flex';
