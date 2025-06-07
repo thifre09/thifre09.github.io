@@ -24,7 +24,7 @@ class Proposta {
     }
 
     aceitar() {
-        dinheiro += this.aceitarResultado.dinheiro + Math.abs(this.aceitarResultado.dinheiro * imposto / 100);
+        dinheiro += this.aceitarResultado.dinheiro + Math.round(Math.abs(this.aceitarResultado.dinheiro * imposto / 100));
         saude += this.aceitarResultado.saude;
         alegria += this.aceitarResultado.alegria;
         seguranca += this.aceitarResultado.seguranca;
@@ -35,10 +35,11 @@ class Proposta {
         infraestrutura += this.aceitarResultado.infraestrutura;
         imposto += this.aceitarResultado.imposto;
         populacao *= this.aceitarResultado.populacao;
+        populacao = Math.max(1, Math.floor(populacao)); // Garante que a população não seja menor que 1
     }
 
     recusar() {
-        dinheiro += this.recusarResultado.dinheiro;
+        dinheiro += this.recusarResultado.dinheiro + Math.round(Math.abs(this.aceitarResultado.dinheiro * imposto / 100));
         saude += this.recusarResultado.saude;
         alegria += this.recusarResultado.alegria;
         seguranca += this.recusarResultado.seguranca;
@@ -67,6 +68,7 @@ class Estatistica {
             infraestrutura: 0,
             imposto: 0,
             populacao: 1,
+            tituloNoticia: "",
             noticia: ""
         }, opcoes); // opcoes sobrescreve os valores padrão
     }
@@ -88,8 +90,9 @@ escolherProposta();
 function atualizarTela() {
     satisfacaoPopulacao = (saude + alegria + seguranca + educacao + (100 - fome) + economia + (100 - desemprego) + infraestrutura) / 8;
     document.getElementById('dinheiro').innerText = `Dinheiro: R$ ${dinheiro}`;
-    document.getElementById('satisfacao').innerText = `Satisfação da População: ${satisfacaoPopulacao}%`;
     document.getElementById('populacao').innerText = `População: ${Math.floor(populacao)}`;
+    document.getElementById('imposto').innerText = `Imposto: ${imposto}%`;
+    document.getElementById('satisfacao').innerText = `Satisfação da População: ${satisfacaoPopulacao}%`;
     document.getElementById('saude').innerText = `${formatarNumero(saude)}`;
     document.getElementById('alegria').innerText = `${formatarNumero(alegria)}`;
     document.getElementById('seguranca').innerText = `${formatarNumero(seguranca)}`;
@@ -98,11 +101,12 @@ function atualizarTela() {
     document.getElementById('economia').innerText = `${formatarNumero(economia)}`;
     document.getElementById('desemprego').innerText = `${desemprego}%`;
     document.getElementById('infraestrutura').innerText = `${formatarNumero(infraestrutura)}`;
-    document.getElementById('imposto').innerText = `${imposto}%`;
 
     document.getElementById("tituloProposta").innerText = listaPropostas[IndexPropostaAtual].titulo;
     document.getElementById("textoProposta").innerText = listaPropostas[IndexPropostaAtual].descricao;
 }
+
+atualizarTela();
 
 function formatarNumero(numero) {
     if (numero === 100) return "Perfeito";
@@ -128,6 +132,16 @@ function corrigir() {
     infraestrutura = Math.max(0, Math.min(100, infraestrutura));
     imposto = Math.max(0, Math.min(100, imposto));    
 }
+
+function ecolherCidade() {
+    let nomeCidade = document.getElementById('nome-cidade').value;
+    document.getElementById("cidade").innerText = `Cidade: ${nomeCidade}`;
+}
+
+function tempoJogo() {
+    const anoTimeOutId = setTimeout(() => {}, );
+}
+
 const btnPlay = document.getElementById('btn-play');
 const btnTutorial = document.getElementById('btn-tutorial');
 const btnCredits = document.getElementById('btn-credits');
@@ -138,6 +152,7 @@ const btnPropostas = document.getElementById('proposals');
 btnPlay.addEventListener("click", () => {
     document.getElementById('tela-inicial').style.display = 'none';
     document.getElementById('jogo').style.display = 'flex';
+    ecolherCidade()
 });
 
 btnTutorial.addEventListener("click", () => {
@@ -174,6 +189,17 @@ btnAceitar.addEventListener("click", () => {
     const custo = Math.abs(listaPropostas[IndexPropostaAtual].aceitarResultado.dinheiro);
     if (dinheiro >= custo) {
         listaPropostas[IndexPropostaAtual].aceitar();
+        const noticiasDiv = document.getElementById('noticias');
+        const noticia = document.createElement("div");
+        const titulo = document.createElement("h1");
+        const texto = document.createElement("p");
+        titulo.innerText = listaPropostas[IndexPropostaAtual].aceitarResultado.tituloNoticia;
+        texto.innerText = listaPropostas[IndexPropostaAtual].aceitarResultado.noticia;
+        noticia.appendChild(titulo);
+        noticia.appendChild(texto);
+        noticia.classList.add("noticia");
+        noticiasDiv.appendChild(noticia);
+
         atualizarTela();
         escolherProposta();
         corrigir();
@@ -185,6 +211,16 @@ btnAceitar.addEventListener("click", () => {
 btnRecusar.addEventListener("click", () => {
     if (dinheiro > listaPropostas[IndexPropostaAtual].recusarResultado.dinheiro) {
         listaPropostas[IndexPropostaAtual].recusar();
+        const noticiasDiv = document.getElementById('noticias');
+        const noticia = document.createElement("div");
+        const titulo = document.createElement("h1");
+        const texto = document.createElement("p");
+        titulo.innerText = listaPropostas[IndexPropostaAtual].recusarResultado.tituloNoticia;
+        texto.innerText = listaPropostas[IndexPropostaAtual].recusarResultado.noticia;
+        noticia.appendChild(titulo);
+        noticia.appendChild(texto);
+        noticia.classList.add("noticia");
+        noticiasDiv.appendChild(noticia);
         atualizarTela();
         escolherProposta();
         corrigir();
@@ -232,10 +268,12 @@ btnRecusar.addEventListener("click", () => {
 // infraestrutura: 0,
 // imposto: 0,
 // populacao: 1,      multiplica
+// tituloNoticia: "",    obrigatório, se não tiver, não mostra a notícia
 // noticia: ""    obrigatório, se não tiver, não mostra a notícia
 
 listaPropostas = [
-    new Proposta("Trazer Hyago Kadson para a cidade.", `Nos termos do disposto no art. 215 da Constituição Federal, que assegura o pleno exercício dos direitos culturais e o acesso às fontes da cultura nacional, a Prefeitura Municipal comunica, por meio da Secretaria de Cultura e Eventos, a contratação do artista Hyago Kadson como atração principal do evento Festival Municipal de Cultura Popular, a ser realizado em praça pública com entrada gratuita.
+    new Proposta("Trazer Hyago Kadson para a cidade.", 
+    `Nos termos do disposto no art. 215 da Constituição Federal, que assegura o pleno exercício dos direitos culturais e o acesso às fontes da cultura nacional, a Prefeitura Municipal comunica, por meio da Secretaria de Cultura e Eventos, a contratação do artista Hyago Kadson como atração principal do evento Festival Municipal de Cultura Popular, a ser realizado em praça pública com entrada gratuita.
     
     A iniciativa integra o calendário oficial de ações de valorização da cultura nordestina e tem por objetivo fortalecer os laços comunitários, fomentar a economia criativa e proporcionar entretenimento de qualidade à população local, sobretudo aos jovens e às famílias que tradicionalmente participam de eventos populares.
     
@@ -244,13 +282,14 @@ listaPropostas = [
     A ação está em consonância com o princípio da dignidade da pessoa humana e da promoção do bem-estar social, sendo esperada grande adesão popular e impacto positivo tanto econômico quanto simbólico para o município.
 
     Custo: 1501 reais.
-    Deputado: Pedão.
-    `,
+    Deputado: Pedão.`,
+
         new Estatistica({dinheiro: -1501, alegria: 20, economia: 7}),
         new Estatistica({alegria: -10, economia: -5}),
     ),
 
-    new Proposta("Novo material de estudo para a rede de educação municipal.", `Em observância ao disposto no art. 205 da Constituição Federal e à Lei de Diretrizes e Bases da Educação Nacional (Lei nº 9.394/1996), a Prefeitura Municipal, por meio da Secretaria de Educação, anuncia a adoção de um novo conjunto de materiais didáticos-pedagógicos para uso obrigatório na rede pública de ensino fundamental.
+    new Proposta("Novo material de estudo para a rede de educação municipal.", 
+        `Em observância ao disposto no art. 205 da Constituição Federal e à Lei de Diretrizes e Bases da Educação Nacional (Lei nº 9.394/1996), a Prefeitura Municipal, por meio da Secretaria de Educação, anuncia a adoção de um novo conjunto de materiais didáticos-pedagógicos para uso obrigatório na rede pública de ensino fundamental.
         
         A medida visa à modernização dos recursos educacionais, à adequação às competências da Base Nacional Comum Curricular (BNCC) e à promoção de uma educação equitativa, inclusiva e de excelência. O novo material contempla recursos impressos e digitais, com linguagem acessível, conteúdo contextualizado à realidade local e apoio multidisciplinar voltado tanto ao corpo docente quanto aos estudantes.
         
@@ -259,46 +298,46 @@ listaPropostas = [
         A iniciativa representa um avanço na política pública educacional do município, fortalecendo o processo de ensino-aprendizagem, combatendo desigualdades de acesso ao conhecimento e garantindo melhores condições para o pleno desenvolvimento intelectual e cidadão dos estudantes da rede municipal.
         
         Custo: 3500 reais.
-        Vereador Dr Thiago Frutas.
-        
-        `,
+        Vereador Dr Thiago Frutas.`,
+
         new Estatistica({ dinheiro: -3500, saude: 3, alegria: 2, educacao: 12, desemprego: -3, populacao: 1.001}),
         new Estatistica({alegria: -1}),
     ),
 
-    new Proposta("Prefeitura Lança Aplicativo de Transporteito aos Domingos", `Em consonância com os princípios da mobilidade urbana sustentável previstos na Lei Federal nº 12.587/2012 (Política Nacional de Mobilidade Urbana), e com fundamento na função social do transporte público, a Prefeitura Municipal, por meio da Secretaria de Mobilidade e Inovação, lança oficialmente o Aplicativo 'Domingo Livre', plataforma digital que garantirá transporte gratuito aos domingos para todos os cidadãos cadastrados.
+    new Proposta("Prefeitura Lança Aplicativo de Transporteito aos Domingos", 
+    `Em consonância com os princípios da mobilidade urbana sustentável previstos na Lei Federal nº 12.587/2012 (Política Nacional de Mobilidade Urbana), e com fundamento na função social do transporte público, a Prefeitura Municipal, por meio da Secretaria de Mobilidade e Inovação, lança oficialmente o Aplicativo 'Domingo Livre', plataforma digital que garantirá transporte gratuito aos domingos para todos os cidadãos cadastrados.
         
-        A iniciativa visa promover o direito de ir e vir com dignidade, reduzir a exclusão social, estimular o uso de espaços públicos de lazer, cultura e esporte, além de contribuir com a diminuição do tráfego de veículos particulares e da emissão de gases poluentes.
+    A iniciativa visa promover o direito de ir e vir com dignidade, reduzir a exclusão social, estimular o uso de espaços públicos de lazer, cultura e esporte, além de contribuir com a diminuição do tráfego de veículos particulares e da emissão de gases poluentes.
         
-        O serviço, de caráter experimental durante os primeiros seis meses, abrangerá as principais rotas urbanas e contará com veículos acessíveis, frota monitorada por GPS e atendimento prioritário em regiões de maior vulnerabilidade social, conforme estudos técnicos realizados pelos setores competentes.
+    O serviço, de caráter experimental durante os primeiros seis meses, abrangerá as principais rotas urbanas e contará com veículos acessíveis, frota monitorada por GPS e atendimento prioritário em regiões de maior vulnerabilidade social, conforme estudos técnicos realizados pelos setores competentes.
 
-        A gratuidade será operacionalizada mediante cadastro prévio no aplicativo, disponível para dispositivos móveis com sistemas Android e iOS, e a operação seguirá normas de segurança, eficiência e acessibilidade, em consonância com os princípios da administração pública.
+    A gratuidade será operacionalizada mediante cadastro prévio no aplicativo, disponível para dispositivos móveis com sistemas Android e iOS, e a operação seguirá normas de segurança, eficiência e acessibilidade, em consonância com os princípios da administração pública.
 
-        Custo: 5000 reais;
-        Vereador Mr. Cuca.  
-        `,
+    Custo: 5000 reais;
+    Vereador Mr. Cuca.`,
+
         new Estatistica({ dinheiro: -5000, saude: 2, alegria: 5, economia: 4, infraestrutura: 5}),
         new Estatistica({alegria: -1}),
     ),
 
     new Proposta("Projeto 'Município iluminado': Iluminação LED em 100% das Comunidades até o Fim do Ano",
-        `No âmbito das competências  municipais previstas no art. 30, inciso I, da Constituição Federal, e visando à promoção do bem-estar social, à segurança urbana e à eficiência energética, a Prefeitura Municipal propõe, por meio do Projeto 'Município Iluminado', a substituição integral do atual sistema de iluminação pública convencional por luminárias dotadas de tecnologia LED em 100% das comunidades locais até o encerramento do presente exercício fiscal.
+    `No âmbito das competências  municipais previstas no art. 30, inciso I, da Constituição Federal, e visando à promoção do bem-estar social, à segurança urbana e à eficiência energética, a Prefeitura Municipal propõe, por meio do Projeto 'Município Iluminado', a substituição integral do atual sistema de iluminação pública convencional por luminárias dotadas de tecnologia LED em 100% das comunidades locais até o encerramento do presente exercício fiscal.
     
-        Tal medida objetiva a redução significativa do consumo de energia elétrica, a diminuição dos índices de criminalidade mediante a ampliação da visibilidade noturna, e o aprimoramento da qualidade de vida da população residente em regiões historicamente negligenciadas por políticas públicas de infraestrutura urbana.
+    Tal medida objetiva a redução significativa do consumo de energia elétrica, a diminuição dos índices de criminalidade mediante a ampliação da visibilidade noturna, e o aprimoramento da qualidade de vida da população residente em regiões historicamente negligenciadas por políticas públicas de infraestrutura urbana.
         
-        A execução do projeto observará os princípios da legalidade, eficiência e economicidade, sendo priorizadas as áreas com maior déficit de iluminação e maior vulnerabilidade social, conforme mapeamento técnico realizado pelas secretarias competentes.
+    A execução do projeto observará os princípios da legalidade, eficiência e economicidade, sendo priorizadas as áreas com maior déficit de iluminação e maior vulnerabilidade social, conforme mapeamento técnico realizado pelas secretarias competentes.
         
-        Custo: 5000.
-        Vereador: Débisson Isaac.
-        
-        `,
+    Custo: 5000.
+    Vereador: Débisson Isaac.`,
+
         new Estatistica({dinheiro: -5000,  alegria: 5, seguranca: 4, infraestrutura: 10}),
         new Estatistica({alegria: -3, seguranca: -4, infraestrutura: -2}),
 
 
     ),
 
-    new Proposta("Proposta para a construção de uma praça pública no Bairro Freitas", `Excelentíssimo(a) Senhor(a) Prefeito(a) Municipal,
+    new Proposta("Proposta para a construção de uma praça pública no Bairro Freitas", 
+    `Excelentíssimo(a) Senhor(a) Prefeito(a) Municipal,
 
     Por meio da presente, propomos a construção de uma praça pública no Bairro Freitas, com o intuito de promover o bem-estar social e melhorar a qualidade de vida dos munícipes, especialmente dos idosos. O espaço atenderá à demanda de áreas para lazer, descanso e atividades de baixo impacto físico, além de fomentar a convivência comunitária.
 
@@ -313,7 +352,8 @@ listaPropostas = [
         new Estatistica(),
 
     ),
-    new Proposta("Proposta para a construção de um hospital público municipal", `Excelentíssimo(a) Senhor(a) Prefeito(a) Municipal,
+    new Proposta("Proposta para a construção de um hospital público municipal", 
+    `Excelentíssimo(a) Senhor(a) Prefeito(a) Municipal,
 
     Vimos por meio desta propor a construção de um hospital público municipal, com o objetivo de ampliar o atendimento médico de qualidade à população. A implantação deste equipamento de saúde visa atender à crescente demanda por serviços médicos e melhorar a eficiência dos atendimentos, especialmente nas áreas de urgência e especialidades.
 
@@ -331,7 +371,8 @@ listaPropostas = [
 
 
 
-    new Proposta("Proposta para a implementação de um projeto EJA (educação de jovens e adultos)", `Excelentíssimo(a) Senhor(a) Prefeito(a) Municipal,
+    new Proposta("Proposta para a implementação de um projeto EJA (educação de jovens e adultos)", 
+    `Excelentíssimo(a) Senhor(a) Prefeito(a) Municipal,
 
     Propomos a criação de um Projeto de Educação de Jovens e Adultos (EJA), com o intuito de proporcionar educação de qualidade aos cidadãos que não tiveram a oportunidade de concluir seus estudos na idade regular. O projeto visa atender às necessidades educacionais dessa população, promovendo sua inclusão social e melhorando suas condições de empregabilidade.
 
@@ -355,7 +396,14 @@ listaPropostas = [
 
     A proposta inclui a contratação de profissionais qualificados, com o devido treinamento, além da promoção de ações voltadas ao bem-estar dos servidores da segurança pública. Tal medida contribuirá diretamente para a sensação de segurança da população e para a melhoria da qualidade de vida no Município.
 
-    Solicitamos a inclusão desta proposta no planejamento orçamentário municipal e a análise das possibilidades de viabilização dessa ação, com base nas necessidades de segurança e na capacidade de gestão do Município.`)
+    Solicitamos a inclusão desta proposta no planejamento orçamentário municipal e a análise das possibilidades de viabilização dessa ação, com base nas necessidades de segurança e na capacidade de gestão do Município.
+    
+    Custo: 1000 reais
+    Vereador Batatuncio Oliveira`,
+
+        new Estatistica(),
+        new Estatistica(),
+    ),
 
 ];
 
