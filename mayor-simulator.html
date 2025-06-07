@@ -14,13 +14,16 @@
 
 <body>
     <header>
-        <h1 id="btn-return">Mayor Simulator</h1>
-
+        <h1 id="btn-return">Prefeito em ação</h1>
     </header>
 
  <section id="tela-inicial">
-        <div class="game-btns">
-
+        <label for="nome-cidade" id="label-cidade">Digite o nome da sua cidade:
+            <br>
+            <input type="text" id="nome-cidade">
+        </label>
+        
+        <div id="btns">
             <div class="bnt-ord" id="btn-tutorial">
                 <img src="assets/images/mayor-simulator/tutorial.png" alt="Como jogar">
                 <button>Tutorial</button>
@@ -35,12 +38,11 @@
                 <img src="assets/images/mayor-simulator/credits.png" alt="Créditos">
                 <button>Créditos</button>
             </div>
-
         </div>
     </section>
 
     <!--Gameplay-->
-    <section id="jogo">
+    <section id="jogo" style="display: none;">
         <div id="left">
             <div id="news" class="new">
                 <img src="assets/images/mayor-simulator/news.png" alt="news">
@@ -70,8 +72,7 @@
 
             <div id="noticias" style="display: none;">
                 <div class="noticia">
-                    <h1>JANDUIR EGITO QUEBRA O GOOGLE APóÓS DIZER ""OK google!!!" VÁRIAS VEZES M = N/V
-                    </h1>
+                    <h1>JANDUIR EGITO QUEBRA O GOOGLE APóÓS DIZER ""OK google!!!" VÁRIAS VEZES M = N/V</h1>
                     <p>Ok google, preparar solução volátil.</p>
                 </div>
                 <div class="noticia">
@@ -112,7 +113,7 @@
                 <h1>Estatísticas</h1>
                 <div id="geral">
                     <p id="cidade" >Cidade: Batatopolis</p>
-                    <p id="dinheiro">Dinheiro: R$ 1000</p>
+                    <p id="dinheiro" style="color: rgb(255, 255, 0);">Dinheiro: R$ 1000</p>
                     <p id="populacao">População: 1000</p>
                     <p id="satisfacao">Satisfação da população: 50%</p>
                 </div>
@@ -195,7 +196,7 @@
         </div>
 
         <div class="img-credits">
-            <img src="assets/images/mayor-simulator/silas.jpeg" alt="Silas">
+            <img src="assets/images/mayor-simulator/" alt="Silas">
             <h2>Silas</h2>
         </div>
 

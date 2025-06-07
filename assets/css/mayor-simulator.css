@@ -26,6 +26,7 @@ header {
     justify-content: center;
     height: 10vh;
     width: 100%;
+    font-size: clamp(1.5rem, 1.8vw, 150px);;
 }
 
 header h1 {
@@ -35,21 +36,36 @@ header h1 {
 }
 
 #tela-inicial {
+    width: 100%;
+    height: 90vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 90vh;
+    flex-direction: column;
+    gap: 2rem;
 }
 
-.game-btns {
+#label-cidade{
+    font-size: clamp(25px, 3vw, 100000px);
+    text-align: center;
+    max-width: 100%;
+}
+
+#label-cidade input{
+    font-size: clamp(25px, 3vw, 100000px);
+    width: clamp(250px, 40vw, 100000px);
+}
+
+#btns {
+    width: 100%;
     display: flex;
-    justify-content: space-around;
-    padding: 20% 25% 20% 25%;
+    justify-content: center;
+    align-items: center;
     gap: 3%;
 }
 
 .bnt-ord {
-    width: 150px;
+    width: clamp(100px, 13vw, 300px);
     display: flex;
     padding: 0;
     flex-direction: column;
@@ -57,67 +73,17 @@ header h1 {
 }
 
 .bnt-ord img {
-    width: 150px;
-    height: 150px;
+    width: clamp(100px, 13vw, 300px);
     box-sizing: border-box;
     border: solid 3px #000000;
 }
 
 .bnt-ord button {
     border: none;
-    font-size: 2rem;
-    width: 150px;
+    font-size: clamp(10px, 3vw, 300px);
+    width: clamp(100px, 13vw, 300px);
     cursor: pointer;
     font-family: "Pixelify Sans", sans-serif;
-}
-
-#creditos {
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    height: 85vh;
-    width: 800px;
-    box-sizing: border-box;
-    background-color: white;
-
-}
-
-.img-credits {
-    width: 200px;
-    height: 200px;
-    border: 5px solid;
-    overflow: hidden;
-    position: relative;
-}
-.img-credits img {
-    width: 100%;
-    display: block;
-    opacity: .5;
-    transition: opacity 0.3s ease-in-out;
-}
-
-.img-credits h2 {
-    background-color: #ffbe5d94;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    text-align: center;
-    transform: translateY(100%);
-    transition: transform 0.3s ease-in-out;
-}
-.img-credits:hover h2{
-    transform: translateY(0%);
-}
-.img-credits:hover img{
-    opacity: 1;
-}
-
-.img-credits:hover h2 {
-    display: block;
-    position: absolute;
 }
 
 #jogo {
@@ -152,6 +118,14 @@ header h1 {
     flex-direction: column;
 }
 
+#center div div h1 {
+    font-size: clamp(36px, 3.6vw, 10000px);
+}
+
+#center div div p{
+    font-size: clamp(20px, 2vw, 10000px);
+}
+
 #propostas {
     flex-direction: column;
     align-items: center;
@@ -166,8 +140,7 @@ header h1 {
     /*Latuff é judeu XD*/
 }
 
-.noticia,
-#proposta {
+.noticia, #proposta {
     overflow: auto;
     height: auto;
     /* XD */
@@ -217,7 +190,8 @@ header h1 {
     align-items: center;
     flex-direction: column;
     gap: 1.5rem;
-    font-size: 1.6em;
+    font-size: clamp(1.5rem, 1.8vw, 150px);
+    overflow: auto;
 }
 
 #right div h1 {
@@ -226,17 +200,14 @@ header h1 {
 
 #geral {
     text-align: center;
-}
-
-#right table {
-    border-collapse: collapse;
-    font-size: 0.7rem;
+    padding: 1%;
 }
 
 #right table, tr, td, th {
+    border-collapse: collapse;
     border: 2px solid;
     padding: 0 0.5rem;
-    font-size: 1.2rem;
+    font-size: clamp(2vw, 1.8vw, 100px);
     text-align: center;
 }
 
@@ -247,36 +218,81 @@ header h1 {
     display: flex;
 }
 
+.new img:first-child {
+    width: clamp(100px, 13vw, 300px);
+}
+
 .new img:nth-child(2) {
     position: absolute;
     top: -10px;
     right: -10px;
-    /* display: none; */
 }
 
 .new p {
     text-align: center;
-    font-size: 1.7rem;
+    font-size: clamp(25px, 3vw, 1000px);
+}
+
+#creditos {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    height: 85vh;
+    width: 800px;
+    box-sizing: border-box;
+    background-color: white;
+}
+
+.img-credits {
+    width: 200px;
+    height: 200px;
+    border: 5px solid;
+    overflow: hidden;
+    position: relative;
+}
+
+.img-credits img {
+    width: 100%;
+    display: block;
+    transition: opacity 0.3s ease-in-out;
+    
+}
+
+.img-credits h2 {
+    background-color: #ffbe5d94;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    transform: translateY(100%);
+    transition: transform 0.3s ease-in-out;
+}
+
+.img-credits:hover h2 {
+    transform: translateY(0%);
+}
+
+.img-credits:hover h2 {
+    display: block;
+    position: absolute;
 }
 
 @media (max-width: 700px) {
-    .game-btns {
+    label {
+        margin-top: 10%;
+    }
+
+    #btns {
         flex-direction: column;
+        gap: 30px;
     }
 
-    .game-btns div {
-        margin: 5%;
-    }
-
-    .bnt-ord,
-    .bnt-ord img,
-    .bnt-ord button {
-        width: 120px;
+    .bnt-ord, .bnt-ord img, .bnt-ord button {
+        width: clamp(100px, 20vw, 300px);
         font-size: 1.3rem;
-    }
-
-    .bnt-ord img {
-        height: 120px;
     }
 
     #jogo {
@@ -285,25 +301,20 @@ header h1 {
 
     #left {
         flex-direction: row;
-    }
+    }   
 
-    td {
-        font-size: 0.9rem;
-    }
-
-    table {
-        height: 10vh;
-        width: 15vw;
-    }
-
-    #left,
-    #right {
+    #left, #right {
         width: 100%;
         height: 27vh;
     }
 
     #right {
         flex-direction: row;
+        font-size: 5vw;
+    }
+
+    #right table, tr, td, th {
+        font-size: clamp(10px, 3.8vw, 5000px);
     }
 
     #center {
