@@ -284,7 +284,7 @@ listaPropostas = [
     Custo: 1501 reais.
     Deputado: Pedão.`,
 
-        new Estatistica({dinheiro: -1501, alegria: 20, economia: 7}),
+        new Estatistica({dinheiro: -1501, alegria: 20, economia: 7, populacao: 1.05}),
         new Estatistica({alegria: -10, economia: -5}),
     ),
 
@@ -300,8 +300,8 @@ listaPropostas = [
         Custo: 3500 reais.
         Vereador Dr Thiago Frutas.`,
 
-        new Estatistica({ dinheiro: -3500, saude: 3, alegria: 2, educacao: 12, desemprego: -3, populacao: 1.001}),
-        new Estatistica({alegria: -1}),
+        new Estatistica({ dinheiro: -3500, alegria: 4, educacao: 12, populacao: 1.001}),
+        new Estatistica({alegria: -5, educacao: -6}),
     ),
 
     new Proposta("Prefeitura Lança Aplicativo de Transporteito aos Domingos", 
@@ -317,7 +317,7 @@ listaPropostas = [
     Vereador Mr. Cuca.`,
 
         new Estatistica({ dinheiro: -5000, saude: 2, alegria: 5, economia: 4, infraestrutura: 5}),
-        new Estatistica({alegria: -1}),
+        new Estatistica({alegria: -3}),
     ),
 
     new Proposta("Projeto 'Município iluminado': Iluminação LED em 100% das Comunidades até o Fim do Ano",
@@ -348,8 +348,8 @@ listaPropostas = [
     Custo: 2400 reais
     Vereador Dr. Giuseppe Camolle`,
 
-        new Estatistica(),
-        new Estatistica(),
+        new Estatistica({dinheiro: -2400, alegria: 7, saude: 2, infraestutura: 5}),
+        new Estatistica({alegria: -5, infraestutura: -5}),
 
     ),
     new Proposta("Proposta para a construção de um hospital público municipal", 
@@ -364,8 +364,8 @@ listaPropostas = [
     Custo: 6000 reais
     Vereador Dr. Giuseppe Camolle`,
         
-        new Estatistica(),
-        new Estatistica(),
+        new Estatistica({dinheiro: -6000, saude: 15, alegria: 7, economia: 5, desemprego: -5, infraestutura: 10, populacao: 1.03}),
+        new Estatistica({saude: -5, alegria: -10, desemprego: 2}),
         
     ),
 
@@ -383,8 +383,8 @@ listaPropostas = [
     Custo: 4000 reais.
     Vereador Dayvyd Lavaniery`,
 
-        new Estatistica(),
-        new Estatistica(),
+        new Estatistica({dinheiro: -4000, alegria: 4, educacao: 7, seguranca: 3, desemprego: -2}),
+        new Estatistica({alegria: -2, seguranca: -4, desemprego: 1}),
 
     ),
 
@@ -398,13 +398,12 @@ listaPropostas = [
 
     Solicitamos a inclusão desta proposta no planejamento orçamentário municipal e a análise das possibilidades de viabilização dessa ação, com base nas necessidades de segurança e na capacidade de gestão do Município.
     
-    Custo: 1000 reais
-    Vereador Batatuncio Oliveira`,
-
-        new Estatistica(),
-        new Estatistica(),
-    ),
-
+    Custo: 3789 reais.
+    Vereador Abacate da Sombrinha`,
+    
+    new Estatistica({dinheiro: -3700, alegria: 5, seguranca: 12, desemprego: -2}),
+    new Estatistica({alegria: -7, seguranca: -8, desemprego: 2}),
+    )
 ];
 
 // Intervalo	    Classificação
