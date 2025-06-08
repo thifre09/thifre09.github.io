@@ -96,26 +96,28 @@ listaPropostas = [
     
         A ação está em consonância com o princípio da dignidade da pessoa humana e da promoção do bem-estar social, sendo esperada grande adesão popular e impacto positivo tanto econômico quanto simbólico para o município.
 
-        Custo: 3003 reais.
+        Custo: 2800 reais.
         Vereador Pedão.`,
 
         new Estatistica({
-            dinheiro: -3003,
-            saude: -5,
-            alegria: 20,
-            meioAmbiente: 7,
-            populacao: 1.05,
+            dinheiro: -2800,
+            saude: -2,
+            alegria: 8,
+            economia: 6,
+            populacao: 1.02,
             tituloNoticia: "Festival com Hyago Kadson reúne multidão e aquece economia local",
             noticia: `A realização do Festival Municipal de Cultura Popular com a participação de Hyago Kadson movimentou a cidade neste fim de semana. Milhares de pessoas compareceram ao evento gratuito na praça central, celebrando a cultura nordestina com música, dança e comidas típicas.
 
-		Além da expressiva adesão popular, comerciantes relataram aumento nas vendas e o evento gerou empregos temporários no setor de eventos e alimentação. Apesar de críticas isoladas por parte de opositores ao gasto de R$ 3.003, a maioria da população demonstrou satisfação com a iniciativa.
+		Além da expressiva adesão popular, comerciantes relataram aumento nas vendas e o evento gerou empregos temporários no setor de eventos e alimentação. Apesar de críticas isoladas por parte de opositores ao gasto de R$ 2.800, a maioria da população demonstrou satisfação com a iniciativa.
 
 		Autoridades destacam que o festival cumpriu seu papel de fomentar a economia criativa, promover o bem-estar social e fortalecer os laços comunitários.`
 
         }),
         new Estatistica({
-            alegria: -10,
-            meioAmbiente: -5,
+            alegria: -5,
+            saude: 4,
+            economia: -3,
+            populacao: 0.97,
             tituloNoticia: "População lamenta cancelamento de show cultural com Hyago Kadson",
             noticia: `A prefeitura anunciou o cancelamento do show de Hyago Kadson, que seria a atração principal do Festival Municipal de Cultura Popular. A decisão gerou frustração entre os moradores, especialmente os jovens que aguardavam o evento com expectativa.
 
@@ -140,9 +142,10 @@ listaPropostas = [
 
         new Estatistica({
             dinheiro: -3500,
-            alegria: 4,
-            educacao: 12,
-            populacao: 1.001,
+            meioAmbiente: 4,
+            alegria: 5,
+            educacao: 10,
+            populacao: 1.01,
             tituloNoticia: "Novo material didático é implementado e eleva qualidade da educação municipal",
             noticia: `A Prefeitura Municipal iniciou a distribuição de um novo conjunto de materiais pedagógicos para todas as escolas da rede pública de ensino fundamental. A iniciativa visa modernizar o processo de ensino, promover a equidade educacional e alinhar o conteúdo à Base Nacional Comum Curricular (BNCC).
 
@@ -152,8 +155,9 @@ listaPropostas = [
 
         }),
         new Estatistica({
-            alegria: -5,
+            alegria: -7,
             educacao: -6,
+            meioAmbiente: -4,
             tituloNoticia: "Corte em investimento educacional gera críticas na rede municipal de ensino",
             noticia: `A decisão da prefeitura de não adotar o novo material didático para a rede pública municipal de ensino gerou reações negativas entre educadores e famílias. A medida foi vista como um retrocesso na busca por uma educação mais equitativa e moderna.
 
@@ -173,14 +177,15 @@ listaPropostas = [
 
         A gratuidade será operacionalizada mediante cadastro prévio no aplicativo, disponível para dispositivos móveis com sistemas Android e iOS, e a operação seguirá normas de segurança, eficiência e acessibilidade, em consonância com os princípios da administração pública.
 
-        Custo: 5000 reais.
+        Custo: 4000 reais.
         Vereador Mr. Cuca.`,
 
         new Estatistica({
-            dinheiro: -5000,
-            saude: 2, alegria: 5,
+            dinheiro: -4000,
+            saude: 3,
+            alegria: 6,
             meioAmbiente: 4,
-            infraestrutura: 5,
+            infraestrutura: 10,
             tituloNoticia: "Aplicativo 'Domingo Livre' promove transporte gratuito e incentiva mobilidade sustentável",
             noticia: `A Prefeitura lançou o aplicativo 'Domingo Livre', garantindo transporte gratuito aos domingos para toda a população cadastrada. A iniciativa busca facilitar o acesso a espaços de lazer, cultura e esporte, além de reduzir o uso de veículos particulares e a emissão de poluentes.
 
@@ -190,8 +195,10 @@ listaPropostas = [
 
         }),
         new Estatistica({
-            alegria: -3,
-            infraestrutura: -6,
+            alegria: -5,
+            infraestrutura: -7,
+            meioAmbiente: -6,
+            saude: -3,
             tituloNoticia: "População crítica diminuição do transporte gratuito aos domingos",
             noticia: `A decisão de não implementar o aplicativo 'Domingo Livre' foi recebida com insatisfação por muitos moradores, que viam no serviço uma forma de garantir acesso facilitado a lazer e cultura nos domingos.
 
@@ -214,9 +221,10 @@ listaPropostas = [
 
         new Estatistica({
             dinheiro: -5000,
-            alegria: 5,
-            seguranca: 4,
-            infraestrutura: 10,
+            alegria: 7,
+            seguranca: 6,
+            infraestrutura: 12,
+            meioAmbiente: 3,
             tituloNoticia: "Município atinge 100% de cobertura com iluminação LED e melhora segurança",
             noticia: `A Prefeitura concluiu a instalação de iluminação pública com tecnologia LED em todas as comunidades do município. O Projeto 'Município Iluminado' trouxe melhorias significativas na segurança urbana, qualidade de vida e eficiência energética.
 
@@ -226,9 +234,9 @@ listaPropostas = [
 
         }),
         new Estatistica({
-            alegria: -3,
-            seguranca: -4,
-            infraestrutura: -2,
+            alegria: -10,
+            seguranca: -6,
+            infraestrutura: -9,
             tituloNoticia: "Falta de investimento em iluminação pública gera insegurança em comunidades",
             noticia: `A decisão da prefeitura de não executar o Projeto 'Município Iluminado' foi alvo de críticas por parte da população e de entidades de segurança pública. Moradores das regiões mais vulneráveis relataram sensação de abandono e aumento da insegurança à noite.
 
@@ -248,14 +256,15 @@ listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão do projeto no planejamento do Município, com a devida previsão orçamentária.
 
-        Custo: 4400 reais
+        Custo: 3800 reais
         Vereador Dr. Giuseppe Camolle.`,
 
         new Estatistica({
-            dinheiro: -4400,
+            dinheiro: -3800,
             alegria: 7,
-            saude: 2,
-            infraestutura: 5,
+            saude: 6,
+            infraestutura: 6,
+            economia: 3,
             tituloNoticia: "Nova praça no Bairro Freitas promove bem-estar e revitalização urbana",
             noticia: `A Prefeitura iniciou as obras da nova praça pública no Bairro Freitas, atendendo a uma antiga demanda dos moradores. O espaço contará com áreas de convivência, bancos, jardins e infraestrutura adequada para idosos e atividades de lazer.
 
@@ -267,6 +276,8 @@ listaPropostas = [
         new Estatistica({
             alegria: -5,
             infraestutura: -5,
+            economia: -5,
+            infraestrutura: -4,
             tituloNoticia: "Moradores do Bairro Freitas lamentam recusa de proposta para construção de praça",
             noticia: `A proposta de construção de uma praça pública no Bairro Freitas foi recusada pela gestão municipal, gerando frustração entre os moradores da região. A comunidade esperava o novo espaço como forma de lazer, saúde e valorização do bairro.
 
@@ -286,16 +297,16 @@ listaPropostas = [
 
         Solicitamos a inclusão deste projeto no planejamento orçamentário municipal e a análise para sua viabilização.
 
-        Custo: 5000 reais
+        Custo: 6000 reais
         Vereador Dr. Giuseppe Camolle.`,
 
         new Estatistica({
-            dinheiro: -5000,
-            saude: 15,
-            alegria: 7,
-            meioAmbiente: 5,
-            economia: -5,
-            infraestutura: 10,
+            dinheiro: -6000,
+            saude: 12,
+            alegria: 6,
+            meioAmbiente: -3,
+            economia: 4,
+            infraestutura: 8,
             populacao: 1.03,
             tituloNoticia: "Hospital público municipal começa a ser construído e promete transformar a saúde local",
             noticia: `A Prefeitura deu início à construção do tão aguardado hospital público municipal, uma obra que visa ampliar o acesso da população a serviços de saúde de qualidade e reduzir a superlotação nas unidades já existentes.
@@ -306,9 +317,11 @@ listaPropostas = [
 
         }),
         new Estatistica({
-            saude: -5,
-            alegria: -10,
-            economia: 2,
+            meioAmbiente: 6,
+            saude: -8,
+            alegria: -8,
+            economia: -4,
+            infraestrutura: -5,
             tituloNoticia: "População critica recusa da proposta de construção de hospital público municipal",
             noticia: `A decisão da Prefeitura de não aprovar a construção de um hospital público municipal gerou forte repercussão negativa entre moradores, especialistas e lideranças comunitárias.
 
@@ -335,9 +348,9 @@ listaPropostas = [
         new Estatistica({
             dinheiro: -4000,
             alegria: 4,
-            educacao: 7,
-            seguranca: 3,
-            economia: -2,
+            educacao: 8,
+            seguranca: 5,
+            economia: 6,
             tituloNoticia: "Prefeitura lança projeto EJA e amplia acesso à educação para adultos",
             noticia: `A Prefeitura anunciou o início do projeto de Educação de Jovens e Adultos (EJA), voltado a pessoas que não concluíram os estudos na idade apropriada. A medida visa promover inclusão social, aumentar a empregabilidade e reduzir desigualdades educacionais no município.
 
@@ -347,9 +360,10 @@ listaPropostas = [
 
         }),
         new Estatistica({
-            alegria: -2,
+            alegria: -1,
             seguranca: -4,
-            economia: 1,
+            educacao: -8,
+            economia: -7,
             tituloNoticia: "Município adia projeto EJA e adultos continuam sem acesso à educação básica",
             noticia: `A proposta de criação do projeto de Educação de Jovens e Adultos (EJA) foi recusada pela gestão municipal, frustrando expectativas de moradores que aguardavam a oportunidade de voltar a estudar.
 
@@ -372,14 +386,14 @@ listaPropostas = [
 
         Solicitamos a inclusão desta proposta no planejamento orçamentário municipal e a análise das possibilidades de viabilização dessa ação, com base nas necessidades de segurança e na capacidade de gestão do Município.
     
-        Custo: 3789 reais.
+        Custo: 4600 reais.
         Vereador Abacate da Sombrinha.`,
 
         new Estatistica({
             dinheiro: -3700,
-            alegria: 5,
+            alegria: 8,
             seguranca: 12,
-            economia: -2,
+            economia: 6,
             tituloNoticia: "Prefeitura amplia efetivo da segurança pública e população sente maior proteção",
             noticia: `A Prefeitura iniciou a contratação de novos oficiais da segurança pública como parte do plano de reforço ao efetivo da Guarda Municipal. A medida tem como objetivo ampliar o patrulhamento, garantir mais segurança e gerar empregos no setor.
 
@@ -389,9 +403,9 @@ listaPropostas = [
 
         }),
         new Estatistica({
-            alegria: -7,
+            alegria: -8,
             seguranca: -8,
-            economia: 2,
+            economia: -4,
             tituloNoticia: "Insegurança aumenta após recusa em reforçar efetivo da Guarda Municipal",
             noticia: `A proposta para aumentar o número de oficiais da segurança pública foi rejeitada pela administração municipal, provocando reações negativas de moradores e representantes comunitários.
 
@@ -412,12 +426,12 @@ listaPropostas = [
         Custo: 0 reais.
         Vereador Dr. Tung Tung Tung Sahur.`,
         new Estatistica({
-            dinheiro: 2500,
-            alegria: -5,
-            meioAmbiente: -4,
-            economia: 1,
-            imposto: 1,
-            populacao: 1.08,
+            dinheiro: 4000,
+            alegria: -7,
+            saude: -5,
+            economia: -1,
+            imposto: 2,
+            populacao: 1.05,
             tituloNoticia: "Prefeitura aprova aumento de impostos sobre anticoncepcionais e gera polêmica",
             noticia: `A administração municipal aprovou a proposta de aumento de impostos sobre produtos anticoncepcionais, com o objetivo de ampliar a arrecadação para programas de saúde e assistência social.
 
@@ -427,7 +441,10 @@ listaPropostas = [
 
         }),
         new Estatistica({
-            alegria: 2,
+            alegria: 7,
+            saude: 6,
+            economia: 6,
+            populacao: 0.96,
             tituloNoticia: "Município recusa aumento de impostos sobre anticoncepcionais e mantém acesso garantido",
             noticia: `A proposta de aumento de impostos sobre anticoncepcionais foi rejeitada pela Prefeitura, mantendo inalterada a carga tributária desses produtos no âmbito municipal.
 
@@ -446,14 +463,14 @@ listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão do projeto no calendário oficial de eventos do Município, com a devida previsão orçamentária.
 
-        Custo: 4.000 reais.
+        Custo: 5.000 reais.
         Vereador Dr. Jurandy Egito.`,
         new Estatistica({
-            dinheiro: -4000,
-            alegria: 10,
-            meioAmbiente: 2,
-            economia: -2,
-            populacao: 1.1,
+            dinheiro: -5000,
+            alegria: 8,
+            economia: 9,
+            educacao: 3,
+            populacao: 1.08,
             tituloNoticia: "Feira cultural movimenta cidade e fortalece economia criativa",
             noticia: `A realização da feira cultural promovida pela Prefeitura reuniu milhares de pessoas e destacou a diversidade artística local com apresentações musicais, exposições de arte, gastronomia e artesanato.
 
@@ -464,9 +481,10 @@ listaPropostas = [
 
         }),
         new Estatistica({
-            alegria: -5,
-            meioAmbiente: -1,
-            economia: 2,
+            alegria: -7,
+            economia: -7,
+            educacao: -7,
+            populacao: 0.96,
             tituloNoticia: "Proposta de feira cultural é recusada e gera críticas de artistas locais",
             noticia: `A Prefeitura decidiu não aprovar a proposta de realização da feira cultural municipal, alegando limitações orçamentárias e outras prioridades administrativas no momento.
 
@@ -490,8 +508,8 @@ listaPropostas = [
         new Estatistica({
             dinheiro: -2500,
             saude: 10,
-            alegria: 2,
-            populacao: 1.01,
+            economia: 4,
+            populacao: 1.02,
             tituloNoticia: "Campanha de doação de sangue mobiliza cidade e salva vidas",
             noticia: `A campanha de doação de sangue promovida pela Prefeitura teve ampla adesão da população, com pontos móveis de coleta distribuídos em locais estratégicos da cidade.
 
@@ -500,8 +518,9 @@ listaPropostas = [
 		Autoridades comemoram os resultados, destacando o impacto positivo na saúde pública e o fortalecimento do espírito de solidariedade entre os munícipes.`
         }),
         new Estatistica({
-            saude: -5,
-            alegria: -1,
+            saude: -7,
+            economia: -4,
+            populacao: 0.99,
             tituloNoticia: "Prefeitura recusa campanha de doação de sangue e decisão gera repercussão",
             noticia: `A proposta de realização de uma campanha municipal de doação de sangue foi recusada pela administração pública, sob justificativa de limitações orçamentárias e priorização de outras ações.
 
@@ -519,13 +538,13 @@ listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão do Projeto Vacinação 100 no plano de ações da Secretaria Municipal de Saúde, com a devida previsão orçamentária para materiais, pessoal de apoio e campanhas de divulgação.
 
-        Custo: 4.287 reais.
+        Custo: 4.300 reais.
         Vereador Dr. Monkey D. Alberto.`,
         new Estatistica({
-            dinheiro: -4287,
-            saude: 15,
-            alegria: 2,
-            populacao: 1.12,
+            dinheiro: -4300,
+            saude: 12,
+            infraestrutura: 5,
+            populacao: 1.08,
             tituloNoticia: "Município alcança recorde de cobertura vacinal com o Projeto Vacinação 100",
             noticia: `Com ações coordenadas e intensivas de mobilização, o Projeto Vacinação 100 atingiu sua meta de cobrir 100% do público-alvo nas principais campanhas de imunização.
 
@@ -534,8 +553,8 @@ listaPropostas = [
 		Profissionais da saúde destacam que a ampla cobertura vacinal ajudará a prevenir surtos, reduzir internações e proteger os grupos mais vulneráveis.`
         }),
         new Estatistica({
-            saude: -7,
-            alegria: -4,
+            saude: -9,
+            infraestrutura: -6,
             populacao: 0.94,
             tituloNoticia: "Município deixa de implementar projeto de vacinação ampla e preocupa especialistas",
             noticia: `A proposta do Projeto Vacinação 100, que previa estratégias para alcançar cobertura vacinal total no Município, foi rejeitada pela administração municipal.
@@ -554,13 +573,14 @@ listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão do programa no planejamento estratégico da área de segurança pública, com a devida previsão orçamentária.
 
-        Custo: 4.874 reais.
+        Custo: 4.800 reais.
         Vereador Natsuki Subaru.`,
         new Estatistica({
-            dinheiro: -4824,
+            dinheiro: -4800,
             seguranca: 12,
-            alegria: 5,
-            populacao: 1.07,
+            educacao: 7,
+            alegria: 6,
+            populacao: 1.02,
             tituloNoticia: "Município investe em capacitação policial e melhora sensação de segurança",
             noticia: `Com o lançamento do programa de formação e capacitação continuada para policiais, a cidade deu um passo importante na valorização das forças de segurança.
 
@@ -570,8 +590,9 @@ listaPropostas = [
 
         }),
         new Estatistica({
-            seguranca: -7,
-            alegria: -4,
+            seguranca: -9,
+            educacao: -4,
+            alegria: -5,
             populacao: 0.96,
             tituloNoticia: "Formação policial continuada é deixada de lado e preocupa especialistas",
             noticia: `A proposta que previa o investimento em capacitação e valorização profissional dos policiais foi rejeitada pelo Município.
@@ -591,13 +612,13 @@ listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão dos Jogos Escolares no calendário oficial do Município, com a devida previsão orçamentária para transporte, premiações, materiais esportivos e estrutura de apoio.
 
-        Custo: 2904 reais.
+        Custo: 2900 reais.
         Vereador Zé ninguém.`,
         new Estatistica({
-            dinheiro: -2904,
-            alegria: 10,
-            populacao: 1.02,
-            educacao: 3,
+            dinheiro: -2900,
+            alegria: 8,
+            saude: 5,
+            educacao: 5,
             tituloNoticia: "Jogos Escolares Municipais promovem esporte e integração entre estudantes",
             noticia: `Com a realização dos Jogos Escolares Municipais, a cidade celebrou a integração entre estudantes da rede pública e privada.
 
@@ -608,7 +629,8 @@ listaPropostas = [
         }),
         new Estatistica({
             alegria: -7,
-            educacao: -2,
+            educacao: -3,
+            saude: -5,
             tituloNoticia: "Jogos Escolares Municipais são rejeitados e preocupam comunidade escolar",
             noticia: `A proposta para realização dos Jogos Escolares Municipais foi recusada pelo Município, gerando insatisfação entre estudantes e educadores.
 
@@ -626,15 +648,12 @@ listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão do projeto no planejamento estratégico do Município, com a devida previsão orçamentária.
 
-        Custo: 5000 reais (possível lucro).
+        Custo: 5500 reais (possível lucro).
         Vereador Alguém debaixo do fogão.`,
         new Estatistica({
-            dinheiro: -5000,
-            meioAmbiente: 10,
-            economia: -0.7,
-            alegria: 7,
-            populacao: 1.16,
-            infraestrutura: 4,
+            dinheiro: (Math.random() * -5500) + 4500,
+            economia: 9,
+            populacao: 1.14,
             tituloNoticia: "Município lança programa de incentivo ao turismo e aquece a economia local",
             noticia: `Com o lançamento do programa municipal de incentivo ao turismo, o Município visa valorizar seus atrativos naturais, culturais e históricos, fortalecendo a economia local.
 
@@ -644,9 +663,9 @@ listaPropostas = [
 
         }),
         new Estatistica({
-            meioAmbiente: -8,
-            economia: 1,
-            alegria: -4,
+            meioAmbiente: 7,
+            economia: -7,
+            populacao: 0.96,
             tituloNoticia: "Proposta de incentivo ao turismo é rejeitada e preocupa setores econômicos",
             noticia: `A proposta para implementação de um programa municipal de incentivo ao turismo foi rejeitada, gerando apreensão em setores ligados ao comércio, hotelaria e cultura.
 
@@ -665,14 +684,14 @@ listaPropostas = [
 
         Diante do exposto, solicitamos o apoio do Executivo Municipal para a formalização de um pedido oficial à Presidência da República, incluindo a disponibilização de terreno adequado e a inserção do projeto nas prioridades do Município.
 
-        Custo: 5000 (parte municipal).
+        Custo: 8000 (parte municipal).
         Vereador Chapolin Colorado.`,
         new Estatistica({
-            dinheiro: -5000,
+            dinheiro: -8000,
             educacao: 15,
-            economia: -0.5, // professores contratados.
-            populacao: 1.15,
-            infraestrutura: 10,
+            economia: 8,
+            infraestrutura: 15,
+            meioAmbiente: -7,
             tituloNoticia: "Município avança em parceria para construção de Instituto Federal",
             noticia: `O Executivo Municipal formalizou um pedido oficial à Presidência da República para a instalação de um Instituto Federal de Educação, Ciência e Tecnologia no Município.
 
@@ -682,8 +701,10 @@ listaPropostas = [
 
         }),
         new Estatistica({
-            educacao: -7,
-            infraestrutura: -5,
+            educacao: -8,
+            infraestrutura: -8,
+            alegria: -10,
+            meioAmbiente: 8,
             tituloNoticia: "Projeto para Instituto Federal é rejeitado e gera debate na comunidade",
             noticia: `A proposta para a construção de um Instituto Federal no Município foi rejeitada no planejamento orçamentário, gerando preocupações entre estudantes, educadores e setores da sociedade civil.
 
@@ -706,8 +727,13 @@ listaPropostas = [
         Vereador Dr. Benício Fonteiras.`,
         new Estatistica({
             dinheiro: -1000,
-            alegria: 4,
-            educacao: 5,
+            alegria: 2,
+            economia: 2,
+            educacao: 2,
+            saude: 2,
+            seguranca: 2,
+            infraestrutura: 2,
+            meioAmbiente: 2,
             tituloNoticia: "Município promove palestra para fortalecer cidadania e educação",
             noticia: `Por meio de palestra aberta à população, o Município incentivou a participação cidadã e o diálogo sobre temas importantes como saúde, meio ambiente e educação financeira.
 
@@ -717,8 +743,13 @@ listaPropostas = [
 
         }),
         new Estatistica({
-            alegria: -1,
-            educacao: -3,
+            alegria: -4,
+            economia: -1,
+            educacao: -1,
+            saude: -1,
+            seguranca: -1,
+            infraestrutura: -1,
+            meioAmbiente: -1,
             tituloNoticia: "Palestra para a população é cancelada e gera insatisfação",
             noticia: `A proposta de realização de palestra aberta à população não foi aprovada, causando preocupação entre educadores e líderes comunitários.
 
@@ -737,14 +768,14 @@ listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão do projeto no plano de governo municipal, com a devida previsão orçamentária.
         
-        Custo: 4891 reais.
-        Vereador  Débisson Isaac.`,
+        Custo: 5400 reais.
+        Vereador Edson Isaac.`,
         new Estatistica({
-            dinheiro: -4891,
+            dinheiro: -5400,
             saude: 10,
-            populacao: 1.12,
-            economia: -0.8,
-            educacao: 5,
+            populacao: 1.04,
+            economia: 8,
+            educacao: 8,
             tituloNoticia: "Município investe na formação de médicos e enfermeiros para melhorar saúde pública",
             noticia: `Com a aprovação do programa municipal de formação e capacitação para médicos e enfermeiros, a cidade aposta na qualificação profissional para melhorar o atendimento na rede pública.
 
@@ -755,8 +786,9 @@ listaPropostas = [
         }),
         new Estatistica({
             saude: -8,
-            populacao: 0.99,
-            educacao: -4,
+            populacao: 0.97,
+            economia: -7,
+            educacao: -7,
             tituloNoticia: "Projeto de formação para profissionais da saúde é rejeitado e preocupa especialistas",
             noticia: `A proposta para criação de programa de formação continuada para médicos e enfermeiros foi recusada pela administração municipal.
 
@@ -775,12 +807,12 @@ listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão do curso no planejamento educacional do Município, com a devida previsão orçamentária para material didático, remuneração de instrutores e estrutura de apoio.
 
-        Custo: 2.289 reais.
+        Custo: 2.300 reais.
         Vereador Real Slim Shady.`,
         new Estatistica({
-            dinheiro: -2289,
-            educacao: 10,
-            economia: -0.5,
+            dinheiro: -2300,
+            educacao: 8,
+            economia: 4,
             populacao: 1.03,
             tituloNoticia: "Curso gratuito de inglês é ofertado para a população",
             noticia: `Por meio da iniciativa da Prefeitura, foi lançado um curso gratuito de inglês voltado para jovens, estudantes da rede pública e trabalhadores.
@@ -792,6 +824,8 @@ listaPropostas = [
         }),
         new Estatistica({
             educacao: -6,
+            alegria: -4,
+            economia: -3,
             tituloNoticia: "Curso de inglês gratuito enfrenta críticas e cortes",
             noticia: `Apesar da proposta para ampliar o ensino de inglês gratuito, o programa sofreu cortes orçamentários que comprometem sua continuidade.
 
@@ -813,9 +847,10 @@ listaPropostas = [
         Custo: Nenhum (medida arrecadatória).
         Vereador Taxad de Imposteira.`,
         new Estatistica({
-            imposto: 15,
-            alegria: -20,
-            dinheiro: 3000,
+            imposto: 4,
+            alegria: -15,
+            economia: -14,
+            dinheiro: 5000,
             tituloNoticia: "Município planeja aumento de impostos para fortalecer serviços públicos",
             noticia: `Foi proposta a revisão e possível aumento dos impostos municipais gerais, visando garantir recursos para saúde, educação, infraestrutura e assistência social.
 
@@ -825,7 +860,8 @@ listaPropostas = [
 
         }),
         new Estatistica({
-            alegria: 4,
+            alegria: 14,
+            economia: 14,
             tituloNoticia: "Reajuste de impostos municipais provoca protestos e preocupação social",
             noticia: `A proposta de aumento dos impostos gerais no Município gerou insatisfação entre moradores e setores produtivos, que temem impactos negativos na economia local.
 
@@ -844,14 +880,13 @@ listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão do programa no planejamento da Secretaria Municipal de Agricultura, com a devida previsão orçamentária.
 
-        Custo: 3.800 reais.
+        Custo: 3.200 reais.
         Vereador Mr. Potato Batatas.`,
         new Estatistica({
-            dinheiro: -3800,
-            meioAmbiente: 10,
-            economia: -0.5,
-            alegria: 4,
-            populacao: 1.1,
+            dinheiro: -3200,
+            meioAmbiente: 6,
+            economia: 9,
+            populacao: 1.04,
             tituloNoticia: "Município investe em programa de incentivo à agricultura de batatas",
             noticia: `Por meio da criação do programa municipal de incentivo à agricultura de batatas, a cidade fortalece a produção local e fomenta a economia agrícola.
 
@@ -861,9 +896,9 @@ listaPropostas = [
 
         }),
         new Estatistica({
-            meioAmbiente: -6,
-            economia: 2.5,
-            populacao: 0.94,
+            meioAmbiente: -7,
+            economia: -7,
+            populacao: 0.98,
             tituloNoticia: "Proposta de incentivo à agricultura de batatas é rejeitada e gera preocupação",
             noticia: `A proposta de criação de um programa de incentivo à agricultura de batatas foi recusada pela administração municipal.
 
@@ -885,15 +920,14 @@ listaPropostas = [
         O plano será executado com base em estudos técnicos e audiências públicas, respeitando os princípios da participação popular, da função social da cidade e da gestão democrática do território urbano, conforme previsto no Estatuto da Cidade (Lei nº 10.257/2001).
         
 
-        Custo: 2000 reais.
+        Custo: 4000 reais.
         Vereadora Hatsune miku.
         `,
         new Estatistica({
             dinheiro: -2000,
-            alegria: 10,
-            populacao: 1.1,
+            alegria: 9,
             infraestrutura: 8,
-            meioAmbiente: 8,
+            economia: 8,
             tituloNoticia: "Revitalização do centro histórico impulsiona cultura e economia local",
             noticia: `O Plano de Revitalização do Centro Histórico trouxe nova vida à região, com restauração de prédios históricos, criação de espaços culturais e feiras permanentes de artesanato e gastronomia.
 
@@ -903,9 +937,9 @@ listaPropostas = [
 
         }),
         new Estatistica({
-            alegria: -7,
-            meioAmbiente: -5,
-            populacao: 0.99,
+            alegria: -2,
+            economia: -6,
+            infraestrutura: -12,
             tituloNoticia: "População crítica à revitalização do centro histórico por impacto econômico e social",
             noticia: `O projeto de revitalização do centro histórico gerou críticas por parte de moradores e comerciantes que apontam impactos negativos na economia local e na rotina da população.
 
@@ -926,15 +960,16 @@ listaPropostas = [
 
         Embora a medida possa gerar desconforto inicial entre os usuários, a Administração Pública reforça que se trata de ação planejada com base em estudos técnicos, visando à melhoria da mobilidade e da equidade no uso do solo urbano.
 
-        Custo: nenhum (com lucros futuros.).
+        Custo: nenhum (arrecadatório).
         Vereador Xandão.
         
         `,
 
         new Estatistica({
-            imposto: 15,
+            dinheiro: 2500,
+            imposto: 2,
             alegria: -15,
-            seguranca: 5,
+            economia: -12,
             tituloNoticia: "Prefeitura institui cobrança em estacionamentos públicos para melhorar mobilidade",
             noticia: `A Prefeitura Municipal anunciou a criação da Zona Municipal de Estacionamento Regulamentado (ZMER), com cobrança de tarifas para vagas em áreas centrais e de grande fluxo comercial.
 
@@ -944,7 +979,8 @@ listaPropostas = [
 
         }),
         new Estatistica({
-            alegria: 1,
+            alegria: 15,
+            economia: 12,
             tituloNoticia: "População crítica à cobrança de estacionamento público na zona urbana",
             noticia: `A recente implementação da Zona Municipal de Estacionamento Regulamentado gerou insatisfação entre os usuários, que apontam perda de conforto e aumento de custos no dia a dia.
 
@@ -971,9 +1007,10 @@ listaPropostas = [
         `,
         new Estatistica({
             dinheiro: -6000,
-            educacao: 5,
-            alegria: 2,
-            infraestrutura: 5,
+            economia: 5,
+            educacao: 8,
+            alegria: 9,
+            infraestrutura: 11,
             tituloNoticia: "Programa 'Leitura para Todos' amplia acesso à cultura em bairros periféricos",
             noticia: `A Prefeitura Municipal, por meio do Programa "Leitura para Todos", implantou bibliotecas comunitárias em bairros periféricos, promovendo o acesso gratuito a livros, atividades literárias e convivência social.
 
@@ -983,9 +1020,10 @@ listaPropostas = [
 
         }),
         new Estatistica({
-            alegria: -5,
-            educacao: -10,
-            infraestrutura: -14,
+            alegria: -6,
+            educacao: -8,
+            economia: -8,
+            infraestrutura: -8,
             tituloNoticia: "Críticas ao programa de bibliotecas comunitárias por impacto nos recursos e infraestrutura",
             noticia: `Apesar dos benefícios culturais esperados, a implantação do Programa "Leitura para Todos" enfrenta críticas devido ao alto custo e impacto negativo na infraestrutura local.
 
@@ -1010,10 +1048,10 @@ listaPropostas = [
         Vereadora Hatsune miku.`,
 
         new Estatistica({
-            alegria: -20,
-            dinheiro: 4000,
+            alegria: -15,
+            dinheiro: 5000,
             saude: -10,
-            populacao: 0.9,
+            populacao: 0.97,
             tituloNoticia: "Suspensão do atendimento noturno em unidades secundárias de saúde",
             noticia: `Devido a restrições orçamentárias, a Prefeitura suspendeu temporariamente o atendimento noturno nas unidades de saúde secundárias, priorizando os serviços essenciais em UPAs e hospitais.
 
@@ -1023,7 +1061,8 @@ listaPropostas = [
 
         }),
         new Estatistica({
-            alegria: 4,
+            alegria: 18,
+            saude: 12,
             tituloNoticia: "População lamenta suspensão do atendimento noturno em unidades de saúde",
             noticia: `A suspensão do atendimento noturno em unidades de saúde secundárias tem causado insatisfação entre munícipes, que enfrentam dificuldades para acesso a serviços fora do horário comercial.
 
@@ -1045,14 +1084,15 @@ listaPropostas = [
 
         Solicitamos, assim, a análise desta proposta e a possibilidade de sua inclusão no planejamento orçamentário e estratégico do Município, de modo a viabilizar a criação de um marco legal que proporcione segurança jurídica e estímulo ao setor produtivo, contribuindo para o progresso social e econômico de nossa comunidade.
         
-        Custo: 0.
+        Custo: 0 (redução de impostos).
         Vereador Manga Mangas.`,
 
         new Estatistica({
-            meioAmbiente: 15,
-            economia: -2,
-            infraestrutura: 8,
-            imposto: -10,
+            dinheiro: 4000,
+            meioAmbiente: -10,
+            economia: 10,
+            infraestrutura: 10,
+            imposto: -2,
             populacao: 1.05,
             tituloNoticia: "Prefeitura lança programa de incentivos fiscais para estimular economia local",
             noticia: `O município aprovou hoje o Programa Municipal de Estímulo à Atividade Econômica, oferecendo reduções fiscais para empresas que se instalarem na região.
@@ -1062,9 +1102,10 @@ listaPropostas = [
 		Especialistas projetam que o programa pode aumentar em 15% a atividade econômica e reduzir o desemprego em 2% nos próximos meses.`
         }),
         new Estatistica({
-            meioAmbiente: -5,
-            infraestrutura: -1,
-            imposto: 8,
+            meioAmbiente: 7,
+            infraestrutura: -8,
+            economia: -5,
+            imposto: 2,
             tituloNoticia: "Prefeitura rejeita proposta de incentivos fiscais para empresas",
             noticia: `A administração municipal decidiu não implementar o programa de incentivos fiscais para empresas, alegando preocupações com a arrecadação.
 
@@ -1084,16 +1125,15 @@ listaPropostas = [
 
         Solicitamos a viabilidade da proposta no planejamento estratégico municipal, com eventual destinação de espaço físico e equipe técnica multidisciplinar.
         
-        custo: 1900.
+        custo: 3800.
         Vereador Tales elementar.`,
 
         new Estatistica({
-            dinheiro: -1900,
-            alegria: 2,
-            infraestrutura: 4,
-            meioAmbiente: 4,
+            dinheiro: -3800,
+            infraestrutura: 8,
+            meioAmbiente: -4,
             populacao: 1.02,
-            economia: -4,
+            economia: 8,
             tituloNoticia: "Prefeitura inaugura Casa do Empreendedor para apoiar pequenos negócios",
             noticia: `Foi inaugurada hoje a Casa do Empreendedor, espaço que reúne todos os serviços necessários para abertura e gestão de pequenos negócios em um só local.
 
@@ -1102,9 +1142,10 @@ listaPropostas = [
 		A iniciativa promete simplificar a vida dos empresários locais e impulsionar a economia do município através do fortalecimento dos pequenos negócios.`
         }),
         new Estatistica({
-            alegria: -1,
-            meioAmbiente: -3,
-            economia: 2,
+            infraestrutura: -6,
+            meioAmbiente: 4,
+            economia: -7,
+            populacao: 0.98,
             tituloNoticia: "Projeto da Casa do Empreendedor é rejeitado pela prefeitura",
             noticia: `A administração municipal decidiu não implementar o projeto da Casa do Empreendedor, alegando restrições orçamentárias.
 
@@ -1131,9 +1172,11 @@ listaPropostas = [
         
         `,
         new Estatistica({
-            alegria: -5,
-            educacao: -5,
-            populacao: 0.998,
+            dinheiro: 3000,
+            infraestrutura: 6,
+            alegria: -12,
+            educacao: -4,
+            populacao: 0.99,
             tituloNoticia: "Creches municipais são interditadas para reformas emergenciais",
             noticia: `A prefeitura anunciou hoje o fechamento temporário de quatro unidades de educação infantil devido a problemas estruturais identificados em vistorias técnicas. As creches permanecerão fechadas por aproximadamente seis meses para a realização de obras de adequação e reforço predial.
 
@@ -1142,8 +1185,9 @@ listaPropostas = [
 		Especialistas em educação infantil destacam a importância das reformas para garantir a segurança das crianças, mas alertam para os possíveis transtornos na rotina das famílias e no desenvolvimento pedagógico dos alunos durante o período de transição entre as unidades escolares.`
         }),
         new Estatistica({
-            alegria: 3,
-            educacao: 2,
+            alegria: 14,
+            educacao: 4,
+            infraestrutura: -6,
             tituloNoticia: "Prefeitura mantém creches abertas após revisão de laudos técnicos",
             noticia: `Após reavaliação dos laudos técnicos e amplo debate com a comunidade escolar, a administração municipal decidiu manter abertas as creches que estariam previstas para reforma.
 
@@ -1170,11 +1214,12 @@ listaPropostas = [
         Vereador: micro faraday.
         `,
         new Estatistica({
-            alegria: -10,
-            seguranca: 4,
-            meioAmbiente: -5,
-            saude: 5,
-            economia: 2,
+            dinheiro: 6000,
+            alegria: -25,
+            seguranca: 8,
+            meioAmbiente: 8,
+            saude: 8,
+            economia: -20,
             tituloNoticia: "Prefeitura anuncia cancelamento do Carnaval oficial para contenção de gastos",
             noticia: `Em decisão polêmica, a administração municipal decretou o cancelamento do Carnaval oficial deste ano, alegando necessidade de contenção de despesas e priorização de serviços essenciais. A medida economizará milhões que seriam destinados à estruturação dos blocos e eventos oficiais.
 
@@ -1183,11 +1228,11 @@ listaPropostas = [
 		Comerciantes e trabalhadores do setor de eventos manifestaram preocupação com a perda de renda durante o período que tradicionalmente movimenta a economia da cidade. A prefeitura prometeu criar um programa emergencial para amenizar os impactos nos profissionais afetados.`
         }),
         new Estatistica({
-            alegria: 8,
-            saude: -8,
-            seguranca: -10,
-            meioAmbiente: 9,
-            economia: -0.4,
+            alegria: 20,
+            saude: -6,
+            seguranca: -6,
+            meioAmbiente: -9,
+            economia: 20,
             tituloNoticia: "Carnaval será mantido apesar de pressão por cortes orçamentários",
             noticia: `Após intenso debate, a prefeitura recuou da proposta de cancelar o Carnaval oficial e garantiu a realização do evento com orçamento reduzido. A decisão foi comemorada por foliões e trabalhadores do setor de eventos.
 
@@ -1209,15 +1254,15 @@ listaPropostas = [
 
         A Administração Municipal reafirma, por meio desta política pública, seu compromisso com a formação cidadã, a prevenção de vulnerabilidades sociais e a promoção da saúde integral dos adolescentes matriculados na rede pública de ensino.
 
-        Custo: 3200 reais.
+        Custo: 3700 reais.
         Vereador Batatão.`,
 
         new Estatistica({
-            dinheiro: -3200,
-            saude: 5,
+            dinheiro: -3700,
+            saude: 8,
             alegria: 2,
-            educacao: 5,
-            populacao: 0.97,
+            educacao: 6,
+            populacao: 0.95,
             tituloNoticia: "Prefeitura implementa projeto pioneiro de educação sexual nas escolas",
             noticia: `O município lançou hoje o projeto "Conhecer para Cuidar", um programa abrangente de educação sexual que será ministrado nas escolas públicas a partir do 8º ano. A iniciativa visa reduzir os índices de gravidez na adolescência através de informação qualificada.
 
@@ -1226,8 +1271,8 @@ listaPropostas = [
 		Especialistas em educação e saúde pública elogiaram a iniciativa, destacando que a informação científica é a melhor ferramenta para prevenir problemas como gravidez precoce e doenças sexualmente transmissíveis entre adolescentes.`
         }),
         new Estatistica({
-            saude: -2,
-            educacao: -3,
+            saude: -9,
+            educacao: -4,
             populacao: 1.05,
             tituloNoticia: "Projeto de educação sexual é rejeitado após polêmica",
             noticia: `A proposta de implementar educação sexual nas escolas foi arquivada após intenso debate na câmara municipal. Grupos conservadores alegaram que o tema deveria ser tratado exclusivamente no âmbito familiar.
@@ -1249,15 +1294,15 @@ listaPropostas = [
 
         Solicitamos a inclusão dessa proposta na agenda de prioridades da Secretaria Municipal de Educação, com previsão orçamentária e avaliação técnica de sua implementação por etapas.
         
-        Custo: 1200 reais.
+        Custo: 2400 reais.
         Vereador Pitbul raivoso.
         `,
 
         new Estatistica({
-            dinheiro: -1200,
-            alegria: 1,
+            dinheiro: -2400,
+            alegria: 3,
             educacao: 7,
-            economia: -1,
+            economia: 5,
             tituloNoticia: "Prefeitura lança programa inovador de reforço escolar no contraturno",
             noticia: `A rede municipal de ensino ganhará um reforço importante com a implantação de aulas complementares no período inverso ao das aulas regulares. O programa visa atender estudantes com dificuldades de aprendizagem em português e matemática.
 
@@ -1266,7 +1311,8 @@ listaPropostas = [
 		A iniciativa inclui ainda merenda escolar no período do contraturno e acompanhamento psicopedagógico, criando um ambiente acolhedor que incentive a permanência dos estudantes na escola e melhore seus resultados acadêmicos.`
         }),
         new Estatistica({
-            educacao: -5,
+            educacao: -8,
+            economia: -4,
             tituloNoticia: "Projeto de reforço escolar é rejeitado por falta de verba",
             noticia: `A proposta de implementar aulas de reforço no contraturno das escolas municipais foi arquivada pela prefeitura, que alegou restrições orçamentárias para custear a iniciativa neste momento.
 
@@ -1286,14 +1332,14 @@ listaPropostas = [
 
         Recomendamos a criação de uma comissão específica para regulamentar e operacionalizar o edital, com apoio da Secretaria Municipal de Cultura e participação da sociedade civil.
         
-        Custo: 2850 reais
+        Custo: 3600 reais
         Vereadora Aparecida.`,
 
         new Estatistica({
-            dinheiro: -2850,
-            alegria: 5,
-            meioAmbiente: 2,
-            economia: 0.5,
+            dinheiro: -3600,
+            economia: 10,
+            alegria: 8,
+            infraestrutura: 3,
             tituloNoticia: "Prefeitura lança edital inédito para fomentar a cultura local",
             noticia: `Artistas e produtores culturais da cidade ganharam um importante incentivo com o lançamento do Edital Municipal de Fomento à Produção Cultural. A iniciativa vai destinar recursos para projetos em diversas áreas artísticas, valorizando a criatividade local.
 
@@ -1302,8 +1348,9 @@ listaPropostas = [
 		Especialistas destacam que o programa vai aquecer a economia criativa, gerar empregos no setor cultural e fortalecer a identidade artística do município, além de democratizar o acesso aos recursos públicos para a cultura.`
         }),
         new Estatistica({
-            alegria: -3,
-            meioAmbiente: -1,
+            alegria: -7,
+            economia: -8,
+            infraestrutura: -3,
             tituloNoticia: "Projeto de incentivo à cultura é arquivado na prefeitura",
             noticia: `A proposta de criar um edital municipal para fomentar a produção cultural local foi rejeitada pela administração pública, que alegou priorizar outras áreas no momento. A decisão desanimou artistas e coletivos culturais da cidade.
 
@@ -1329,10 +1376,9 @@ listaPropostas = [
 
         new Estatistica({
             dinheiro: -1800,
-            saude: 3,
-            meioAmbiente: 2,
-            educacao: 2,
-            economia: -0.5,
+            alegria: 4,
+            saude: 4,
+            economia: 4,
             tituloNoticia: "Prefeitura lança programa 'Esporte para Todos' com atividades gratuitas",
             noticia: `A administração municipal anunciou hoje o início do programa "Esporte para Todos", que oferecerá atividades físicas e esportivas gratuitas em diversos pontos da cidade. A iniciativa visa promover saúde, inclusão social e qualidade de vida para todas as idades.
 
@@ -1341,8 +1387,9 @@ listaPropostas = [
 		O programa também prevê a realização de campeonatos interbairros e atividades itinerantes, criando oportunidades de integração social e descoberta de novos talentos esportivos em comunidades carentes.`
         }),
         new Estatistica({
-            saúde: -1,
-            educacao: -4,
+            saúde: -3,
+            alegria: -3,
+            economia: -3,
             tituloNoticia: "Projeto de esporte comunitário é rejeitado por falta de verba",
             noticia: `A proposta de criar um programa municipal de esportes gratuitos foi arquivada pela prefeitura, que alegou restrições orçamentárias. A decisão frustrou expectativas de muitas famílias que dependiam de iniciativas públicas para atividades esportivas.
 
@@ -1367,11 +1414,11 @@ listaPropostas = [
 
         `,
         new Estatistica({
-            dinheiro: 3000,
-            alegria: -7,
-            meioAmbiente: -3,
-            infraestutura: 3,
-            imposto: 10,
+            dinheiro: 4000,
+            alegria: -12,
+            infraestutura: 7,
+            economia: -10,
+            imposto: 3,
             populacao: 0.99,
             tituloNoticia: "Prefeitura anuncia reajuste de 8,2% na tarifa de energia elétrica",
             noticia: `A administração municipal confirmou hoje o aumento de 8,2% nas contas de luz, que entrará em vigor no próximo mês. Segundo a prefeitura, o reajuste é necessário para cobrir os custos de manutenção e modernização da rede elétrica.
@@ -1381,8 +1428,9 @@ listaPropostas = [
 		Economistas alertam que o aumento na conta de luz pode pressionar ainda mais o orçamento doméstico, especialmente em lares que já enfrentam dificuldades financeiras após a pandemia.`
         }),
         new Estatistica({
-            alegria: 5,
-            populacao: 1.01,
+            alegria: 14,
+            economia: 8,
+            infraestrutura: -2,
             tituloNoticia: "Prefeitura recua e mantém tarifa de energia sem reajuste",
             noticia: `Após forte pressão popular, a administração municipal decidiu não autorizar o aumento de 8,2% nas tarifas de energia elétrica que estava previsto. A decisão foi comemorada por consumidores e entidades de defesa do consumidor.
 
@@ -1411,8 +1459,7 @@ listaPropostas = [
             dinheiro: -4000,
             alegria: 5,
             seguranca: 10,
-            infraestrutura: 7,
-            imposto: 3,
+            infraestrutura: 8,
             tituloNoticia: "Prefeitura implanta sistema de câmeras de segurança em pontos estratégicos da cidade",
             noticia: `A administração municipal anunciou hoje a instalação de um moderno sistema de videomonitoramento em áreas consideradas críticas. As câmeras estarão conectadas a uma central 24 horas que coordenará as ações da Guarda Municipal e Polícia Militar.
 
@@ -1421,9 +1468,9 @@ listaPropostas = [
 		Especialistas em segurança pública elogiaram a iniciativa, destacando que o monitoramento eletrônico é uma ferramenta comprovadamente eficaz na prevenção e investigação de crimes, além de ajudar no planejamento urbano.`
         }),
         new Estatistica({
-            alegria: -4,
-            seguranca: -5,
-            infraestrutura: -2,
+            alegria: -6,
+            seguranca: -7,
+            infraestrutura: -7,
             tituloNoticia: "Projeto de videomonitoramento é rejeitado por questões orçamentárias",
             noticia: `A proposta de instalar câmeras de segurança em pontos críticos da cidade foi arquivada pela prefeitura. A justificativa foi a falta de recursos para custear o sistema, que teria um investimento inicial de R$ 4 mil.
 
@@ -1447,15 +1494,15 @@ listaPropostas = [
 
         Solicitamos, assim, a análise desta proposta por parte do Executivo Municipal, em articulação com as Secretarias de Segurança, Planejamento e Desenvolvimento Urbano, a fim de viabilizar os estudos técnicos necessários e encaminhamentos junto aos entes competentes.
         
-        Custo: 5200 reais.
+        Custo: 6000 reais.
         Vereador Renato Impera.`,
 
         new Estatistica({
-            dinheiro: -5200,
-            alegria: -15,
-            seguranca: 10,
-            economia: -0.1,
-            infraestrutura: 6,
+            dinheiro: -6000,
+            alegria: 10,
+            seguranca: 15,
+            infraestrutura: 8,
+            populacao: 1.01,
             tituloNoticia: "Prefeitura aprova construção de presídio municipal após polêmico debate",
             noticia: `A administração municipal confirmou hoje a construção de uma unidade prisional na cidade após intensos debates. O projeto, orçado em R$ 5.200, promete gerar empregos e melhorar a segurança regional.
 
@@ -1464,8 +1511,9 @@ listaPropostas = [
 		Apesar dos benefícios econômicos anunciados, muitos moradores manifestaram preocupação com o impacto na imagem da cidade e possíveis riscos de segurança, organizando protestos contra a instalação do presídio.`
         }),
         new Estatistica({
-            alegria: -3,
-            seguranca: -4,
+            alegria: -10,
+            seguranca: -10,
+            infraestrutura: -8,
             populacao: 0.98,
             tituloNoticia: "Projeto de presídio municipal é rejeitado após pressão popular",
             noticia: `A proposta de construir uma unidade prisional na cidade foi arquivada após forte oposição da comunidade. Manifestantes alegaram que o presídio traria mais problemas que benefícios para o município.
