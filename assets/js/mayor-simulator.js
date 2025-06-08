@@ -1642,13 +1642,13 @@ function verificarEventosMensais(mesesAtuais) {
 
 function acaoPeriodica() {
     dinheiro += (populacao / 25) * (imposto / 10);
-    saude -= 3;
-    alegria -= 3;
-    seguranca -= 3;
-    educacao -= 3;
-    meioAmbiente -= 3;
-    economia -= 3;
-    infraestrutura -= 3;
+    saude -= 2;
+    alegria -= 2;
+    seguranca -= 2;
+    educacao -= 2;
+    meioAmbiente -= 2;
+    economia -= 2;
+    infraestrutura -= 2;
     corrigir();
     populacao *= 0.95;
     atualizarTela();
@@ -1683,7 +1683,7 @@ function acabarJogo() {
     resultado.innerText = satisfacaoPopulacao > 50 ? "Você foi um bom prefeito!" : "Você não foi um bom prefeito.";
     resultado.style.color = satisfacaoPopulacao > 50 ? "green" : "red";
     document.getElementById("pontuacao").innerText = `Pontuação: ${Math.round(satisfacaoPopulacao * 100 + populacao / 10 + dinheiro)}`;
-    document.getElementById("resultado-dinheiro").innerText = `Dinheiro: R$ ${dinheiro}`;
+    document.getElementById("resultado-dinheiro").innerText = `Dinheiro: R$ ${Math.round(dinheiro)}`;
     document.getElementById("resultado-populacao").innerText = `População: ${Math.floor(populacao)}`;
     document.getElementById("resultado-imposto").innerText = `Imposto: ${imposto}%`;
     document.getElementById("resultado-satifacao").innerText = `Satisfação da População: ${satisfacaoPopulacao.toFixed(2)}%`;
