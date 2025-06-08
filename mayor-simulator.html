@@ -17,12 +17,13 @@
         <h1 id="btn-return">Prefeito em ação</h1>
     </header>
 
- <section id="tela-inicial">
+
+    <section id="tela-inicial">
         <label for="nome-cidade" id="label-cidade">Digite o nome da sua cidade:
             <br>
-            <input type="text" id="nome-cidade">
+            <input type="text" id="nome-cidade" maxlength="20">
         </label>
-        
+
         <div id="btns">
             <div class="bnt-ord" id="btn-tutorial">
                 <img src="assets/images/mayor-simulator/tutorial.png" alt="Como jogar">
@@ -42,16 +43,16 @@
     </section>
 
     <!--Gameplay-->
-    <section id="jogo" style="display:none">
+    <section id="jogo" style="display: none;">
         <div id="left">
             <div id="news" class="new">
                 <img src="assets/images/mayor-simulator/news.png" alt="news">
-                <img src="assets/images/mayor-simulator/new.png" alt="new">
+                <img src="assets/images/mayor-simulator/new.png" alt="new" id="newNews" style="display: none;">
                 <p>Notícias</p>
             </div>
             <div id="proposals" class="new">
-                <img src="assets/images/mayor-simulator/proposal.png" alt="news">
-                <img src="assets/images/mayor-simulator/new.png" alt="new">
+                <img src="assets/images/mayor-simulator/proposal.png" alt="Proposta" id="proposalIcon">
+                <img src="assets/images/mayor-simulator/new.png" alt="new" id="newProposal" style="display: none;">
                 <p>Propostas</p>
             </div>
         </div>
@@ -61,7 +62,17 @@
             <div id="propostas" style="display: block;">
                 <div id="proposta">
                     <h1 id="tituloProposta">batatas são as melhores</h1>
-                    <p id="textoProposta">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Incidunt, saepe quae veniam eveniet mollitia similique. Tenetur suscipit eaque temporibus natus dolor, mollitia ipsa aliquid reprehenderit dolores minus, qui provident debitis. Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium voluptatum doloremque animi eaque odit, laudantium nostrum dolore repellendus minima nam nemo nobis, rerum aliquid cupiditate explicabo, dignissimos at sequi quam. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Possimus, earum repudiandae? Corrupti odio totam culpa illum dolorum dicta neque odit voluptas praesentium rerum, quo ad molestiae maiores dolores ut exercitationem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Error amet numquam iste suscipit illo asperiores atque quod aspernatur odio. Animi accusantium minima provident labore nisi esse quia eos incidunt ducimus?</p>
+                    <p id="textoProposta">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Incidunt, saepe quae
+                        veniam eveniet mollitia similique. Tenetur suscipit eaque temporibus natus dolor, mollitia ipsa
+                        aliquid reprehenderit dolores minus, qui provident debitis. Lorem ipsum dolor sit amet
+                        consectetur adipisicing elit. Accusantium voluptatum doloremque animi eaque odit, laudantium
+                        nostrum dolore repellendus minima nam nemo nobis, rerum aliquid cupiditate explicabo,
+                        dignissimos at sequi quam. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Possimus,
+                        earum repudiandae? Corrupti odio totam culpa illum dolorum dicta neque odit voluptas praesentium
+                        rerum, quo ad molestiae maiores dolores ut exercitationem. Lorem ipsum dolor sit amet
+                        consectetur adipisicing elit. Error amet numquam iste suscipit illo asperiores atque quod
+                        aspernatur odio. Animi accusantium minima provident labore nisi esse quia eos incidunt ducimus?
+                    </p>
                 </div>
 
                 <div id="buttons-propose">
@@ -79,7 +90,8 @@
             <div>
                 <h1>Estatísticas</h1>
                 <div id="geral">
-                    <p id="cidade" >Cidade: Batatopolis</p>
+                    <p id="cidade">Cidade: Batatopolis</p>
+                    <p id="tempo">Tempo passado: 3A 11m</p>
                     <p id="dinheiro" style="color: rgb(255, 255, 0);">Dinheiro: R$ 1000</p>
                     <p id="populacao">População: 1000</p>
                     <p id="imposto">Imposto: 10%</p>
@@ -110,16 +122,12 @@
                         <td id="educacao">Média</td>
                     </tr>
                     <tr>
-                        <td>Fome</td>
-                        <td id="fome">5%</td>
+                        <td>Meio ambiente</td>
+                        <td id="meioAmbiente">Médio</td>
                     </tr>
                     <tr>
                         <td>Economia</td>
-                        <td id="economia">Médio</td>
-                    </tr>
-                    <tr>
-                        <td>Desemprego</td>
-                        <td id="desemprego">5%</td>
+                        <td id="economia">Média</td>
                     </tr>
                     <tr>
                         <td>Infraestrutura</td>
@@ -134,7 +142,51 @@
 
     <!--Tutoria-->
     <section id="tutorial" style="display: none;">
-
+        <div>Sempre que quiser voltar para a tela inicial, aperte no nome do jogo(Prefeito em ação)</div>
+        <article>
+            <div class="tutorial-text">
+                <h1>Aceitar ou recusar propostas</h1>
+                <p>No jogo terá propostas as quais você terá que aceitar ou recusar.
+                    Recusar ou aceitar propostas implica em possíveis consequências
+                    para as áreas de Saúde, Alegria, Segurança, Educação, Meio ambiente,
+                    Economia, Infraestrutura, Impostos, Tamanho da População e pode custar
+                    dinheiro.
+                </p>
+            </div>
+            <div class="tutorial-imgs">
+                <div><img src="assets/images/mayor-simulator/yes.png" alt="aceitar"></div>
+                <div><img src="assets/images/mayor-simulator/no.png" alt="recusar"></div>
+            </div>
+        </article>
+        <article>
+            <div class="tutorial-text">
+                <h1>Consequências das propostas</h1>
+                <p>
+                    Após aceitar ou recusar uma proposta, verifique o
+                    resultado das suas ações na aba de notícias. Com
+                    base nisso, tome suas próximas decisões, levando
+                    em consideração, além disso, a tabela com os dados,
+                    onde você consegue enxergar as mudanças.
+                </p>
+            </div>
+            <div class="tutorial-imgs">
+                <div id="tutorial-news"><img src="assets/images/mayor-simulator/news.png" alt="aceitar"></div>
+            </div>
+        </article>
+        <article>
+            <div class="tutorial-text">
+                <h1>Dicas</h1>
+                <p>- 1 mês = 15 segundos, seu mandato dura 4 anos, ou 12 minutos</p>
+                <p>- Reflita demograficamente sobre os impactos que uma proposta pode levar sobre cada uma de suas
+                    decisões.</p>
+                <p>- A cada 4 meses, você ganha uma quantia em dinheiro e uma pequena parcela da população.</p>
+                <p>- Algumas propostas podem parecer não ter um efeito imediato, mas sempre causam algum resultado, por
+                    menor que seja.</p>
+                <p>- O preço das propostas diminui de acordo com o valor do imposto</p>
+                <p>- O máximo de imposto é 50%</p>
+                <p>- A pontuação final será baseada na população, dinheiro que sobrou e satisfação da população</p>
+            </div>
+        </article>
     </section>
 
     <!--Créditos-->
@@ -166,6 +218,52 @@
 
         </div>
     </section>
+
+    <section id="tela-fim-de-jogo" style="display: none;">
+        <h1>Fim de jogo</h1>
+        <p id="resultado">Você ganhou!</p>
+        <p id="pontuacao">Pontuação: 0</p>
+        <p id="resultado-dinheiro">Dinheiro: R$ 0</p>
+        <p id="resultado-populacao">População: 0</p>
+        <p id="resultado-imposto">Imposto: 10%</p>
+        <p id="resultado-satifacao">Satisfação da população: 0%</p>
+        <table class="table-fim-de-jogo">
+            <thead>
+                <th>Dados</th>
+                <th>Estatística</th>
+            </thead>
+            <tr>
+                <td>Saúde</td>
+                <td id="resultado-saude">Média</td>
+            </tr>
+            <tr>
+                <td>Alegria</td>
+                <td id="resultado-alegria">Média</td>
+            </tr>
+            <tr>
+                <td>Segurança</td>
+                <td id="resultado-seguranca">Média</td>
+            </tr>
+            <tr>
+                <td>Educação</td>
+                <td id="resultado-educacao">Média</td>
+            </tr>
+            <tr>
+                <td>Meio ambiente</td>
+                <td id="resultado-meioAmbiente">Médio</td>
+            </tr>
+            <tr>
+                <td>economia</td>
+                <td id="resultado-economia">5%</td>
+            </tr>
+            <tr>
+                <td>Infraestrutura</td>
+                <td id="resultado-infraestrutura">Média</td>
+            </tr>
+        </table>
+        <p id="btn-reiniciar">Recarregue a página para jogar novamente!</p>
+    </section>
     <script src="assets/js/mayor-simulator.js"></script>
 </body>
+
 </html>

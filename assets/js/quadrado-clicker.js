@@ -1572,4 +1572,3 @@ function comprarMelhoriasTriangulos(melhoria, evento) {
 
 setInterval(salvarDados, 60000);
 //compras
-
