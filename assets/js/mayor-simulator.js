@@ -9,7 +9,7 @@ let educacao = 50;
 let meioAmbiente = 50;
 let economia = 50;
 let infraestrutura = 50;
-let imposto = 50
+let imposto = 10;
 
 let satisfacaoPopulacao = 50;
 let IndexPropostaAtual = null;
