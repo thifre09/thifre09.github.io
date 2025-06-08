@@ -27,6 +27,7 @@ let IndexPropostaAtual = null;
 //         audio.play();
 //     }, 1*i)
 // }
+
 class Proposta {
 
     constructor(titulo, descricao, aceitarResultado = new Estatistica(), recusarResultado = new Estatistica()) {
@@ -37,7 +38,7 @@ class Proposta {
     }
 
     aceitar() {
-        dinheiro += this.aceitarResultado.dinheiro + Math.round(Math.abs(this.aceitarResultado.dinheiro * imposto / 100));
+        dinheiro += this.aceitarResultado.dinheiro + Math.round(Math.abs(this.aceitarResultado.dinheiro/10));
         dinheiro = Math.round(dinheiro);
         saude += this.aceitarResultado.saude;
         alegria += this.aceitarResultado.alegria;
@@ -104,7 +105,7 @@ listaPropostas = [
             saude: -2,
             alegria: 8,
             economia: 6,
-            populacao: 1.02,
+            populacao: 1.025,
             tituloNoticia: "Festival com Hyago Kadson reúne multidão e aquece economia local",
             noticia: `A realização do Festival Municipal de Cultura Popular com a participação de Hyago Kadson movimentou a cidade neste fim de semana. Milhares de pessoas compareceram ao evento gratuito na praça central, celebrando a cultura nordestina com música, dança e comidas típicas.
 
@@ -116,8 +117,8 @@ listaPropostas = [
         new Estatistica({
             alegria: -5,
             saude: 4,
-            economia: -3,
-            populacao: 0.97,
+            economia: -4,
+            populacao: 0.992,
             tituloNoticia: "População lamenta cancelamento de show cultural com Hyago Kadson",
             noticia: `A prefeitura anunciou o cancelamento do show de Hyago Kadson, que seria a atração principal do Festival Municipal de Cultura Popular. A decisão gerou frustração entre os moradores, especialmente os jovens que aguardavam o evento com expectativa.
 
@@ -145,7 +146,7 @@ listaPropostas = [
             meioAmbiente: 4,
             alegria: 5,
             educacao: 10,
-            populacao: 1.01,
+            populacao: 1.014,
             tituloNoticia: "Novo material didático é implementado e eleva qualidade da educação municipal",
             noticia: `A Prefeitura Municipal iniciou a distribuição de um novo conjunto de materiais pedagógicos para todas as escolas da rede pública de ensino fundamental. A iniciativa visa modernizar o processo de ensino, promover a equidade educacional e alinhar o conteúdo à Base Nacional Comum Curricular (BNCC).
 
@@ -307,7 +308,7 @@ listaPropostas = [
             meioAmbiente: -3,
             economia: 4,
             infraestutura: 8,
-            populacao: 1.03,
+            populacao: 1.042,
             tituloNoticia: "Hospital público municipal começa a ser construído e promete transformar a saúde local",
             noticia: `A Prefeitura deu início à construção do tão aguardado hospital público municipal, uma obra que visa ampliar o acesso da população a serviços de saúde de qualidade e reduzir a superlotação nas unidades já existentes.
 
@@ -431,7 +432,7 @@ listaPropostas = [
             saude: -5,
             economia: -1,
             imposto: 2,
-            populacao: 1.05,
+            populacao: 1.063,
             tituloNoticia: "Prefeitura aprova aumento de impostos sobre anticoncepcionais e gera polêmica",
             noticia: `A administração municipal aprovou a proposta de aumento de impostos sobre produtos anticoncepcionais, com o objetivo de ampliar a arrecadação para programas de saúde e assistência social.
 
@@ -444,7 +445,7 @@ listaPropostas = [
             alegria: 7,
             saude: 6,
             economia: 6,
-            populacao: 0.96,
+            populacao: 0.978,
             tituloNoticia: "Município recusa aumento de impostos sobre anticoncepcionais e mantém acesso garantido",
             noticia: `A proposta de aumento de impostos sobre anticoncepcionais foi rejeitada pela Prefeitura, mantendo inalterada a carga tributária desses produtos no âmbito municipal.
 
@@ -470,7 +471,7 @@ listaPropostas = [
             alegria: 8,
             economia: 9,
             educacao: 3,
-            populacao: 1.08,
+            populacao: 1.088,
             tituloNoticia: "Feira cultural movimenta cidade e fortalece economia criativa",
             noticia: `A realização da feira cultural promovida pela Prefeitura reuniu milhares de pessoas e destacou a diversidade artística local com apresentações musicais, exposições de arte, gastronomia e artesanato.
 
@@ -484,7 +485,7 @@ listaPropostas = [
             alegria: -7,
             economia: -7,
             educacao: -7,
-            populacao: 0.96,
+            populacao: 0.986,
             tituloNoticia: "Proposta de feira cultural é recusada e gera críticas de artistas locais",
             noticia: `A Prefeitura decidiu não aprovar a proposta de realização da feira cultural municipal, alegando limitações orçamentárias e outras prioridades administrativas no momento.
 
@@ -509,7 +510,7 @@ listaPropostas = [
             dinheiro: -2500,
             saude: 10,
             economia: 4,
-            populacao: 1.02,
+            populacao: 1.012,
             tituloNoticia: "Campanha de doação de sangue mobiliza cidade e salva vidas",
             noticia: `A campanha de doação de sangue promovida pela Prefeitura teve ampla adesão da população, com pontos móveis de coleta distribuídos em locais estratégicos da cidade.
 
@@ -520,7 +521,7 @@ listaPropostas = [
         new Estatistica({
             saude: -7,
             economia: -4,
-            populacao: 0.99,
+            populacao: 0.991,
             tituloNoticia: "Prefeitura recusa campanha de doação de sangue e decisão gera repercussão",
             noticia: `A proposta de realização de uma campanha municipal de doação de sangue foi recusada pela administração pública, sob justificativa de limitações orçamentárias e priorização de outras ações.
 
@@ -544,7 +545,7 @@ listaPropostas = [
             dinheiro: -4300,
             saude: 12,
             infraestrutura: 5,
-            populacao: 1.08,
+            populacao: 1.072,
             tituloNoticia: "Município alcança recorde de cobertura vacinal com o Projeto Vacinação 100",
             noticia: `Com ações coordenadas e intensivas de mobilização, o Projeto Vacinação 100 atingiu sua meta de cobrir 100% do público-alvo nas principais campanhas de imunização.
 
@@ -555,7 +556,7 @@ listaPropostas = [
         new Estatistica({
             saude: -9,
             infraestrutura: -6,
-            populacao: 0.94,
+            populacao: 0.97,
             tituloNoticia: "Município deixa de implementar projeto de vacinação ampla e preocupa especialistas",
             noticia: `A proposta do Projeto Vacinação 100, que previa estratégias para alcançar cobertura vacinal total no Município, foi rejeitada pela administração municipal.
 
@@ -580,7 +581,7 @@ listaPropostas = [
             seguranca: 12,
             educacao: 7,
             alegria: 6,
-            populacao: 1.02,
+            populacao: 1.03,
             tituloNoticia: "Município investe em capacitação policial e melhora sensação de segurança",
             noticia: `Com o lançamento do programa de formação e capacitação continuada para policiais, a cidade deu um passo importante na valorização das forças de segurança.
 
@@ -593,7 +594,7 @@ listaPropostas = [
             seguranca: -9,
             educacao: -4,
             alegria: -5,
-            populacao: 0.96,
+            populacao: 0.976,
             tituloNoticia: "Formação policial continuada é deixada de lado e preocupa especialistas",
             noticia: `A proposta que previa o investimento em capacitação e valorização profissional dos policiais foi rejeitada pelo Município.
 
@@ -648,12 +649,12 @@ listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão do projeto no planejamento estratégico do Município, com a devida previsão orçamentária.
 
-        Custo: 5500 reais (possível lucro).
+        Custo: 5500 reais.
         Vereador Alguém debaixo do fogão.`,
         new Estatistica({
-            dinheiro: (Math.random() * -5500) + 4500,
+            dinheiro: -5500,
             economia: 9,
-            populacao: 1.14,
+            populacao: 1.119,
             tituloNoticia: "Município lança programa de incentivo ao turismo e aquece a economia local",
             noticia: `Com o lançamento do programa municipal de incentivo ao turismo, o Município visa valorizar seus atrativos naturais, culturais e históricos, fortalecendo a economia local.
 
@@ -665,7 +666,7 @@ listaPropostas = [
         new Estatistica({
             meioAmbiente: 7,
             economia: -7,
-            populacao: 0.96,
+            populacao: 0.974,
             tituloNoticia: "Proposta de incentivo ao turismo é rejeitada e preocupa setores econômicos",
             noticia: `A proposta para implementação de um programa municipal de incentivo ao turismo foi rejeitada, gerando apreensão em setores ligados ao comércio, hotelaria e cultura.
 
@@ -773,7 +774,7 @@ listaPropostas = [
         new Estatistica({
             dinheiro: -5400,
             saude: 10,
-            populacao: 1.04,
+            populacao: 1.05,
             economia: 8,
             educacao: 8,
             tituloNoticia: "Município investe na formação de médicos e enfermeiros para melhorar saúde pública",
@@ -786,7 +787,7 @@ listaPropostas = [
         }),
         new Estatistica({
             saude: -8,
-            populacao: 0.97,
+            populacao: 0.978,
             economia: -7,
             educacao: -7,
             tituloNoticia: "Projeto de formação para profissionais da saúde é rejeitado e preocupa especialistas",
@@ -813,7 +814,7 @@ listaPropostas = [
             dinheiro: -2300,
             educacao: 8,
             economia: 4,
-            populacao: 1.03,
+            populacao: 1.04,
             tituloNoticia: "Curso gratuito de inglês é ofertado para a população",
             noticia: `Por meio da iniciativa da Prefeitura, foi lançado um curso gratuito de inglês voltado para jovens, estudantes da rede pública e trabalhadores.
 
@@ -886,7 +887,7 @@ listaPropostas = [
             dinheiro: -3200,
             meioAmbiente: 6,
             economia: 9,
-            populacao: 1.04,
+            populacao: 1.05,
             tituloNoticia: "Município investe em programa de incentivo à agricultura de batatas",
             noticia: `Por meio da criação do programa municipal de incentivo à agricultura de batatas, a cidade fortalece a produção local e fomenta a economia agrícola.
 
@@ -898,7 +899,7 @@ listaPropostas = [
         new Estatistica({
             meioAmbiente: -7,
             economia: -7,
-            populacao: 0.98,
+            populacao: 0.988,
             tituloNoticia: "Proposta de incentivo à agricultura de batatas é rejeitada e gera preocupação",
             noticia: `A proposta de criação de um programa de incentivo à agricultura de batatas foi recusada pela administração municipal.
 
@@ -1051,7 +1052,7 @@ listaPropostas = [
             alegria: -15,
             dinheiro: 5000,
             saude: -10,
-            populacao: 0.97,
+            populacao: 0.981,
             tituloNoticia: "Suspensão do atendimento noturno em unidades secundárias de saúde",
             noticia: `Devido a restrições orçamentárias, a Prefeitura suspendeu temporariamente o atendimento noturno nas unidades de saúde secundárias, priorizando os serviços essenciais em UPAs e hospitais.
 
@@ -1093,7 +1094,7 @@ listaPropostas = [
             economia: 10,
             infraestrutura: 10,
             imposto: -2,
-            populacao: 1.05,
+            populacao: 1.068,
             tituloNoticia: "Prefeitura lança programa de incentivos fiscais para estimular economia local",
             noticia: `O município aprovou hoje o Programa Municipal de Estímulo à Atividade Econômica, oferecendo reduções fiscais para empresas que se instalarem na região.
 
@@ -1132,7 +1133,7 @@ listaPropostas = [
             dinheiro: -3800,
             infraestrutura: 8,
             meioAmbiente: -4,
-            populacao: 1.02,
+            populacao: 1.014,
             economia: 8,
             tituloNoticia: "Prefeitura inaugura Casa do Empreendedor para apoiar pequenos negócios",
             noticia: `Foi inaugurada hoje a Casa do Empreendedor, espaço que reúne todos os serviços necessários para abertura e gestão de pequenos negócios em um só local.
@@ -1145,7 +1146,7 @@ listaPropostas = [
             infraestrutura: -6,
             meioAmbiente: 4,
             economia: -7,
-            populacao: 0.98,
+            populacao: 0.989,
             tituloNoticia: "Projeto da Casa do Empreendedor é rejeitado pela prefeitura",
             noticia: `A administração municipal decidiu não implementar o projeto da Casa do Empreendedor, alegando restrições orçamentárias.
 
@@ -1176,7 +1177,7 @@ listaPropostas = [
             infraestrutura: 6,
             alegria: -12,
             educacao: -4,
-            populacao: 0.99,
+            populacao: 0.989,
             tituloNoticia: "Creches municipais são interditadas para reformas emergenciais",
             noticia: `A prefeitura anunciou hoje o fechamento temporário de quatro unidades de educação infantil devido a problemas estruturais identificados em vistorias técnicas. As creches permanecerão fechadas por aproximadamente seis meses para a realização de obras de adequação e reforço predial.
 
@@ -1262,7 +1263,7 @@ listaPropostas = [
             saude: 8,
             alegria: 2,
             educacao: 6,
-            populacao: 0.95,
+            populacao: 0.984,
             tituloNoticia: "Prefeitura implementa projeto pioneiro de educação sexual nas escolas",
             noticia: `O município lançou hoje o projeto "Conhecer para Cuidar", um programa abrangente de educação sexual que será ministrado nas escolas públicas a partir do 8º ano. A iniciativa visa reduzir os índices de gravidez na adolescência através de informação qualificada.
 
@@ -1273,7 +1274,7 @@ listaPropostas = [
         new Estatistica({
             saude: -9,
             educacao: -4,
-            populacao: 1.05,
+            populacao: 1.069,
             tituloNoticia: "Projeto de educação sexual é rejeitado após polêmica",
             noticia: `A proposta de implementar educação sexual nas escolas foi arquivada após intenso debate na câmara municipal. Grupos conservadores alegaram que o tema deveria ser tratado exclusivamente no âmbito familiar.
 
@@ -1419,7 +1420,7 @@ listaPropostas = [
             infraestutura: 7,
             economia: -10,
             imposto: 3,
-            populacao: 0.99,
+            populacao: 0.991,
             tituloNoticia: "Prefeitura anuncia reajuste de 8,2% na tarifa de energia elétrica",
             noticia: `A administração municipal confirmou hoje o aumento de 8,2% nas contas de luz, que entrará em vigor no próximo mês. Segundo a prefeitura, o reajuste é necessário para cobrir os custos de manutenção e modernização da rede elétrica.
 
@@ -1502,7 +1503,7 @@ listaPropostas = [
             alegria: 10,
             seguranca: 15,
             infraestrutura: 8,
-            populacao: 1.01,
+            populacao: 1.015,
             tituloNoticia: "Prefeitura aprova construção de presídio municipal após polêmico debate",
             noticia: `A administração municipal confirmou hoje a construção de uma unidade prisional na cidade após intensos debates. O projeto, orçado em R$ 5.200, promete gerar empregos e melhorar a segurança regional.
 
@@ -1514,7 +1515,7 @@ listaPropostas = [
             alegria: -10,
             seguranca: -10,
             infraestrutura: -8,
-            populacao: 0.98,
+            populacao: 0.991,
             tituloNoticia: "Projeto de presídio municipal é rejeitado após pressão popular",
             noticia: `A proposta de construir uma unidade prisional na cidade foi arquivada após forte oposição da comunidade. Manifestantes alegaram que o presídio traria mais problemas que benefícios para o município.
 
@@ -1522,6 +1523,20 @@ listaPropostas = [
 
 		A decisão foi comemorada por moradores e empresários, que temiam os impactos negativos no turismo e no valor dos imóveis, mas deixou autoridades estaduais preocupadas com a falta de vagas no sistema prisional.`
         }),
+    ),
+
+    new Proposta(`Proposta de Criação de Zona de Proteção Ambiental (ZPA) no Município de ${nomeCidade}`, `Excelentíssimo(a) Senhor(a) Prefeito(a) Municipal,
+
+        Vimos, por meio deste, propor a criação de uma Zona de Proteção Ambiental (ZPA) no âmbito do território municipal, com o objetivo de assegurar a preservação dos recursos naturais, promover a sustentabilidade ambiental e garantir a qualidade de vida da população.
+
+        A implementação da ZPA visa a proteção de áreas de relevante interesse ecológico, com a adoção de medidas rigorosas de controle sobre atividades que possam causar degradação ambiental. Com a criação dessa zona, será possível preservar ecossistemas, melhorar a qualidade do ar, da água e do solo, bem como promover o equilíbrio entre o desenvolvimento urbano e a conservação ambiental.
+
+        Considerando a importância de tal iniciativa para o bem-estar coletivo e a preservação do meio ambiente, solicitamos a inclusão deste projeto nas diretrizes de planejamento e a avaliação de sua viabilidade, com vistas à sua implementação efetiva.
+        
+        Custo: 2100
+        Vereador Natural`,
+
+        new Estatistica()
     ),
 ];
 // funções gerais
@@ -1650,7 +1665,7 @@ function acaoPeriodica() {
     economia -= 2;
     infraestrutura -= 2;
     corrigir();
-    populacao *= 0.95;
+    populacao *= 0.97;
     atualizarTela();
 }
 
@@ -1660,13 +1675,16 @@ function atualizarTempo() {
     const minutosTotais = decorrido / 60000;
     const mesesTotais = Math.floor(minutosTotais * 4); // 1 minuto = 4 meses
 
-    document.getElementById('tempo').textContent = `Tempo passado: ${formatarTempo(decorrido)}`;
-    verificarEventosMensais(mesesTotais);
-
     if (decorrido >= 720000) { // 12 minutos = 4 anos
         clearInterval(intervaloAtualizacao);
         acabarJogo();
+        return;
     }
+
+    document.getElementById('tempo').textContent = `Tempo passado: ${formatarTempo(decorrido)}`;
+    verificarEventosMensais(mesesTotais);
+
+    
 }
 
 function iniciarTempoJogo() {

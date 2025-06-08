@@ -13,7 +13,6 @@
     padding: 10px;
     background-color: rgb(6, 121, 6);
     padding: 0.8em 0;
-    margin-bottom: 7em;
     height: fit-content;
 }
 .logo{
@@ -69,8 +68,14 @@ label:has(input:focus)::after{
 
 main {
     padding: 20%;
-    padding-top: 2%;
+    padding-top: 7rem;
     padding-bottom: 2%;
+    background-color: rgb(214, 221, 226);
+}
+
+img {
+    margin-top: 20px;
+    max-width: 100%;
 }
 
 .title {
@@ -121,6 +126,7 @@ main > h3{
     border-bottom: 2px solid black;
     padding-bottom: 0.4rem;
     list-style-type: none;
+    line-break: anywhere;
 }
 
 .bibliografia a{
@@ -129,7 +135,6 @@ main > h3{
 @media (max-width: 768px) {
     .header {
         padding: 10px;
-        margin-bottom: 5em;
     }
 
     .logo {
@@ -142,7 +147,7 @@ main > h3{
 
     main {
         padding: 10%;
-        padding-top: 2%;
+        padding-top: 5rem;
     }
 
     .title {
