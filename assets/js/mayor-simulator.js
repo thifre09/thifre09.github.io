@@ -1615,6 +1615,8 @@ listaPropostas = [
         `,
 
         new Estatistica({
+            dinheiro: -3600,
+
             tituloNoticia: "Prefeitura cria Centro de Entretenimento para a juventude",
             noticia: `A administração municipal anunciou a construção de um moderno Centro de Entretenimento voltado para os jovens, com áreas esportivas, oficinas criativas e espaços digitais.
 
@@ -1999,6 +2001,35 @@ listaPropostas = [
         new Estatistica({})
     ),
 
+    new Proposta("Investimentos gerais no meio ambiente",
+        `Por meio da presente, propomos a realização de investimentos abrangentes na área ambiental municipal, com o objetivo de preservar os recursos naturais, promover a sustentabilidade, melhorar a qualidade de vida da população e garantir o equilíbrio ecológico do Município. A iniciativa inclui ações como recuperação de áreas degradadas, conservação de mananciais, ampliação da arborização urbana, educação ambiental, fiscalização ambiental e incentivo a práticas sustentáveis entre cidadãos e empresas.
+
+        Esses investimentos contribuirão para a proteção da biodiversidade local, a mitigação dos efeitos das mudanças climáticas e o fortalecimento das políticas públicas ambientais, além de promover a conscientização social e o engajamento comunitário em prol do meio ambiente.
+
+        Diante do exposto, solicitamos a inclusão da proposta no plano municipal de meio ambiente, com a devida previsão orçamentária para sua implementação.`,
+        new Estatistica({}),
+        new Estatistica({})
+    ),
+
+    new Proposta("Incentivar o aumento da natalidade",
+        `Por meio da presente, propomos a implementação de políticas públicas voltadas para o incentivo ao aumento da natalidade no Município, com o objetivo de promover o equilíbrio demográfico e assegurar o desenvolvimento sustentável da comunidade. A proposta contempla ações como ampliação do acesso a serviços de saúde materno-infantil, programas de apoio financeiro e social para gestantes e famílias, flexibilização de benefícios trabalhistas, e campanhas educativas sobre a importância da maternidade e paternidade responsáveis.
+
+        Essas medidas visam criar um ambiente favorável à formação e ampliação das famílias, garantindo assistência integral durante a gravidez, parto e primeiros anos de vida, além de incentivar o planejamento familiar consciente e a responsabilidade social.
+
+        Diante do exposto, solicitamos a inclusão da proposta no plano municipal de saúde e assistência social, com a devida previsão orçamentária para sua execução.`,
+        new Estatistica({}),
+        new Estatistica({})
+    ),
+
+    new Proposta("Campanha de uso da camisinha",
+        `Por meio da presente, propomos a realização de uma campanha educativa e preventiva sobre o uso da camisinha, com o objetivo de reduzir a incidência de doenças sexualmente transmissíveis (DSTs) e evitar gravidez indesejada entre a população. A iniciativa incluirá distribuição gratuita de preservativos em unidades de saúde, escolas e espaços públicos, além de palestras, materiais informativos e ações de conscientização direcionadas a jovens, adultos e grupos vulneráveis.
+
+        A campanha visa promover a saúde sexual e reprodutiva, fortalecer a cultura da prevenção e incentivar comportamentos responsáveis, contribuindo para a redução dos custos com tratamentos médicos e melhoria da qualidade de vida da comunidade.
+
+        Diante do exposto, solicitamos a inclusão da proposta no plano municipal de saúde pública, com a devida previsão orçamentária para sua realização.`,
+        new Estatistica({}),
+        new Estatistica({})
+    ),
 ];
 // funções gerais
 
