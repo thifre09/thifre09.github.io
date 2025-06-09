@@ -35,6 +35,7 @@ class Proposta {
         this.descricao = descricao;
         this.aceitarResultado = aceitarResultado; //Estatistica
         this.recusarResultado = recusarResultado; //Estatistica
+        this.aconteceu = false;
     }
 
     aceitar() {
@@ -87,7 +88,7 @@ class Estatistica {
     }
 }
 
-listaPropostas = [
+let listaPropostas = [
     new Proposta("Trazer a celebridade Hyago Kadson para a cidade.",
         `Nos termos do disposto no art. 215 da Constituição Federal, que assegura o pleno exercício dos direitos culturais e o acesso às fontes da cultura nacional, a Prefeitura Municipal comunica, por meio da Secretaria de Cultura e Eventos, a contratação do artista Hyago Kadson como atração principal do evento Festival Municipal de Cultura Popular, a ser realizado em praça pública com entrada gratuita.
     
@@ -1540,7 +1541,7 @@ listaPropostas = [
 
         new Estatistica({
             dinheiro: -3400,
-            meioAmbiente: 13,
+            meioAmbiente: 12,
             saude: 3,
             infraestrutura: 5,
             tituloNoticia: `${nomeCidade} cria Zona de Proteção Ambiental para preservar ecossistemas locais`,
@@ -1551,8 +1552,9 @@ listaPropostas = [
 		Estudos preliminares indicam que a ZPA poderá aumentar em 15% a qualidade do ar e da água na região metropolitana, além de proteger espécies nativas ameaçadas de extinção.`
         }),
         new Estatistica({
-            meioAmbiente: -5,
-            saude: -3,
+            meioAmbiente: -8,
+            saude: -4,
+            infraestrutura: -5,
             tituloNoticia: `Projeto de proteção ambiental é rejeitado em ${nomeCidade}`,
             noticia: `A proposta de criação de uma Zona de Proteção Ambiental (ZPA) foi arquivada pela prefeitura de ${nomeCidade}, gerando críticas de ambientalistas e moradores preocupados com a degradação dos ecossistemas locais.
 
@@ -1570,16 +1572,16 @@ listaPropostas = [
 
         O Lar de Idosos será voltado especialmente à população de baixa renda e contemplará tanto moradores urbanos quanto de zonas rurais, com serviços de transporte assistido e atendimento multiprofissional. A iniciativa visa garantir dignidade, segurança, e qualidade de vida à população idosa, além de aliviar a sobrecarga de cuidadores informais e unidades básicas de saúde.
 
-        Custo: 4900 reais.  
+        Custo: 4800 reais.  
         Vereadora Vó Dirce.
         `,
 
         new Estatistica({
-            dinheiro: -4900,
+            dinheiro: -4800,
             alegria: 7,
-            saude: 14,
+            saude: 8,
             infraestrutura: 10,
-            populacao: 1.15,
+            populacao: 1.02,
             tituloNoticia: `${nomeCidade} inaugura Lar Municipal para Idosos com estrutura completa`,
             noticia: `A prefeitura de ${nomeCidade} celebrou hoje a abertura do primeiro Lar Municipal para Idosos, destinado a acolher a população acima de 65 anos em situação de vulnerabilidade. A unidade oferecerá moradia assistida, cuidados médicos e atividades recreativas.
 
@@ -1589,10 +1591,10 @@ listaPropostas = [
         }),
 
         new Estatistica({
-            alegria: -3,
-            saude: -4,
-            infraestrutura: -4,
-            populacao: -0.95,
+            alegria: -6,
+            saude: -8,
+            infraestrutura: -9,
+            populacao: 0.99,
             tituloNoticia: `Projeto de Lar para Idosos é arquivado em ${nomeCidade}`,
             noticia: `A proposta de criação de um Lar Municipal para Idosos foi rejeitada pela prefeitura de ${nomeCidade}, deixando desamparados centenas de idosos em situação de vulnerabilidade. A justificativa foi a falta de recursos no orçamento.
 
@@ -1616,7 +1618,9 @@ listaPropostas = [
 
         new Estatistica({
             dinheiro: -3600,
-
+            infraestrutura: 6,
+            economia: 5,
+            alegria: 10,
             tituloNoticia: "Prefeitura cria Centro de Entretenimento para a juventude",
             noticia: `A administração municipal anunciou a construção de um moderno Centro de Entretenimento voltado para os jovens, com áreas esportivas, oficinas criativas e espaços digitais.
 
@@ -1626,6 +1630,9 @@ listaPropostas = [
 
         }),
         new Estatistica({
+            infraestrutura: -4,
+            economia: -5,
+            alegria: -9,
             tituloNoticia: "Falta de espaços para jovens preocupa especialistas",
             noticia: `A recusa na criação de um Centro de Entretenimento para jovens acendeu o alerta entre educadores e profissionais da saúde.
 
@@ -1646,10 +1653,13 @@ listaPropostas = [
 
 		Com esta ação, busca-se promover a autonomia, a inclusão social e a melhoria da qualidade de vida da população idosa, respondendo ao desafio do envelhecimento demográfico com políticas públicas eficazes e humanizadas.
 
-		Custo: .  
+		Custo: 2800  
 		Vereador Raul Vitalício.
 		`,
         new Estatistica({
+            infraestrutura: 10,
+            saude: 2,
+            alegria: 3,
             tituloNoticia: "Prefeitura lança linha de transporte exclusiva para idosos",
             noticia: `A nova linha de ônibus voltada à população idosa já está em operação. Com veículos adaptados e equipe capacitada, o serviço garante acesso seguro a serviços de saúde, lazer e assistência.
 
@@ -1657,6 +1667,9 @@ listaPropostas = [
 
         }),
         new Estatistica({
+            infraestrutura: -7,
+            saude: -3,
+            alegria: -5,
             tituloNoticia: "Falta de transporte adequado dificulta rotina de idosos",
             noticia: `Sem uma linha de transporte específica, muitos idosos continuam enfrentando dificuldades para acessar postos de saúde, praças e serviços essenciais.
 
@@ -1675,10 +1688,14 @@ listaPropostas = [
 
 		Com políticas bem estruturadas de acolhimento e acompanhamento, o município poderá enfrentar os desafios do envelhecimento populacional e escassez de mão de obra qualificada em áreas estratégicas.
 
-		Custo: .  
+		Custo: 2500 reais. 
 		Vereador Ibrahim Lopes.
 		`,
         new Estatistica({
+            dinheiro: 2500,
+            meioAmbiente: -3,
+            populacao: 1.05,
+            economia: 10,
             tituloNoticia: "Município atrai imigrantes com bolsas de trabalho e vê economia crescer",
             noticia: `O novo programa de incentivo à imigração lançado pela prefeitura já mostra resultados: bairros com baixa densidade populacional começaram a receber novos moradores, e o comércio local está aquecido.
 
@@ -1688,6 +1705,8 @@ listaPropostas = [
 
         }),
         new Estatistica({
+            aleggria: -5,
+            economia: -5,
             tituloNoticia: "Falta de incentivo à imigração mantém regiões vazias e economia estagnada",
             noticia: `A proposta de atrair imigrantes por meio de bolsas de trabalho foi rejeitada pela gestão municipal, frustrando expectativas de revitalização populacional e econômica.
 
@@ -1712,6 +1731,9 @@ listaPropostas = [
 		Vereador Professor Elísio.
 		`,
         new Estatistica({
+            dinheiro: -2700,
+            alegria: 7,
+            educacao: 10,
             tituloNoticia: "Inclusão digital transforma a vida da população idosa no município",
             noticia: `Com o lançamento do programa de inclusão digital para idosos, dezenas de cidadãos acima dos 60 anos agora acessam redes sociais, realizam serviços públicos online e mantêm contato com familiares de forma mais frequente.
 
@@ -1721,6 +1743,8 @@ listaPropostas = [
 
         }),
         new Estatistica({
+            alegria: -4,
+            educacao: -5,
             tituloNoticia: "Falta de apoio à inclusão digital deixa idosos à margem da tecnologia",
             noticia: `A proposta de oferecer cursos gratuitos de informática para a população idosa foi recusada, gerando críticas de educadores e representantes de associações da terceira idade.
 
@@ -1745,6 +1769,9 @@ listaPropostas = [
 		Vereador Claudemir Bigode.
 		`,
         new Estatistica({
+            imposto: -5,
+            seguranca: 10,
+            alegria: 4,
             tituloNoticia: "Município aprova isenção de impostos sobre câmeras de segurança",
             noticia: `A Câmara Municipal aprovou a proposta do vereador Claudemir Bigode que reduz impostos sobre câmeras de segurança, facilitando o acesso da população a esses equipamentos.
 
@@ -1754,6 +1781,8 @@ listaPropostas = [
 
         }),
         new Estatistica({
+            seguranca: -5,
+            alegria: -2,
             tituloNoticia: "Câmara rejeita proposta de redução de impostos sobre câmeras de segurança",
             noticia: `A proposta de isenção fiscal para câmeras de segurança foi rejeitada pela maioria dos vereadores, sob o argumento de que a renúncia de receita prejudicaria outras áreas essenciais do orçamento.
 
@@ -1778,6 +1807,8 @@ listaPropostas = [
 		Vereadoror(a) Bombardillo Crocodilo/Lirio Lirio Larila.
 		`,
         new Estatistica({
+            alegria: 15,
+            economia: -1,
             tituloNoticia: `${nomeCidade} institui feriado do Tralalero Tralala como nova tradição municipal`,
             noticia: `A Câmara Municipal aprovou por ampla maioria a criação do feriado do Tralalero Tralala, data que entrará para o calendário oficial de ${nomeCidade}. A celebração acontecerá anualmente no dia 13 de julho.
 
@@ -1786,6 +1817,8 @@ listaPropostas = [
 		Pesquisas indicam que feriados municipais podem aumentar em até 30% o movimento no comércio local e gerar empregos temporários na organização de eventos.`
         }),
         new Estatistica({
+            alegria: -10,
+            economia: 2,
             tituloNoticia: `Câmara rejeita criação do feriado do Tralalero Tralala em ${nomeCidade}`,
             noticia: `A proposta do vereador Bombardillo Crocodilo para instituir o feriado do Tralalero Tralala foi arquivada após debate acalorado. Opositores argumentaram que a cidade já tem excesso de datas comemorativas.
 
@@ -1807,6 +1840,9 @@ listaPropostas = [
         Vereador Dr. Giuseppe Camolle`,
 
         new Estatistica({
+            imposto: -15,
+            alegria: 9,
+            economia: -3,
             tituloNoticia: "Câmara aprova redução de impostos municipais para aliviar carga tributária",
             noticia: `A Câmara Municipal aprovou a proposta do vereador Dr. Giuseppe Camolle que visa reduzir impostos gerais, como IPTU e ISS, com o objetivo de estimular a economia local e aliviar a carga tributária sobre a população e empreendedores.
 
@@ -1815,6 +1851,7 @@ listaPropostas = [
         “Essa redução vai ajudar muito meu pequeno negócio a crescer”, afirmou o empresário Carlos Mendes, dono de uma padaria no centro da cidade. A proposta não terá custo imediato para os cofres públicos, sendo uma medida desonerativa.`
         }),
         new Estatistica({
+            alegria: 1,
             tituloNoticia: "Câmara rejeita proposta de redução de impostos municipais",
             noticia: `A Câmara Municipal decidiu rejeitar a proposta do vereador Dr. Giuseppe Camolle que sugeria a redução de impostos como IPTU e ISS para estimular a economia local. A justificativa foi a preocupação com o impacto fiscal a curto prazo no orçamento público.
 
@@ -1830,8 +1867,16 @@ listaPropostas = [
 
         A arborização urbana contribui para o bem-estar da população, a valorização dos espaços públicos e o equilíbrio ecológico, além de oferecer sombra, abrigo para a fauna e benefícios estéticos que incentivam o uso coletivo das áreas centrais. A ação também poderá envolver escolas e organizações locais em atividades de educação ambiental.
 
-        Diante do exposto, solicitamos a inclusão do projeto no plano de revitalização urbana e meio ambiente do Município, com a devida previsão orçamentária para aquisição de mudas, insumos e mão de obra.`,
+        Diante do exposto, solicitamos a inclusão do projeto no plano de revitalização urbana e meio ambiente do Município, com a devida previsão orçamentária para aquisição de mudas, insumos e mão de obra.
+        
+        Custo: 1080 reais.
+        Vereador caveirinha.
+
+        `,
         new Estatistica({
+            meioAmbiente: 10,
+            alegria: 4,
+            saude: 4,
             tituloNoticia: "Câmara aprova projeto de arborização no centro da cidade",
             noticia: `A Câmara Municipal aprovou a proposta de plantação de árvores no centro da cidade, apresentada pelo vereador Dr. Giuseppe Camolle. O projeto visa melhorar a qualidade do ar, reduzir as ilhas de calor e embelezar os espaços públicos, com o plantio de espécies nativas e ornamentais em praças e calçadas.  
 
@@ -1840,6 +1885,8 @@ listaPropostas = [
         “Ter mais árvores vai deixar a cidade mais fresca e agradável”, disse Maria Souza, dona de uma loja no centro. O projeto será incluído no plano de revitalização urbana, com previsão orçamentária para mudas e manutenção.`
         }),
         new Estatistica({
+            meioAmbiente: -7,
+            saude: -4,
             tituloNoticia: "Câmara rejeita projeto de plantio de árvores no centro da cidade",
             noticia: `A Câmara Municipal rejeitou a proposta de arborização no centro da cidade, apresentada pelo vereador Dr. Giuseppe Camolle. A justificativa foi a falta de recursos no orçamento e preocupações com possíveis conflitos com a infraestrutura urbana, como raízes danificando calçadas.  
 
@@ -1855,8 +1902,17 @@ listaPropostas = [
 
         Essa iniciativa permitirá significativa economia aos cofres públicos a médio e longo prazo, além de servir como modelo educativo e de conscientização ambiental para a população. A adoção de energia limpa reafirma o compromisso do Município com a inovação, a responsabilidade ambiental e o futuro das próximas gerações.
 
-        Diante do exposto, solicitamos a inclusão do projeto no plano de modernização da infraestrutura pública, com a devida previsão orçamentária e estudos técnicos de viabilidade.`,
+        Diante do exposto, solicitamos a inclusão do projeto no plano de modernização da infraestrutura pública, com a devida previsão orçamentária e estudos técnicos de viabilidade.
+        
+        Custo: 5000,
+        Vereador DeepSeek.
+        
+        `,
         new Estatistica({
+            dinheiro: -5000,
+            economia: 10,
+            meioAmbiente: 5,
+            infraestrutura: 5,
             tituloNoticia: "Câmara aprova projeto de energia solar em prédios públicos para reduzir custos e promover sustentabilidade",
             noticia: `A Câmara Municipal aprovou por maioria o projeto do vereador Dr. Giuseppe Camolle que prevê a instalação de sistemas de energia solar em escolas, postos de saúde e prédios administrativos. A medida visa reduzir gastos com energia elétrica em até 40% nos próximos anos, além de promover fontes renováveis.
 
@@ -1865,6 +1921,9 @@ listaPropostas = [
         Moradores comemoram a iniciativa: "Minha filha estuda em uma escola municipal que sempre sofre com falta de verba. Essa economia pode melhorar a educação", disse a dona de casa Eliana Torres, mãe de uma aluna da rede pública.`
         }),
         new Estatistica({
+            economia: -5,
+            meioAmbiente: -5,
+            infraestrutura: -3,
             tituloNoticia: "Proposta de energia solar em prédios públicos é rejeitada por falta de verba",
             noticia: `A Câmara Municipal rejeitou o projeto de implantação de energia solar fotovoltaica em unidades públicas, apresentado pelo vereador Dr. Giuseppe Camolle. A justificativa foi a inviabilidade financeira no atual cenário orçamentário.
 
@@ -1880,8 +1939,18 @@ listaPropostas = [
 
         A adoção da energia eólica representa um avanço tecnológico importante, além de gerar benefícios ambientais, educacionais e econômicos. O projeto poderá ainda atrair investimentos, fomentar a inovação e criar oportunidades de capacitação e emprego no setor de energias renováveis.
 
-        Diante do exposto, solicitamos a inclusão desta proposta no planejamento estratégico do Município, com a devida previsão orçamentária para estudos de viabilidade, instalação piloto e estrutura de apoio.`,
+        Diante do exposto, solicitamos a inclusão desta proposta no planejamento estratégico do Município, com a devida previsão orçamentária para estudos de viabilidade, instalação piloto e estrutura de apoio.
+        
+        Custo: 6600 reais
+        Vereador alberto.
+
+
+        `,
         new Estatistica({
+            dinheiro: -6600,
+            economia: 12,
+            alegria: 3,
+            meioAmbiente: 13,
             tituloNoticia: "Câmara aprova projeto pioneiro de energia eólica para diversificar matriz energética da cidade",
             noticia: `A Câmara Municipal aprovou hoje o projeto inovador do vereador Dr. Giuseppe Camolle que prevê a instalação de aerogeradores em áreas estratégicas da cidade. A iniciativa tem como objetivo reduzir custos com energia elétrica e promover fontes renováveis, colocando o município na vanguarda da sustentabilidade energética.
 
@@ -1890,6 +1959,9 @@ listaPropostas = [
         Moradores e empresários comemoraram a decisão. "Além de ajudar o meio ambiente, pode trazer novos empregos para nossa região", afirmou Carlos Mendes, dono de um restaurante local. A previsão é que os primeiros aerogeradores comecem a ser instalados dentro de 12 meses.`
         }),
         new Estatistica({
+            economia: -5,
+            meioAmbiente: -8,
+            alegria: -2,
             tituloNoticia: "Projeto de energia eólica é rejeitado pela Câmara Municipal",
             noticia: `A proposta de implantação de energia eólica no município, apresentada pelo vereador Dr. Giuseppe Camolle, foi rejeitada pela maioria dos parlamentares. Os opositores alegaram altos custos iniciais e incertezas sobre a viabilidade técnica do projeto.
 
@@ -1905,8 +1977,16 @@ listaPropostas = [
 
         Essa iniciativa visa alinhar o Município às diretrizes de sustentabilidade e inovação, promovendo a transição para fontes de energia limpa no transporte urbano, além de posicionar a cidade como referência em políticas ambientais e estímulo à tecnologia verde.
 
-        Diante do exposto, solicitamos a análise jurídica e financeira da viabilidade da medida, bem como sua inclusão no plano de mobilidade urbana e desenvolvimento sustentável do Município.`,
+        Diante do exposto, solicitamos a análise jurídica e financeira da viabilidade da medida, bem como sua inclusão no plano de mobilidade urbana e desenvolvimento sustentável do Município.
+        
+        Custo: 0 (Redução de imposto)
+        Vereador Nascimento.
+
+        `,
         new Estatistica({
+            imposto: -5,
+            meioAmbiente: 8,
+            economia: 7,
             tituloNoticia: "Câmara aprova isenção fiscal para carros elétricos em incentivo à mobilidade sustentável",
             noticia: `A Câmara Municipal aprovou hoje o projeto do vereador Dr. Giuseppe Camolle que concede isenção total de impostos municipais para veículos elétricos, incluindo IPVA municipal, taxas de licenciamento e estacionamento público. A medida busca estimular a adoção de transportes não poluentes e modernizar a frota veicular da cidade.
 
@@ -1915,6 +1995,8 @@ listaPropostas = [
         Proprietários de veículos elétricos comemoraram: "Agora ficou mais acessível manter meu carro limpo na cidade", disse a arquiteta Juliana Moraes, que adquiriu um veículo elétrico há seis meses. A isenção entra em vigor em 60 dias e inclui benefícios como liberação de rodízios municipais.`
         }),
         new Estatistica({
+            economia: -5,
+            meioAmbiente: -6,
             tituloNoticia: "Proposta de isenção para carros elétricos é rejeitada por impacto no orçamento",
             noticia: `A Câmara Municipal rejeitou o projeto que previa isenção de impostos para veículos elétricos, apresentado pelo vereador Dr. Giuseppe Camolle. A maioria dos parlamentares considerou que a medida criaria um rombo significativo nos cofres públicos sem benefício imediato para a maioria da população.
 
@@ -1930,12 +2012,34 @@ listaPropostas = [
 
         O projeto visa reduzir significativamente o volume de lixo destinado a aterros, promover a economia circular, gerar empregos verdes e fortalecer a educação ambiental. Além disso, contribui para a melhoria da qualidade de vida, preservação dos recursos naturais e fortalecimento da imagem do Município como comprometido com o futuro sustentável.
 
-        Diante do exposto, solicitamos a inclusão do projeto no plano diretor municipal e na política de meio ambiente, com a devida previsão orçamentária para sua execução em etapas.`,
-        new Estatistica({
+        Diante do exposto, solicitamos a inclusão do projeto no plano diretor municipal e na política de meio ambiente, com a devida previsão orçamentária para sua execução em etapas.
+        
+        Custo: 2765 reais
+        Vereador risadinha
 
+        `,
+        new Estatistica({
+            meioAmbiente: 10,
+            dinheiro: -2765,
+            economia: 2,
+            tituloNoticia: "Câmara transforma cidade em modelo nacional de reciclagem com projeto pioneiro",
+            noticia: `A Câmara Municipal aprovou por unanimidade o projeto "Cidade 100% Reciclada", proposta do vereador Dr. Giuseppe Camolle que posicionará o município como referência em sustentabilidade. O plano prevê coleta seletiva em 100% dos bairros, instalação de 30 ecopontos estratégicos e parcerias com cooperativas de catadores até 2026.
+
+        "Esta é a política ambiental mais ousada dos últimos 20 anos", declarou a secretária de Meio Ambiente, destacando que o projeto pode desviar 80% do lixo dos aterros. A primeira fase começará pelo centro expandido, com investimento inicial de R$ 3,2 milhões em infraestrutura e educação ambiental.
+
+        Cooperativas celebram: "Finalmente teremos estrutura digna para nosso trabalho", comemorou Maria dos Santos, presidente da CooperRecicla. Escolas municipais incorporarão oficinas de reciclagem no currículo a partir do próximo semestre.`
         }),
         new Estatistica({
+            meioAmbiente: -6,
+            economia: -2,
+            economia: -4,
+            alegria: 6,
+            tituloNoticia: "Projeto ambicioso de reciclagem integral é barrado na Câmara",
+            noticia: `O projeto "Cidade 100% Reciclada", que pretendia transformar o município em modelo nacional de sustentabilidade, foi rejeitado por 15 votos contra 10. Os opositores alegaram custos proibitivos (R$ 12 milhões totais) e complexidade operacional.
 
+        "A ideia é nobre, mas inviável no atual cenário fiscal", justificou o relator. Estudos da secretaria de Serviços Urbanos indicavam necessidade de triplicar a frota de coleta seletiva, com retorno financeiro apenas após 7 anos.
+
+        Ambientalistas reagiram: "Preferiram o comodismo à visão de futuro", criticou o Movimento EcoCidade. Catadores de materiais recicláveis protestaram nas galerias. O vereador proponente prometeu fragmentar a proposta em projetos menores para tentar aprovação parcial.`
         })
     ),
 
@@ -1945,9 +2049,33 @@ listaPropostas = [
 
         A iniciativa contribuirá para a melhoria do rendimento escolar, a formação tecnológica dos estudantes e o fortalecimento da igualdade de oportunidades, especialmente para alunos em situação de vulnerabilidade social. Além disso, a ação estará alinhada com as diretrizes nacionais de inovação na educação pública.
 
-        Diante do exposto, solicitamos a inclusão do projeto no planejamento da Secretaria Municipal de Educação, com a devida previsão orçamentária para aquisição dos equipamentos, treinamento de professores e suporte técnico.`,
-        new Estatistica({}),
-        new Estatistica({})
+        Diante do exposto, solicitamos a inclusão do projeto no planejamento da Secretaria Municipal de Educação, com a devida previsão orçamentária para aquisição dos equipamentos, treinamento de professores e suporte técnico.
+        
+        Custo: 5400 reais
+        Vereador MW
+        
+        `,
+        new Estatistica({
+            dinheiro: -5400,
+            educacao: 14,
+            alegria: 5,
+            tituloNoticia: "Câmara aprova distribuição de tablets para todos os alunos da rede municipal",
+            noticia: `A Câmara Municipal aprovou hoje o projeto do vereador Dr. Giuseppe Camolle que prevê a distribuição de tablets educacionais para os 28 mil alunos da rede pública municipal. A iniciativa, que contará com investimento inicial de R$ 8,5 milhões, tem como objetivo reduzir a desigualdade digital e modernizar o ensino na cidade.
+
+        "Esta é uma revolução na educação municipal", declarou a secretária de Educação, anunciando que os primeiros 5 mil dispositivos serão entregues já no início do próximo ano letivo. Os tablets virão com conteúdo pedagógico pré-instalado e acesso gratuito a plataformas educacionais.
+
+        Pais e educadores comemoram: "Meus filhos finalmente terão as mesmas oportunidades que alunos de escolas particulares", disse a dona de casa Carla Santos, mãe de dois estudantes. Professores receberão capacitação especial para integrar a tecnologia às aulas.`
+        }),
+        new Estatistica({
+            educacao: -5,
+            alegria: -3,
+            tituloNoticia: "Projeto de tablets para escolas municipais é rejeitado por falta de verba",
+            noticia: `O projeto que previa a distribuição de tablets para alunos da rede pública municipal foi rejeitado pela Câmara por 12 votos contra 9. A justificativa foi a incompatibilidade com o atual cenário orçamentário, que prioriza obras emergenciais em unidades escolares.
+
+        "A proposta é meritória, mas o custo de R$ 8,5 milhões inviabiliza sua execução neste momento", explicou o relator. Estudos técnicos apontavam ainda desafios como manutenção dos equipamentos e conectividade em áreas periféricas.
+
+        Professores manifestaram decepção: "Perdemos a chance de reduzir o abismo tecnológico", lamentou a diretora da Escola Municipal João Paulo II. O vereador proponente afirmou que buscará parcerias com a iniciativa privada para viabilizar versão reduzida do projeto.`
+        })
 
     ),
 
@@ -1956,9 +2084,37 @@ listaPropostas = [
 
         A medida visa promover a sensação de segurança, valorizar os profissionais da área e tornar o Município um ambiente mais seguro para viver, estudar e empreender. Com uma abordagem preventiva e tecnológica, será possível aumentar a eficiência na resposta às ocorrências e reduzir os índices de violência.
 
-        Diante do exposto, solicitamos a inclusão desta proposta no planejamento orçamentário e no plano de ação da Secretaria Municipal de Segurança, com a devida previsão de recursos.`,
-        new Estatistica({}),
-        new Estatistica({})
+        Diante do exposto, solicitamos a inclusão desta proposta no planejamento orçamentário e no plano de ação da Secretaria Municipal de Segurança, com a devida previsão de recursos.
+        
+        Custo: 7000 reais
+        Vereador Thiago Freita
+        
+        
+        `,
+        new Estatistica({
+            dinheiro: -7000,
+            seguranca: 15,
+            alegria: 5,
+            populacao: 1.15,
+
+            tituloNoticia: "Prefeitura e Câmara aprovam pacote de R$ 15 milhões para modernizar segurança municipal",
+            noticia: `Foi aprovado hoje o plano de investimentos em segurança pública proposto pelo vereador Dr. Giuseppe Camolle, com orçamento de R$ 15 milhões para aquisição de 30 novas viaturas, instalação de 500 câmeras de monitoramento e modernização da iluminação pública em áreas de risco. A medida integra o programa municipal "Cidade Segura".
+
+        "Estamos dando um salto na capacidade de prevenção e resposta", afirmou o secretário de Segurança, destacando que os recursos também incluem treinamento especializado para 200 guardas municipais e integração com o sistema estadual de inteligência. As primeiras câmeras começam a ser instaladas em 90 dias.
+
+        Comerciantes e moradores de regiões críticas comemoram: "Finalmente teremos segurança para abrir nossos negócios até mais tarde", declarou André Lima, dono de um restaurante no centro. O projeto prevê ainda parcerias com universidades para análise de dados criminais.`
+        }),
+        new Estatistica({
+            seguranca: -10,
+            alegria: -4,
+            populacao: 0.16,
+            tituloNoticia: "Câmara rejeita pacote de investimentos em segurança por divergências sobre prioridades",
+            noticia: `O projeto de investimentos em segurança pública foi rejeitado pela Câmara Municipal após acalorados debates. A proposta do vereador Dr. Giuseppe Camolle, que previa R$ 15 milhões para viaturas, câmeras e capacitação, foi derrotada por 14 votos contra 11, com críticas à distribuição dos recursos.
+
+        "Precisamos primeiro resolver problemas estruturais básicos antes de investir em tecnologia", argumentou a líder da oposição. Técnicos da prefeitura alertaram sobre dificuldades de manutenção dos equipamentos a médio prazo sem garantia de verba adicional.
+
+        Associações de bairro protestaram: "Estamos abandonados à própria sorte", desabafou Maria Oliveira, presidente do conselho comunitário do Jardim São Pedro. O prefeito sinalizou que enviará nova proposta com foco inicial no policiamento preventivo.`
+        })
     ),
 
     new Proposta("Investimentos gerais na saúde",
@@ -1966,9 +2122,36 @@ listaPropostas = [
 
         A iniciativa contribuirá para o acesso universal e igualitário à saúde, assegurando melhores condições de diagnóstico, tratamento e prevenção de doenças, especialmente para as comunidades mais vulneráveis. Além disso, os investimentos permitirão maior resolutividade no atendimento e valorização dos servidores da área.
 
-        Diante do exposto, solicitamos a inclusão da proposta no plano de gestão da Secretaria Municipal de Saúde, com a devida previsão orçamentária.`,
-        new Estatistica({}),
-        new Estatistica({})
+        Diante do exposto, solicitamos a inclusão da proposta no plano de gestão da Secretaria Municipal de Saúde, com a devida previsão orçamentária.
+        
+        Custo: 5576 reais
+        Vereador Dráuzio
+        
+        
+        `,
+        new Estatistica({
+            dinheiro: -5576,
+            saude: 10,
+            alegria: 5,
+            infraestrutura: 10,
+            tituloNoticia: "Câmara aprova amplo pacote de investimentos para fortalecer a saúde municipal",
+            noticia: `A Câmara Municipal aprovou por ampla maioria o projeto do vereador Dr. Giuseppe Camolle que prevê uma série de melhorias para a rede pública de saúde. A medida inclui a aquisição de novos equipamentos médicos, reformas em unidades de saúde e a contratação de profissionais para reforçar o atendimento à população.
+
+        "Estamos dando um importante passo para garantir saúde de qualidade para todos os cidadãos", declarou o secretário municipal de Saúde durante a sessão. O projeto beneficiará especialmente as comunidades mais carentes, com ampliação dos serviços de atenção básica e especializada.
+
+        Moradores comemoraram a decisão: "Finalmente teremos um posto de saúde digno no nosso bairro", disse a dona de casa Marta Silva, residente na Zona Leste. As primeiras ações devem começar ainda neste semestre, priorizando as regiões com maior carência de serviços.`
+        }),
+        new Estatistica({
+            saude: -5,
+            alegria: -4,
+            infraestrutura: -7,
+            tituloNoticia: "Proposta de investimentos na saúde é rejeitada pela Câmara Municipal",
+            noticia: `O projeto que previa melhorias para a rede pública de saúde foi rejeitado pela Câmara Municipal após debates acalorados. A proposta do vereador Dr. Giuseppe Camolle, que incluía aquisição de equipamentos e reformas em unidades de saúde, não obteve votos suficientes para aprovação.
+
+        "Reconhecemos a importância da proposta, mas o momento não é adequado para sua implementação", justificou o relator do projeto. Alguns vereadores defenderam que as ações precisam ser melhor planejadas para garantir sua efetividade.
+
+        Usuários do SUS manifestaram preocupação: "Nossas unidades de saúde continuarão precárias", lamentou o aposentado João Santos, frequentador de um posto no centro da cidade. O vereador proponente afirmou que trabalhará em uma nova versão do projeto para reapresentação no próximo ano.`
+        })
     ),
 
     new Proposta("Investimentos gerais na economia",
@@ -1976,9 +2159,33 @@ listaPropostas = [
 
         Esses investimentos visam dinamizar a atividade econômica, aumentar a arrecadação, atrair novos negócios e promover a inclusão produtiva, beneficiando especialmente jovens, mulheres e trabalhadores informais. A medida também reforça a autonomia do Município e prepara a cidade para os desafios de um mercado cada vez mais competitivo.
 
-        Diante do exposto, solicitamos a inclusão da proposta no plano de desenvolvimento econômico do Município, com a devida previsão orçamentária.`,
-        new Estatistica({}),
-        new Estatistica({})
+        Diante do exposto, solicitamos a inclusão da proposta no plano de desenvolvimento econômico do Município, com a devida previsão orçamentária.
+        
+        Custo: 7000 reais
+        Vereador juao paulo
+
+        `,
+        new Estatistica({
+            dinheiro: -7000,
+            economia: 15,
+            infraestrutura: 4,
+            tituloNoticia: "Câmara aprova pacote de medidas para impulsionar a economia local",
+            noticia: `A Câmara Municipal aprovou hoje o projeto do vereador Dr. Giuseppe Camolle que estabelece um conjunto de ações para estimular o desenvolvimento econômico da cidade. A iniciativa prevê incentivos para pequenos negócios, programas de qualificação profissional e modernização da infraestrutura comercial.
+
+        "Estamos plantando as sementes para uma economia mais forte e inclusiva", declarou o secretário de Desenvolvimento Econômico. O pacote inclui ainda a realização de feiras empresariais e parcerias para facilitar o acesso ao crédito, com foco especial em jovens empreendedores e mulheres chefes de família.
+
+        Comerciantes comemoraram a decisão: "Esses incentivos vão ajudar minha pequena loja a se recuperar após a crise", afirmou Carlos Mendes, dono de uma mercearia no bairro industrial. As primeiras ações devem começar ainda neste trimestre.`
+        }),
+        new Estatistica({
+            economia: -9,
+            infraestrutura: -3,
+            tituloNoticia: "Proposta de estímulo à economia local é rejeitada pela Câmara",
+            noticia: `O projeto que visava impulsionar a economia municipal foi rejeitado pela Câmara após intensos debates. A proposta do vereador Dr. Giuseppe Camolle, que incluía incentivos a pequenas empresas e programas de qualificação, não obteve maioria dos votos.
+
+        "A ideia é válida, mas precisa de ajustes para se adequar à realidade orçamentária", explicou o relator da matéria. Alguns vereadores defenderam que as ações propostas deveriam ter foco mais específico em setores estratégicos.
+
+        Pequenos empresários expressaram decepção: "Perdemos uma oportunidade de renovar nossos negócios", lamentou a artesã Ana Lúcia, que participa de feiras locais. O vereador proponente afirmou que trabalhará em uma versão revisada do projeto.`
+        })
     ),
 
     new Proposta("Investimentos gerais na educação",
@@ -1986,9 +2193,29 @@ listaPropostas = [
 
         Esses investimentos visam garantir ensino de qualidade, promover a equidade educacional e preparar os estudantes para os desafios do século XXI, contribuindo para o progresso social e econômico do Município. Além disso, reforça o compromisso da gestão pública com a valorização da educação como base do desenvolvimento sustentável.
 
-        Diante do exposto, solicitamos a inclusão da proposta no planejamento da Secretaria Municipal de Educação, com a devida previsão orçamentária para sua execução.`,
-        new Estatistica({}),
-        new Estatistica({})
+        Diante do exposto, solicitamos a inclusão da proposta no planejamento da Secretaria Municipal de Educação, com a devida previsão orçamentária para sua execução.
+        
+        Custo: 4300 reais
+        Vereador Greg heffley
+        
+        
+        `,
+        new Estatistica({
+
+            tituloNoticia: "Câmara aprova pacote histórico de investimentos para revolucionar educação municipal",
+            noticia: `A Câmara Municipal aprovou por unanimidade o ambicioso projeto de investimentos educacionais proposto pelo vereador Dr. Giuseppe Camolle. O plano prevê transformações profundas na rede municipal de ensino, com modernização de escolas, capacitação de professores e aquisição de tecnologias educacionais de ponta.
+
+        "Estamos escrevendo um novo capítulo na educação do nosso município", declarou emocionada a secretária de Educação, destacando que o projeto beneficiará mais de 50 mil alunos. As ações incluem desde reformas em unidades escolares até a implantação de laboratórios de ciências e robótica em todas as regionais.
+
+        Professores e pais comemoram: "Meus filhos terão acesso à mesma qualidade de ensino das melhores escolas particulares", comemorou a dona de casa Eliana Costa, mãe de dois estudantes. As primeiras intervenções começam já no próximo mês, com prioridade para as escolas em pior estado de conservação.`
+        }),
+        new Estatistica({
+            tituloNoticia: "Projeto de modernização da educação municipal é barrado na Câmara",
+            noticia: `O amplo pacote de investimentos na educação pública municipal foi rejeitado após acirrada discussão na Câmara. A proposta do vereador Dr. Giuseppe Camolle, que prometia revolucionar as escolas da rede pública, não conseguiu os votos necessários para aprovação.
+
+        "A iniciativa é louvável, mas desconsidera nossas reais possibilidades financeiras", argumentou o líder do governo. Estudos técnicos apontaram incompatibilidade entre o escopo do projeto e a capacidade atual de execução da secretaria de Educação.
+
+        A comunidade escolar reagiu com frustração: "Mais uma vez a educação fica para depois", protestou a diretora Maria Fernandes, de uma escola na periferia. O vereador afirmou que fragmentará a proposta em projetos menores para tentar aprovação parcial ainda este ano.`})
     ),
 
     new Proposta("Investimentos gerais na infarestrutura",
@@ -1997,8 +2224,22 @@ listaPropostas = [
         Esses investimentos visam impulsionar o desenvolvimento socioeconômico do Município, promover a inclusão social e garantir a sustentabilidade ambiental, atendendo às demandas atuais e futuras da comunidade. Ademais, contribuem para a valorização dos imóveis, atração de novos investimentos e melhoria da qualidade dos serviços públicos.
 
         Diante do exposto, solicitamos a inclusão da proposta no planejamento orçamentário e estratégico da Prefeitura, com a devida previsão de recursos para sua execução.`,
-        new Estatistica({}),
-        new Estatistica({})
+        new Estatistica({
+            tituloNoticia: "Câmara aprova megapacote de infraestrutura que transformará a cidade",
+            noticia: `Em sessão histórica, a Câmara Municipal aprovou por ampla maioria o ambicioso plano de investimentos em infraestrutura proposto pelo vereador Dr. Giuseppe Camolle. O projeto vai revolucionar a malha urbana com obras de pavimentação, saneamento básico completo e modernização do sistema de iluminação pública em todos os bairros.
+
+        "Estamos corrigindo décadas de atraso e preparando a cidade para o futuro", declarou o prefeito durante o anúncio. O pacote prevê ainda a universalização do acesso à água potável e a criação de corredores acessíveis para pessoas com deficiência.
+
+        Moradores de áreas carentes comemoram: "Finalmente teremos ruas pavimentadas e esgoto tratado", comemorou a líder comunitária Rita Oliveira, da região Norte. As obras prioritárias começam em 60 dias, com cronograma de execução em etapas até 2026.`
+        }),
+        new Estatistica({
+            tituloNoticia: "Projeto que prometia revolucionar infraestrutura da cidade é rejeitado",
+            noticia: `O amplo plano de modernização da infraestrutura municipal foi barrado na Câmara após acalorados debates. A proposta do vereador Dr. Giuseppe Camolle, que previa obras em saneamento, pavimentação e iluminação pública, foi considerada "inviável no cenário atual" pela maioria dos parlamentares.
+
+        "Apesar de necessário, o projeto exige recursos além da nossa capacidade", justificou o relator. Técnicos alertaram sobre riscos de licitações apressadas e sobrecarga na máquina pública para gerenciar tantas obras simultaneamente.
+
+        Comunidades periféricas protestaram: "Continuaremos vivendo na idade das trevas", desabafou o pedreiro Marcos Silva, morador de um bairro sem asfalto há 20 anos. O prefeito sinalizou que enviará uma versão mais enxuta do projeto em breve.`
+        })
     ),
 
     new Proposta("Investimentos gerais no meio ambiente",
@@ -2007,8 +2248,22 @@ listaPropostas = [
         Esses investimentos contribuirão para a proteção da biodiversidade local, a mitigação dos efeitos das mudanças climáticas e o fortalecimento das políticas públicas ambientais, além de promover a conscientização social e o engajamento comunitário em prol do meio ambiente.
 
         Diante do exposto, solicitamos a inclusão da proposta no plano municipal de meio ambiente, com a devida previsão orçamentária para sua implementação.`,
-        new Estatistica({}),
-        new Estatistica({})
+        new Estatistica({
+            tituloNoticia: "Câmara aprova pacote de investimentos ambientais para preservação e sustentabilidade",
+            noticia: `A Câmara Municipal aprovou por ampla maioria o projeto de investimentos em meio ambiente proposto pelo vereador Dr. Giuseppe Camolle, que prevê recuperação de áreas degradadas, proteção de mananciais e ampliação de áreas verdes urbanas.  
+
+        A iniciativa, que será incluída no orçamento municipal, inclui ainda programas de educação ambiental e fiscalização para garantir práticas sustentáveis. "É um avanço para nossa cidade, que precisa urgentemente de políticas ecológicas de longo prazo", declarou a bióloga Marta Rios, integrante de uma ONG local.  
+
+        Moradores de bairros afetados por enchentes comemoraram a medida: "Finalmente teremos ações concretas para proteger nossos rios", disse o aposentado José Almeida. A prefeitura estima que os projetos gerem empregos verdes e melhorem a qualidade do ar e da água em até cinco anos.`
+        }),
+        new Estatistica({
+            tituloNoticia: "Câmara barra investimentos em meio ambiente por falta de recursos",
+            noticia: `A proposta de ampliação de investimentos ambientais no município, apresentada pelo vereador Dr. Giuseppe Camolle, foi rejeitada pela maioria da Câmara sob alegação de "restrições orçamentárias". O projeto incluía recuperação de áreas verdes, proteção de nascentes e campanhas de conscientização.  
+
+        "Infelizmente, prioridades como saúde e segurança consomem nosso orçamento", justificou o relator da matéria. Ambientalistas criticaram a decisão: "É um retrocesso, já sofremos com erosões e poluição", protestou Carlos Mendes, do Movimento EcoVida.  
+
+        O vereador autor da proposta prometeu buscar parcerias com o governo estadual para viabilizar parte das ações. Enquanto isso, moradores de regiões com risco de deslizamentos temem pelo adiamento das medidas: "A natureza não espera", desabafou a dona de casa Lucia Santos.`
+        })
     ),
 
     new Proposta("Incentivar o aumento da natalidade",
@@ -2017,8 +2272,22 @@ listaPropostas = [
         Essas medidas visam criar um ambiente favorável à formação e ampliação das famílias, garantindo assistência integral durante a gravidez, parto e primeiros anos de vida, além de incentivar o planejamento familiar consciente e a responsabilidade social.
 
         Diante do exposto, solicitamos a inclusão da proposta no plano municipal de saúde e assistência social, com a devida previsão orçamentária para sua execução.`,
-        new Estatistica({}),
-        new Estatistica({})
+        new Estatistica({
+            tituloNoticia: "Município aprova pacote de incentivos para aumentar natalidade e apoiar famílias",
+            noticia: `A Câmara Municipal aprovou nesta semana o programa de incentivo à natalidade proposto pelo vereador Dr. Giuseppe Camolle, que prevê benefícios financeiros, ampliação da saúde materno-infantil e campanhas educativas para famílias.  
+
+        Entre as medidas estão auxílios para gestantes, flexibilização de direitos trabalhistas e consultas pré-natal gratuitas. "Queremos reverter a queda demográfica e garantir um futuro sustentável para nossa cidade", afirmou o vereador durante a sessão.  
+
+        Mães como Ana Lúcia, 32 anos, comemoraram: "Agora terei apoio para ter meu segundo filho". Especialistas destacam que o projeto pode reduzir a evasão de jovens e fortalecer a economia local em médio prazo. A prefeitura estima que os primeiros resultados apareçam em 3 anos.`
+        }),
+        new Estatistica({
+            tituloNoticia: "Câmara rejeita proposta de incentivo à natalidade por 'prioridades conflitantes'",
+            noticia: `A proposta do vereador Dr. Giuseppe Camolle para aumentar a natalidade no município foi rejeitada por 12 votos a 5. O projeto, que incluía auxílios a gestantes e ampliação de creches, foi considerado "inviável financeiramente" pela maioria.  
+
+        "Temos urgências como saneamento básico e segurança", justificou a líder do governo. Sociedades de pediatria criticaram a decisão: "Famílias pobres continuarão adiando a maternidade por falta de suporte", disse Dra. Renata Góes.  
+
+        O vereador prometeu buscar parcerias com a iniciativa privada para viabilizar partes do projeto. Enquanto isso, jovens casais como Marcos e Juliana, 28 anos, desabafam: "Sem políticas públicas, fica impossível planejar filhos".`
+        })
     ),
 
     new Proposta("Campanha de uso da camisinha",
@@ -2027,19 +2296,53 @@ listaPropostas = [
         A campanha visa promover a saúde sexual e reprodutiva, fortalecer a cultura da prevenção e incentivar comportamentos responsáveis, contribuindo para a redução dos custos com tratamentos médicos e melhoria da qualidade de vida da comunidade.
 
         Diante do exposto, solicitamos a inclusão da proposta no plano municipal de saúde pública, com a devida previsão orçamentária para sua realização.`,
-        new Estatistica({}),
-        new Estatistica({})
+        new Estatistica({
+            tituloNoticia: "Município lança campanha de distribuição gratuita de camisinhas e conscientização sobre DSTs",
+            noticia: `A Câmara Municipal aprovou por unanimidade a proposta de campanha de prevenção e conscientização sobre o uso de camisinhas, apresentada pelo vereador Dr. Giuseppe Camolle. A iniciativa prevê a distribuição gratuita de preservativos em postos de saúde, escolas e locais públicos, além de palestras educativas.
+
+        "Esta é uma medida de saúde pública essencial para reduzir as DSTs e gravidezes não planejadas entre nossos jovens", afirmou o Secretário Municipal de Saúde durante o anúncio. Estudantes comemoraram a decisão: "Agora teremos acesso fácil a informações e métodos preventivos", disse Maria Eduarda, 17 anos.
+
+        A campanha, que terá início no próximo mês, incluirá parcerias com unidades básicas de saúde e ONGs especializadas. Especialistas estimam que a medida pode reduzir em até 30% os casos de sífilis e HIV na cidade nos próximos dois anos.`
+        }),
+        new Estatistica({
+            tituloNoticia: 'Câmara rejeita campanha de prevenção sexual sob alegação de "conteúdo inadequado"',
+            noticia: `A proposta de campanha educativa sobre uso de camisinhas foi rejeitada pela maioria dos vereadores, que alegaram "incompatibilidade com valores familiares". O projeto, que previa distribuição gratuita de preservativos e palestras em escolas, foi arquivado após acalorados debates.
+
+        "Temos que preservar a inocência das crianças", declarou o vereador opositor. Profissionais de saúde reagiram com indignação: "Estão negando informação que salva vidas", criticou a Dra. Ana Beatriz, infectologista.
+
+        O vereador proponente, Dr. Giuseppe Camolle, lamentou: "O preconceito venceu a saúde pública". Enquanto isso, ativistas prometem pressionar por nova votação. "Jovens continuarão expostos a riscos por falta de orientação", alertou um representante de ONG que combate a AIDS.`
+        })
     ),
 ];
 // funções gerais
 
 function escolherProposta() {
-    let randomIndex = Math.floor(Math.random() * listaPropostas.length);
-    while (randomIndex === IndexPropostaAtual) {
-        // Garante que a proposta escolhida seja diferente da atual
-        randomIndex = Math.floor(Math.random() * listaPropostas.length);
+    // Verifica se todas as propostas já foram mostradas
+    const todasMostradas = listaPropostas.every(p => p.aconteceu);
+
+    if (todasMostradas) {
+        // Reseta todas as propostas
+        listaPropostas.forEach(p => p.aconteceu = false);
     }
+
+    let randomIndex;
+    let tentativas = 0;
+    const maxTentativas = 100;
+
+    do {
+        randomIndex = Math.floor(Math.random() * listaPropostas.length);
+        tentativas++;
+
+        // Prevenir loop infinito
+        if (tentativas >= maxTentativas) {
+            // Força seleção mesmo que já tenha acontecido
+            break;
+        }
+    } while (listaPropostas[randomIndex].aconteceu);
+
+    // Atualiza a proposta atual e marca como mostrada
     IndexPropostaAtual = randomIndex;
+    listaPropostas[IndexPropostaAtual].aconteceu = true;
 }
 
 escolherProposta();
