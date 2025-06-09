@@ -38,7 +38,7 @@ class Proposta {
     }
 
     aceitar() {
-        dinheiro += this.aceitarResultado.dinheiro + Math.round(Math.abs(this.aceitarResultado.dinheiro/10));
+        dinheiro += this.aceitarResultado.dinheiro + Math.round(Math.abs(this.aceitarResultado.dinheiro / 10));
         dinheiro = Math.round(dinheiro);
         saude += this.aceitarResultado.saude;
         alegria += this.aceitarResultado.alegria;
@@ -88,7 +88,7 @@ class Estatistica {
 }
 
 listaPropostas = [
-    new Proposta("Trazer Hyago Kadson para a cidade.",
+    new Proposta("Trazer a celebridade Hyago Kadson para a cidade.",
         `Nos termos do disposto no art. 215 da Constituição Federal, que assegura o pleno exercício dos direitos culturais e o acesso às fontes da cultura nacional, a Prefeitura Municipal comunica, por meio da Secretaria de Cultura e Eventos, a contratação do artista Hyago Kadson como atração principal do evento Festival Municipal de Cultura Popular, a ser realizado em praça pública com entrada gratuita.
     
         A iniciativa integra o calendário oficial de ações de valorização da cultura nordestina e tem por objetivo fortalecer os laços comunitários, fomentar a economia criativa e proporcionar entretenimento de qualidade à população local, sobretudo aos jovens e às famílias que tradicionalmente participam de eventos populares.
@@ -1525,6 +1525,8 @@ listaPropostas = [
         }),
     ),
 
+    //precisa modificar a partir daqui
+
     new Proposta(`Proposta de Criação de Zona de Proteção Ambiental (ZPA) no Município de ${nomeCidade}`, `Excelentíssimo(a) Senhor(a) Prefeito(a) Municipal,
 
         Vimos, por meio deste, propor a criação de uma Zona de Proteção Ambiental (ZPA) no âmbito do território municipal, com o objetivo de assegurar a preservação dos recursos naturais, promover a sustentabilidade ambiental e garantir a qualidade de vida da população.
@@ -1533,11 +1535,470 @@ listaPropostas = [
 
         Considerando a importância de tal iniciativa para o bem-estar coletivo e a preservação do meio ambiente, solicitamos a inclusão deste projeto nas diretrizes de planejamento e a avaliação de sua viabilidade, com vistas à sua implementação efetiva.
         
-        Custo: 2100
+        Custo: 3400 reais
         Vereador Natural`,
 
-        new Estatistica()
+        new Estatistica({
+            dinheiro: -3400,
+            meioAmbiente: 13,
+            saude: 3,
+            infraestrutura: 5,
+            tituloNoticia: `${nomeCidade} cria Zona de Proteção Ambiental para preservar ecossistemas locais`,
+            noticia: `A prefeitura de ${nomeCidade} anunciou hoje a criação de uma Zona de Proteção Ambiental (ZPA) que abrangerá áreas de relevante interesse ecológico no município. A medida visa proteger os recursos naturais e garantir o desenvolvimento sustentável da região.
+
+		A nova legislação estabelece regras rigorosas para atividades econômicas na área protegida, com o objetivo de preservar a biodiversidade e melhorar a qualidade ambiental para as futuras gerações. Ambientalistas comemoraram a decisão como um marco na política ecológica da cidade.
+
+		Estudos preliminares indicam que a ZPA poderá aumentar em 15% a qualidade do ar e da água na região metropolitana, além de proteger espécies nativas ameaçadas de extinção.`
+        }),
+        new Estatistica({
+            meioAmbiente: -5,
+            saude: -3,
+            tituloNoticia: `Projeto de proteção ambiental é rejeitado em ${nomeCidade}`,
+            noticia: `A proposta de criação de uma Zona de Proteção Ambiental (ZPA) foi arquivada pela prefeitura de ${nomeCidade}, gerando críticas de ambientalistas e moradores preocupados com a degradação dos ecossistemas locais.
+
+		O veto à medida foi justificado pela administração municipal como necessário para não prejudicar o desenvolvimento econômico da região. No entanto, especialistas alertam que a falta de proteção pode levar à perda irreparável de biodiversidade.
+
+		Manifestantes protestaram em frente à prefeitura, argumentando que a decisão coloca em risco áreas naturais importantes e compromete a qualidade de vida da população a longo prazo.`
+        }),
     ),
+
+    new Proposta("Criação do lar de idosos para ajudar a população acima de 65 anos",
+        `
+        Considerando o crescimento progressivo da população idosa no Município — especialmente a faixa etária acima dos 65 anos, que já representa uma parcela significativa dos habitantes locais —, propõe-se a criação de um Lar Municipal para Idosos, com estrutura adequada para acolhimento, cuidados médicos, atividades socioculturais e apoio psicossocial.
+
+        A proposta responde ao aumento da expectativa de vida e à tendência de envelhecimento populacional, identificada nos dados demográficos recentes. Muitos desses idosos vivem sozinhos, sem rede de apoio familiar, ou enfrentam situações de vulnerabilidade socioeconômica e dependência funcional. 
+
+        O Lar de Idosos será voltado especialmente à população de baixa renda e contemplará tanto moradores urbanos quanto de zonas rurais, com serviços de transporte assistido e atendimento multiprofissional. A iniciativa visa garantir dignidade, segurança, e qualidade de vida à população idosa, além de aliviar a sobrecarga de cuidadores informais e unidades básicas de saúde.
+
+        Custo: 4900 reais.  
+        Vereadora Vó Dirce.
+        `,
+
+        new Estatistica({
+            dinheiro: -4900,
+            alegria: 7,
+            saude: 14,
+            infraestrutura: 10,
+            populacao: 1.15,
+            tituloNoticia: `${nomeCidade} inaugura Lar Municipal para Idosos com estrutura completa`,
+            noticia: `A prefeitura de ${nomeCidade} celebrou hoje a abertura do primeiro Lar Municipal para Idosos, destinado a acolher a população acima de 65 anos em situação de vulnerabilidade. A unidade oferecerá moradia assistida, cuidados médicos e atividades recreativas.
+
+		Com quartos adaptados, equipe multiprofissional e programação cultural, o espaço visa garantir dignidade e qualidade de vida aos idosos que não possuem rede de apoio familiar. A iniciativa já recebeu mais de 120 inscrições de candidatos a vagas.
+
+		"É nosso dever cuidar de quem cuidou de nós", declarou o prefeito durante a cerimônia, destacando que o projeto alia assistência social e saúde pública, reduzindo a sobrecarga nas unidades básicas de saúde.`
+        }),
+
+        new Estatistica({
+            alegria: -3,
+            saude: -4,
+            infraestrutura: -4,
+            populacao: -0.95,
+            tituloNoticia: `Projeto de Lar para Idosos é arquivado em ${nomeCidade}`,
+            noticia: `A proposta de criação de um Lar Municipal para Idosos foi rejeitada pela prefeitura de ${nomeCidade}, deixando desamparados centenas de idosos em situação de vulnerabilidade. A justificativa foi a falta de recursos no orçamento.
+
+		Associações de defesa dos direitos dos idosos protestaram contra a decisão, lembrando que muitos vivem sozinhos, sem cuidados básicos. "É uma população que precisa de apoio, não de descaso", criticou uma representante do Conselho do Idoso.
+
+		Sem a nova estrutura, famílias continuarão sobrecarregadas com os cuidados ou dependentes de instituições particulares, muitas vezes inacessíveis para a população de baixa renda.`
+        })
+    ),
+
+    new Proposta("Criação de centro de entretenimento com foco na população jovem",
+        `
+        Com base nos dados demográficos mais recentes, observa-se que uma parte expressiva da população do Município está concentrada na faixa etária entre 15 e 29 anos. Esta parcela jovem demanda espaços adequados para lazer, expressão cultural e desenvolvimento de atividades sociais e esportivas.
+
+        Diante disso, propõe-se a criação de um Centro Municipal de Entretenimento Juvenil, com instalações modernas que incluam áreas para esportes, jogos eletrônicos, oficinas criativas, eventos culturais, coworking para jovens empreendedores e atividades voltadas à saúde mental.
+
+        O projeto visa não apenas oferecer alternativas saudáveis de lazer para a juventude, mas também prevenir problemas sociais como o uso de drogas, o sedentarismo e a violência urbana, ao mesmo tempo em que estimula o protagonismo juvenil, o empreendedorismo e a inclusão digital.
+
+        Custo: 3600 reais.  
+        Vereador Zeca da Galera.
+        `,
+
+        new Estatistica({
+            tituloNoticia: "Prefeitura cria Centro de Entretenimento para a juventude",
+            noticia: `A administração municipal anunciou a construção de um moderno Centro de Entretenimento voltado para os jovens, com áreas esportivas, oficinas criativas e espaços digitais.
+
+		O projeto visa promover lazer saudável, prevenir a violência e estimular o protagonismo juvenil, beneficiando milhares de adolescentes e jovens adultos da cidade.
+
+		A população comemora a iniciativa como um marco na valorização da juventude.`
+
+        }),
+        new Estatistica({
+            tituloNoticia: "Falta de espaços para jovens preocupa especialistas",
+            noticia: `A recusa na criação de um Centro de Entretenimento para jovens acendeu o alerta entre educadores e profissionais da saúde.
+
+		A ausência de alternativas saudáveis de lazer pode ampliar o risco de problemas sociais como o uso de drogas, violência e evasão escolar.
+
+		Movimentos juvenis cobram políticas públicas mais efetivas e inclusivas.`
+
+        })
+    ),
+
+    new Proposta("Criação de linha de transporte exclusivo para crescente população idosa",
+        `
+		Considerando o aumento contínuo da população acima de 60 anos no Município, propõe-se a criação de uma linha de transporte público exclusiva para idosos, com foco em acessibilidade, conforto e segurança.
+
+		A medida visa atender às necessidades de mobilidade dessa faixa etária, muitas vezes limitada em termos físicos e com dificuldades de acesso ao transporte convencional. Os veículos serão adaptados com plataformas elevatórias, assentos prioritários ampliados e equipe capacitada para o atendimento humanizado.
+
+		A linha terá como prioridade a conexão entre bairros residenciais e centros de saúde, farmácias, praças, unidades de assistência social e centros de convivência para a terceira idade.
+
+		Com esta ação, busca-se promover a autonomia, a inclusão social e a melhoria da qualidade de vida da população idosa, respondendo ao desafio do envelhecimento demográfico com políticas públicas eficazes e humanizadas.
+
+		Custo: .  
+		Vereador Raul Vitalício.
+		`,
+        new Estatistica({
+            tituloNoticia: "Prefeitura lança linha de transporte exclusiva para idosos",
+            noticia: `A nova linha de ônibus voltada à população idosa já está em operação. Com veículos adaptados e equipe capacitada, o serviço garante acesso seguro a serviços de saúde, lazer e assistência.
+
+        A medida foi celebrada por entidades da terceira idade, que destacam a importância da mobilidade para a autonomia e bem-estar dos idosos.`
+
+        }),
+        new Estatistica({
+            tituloNoticia: "Falta de transporte adequado dificulta rotina de idosos",
+            noticia: `Sem uma linha de transporte específica, muitos idosos continuam enfrentando dificuldades para acessar postos de saúde, praças e serviços essenciais.
+
+        Organizações sociais cobram do poder público ações mais inclusivas para a crescente população idosa do Município.`
+
+        })
+    ),
+
+    new Proposta("Incentivo a vinda de imigrantes por meio de bolsas de trabalho",
+        `
+		Diante da redução no crescimento populacional e da necessidade de revitalização de determinadas regiões do município, propõe-se um programa de incentivo à vinda de imigrantes por meio de bolsas de trabalho e integração social.
+
+		O projeto visa atrair pessoas de outras localidades e países, especialmente em idade produtiva (entre 20 e 45 anos), oferecendo apoio financeiro inicial, cursos de idioma e cultura local, além de parcerias com empresas para inserção no mercado de trabalho formal.
+
+		A iniciativa pretende equilibrar o perfil etário da população, fomentar o crescimento econômico e repovoar bairros com baixa densidade habitacional, contribuindo para a diversidade cultural e o dinamismo social.
+
+		Com políticas bem estruturadas de acolhimento e acompanhamento, o município poderá enfrentar os desafios do envelhecimento populacional e escassez de mão de obra qualificada em áreas estratégicas.
+
+		Custo: .  
+		Vereador Ibrahim Lopes.
+		`,
+        new Estatistica({
+            tituloNoticia: "Município atrai imigrantes com bolsas de trabalho e vê economia crescer",
+            noticia: `O novo programa de incentivo à imigração lançado pela prefeitura já mostra resultados: bairros com baixa densidade populacional começaram a receber novos moradores, e o comércio local está aquecido.
+
+        A oferta de bolsas de trabalho e cursos de integração tem facilitado a adaptação dos recém-chegados, enquanto empresas locais elogiam a chegada de mão de obra qualificada.
+
+        Moradores destacam o impacto positivo da diversidade cultural e o renascimento de áreas antes esquecidas.`
+
+        }),
+        new Estatistica({
+            tituloNoticia: "Falta de incentivo à imigração mantém regiões vazias e economia estagnada",
+            noticia: `A proposta de atrair imigrantes por meio de bolsas de trabalho foi rejeitada pela gestão municipal, frustrando expectativas de revitalização populacional e econômica.
+
+        Especialistas alertam para o agravamento do envelhecimento da população e o risco de escassez de mão de obra qualificada em setores estratégicos.
+
+        Moradores de bairros com baixa ocupação relatam desânimo com a ausência de ações que tragam vida e oportunidades às suas regiões.`
+
+        })
+    ),
+
+    new Proposta("Proposta para integração da população idosa com informatica",
+        `
+		Considerando o aumento expressivo da população com mais de 60 anos no município, propõe-se a criação de um programa de inclusão digital voltado exclusivamente para a terceira idade, com cursos gratuitos e adaptados às necessidades dessa faixa etária.
+
+		O objetivo principal é promover a autonomia dos idosos no uso de tecnologias básicas, como smartphones, internet, redes sociais e serviços públicos digitais, contribuindo para o fortalecimento de vínculos familiares, acesso à informação e prevenção do isolamento social.
+
+		As atividades serão conduzidas por educadores capacitados, com metodologia acessível e material didático apropriado, em parceria com escolas, centros comunitários e universidades locais.
+
+		Essa iniciativa não apenas valoriza o envelhecimento ativo e participativo, como também reduz barreiras intergeracionais e amplia o acesso da população idosa às inovações tecnológicas.
+
+		Custo: 2700 reais.  
+		Vereador Professor Elísio.
+		`,
+        new Estatistica({
+            tituloNoticia: "Inclusão digital transforma a vida da população idosa no município",
+            noticia: `Com o lançamento do programa de inclusão digital para idosos, dezenas de cidadãos acima dos 60 anos agora acessam redes sociais, realizam serviços públicos online e mantêm contato com familiares de forma mais frequente.
+
+        As aulas, conduzidas em centros comunitários e escolas, estão sendo elogiadas pela abordagem prática e sensível às limitações da idade. Para muitos participantes, a experiência tem sido transformadora.
+
+        “Me sinto mais conectada ao mundo”, afirmou Dona Neusa, de 72 anos.`
+
+        }),
+        new Estatistica({
+            tituloNoticia: "Falta de apoio à inclusão digital deixa idosos à margem da tecnologia",
+            noticia: `A proposta de oferecer cursos gratuitos de informática para a população idosa foi recusada, gerando críticas de educadores e representantes de associações da terceira idade.
+
+        Com o avanço dos serviços digitais, especialistas alertam que muitos idosos continuam dependentes de terceiros para tarefas simples, como marcar consultas ou pagar contas online.
+
+        “Não é só aprender computador — é manter a autonomia e evitar o isolamento”, comentou o vereador Professor Elísio, autor da proposta.`
+
+        })
+    ),
+
+    new Proposta("Redução de impostos sobre cameras de segurança",
+        `
+		Propõe-se a redução dos impostos municipais incidentes sobre a comercialização e instalação de câmeras de segurança, com o intuito de estimular a adesão da população a sistemas de monitoramento doméstico e comercial.
+
+		A medida visa não apenas ampliar a sensação de segurança entre os cidadãos, mas também fortalecer a rede colaborativa de vigilância urbana, especialmente em áreas residenciais com maior concentração de idosos e comércios locais.
+
+		Com a crescente demanda por segurança preventiva e o avanço da tecnologia acessível, facilitar o acesso a equipamentos de monitoramento pode contribuir para inibir delitos, apoiar investigações e integrar os esforços do poder público com a comunidade.
+
+		A proposta ainda prevê campanhas de conscientização sobre o uso responsável desses equipamentos e incentivo à criação de redes de vizinhança segura, principalmente em bairros com maior densidade populacional e presença de grupos vulneráveis.
+
+		Custo: 0 reais (renúncia fiscal).
+		Vereador Claudemir Bigode.
+		`,
+        new Estatistica({
+            tituloNoticia: "Município aprova isenção de impostos sobre câmeras de segurança",
+            noticia: `A Câmara Municipal aprovou a proposta do vereador Claudemir Bigode que reduz impostos sobre câmeras de segurança, facilitando o acesso da população a esses equipamentos.
+
+        Com a medida, espera-se o fortalecimento das redes de vigilância colaborativa, principalmente em bairros residenciais. A população comemorou a iniciativa como uma forma de prevenção aos crimes.
+
+        “Agora posso instalar câmeras na minha mercearia com menos custo”, disse a comerciante Rita Barbosa, do bairro São José.`
+
+        }),
+        new Estatistica({
+            tituloNoticia: "Câmara rejeita proposta de redução de impostos sobre câmeras de segurança",
+            noticia: `A proposta de isenção fiscal para câmeras de segurança foi rejeitada pela maioria dos vereadores, sob o argumento de que a renúncia de receita prejudicaria outras áreas essenciais do orçamento.
+
+        Moradores e comerciantes demonstraram frustração com a decisão, afirmando que o incentivo poderia fortalecer a proteção de bairros mais vulneráveis.
+
+        “O custo ainda é muito alto para quem quer se proteger”, reclamou um morador da região central.`
+
+        })
+    ),
+
+    new Proposta("Criação do feriado municipal do Tralalero Tralala",
+        `
+		Propõe-se a criação do feriado municipal do Tralalero Tralala, celebrado anualmente como um marco cultural e de identidade local, com o objetivo de fortalecer os laços comunitários e valorizar tradições populares da região.
+
+		A instituição do feriado busca oferecer um momento de pausa para a população, especialmente para trabalhadores formais e estudantes, promovendo a realização de eventos comemorativos, apresentações artísticas, feiras e atividades voltadas ao lazer.
+
+		Estudos demográficos indicam que datas comemorativas locais tendem a aumentar a coesão social, gerar impacto econômico positivo no setor de comércio e turismo, além de atender ao desejo das faixas etárias mais jovens e de meia-idade por celebrações culturais.
+
+		A medida será submetida à consulta pública e inserida no calendário oficial do município, respeitando os limites de feriados definidos pela legislação nacional.
+
+		Custo: 0 reais.
+		Vereadoror(a) Bombardillo Crocodilo/Lirio Lirio Larila.
+		`,
+        new Estatistica({
+            tituloNoticia: `${nomeCidade} institui feriado do Tralalero Tralala como nova tradição municipal`,
+            noticia: `A Câmara Municipal aprovou por ampla maioria a criação do feriado do Tralalero Tralala, data que entrará para o calendário oficial de ${nomeCidade}. A celebração acontecerá anualmente no dia 13 de julho.
+
+		O prefeito destacou que o feriado fortalecerá a identidade cultural local: "É uma homenagem às nossas raízes e uma oportunidade para movimentar a economia criativa". Já estão programados desfiles, oficinas artísticas e um grande festival gastronômico.
+
+		Pesquisas indicam que feriados municipais podem aumentar em até 30% o movimento no comércio local e gerar empregos temporários na organização de eventos.`
+        }),
+        new Estatistica({
+            tituloNoticia: `Câmara rejeita criação do feriado do Tralalero Tralala em ${nomeCidade}`,
+            noticia: `A proposta do vereador Bombardillo Crocodilo para instituir o feriado do Tralalero Tralala foi arquivada após debate acalorado. Opositores argumentaram que a cidade já tem excesso de datas comemorativas.
+
+		"Precisamos priorizar a produtividade, não mais folgas", declarou o líder da oposição. Já os defensores do projeto lamentaram a decisão: "Perdemos a chance de criar uma tradição única que colocaria ${nomeCidade} no mapa cultural da região".
+
+		Sem o novo feriado, o calendário municipal mantém suas 12 datas oficiais, sendo 8 nacionais e 4 locais estabelecidas há mais de década.`
+        })
+    ),
+
+    new Proposta("Redução de imposto geral",
+        `
+        Por meio da presente, propomos a realização de estudos técnicos e financeiros visando à redução de impostos municipais gerais, como forma de aliviar a carga tributária sobre a população e os empreendedores locais, estimulando o consumo, o investimento e o crescimento econômico no Município. A medida poderá abranger tributos como IPTU, ISS e taxas diversas, com ajustes graduais e sustentáveis conforme a capacidade fiscal do Município.
+
+        A iniciativa busca fomentar a atividade econômica, incentivar a regularização de contribuintes, atrair novos negócios e gerar empregos, promovendo um ambiente mais justo e competitivo. A redução estratégica da carga tributária, acompanhada de ações de gestão eficiente, poderá resultar em aumento da arrecadação a médio prazo, por meio do crescimento da base de contribuintes.
+
+        Diante do exposto, solicitamos a inclusão do tema no planejamento orçamentário e legislativo do Município, com a devida análise de impacto fiscal e jurídico.
+
+        Custo: Nenhum (medida desonerativa)
+        Vereador Dr. Giuseppe Camolle`,
+
+        new Estatistica({
+            tituloNoticia: "Câmara aprova redução de impostos municipais para aliviar carga tributária",
+            noticia: `A Câmara Municipal aprovou a proposta do vereador Dr. Giuseppe Camolle que visa reduzir impostos gerais, como IPTU e ISS, com o objetivo de estimular a economia local e aliviar a carga tributária sobre a população e empreendedores.
+
+        A medida, que passará por estudos técnicos e financeiros, busca incentivar o consumo, atrair novos negócios e gerar empregos, promovendo um ambiente mais competitivo no município. Comerciantes e moradores comemoraram a decisão, que pode também aumentar a arrecadação a médio prazo.
+
+        “Essa redução vai ajudar muito meu pequeno negócio a crescer”, afirmou o empresário Carlos Mendes, dono de uma padaria no centro da cidade. A proposta não terá custo imediato para os cofres públicos, sendo uma medida desonerativa.`
+        }),
+        new Estatistica({
+            tituloNoticia: "Câmara rejeita proposta de redução de impostos municipais",
+            noticia: `A Câmara Municipal decidiu rejeitar a proposta do vereador Dr. Giuseppe Camolle que sugeria a redução de impostos como IPTU e ISS para estimular a economia local. A justificativa foi a preocupação com o impacto fiscal a curto prazo no orçamento público.
+
+        Apesar dos argumentos de que a medida poderia aliviar a carga tributária e atrair investimentos, a maioria dos vereadores considerou o momento inadequado, citando a necessidade de manter a arrecadação para cobrir despesas essenciais. Empresários demonstraram frustração com a decisão.
+
+        “Perdemos uma oportunidade de reaquecer o comércio e gerar empregos”, lamentou a microempreendedora Ana Lúcia, dona de uma loja de roupas. A proposta, que não teria custo direto, foi arquivada para possível revisão no futuro.`
+        })
+    ),
+
+    new Proposta("Plantação de árvores no centro da cidade",
+        `
+        Por meio da presente, propomos a realização de um projeto de plantação de árvores no centro da cidade, com o objetivo de melhorar a qualidade do ar, reduzir as ilhas de calor, embelezar os espaços públicos e promover a sustentabilidade ambiental. A iniciativa poderá incluir o plantio de espécies nativas e ornamentais em calçadas, praças e canteiros centrais, com acompanhamento técnico para garantir a harmonia com a infraestrutura urbana.
+
+        A arborização urbana contribui para o bem-estar da população, a valorização dos espaços públicos e o equilíbrio ecológico, além de oferecer sombra, abrigo para a fauna e benefícios estéticos que incentivam o uso coletivo das áreas centrais. A ação também poderá envolver escolas e organizações locais em atividades de educação ambiental.
+
+        Diante do exposto, solicitamos a inclusão do projeto no plano de revitalização urbana e meio ambiente do Município, com a devida previsão orçamentária para aquisição de mudas, insumos e mão de obra.`,
+        new Estatistica({
+            tituloNoticia: "Câmara aprova projeto de arborização no centro da cidade",
+            noticia: `A Câmara Municipal aprovou a proposta de plantação de árvores no centro da cidade, apresentada pelo vereador Dr. Giuseppe Camolle. O projeto visa melhorar a qualidade do ar, reduzir as ilhas de calor e embelezar os espaços públicos, com o plantio de espécies nativas e ornamentais em praças e calçadas.  
+
+        A iniciativa, que contará com apoio técnico e participação da comunidade, também incluirá ações de educação ambiental em escolas. Moradores e comerciantes comemoraram a decisão, destacando os benefícios para o bem-estar e a valorização da região central.  
+
+        “Ter mais árvores vai deixar a cidade mais fresca e agradável”, disse Maria Souza, dona de uma loja no centro. O projeto será incluído no plano de revitalização urbana, com previsão orçamentária para mudas e manutenção.`
+        }),
+        new Estatistica({
+            tituloNoticia: "Câmara rejeita projeto de plantio de árvores no centro da cidade",
+            noticia: `A Câmara Municipal rejeitou a proposta de arborização no centro da cidade, apresentada pelo vereador Dr. Giuseppe Camolle. A justificativa foi a falta de recursos no orçamento e preocupações com possíveis conflitos com a infraestrutura urbana, como raízes danificando calçadas.  
+
+        Apesar dos argumentos sobre melhorias na qualidade do ar e no bem-estar da população, a maioria dos vereadores considerou que o momento não é adequado para o investimento. Ambientalistas e moradores expressaram frustração com a decisão.  
+
+        “Perdemos a chance de deixar a cidade mais verde e sustentável”, lamentou o estudante Pedro Almeida, integrante de um grupo ecológico local. A proposta foi arquivada, mas poderá ser reconsiderada no futuro.`
+        })
+    ),
+
+    new Proposta("Implantação de energia solar em unidades municipais",
+        `
+        Por meio da presente, propomos a implantação de sistemas de energia solar fotovoltaica nas unidades municipais, como escolas, postos de saúde, prédios administrativos e centros comunitários, com o objetivo de reduzir os custos com energia elétrica, promover o uso de fontes renováveis e contribuir com a sustentabilidade ambiental. A proposta pode ser executada por meio de parcerias públicas, convênios com instituições federais e uso de recursos próprios ou emendas parlamentares.
+
+        Essa iniciativa permitirá significativa economia aos cofres públicos a médio e longo prazo, além de servir como modelo educativo e de conscientização ambiental para a população. A adoção de energia limpa reafirma o compromisso do Município com a inovação, a responsabilidade ambiental e o futuro das próximas gerações.
+
+        Diante do exposto, solicitamos a inclusão do projeto no plano de modernização da infraestrutura pública, com a devida previsão orçamentária e estudos técnicos de viabilidade.`,
+        new Estatistica({
+            tituloNoticia: "Câmara aprova projeto de energia solar em prédios públicos para reduzir custos e promover sustentabilidade",
+            noticia: `A Câmara Municipal aprovou por maioria o projeto do vereador Dr. Giuseppe Camolle que prevê a instalação de sistemas de energia solar em escolas, postos de saúde e prédios administrativos. A medida visa reduzir gastos com energia elétrica em até 40% nos próximos anos, além de promover fontes renováveis.
+
+        O projeto será implementado através de parcerias públicas e recursos de emendas parlamentares. Técnicos estimam que a economia gerada poderá ser reinvestida em melhorias para a população. "É um avanço para o meio ambiente e para os cofres públicos", afirmou o secretário de Administração.
+
+        Moradores comemoram a iniciativa: "Minha filha estuda em uma escola municipal que sempre sofre com falta de verba. Essa economia pode melhorar a educação", disse a dona de casa Eliana Torres, mãe de uma aluna da rede pública.`
+        }),
+        new Estatistica({
+            tituloNoticia: "Proposta de energia solar em prédios públicos é rejeitada por falta de verba",
+            noticia: `A Câmara Municipal rejeitou o projeto de implantação de energia solar fotovoltaica em unidades públicas, apresentado pelo vereador Dr. Giuseppe Camolle. A justificativa foi a inviabilidade financeira no atual cenário orçamentário.
+
+        Apesar dos argumentos sobre economia a longo prazo e benefícios ambientais, a maioria dos vereadores considerou o investimento inicial elevado. "A ideia é boa, mas não temos como bancar os custos agora", declarou o presidente da Comissão de Finanças.
+
+        Ambientalistas criticaram a decisão: "Perdemos a chance de modernizar a cidade e reduzir a pegada de carbono", protestou o coordenador do Instituto EcoLocal, Marcos Rocha. O vereador proponente afirmou que buscará alternativas para reapresentar a proposta no próximo ano.`
+        })
+    ),
+
+    new Proposta("Introdução de energia eólica na cidade",
+        `
+        Por meio da presente, propomos a introdução de energia eólica no Município, com o objetivo de diversificar a matriz energética local, reduzir os custos com eletricidade e fortalecer o compromisso com fontes de energia limpa e sustentável. A proposta visa a instalação de aerogeradores em áreas estratégicas, de forma experimental ou permanente, com base em estudos técnicos sobre a viabilidade dos ventos e parcerias com instituições públicas e privadas.
+
+        A adoção da energia eólica representa um avanço tecnológico importante, além de gerar benefícios ambientais, educacionais e econômicos. O projeto poderá ainda atrair investimentos, fomentar a inovação e criar oportunidades de capacitação e emprego no setor de energias renováveis.
+
+        Diante do exposto, solicitamos a inclusão desta proposta no planejamento estratégico do Município, com a devida previsão orçamentária para estudos de viabilidade, instalação piloto e estrutura de apoio.`,
+        new Estatistica({
+            tituloNoticia: "Câmara aprova projeto pioneiro de energia eólica para diversificar matriz energética da cidade",
+            noticia: `A Câmara Municipal aprovou hoje o projeto inovador do vereador Dr. Giuseppe Camolle que prevê a instalação de aerogeradores em áreas estratégicas da cidade. A iniciativa tem como objetivo reduzir custos com energia elétrica e promover fontes renováveis, colocando o município na vanguarda da sustentabilidade energética.
+
+        O projeto será implementado inicialmente de forma experimental, com parcerias entre poder público, universidades e empresas especializadas. Estudos preliminares indicam que a região possui ventos favoráveis para geração de energia limpa. "Esta é uma oportunidade para nos tornarmos referência em energias renováveis", destacou o secretário de Meio Ambiente.
+
+        Moradores e empresários comemoraram a decisão. "Além de ajudar o meio ambiente, pode trazer novos empregos para nossa região", afirmou Carlos Mendes, dono de um restaurante local. A previsão é que os primeiros aerogeradores comecem a ser instalados dentro de 12 meses.`
+        }),
+        new Estatistica({
+            tituloNoticia: "Projeto de energia eólica é rejeitado pela Câmara Municipal",
+            noticia: `A proposta de implantação de energia eólica no município, apresentada pelo vereador Dr. Giuseppe Camolle, foi rejeitada pela maioria dos parlamentares. Os opositores alegaram altos custos iniciais e incertezas sobre a viabilidade técnica do projeto.
+
+        Apesar dos argumentos sobre benefícios ambientais e econômicos a longo prazo, os vereadores consideraram que o município não possui condições financeiras para bancar os estudos e a infraestrutura necessários. "É uma ideia interessante, mas prematura para nossa realidade atual", declarou o relator do projeto.
+
+        Ambientalistas e acadêmicos criticaram a decisão. "Perdemos a chance de dar um salto tecnológico e reduzir nossa dependência de energias poluentes", lamentou a professora de Engenharia Ambiental da Universidade local, Dra. Ana Beatriz. O vereador proponente afirmou que continuará buscando alternativas para viabilizar o projeto no futuro.`
+        })
+    ),
+
+    new Proposta("Insenção de impostos sobre carros elétricos",
+        `
+        Por meio da presente, propomos a isenção total dos impostos municipais incidentes sobre veículos elétricos, como o IPVA municipal (quando aplicável) e taxas de licenciamento e estacionamento público, com o objetivo de incentivar a mobilidade sustentável, reduzir a emissão de poluentes e modernizar a frota veicular da cidade. A medida também poderá incluir benefícios como isenção de rodízios ou prioridade em zonas de tráfego limitado.
+
+        Essa iniciativa visa alinhar o Município às diretrizes de sustentabilidade e inovação, promovendo a transição para fontes de energia limpa no transporte urbano, além de posicionar a cidade como referência em políticas ambientais e estímulo à tecnologia verde.
+
+        Diante do exposto, solicitamos a análise jurídica e financeira da viabilidade da medida, bem como sua inclusão no plano de mobilidade urbana e desenvolvimento sustentável do Município.`,
+        new Estatistica({
+            tituloNoticia: "Câmara aprova isenção fiscal para carros elétricos em incentivo à mobilidade sustentável",
+            noticia: `A Câmara Municipal aprovou hoje o projeto do vereador Dr. Giuseppe Camolle que concede isenção total de impostos municipais para veículos elétricos, incluindo IPVA municipal, taxas de licenciamento e estacionamento público. A medida busca estimular a adoção de transportes não poluentes e modernizar a frota veicular da cidade.
+
+        "Esta é uma política visionária que coloca nossa cidade na vanguarda da mobilidade sustentável", declarou o secretário de Meio Ambiente durante a sessão. Estudos da prefeitura indicam que a medida pode reduzir em até 15% as emissões de CO2 no trânsito municipal nos próximos cinco anos.
+
+        Proprietários de veículos elétricos comemoraram: "Agora ficou mais acessível manter meu carro limpo na cidade", disse a arquiteta Juliana Moraes, que adquiriu um veículo elétrico há seis meses. A isenção entra em vigor em 60 dias e inclui benefícios como liberação de rodízios municipais.`
+        }),
+        new Estatistica({
+            tituloNoticia: "Proposta de isenção para carros elétricos é rejeitada por impacto no orçamento",
+            noticia: `A Câmara Municipal rejeitou o projeto que previa isenção de impostos para veículos elétricos, apresentado pelo vereador Dr. Giuseppe Camolle. A maioria dos parlamentares considerou que a medida criaria um rombo significativo nos cofres públicos sem benefício imediato para a maioria da população.
+
+        "Apoiamos a sustentabilidade, mas não podemos abrir mão de recursos essenciais para serviços públicos", argumentou o líder do governo na Casa. Dados da secretaria de Finanças estimavam perda anual de R$ 2,8 milhões em arrecadação.
+
+        Ambientalistas criticaram a decisão: "Perdemos a chance de acelerar a transição ecológica no transporte", protestou o diretor da ONG Mobilidade Verde, Ricardo Lopes. O vereador proponente afirmou que buscará alternativas parciais para reapresentar a proposta.`
+        })
+    ),
+
+    new Proposta("Projeto: Cidade 100% reciclada",
+        `
+        Por meio da presente, propomos a criação e implementação do projeto Cidade 100% Reciclada, com o objetivo de transformar o Município em referência nacional em gestão de resíduos sólidos e sustentabilidade ambiental. A iniciativa contempla ações como coleta seletiva universalizada, instalação de ecopontos, campanhas de conscientização, parcerias com cooperativas de catadores e incentivo à reciclagem em escolas, comércios e repartições públicas.
+
+        O projeto visa reduzir significativamente o volume de lixo destinado a aterros, promover a economia circular, gerar empregos verdes e fortalecer a educação ambiental. Além disso, contribui para a melhoria da qualidade de vida, preservação dos recursos naturais e fortalecimento da imagem do Município como comprometido com o futuro sustentável.
+
+        Diante do exposto, solicitamos a inclusão do projeto no plano diretor municipal e na política de meio ambiente, com a devida previsão orçamentária para sua execução em etapas.`,
+        new Estatistica({
+
+        }),
+        new Estatistica({
+
+        })
+    ),
+
+    new Proposta("Distribuição de tablets para estudo nas escolas municipais",
+        `
+        Por meio da presente, propomos a distribuição de tablets para uso educacional nas escolas da rede municipal de ensino, com o objetivo de modernizar os processos pedagógicos, ampliar o acesso dos alunos à tecnologia e promover a inclusão digital desde os primeiros anos de escolarização. Os dispositivos poderão ser utilizados em sala de aula e em casa, com acesso a plataformas educativas, conteúdos didáticos e ferramentas interativas.
+
+        A iniciativa contribuirá para a melhoria do rendimento escolar, a formação tecnológica dos estudantes e o fortalecimento da igualdade de oportunidades, especialmente para alunos em situação de vulnerabilidade social. Além disso, a ação estará alinhada com as diretrizes nacionais de inovação na educação pública.
+
+        Diante do exposto, solicitamos a inclusão do projeto no planejamento da Secretaria Municipal de Educação, com a devida previsão orçamentária para aquisição dos equipamentos, treinamento de professores e suporte técnico.`,
+        new Estatistica({}),
+        new Estatistica({})
+
+    ),
+
+    new Proposta("Investimentos gerais na segurança",
+        `Por meio da presente, propomos a realização de investimentos estratégicos na segurança pública municipal, com o objetivo de garantir maior proteção à população, prevenir a criminalidade e fortalecer as ações das forças de segurança locais. A iniciativa poderá contemplar a aquisição de viaturas, instalação de câmeras de monitoramento em pontos críticos, melhoria na iluminação pública, capacitação da Guarda Municipal e integração com sistemas estaduais de segurança.
+
+        A medida visa promover a sensação de segurança, valorizar os profissionais da área e tornar o Município um ambiente mais seguro para viver, estudar e empreender. Com uma abordagem preventiva e tecnológica, será possível aumentar a eficiência na resposta às ocorrências e reduzir os índices de violência.
+
+        Diante do exposto, solicitamos a inclusão desta proposta no planejamento orçamentário e no plano de ação da Secretaria Municipal de Segurança, com a devida previsão de recursos.`,
+        new Estatistica({}),
+        new Estatistica({})
+    ),
+
+    new Proposta("Investimentos gerais na saúde",
+        `Por meio da presente, propomos a realização de investimentos gerais na área da saúde pública municipal, com o objetivo de ampliar e qualificar o atendimento à população, reduzir filas, garantir o abastecimento de medicamentos e fortalecer a estrutura física e humana das unidades de saúde. A proposta inclui aquisição de equipamentos médicos, reformas de postos de saúde, contratação de profissionais e ampliação dos serviços de atenção básica e especializada.
+
+        A iniciativa contribuirá para o acesso universal e igualitário à saúde, assegurando melhores condições de diagnóstico, tratamento e prevenção de doenças, especialmente para as comunidades mais vulneráveis. Além disso, os investimentos permitirão maior resolutividade no atendimento e valorização dos servidores da área.
+
+        Diante do exposto, solicitamos a inclusão da proposta no plano de gestão da Secretaria Municipal de Saúde, com a devida previsão orçamentária.`,
+        new Estatistica({}),
+        new Estatistica({})
+    ),
+
+    new Proposta("Investimentos gerais na economia",
+        `Por meio da presente, propomos a realização de investimentos estratégicos na economia municipal, com o objetivo de estimular o desenvolvimento local, gerar empregos, apoiar o empreendedorismo e fortalecer os setores produtivos da cidade. A proposta engloba ações como incentivos a micro e pequenas empresas, qualificação profissional, modernização da infraestrutura comercial, apoio a feiras e eventos econômicos, além de parcerias com instituições financeiras para facilitar o acesso ao crédito.
+
+        Esses investimentos visam dinamizar a atividade econômica, aumentar a arrecadação, atrair novos negócios e promover a inclusão produtiva, beneficiando especialmente jovens, mulheres e trabalhadores informais. A medida também reforça a autonomia do Município e prepara a cidade para os desafios de um mercado cada vez mais competitivo.
+
+        Diante do exposto, solicitamos a inclusão da proposta no plano de desenvolvimento econômico do Município, com a devida previsão orçamentária.`,
+        new Estatistica({}),
+        new Estatistica({})
+    ),
+
+    new Proposta("Investimentos gerais na educação",
+        `Por meio da presente, propomos a realização de investimentos abrangentes na educação municipal, com o objetivo de melhorar a infraestrutura das escolas, qualificar os profissionais da educação, ampliar o acesso a materiais didáticos e tecnologias educacionais, e fortalecer programas pedagógicos voltados para a inclusão e o desenvolvimento integral dos alunos. A iniciativa poderá incluir reformas e ampliações de unidades escolares, capacitação continuada para professores, aquisição de equipamentos tecnológicos e estímulo a atividades culturais e esportivas.
+
+        Esses investimentos visam garantir ensino de qualidade, promover a equidade educacional e preparar os estudantes para os desafios do século XXI, contribuindo para o progresso social e econômico do Município. Além disso, reforça o compromisso da gestão pública com a valorização da educação como base do desenvolvimento sustentável.
+
+        Diante do exposto, solicitamos a inclusão da proposta no planejamento da Secretaria Municipal de Educação, com a devida previsão orçamentária para sua execução.`,
+        new Estatistica({}),
+        new Estatistica({})
+    ),
+
+    new Proposta("Investimentos gerais na infarestrutura",
+        `Por meio da presente, propomos a realização de investimentos estratégicos na infraestrutura municipal, com o objetivo de modernizar e ampliar a rede viária, melhorar o sistema de abastecimento de água, saneamento básico, iluminação pública, e fortalecer a infraestrutura urbana e rural para garantir melhores condições de vida à população. A proposta abrange reparos, obras de pavimentação, expansão de redes elétricas e hidráulicas, além de projetos voltados para acessibilidade e mobilidade urbana.
+
+        Esses investimentos visam impulsionar o desenvolvimento socioeconômico do Município, promover a inclusão social e garantir a sustentabilidade ambiental, atendendo às demandas atuais e futuras da comunidade. Ademais, contribuem para a valorização dos imóveis, atração de novos investimentos e melhoria da qualidade dos serviços públicos.
+
+        Diante do exposto, solicitamos a inclusão da proposta no planejamento orçamentário e estratégico da Prefeitura, com a devida previsão de recursos para sua execução.`,
+        new Estatistica({}),
+        new Estatistica({})
+    ),
+
 ];
 // funções gerais
 
@@ -1630,6 +2091,9 @@ function corrigir() {
 
 function ecolherCidade() {
     nomeCidade = document.getElementById('nome-cidade').value;
+    if (nomeCidade === "") {
+        nomeCidade = "Xique-Xique Baia"
+    }
     document.getElementById("cidade").innerText = `Cidade: ${nomeCidade}`;
 }
 
@@ -1684,7 +2148,7 @@ function atualizarTempo() {
     document.getElementById('tempo').textContent = `Tempo passado: ${formatarTempo(decorrido)}`;
     verificarEventosMensais(mesesTotais);
 
-    
+
 }
 
 function iniciarTempoJogo() {
