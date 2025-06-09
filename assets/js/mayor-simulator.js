@@ -98,13 +98,13 @@ let listaPropostas = [
     
         A ação está em consonância com o princípio da dignidade da pessoa humana e da promoção do bem-estar social, sendo esperada grande adesão popular e impacto positivo tanto econômico quanto simbólico para o município.
 
-        Custo: 2800 reais.
+        Custo: 2600 reais.
         Vereador Pedão.`,
 
         new Estatistica({
-            dinheiro: -2800,
+            dinheiro: -2600,
             saude: -2,
-            alegria: 8,
+            alegria: 10,
             economia: 6,
             populacao: 1.025,
             tituloNoticia: "Festival com Hyago Kadson reúne multidão e aquece economia local",
@@ -139,14 +139,14 @@ let listaPropostas = [
         
         A iniciativa representa um avanço na política pública educacional do município, fortalecendo o processo de ensino-aprendizagem, combatendo desigualdades de acesso ao conhecimento e garantindo melhores condições para o pleno desenvolvimento intelectual e cidadão dos estudantes da rede municipal.
         
-        Custo: 3500 reais.
+        Custo: 3300 reais.
         Vereador Dr Thiago Frutas.`,
 
         new Estatistica({
-            dinheiro: -3500,
+            dinheiro: -3300,
             meioAmbiente: 4,
-            alegria: 5,
-            educacao: 10,
+            alegria: 6,
+            educacao: 11,
             populacao: 1.014,
             tituloNoticia: "Novo material didático é implementado e eleva qualidade da educação municipal",
             noticia: `A Prefeitura Municipal iniciou a distribuição de um novo conjunto de materiais pedagógicos para todas as escolas da rede pública de ensino fundamental. A iniciativa visa modernizar o processo de ensino, promover a equidade educacional e alinhar o conteúdo à Base Nacional Comum Curricular (BNCC).
@@ -179,15 +179,15 @@ let listaPropostas = [
 
         A gratuidade será operacionalizada mediante cadastro prévio no aplicativo, disponível para dispositivos móveis com sistemas Android e iOS, e a operação seguirá normas de segurança, eficiência e acessibilidade, em consonância com os princípios da administração pública.
 
-        Custo: 4000 reais.
+        Custo: 3800 reais.
         Vereador Mr. Cuca.`,
 
         new Estatistica({
-            dinheiro: -4000,
+            dinheiro: -3800,
             saude: 3,
             alegria: 6,
-            meioAmbiente: 4,
-            infraestrutura: 10,
+            meioAmbiente: 5,
+            infraestrutura: 11,
             tituloNoticia: "Aplicativo 'Domingo Livre' promove transporte gratuito e incentiva mobilidade sustentável",
             noticia: `A Prefeitura lançou o aplicativo 'Domingo Livre', garantindo transporte gratuito aos domingos para toda a população cadastrada. A iniciativa busca facilitar o acesso a espaços de lazer, cultura e esporte, além de reduzir o uso de veículos particulares e a emissão de poluentes.
 
@@ -218,14 +218,14 @@ let listaPropostas = [
         
         A execução do projeto observará os princípios da legalidade, eficiência e economicidade, sendo priorizadas as áreas com maior déficit de iluminação e maior vulnerabilidade social, conforme mapeamento técnico realizado pelas secretarias competentes.
         
-        Custo: 5000.
+        Custo: 4800.
         Vereador Retificador de onda completa com filtro capacitivo.`,
 
         new Estatistica({
-            dinheiro: -5000,
+            dinheiro: -4800,
             alegria: 7,
-            seguranca: 6,
-            infraestrutura: 12,
+            seguranca: 7,
+            infraestrutura: 13,
             meioAmbiente: 3,
             tituloNoticia: "Município atinge 100% de cobertura com iluminação LED e melhora segurança",
             noticia: `A Prefeitura concluiu a instalação de iluminação pública com tecnologia LED em todas as comunidades do município. O Projeto 'Município Iluminado' trouxe melhorias significativas na segurança urbana, qualidade de vida e eficiência energética.
@@ -258,14 +258,14 @@ let listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão do projeto no planejamento do Município, com a devida previsão orçamentária.
 
-        Custo: 3800 reais
+        Custo: 3600 reais
         Vereador Dr. Giuseppe Camolle.`,
 
         new Estatistica({
-            dinheiro: -3800,
-            alegria: 7,
+            dinheiro: -3600,
+            alegria: 8,
             saude: 6,
-            infraestutura: 6,
+            infraestutura: 7,
             economia: 3,
             tituloNoticia: "Nova praça no Bairro Freitas promove bem-estar e revitalização urbana",
             noticia: `A Prefeitura iniciou as obras da nova praça pública no Bairro Freitas, atendendo a uma antiga demanda dos moradores. O espaço contará com áreas de convivência, bancos, jardins e infraestrutura adequada para idosos e atividades de lazer.
@@ -299,12 +299,12 @@ let listaPropostas = [
 
         Solicitamos a inclusão deste projeto no planejamento orçamentário municipal e a análise para sua viabilização.
 
-        Custo: 6000 reais
+        Custo: 5800 reais
         Vereador Dr. Giuseppe Camolle.`,
 
         new Estatistica({
-            dinheiro: -6000,
-            saude: 12,
+            dinheiro: -5800,
+            saude: 14,
             alegria: 6,
             meioAmbiente: -3,
             economia: 4,
@@ -344,13 +344,13 @@ let listaPropostas = [
 
         Solicitamos a aprovação deste projeto e sua inclusão no planejamento orçamentário do Município.
 
-        Custo: 4000 reais.
+        Custo: 3800 reais.
         Vereador Dayvyd Lavaniery.`,
 
         new Estatistica({
-            dinheiro: -4000,
+            dinheiro: -3800,
             alegria: 4,
-            educacao: 8,
+            educacao: 10,
             seguranca: 5,
             economia: 6,
             tituloNoticia: "Prefeitura lança projeto EJA e amplia acesso à educação para adultos",
@@ -388,14 +388,14 @@ let listaPropostas = [
 
         Solicitamos a inclusão desta proposta no planejamento orçamentário municipal e a análise das possibilidades de viabilização dessa ação, com base nas necessidades de segurança e na capacidade de gestão do Município.
     
-        Custo: 4600 reais.
+        Custo: 4400 reais.
         Vereador Abacate da Sombrinha.`,
 
         new Estatistica({
-            dinheiro: -3700,
+            dinheiro: -4400,
             alegria: 8,
-            seguranca: 12,
-            economia: 6,
+            seguranca: 13,
+            economia: 7,
             tituloNoticia: "Prefeitura amplia efetivo da segurança pública e população sente maior proteção",
             noticia: `A Prefeitura iniciou a contratação de novos oficiais da segurança pública como parte do plano de reforço ao efetivo da Guarda Municipal. A medida tem como objetivo ampliar o patrulhamento, garantir mais segurança e gerar empregos no setor.
 
@@ -428,12 +428,12 @@ let listaPropostas = [
         Custo: 0 reais.
         Vereador Dr. Tung Tung Tung Sahur.`,
         new Estatistica({
-            dinheiro: 4000,
+            dinheiro: 5000,
             alegria: -7,
             saude: -5,
             economia: -1,
             imposto: 2,
-            populacao: 1.063,
+            populacao: 1.07,
             tituloNoticia: "Prefeitura aprova aumento de impostos sobre anticoncepcionais e gera polêmica",
             noticia: `A administração municipal aprovou a proposta de aumento de impostos sobre produtos anticoncepcionais, com o objetivo de ampliar a arrecadação para programas de saúde e assistência social.
 
@@ -444,9 +444,9 @@ let listaPropostas = [
         }),
         new Estatistica({
             alegria: 7,
-            saude: 6,
-            economia: 6,
-            populacao: 0.978,
+            saude: 7,
+            economia: 7,
+            populacao: 0.99,
             tituloNoticia: "Município recusa aumento de impostos sobre anticoncepcionais e mantém acesso garantido",
             noticia: `A proposta de aumento de impostos sobre anticoncepcionais foi rejeitada pela Prefeitura, mantendo inalterada a carga tributária desses produtos no âmbito municipal.
 
@@ -465,14 +465,14 @@ let listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão do projeto no calendário oficial de eventos do Município, com a devida previsão orçamentária.
 
-        Custo: 5.000 reais.
+        Custo: 4.800 reais.
         Vereador Dr. Jurandy Egito.`,
         new Estatistica({
-            dinheiro: -5000,
+            dinheiro: -4800,
             alegria: 8,
             economia: 9,
-            educacao: 3,
-            populacao: 1.088,
+            educacao: 5,
+            populacao: 1.095,
             tituloNoticia: "Feira cultural movimenta cidade e fortalece economia criativa",
             noticia: `A realização da feira cultural promovida pela Prefeitura reuniu milhares de pessoas e destacou a diversidade artística local com apresentações musicais, exposições de arte, gastronomia e artesanato.
 
@@ -505,13 +505,13 @@ let listaPropostas = [
 
         Diante do exposto, solicitamos o apoio institucional e a inclusão da campanha no cronograma de ações da Secretaria Municipal de Saúde, com a devida previsão orçamentária para materiais de divulgação e estrutura de apoio.
 
-        Custo: 2.500 reais
+        Custo: 2.300 reais
         Vereador Amazias Zesty.`,
         new Estatistica({
-            dinheiro: -2500,
+            dinheiro: -2300,
             saude: 10,
-            economia: 4,
-            populacao: 1.012,
+            economia: 6,
+            populacao: 1.022,
             tituloNoticia: "Campanha de doação de sangue mobiliza cidade e salva vidas",
             noticia: `A campanha de doação de sangue promovida pela Prefeitura teve ampla adesão da população, com pontos móveis de coleta distribuídos em locais estratégicos da cidade.
 
@@ -540,12 +540,12 @@ let listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão do Projeto Vacinação 100 no plano de ações da Secretaria Municipal de Saúde, com a devida previsão orçamentária para materiais, pessoal de apoio e campanhas de divulgação.
 
-        Custo: 4.300 reais.
+        Custo: 4.100 reais.
         Vereador Dr. Monkey D. Alberto.`,
         new Estatistica({
-            dinheiro: -4300,
+            dinheiro: -4100,
             saude: 12,
-            infraestrutura: 5,
+            infraestrutura: 7,
             populacao: 1.072,
             tituloNoticia: "Município alcança recorde de cobertura vacinal com o Projeto Vacinação 100",
             noticia: `Com ações coordenadas e intensivas de mobilização, o Projeto Vacinação 100 atingiu sua meta de cobrir 100% do público-alvo nas principais campanhas de imunização.
@@ -575,13 +575,13 @@ let listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão do programa no planejamento estratégico da área de segurança pública, com a devida previsão orçamentária.
 
-        Custo: 4.800 reais.
+        Custo: 4.600 reais.
         Vereador Natsuki Subaru.`,
         new Estatistica({
-            dinheiro: -4800,
+            dinheiro: -4600,
             seguranca: 12,
             educacao: 7,
-            alegria: 6,
+            alegria: 8,
             populacao: 1.03,
             tituloNoticia: "Município investe em capacitação policial e melhora sensação de segurança",
             noticia: `Com o lançamento do programa de formação e capacitação continuada para policiais, a cidade deu um passo importante na valorização das forças de segurança.
@@ -614,13 +614,13 @@ let listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão dos Jogos Escolares no calendário oficial do Município, com a devida previsão orçamentária para transporte, premiações, materiais esportivos e estrutura de apoio.
 
-        Custo: 2900 reais.
+        Custo: 2700 reais.
         Vereador Zé ninguém.`,
         new Estatistica({
-            dinheiro: -2900,
+            dinheiro: -2700,
             alegria: 8,
-            saude: 5,
-            educacao: 5,
+            saude: 6,
+            educacao: 6,
             tituloNoticia: "Jogos Escolares Municipais promovem esporte e integração entre estudantes",
             noticia: `Com a realização dos Jogos Escolares Municipais, a cidade celebrou a integração entre estudantes da rede pública e privada.
 
@@ -650,12 +650,14 @@ let listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão do projeto no planejamento estratégico do Município, com a devida previsão orçamentária.
 
-        Custo: 5500 reais.
+        Custo: 5300 reais.
         Vereador Alguém debaixo do fogão.`,
         new Estatistica({
-            dinheiro: -5500,
-            economia: 9,
-            populacao: 1.119,
+            dinheiro: -5300,
+            economia: 18,
+            alegria: 10,
+            meioAmbiente: -7,
+            populacao: 1.12,
             tituloNoticia: "Município lança programa de incentivo ao turismo e aquece a economia local",
             noticia: `Com o lançamento do programa municipal de incentivo ao turismo, o Município visa valorizar seus atrativos naturais, culturais e históricos, fortalecendo a economia local.
 
@@ -665,9 +667,9 @@ let listaPropostas = [
 
         }),
         new Estatistica({
-            meioAmbiente: 7,
+            meioAmbiente: 10,
             economia: -7,
-            populacao: 0.974,
+            populacao: 0.98,
             tituloNoticia: "Proposta de incentivo ao turismo é rejeitada e preocupa setores econômicos",
             noticia: `A proposta para implementação de um programa municipal de incentivo ao turismo foi rejeitada, gerando apreensão em setores ligados ao comércio, hotelaria e cultura.
 
@@ -686,14 +688,14 @@ let listaPropostas = [
 
         Diante do exposto, solicitamos o apoio do Executivo Municipal para a formalização de um pedido oficial à Presidência da República, incluindo a disponibilização de terreno adequado e a inserção do projeto nas prioridades do Município.
 
-        Custo: 8000 (parte municipal).
+        Custo: 7500 (parte municipal).
         Vereador Chapolin Colorado.`,
         new Estatistica({
-            dinheiro: -8000,
-            educacao: 15,
-            economia: 8,
-            infraestrutura: 15,
-            meioAmbiente: -7,
+            dinheiro: -7500,
+            educacao: 20,
+            economia: 12,
+            infraestrutura: 20,
+            meioAmbiente: -9,
             tituloNoticia: "Município avança em parceria para construção de Instituto Federal",
             noticia: `O Executivo Municipal formalizou um pedido oficial à Presidência da República para a instalação de um Instituto Federal de Educação, Ciência e Tecnologia no Município.
 
@@ -705,7 +707,7 @@ let listaPropostas = [
         new Estatistica({
             educacao: -8,
             infraestrutura: -8,
-            alegria: -10,
+            alegria: -8,
             meioAmbiente: 8,
             tituloNoticia: "Projeto para Instituto Federal é rejeitado e gera debate na comunidade",
             noticia: `A proposta para a construção de um Instituto Federal no Município foi rejeitada no planejamento orçamentário, gerando preocupações entre estudantes, educadores e setores da sociedade civil.
@@ -725,10 +727,10 @@ let listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão da atividade no calendário de eventos do Município, com a devida previsão orçamentária para estrutura, som, material gráfico e apoio logístico.
 
-        Custo: 1.000 reais.
+        Custo: 800 reais.
         Vereador Dr. Benício Fonteiras.`,
         new Estatistica({
-            dinheiro: -1000,
+            dinheiro: -800,
             alegria: 2,
             economia: 2,
             educacao: 2,
@@ -770,11 +772,11 @@ let listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão do projeto no plano de governo municipal, com a devida previsão orçamentária.
         
-        Custo: 5400 reais.
+        Custo: 5200 reais.
         Vereador Edson Isaac.`,
         new Estatistica({
-            dinheiro: -5400,
-            saude: 10,
+            dinheiro: -5200,
+            saude: 12,
             populacao: 1.05,
             economia: 8,
             educacao: 8,
@@ -809,12 +811,12 @@ let listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão do curso no planejamento educacional do Município, com a devida previsão orçamentária para material didático, remuneração de instrutores e estrutura de apoio.
 
-        Custo: 2.300 reais.
+        Custo: 2.100 reais.
         Vereador Real Slim Shady.`,
         new Estatistica({
-            dinheiro: -2300,
-            educacao: 8,
-            economia: 4,
+            dinheiro: -2100,
+            educacao: 9,
+            economia: 5,
             populacao: 1.04,
             tituloNoticia: "Curso gratuito de inglês é ofertado para a população",
             noticia: `Por meio da iniciativa da Prefeitura, foi lançado um curso gratuito de inglês voltado para jovens, estudantes da rede pública e trabalhadores.
@@ -847,12 +849,12 @@ let listaPropostas = [
         Diante do exposto, solicitamos que o tema seja incluído na pauta de planejamento financeiro e legislativo do Município, com a devida previsão de impacto orçamentário.
 
         Custo: Nenhum (medida arrecadatória).
-        Vereador Taxad de Imposteira.`,
+        Vereador Sr. Impostinho.`,
         new Estatistica({
             imposto: 4,
-            alegria: -15,
-            economia: -14,
-            dinheiro: 5000,
+            alegria: -13,
+            economia: -12,
+            dinheiro: 6000,
             tituloNoticia: "Município planeja aumento de impostos para fortalecer serviços públicos",
             noticia: `Foi proposta a revisão e possível aumento dos impostos municipais gerais, visando garantir recursos para saúde, educação, infraestrutura e assistência social.
 
@@ -862,8 +864,8 @@ let listaPropostas = [
 
         }),
         new Estatistica({
-            alegria: 14,
-            economia: 14,
+            alegria: 15,
+            economia: 15,
             tituloNoticia: "Reajuste de impostos municipais provoca protestos e preocupação social",
             noticia: `A proposta de aumento dos impostos gerais no Município gerou insatisfação entre moradores e setores produtivos, que temem impactos negativos na economia local.
 
@@ -882,11 +884,11 @@ let listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão do programa no planejamento da Secretaria Municipal de Agricultura, com a devida previsão orçamentária.
 
-        Custo: 3.200 reais.
+        Custo: 3.000 reais.
         Vereador Mr. Potato Batatas.`,
         new Estatistica({
-            dinheiro: -3200,
-            meioAmbiente: 6,
+            dinheiro: -3000,
+            meioAmbiente: 8,
             economia: 9,
             populacao: 1.05,
             tituloNoticia: "Município investe em programa de incentivo à agricultura de batatas",
@@ -922,13 +924,13 @@ let listaPropostas = [
         O plano será executado com base em estudos técnicos e audiências públicas, respeitando os princípios da participação popular, da função social da cidade e da gestão democrática do território urbano, conforme previsto no Estatuto da Cidade (Lei nº 10.257/2001).
         
 
-        Custo: 4000 reais.
+        Custo: 3.800 reais.
         Vereadora Hatsune miku.
         `,
         new Estatistica({
-            dinheiro: -2000,
-            alegria: 9,
-            infraestrutura: 8,
+            dinheiro: -3800,
+            alegria: 7,
+            infraestrutura: 10,
             economia: 8,
             tituloNoticia: "Revitalização do centro histórico impulsiona cultura e economia local",
             noticia: `O Plano de Revitalização do Centro Histórico trouxe nova vida à região, com restauração de prédios históricos, criação de espaços culturais e feiras permanentes de artesanato e gastronomia.
@@ -968,9 +970,8 @@ let listaPropostas = [
         `,
 
         new Estatistica({
-            dinheiro: 2500,
-            imposto: 2,
-            alegria: -15,
+            dinheiro: 4500,
+            alegria: -12,
             economia: -12,
             tituloNoticia: "Prefeitura institui cobrança em estacionamentos públicos para melhorar mobilidade",
             noticia: `A Prefeitura Municipal anunciou a criação da Zona Municipal de Estacionamento Regulamentado (ZMER), com cobrança de tarifas para vagas em áreas centrais e de grande fluxo comercial.
@@ -982,7 +983,7 @@ let listaPropostas = [
         }),
         new Estatistica({
             alegria: 15,
-            economia: 12,
+            economia: 15,
             tituloNoticia: "População crítica à cobrança de estacionamento público na zona urbana",
             noticia: `A recente implementação da Zona Municipal de Estacionamento Regulamentado gerou insatisfação entre os usuários, que apontam perda de conforto e aumento de custos no dia a dia.
 
@@ -1003,13 +1004,13 @@ let listaPropostas = [
         
         A ação reflete o compromisso da Administração Pública com a valorização da cultura, a redução das desigualdades educacionais e o fortalecimento da cidadania por meio do acesso democrático ao conhecimento.
 
-        Custo: 6000 reais.
+        Custo: 5800 reais.
         Vereador Pedão.
         
         `,
         new Estatistica({
-            dinheiro: -6000,
-            economia: 5,
+            dinheiro: -5800,
+            economia: 7,
             educacao: 8,
             alegria: 9,
             infraestrutura: 11,
@@ -1051,9 +1052,9 @@ let listaPropostas = [
 
         new Estatistica({
             alegria: -15,
-            dinheiro: 5000,
+            dinheiro: 6000,
             saude: -10,
-            populacao: 0.981,
+            populacao: 0.993,
             tituloNoticia: "Suspensão do atendimento noturno em unidades secundárias de saúde",
             noticia: `Devido a restrições orçamentárias, a Prefeitura suspendeu temporariamente o atendimento noturno nas unidades de saúde secundárias, priorizando os serviços essenciais em UPAs e hospitais.
 
@@ -1064,7 +1065,7 @@ let listaPropostas = [
         }),
         new Estatistica({
             alegria: 18,
-            saude: 12,
+            saude: 14,
             tituloNoticia: "População lamenta suspensão do atendimento noturno em unidades de saúde",
             noticia: `A suspensão do atendimento noturno em unidades de saúde secundárias tem causado insatisfação entre munícipes, que enfrentam dificuldades para acesso a serviços fora do horário comercial.
 
@@ -1090,9 +1091,9 @@ let listaPropostas = [
         Vereador Manga Mangas.`,
 
         new Estatistica({
-            dinheiro: 4000,
-            meioAmbiente: -10,
-            economia: 10,
+            dinheiro: 5000,
+            meioAmbiente: -15,
+            economia: 12,
             infraestrutura: 10,
             imposto: -2,
             populacao: 1.068,
@@ -1104,7 +1105,7 @@ let listaPropostas = [
 		Especialistas projetam que o programa pode aumentar em 15% a atividade econômica e reduzir o desemprego em 2% nos próximos meses.`
         }),
         new Estatistica({
-            meioAmbiente: 7,
+            meioAmbiente: 12,
             infraestrutura: -8,
             economia: -5,
             imposto: 2,
@@ -1127,12 +1128,12 @@ let listaPropostas = [
 
         Solicitamos a viabilidade da proposta no planejamento estratégico municipal, com eventual destinação de espaço físico e equipe técnica multidisciplinar.
         
-        custo: 3800.
+        custo: 3600.
         Vereador Tales elementar.`,
 
         new Estatistica({
-            dinheiro: -3800,
-            infraestrutura: 8,
+            dinheiro: -3600,
+            infraestrutura: 10,
             meioAmbiente: -4,
             populacao: 1.014,
             economia: 8,
@@ -1147,7 +1148,7 @@ let listaPropostas = [
             infraestrutura: -6,
             meioAmbiente: 4,
             economia: -7,
-            populacao: 0.989,
+            populacao: 0.992,
             tituloNoticia: "Projeto da Casa do Empreendedor é rejeitado pela prefeitura",
             noticia: `A administração municipal decidiu não implementar o projeto da Casa do Empreendedor, alegando restrições orçamentárias.
 
@@ -1174,11 +1175,11 @@ let listaPropostas = [
         
         `,
         new Estatistica({
-            dinheiro: 3000,
-            infraestrutura: 6,
-            alegria: -12,
+            dinheiro: 4500,
+            infraestrutura: 5,
+            alegria: -9,
             educacao: -4,
-            populacao: 0.989,
+            populacao: 0.992,
             tituloNoticia: "Creches municipais são interditadas para reformas emergenciais",
             noticia: `A prefeitura anunciou hoje o fechamento temporário de quatro unidades de educação infantil devido a problemas estruturais identificados em vistorias técnicas. As creches permanecerão fechadas por aproximadamente seis meses para a realização de obras de adequação e reforço predial.
 
@@ -1188,7 +1189,7 @@ let listaPropostas = [
         }),
         new Estatistica({
             alegria: 14,
-            educacao: 4,
+            educacao: 6,
             infraestrutura: -6,
             tituloNoticia: "Prefeitura mantém creches abertas após revisão de laudos técnicos",
             noticia: `Após reavaliação dos laudos técnicos e amplo debate com a comunidade escolar, a administração municipal decidiu manter abertas as creches que estariam previstas para reforma.
@@ -1216,7 +1217,7 @@ let listaPropostas = [
         Vereador: micro faraday.
         `,
         new Estatistica({
-            dinheiro: 6000,
+            dinheiro: 9000,
             alegria: -25,
             seguranca: 8,
             meioAmbiente: 8,
@@ -1230,11 +1231,11 @@ let listaPropostas = [
 		Comerciantes e trabalhadores do setor de eventos manifestaram preocupação com a perda de renda durante o período que tradicionalmente movimenta a economia da cidade. A prefeitura prometeu criar um programa emergencial para amenizar os impactos nos profissionais afetados.`
         }),
         new Estatistica({
-            alegria: 20,
+            alegria: 22,
             saude: -6,
             seguranca: -6,
             meioAmbiente: -9,
-            economia: 20,
+            economia: 22,
             tituloNoticia: "Carnaval será mantido apesar de pressão por cortes orçamentários",
             noticia: `Após intenso debate, a prefeitura recuou da proposta de cancelar o Carnaval oficial e garantiu a realização do evento com orçamento reduzido. A decisão foi comemorada por foliões e trabalhadores do setor de eventos.
 
@@ -1256,15 +1257,15 @@ let listaPropostas = [
 
         A Administração Municipal reafirma, por meio desta política pública, seu compromisso com a formação cidadã, a prevenção de vulnerabilidades sociais e a promoção da saúde integral dos adolescentes matriculados na rede pública de ensino.
 
-        Custo: 3700 reais.
+        Custo: 3500 reais.
         Vereador Batatão.`,
 
         new Estatistica({
-            dinheiro: -3700,
+            dinheiro: -3500,
             saude: 8,
             alegria: 2,
-            educacao: 6,
-            populacao: 0.984,
+            educacao: 8,
+            populacao: 0.976,
             tituloNoticia: "Prefeitura implementa projeto pioneiro de educação sexual nas escolas",
             noticia: `O município lançou hoje o projeto "Conhecer para Cuidar", um programa abrangente de educação sexual que será ministrado nas escolas públicas a partir do 8º ano. A iniciativa visa reduzir os índices de gravidez na adolescência através de informação qualificada.
 
@@ -1275,7 +1276,7 @@ let listaPropostas = [
         new Estatistica({
             saude: -9,
             educacao: -4,
-            populacao: 1.069,
+            populacao: 1.071,
             tituloNoticia: "Projeto de educação sexual é rejeitado após polêmica",
             noticia: `A proposta de implementar educação sexual nas escolas foi arquivada após intenso debate na câmara municipal. Grupos conservadores alegaram que o tema deveria ser tratado exclusivamente no âmbito familiar.
 
@@ -1296,15 +1297,15 @@ let listaPropostas = [
 
         Solicitamos a inclusão dessa proposta na agenda de prioridades da Secretaria Municipal de Educação, com previsão orçamentária e avaliação técnica de sua implementação por etapas.
         
-        Custo: 2400 reais.
+        Custo: 2200 reais.
         Vereador Pitbul raivoso.
         `,
 
         new Estatistica({
-            dinheiro: -2400,
-            alegria: 3,
+            dinheiro: -2200,
+            alegria: 4,
             educacao: 7,
-            economia: 5,
+            economia: 6,
             tituloNoticia: "Prefeitura lança programa inovador de reforço escolar no contraturno",
             noticia: `A rede municipal de ensino ganhará um reforço importante com a implantação de aulas complementares no período inverso ao das aulas regulares. O programa visa atender estudantes com dificuldades de aprendizagem em português e matemática.
 
@@ -1334,14 +1335,14 @@ let listaPropostas = [
 
         Recomendamos a criação de uma comissão específica para regulamentar e operacionalizar o edital, com apoio da Secretaria Municipal de Cultura e participação da sociedade civil.
         
-        Custo: 3600 reais
+        Custo: 3400 reais
         Vereadora Aparecida.`,
 
         new Estatistica({
-            dinheiro: -3600,
+            dinheiro: -3400,
             economia: 10,
             alegria: 8,
-            infraestrutura: 3,
+            infraestrutura: 5,
             tituloNoticia: "Prefeitura lança edital inédito para fomentar a cultura local",
             noticia: `Artistas e produtores culturais da cidade ganharam um importante incentivo com o lançamento do Edital Municipal de Fomento à Produção Cultural. A iniciativa vai destinar recursos para projetos em diversas áreas artísticas, valorizando a criatividade local.
 
@@ -1373,12 +1374,12 @@ let listaPropostas = [
 
         Solicitamos análise da proposta por parte da Secretaria Municipal de Esportes e sua integração com ações de juventude, saúde e assistência social.
         
-        Custo: 1800 reais.
+        Custo: 1600 reais.
         Vereador Mennino ney`,
 
         new Estatistica({
-            dinheiro: -1800,
-            alegria: 4,
+            dinheiro: -1600,
+            alegria: 6,
             saude: 4,
             economia: 4,
             tituloNoticia: "Prefeitura lança programa 'Esporte para Todos' com atividades gratuitas",
@@ -1416,12 +1417,12 @@ let listaPropostas = [
 
         `,
         new Estatistica({
-            dinheiro: 4000,
+            dinheiro: 5500,
             alegria: -12,
-            infraestutura: 7,
-            economia: -10,
+            infraestutura: 9,
+            economia: -12,
             imposto: 3,
-            populacao: 0.991,
+            populacao: 0.975,
             tituloNoticia: "Prefeitura anuncia reajuste de 8,2% na tarifa de energia elétrica",
             noticia: `A administração municipal confirmou hoje o aumento de 8,2% nas contas de luz, que entrará em vigor no próximo mês. Segundo a prefeitura, o reajuste é necessário para cobrir os custos de manutenção e modernização da rede elétrica.
 
@@ -1431,7 +1432,7 @@ let listaPropostas = [
         }),
         new Estatistica({
             alegria: 14,
-            economia: 8,
+            economia: 10,
             infraestrutura: -2,
             tituloNoticia: "Prefeitura recua e mantém tarifa de energia sem reajuste",
             noticia: `Após forte pressão popular, a administração municipal decidiu não autorizar o aumento de 8,2% nas tarifas de energia elétrica que estava previsto. A decisão foi comemorada por consumidores e entidades de defesa do consumidor.
@@ -1453,13 +1454,13 @@ let listaPropostas = [
         
         Além disso, o monitoramento contribui para a organização do trânsito, para a identificação de suspeitos e para o aumento da sensação de segurança da população.
         
-        Custo: 4000
+        Custo: 3800
         Vereador Credson Tecnologias
         `,
 
         new Estatistica({
-            dinheiro: -4000,
-            alegria: 5,
+            dinheiro: -3800,
+            alegria: 7,
             seguranca: 10,
             infraestrutura: 8,
             tituloNoticia: "Prefeitura implanta sistema de câmeras de segurança em pontos estratégicos da cidade",
@@ -1496,17 +1497,17 @@ let listaPropostas = [
 
         Solicitamos, assim, a análise desta proposta por parte do Executivo Municipal, em articulação com as Secretarias de Segurança, Planejamento e Desenvolvimento Urbano, a fim de viabilizar os estudos técnicos necessários e encaminhamentos junto aos entes competentes.
         
-        Custo: 6000 reais.
+        Custo: 5800 reais.
         Vereador Renato Impera.`,
 
         new Estatistica({
-            dinheiro: -6000,
+            dinheiro: -5800,
             alegria: 10,
             seguranca: 15,
-            infraestrutura: 8,
-            populacao: 1.015,
+            infraestrutura: 10,
+            populacao: 1.025,
             tituloNoticia: "Prefeitura aprova construção de presídio municipal após polêmico debate",
-            noticia: `A administração municipal confirmou hoje a construção de uma unidade prisional na cidade após intensos debates. O projeto, orçado em R$ 5.200, promete gerar empregos e melhorar a segurança regional.
+            noticia: `A administração municipal confirmou hoje a construção de uma unidade prisional na cidade após intensos debates. O projeto, orçado em R$ 6.000, promete gerar empregos e melhorar a segurança regional.
 
 		O complexo penitenciário será construído em área afastada do centro urbano e contará com modernos sistemas de segurança. Autoridades afirmam que a unidade ajudará a desafogar o sistema carcerário estadual e trará investimentos para a região.
 
@@ -1536,13 +1537,13 @@ let listaPropostas = [
 
         Considerando a importância de tal iniciativa para o bem-estar coletivo e a preservação do meio ambiente, solicitamos a inclusão deste projeto nas diretrizes de planejamento e a avaliação de sua viabilidade, com vistas à sua implementação efetiva.
         
-        Custo: 3400 reais
+        Custo: 3200 reais
         Vereador Natural`,
 
         new Estatistica({
-            dinheiro: -3400,
+            dinheiro: -3200,
             meioAmbiente: 12,
-            saude: 3,
+            saude: 5,
             infraestrutura: 5,
             tituloNoticia: `${nomeCidade} cria Zona de Proteção Ambiental para preservar ecossistemas locais`,
             noticia: `A prefeitura de ${nomeCidade} anunciou hoje a criação de uma Zona de Proteção Ambiental (ZPA) que abrangerá áreas de relevante interesse ecológico no município. A medida visa proteger os recursos naturais e garantir o desenvolvimento sustentável da região.
@@ -1572,16 +1573,16 @@ let listaPropostas = [
 
         O Lar de Idosos será voltado especialmente à população de baixa renda e contemplará tanto moradores urbanos quanto de zonas rurais, com serviços de transporte assistido e atendimento multiprofissional. A iniciativa visa garantir dignidade, segurança, e qualidade de vida à população idosa, além de aliviar a sobrecarga de cuidadores informais e unidades básicas de saúde.
 
-        Custo: 4800 reais.  
+        Custo: 4600 reais.  
         Vereadora Vó Dirce.
         `,
 
         new Estatistica({
-            dinheiro: -4800,
-            alegria: 7,
+            dinheiro: -4600,
+            alegria: 8,
             saude: 8,
-            infraestrutura: 10,
-            populacao: 1.02,
+            infraestrutura: 11,
+            populacao: 1.023,
             tituloNoticia: `${nomeCidade} inaugura Lar Municipal para Idosos com estrutura completa`,
             noticia: `A prefeitura de ${nomeCidade} celebrou hoje a abertura do primeiro Lar Municipal para Idosos, destinado a acolher a população acima de 65 anos em situação de vulnerabilidade. A unidade oferecerá moradia assistida, cuidados médicos e atividades recreativas.
 
@@ -1653,13 +1654,14 @@ let listaPropostas = [
 
 		Com esta ação, busca-se promover a autonomia, a inclusão social e a melhoria da qualidade de vida da população idosa, respondendo ao desafio do envelhecimento demográfico com políticas públicas eficazes e humanizadas.
 
-		Custo: 2800  
+		Custo: 2600  
 		Vereador Raul Vitalício.
 		`,
         new Estatistica({
+            dinheiro: -2600,
             infraestrutura: 10,
-            saude: 2,
-            alegria: 3,
+            saude: 4,
+            alegria: 5,
             tituloNoticia: "Prefeitura lança linha de transporte exclusiva para idosos",
             noticia: `A nova linha de ônibus voltada à população idosa já está em operação. Com veículos adaptados e equipe capacitada, o serviço garante acesso seguro a serviços de saúde, lazer e assistência.
 
@@ -1669,7 +1671,7 @@ let listaPropostas = [
         new Estatistica({
             infraestrutura: -7,
             saude: -3,
-            alegria: -5,
+            alegria: -4,
             tituloNoticia: "Falta de transporte adequado dificulta rotina de idosos",
             noticia: `Sem uma linha de transporte específica, muitos idosos continuam enfrentando dificuldades para acessar postos de saúde, praças e serviços essenciais.
 
@@ -1688,14 +1690,13 @@ let listaPropostas = [
 
 		Com políticas bem estruturadas de acolhimento e acompanhamento, o município poderá enfrentar os desafios do envelhecimento populacional e escassez de mão de obra qualificada em áreas estratégicas.
 
-		Custo: 2500 reais. 
+		Custo: 2300 reais. 
 		Vereador Ibrahim Lopes.
 		`,
         new Estatistica({
-            dinheiro: 2500,
-            meioAmbiente: -3,
-            populacao: 1.05,
-            economia: 10,
+            dinheiro: -2300,
+            populacao: 1.07,
+            economia: 11,
             tituloNoticia: "Município atrai imigrantes com bolsas de trabalho e vê economia crescer",
             noticia: `O novo programa de incentivo à imigração lançado pela prefeitura já mostra resultados: bairros com baixa densidade populacional começaram a receber novos moradores, e o comércio local está aquecido.
 
@@ -1705,8 +1706,9 @@ let listaPropostas = [
 
         }),
         new Estatistica({
-            aleggria: -5,
+            alegria: -5,
             economia: -5,
+            populacao: 0.98,
             tituloNoticia: "Falta de incentivo à imigração mantém regiões vazias e economia estagnada",
             noticia: `A proposta de atrair imigrantes por meio de bolsas de trabalho foi rejeitada pela gestão municipal, frustrando expectativas de revitalização populacional e econômica.
 
@@ -1727,13 +1729,13 @@ let listaPropostas = [
 
 		Essa iniciativa não apenas valoriza o envelhecimento ativo e participativo, como também reduz barreiras intergeracionais e amplia o acesso da população idosa às inovações tecnológicas.
 
-		Custo: 2700 reais.  
+		Custo: 2500 reais.  
 		Vereador Professor Elísio.
 		`,
         new Estatistica({
-            dinheiro: -2700,
-            alegria: 7,
-            educacao: 10,
+            dinheiro: -2500,
+            alegria: 8,
+            educacao: 11,
             tituloNoticia: "Inclusão digital transforma a vida da população idosa no município",
             noticia: `Com o lançamento do programa de inclusão digital para idosos, dezenas de cidadãos acima dos 60 anos agora acessam redes sociais, realizam serviços públicos online e mantêm contato com familiares de forma mais frequente.
 
@@ -1743,8 +1745,9 @@ let listaPropostas = [
 
         }),
         new Estatistica({
-            alegria: -4,
-            educacao: -5,
+            alegria: -5,
+            educacao: -6,
+            populacao: 0.98,
             tituloNoticia: "Falta de apoio à inclusão digital deixa idosos à margem da tecnologia",
             noticia: `A proposta de oferecer cursos gratuitos de informática para a população idosa foi recusada, gerando críticas de educadores e representantes de associações da terceira idade.
 
@@ -1769,9 +1772,9 @@ let listaPropostas = [
 		Vereador Claudemir Bigode.
 		`,
         new Estatistica({
-            imposto: -5,
-            seguranca: 10,
-            alegria: 4,
+            imposto: -4,
+            seguranca: 12,
+            alegria: 9,
             tituloNoticia: "Município aprova isenção de impostos sobre câmeras de segurança",
             noticia: `A Câmara Municipal aprovou a proposta do vereador Claudemir Bigode que reduz impostos sobre câmeras de segurança, facilitando o acesso da população a esses equipamentos.
 
@@ -1781,8 +1784,9 @@ let listaPropostas = [
 
         }),
         new Estatistica({
-            seguranca: -5,
-            alegria: -2,
+            seguranca: -7,
+            alegria: -7,
+            imposto: 2,
             tituloNoticia: "Câmara rejeita proposta de redução de impostos sobre câmeras de segurança",
             noticia: `A proposta de isenção fiscal para câmeras de segurança foi rejeitada pela maioria dos vereadores, sob o argumento de que a renúncia de receita prejudicaria outras áreas essenciais do orçamento.
 
@@ -1803,12 +1807,13 @@ let listaPropostas = [
 
 		A medida será submetida à consulta pública e inserida no calendário oficial do município, respeitando os limites de feriados definidos pela legislação nacional.
 
-		Custo: 0 reais.
-		Vereadoror(a) Bombardillo Crocodilo/Lirio Lirio Larila.
+		Custo: 800 reais.
+		Vereador Bombardillo Crocodilo/Lirio Lirio Larila.
 		`,
         new Estatistica({
-            alegria: 15,
-            economia: -1,
+            dinheiro: -800,
+            alegria: 5,
+            economia: 5,
             tituloNoticia: `${nomeCidade} institui feriado do Tralalero Tralala como nova tradição municipal`,
             noticia: `A Câmara Municipal aprovou por ampla maioria a criação do feriado do Tralalero Tralala, data que entrará para o calendário oficial de ${nomeCidade}. A celebração acontecerá anualmente no dia 13 de julho.
 
@@ -1817,8 +1822,8 @@ let listaPropostas = [
 		Pesquisas indicam que feriados municipais podem aumentar em até 30% o movimento no comércio local e gerar empregos temporários na organização de eventos.`
         }),
         new Estatistica({
-            alegria: -10,
-            economia: 2,
+            alegria: -2,
+            economia: -3,
             tituloNoticia: `Câmara rejeita criação do feriado do Tralalero Tralala em ${nomeCidade}`,
             noticia: `A proposta do vereador Bombardillo Crocodilo para instituir o feriado do Tralalero Tralala foi arquivada após debate acalorado. Opositores argumentaram que a cidade já tem excesso de datas comemorativas.
 
@@ -1837,23 +1842,27 @@ let listaPropostas = [
         Diante do exposto, solicitamos a inclusão do tema no planejamento orçamentário e legislativo do Município, com a devida análise de impacto fiscal e jurídico.
 
         Custo: Nenhum (medida desonerativa)
-        Vereador Dr. Giuseppe Camolle`,
+        Vereador Sr. Anti-Impostinho.`,
 
         new Estatistica({
-            imposto: -15,
-            alegria: 9,
-            economia: -3,
+            imposto: -4,
+            alegria: 14,
+            economia: 14,
+            populacao: 1.03,
             tituloNoticia: "Câmara aprova redução de impostos municipais para aliviar carga tributária",
-            noticia: `A Câmara Municipal aprovou a proposta do vereador Dr. Giuseppe Camolle que visa reduzir impostos gerais, como IPTU e ISS, com o objetivo de estimular a economia local e aliviar a carga tributária sobre a população e empreendedores.
+            noticia: `A Câmara Municipal aprovou a proposta do vereador Sr. Anti-Impostinho que visa reduzir impostos gerais, como IPTU e ISS, com o objetivo de estimular a economia local e aliviar a carga tributária sobre a população e empreendedores.
 
         A medida, que passará por estudos técnicos e financeiros, busca incentivar o consumo, atrair novos negócios e gerar empregos, promovendo um ambiente mais competitivo no município. Comerciantes e moradores comemoraram a decisão, que pode também aumentar a arrecadação a médio prazo.
 
         “Essa redução vai ajudar muito meu pequeno negócio a crescer”, afirmou o empresário Carlos Mendes, dono de uma padaria no centro da cidade. A proposta não terá custo imediato para os cofres públicos, sendo uma medida desonerativa.`
         }),
         new Estatistica({
-            alegria: 1,
+            imposto: 2,
+            alegria: -10,
+            economia: -10,
+            populacao: 0.95,
             tituloNoticia: "Câmara rejeita proposta de redução de impostos municipais",
-            noticia: `A Câmara Municipal decidiu rejeitar a proposta do vereador Dr. Giuseppe Camolle que sugeria a redução de impostos como IPTU e ISS para estimular a economia local. A justificativa foi a preocupação com o impacto fiscal a curto prazo no orçamento público.
+            noticia: `A Câmara Municipal decidiu rejeitar a proposta do vereador Sr Anti-Impostinho que sugeria a redução de impostos como IPTU e ISS para estimular a economia local. A justificativa foi a preocupação com o impacto fiscal a curto prazo no orçamento público.
 
         Apesar dos argumentos de que a medida poderia aliviar a carga tributária e atrair investimentos, a maioria dos vereadores considerou o momento inadequado, citando a necessidade de manter a arrecadação para cobrir despesas essenciais. Empresários demonstraram frustração com a decisão.
 
@@ -1869,26 +1878,28 @@ let listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão do projeto no plano de revitalização urbana e meio ambiente do Município, com a devida previsão orçamentária para aquisição de mudas, insumos e mão de obra.
         
-        Custo: 1080 reais.
-        Vereador caveirinha.
+        Custo: 2200 reais.
+        Vereador Caveirinha.
 
         `,
         new Estatistica({
-            meioAmbiente: 10,
-            alegria: 4,
-            saude: 4,
+            dinheiro: -2200,
+            meioAmbiente: 8,
+            alegria: 6,
+            saude: 3,
             tituloNoticia: "Câmara aprova projeto de arborização no centro da cidade",
-            noticia: `A Câmara Municipal aprovou a proposta de plantação de árvores no centro da cidade, apresentada pelo vereador Dr. Giuseppe Camolle. O projeto visa melhorar a qualidade do ar, reduzir as ilhas de calor e embelezar os espaços públicos, com o plantio de espécies nativas e ornamentais em praças e calçadas.  
+            noticia: `A Câmara Municipal aprovou a proposta de plantação de árvores no centro da cidade, apresentada pelo vereador Caveirinha. O projeto visa melhorar a qualidade do ar, reduzir as ilhas de calor e embelezar os espaços públicos, com o plantio de espécies nativas e ornamentais em praças e calçadas.  
 
         A iniciativa, que contará com apoio técnico e participação da comunidade, também incluirá ações de educação ambiental em escolas. Moradores e comerciantes comemoraram a decisão, destacando os benefícios para o bem-estar e a valorização da região central.  
 
         “Ter mais árvores vai deixar a cidade mais fresca e agradável”, disse Maria Souza, dona de uma loja no centro. O projeto será incluído no plano de revitalização urbana, com previsão orçamentária para mudas e manutenção.`
         }),
         new Estatistica({
-            meioAmbiente: -7,
+            meioAmbiente: -6,
+            alegria: -2,
             saude: -4,
             tituloNoticia: "Câmara rejeita projeto de plantio de árvores no centro da cidade",
-            noticia: `A Câmara Municipal rejeitou a proposta de arborização no centro da cidade, apresentada pelo vereador Dr. Giuseppe Camolle. A justificativa foi a falta de recursos no orçamento e preocupações com possíveis conflitos com a infraestrutura urbana, como raízes danificando calçadas.  
+            noticia: `A Câmara Municipal rejeitou a proposta de arborização no centro da cidade, apresentada pelo vereador Caveirinha. A justificativa foi a falta de recursos no orçamento e preocupações com possíveis conflitos com a infraestrutura urbana, como raízes danificando calçadas.  
 
         Apesar dos argumentos sobre melhorias na qualidade do ar e no bem-estar da população, a maioria dos vereadores considerou que o momento não é adequado para o investimento. Ambientalistas e moradores expressaram frustração com a decisão.  
 
@@ -1904,28 +1915,28 @@ let listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão do projeto no plano de modernização da infraestrutura pública, com a devida previsão orçamentária e estudos técnicos de viabilidade.
         
-        Custo: 5000,
+        Custo: 4800,
         Vereador DeepSeek.
         
         `,
         new Estatistica({
-            dinheiro: -5000,
-            economia: 10,
-            meioAmbiente: 5,
-            infraestrutura: 5,
+            dinheiro: -4800,
+            economia: 8,
+            meioAmbiente: 12,
+            infraestrutura: 10,
             tituloNoticia: "Câmara aprova projeto de energia solar em prédios públicos para reduzir custos e promover sustentabilidade",
-            noticia: `A Câmara Municipal aprovou por maioria o projeto do vereador Dr. Giuseppe Camolle que prevê a instalação de sistemas de energia solar em escolas, postos de saúde e prédios administrativos. A medida visa reduzir gastos com energia elétrica em até 40% nos próximos anos, além de promover fontes renováveis.
+            noticia: `A Câmara Municipal aprovou por maioria o projeto do vereador DeepSeek que prevê a instalação de sistemas de energia solar em escolas, postos de saúde e prédios administrativos. A medida visa reduzir gastos com energia elétrica em até 40% nos próximos anos, além de promover fontes renováveis.
 
         O projeto será implementado através de parcerias públicas e recursos de emendas parlamentares. Técnicos estimam que a economia gerada poderá ser reinvestida em melhorias para a população. "É um avanço para o meio ambiente e para os cofres públicos", afirmou o secretário de Administração.
 
         Moradores comemoram a iniciativa: "Minha filha estuda em uma escola municipal que sempre sofre com falta de verba. Essa economia pode melhorar a educação", disse a dona de casa Eliana Torres, mãe de uma aluna da rede pública.`
         }),
         new Estatistica({
-            economia: -5,
-            meioAmbiente: -5,
-            infraestrutura: -3,
+            economia: -8,
+            meioAmbiente: -10,
+            infraestrutura: -7,
             tituloNoticia: "Proposta de energia solar em prédios públicos é rejeitada por falta de verba",
-            noticia: `A Câmara Municipal rejeitou o projeto de implantação de energia solar fotovoltaica em unidades públicas, apresentado pelo vereador Dr. Giuseppe Camolle. A justificativa foi a inviabilidade financeira no atual cenário orçamentário.
+            noticia: `A Câmara Municipal rejeitou o projeto de implantação de energia solar fotovoltaica em unidades públicas, apresentado pelo vereador DeepSeek. A justificativa foi a inviabilidade financeira no atual cenário orçamentário.
 
         Apesar dos argumentos sobre economia a longo prazo e benefícios ambientais, a maioria dos vereadores considerou o investimento inicial elevado. "A ideia é boa, mas não temos como bancar os custos agora", declarou o presidente da Comissão de Finanças.
 
@@ -1941,29 +1952,32 @@ let listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão desta proposta no planejamento estratégico do Município, com a devida previsão orçamentária para estudos de viabilidade, instalação piloto e estrutura de apoio.
         
-        Custo: 6600 reais
-        Vereador alberto.
+        Custo: 6400 reais
+        Vereador Alberto de Judas.
 
 
         `,
         new Estatistica({
-            dinheiro: -6600,
-            economia: 12,
-            alegria: 3,
-            meioAmbiente: 13,
+            dinheiro: -6400,
+            economia: 6,
+            alegria: 6,
+            meioAmbiente: 14,
+            infraestrutura: 10,
+            populacao: 1.025,
             tituloNoticia: "Câmara aprova projeto pioneiro de energia eólica para diversificar matriz energética da cidade",
-            noticia: `A Câmara Municipal aprovou hoje o projeto inovador do vereador Dr. Giuseppe Camolle que prevê a instalação de aerogeradores em áreas estratégicas da cidade. A iniciativa tem como objetivo reduzir custos com energia elétrica e promover fontes renováveis, colocando o município na vanguarda da sustentabilidade energética.
+            noticia: `A Câmara Municipal aprovou hoje o projeto inovador do vereador Alberto de Judas que prevê a instalação de aerogeradores em áreas estratégicas da cidade. A iniciativa tem como objetivo reduzir custos com energia elétrica e promover fontes renováveis, colocando o município na vanguarda da sustentabilidade energética.
 
         O projeto será implementado inicialmente de forma experimental, com parcerias entre poder público, universidades e empresas especializadas. Estudos preliminares indicam que a região possui ventos favoráveis para geração de energia limpa. "Esta é uma oportunidade para nos tornarmos referência em energias renováveis", destacou o secretário de Meio Ambiente.
 
         Moradores e empresários comemoraram a decisão. "Além de ajudar o meio ambiente, pode trazer novos empregos para nossa região", afirmou Carlos Mendes, dono de um restaurante local. A previsão é que os primeiros aerogeradores comecem a ser instalados dentro de 12 meses.`
         }),
         new Estatistica({
-            economia: -5,
-            meioAmbiente: -8,
-            alegria: -2,
+            economia: -8,
+            meioAmbiente: -12,
+            alegria: -5,
+            infraestrutura: -8,
             tituloNoticia: "Projeto de energia eólica é rejeitado pela Câmara Municipal",
-            noticia: `A proposta de implantação de energia eólica no município, apresentada pelo vereador Dr. Giuseppe Camolle, foi rejeitada pela maioria dos parlamentares. Os opositores alegaram altos custos iniciais e incertezas sobre a viabilidade técnica do projeto.
+            noticia: `A proposta de implantação de energia eólica no município, apresentada pelo vereador Alberto de Judas, foi rejeitada pela maioria dos parlamentares. Os opositores alegaram altos custos iniciais e incertezas sobre a viabilidade técnica do projeto.
 
         Apesar dos argumentos sobre benefícios ambientais e econômicos a longo prazo, os vereadores consideraram que o município não possui condições financeiras para bancar os estudos e a infraestrutura necessários. "É uma ideia interessante, mas prematura para nossa realidade atual", declarou o relator do projeto.
 
@@ -1984,21 +1998,24 @@ let listaPropostas = [
 
         `,
         new Estatistica({
-            imposto: -5,
-            meioAmbiente: 8,
-            economia: 7,
+            imposto: -2,
+            meioAmbiente: 10,
+            economia: 6,
+            alegria: 6,
             tituloNoticia: "Câmara aprova isenção fiscal para carros elétricos em incentivo à mobilidade sustentável",
-            noticia: `A Câmara Municipal aprovou hoje o projeto do vereador Dr. Giuseppe Camolle que concede isenção total de impostos municipais para veículos elétricos, incluindo IPVA municipal, taxas de licenciamento e estacionamento público. A medida busca estimular a adoção de transportes não poluentes e modernizar a frota veicular da cidade.
+            noticia: `A Câmara Municipal aprovou hoje o projeto do vereador Nascimento que concede isenção total de impostos municipais para veículos elétricos, incluindo IPVA municipal, taxas de licenciamento e estacionamento público. A medida busca estimular a adoção de transportes não poluentes e modernizar a frota veicular da cidade.
 
         "Esta é uma política visionária que coloca nossa cidade na vanguarda da mobilidade sustentável", declarou o secretário de Meio Ambiente durante a sessão. Estudos da prefeitura indicam que a medida pode reduzir em até 15% as emissões de CO2 no trânsito municipal nos próximos cinco anos.
 
         Proprietários de veículos elétricos comemoraram: "Agora ficou mais acessível manter meu carro limpo na cidade", disse a arquiteta Juliana Moraes, que adquiriu um veículo elétrico há seis meses. A isenção entra em vigor em 60 dias e inclui benefícios como liberação de rodízios municipais.`
         }),
         new Estatistica({
+            imposto: 2,
             economia: -5,
-            meioAmbiente: -6,
+            meioAmbiente: -10,
+            alegria: -8,
             tituloNoticia: "Proposta de isenção para carros elétricos é rejeitada por impacto no orçamento",
-            noticia: `A Câmara Municipal rejeitou o projeto que previa isenção de impostos para veículos elétricos, apresentado pelo vereador Dr. Giuseppe Camolle. A maioria dos parlamentares considerou que a medida criaria um rombo significativo nos cofres públicos sem benefício imediato para a maioria da população.
+            noticia: `A Câmara Municipal rejeitou o projeto que previa isenção de impostos para veículos elétricos, apresentado pelo vereador Nascimento. A maioria dos parlamentares considerou que a medida criaria um rombo significativo nos cofres públicos sem benefício imediato para a maioria da população.
 
         "Apoiamos a sustentabilidade, mas não podemos abrir mão de recursos essenciais para serviços públicos", argumentou o líder do governo na Casa. Dados da secretaria de Finanças estimavam perda anual de R$ 2,8 milhões em arrecadação.
 
@@ -2014,26 +2031,28 @@ let listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão do projeto no plano diretor municipal e na política de meio ambiente, com a devida previsão orçamentária para sua execução em etapas.
         
-        Custo: 2765 reais
-        Vereador risadinha
+        Custo: 2900 reais.
+        Vereador Risadinha.
 
         `,
         new Estatistica({
-            meioAmbiente: 10,
-            dinheiro: -2765,
-            economia: 2,
+            meioAmbiente: 8,
+            dinheiro: -2900,
+            economia: 5,
+            alegria: 2,
+            infraestrutura: 6,
             tituloNoticia: "Câmara transforma cidade em modelo nacional de reciclagem com projeto pioneiro",
-            noticia: `A Câmara Municipal aprovou por unanimidade o projeto "Cidade 100% Reciclada", proposta do vereador Dr. Giuseppe Camolle que posicionará o município como referência em sustentabilidade. O plano prevê coleta seletiva em 100% dos bairros, instalação de 30 ecopontos estratégicos e parcerias com cooperativas de catadores até 2026.
+            noticia: `A Câmara Municipal aprovou por unanimidade o projeto "Cidade 100% Reciclada", proposta do vereador Risadinha que posicionará o município como referência em sustentabilidade. O plano prevê coleta seletiva em 100% dos bairros, instalação de 30 ecopontos estratégicos e parcerias com cooperativas de catadores até 2026.
 
         "Esta é a política ambiental mais ousada dos últimos 20 anos", declarou a secretária de Meio Ambiente, destacando que o projeto pode desviar 80% do lixo dos aterros. A primeira fase começará pelo centro expandido, com investimento inicial de R$ 3,2 milhões em infraestrutura e educação ambiental.
 
         Cooperativas celebram: "Finalmente teremos estrutura digna para nosso trabalho", comemorou Maria dos Santos, presidente da CooperRecicla. Escolas municipais incorporarão oficinas de reciclagem no currículo a partir do próximo semestre.`
         }),
         new Estatistica({
-            meioAmbiente: -6,
-            economia: -2,
+            meioAmbiente: -4,
             economia: -4,
-            alegria: 6,
+            alegria: -4,
+            infraestrutura: -4,
             tituloNoticia: "Projeto ambicioso de reciclagem integral é barrado na Câmara",
             noticia: `O projeto "Cidade 100% Reciclada", que pretendia transformar o município em modelo nacional de sustentabilidade, foi rejeitado por 15 votos contra 10. Os opositores alegaram custos proibitivos (R$ 12 milhões totais) e complexidade operacional.
 
@@ -2051,24 +2070,26 @@ let listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão do projeto no planejamento da Secretaria Municipal de Educação, com a devida previsão orçamentária para aquisição dos equipamentos, treinamento de professores e suporte técnico.
         
-        Custo: 5400 reais
-        Vereador MW
+        Custo: 5200 reais
+        Vereador BMW
         
         `,
         new Estatistica({
-            dinheiro: -5400,
+            dinheiro: -5200,
             educacao: 14,
-            alegria: 5,
+            alegria: 9,
+            infraestrutura: 9,
             tituloNoticia: "Câmara aprova distribuição de tablets para todos os alunos da rede municipal",
-            noticia: `A Câmara Municipal aprovou hoje o projeto do vereador Dr. Giuseppe Camolle que prevê a distribuição de tablets educacionais para os 28 mil alunos da rede pública municipal. A iniciativa, que contará com investimento inicial de R$ 8,5 milhões, tem como objetivo reduzir a desigualdade digital e modernizar o ensino na cidade.
+            noticia: `A Câmara Municipal aprovou hoje o projeto do vereador BMW que prevê a distribuição de tablets educacionais para os 28 mil alunos da rede pública municipal. A iniciativa, que contará com investimento inicial de R$ 8,5 milhões, tem como objetivo reduzir a desigualdade digital e modernizar o ensino na cidade.
 
         "Esta é uma revolução na educação municipal", declarou a secretária de Educação, anunciando que os primeiros 5 mil dispositivos serão entregues já no início do próximo ano letivo. Os tablets virão com conteúdo pedagógico pré-instalado e acesso gratuito a plataformas educacionais.
 
         Pais e educadores comemoram: "Meus filhos finalmente terão as mesmas oportunidades que alunos de escolas particulares", disse a dona de casa Carla Santos, mãe de dois estudantes. Professores receberão capacitação especial para integrar a tecnologia às aulas.`
         }),
         new Estatistica({
-            educacao: -5,
-            alegria: -3,
+            educacao: -11,
+            alegria: -9,
+            infraestrutura: -7,
             tituloNoticia: "Projeto de tablets para escolas municipais é rejeitado por falta de verba",
             noticia: `O projeto que previa a distribuição de tablets para alunos da rede pública municipal foi rejeitado pela Câmara por 12 votos contra 9. A justificativa foi a incompatibilidade com o atual cenário orçamentário, que prioriza obras emergenciais em unidades escolares.
 
@@ -2086,30 +2107,26 @@ let listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão desta proposta no planejamento orçamentário e no plano de ação da Secretaria Municipal de Segurança, com a devida previsão de recursos.
         
-        Custo: 7000 reais
-        Vereador Thiago Freita
+        Custo: 3000 reais
+        Vereador Vogais
         
         
         `,
         new Estatistica({
-            dinheiro: -7000,
-            seguranca: 15,
-            alegria: 5,
-            populacao: 1.15,
-
+            dinheiro: -3000,
+            seguranca: 21,
             tituloNoticia: "Prefeitura e Câmara aprovam pacote de R$ 15 milhões para modernizar segurança municipal",
-            noticia: `Foi aprovado hoje o plano de investimentos em segurança pública proposto pelo vereador Dr. Giuseppe Camolle, com orçamento de R$ 15 milhões para aquisição de 30 novas viaturas, instalação de 500 câmeras de monitoramento e modernização da iluminação pública em áreas de risco. A medida integra o programa municipal "Cidade Segura".
+            noticia: `Foi aprovado hoje o plano de investimentos em segurança pública proposto pelo vereador Vogais, com orçamento de R$ 15 milhões para aquisição de 30 novas viaturas, instalação de 500 câmeras de monitoramento e modernização da iluminação pública em áreas de risco. A medida integra o programa municipal "Cidade Segura".
 
         "Estamos dando um salto na capacidade de prevenção e resposta", afirmou o secretário de Segurança, destacando que os recursos também incluem treinamento especializado para 200 guardas municipais e integração com o sistema estadual de inteligência. As primeiras câmeras começam a ser instaladas em 90 dias.
 
         Comerciantes e moradores de regiões críticas comemoram: "Finalmente teremos segurança para abrir nossos negócios até mais tarde", declarou André Lima, dono de um restaurante no centro. O projeto prevê ainda parcerias com universidades para análise de dados criminais.`
         }),
         new Estatistica({
-            seguranca: -10,
-            alegria: -4,
-            populacao: 0.16,
+            seguranca: -8,
+            alegria: -8,
             tituloNoticia: "Câmara rejeita pacote de investimentos em segurança por divergências sobre prioridades",
-            noticia: `O projeto de investimentos em segurança pública foi rejeitado pela Câmara Municipal após acalorados debates. A proposta do vereador Dr. Giuseppe Camolle, que previa R$ 15 milhões para viaturas, câmeras e capacitação, foi derrotada por 14 votos contra 11, com críticas à distribuição dos recursos.
+            noticia: `O projeto de investimentos em segurança pública foi rejeitado pela Câmara Municipal após acalorados debates. A proposta do vereador Vogais, que previa R$ 15 milhões para viaturas, câmeras e capacitação, foi derrotada por 14 votos contra 11, com críticas à distribuição dos recursos.
 
         "Precisamos primeiro resolver problemas estruturais básicos antes de investir em tecnologia", argumentou a líder da oposição. Técnicos da prefeitura alertaram sobre dificuldades de manutenção dos equipamentos a médio prazo sem garantia de verba adicional.
 
@@ -2124,29 +2141,26 @@ let listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão da proposta no plano de gestão da Secretaria Municipal de Saúde, com a devida previsão orçamentária.
         
-        Custo: 5576 reais
+        Custo: 3000 reais
         Vereador Dráuzio
-        
-        
+    
         `,
         new Estatistica({
-            dinheiro: -5576,
-            saude: 10,
-            alegria: 5,
-            infraestrutura: 10,
+            dinheiro: -3000,
+            saude: 21,
             tituloNoticia: "Câmara aprova amplo pacote de investimentos para fortalecer a saúde municipal",
-            noticia: `A Câmara Municipal aprovou por ampla maioria o projeto do vereador Dr. Giuseppe Camolle que prevê uma série de melhorias para a rede pública de saúde. A medida inclui a aquisição de novos equipamentos médicos, reformas em unidades de saúde e a contratação de profissionais para reforçar o atendimento à população.
+            noticia: `A Câmara Municipal aprovou por ampla maioria o projeto do vereador Dráuzio que prevê uma série de melhorias para a rede pública de saúde. A medida inclui a aquisição de novos equipamentos médicos, reformas em unidades de saúde e a contratação de profissionais para reforçar o atendimento à população.
 
         "Estamos dando um importante passo para garantir saúde de qualidade para todos os cidadãos", declarou o secretário municipal de Saúde durante a sessão. O projeto beneficiará especialmente as comunidades mais carentes, com ampliação dos serviços de atenção básica e especializada.
 
         Moradores comemoraram a decisão: "Finalmente teremos um posto de saúde digno no nosso bairro", disse a dona de casa Marta Silva, residente na Zona Leste. As primeiras ações devem começar ainda neste semestre, priorizando as regiões com maior carência de serviços.`
         }),
         new Estatistica({
-            saude: -5,
-            alegria: -4,
-            infraestrutura: -7,
+            saude: -6,
+            alegria: -5,
+            infraestrutura: -5,
             tituloNoticia: "Proposta de investimentos na saúde é rejeitada pela Câmara Municipal",
-            noticia: `O projeto que previa melhorias para a rede pública de saúde foi rejeitado pela Câmara Municipal após debates acalorados. A proposta do vereador Dr. Giuseppe Camolle, que incluía aquisição de equipamentos e reformas em unidades de saúde, não obteve votos suficientes para aprovação.
+            noticia: `O projeto que previa melhorias para a rede pública de saúde foi rejeitado pela Câmara Municipal após debates acalorados. A proposta do vereador Dráuzio, que incluía aquisição de equipamentos e reformas em unidades de saúde, não obteve votos suficientes para aprovação.
 
         "Reconhecemos a importância da proposta, mas o momento não é adequado para sua implementação", justificou o relator do projeto. Alguns vereadores defenderam que as ações precisam ser melhor planejadas para garantir sua efetividade.
 
@@ -2161,26 +2175,25 @@ let listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão da proposta no plano de desenvolvimento econômico do Município, com a devida previsão orçamentária.
         
-        Custo: 7000 reais
-        Vereador juao paulo
+        Custo: 3000 reais.
+        Vereador Juão Paulo.
 
         `,
         new Estatistica({
-            dinheiro: -7000,
-            economia: 15,
-            infraestrutura: 4,
+            dinheiro: -3000,
+            economia: 21,
             tituloNoticia: "Câmara aprova pacote de medidas para impulsionar a economia local",
-            noticia: `A Câmara Municipal aprovou hoje o projeto do vereador Dr. Giuseppe Camolle que estabelece um conjunto de ações para estimular o desenvolvimento econômico da cidade. A iniciativa prevê incentivos para pequenos negócios, programas de qualificação profissional e modernização da infraestrutura comercial.
+            noticia: `A Câmara Municipal aprovou hoje o projeto do vereador Dr. Juão Paulo que estabelece um conjunto de ações para estimular o desenvolvimento econômico da cidade. A iniciativa prevê incentivos para pequenos negócios, programas de qualificação profissional e modernização da infraestrutura comercial.
 
         "Estamos plantando as sementes para uma economia mais forte e inclusiva", declarou o secretário de Desenvolvimento Econômico. O pacote inclui ainda a realização de feiras empresariais e parcerias para facilitar o acesso ao crédito, com foco especial em jovens empreendedores e mulheres chefes de família.
 
         Comerciantes comemoraram a decisão: "Esses incentivos vão ajudar minha pequena loja a se recuperar após a crise", afirmou Carlos Mendes, dono de uma mercearia no bairro industrial. As primeiras ações devem começar ainda neste trimestre.`
         }),
         new Estatistica({
-            economia: -9,
-            infraestrutura: -3,
+            economia: -8,
+            alegria: -8,
             tituloNoticia: "Proposta de estímulo à economia local é rejeitada pela Câmara",
-            noticia: `O projeto que visava impulsionar a economia municipal foi rejeitado pela Câmara após intensos debates. A proposta do vereador Dr. Giuseppe Camolle, que incluía incentivos a pequenas empresas e programas de qualificação, não obteve maioria dos votos.
+            noticia: `O projeto que visava impulsionar a economia municipal foi rejeitado pela Câmara após intensos debates. A proposta do vereador Juão Paulo, que incluía incentivos a pequenas empresas e programas de qualificação, não obteve maioria dos votos.
 
         "A ideia é válida, mas precisa de ajustes para se adequar à realidade orçamentária", explicou o relator da matéria. Alguns vereadores defenderam que as ações propostas deveriam ter foco mais específico em setores estratégicos.
 
@@ -2195,46 +2208,60 @@ let listaPropostas = [
 
         Diante do exposto, solicitamos a inclusão da proposta no planejamento da Secretaria Municipal de Educação, com a devida previsão orçamentária para sua execução.
         
-        Custo: 4300 reais
-        Vereador Greg heffley
+        Custo: 3000 reais.
+        Vereador Greg Heffley.
         
         
         `,
         new Estatistica({
-
+            dinheiro: -3000,
+            educacao: 21,
             tituloNoticia: "Câmara aprova pacote histórico de investimentos para revolucionar educação municipal",
-            noticia: `A Câmara Municipal aprovou por unanimidade o ambicioso projeto de investimentos educacionais proposto pelo vereador Dr. Giuseppe Camolle. O plano prevê transformações profundas na rede municipal de ensino, com modernização de escolas, capacitação de professores e aquisição de tecnologias educacionais de ponta.
+            noticia: `A Câmara Municipal aprovou por unanimidade o ambicioso projeto de investimentos educacionais proposto pelo vereador Greg Heffley. O plano prevê transformações profundas na rede municipal de ensino, com modernização de escolas, capacitação de professores e aquisição de tecnologias educacionais de ponta.
 
         "Estamos escrevendo um novo capítulo na educação do nosso município", declarou emocionada a secretária de Educação, destacando que o projeto beneficiará mais de 50 mil alunos. As ações incluem desde reformas em unidades escolares até a implantação de laboratórios de ciências e robótica em todas as regionais.
 
         Professores e pais comemoram: "Meus filhos terão acesso à mesma qualidade de ensino das melhores escolas particulares", comemorou a dona de casa Eliana Costa, mãe de dois estudantes. As primeiras intervenções começam já no próximo mês, com prioridade para as escolas em pior estado de conservação.`
         }),
         new Estatistica({
+            educacao: -6,
+            infraestrutura: -5,
+            alegria: -5,
             tituloNoticia: "Projeto de modernização da educação municipal é barrado na Câmara",
-            noticia: `O amplo pacote de investimentos na educação pública municipal foi rejeitado após acirrada discussão na Câmara. A proposta do vereador Dr. Giuseppe Camolle, que prometia revolucionar as escolas da rede pública, não conseguiu os votos necessários para aprovação.
+            noticia: `O amplo pacote de investimentos na educação pública municipal foi rejeitado após acirrada discussão na Câmara. A proposta do vereador Greg Heffley, que prometia revolucionar as escolas da rede pública, não conseguiu os votos necessários para aprovação.
 
         "A iniciativa é louvável, mas desconsidera nossas reais possibilidades financeiras", argumentou o líder do governo. Estudos técnicos apontaram incompatibilidade entre o escopo do projeto e a capacidade atual de execução da secretaria de Educação.
 
         A comunidade escolar reagiu com frustração: "Mais uma vez a educação fica para depois", protestou a diretora Maria Fernandes, de uma escola na periferia. O vereador afirmou que fragmentará a proposta em projetos menores para tentar aprovação parcial ainda este ano.`})
     ),
 
-    new Proposta("Investimentos gerais na infarestrutura",
+    new Proposta("Investimentos gerais na infraestrutura",
         `Por meio da presente, propomos a realização de investimentos estratégicos na infraestrutura municipal, com o objetivo de modernizar e ampliar a rede viária, melhorar o sistema de abastecimento de água, saneamento básico, iluminação pública, e fortalecer a infraestrutura urbana e rural para garantir melhores condições de vida à população. A proposta abrange reparos, obras de pavimentação, expansão de redes elétricas e hidráulicas, além de projetos voltados para acessibilidade e mobilidade urbana.
 
         Esses investimentos visam impulsionar o desenvolvimento socioeconômico do Município, promover a inclusão social e garantir a sustentabilidade ambiental, atendendo às demandas atuais e futuras da comunidade. Ademais, contribuem para a valorização dos imóveis, atração de novos investimentos e melhoria da qualidade dos serviços públicos.
 
-        Diante do exposto, solicitamos a inclusão da proposta no planejamento orçamentário e estratégico da Prefeitura, com a devida previsão de recursos para sua execução.`,
+        Diante do exposto, solicitamos a inclusão da proposta no planejamento orçamentário e estratégico da Prefeitura, com a devida previsão de recursos para sua execução.
+        
+        Custo: 3000 reais
+        Vereador Lukete
+
+        
+        `,
         new Estatistica({
+            dinheiro: -3000,
+            infraestrutura: 21,
             tituloNoticia: "Câmara aprova megapacote de infraestrutura que transformará a cidade",
-            noticia: `Em sessão histórica, a Câmara Municipal aprovou por ampla maioria o ambicioso plano de investimentos em infraestrutura proposto pelo vereador Dr. Giuseppe Camolle. O projeto vai revolucionar a malha urbana com obras de pavimentação, saneamento básico completo e modernização do sistema de iluminação pública em todos os bairros.
+            noticia: `Em sessão histórica, a Câmara Municipal aprovou por ampla maioria o ambicioso plano de investimentos em infraestrutura proposto pelo vereador Lukete. O projeto vai revolucionar a malha urbana com obras de pavimentação, saneamento básico completo e modernização do sistema de iluminação pública em todos os bairros.
 
         "Estamos corrigindo décadas de atraso e preparando a cidade para o futuro", declarou o prefeito durante o anúncio. O pacote prevê ainda a universalização do acesso à água potável e a criação de corredores acessíveis para pessoas com deficiência.
 
         Moradores de áreas carentes comemoram: "Finalmente teremos ruas pavimentadas e esgoto tratado", comemorou a líder comunitária Rita Oliveira, da região Norte. As obras prioritárias começam em 60 dias, com cronograma de execução em etapas até 2026.`
         }),
         new Estatistica({
+            infraestrutura: -8,
+            alegria: -8,
             tituloNoticia: "Projeto que prometia revolucionar infraestrutura da cidade é rejeitado",
-            noticia: `O amplo plano de modernização da infraestrutura municipal foi barrado na Câmara após acalorados debates. A proposta do vereador Dr. Giuseppe Camolle, que previa obras em saneamento, pavimentação e iluminação pública, foi considerada "inviável no cenário atual" pela maioria dos parlamentares.
+            noticia: `O amplo plano de modernização da infraestrutura municipal foi barrado na Câmara após acalorados debates. A proposta do vereador Lukete, que previa obras em saneamento, pavimentação e iluminação pública, foi considerada "inviável no cenário atual" pela maioria dos parlamentares.
 
         "Apesar de necessário, o projeto exige recursos além da nossa capacidade", justificou o relator. Técnicos alertaram sobre riscos de licitações apressadas e sobrecarga na máquina pública para gerenciar tantas obras simultaneamente.
 
@@ -2247,22 +2274,33 @@ let listaPropostas = [
 
         Esses investimentos contribuirão para a proteção da biodiversidade local, a mitigação dos efeitos das mudanças climáticas e o fortalecimento das políticas públicas ambientais, além de promover a conscientização social e o engajamento comunitário em prol do meio ambiente.
 
-        Diante do exposto, solicitamos a inclusão da proposta no plano municipal de meio ambiente, com a devida previsão orçamentária para sua implementação.`,
+        Diante do exposto, solicitamos a inclusão da proposta no plano municipal de meio ambiente, com a devida previsão orçamentária para sua implementação.
+        
+        Custo: 3000.
+        Vereadora Jinx`,
+
         new Estatistica({
+            dinheiro: -3000,
+            meioAmbiente: 21,
             tituloNoticia: "Câmara aprova pacote de investimentos ambientais para preservação e sustentabilidade",
-            noticia: `A Câmara Municipal aprovou por ampla maioria o projeto de investimentos em meio ambiente proposto pelo vereador Dr. Giuseppe Camolle, que prevê recuperação de áreas degradadas, proteção de mananciais e ampliação de áreas verdes urbanas.  
+            noticia: `A Câmara Municipal aprovou por ampla maioria o projeto de investimentos em meio ambiente proposto pela vereadora Jinx, que prevê recuperação de áreas degradadas, proteção de mananciais e ampliação de áreas verdes urbanas.  
 
         A iniciativa, que será incluída no orçamento municipal, inclui ainda programas de educação ambiental e fiscalização para garantir práticas sustentáveis. "É um avanço para nossa cidade, que precisa urgentemente de políticas ecológicas de longo prazo", declarou a bióloga Marta Rios, integrante de uma ONG local.  
 
-        Moradores de bairros afetados por enchentes comemoraram a medida: "Finalmente teremos ações concretas para proteger nossos rios", disse o aposentado José Almeida. A prefeitura estima que os projetos gerem empregos verdes e melhorem a qualidade do ar e da água em até cinco anos.`
+        Moradores de bairros afetados por enchentes comemoraram a medida: "Finalmente teremos ações concretas para proteger nossos rios", disse o aposentado José Almeida. A prefeitura estima que os projetos gerem empregos verdes e melhorem a qualidade do ar e da água em até cinco anos.
+        `
         }),
+
         new Estatistica({
+            meioAmbiente: -6,
+            alegria: -5,
+            infraestrutura: -5,
             tituloNoticia: "Câmara barra investimentos em meio ambiente por falta de recursos",
-            noticia: `A proposta de ampliação de investimentos ambientais no município, apresentada pelo vereador Dr. Giuseppe Camolle, foi rejeitada pela maioria da Câmara sob alegação de "restrições orçamentárias". O projeto incluía recuperação de áreas verdes, proteção de nascentes e campanhas de conscientização.  
+            noticia: `A proposta de ampliação de investimentos ambientais no município, apresentada pela vereadora Jinx, foi rejeitada pela maioria da Câmara sob alegação de "restrições orçamentárias". O projeto incluía recuperação de áreas verdes, proteção de nascentes e campanhas de conscientização.  
 
         "Infelizmente, prioridades como saúde e segurança consomem nosso orçamento", justificou o relator da matéria. Ambientalistas criticaram a decisão: "É um retrocesso, já sofremos com erosões e poluição", protestou Carlos Mendes, do Movimento EcoVida.  
 
-        O vereador autor da proposta prometeu buscar parcerias com o governo estadual para viabilizar parte das ações. Enquanto isso, moradores de regiões com risco de deslizamentos temem pelo adiamento das medidas: "A natureza não espera", desabafou a dona de casa Lucia Santos.`
+        A vereadora autora da proposta prometeu buscar parcerias com o governo estadual para viabilizar parte das ações. Enquanto isso, moradores de regiões com risco de deslizamentos temem pelo adiamento das medidas: "A natureza não espera", desabafou a dona de casa Lucia Santos.`
         })
     ),
 
@@ -2271,18 +2309,32 @@ let listaPropostas = [
 
         Essas medidas visam criar um ambiente favorável à formação e ampliação das famílias, garantindo assistência integral durante a gravidez, parto e primeiros anos de vida, além de incentivar o planejamento familiar consciente e a responsabilidade social.
 
-        Diante do exposto, solicitamos a inclusão da proposta no plano municipal de saúde e assistência social, com a devida previsão orçamentária para sua execução.`,
+        Diante do exposto, solicitamos a inclusão da proposta no plano municipal de saúde e assistência social, com a devida previsão orçamentária para sua execução.
+        
+        Custo: 4400 reais.
+        Vereador Alguém do Outro Lado da Rua de Dentro`,
+
         new Estatistica({
+            dinheiro: -4400,
+            populacao: 1.12,
+            economia: -7,
+            saude: -7,
+            alegria: -1,
             tituloNoticia: "Município aprova pacote de incentivos para aumentar natalidade e apoiar famílias",
-            noticia: `A Câmara Municipal aprovou nesta semana o programa de incentivo à natalidade proposto pelo vereador Dr. Giuseppe Camolle, que prevê benefícios financeiros, ampliação da saúde materno-infantil e campanhas educativas para famílias.  
+            noticia: `A Câmara Municipal aprovou nesta semana o programa de incentivo à natalidade proposto pelo vereador Alguém do Outro Lado da Rua de Dentro, que prevê benefícios financeiros, ampliação da saúde materno-infantil e campanhas educativas para famílias.  
 
         Entre as medidas estão auxílios para gestantes, flexibilização de direitos trabalhistas e consultas pré-natal gratuitas. "Queremos reverter a queda demográfica e garantir um futuro sustentável para nossa cidade", afirmou o vereador durante a sessão.  
 
         Mães como Ana Lúcia, 32 anos, comemoraram: "Agora terei apoio para ter meu segundo filho". Especialistas destacam que o projeto pode reduzir a evasão de jovens e fortalecer a economia local em médio prazo. A prefeitura estima que os primeiros resultados apareçam em 3 anos.`
         }),
+
         new Estatistica({
+            populacao: 0.96,
+            economia: 7,
+            saude: 7,
+            alegria: 6,
             tituloNoticia: "Câmara rejeita proposta de incentivo à natalidade por 'prioridades conflitantes'",
-            noticia: `A proposta do vereador Dr. Giuseppe Camolle para aumentar a natalidade no município foi rejeitada por 12 votos a 5. O projeto, que incluía auxílios a gestantes e ampliação de creches, foi considerado "inviável financeiramente" pela maioria.  
+            noticia: `A proposta do vereador Alguém do Outro Lado da Rua de Dentro para aumentar a natalidade no município foi rejeitada por 12 votos a 5. O projeto, que incluía auxílios a gestantes e ampliação de creches, foi considerado "inviável financeiramente" pela maioria.  
 
         "Temos urgências como saneamento básico e segurança", justificou a líder do governo. Sociedades de pediatria criticaram a decisão: "Famílias pobres continuarão adiando a maternidade por falta de suporte", disse Dra. Renata Góes.  
 
@@ -2295,24 +2347,39 @@ let listaPropostas = [
 
         A campanha visa promover a saúde sexual e reprodutiva, fortalecer a cultura da prevenção e incentivar comportamentos responsáveis, contribuindo para a redução dos custos com tratamentos médicos e melhoria da qualidade de vida da comunidade.
 
-        Diante do exposto, solicitamos a inclusão da proposta no plano municipal de saúde pública, com a devida previsão orçamentária para sua realização.`,
+        Diante do exposto, solicitamos a inclusão da proposta no plano municipal de saúde pública, com a devida previsão orçamentária para sua realização.
+        
+        Custo: 5000 reais.
+        Vereador Falta de Amor Recíproco.`,
+
         new Estatistica({
+            dinheiro: -5000,
+            populacao: 0.91,
+            economia: 12,
+            saude: 10,
+            alegria: 9,
             tituloNoticia: "Município lança campanha de distribuição gratuita de camisinhas e conscientização sobre DSTs",
-            noticia: `A Câmara Municipal aprovou por unanimidade a proposta de campanha de prevenção e conscientização sobre o uso de camisinhas, apresentada pelo vereador Dr. Giuseppe Camolle. A iniciativa prevê a distribuição gratuita de preservativos em postos de saúde, escolas e locais públicos, além de palestras educativas.
+            noticia: `A Câmara Municipal aprovou por unanimidade a proposta de campanha de prevenção e conscientização sobre o uso de camisinhas, apresentada pelo vereador Falta de Amor Recíproco. A iniciativa prevê a distribuição gratuita de preservativos em postos de saúde, escolas e locais públicos, além de palestras educativas.
 
         "Esta é uma medida de saúde pública essencial para reduzir as DSTs e gravidezes não planejadas entre nossos jovens", afirmou o Secretário Municipal de Saúde durante o anúncio. Estudantes comemoraram a decisão: "Agora teremos acesso fácil a informações e métodos preventivos", disse Maria Eduarda, 17 anos.
 
         A campanha, que terá início no próximo mês, incluirá parcerias com unidades básicas de saúde e ONGs especializadas. Especialistas estimam que a medida pode reduzir em até 30% os casos de sífilis e HIV na cidade nos próximos dois anos.`
         }),
+
         new Estatistica({
+            populacao: 1.03,
+            economia: -8,
+            saude: -8,
+            alegria: -8,
             tituloNoticia: 'Câmara rejeita campanha de prevenção sexual sob alegação de "conteúdo inadequado"',
             noticia: `A proposta de campanha educativa sobre uso de camisinhas foi rejeitada pela maioria dos vereadores, que alegaram "incompatibilidade com valores familiares". O projeto, que previa distribuição gratuita de preservativos e palestras em escolas, foi arquivado após acalorados debates.
 
         "Temos que preservar a inocência das crianças", declarou o vereador opositor. Profissionais de saúde reagiram com indignação: "Estão negando informação que salva vidas", criticou a Dra. Ana Beatriz, infectologista.
 
-        O vereador proponente, Dr. Giuseppe Camolle, lamentou: "O preconceito venceu a saúde pública". Enquanto isso, ativistas prometem pressionar por nova votação. "Jovens continuarão expostos a riscos por falta de orientação", alertou um representante de ONG que combate a AIDS.`
+        O vereador proponente, Falta de Amor Recíproco, lamentou: "O preconceito venceu a saúde pública". Enquanto isso, ativistas prometem pressionar por nova votação. "Jovens continuarão expostos a riscos por falta de orientação", alertou um representante de ONG que combate a AIDS.`
         })
     ),
+
 ];
 // funções gerais
 
