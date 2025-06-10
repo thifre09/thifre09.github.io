@@ -14,19 +14,12 @@ let imposto = 10;
 let satisfacaoPopulacao = 50;
 let IndexPropostaAtual = null;
 
-// for (let i=0; i < 1000; i++) {
-//     const adiouElement = document.createElement("audio");
-//     adiouElement.id = "audio"+i;
-//     const source = document.createElement("source");
-//     source.src = "assets/images/mayor-simulator/WhatsApp Audio 2025-06-07 at 18.12.37.mpeg";
-//     adiouElement.appendChild(source);
-//     document.querySelector("body").appendChild(adiouElement)
-//     setTimeout(() => {
-//         const audio = document.getElementById("audio"+(i+1));
-//         audio.volume = 1;
-//         audio.play();
-//     }, 1*i)
-// }
+const audio = document.getElementById("musicaFundo");
+
+document.addEventListener("click", () => {
+    audio.volume = 0.5;
+    audio.play();
+}, { once: true });
 
 class Proposta {
 
