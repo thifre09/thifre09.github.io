@@ -2514,7 +2514,7 @@ function verificarEventosMensais(mesesAtuais) {
 }
 
 function acaoPeriodica() {
-    dinheiro += (populacao / 20) * (imposto / 5);
+    dinheiro += (populacao / 25) * (imposto / 5);
     saude -= 2;
     alegria -= 2;
     seguranca -= 2;
