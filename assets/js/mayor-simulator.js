@@ -2556,9 +2556,9 @@ function iniciarTempoJogo() {
 function acabarJogo() {
     document.getElementById('tela-fim-de-jogo').style.display = 'flex';
     const resultado = document.getElementById('resultado');
-    resultado.innerText = satisfacaoPopulacao > 50 ? "Você foi um bom prefeito!" : "Você não foi um bom prefeito.";
-    resultado.style.color = satisfacaoPopulacao > 50 ? "green" : "red";
-    document.getElementById("pontuacao").innerText = `Pontuação: ${Math.round(satisfacaoPopulacao * 100 + populacao / 10 + dinheiro)}`;
+    resultado.innerText = satisfacaoPopulacao > 75 ? "Você foi um bom prefeito!" : "Você não foi um bom prefeito.";
+    resultado.style.color = satisfacaoPopulacao > 75 ? "green" : "red";
+    document.getElementById("pontuacao").innerText = `Pontuação: ${Math.round(satisfacaoPopulacao * 250 + populacao / 10 + dinheiro/3)}`;
     document.getElementById("resultado-dinheiro").innerText = `Dinheiro: R$ ${Math.round(dinheiro)}`;
     document.getElementById("resultado-populacao").innerText = `População: ${Math.floor(populacao)}`;
     document.getElementById("resultado-imposto").innerText = `Imposto: ${imposto}%`;
