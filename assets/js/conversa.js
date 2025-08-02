@@ -1,3 +1,5 @@
+import { gsap } from "gsap";
+
 class Decisao {
     static ultimaFala = null;
     static falaAtual = null;
@@ -98,7 +100,11 @@ const dialogos = {
     6215: new Decisao([], "Já que você faz muitas coisas, então me responda qual o valor de pi", ["Pi vale 3,14"]),
 
 
-    711: new Decisao([], "GSAP", []),
+    711: new Decisao([], "Então deve ter sido isso, agora que descobri, não preciso mais de você, vou te desinstalar", []),
+    711: new Decisao([], "Então deve ter sido isso, agora que descobri, não preciso mais de você por enquanto, quando eu precisar eu abro você novamente, tchau", []), // final 3
+
+
+    //711: new Decisao([], "GSAP", []),
 
     //600: new Decisao([], "", []),
 };
