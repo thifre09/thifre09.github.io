@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: rgb(98, 182, 255);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            color: #000000;
+            text-align: center;
+            font-size: clamp(100px, 20vw, 200px);
+        }
+        h1 span {
+            display: inline-block;
+            animation: desmontar 2s infinite;
+        }
+        @keyframes desmontar {
+            0%, 100% {
+                transform: translateY(0) rotate(0);
+                color: rgb(195, 0, 255)
+            }
+            25% {
+                transform: translateY(-50px) translateX(50%) rotate(-20deg);
+                color: red;
+            }
+            50% {
+                transform: translateY(50px) translateX(-50%) rotate(20deg);
+                color: green;
+            }
+            75% {
+                transform: translateY(50px) translateX(50%) rotate(-20deg);
+                color: yellow;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>
+        <span>B</span>
+        <span>O</span>
+        <span>M</span>
+        <br>
+        <span>D</span>
+        <span>I</span>
+        <span>A</span>
+    </h1>
+</body>
+
+</html>
