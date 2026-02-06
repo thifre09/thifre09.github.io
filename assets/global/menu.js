@@ -18,39 +18,139 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Lógica para arrastar as divs
             function mover(objeto) {
+                let draggedElement = null;
+                let shiftX, shiftY;
+                let startX, startY;
+                let isDragging = false;
+                const MOVE_THRESHOLD = 5; // pixels de movimento para considerar como arraste
+                
+                const moveAt = (pageX, pageY) => {
+                    if (!draggedElement) return;
+                    draggedElement.style.left = `${pageX - shiftX - window.scrollX}px`;
+                    draggedElement.style.top = `${pageY - shiftY - window.scrollY}px`;
+                };
+                
+                // Mouse events
                 objeto.addEventListener('mousedown', (e) => {
+                    // Se o clique foi em uma imagem dentro do elemento, permita o clique normal
+                    if (e.target.tagName === 'IMG') {
+                        return;
+                    }
+                    
                     draggedElement = objeto;
                     const rect = draggedElement.getBoundingClientRect();
-                    const shiftX = e.clientX - rect.left;
-                    const shiftY = e.clientY - rect.top;
-
-                    // Função para mover o painel
-                    const moveAt = (pageX, pageY) => {
-                        draggedElement.style.left = `${pageX - shiftX - window.scrollX}px`;
-                        draggedElement.style.top = `${pageY - shiftY - window.scrollY}px`;
+                    shiftX = e.clientX - rect.left;
+                    shiftY = e.clientY - rect.top;
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    isDragging = false;
+                    
+                    const onMouseMove = (e) => {
+                        // Verifica se o movimento passou do threshold
+                        if (!isDragging && 
+                            (Math.abs(e.clientX - startX) > MOVE_THRESHOLD || 
+                             Math.abs(e.clientY - startY) > MOVE_THRESHOLD)) {
+                            isDragging = true;
+                        }
+                        
+                        if (isDragging) {
+                            moveAt(e.pageX, e.pageY);
+                        }
                     };
-
-                    const onMouseMove = (event) => {
-                        moveAt(event.pageX, event.pageY);
-                    };
-
-                    // Começa a mover com o mouse
-                    document.addEventListener('mousemove', onMouseMove);
-
-                    // Solta o painel ao soltar o mouse
-                    document.addEventListener('mouseup', () => {
-                        draggedElement = null;
+                    
+                    const onMouseUp = (e) => {
                         document.removeEventListener('mousemove', onMouseMove);
-                    }, { once: true });
+                        document.removeEventListener('mouseup', onMouseUp);
+                        
+                        // Se não estava arrastando, permite o clique
+                        if (!isDragging && e.target.tagName === 'IMG') {
+                            e.target.click();
+                        }
+                        
+                        draggedElement = null;
+                    };
+                    
+                    document.addEventListener('mousemove', onMouseMove);
+                    document.addEventListener('mouseup', onMouseUp);
                 });
+                
+                // Touch events
+                objeto.addEventListener('touchstart', (e) => {
+                    // Se o toque foi em uma imagem dentro do elemento
+                    if (e.target.className === 'fechar') {
+                        // Marca para permitir o clique se não houver movimento
+                        const touch = e.touches[0];
+                        startX = touch.clientX;
+                        startY = touch.clientY;
+                        isDragging = false;
+                        
+                        const onTouchMove = (e) => {
+                            const touch = e.touches[0];
+                            if (!isDragging && 
+                                (Math.abs(touch.clientX - startX) > MOVE_THRESHOLD || 
+                                 Math.abs(touch.clientY - startY) > MOVE_THRESHOLD)) {
+                                isDragging = true;
+                                e.preventDefault();
+                            }
+                        };
+                        
+                        const onTouchEnd = (e) => {
+                            document.removeEventListener('touchmove', onTouchMove);
+                            document.removeEventListener('touchend', onTouchEnd);
+                            
+                            // Se não estava arrastando, dispara o clique
+                            if (!isDragging) {
+                                e.target.click();
+                            }
+                        };
+                        
+                        document.addEventListener('touchmove', onTouchMove);
+                        document.addEventListener('touchend', onTouchEnd, { once: true });
+                        
+                        return;
+                    }
+                    
+                    // Caso contrário, trata como arraste
+                    e.preventDefault();
+                    draggedElement = objeto;
+                    const touch = e.touches[0];
+                    const rect = draggedElement.getBoundingClientRect();
+                    shiftX = touch.clientX - rect.left;
+                    shiftY = touch.clientY - rect.top;
+                    startX = touch.clientX;
+                    startY = touch.clientY;
+                    isDragging = false;
+                    
+                    const onTouchMove = (e) => {
+                        const touch = e.touches[0];
+                        if (!isDragging && 
+                            (Math.abs(touch.clientX - startX) > MOVE_THRESHOLD || 
+                             Math.abs(touch.clientY - startY) > MOVE_THRESHOLD)) {
+                            isDragging = true;
+                        }
+                        
+                        if (isDragging) {
+                            moveAt(touch.pageX, touch.pageY);
+                        }
+                    };
+                    
+                    const onTouchEnd = () => {
+                        document.removeEventListener('touchmove', onTouchMove);
+                        document.removeEventListener('touchend', onTouchEnd);
+                        draggedElement = null;
+                    };
+                    
+                    document.addEventListener('touchmove', onTouchMove);
+                    document.addEventListener('touchend', onTouchEnd, { once: true });
+                }, { passive: false });
             }
-            let draggedElement = null;
-
+            
+            // Aplicar a todos os elementos
             mover(document.getElementById('updates'));
-            mover(document.getElementById('calculadora'))
-            mover(document.getElementById('bloco'))
-            mover(document.getElementById('conquistasGeral'))
-            mover(document.getElementById('configuracoes'))
+            mover(document.getElementById('calculadora'));
+            mover(document.getElementById('bloco'));
+            mover(document.getElementById('conquistasGeral'));
+            mover(document.getElementById('configuracoes'));
 
             // Carrega as notas do localStorage quando a página é carregada
             const savedNotes = JSON.parse(localStorage.getItem('notes')) || [];

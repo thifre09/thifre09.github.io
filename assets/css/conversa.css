@@ -1,0 +1,177 @@
+#div-main {
+    background-color: aliceblue;
+    height: 100vh;
+}
+
+#opcoes-principal {
+    box-sizing: border-box;
+    width: 100%;
+    height: 92vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+#opcoes-principal > button {
+    border: none;
+    border-radius: 10px;
+    font-size: 5rem;
+    background-color: #87CEFA;
+    transition: 0.4s;
+    cursor: pointer;
+}
+
+#opcoes-principal > button:hover {
+    transform: scale(1.35);
+    background-color: #69c5ff;
+}
+
+#menu-principal > h3 {
+    margin: 0;
+    height: 5vh;
+    text-align: center;
+    font-size: larger;
+    color: red;
+}
+
+@media (max-width: 600px) {
+    #menu-principal > h3 {
+        font-size: medium;
+    }
+}
+
+div#jogo {
+    height: 100vh;
+    background-color: aliceblue;
+    min-height: fit-content;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+#ia {
+    width: 40%;
+    height: 90vh;
+    background-color: rgb(255, 255, 255);
+    border: solid 1px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#texto {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.fala-ia {
+    text-align: center;
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+.fala-player {
+    max-width: 70%;
+    padding: 1%;
+    background-color: rgb(235, 235, 235);
+    border-radius: 15px;
+    align-self: flex-end;
+}
+
+#prompt {
+    box-sizing: border-box;
+    width: 98%;
+    height: fit-content;
+    margin: 1%;
+    padding-left: 1%;
+    padding-top: 2%; 
+    padding-bottom: 2%;
+    font-size: x-large;
+    border-radius: 15px;
+    background-color: rgb(215, 215, 215);
+}
+
+#opcoes {
+    width: 30%;
+    height: 90vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: rgb(214, 236, 255);
+    border-radius: 15px;
+}
+
+#opcoes > button {
+    width: fit-content;
+    height: fit-content;
+    margin: 3%;
+    border: none;
+    border-radius: 10px;
+    background-color: rgb(255, 76, 76);
+    font-size: x-large;
+}
+
+#opcoes > div {
+    height: 95%;
+    width: 100%;
+    padding: 5%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+#opcoes > div > button {
+    font-size: medium;
+    width: 100%;
+    height: fit-content;
+    border: none;
+    border-radius: 10px;
+    background-color: rgb(156, 215, 208);
+    cursor: pointer;
+}
+
+#reiniciar {
+    cursor: pointer;
+}
+
+@media (max-width:600px) {
+    div#jogo {
+        flex-direction: column;
+    }
+
+    #ia {
+        margin-top: 10%;
+        width: 90%;
+        height: 59%;
+    }
+
+    #texto {
+        font-size: 1.3rem;
+    }
+
+    #opcoes {
+        margin-top: 5%;
+        width: 90%;
+        height: fit-content;
+    }
+
+    #opcoes > button {
+        width: fit-content;
+        height: fit-content;
+    }
+
+    #opcoes > div {
+        height: fit-content;
+    }
+
+    #opcoes > div > button{
+        width: 40%;
+        margin: 3%;
+        font-size: 1.3rem;
+    }
+}
