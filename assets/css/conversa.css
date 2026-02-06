@@ -16,7 +16,7 @@
 #opcoes-principal > button {
     border: none;
     border-radius: 10px;
-    font-size: xx-large;
+    font-size: 5rem;
     background-color: #87CEFA;
     transition: 0.4s;
     cursor: pointer;
@@ -132,6 +132,10 @@ div#jogo {
     border: none;
     border-radius: 10px;
     background-color: rgb(156, 215, 208);
+    cursor: pointer;
+}
+
+#reiniciar {
     cursor: pointer;
 }
 
