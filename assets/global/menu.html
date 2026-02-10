@@ -4,11 +4,11 @@
 
 <aside id="menu-lateral" style="display: none;">
     <div id="fechar-menu-lateral">
-        <img src="assets/images/icones/cruz.png" style="width: 50px;" onclick="abrirMenu(true)">
+        <img src="assets/images/icones-uteis/cruz.png" style="width: 50px;" onclick="abrirMenu(true)">
     </div>
     <button onclick="abrir(false, 'notas-atualizacao')">Notas da atualização</button>
     <!--<button onclick="abrir(false, 'calculadora')">Calculadora</button>-->
-    <!--<button onclick="abrir(false, 'blocoNotas')">Bloco de notas</button>-->
+    <!--<button onclick="abrir(false, 'bloco-notas')">Bloco de notas</button>-->
     <!--<button onclick="abrir(false, 'conquistas-geral')">Conquistas</button>-->
     <!--<button onclick="abrir(false, 'configuracoes')">Configurações</button>-->
 </aside>
@@ -16,15 +16,15 @@
 <h1 id="title"><a href="index.html">Meu site incrível</a></h1>
 
 <nav id="barra-main">
-    <div onclick="abrirMenu(false)" class="botao-menu-lateral"><img src="assets/images/icones/menu.png"></div>
+    <div onclick="abrirMenu(false)" class="botao-menu-lateral"><img src="assets/images/icones-uteis/menu.png"></div>
     <h6 id="titulo"><a href="#title">Bem vindo ao incrível site</a></h6>
 </nav>
 
-<div onclick="abrirMenu(false)" class="botao-menu-lateral" id="botao-menu-lateral-reserva" style="display: none;"><img src="assets/images/icones/menu.png"></div>
+<div onclick="abrirMenu(false)" class="botao-menu-lateral" id="botao-menu-lateral-reserva" style="display: none;"><img src="assets/images/icones-uteis/menu.png"></div>
 
 <div id="updates" style="display: none;">
     <div class="fechar-container">
-        <img src="assets/images/icones/cruz.png" class="fechar" onclick="abrir(true, 'updates')">
+        <img src="assets/images/icones-uteis/cruz.png" class="fechar" onclick="abrir(true, 'updates')">
     </div>
 
     <h5>Ver. Beta 2.2</h5>
@@ -215,9 +215,11 @@
             </svg>
         </button></div>
     </header>
-    <section id="notas-atualizacao-container">  
-        
-    </section>
+    <div class="aside-scroll">
+        <section id="notas-atualizacao-container">  
+            
+        </section>
+    </div>
 </div>
 
 <div class="aside-window" id="calculadora" style="display: none;">
@@ -270,7 +272,7 @@
     </table>
 </div>
 
-<div class="aside-window" id="blocoNotas" style="display: none;">
+<div class="aside-window" id="bloco-notas" style="display: none;">
     <div class="fechar-container">
         <img src="assets/images/icones/cruz.png" class="fechar" onclick="abrir(true, 'blocoNotas')">
     </div>

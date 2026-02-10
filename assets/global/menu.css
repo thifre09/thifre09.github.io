@@ -1,3 +1,7 @@
+:root{
+    --date-size: 1rem;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -173,14 +177,21 @@ div.aside-window {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
-    overflow: auto; 
-    position: fixed;
+    overflow: visible;
+    position: fixed; /* borda aqui */
     top: 20px;
     left: 20px;
     cursor: default;
     z-index: 101;
     margin: 0;
     padding: 0;
+}
+
+div.aside-window .aside-scroll {
+    overflow: auto;
+    height: calc(100% - 8vh); /* ajuste conforme header */
+    box-sizing: border-box;
+    padding: 10px;
 }
 
 header.aside-window-header {
@@ -195,41 +206,38 @@ header.aside-window-header {
         justify-content: flex-start;
         margin: 1% 1% 1% 0.5%;
 
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            margin: 10px 15px 10px 25px;
+            padding: 0;
+            transition: 0.25s, transform 0.25s;
+            color: white;
+            align-self: center;
+        }
+
         div {
             align-self: center;
-            margin: 0 5px 0 5px;
+            align-items: flex-start;
+
+            h1 {
+                margin: 0 0 5px 0;
+                padding: 0px;
+                width: fit-content;
+                font-size: x-large;
+                color: white;
+           }
+                
+            h2 {
+                margin: 0px;
+                padding: 0px;
+                width: fit-content;
+                font-size: medium;
+                color: rgba(255, 255, 255, 0.792);
+            }
         }
     }
 
-    .header-icon {
-        width: 40px;
-        height: 40px;
-        margin: 10px 15px 10px 25px;
-        padding: 0;
-        transition: 0.25s, transform 0.25s;
-        color: white;
-        align-self: center;
-    }
-
-    h1 {
-        margin: 0 0 5px 0;
-        padding: 0px;
-        width: fit-content;
-        font-size: x-large;
-        text-align: center;
-        color: white;
-        align-self: center;
-    }
-
-    h2 {
-        margin: 0px;
-        padding: 0px;
-        width: fit-content;
-        font-size: medium;
-        text-align: center;
-        color: rgba(255, 255, 255, 0.792);
-        align-self: center;
-    }
 
     div.button-div {
         width: 20%;
@@ -276,4 +284,88 @@ header.aside-window-header {
     }
 }
 
+section#notas-atualizacao-container {
+    div.atualizacao {
+        padding: 10px;
 
+        div.versao-data {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+
+            h2 {
+                background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%);
+                padding: 10px;
+                border-radius: 10px;
+                color: white;
+                font-size: 1.3rem;
+                font-weight: 100;
+            }
+
+            div.data-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 30%;
+
+
+                svg {
+                    max-width: var(--date-size);
+                }
+
+                
+                p.data {
+                    font-size: var(--date-size);
+                    color: #666;
+                    margin-left: 5px;
+                }
+            }
+        }
+
+        ul {
+            display: block;
+
+            li.nota {
+                margin: 20px;
+                background-color: rgb(245, 245, 245);
+                list-style: none;
+                transition: 0.2s;
+                padding: 20px;
+                border-radius: 15px;
+
+                .tipo-nota {
+                    display: flex;
+
+                    h4 {
+                        background-color: purple;
+                        width: fit-content;
+                        border-radius: 100px;
+                        font-size: small;
+                        padding: 5px 10px 5px 10px;
+                    }
+
+                    img {
+                        width: 20px;
+                        height: 20px;
+                        margin-left: 10px;
+                    }
+                }
+                   
+
+                h3 {
+                    margin: 15px 0 15px 0;
+                }
+
+                p {
+                    font-size: smaller;
+                }
+            }
+
+            li.nota:hover {
+                transform: scale(1.05);
+                box-shadow: 5px 5px 5px #b3b3b3;
+            }
+        }
+    }
+}

@@ -149,9 +149,9 @@ document.addEventListener('DOMContentLoaded', () => {
             mover(document.getElementById('updates'));
             mover(document.getElementById('notas-atualizacao'))
             mover(document.getElementById('calculadora'));
-            mover(document.getElementById('bloco'));
-            mover(document.getElementById('conquistasGeral'));
-            mover(document.getElementById('configuracoes'));
+            //mover(document.getElementById('bloco-notas'));
+            //mover(document.getElementById('conquistas-geral'));
+            //mover(document.getElementById('configuracoes'));
 
             // Carrega as notas do localStorage quando a página é carregada
             const savedNotes = JSON.parse(localStorage.getItem('notes')) || [];
@@ -166,6 +166,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 noteContainer.appendChild(note);
             });
+            console.log("sim")
+            criarNotasAtualizacao();
         })
 
         .catch(error => console.error('Erro ao carregar o menu:', error)); // Exibe um erro no console caso haja algum problema ao carregar o menu
@@ -212,8 +214,6 @@ function abrirConquistas(estado) {
 
 // Notas da atualização
 
-notasContainer = document.getElementById("notas-atualizacao-container");
-
 const tipoNota = Object.freeze({
     MELHORIA: "melhoria",
     ATUALIZACAO: "atualizacao",
@@ -228,6 +228,113 @@ class NotaAtualizacao {
         this.tipo = tipo;
     }
 }
+
+class Atualizacao {
+    constructor(nome, data, notas) {
+        this.nome = nome;
+        this.data = data;
+        this.notas = notas;
+    }
+}
+
+const atualizacoes = [
+    new Atualizacao("Beta 1.0", "2024-06-01", [
+        new NotaAtualizacao("Lançamento do Quadrado Clicker", "O Quadrado Clicker é um jogo de clique simples e viciante, onde o objetivo é clicar em um quadrado para ganhar pontos. Com gráficos minimalistas e uma jogabilidade fácil de entender, o Quadrado Clicker é perfeito para quem procura uma experiência casual e divertida. Desafie-se a alcançar a maior pontuação possível e descubra as conquistas escondidas ao longo do caminho!", tipoNota.NOVO_RECURSO)
+    ]),
+    new Atualizacao("Beta 1.1", "2024-06-15", [
+        new NotaAtualizacao("Adição de conquistas", "Agora você pode desbloquear conquistas especiais ao realizar ações específicas no jogo. Explore o Quadrado Clicker e descubra todas as conquistas disponíveis!", tipoNota.NOVO_RECURSO),
+        new NotaAtualizacao("Melhoria na interface do usuário", "A interface do Quadrado Clicker foi aprimorada para proporcionar uma experiência mais agradável e intuitiva. Aproveite as melhorias visuais enquanto joga!", tipoNota.MELHORIA)
+    ])
+];
+
+function criarNotasAtualizacao() {
+    const notasContainer = document.getElementById("notas-atualizacao-container");
+
+    atualizacoes.forEach(atualizacao => {
+        const divAtualizacao = document.createElement("div");
+        divAtualizacao.classList.add("atualizacao");
+        notasContainer.appendChild(divAtualizacao);
+
+        const divVersaoData = document.createElement("div");
+        divVersaoData.classList.add("versao-data");
+        divAtualizacao.appendChild(divVersaoData);
+
+        const h2titulo = document.createElement("h2");
+        h2titulo.textContent = atualizacao.nome;
+        divVersaoData.appendChild(h2titulo);
+
+        const divData = document.createElement("div");
+        divData.classList.add("data-container");
+        
+        divData.innerHTML = `
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+                <line x1="16" x2="16" y1="2" y2="6" />
+                <line x1="8" x2="8" y1="2" y2="6" />
+                <line x1="3" x2="21" y1="10" y2="10" />
+            </svg>`;
+        divVersaoData.appendChild(divData);
+
+        const data = document.createElement("p");
+        data.classList.add("data");
+        data.textContent = atualizacao.data;
+        divData.appendChild(data);
+
+        const ulNotas = document.createElement("ul");
+        divAtualizacao.appendChild(ulNotas);
+
+        atualizacao.notas.forEach(nota => {
+            const liNota = document.createElement("li");
+            liNota.classList.add("nota");
+            
+            const divTipo = document.createElement("div");
+            divTipo.classList.add("tipo-nota");
+            liNota.appendChild(divTipo);
+
+            const tipo = document.createElement("h4");
+            tipo.textContent = nota.tipo.replace("_", " ").toUpperCase();
+            divTipo.appendChild(tipo);
+
+            const h3tituloNota = document.createElement("h3");
+            h3tituloNota.textContent = nota.titulo;
+            liNota.appendChild(h3tituloNota);
+
+            const pDescricao = document.createElement("p");
+            pDescricao.textContent = nota.descricao;
+            liNota.appendChild(pDescricao);
+
+            ulNotas.appendChild(liNota);
+
+            switch (nota.tipo) {
+                case tipoNota.MELHORIA:
+                    liNota.style.borderLeft = "4px solid #4CAF50"; // Verde
+                    tipo.style.color = "#4CAF50";
+                    tipo.style.backgroundColor = "#e8f5e9";
+                    divTipo.innerHTML += "<img src='assets/images/icones-uteis/melhoria.png'>"; // Ícone de melhoria
+                    break;
+                case tipoNota.ATUALIZACAO:
+                    liNota.style.borderLeft = "4px solid #2196F3"; // Azul
+                    tipo.style.color = "#2196F3";
+                    tipo.style.backgroundColor = "#e3f2fd";
+                    divTipo.innerHTML += "<img src='assets/images/icones-uteis/atualizacao.png'>"; // Ícone de atualização
+                    break;
+                case tipoNota.CORRECAO:
+                    liNota.style.borderLeft = "4px solid #f44336"; // Vermelho
+                    tipo.style.color = "#f44336";
+                    tipo.style.backgroundColor = "#ffebee";
+                    divTipo.innerHTML += "<img src='assets/images/icones-uteis/correcao.png'>"; // Ícone de correção
+                    break;
+                case tipoNota.NOVO_RECURSO:
+                    liNota.style.borderLeft = "4px solid #ff9800"; // Laranja
+                    tipo.style.color = "#ff9800";
+                    tipo.style.backgroundColor = "#fff3e0";
+                    divTipo.innerHTML += "<img src='assets/images/icones-uteis/novo_recurso.png'>"; // Ícone de novo recurso
+                    break;
+            }
+        });
+    });
+}
+console.log("ola")
 
 /* Conquistas */
 
@@ -286,6 +393,10 @@ function carregarConquistasGeral() {
 // Renderiza as conquistas no HTML
 function adicionarConquistasGeral() {
     const conquistasContainer = document.getElementById("conquistas-container");
+    if (conquistasContainer === null) {
+        console.warn("adicionarConquistasGeral: 'conquistas-container' não encontrado. Chame adicionarConquistasGeral() após a injeção de 'menu.html'.");
+        return;
+    }
     conquistasContainer.innerHTML = "";
 
     conquistasLista.forEach((element) => {
