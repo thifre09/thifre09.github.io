@@ -6,11 +6,11 @@
     <div id="fechar-menu-lateral">
         <img src="assets/images/icones/cruz.png" style="width: 50px;" onclick="abrirMenu(true)">
     </div>
-    <button onclick="abrirNotasAtualizacao(false)">Notas da atualização</button>
-    <button onclick="abrirCalculadora(false)">Calculadora</button>
-    <button onclick="abrirBlocoNotas(false)">Bloco de notas</button>
-    <button onclick="abrirConquistas(false)">Conquistas</button>
-    <button onclick="abrirConfiguracoes(false)">Configurações</button>
+    <button onclick="abrir(false, 'notas-atualizacao')">Notas da atualização</button>
+    <!--<button onclick="abrir(false, 'calculadora')">Calculadora</button>-->
+    <!--<button onclick="abrir(false, 'blocoNotas')">Bloco de notas</button>-->
+    <!--<button onclick="abrir(false, 'conquistas-geral')">Conquistas</button>-->
+    <!--<button onclick="abrir(false, 'configuracoes')">Configurações</button>-->
 </aside>
 
 <h1 id="title"><a href="index.html">Meu site incrível</a></h1>
@@ -24,15 +24,7 @@
 
 <div id="updates" style="display: none;">
     <div class="fechar-container">
-        <img src="assets/images/icones/cruz.png" class="fechar" onclick="abrirNotasAtualizacao(true)">
-    </div>
-
-    <div class="dropdown">
-        <button id="dropdown-button">Geral</button>
-        <div class="dropdown-content">
-            <button onclick="abrirMudarNotasAtualizacao('geral')">Geral</button>
-            <button onclick="abrirMudarNotasAtualizacao('quadrado-clicker')">Quadrado clicker</button>
-        </div>
+        <img src="assets/images/icones/cruz.png" class="fechar" onclick="abrir(true, 'updates')">
     </div>
 
     <h5>Ver. Beta 2.2</h5>
@@ -53,14 +45,22 @@
         <h4>Beta 2.1.1</h4>
         <ul>
             <li>Mudança nas notas da atualização</li>
-            <li>Atualização no <span onclick="abrirMudarNotasAtualizacao('quadrado-clicker')">Quadrado clicker</span></li>
+            <li>Quadrado CLicker: Correção de alguns bugs</li>
         </ul>
         
         <h4>Beta 2.1</h4>
         <ul>
-            <li><span onclick="abrirMudarNotasAtualizacao('quadrado-clicker')">Quadrado clicker</span>: grande atualização</li>
             <li>Pequenas mudanças no layout de algumas páginas</li>
             <li>Correção de pequenos bugs</li>
+            <li>Quadrado CLicker: Adicionado um sistema de conquistas</li>
+            <li>Quadrado CLicker: Adicionado uma melhoria de triângulo que gera quadrados automaticamente</li>
+            <li>Quadrado CLicker: Adicionado 3 novos geradores</li>
+            <li>Quadrado CLicker: Mudanças nos preços dos geradores e melhorias</li>
+            <li>Quadrado CLicker: Melhorado o sistema de salvamento</li>
+            <li>Quadrado CLicker: Melhorias visuais</li>
+            <li>Quadrado CLicker: Mais perguntas no quiz matemático</li>
+            <li>Quadrado CLicker: Aumentado o limite de quadrados</li>
+            <li>Quadrado CLicker: Correção de pequenos bugs</li>
         </ul>
 
         <h4>Beta 2.0</h4>
@@ -182,28 +182,47 @@
     <div id="quadrado-clicker-updates" style="display: none;">
         <h4>Beta 2.1.1</h4>
         <ul>
-            <li>Correção de alguns bugs</li>
+            
         </ul>
 
         <h4>Beta 2.1</h4>
         <ul>
-            <li>Adicionado um sistema de conquistas</li>
-            <li>Adicionado uma melhoria de triângulo que gera quadrados automaticamente</li>
-            <li>Adicionado 3 novos geradores</li>
-            <li>Mudanças nos preços dos geradores e melhorias</li>
-            <li>Melhorado o sistema de salvamento</li>
-            <li>Melhorias visuais</li>
-            <li>Mais perguntas no quiz matemático</li>
-            <li>Aumentado o limite de quadrados</li>
-            <li>Correção de pequenos bugs</li>
+            
         </ul>
     </div>
         
 </div>
 
-<div id="calculadora" style="display: none;">
+<div class="aside-window" id="notas-atualizacao">
+    <header class="aside-window-header">   
+        <div class="left-div">
+            <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+                <path d="M5 3v4" />
+                <path d="M19 17v4" />
+                <path d="M3 5h4" />
+                <path d="M17 19h4" />
+            </svg>
+            <div>
+                <h1>Atualizações</h1>
+                <h2>Últimas atualizações do site</h2>
+            </div>
+        </div>
+        <div class="button-div" onclick="abrir(true, 'notas-atualizacao')"><button>
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+            </svg>
+        </button></div>
+    </header>
+    <section id="notas-atualizacao-container">  
+        
+    </section>
+</div>
+
+<div class="aside-window" id="calculadora" style="display: none;">
     <div class="fechar-container">
-        <img src="assets/images/icones/cruz.png" class="fechar" onclick="abrirCalculadora(true)">
+        <img src="assets/images/icones/cruz.png" class="fechar" onclick="abrir(true, 'calculadora')">
     </div>
 
     <table id="botoes">
@@ -251,9 +270,9 @@
     </table>
 </div>
 
-<div id="bloco" style="display: none;">
+<div class="aside-window" id="blocoNotas" style="display: none;">
     <div class="fechar-container">
-        <img src="assets/images/icones/cruz.png" class="fechar" onclick="abrirBlocoNotas(true)">
+        <img src="assets/images/icones/cruz.png" class="fechar" onclick="abrir(true, 'blocoNotas')">
     </div>
     <h2>Notas</h2>
     <textarea id="newNoteText" rows="4" placeholder="Digite sua nova nota aqui..."></textarea>
@@ -263,18 +282,18 @@
     </div>
 </div>
 
-<div id="conquistasGeral" style="display: none;">
+<div class="aside-window" id="conquistas-geral" style="display: none;">
     <div class="fechar-container">
-        <img src="assets/images/icones/cruz.png" class="fechar" onclick="abrirConquistas(true)">
+        <img src="assets/images/icones/cruz.png" class="fechar" onclick="abrir(true, 'conquistasGeral')">
     </div>
 
     <h2>Conquistas</h2>
     <div id="conquistas-container"></div>
 </div>
 
-<div id="configuracoes" style="display: none;">
+<div class="aside-window" id="configuracoes" style="display: none;">
     <div class="fechar-container">
-        <img src="assets/images/icones/cruz.png" class="fechar" onclick="abrirConfiguracoes(true)">
+        <img src="assets/images/icones/cruz.png" class="fechar" onclick="abrir(true, 'conficuracoes')">
     </div>
     <h2>Configurações</h2>
 

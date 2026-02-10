@@ -147,6 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Aplicar a todos os elementos
             mover(document.getElementById('updates'));
+            mover(document.getElementById('notas-atualizacao'))
             mover(document.getElementById('calculadora'));
             mover(document.getElementById('bloco'));
             mover(document.getElementById('conquistasGeral'));
@@ -187,41 +188,12 @@ function abrirMenu(estado) {
     }
 }
 
-function abrirNotasAtualizacao(estado) {
-    let NotasAtu = document.getElementById("updates");
+function abrir(estado, id) {
+    let element = document.getElementById(id);
     if (estado === true) {
-        NotasAtu.style.display = "none";
+        element.style.display = "none";
     } else if (estado === false) {
-        NotasAtu.style.display = "block";
-    }
-}
-
-function abrirMudarNotasAtualizacao(divId) {
-    let divs = document.querySelectorAll("div#updates > div")
-    divs.forEach((div) => div.style.display = "none")
-    divs[0].style.display = "block"
-    divs[1].style.display = "block"
-    document.getElementById(divId + "-updates").style.display = "block"
-
-    let button = document.getElementById("dropdown-button")
-    button.innerText = (divId.charAt(0).toUpperCase() + divId.slice(1)).replace("-", " ");
-}
-
-function abrirCalculadora(estado) {
-    let calculadora = document.getElementById("calculadora");
-    if (estado === true) {
-        calculadora.style.display = "none";
-    } else if (estado === false) {
-        calculadora.style.display = "block";
-    }
-}
-
-function abrirBlocoNotas(estado) {
-    let blocoNotas = document.getElementById("bloco");
-    if (estado === true) {
-        blocoNotas.style.display = "none";
-    } else if (estado === false) {
-        blocoNotas.style.display = "block";
+        element.style.display = "block";
     }
 }
 
@@ -233,192 +205,29 @@ function abrirConquistas(estado) {
         con.style.display = "none";
     } else if (estado === false) {
         con.style.display = "block";
-        adicionarConquistasGeral()
+        adicionarConquistasGeral();
     }
-    salvarConquistasGeral()
+    salvarConquistasGeral();
 }
 
-function abrirConfiguracoes(estado) {
-    let configuracoes = document.getElementById("configuracoes");
-    if (estado === true) {
-        configuracoes.style.display = "none";
-    } else if (estado === false) {
-        configuracoes.style.display = "block";
-    }
-}
+// Notas da atualização
 
+notasContainer = document.getElementById("notas-atualizacao-container");
 
+const tipoNota = Object.freeze({
+    MELHORIA: "melhoria",
+    ATUALIZACAO: "atualizacao",
+    CORRECAO: "correcao",
+    NOVO_RECURSO: "novo_recurso"
+});
 
-/* todo o javascript da calculadora */
-
-let num1 = 0;
-let numeroAtivo = 0;
-let operador = "";
-let calcularFoiUltimoUsado = false;
-let virgulaAtivo = false;
-let clicksVirgula = 1;
-
-function numbers(numero) {
-
-    if (virgulaAtivo === false) {
-        numeroAtivo *= 10;
-        numeroAtivo += numero;
-        visor.innerText = numeroAtivo;
-    } else {
-        numeroAtivo += numero / 10 ** clicksVirgula;
-        clicksVirgula++;
-        visor.innerText = numeroAtivo.toLocaleString("pt-BR", { maximumFractionDigits: 8 });
+class NotaAtualizacao {
+    constructor(titulo, descricao, tipo) {
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.tipo = tipo;
     }
 }
-
-function simbolos(simbolo) {
-    if (operador !== "" && calcularFoiUltimoUsado === false) {
-        calcular(); // Corrige a lógica repetitiva e reutiliza o cálculo.
-    } else if (operador === "") {
-        num1 = numeroAtivo;
-    }
-
-    numeroAtivo = 0;
-    virgulaAtivo = false;
-    clicksVirgula = 1;
-    calcularFoiUltimoUsado = false;
-    operador = simbolo;
-}
-
-function simbolosInstantaneos(simbolo) {
-    if (simbolo === "**") {
-        numeroAtivo **= 2;
-    } else if (simbolo === "sqrt") {
-        numeroAtivo = Math.sqrt(numeroAtivo);
-    } else if (simbolo === "+/-") {
-        numeroAtivo *= -1;
-    } else if (simbolo === "1/x") {
-        numeroAtivo = 1 / numeroAtivo;
-    } else if (simbolo === "%") {
-        numeroAtivo = (num1 / 100) * numeroAtivo;
-    }
-
-    visor.innerHTML = numeroAtivo;
-}
-
-function apagar(tipo) {
-    if (tipo === "tudo") {
-        num1 = 0;
-        numeroAtivo = 0;
-        operador = "";
-        virgulaAtivo = false;
-        clicksVirgula = 1;
-        calcularFoiUltimoUsado = false;
-        visor.innerHTML = numeroAtivo;
-    } else if (tipo === "parcial") {
-        numeroAtivo = 0;
-        virgulaAtivo = false;
-        clicksVirgula = 1;
-        visor.innerHTML = numeroAtivo;
-    } else if (tipo === "um") {
-        if (virgulaAtivo === false) {
-            numeroAtivo = Math.floor(numeroAtivo / 10);
-        } else {
-            numeroAtivo = Math.floor(numeroAtivo * 10 ** (clicksVirgula - 1)) / 10 ** (clicksVirgula - 1);
-            clicksVirgula--;
-        }
-
-        if (numeroAtivo === 0) {
-            visor.innerHTML = num1;
-        } else {
-            visor.innerHTML = numeroAtivo.toLocaleString("pt-BR", { maximumFractionDigits: 8 });
-        }
-    }
-}
-
-function virgula() {
-    virgulaAtivo = true;
-    visor.innerHTML = numeroAtivo.toLocaleString("pt-BR") + ",";
-}
-
-function calcular() {
-    if (operador === "+") {
-        num1 += numeroAtivo;
-    } else if (operador === "-") {
-        num1 -= numeroAtivo;
-    } else if (operador === "x") {
-        num1 *= numeroAtivo;
-    } else if (operador === "/") {
-        if (numeroAtivo !== 0) {
-            num1 /= numeroAtivo;
-        } else {
-            visor.innerHTML = "Erro: Divisão por zero";
-            return;
-        }
-    }
-
-    numeroAtivo = 0;
-    virgulaAtivo = false;
-    clicksVirgula = 1;
-    calcularFoiUltimoUsado = true;
-    visor.innerHTML = num1.toLocaleString("pt-BR");
-}
-
-/* todo o javascript da calculadora */
-
-
-
-/* bloco de notas */
-
-function addNote() {
-    const noteText = document.getElementById('newNoteText').value;
-    if (noteText.trim() === '') return;
-
-    const noteContainer = document.getElementById('noteContainer');
-    const note = document.createElement('div');
-    note.className = 'note';
-
-    note.innerHTML = `
-        <textarea readonly>${noteText}</textarea>
-        <button class="edit" onclick="editNote(this)">Editar</button>
-        <button class="delete" onclick="deleteNote(this)">Excluir</button>
-    `;
-
-    noteContainer.appendChild(note);
-    document.getElementById('newNoteText').value = '';
-
-    // Salva a nova nota no localStorage
-    saveNotes();
-}
-
-function editNote(button) {
-    const note = button.parentElement;
-    const textarea = note.querySelector('textarea');
-
-    if (button.textContent === 'Editar') {
-        textarea.removeAttribute('readonly');
-        button.textContent = 'Salvar';
-    } else {
-        textarea.setAttribute('readonly', '');
-        button.textContent = 'Editar';
-
-        // Salva as alterações no localStorage
-        saveNotes();
-    }
-}
-
-function deleteNote(button) {
-    const note = button.parentElement;
-    note.remove();
-
-    // Salva as alterações no localStorage
-    saveNotes();
-}
-
-function saveNotes() {
-    const noteContainer = document.getElementById('noteContainer');
-    const notes = Array.from(noteContainer.children).map(note => note.querySelector('textarea').value);
-    localStorage.setItem('notes', JSON.stringify(notes));
-}
-
-/* bloco de notas */
-
-
 
 /* Conquistas */
 
