@@ -345,10 +345,11 @@ section#notas-atualizacao-container {
                         padding: 5px 10px 5px 10px;
                     }
 
-                    img {
-                        width: 20px;
-                        height: 20px;
+                    svg {
+                        width: 30px;
+                        height: 30px;
                         margin-left: 10px;
+                        color: rgb(0, 68, 255);
                     }
                 }
                    
