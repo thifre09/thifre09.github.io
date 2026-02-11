@@ -1,0 +1,16 @@
+:root{
+    --primary-color: rgb(39, 108, 212);
+    --aside-primary-color1: #4f46e5;
+    --aside-primary-color2: #7c3aed;
+    --gray1: rgb(245, 245, 245);
+    --green1: #4CAF50;
+    --green2: #e8f5e9;
+    --blue1: #2196F3;
+    --blue2: #e3f2fd;
+    --red1: #f44336;
+    --red2: #ffebee;
+    --orange1: #ff9800;
+    --orange2: #fff3e0;
+
+    --date-size: 1rem;
+}

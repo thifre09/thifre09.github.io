@@ -1,6 +1,4 @@
-:root{
-    --date-size: 1rem;
-}
+@import url(variables.css);
 
 * {
     margin: 0;
@@ -8,7 +6,7 @@
 }
 
 body {
-    color:#333;
+    color:#000000;
     padding: 0;
     margin: 0;
     font-family: sans-serif;
@@ -16,26 +14,28 @@ body {
 
 h1#title {
     text-align: center;
-    color:rgb(55, 120, 218);
+    color:var(--primary-color);
     background-color: white;
     transition: 0.3s, transform 0.3s;
     text-decoration:none;
     text-align: center;
-}
+    margin: 15px;
 
-h1#title a {
-    text-decoration:none;
-    text-align: center;
-}
+    a {
+        text-decoration:none;
+        text-align: center;
+    }
 
-h1#title a:visited {
-    color: rgb(55, 120, 218);
-    text-decoration:none;
-    text-align: center;
+    a:visited {
+        color: var(--primary-color);
+        text-decoration:none;
+        text-align: center;
+    }
+    
 }
 
 h1#title:hover {
-    transform: scale(1.25);
+    transform: scale(1.20);
 }
 
 nav#barra-main {
@@ -50,21 +50,23 @@ nav#barra-main {
     top: 0;
     color: white;
     z-index: 100;
+    margin: 10px 0 10px 0;
 }
 
-.botao-menu-lateral img {
-    width: 36px;
-    position: absolute;
-    transition: 0.3s, transform 0.3s;
-}
-
-.botao-menu-lateral img:hover {
-    transform: scale(1.25);
-}
 
 .botao-menu-lateral {
     width: fit-content;
     height: fit-content;
+
+    img {
+        width: 36px;
+        position: absolute;
+        transition: 0.3s, transform 0.3s;
+    }
+
+    img:hover {
+        transform: scale(1.25);
+    }
 }
 
 #botao-menu-lateral-reserva {
@@ -79,12 +81,12 @@ h6#titulo {
     width: 100%;
     text-decoration:none;
     text-align: center;
-}
 
-h6#titulo > a {
-    color: white;
-    text-decoration:none;
-    text-align: center;
+    > a {
+        text-decoration:none;
+        text-align: center;
+        color: white;
+    }
 }
 
 @keyframes abrirMenu {
@@ -115,6 +117,25 @@ aside#menu-lateral {
     background-color: rgba(255, 255, 255, 0.637);
     width: 30%;
     top: 0;
+
+    button {
+        border: none;
+        border-radius: 100px;
+        font-size: larger;
+        padding: 3px;
+        margin: 3%;
+        width: fit-content;
+        background: linear-gradient(40deg, #66BB6A, #00ff0d);
+        transition: 0.3s, transform 0.3s;
+        box-shadow: 4px 4px 4px #8ca38d;
+    }
+
+    button:hover {
+        transform: scale(1.25);
+        cursor: pointer;
+        box-shadow: 4px 4px 4px #96da99;
+        background: linear-gradient(40deg, #a6e9aa, #00ff0d);
+    }
 }
 
 #fechar-menu-lateral {
@@ -122,25 +143,6 @@ aside#menu-lateral {
     height: fit-content;
     margin: 0;
     padding: 0;
-}
-
-aside#menu-lateral button {
-    border: none;
-    border-radius: 100px;
-    font-size: larger;
-    padding: 3px;
-    margin: 3%;
-    width: fit-content;
-    background: linear-gradient(40deg, #66BB6A, #00ff0d);
-    transition: 0.3s, transform 0.3s;
-    box-shadow: 4px 4px 4px #8ca38d;
-}
-
-aside#menu-lateral button:hover {
-    transform: scale(1.25);
-    cursor: pointer;
-    box-shadow: 4px 4px 4px #96da99;
-    background: linear-gradient(40deg, #a6e9aa, #00ff0d);
 }
 
 img.fechar {
@@ -177,7 +179,7 @@ div.aside-window {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
-    overflow: visible;
+    overflow: hidden;
     position: fixed; /* borda aqui */
     top: 20px;
     left: 20px;
@@ -185,18 +187,20 @@ div.aside-window {
     z-index: 101;
     margin: 0;
     padding: 0;
-}
 
-div.aside-window .aside-scroll {
-    overflow: auto;
-    height: calc(100% - 8vh); /* ajuste conforme header */
-    box-sizing: border-box;
-    padding: 10px;
+    .aside-scroll {
+        overflow: auto;
+        height: calc(100% - 8vh); /* ajuste conforme header */
+        box-sizing: border-box;
+        padding: 10px;
+        padding-right: 5px;
+        scrollbar-gutter: stable;
+    }
 }
 
 header.aside-window-header {
     display: flex;
-    background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%);
+    background: linear-gradient(90deg, var(--aside-primary-color1) 0%, var(--aside-primary-color2) 100%);
     height: 8vh;
 
     div.left-div {
@@ -295,7 +299,7 @@ section#notas-atualizacao-container {
             margin-bottom: 10px;
 
             h2 {
-                background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%);
+                background: linear-gradient(90deg, var(--aside-primary-color1) 0%, var(--aside-primary-color2) 100%);
                 padding: 10px;
                 border-radius: 10px;
                 color: white;
@@ -328,7 +332,7 @@ section#notas-atualizacao-container {
 
             li.nota {
                 margin: 20px;
-                background-color: rgb(245, 245, 245);
+                background-color: var(--gray1);
                 list-style: none;
                 transition: 0.2s;
                 padding: 20px;
@@ -336,9 +340,10 @@ section#notas-atualizacao-container {
 
                 .tipo-nota {
                     display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
 
                     h4 {
-                        background-color: purple;
                         width: fit-content;
                         border-radius: 100px;
                         font-size: small;
@@ -348,8 +353,8 @@ section#notas-atualizacao-container {
                     svg {
                         width: 30px;
                         height: 30px;
-                        margin-left: 10px;
-                        color: rgb(0, 68, 255);
+
+                        color: rgb(0, 62, 233);
                     }
                 }
                    
@@ -358,8 +363,16 @@ section#notas-atualizacao-container {
                     margin: 15px 0 15px 0;
                 }
 
-                p {
+                p.descricao {
                     font-size: smaller;
+                }
+
+                p.relacionado {
+                    border: solid 1px #ccc;
+                    width: fit-content;
+                    padding: 5px;
+                    background: white;
+                    margin-top: 10px;
                 }
             }
 
