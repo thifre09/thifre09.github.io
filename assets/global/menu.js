@@ -15,164 +15,148 @@ document.addEventListener('DOMContentLoaded', () => {
             if (titleElement && pageTitle) {
                 titleElement.textContent = pageTitle;
             }
-
-            // Lógica para arrastar as divs
-            function mover(objeto) {
-                let draggedElement = null;
-                let shiftX, shiftY;
-                let startX, startY;
-                let isDragging = false;
-                const MOVE_THRESHOLD = 5; // pixels de movimento para considerar como arraste
-                
-                const moveAt = (pageX, pageY) => {
-                    if (!draggedElement) return;
-                    draggedElement.style.left = `${pageX - shiftX - window.scrollX}px`;
-                    draggedElement.style.top = `${pageY - shiftY - window.scrollY}px`;
-                };
-                
-                // Mouse events
-                objeto.addEventListener('mousedown', (e) => {
-                    // Se o clique foi em uma imagem dentro do elemento, permita o clique normal
-                    if (e.target.tagName === 'IMG') {
-                        return;
-                    }
-                    
-                    draggedElement = objeto;
-                    const rect = draggedElement.getBoundingClientRect();
-                    shiftX = e.clientX - rect.left;
-                    shiftY = e.clientY - rect.top;
-                    startX = e.clientX;
-                    startY = e.clientY;
-                    isDragging = false;
-                    
-                    const onMouseMove = (e) => {
-                        // Verifica se o movimento passou do threshold
-                        if (!isDragging && 
-                            (Math.abs(e.clientX - startX) > MOVE_THRESHOLD || 
-                             Math.abs(e.clientY - startY) > MOVE_THRESHOLD)) {
-                            isDragging = true;
-                        }
-                        
-                        if (isDragging) {
-                            moveAt(e.pageX, e.pageY);
-                        }
-                    };
-                    
-                    const onMouseUp = (e) => {
-                        document.removeEventListener('mousemove', onMouseMove);
-                        document.removeEventListener('mouseup', onMouseUp);
-                        
-                        // Se não estava arrastando, permite o clique
-                        if (!isDragging && e.target.tagName === 'IMG') {
-                            e.target.click();
-                        }
-                        
-                        draggedElement = null;
-                    };
-                    
-                    document.addEventListener('mousemove', onMouseMove);
-                    document.addEventListener('mouseup', onMouseUp);
-                });
-                
-                // Touch events
-                objeto.addEventListener('touchstart', (e) => {
-                    // Se o toque foi em uma imagem dentro do elemento
-                    if (e.target.className === 'fechar') {
-                        // Marca para permitir o clique se não houver movimento
-                        const touch = e.touches[0];
-                        startX = touch.clientX;
-                        startY = touch.clientY;
-                        isDragging = false;
-                        
-                        const onTouchMove = (e) => {
-                            const touch = e.touches[0];
-                            if (!isDragging && 
-                                (Math.abs(touch.clientX - startX) > MOVE_THRESHOLD || 
-                                 Math.abs(touch.clientY - startY) > MOVE_THRESHOLD)) {
-                                isDragging = true;
-                                e.preventDefault();
-                            }
-                        };
-                        
-                        const onTouchEnd = (e) => {
-                            document.removeEventListener('touchmove', onTouchMove);
-                            document.removeEventListener('touchend', onTouchEnd);
-                            
-                            // Se não estava arrastando, dispara o clique
-                            if (!isDragging) {
-                                e.target.click();
-                            }
-                        };
-                        
-                        document.addEventListener('touchmove', onTouchMove);
-                        document.addEventListener('touchend', onTouchEnd, { once: true });
-                        
-                        return;
-                    }
-                    
-                    // Caso contrário, trata como arraste
-                    e.preventDefault();
-                    draggedElement = objeto;
-                    const touch = e.touches[0];
-                    const rect = draggedElement.getBoundingClientRect();
-                    shiftX = touch.clientX - rect.left;
-                    shiftY = touch.clientY - rect.top;
-                    startX = touch.clientX;
-                    startY = touch.clientY;
-                    isDragging = false;
-                    
-                    const onTouchMove = (e) => {
-                        const touch = e.touches[0];
-                        if (!isDragging && 
-                            (Math.abs(touch.clientX - startX) > MOVE_THRESHOLD || 
-                             Math.abs(touch.clientY - startY) > MOVE_THRESHOLD)) {
-                            isDragging = true;
-                        }
-                        
-                        if (isDragging) {
-                            moveAt(touch.pageX, touch.pageY);
-                        }
-                    };
-                    
-                    const onTouchEnd = () => {
-                        document.removeEventListener('touchmove', onTouchMove);
-                        document.removeEventListener('touchend', onTouchEnd);
-                        draggedElement = null;
-                    };
-                    
-                    document.addEventListener('touchmove', onTouchMove);
-                    document.addEventListener('touchend', onTouchEnd, { once: true });
-                }, { passive: false });
-            }
             
             // Aplicar a todos os elementos
-            mover(document.getElementById('updates'));
             mover(document.getElementById('notas-atualizacao'))
-            mover(document.getElementById('calculadora'));
-            //mover(document.getElementById('bloco-notas'));
+            //mover(document.getElementById('calculadora'));
+            mover(document.getElementById('bloco-notas'));
             //mover(document.getElementById('conquistas-geral'));
             //mover(document.getElementById('configuracoes'));
 
-            // Carrega as notas do localStorage quando a página é carregada
-            const savedNotes = JSON.parse(localStorage.getItem('notes')) || [];
-            const noteContainer = document.getElementById('noteContainer');
-            savedNotes.forEach(noteText => {
-                const note = document.createElement('div');
-                note.className = 'note';
-                note.innerHTML = `
-                    <textarea readonly>${noteText}</textarea>
-                    <button class="edit" onclick="editNote(this)">Editar</button>
-                    <button class="delete" onclick="deleteNote(this)">Excluir</button>
-                `;
-                noteContainer.appendChild(note);
-            });
-            console.log("sim")
             criarNotasAtualizacao();
         })
 
         .catch(error => console.error('Erro ao carregar o menu:', error)); // Exibe um erro no console caso haja algum problema ao carregar o menu
 
 });
+
+function mover(objeto) {
+    let draggedElement = null;
+    let shiftX, shiftY;
+    let startX, startY;
+    let isDragging = false;
+    const MOVE_THRESHOLD = 5; // pixels de movimento para considerar como arraste
+
+    const moveAt = (pageX, pageY) => {
+        if (!draggedElement) return;
+        draggedElement.style.left = `${pageX - shiftX - window.scrollX}px`;
+        draggedElement.style.top = `${pageY - shiftY - window.scrollY}px`;
+    };
+
+    // Mouse events
+    objeto.addEventListener('mousedown', (e) => {
+        // Se o clique foi em uma imagem dentro do elemento, permita o clique normal
+        if (e.target.tagName === 'IMG') {
+            return;
+        }
+        
+        draggedElement = objeto;
+        const rect = draggedElement.getBoundingClientRect();
+        shiftX = e.clientX - rect.left;
+        shiftY = e.clientY - rect.top;
+        startX = e.clientX;
+        startY = e.clientY;
+        isDragging = false;
+        
+        const onMouseMove = (e) => {
+            // Verifica se o movimento passou do threshold
+            if (!isDragging && 
+                (Math.abs(e.clientX - startX) > MOVE_THRESHOLD || 
+                    Math.abs(e.clientY - startY) > MOVE_THRESHOLD)) {
+                isDragging = true;
+            }
+            
+            if (isDragging) {
+                moveAt(e.pageX, e.pageY);
+            }
+        };
+        
+        const onMouseUp = (e) => {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+            
+            // Se não estava arrastando, permite o clique
+            if (!isDragging && e.target.tagName === 'IMG') {
+                e.target.click();
+            }
+            
+            draggedElement = null;
+        };
+        
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    });
+
+    // Touch events
+    objeto.addEventListener('touchstart', (e) => {
+        // Se o toque foi em uma imagem dentro do elemento
+        if (e.target.className === 'fechar') {
+            // Marca para permitir o clique se não houver movimento
+            const touch = e.touches[0];
+            startX = touch.clientX;
+            startY = touch.clientY;
+            isDragging = false;
+            
+            const onTouchMove = (e) => {
+                const touch = e.touches[0];
+                if (!isDragging && 
+                    (Math.abs(touch.clientX - startX) > MOVE_THRESHOLD || 
+                        Math.abs(touch.clientY - startY) > MOVE_THRESHOLD)) {
+                    isDragging = true;
+                    e.preventDefault();
+                }
+            };
+            
+            const onTouchEnd = (e) => {
+                document.removeEventListener('touchmove', onTouchMove);
+                document.removeEventListener('touchend', onTouchEnd);
+                
+                // Se não estava arrastando, dispara o clique
+                if (!isDragging) {
+                    e.target.click();
+                }
+            };
+            
+            document.addEventListener('touchmove', onTouchMove);
+            document.addEventListener('touchend', onTouchEnd, { once: true });
+            
+            return;
+        }
+        
+        // Caso contrário, trata como arraste
+        e.preventDefault();
+        draggedElement = objeto;
+        const touch = e.touches[0];
+        const rect = draggedElement.getBoundingClientRect();
+        shiftX = touch.clientX - rect.left;
+        shiftY = touch.clientY - rect.top;
+        startX = touch.clientX;
+        startY = touch.clientY;
+        isDragging = false;
+        
+        const onTouchMove = (e) => {
+            const touch = e.touches[0];
+            if (!isDragging && 
+                (Math.abs(touch.clientX - startX) > MOVE_THRESHOLD || 
+                    Math.abs(touch.clientY - startY) > MOVE_THRESHOLD)) {
+                isDragging = true;
+            }
+            
+            if (isDragging) {
+                moveAt(touch.pageX, touch.pageY);
+            }
+        };
+        
+        const onTouchEnd = () => {
+            document.removeEventListener('touchmove', onTouchMove);
+            document.removeEventListener('touchend', onTouchEnd);
+            draggedElement = null;
+        };
+        
+        document.addEventListener('touchmove', onTouchMove);
+        document.addEventListener('touchend', onTouchEnd, { once: true });
+    }, { passive: false });
+}
 
 function abrirMenu(estado) {
     let barra = document.getElementById("menu-lateral");
@@ -199,20 +183,7 @@ function abrir(estado, id) {
     }
 }
 
-function abrirConquistas(estado) {
-    verificarConquistasGeral()
-
-    let con = document.getElementById("conquistasGeral");
-    if (estado === true) {
-        con.style.display = "none";
-    } else if (estado === false) {
-        con.style.display = "block";
-        adicionarConquistasGeral();
-    }
-    salvarConquistasGeral();
-}
-
-// Notas da atualização
+// #region Notas da atualização
 
 const tipoNota = Object.freeze({
     MELHORIA: "melhoria",
@@ -257,7 +228,24 @@ class Atualizacao {
 }
 
 const atualizacoes = [
-    new Atualizacao("Beta 2.0", "??/??/????", [
+    new Atualizacao("Beta 2.2", "19/03/2024", [
+        new NotaAtualizacao("Criação de conquistas gerais para todo o site", "Agora existem conquistas que podem ser desbloqueadas em todas as páginas do site. Elas podem ser acessadas pelo menu lateral.", tipoNota.NOVO_RECURSO, relacionado.GERAL),
+        new NotaAtualizacao("Adição de curiosidades sobre história", "Adicionadas curiosidades sobre história à aba de curiosidades.", tipoNota.ATUALIZACAO, relacionado.CURIOSIDADES),
+        new NotaAtualizacao("Adição de novos memes", "Adicionado 2 novos memes à aba de memes.", tipoNota.ATUALIZACAO, relacionado.MEMES),
+        new NotaAtualizacao("Adição de novas reviews de jogos", "Adicionado 7 novas reviews de jogos que joguei recentemente.", tipoNota.ATUALIZACAO, relacionado.REVIEW_DE_JOGOS),
+        new NotaAtualizacao("Criação da aba O poder do CSS", "Essa aba contém uma coleção de pequenos truques de CSS, mostrando o poder que ele tem para criar coisas incríveis.", tipoNota.NOVO_RECURSO, relacionado.PODER_DO_CSS),
+        new NotaAtualizacao("Correção de pequenos bugs", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do site.", tipoNota.CORRECAO, relacionado.GERAL)
+    ]),
+    new Atualizacao("Beta 2.1.1", "??/??/????", [
+        new NotaAtualizacao("Mudança nas notas da atualização", "As notas da atualização agora estão mais organizadas.", tipoNota.MELHORIA, relacionado.GERAL),
+        new NotaAtualizacao("Correção de alguns bugs no Quadrado Clicker", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do jogo.", tipoNota.CORRECAO, relacionado.QUADRADO_CLICKER)
+    ]),
+    new Atualizacao("Beta 2.1", "19/02/2025", [
+        new NotaAtualizacao("Pequenas mudanças no layout de algumas páginas", "Algumas páginas tiveram pequenas mudanças no layout para melhorar a experiência do usuário.", tipoNota.MELHORIA, relacionado.GERAL),
+        new NotaAtualizacao("Correção de pequenos bugs", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do site.", tipoNota.CORRECAO, relacionado.GERAL),
+        new NotaAtualizacao("Atualização no Quadrado clicker", "Adicionado um sistema de conquistas, uma melhoria de triângulo que gera quadrados automaticamente, 3 novos geradores, mudanças nos preços dos geradores e melhorias, melhorias visuais, mais perguntas no quiz matemático, aumento do limite de quadrados e correção de pequenos bugs.", tipoNota.ATUALIZACAO, relacionado.QUADRADO_CLICKER)
+    ]),
+    new Atualizacao("Beta 2.0", "22/01/2025", [
         new NotaAtualizacao("Mudanças no layout de quase todas as páginas", "O layout de quase todas as páginas do site foi completamente refeito, com um design mais moderno e responsivo.", tipoNota.MELHORIA, relacionado.GERAL),
         new NotaAtualizacao("Atualização no banner principal", "O banner principal de cada página foi padronizado, com um design mais moderno e responsivo.", tipoNota.MELHORIA, relacionado.BANNER_PRINCIPAL),
         new NotaAtualizacao("Criação de um menu lateral", "Foi criado um menu lateral no banner principal, contendo o bloco de notas, as notas de atualização e a calculadora.", tipoNota.NOVO_RECURSO, relacionado.BANNER_PRINCIPAL),
@@ -272,27 +260,27 @@ const atualizacoes = [
         new NotaAtualizacao("Criação da aba Cores", "Essa aba contém uma lista de cores e suas respectivas representações hexadecimais, HSL, HWB e RGB.", tipoNota.NOVO_RECURSO, relacionado.Cores),
         new NotaAtualizacao("Correção de erros gramaticais", "Foram corrigidos diversos erros gramaticais em todo o site.", tipoNota.CORRECAO, relacionado.GERAL)
     ]),
-    new Atualizacao("Beta 1.3", "??/??/????", [
+    new Atualizacao("Beta 1.3", "17/12/2024", [
         new NotaAtualizacao("Criação da aba Quadrado Clicker", "Essa aba contém um jogo de clicker, onde o objetivo é clicar em um quadrado para ganhar quadrados, e usar esses quadrados para comprar melhorias que te dão mais quadrados por clique.", tipoNota.NOVO_RECURSO, relacionado.QUADRADO_CLICKER),
         new NotaAtualizacao("Adicionado mais reviews de jogos", "Adicionado novas reviews de jogos que joguei recentemente.", tipoNota.ATUALIZACAO, relacionado.REVIEW_DE_JOGOS)
     ]),
-    new Atualizacao("Beta 1.2", "??/??/????", [
+    new Atualizacao("Beta 1.2", "??/??/2024", [
         new NotaAtualizacao("Criação da aba curiosidades", "Essa aba contém curiosidades sobre diversos assuntos, divididas 4 em categorias.", tipoNota.NOVO_RECURSO, relacionado.CURIOSIDADES),
         new NotaAtualizacao("Python:Melhoria no layout", "O layout da aba de Python foi ajustado para se ajustar melhor em celulares.", tipoNota.MELHORIA, relacionado.PYTHON),
         new NotaAtualizacao("Adição de novos memes", "Adicionado 3 novos memes à aba de memes.", tipoNota.ATUALIZACAO, relacionado.MEMES)
     ]),
-    new Atualizacao("Beta 1.1", "??/??/????", [
+    new Atualizacao("Beta 1.1", "??/??/2024", [
         new NotaAtualizacao("Criação da aba Batatas", "Essa aba contém um quiz sobre curiosidades aleatórias, com um botão para verificar seus acertos.", tipoNota.NOVO_RECURSO, relacionado.BATATAS),
         new NotaAtualizacao("Melhoria no banner principal", "O banner principal agora é fixo, e desce junto com o resto da página.", tipoNota.MELHORIA, relacionado.BANNER_PRINCIPAL),
         new NotaAtualizacao("Mudança no layout de algumas abas", "Algumas abas tiveram seu layout ajustado para se ajustar melhor em celulares.", tipoNota.MELHORIA, relacionado.GERAL),
     ]),
-    new Atualizacao("Beta 1.0", "??/??/????", [
+    new Atualizacao("Beta 1.0", "??/??/2024", [
         new NotaAtualizacao("Pequenas mudanças no layout", "Algumas páginas tiveram seu layout ajustado para melhorar a experiência do usuário.", tipoNota.MELHORIA, relacionado.PAGINA_INICIAL),
         new NotaAtualizacao("Continuação do curso de Python", "Adicionado mais seções ao curso de Python. Tabém foi adicionado uma mesagem no final", tipoNota.ATUALIZACAO, relacionado.PYTHON),
         new NotaAtualizacao("Atualizado a seção de Review de jogos", "Adicionada mais reviews de jogos que joguei recentemente.", tipoNota.ATUALIZACAO, relacionado.REVIEW_DE_JOGOS),
         new NotaAtualizacao("Correção de bugs menores", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do site.", tipoNota.CORRECAO, relacionado.GERAL)
     ]),
-    new Atualizacao("Alfa 1.0", "??/??/????", [
+    new Atualizacao("Alfa 1.0", "??/??/2024", [
         new NotaAtualizacao("Lançamento inicial", "Lançamento inicial do projeto com funcionalidades básicas.", tipoNota.NOVO_RECURSO, relacionado.GERAL),
         new NotaAtualizacao("Criação da aba Memes", "Essa aba contém uma lista de diversos memes aleatórios.", tipoNota.NOVO_RECURSO, relacionado.MEMES),
         new NotaAtualizacao("Criação da aba Python", "Essa aba contém um minicurso de python, cobrindo o básico até a parte de condicionais.", tipoNota.NOVO_RECURSO, relacionado.PYTHON),
@@ -342,10 +330,14 @@ function criarNotasAtualizacao() {
         atualizacao.notas.forEach(nota => {
             const liNota = document.createElement("li");
             liNota.classList.add("nota");
+            liNota.classList.add(`nota-${nota.tipo.toLowerCase()}`);
+            console.log(nota.tipo.toLowerCase())
+            
             
             const divTipo = document.createElement("div");
             divTipo.classList.add("tipo-nota");
             liNota.appendChild(divTipo);
+            
 
             const tipo = document.createElement("h4");
             tipo.textContent = nota.tipo.replace("_", " ").toUpperCase();
@@ -369,16 +361,13 @@ function criarNotasAtualizacao() {
 
             switch (nota.tipo) {
                 case tipoNota.MELHORIA:
-                    liNota.style.borderLeft = "4px solid #4CAF50"; // Verde
-                    tipo.style.color = "#4CAF50";
-                    tipo.style.backgroundColor = "#e8f5e9";
                     divTipo.innerHTML += `
                     <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                         width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000"
                         preserveAspectRatio="xMidYMid meet">
 
                         <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                        fill="#4CAF50" stroke="none">
+                        fill="var(--green1)" stroke="none">
                             <path d="M3010 5104 c-41 -27 -1710 -1697 -1726 -1726 -18 -35 -18 -72 1 -108
                             31 -60 33 -60 492 -60 l419 0 -3 -42 c-27 -386 -103 -677 -263 -1003 -127
                             -260 -281 -476 -485 -680 -132 -132 -239 -220 -399 -326 -174 -116 -433 -243
@@ -419,9 +408,6 @@ function criarNotasAtualizacao() {
                     </svg>`;
                     break;
                 case tipoNota.ATUALIZACAO:
-                    liNota.style.borderLeft = "4px solid #2196F3"; // Azul
-                    tipo.style.color = "#2196F3";
-                    tipo.style.backgroundColor = "#e3f2fd";
                     divTipo.innerHTML += `
                     <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                     width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000"
@@ -448,9 +434,6 @@ function criarNotasAtualizacao() {
                     `;
                     break;
                 case tipoNota.CORRECAO:
-                    liNota.style.borderLeft = "4px solid #f44336"; // Vermelho
-                    tipo.style.color = "#f44336";
-                    tipo.style.backgroundColor = "#ffebee";
                     divTipo.innerHTML += `
                     <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                     width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000"
@@ -490,9 +473,6 @@ function criarNotasAtualizacao() {
                     `;
                     break;
                 case tipoNota.NOVO_RECURSO:
-                    liNota.style.borderLeft = "4px solid #ff9800"; // Laranja
-                    tipo.style.color = "#ff9800";
-                    tipo.style.backgroundColor = "#fff3e0";
                     divTipo.innerHTML += `
                     <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                     width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000"
@@ -525,7 +505,21 @@ function criarNotasAtualizacao() {
     });
 }
 
-/* Conquistas */
+//#endregion
+
+// #region Bloco de notas
+
+function novaNota() {
+
+}
+
+function salvarNota() {
+
+}
+
+//#endregion
+
+//#region Conquistas
 
 class ConquistaGeral {
     constructor(img = "", descricao = "", possui = false) {
@@ -643,7 +637,7 @@ window.addEventListener("DOMContentLoaded", () => {
     verificarConquistasGeral();
 });
 
-/* Conquistas */
+//#endregion
 
 
 

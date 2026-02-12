@@ -1,12 +1,10 @@
-@import url(variables.css);
-
 * {
     margin: 0;
     padding: 0;
 }
 
 body {
-    color:#000000;
+    color:var(--black);
     padding: 0;
     margin: 0;
     font-family: sans-serif;
@@ -14,8 +12,7 @@ body {
 
 h1#title {
     text-align: center;
-    color:var(--primary-color);
-    background-color: white;
+    color:var(--blue2);
     transition: 0.3s, transform 0.3s;
     text-decoration:none;
     text-align: center;
@@ -27,7 +24,7 @@ h1#title {
     }
 
     a:visited {
-        color: var(--primary-color);
+        color: var(--blue2);
         text-decoration:none;
         text-align: center;
     }
@@ -172,7 +169,6 @@ img.fechar:hover {
 }
 
 div.aside-window {
-    width: 30%;
     height: 70vh;
     background-color: #ffffff;
     border: solid 3px;
@@ -198,17 +194,20 @@ div.aside-window {
     }
 }
 
+#notas-atualizacao {
+    width: 30%;
+}
+
 header.aside-window-header {
     display: flex;
-    background: linear-gradient(90deg, var(--aside-primary-color1) 0%, var(--aside-primary-color2) 100%);
-    height: 8vh;
+    background: linear-gradient(90deg, var(--purple1) 0%, var(--purple2) 100%);
 
     div.left-div {
         width: 80%;
         display: flex;
         align-content: center;
         justify-content: flex-start;
-        margin: 1% 1% 1% 0.5%;
+        margin: 1vh 1% 1vh 0.5%;
 
         .header-icon {
             width: 40px;
@@ -225,15 +224,15 @@ header.aside-window-header {
             align-items: flex-start;
 
             h1 {
-                margin: 0 0 5px 0;
-                padding: 0px;
+                margin: 0;
+                padding: 0 0 5px 0;
                 width: fit-content;
                 font-size: x-large;
                 color: white;
            }
                 
             h2 {
-                margin: 0px;
+                margin: 0 0 5px 0;
                 padding: 0px;
                 width: fit-content;
                 font-size: medium;
@@ -242,15 +241,12 @@ header.aside-window-header {
         }
     }
 
-
     div.button-div {
         width: 20%;
         display: flex;
         align-content: center;
         justify-content: center;
-    }
-
-    div {
+        margin: 1vh 1% 1vh 0.5%;
         button {
             width: 30px;
             height: 30px;
@@ -284,6 +280,7 @@ header.aside-window-header {
             border-radius: 5px;
             background-color: #ffffff74;
             cursor: pointer;
+            transform: scale(1.05);
         }
     }
 }
@@ -299,7 +296,7 @@ section#notas-atualizacao-container {
             margin-bottom: 10px;
 
             h2 {
-                background: linear-gradient(90deg, var(--aside-primary-color1) 0%, var(--aside-primary-color2) 100%);
+                background: linear-gradient(90deg, var(--purple1) 0%, var(--purple2) 100%);
                 padding: 10px;
                 border-radius: 10px;
                 color: white;
@@ -313,15 +310,13 @@ section#notas-atualizacao-container {
                 align-items: center;
                 width: 30%;
 
-
                 svg {
                     max-width: var(--date-size);
                 }
 
-                
                 p.data {
                     font-size: var(--date-size);
-                    color: #666;
+                    color: #000000;
                     margin-left: 5px;
                 }
             }
@@ -332,7 +327,7 @@ section#notas-atualizacao-container {
 
             li.nota {
                 margin: 20px;
-                background-color: var(--gray1);
+                background-color: var(--gray3);
                 list-style: none;
                 transition: 0.2s;
                 padding: 20px;
@@ -353,11 +348,9 @@ section#notas-atualizacao-container {
                     svg {
                         width: 30px;
                         height: 30px;
-
-                        color: rgb(0, 62, 233);
+                        margin-left: 10px;
                     }
-                }
-                   
+                }      
 
                 h3 {
                     margin: 15px 0 15px 0;
@@ -368,11 +361,13 @@ section#notas-atualizacao-container {
                 }
 
                 p.relacionado {
-                    border: solid 1px #ccc;
+                    border: solid 2px var(--purple2);
+                    border-radius: 10px;
                     width: fit-content;
                     padding: 5px;
-                    background: white;
+                    background: var(--purple3);
                     margin-top: 10px;
+                    color: var(--purple2);
                 }
             }
 
@@ -380,6 +375,126 @@ section#notas-atualizacao-container {
                 transform: scale(1.05);
                 box-shadow: 5px 5px 5px #b3b3b3;
             }
+
+            li.nota-melhoria {
+                border-left: 4px solid var(--green1);
+
+                .tipo-nota h4{
+                    color: var(--green1);
+                    background-color: var(--green3);
+                }    
+            }
+
+            li.nota-atualizacao {
+                border-left: 4px solid var(--blue1);
+
+                .tipo-nota h4{
+                    color: var(--blue1);
+                    background-color: var(--blue3);
+                }
+            }
+
+            li.nota-correcao {
+                border-left: 4px solid var(--red1);
+
+                .tipo-nota h4{
+                    color: var(--red1);
+                    background-color: var(--red3);
+                }
+            }
+
+            li.nota-novo_recurso {
+                border-left: 4px solid var(--orange1);
+
+                .tipo-nota h4{
+                    color: var(--orange1);
+                    background-color: var(--orange3);
+                }
+            }
         }
+    }
+}
+
+@media (max-width: 600px) {
+    
+}
+
+#bloco-notas {
+    width: 50%;
+
+    .topo-notas {
+        background-color: var(--gray3);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        * {
+            margin: 10px;
+        } 
+        h2 {
+            font-size: large;
+        }  
+
+        button {
+            background: var(--blue1);
+            border-radius: 10px;
+            border: none;
+            font-size: large;
+            color: var(--white);
+            padding: 5px 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.25s;
+
+            #mais-topo-notas {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: larger;
+                width: fit-content;
+                padding: 0;
+                margin: 0 5px 0 0px;
+            }
+        }
+
+        button:hover {
+            background: var(--blue2);
+            transform: scale(1.05);
+        }
+    }
+}
+
+section#bloco-notas-container {
+    #notas-container {
+        #nenhuma-nota-ainda {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            svg {
+                width: 150px;
+                color: var(--gray2);
+                margin: 3%;
+            }
+
+            h4 {
+                font-size: larger;
+                margin: 1%;
+
+            }
+
+            h5 {
+                font-size: 0.9rem;
+                margin-top: 2%;
+                color: var(--gray1)
+            }
+
+        }
+    }
+
+    #criar-nota {
+
     }
 }

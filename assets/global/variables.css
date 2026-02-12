@@ -1,16 +1,27 @@
 :root{
-    --primary-color: rgb(39, 108, 212);
-    --aside-primary-color1: #4f46e5;
-    --aside-primary-color2: #7c3aed;
-    --gray1: rgb(245, 245, 245);
+    --purple1: #4f46e5;
+    --purple2: #7c3aed;
+    --purple3: #e6dfff;
+    --gray1: #999999;
+    --gray2: #cccccc;
+    --gray3: #f5f5f5;
     --green1: #4CAF50;
-    --green2: #e8f5e9;
-    --blue1: #2196F3;
-    --blue2: #e3f2fd;
+    --green2: #388E3C;
+    --green3: #e8f5e9;
+    --blue1: #276cd4;
+    --blue2: #2196F3;
+    --blue3: #e3f2fd;
     --red1: #f44336;
-    --red2: #ffebee;
+    --red2: #d32f2f;
+    --red3: #ffebee;
     --orange1: #ff9800;
-    --orange2: #fff3e0;
+    --orange2: #f57c00;
+    --orange3: #fff3e0;
+    --yellow1: #e6cf09;
+    --yellow2: #fbc02d;
+    --yellow3: #fffde7;
+    --black: #000000;
+    --white: #ffffff;
 
     --date-size: 1rem;
 }
