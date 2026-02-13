@@ -86,76 +86,6 @@ function mover(objeto) {
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
     });
-
-    // Touch events
-    objeto.addEventListener('touchstart', (e) => {
-        // Se o toque foi em uma imagem dentro do elemento
-        if (e.target.className === 'fechar') {
-            // Marca para permitir o clique se não houver movimento
-            const touch = e.touches[0];
-            startX = touch.clientX;
-            startY = touch.clientY;
-            isDragging = false;
-            
-            const onTouchMove = (e) => {
-                const touch = e.touches[0];
-                if (!isDragging && 
-                    (Math.abs(touch.clientX - startX) > MOVE_THRESHOLD || 
-                        Math.abs(touch.clientY - startY) > MOVE_THRESHOLD)) {
-                    isDragging = true;
-                    e.preventDefault();
-                }
-            };
-            
-            const onTouchEnd = (e) => {
-                document.removeEventListener('touchmove', onTouchMove);
-                document.removeEventListener('touchend', onTouchEnd);
-                
-                // Se não estava arrastando, dispara o clique
-                if (!isDragging) {
-                    e.target.click();
-                }
-            };
-            
-            document.addEventListener('touchmove', onTouchMove);
-            document.addEventListener('touchend', onTouchEnd, { once: true });
-            
-            return;
-        }
-        
-        // Caso contrário, trata como arraste
-        e.preventDefault();
-        draggedElement = objeto;
-        const touch = e.touches[0];
-        const rect = draggedElement.getBoundingClientRect();
-        shiftX = touch.clientX - rect.left;
-        shiftY = touch.clientY - rect.top;
-        startX = touch.clientX;
-        startY = touch.clientY;
-        isDragging = false;
-        
-        const onTouchMove = (e) => {
-            const touch = e.touches[0];
-            if (!isDragging && 
-                (Math.abs(touch.clientX - startX) > MOVE_THRESHOLD || 
-                    Math.abs(touch.clientY - startY) > MOVE_THRESHOLD)) {
-                isDragging = true;
-            }
-            
-            if (isDragging) {
-                moveAt(touch.pageX, touch.pageY);
-            }
-        };
-        
-        const onTouchEnd = () => {
-            document.removeEventListener('touchmove', onTouchMove);
-            document.removeEventListener('touchend', onTouchEnd);
-            draggedElement = null;
-        };
-        
-        document.addEventListener('touchmove', onTouchMove);
-        document.addEventListener('touchend', onTouchEnd, { once: true });
-    }, { passive: false });
 }
 
 function abrirMenu(estado) {
@@ -331,13 +261,10 @@ function criarNotasAtualizacao() {
             const liNota = document.createElement("li");
             liNota.classList.add("nota");
             liNota.classList.add(`nota-${nota.tipo.toLowerCase()}`);
-            console.log(nota.tipo.toLowerCase())
-            
             
             const divTipo = document.createElement("div");
             divTipo.classList.add("tipo-nota");
             liNota.appendChild(divTipo);
-            
 
             const tipo = document.createElement("h4");
             tipo.textContent = nota.tipo.replace("_", " ").toUpperCase();
@@ -509,12 +436,89 @@ function criarNotasAtualizacao() {
 
 // #region Bloco de notas
 
-function novaNota() {
-
+class Nota {
+    constructor(titulo, conteudo) {
+        this.titulo = titulo;
+        this.conteudo = conteudo;
+        this.data = new Date();
+    }
 }
 
-function salvarNota() {
+let notas = []
 
+function novaNota() {
+    const divTopoCriarNota = document.getElementById("topo-criar-nota");
+    const divTopoNotasContainer = document.getElementById("topo-notas-container");
+    divTopoCriarNota.style.display = "flex";
+    divTopoNotasContainer.style.display = "none";
+
+    const divNotasContainer = document.getElementById("notas-container");
+    const divCriarNota = document.getElementById("criar-nota");
+    divNotasContainer.style.display = "none";
+    divCriarNota.style.display = "flex";
+}
+
+function voltarParaNotas() {
+    const divTopoCriarNota = document.getElementById("topo-criar-nota");
+    const divTopoNotasContainer = document.getElementById("topo-notas-container");
+    divTopoCriarNota.style.display = "none";
+    divTopoNotasContainer.style.display = "flex";
+
+    const divNotasContainer = document.getElementById("notas-container");
+    const divCriarNota = document.getElementById("criar-nota");
+    divNotasContainer.style.display = "block";
+    divCriarNota.style.display = "none";
+}
+
+function criarNota() {
+    const divNenhumaNotaAinda = document.getElementById("nenhuma-nota-ainda");
+    divNenhumaNotaAinda.style.display = "none";
+
+    voltarParaNotas();
+
+    const titulo = document.getElementById("titulo-criar-nota").value;
+    const conteudo = document.getElementById("conteudo-criar-nota").value;
+    let nota = new Nota(titulo, conteudo)
+    notas.unshift(nota)
+
+    const divNota = document.createElement("div");
+    divNota.classList.add("nota");
+
+    const h3Titulo = document.createElement("h3");
+    h3Titulo.textContent = titulo;
+    divNota.appendChild(h3Titulo);
+
+    const pConteudo = document.createElement("p");
+    pConteudo.classList.add("conteudo-nota");
+    pConteudo.textContent = conteudo;
+    divNota.appendChild(pConteudo);
+
+    const pData = document.createElement("p");
+    pData.classList.add("data-nota");
+    let dataStr = String(nota.data.getDay()) + " de " + nota.data.toLocaleString("pt-BR", { month: "long" }) + " de " + String(nota.data.getFullYear()) + " às " + nota.data.getHours() + ":" + String(nota.data.getMinutes()).padStart(2, "0");
+    pData.textContent = dataStr;
+    divNota.appendChild(pData);
+
+    const divEditarExcluir = document.createElement("div");
+
+    const buttonEditar = document.createElement("button");
+    buttonEditar.innerHTML = "<img src='assets/images/icones-uteis/pencil.png'> Editar";
+    divEditarExcluir.appendChild(buttonEditar);
+
+    const buttonExcluir = document.createElement("button");
+    buttonExcluir.innerHTML = `
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                <line x1="10" y1="11" x2="10" y2="17"/>
+                <line x1="14" y1="11" x2="14" y2="17"/>
+            </svg>
+            `;
+    divEditarExcluir.appendChild(buttonExcluir)
+
+    divNota.appendChild(divEditarExcluir);
+    const divNotas = document.getElementById("notas");
+    divNotas.appendChild(divNota);
 }
 
 //#endregion

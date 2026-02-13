@@ -13,7 +13,7 @@ body {
 h1#title {
     text-align: center;
     color:var(--blue2);
-    transition: 0.3s, transform 0.3s;
+    transition: var(--transition-time1);
     text-decoration:none;
     text-align: center;
     margin: 15px;
@@ -58,7 +58,7 @@ nav#barra-main {
     img {
         width: 36px;
         position: absolute;
-        transition: 0.3s, transform 0.3s;
+        transition: var(--transition-time1);
     }
 
     img:hover {
@@ -123,7 +123,7 @@ aside#menu-lateral {
         margin: 3%;
         width: fit-content;
         background: linear-gradient(40deg, #66BB6A, #00ff0d);
-        transition: 0.3s, transform 0.3s;
+        transition: var(--transition-time1);
         box-shadow: 4px 4px 4px #8ca38d;
     }
 
@@ -189,8 +189,6 @@ div.aside-window {
         height: calc(100% - 8vh); /* ajuste conforme header */
         box-sizing: border-box;
         padding: 10px;
-        padding-right: 5px;
-        scrollbar-gutter: stable;
     }
 }
 
@@ -214,7 +212,7 @@ header.aside-window-header {
             height: 40px;
             margin: 10px 15px 10px 25px;
             padding: 0;
-            transition: 0.25s, transform 0.25s;
+            transition: var(--transition-time1);
             color: white;
             align-self: center;
         }
@@ -256,7 +254,7 @@ header.aside-window-header {
             border: none;
             border-radius: 5px;
             background-color: #ffffff53;
-            transition: 0.25s;
+            transition: var(--transition-time1);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -311,11 +309,11 @@ section#notas-atualizacao-container {
                 width: 30%;
 
                 svg {
-                    max-width: var(--date-size);
+                    max-width: 1rem;
                 }
 
                 p.data {
-                    font-size: var(--date-size);
+                    font-size: 1rem;
                     color: #000000;
                     margin-left: 5px;
                 }
@@ -327,9 +325,9 @@ section#notas-atualizacao-container {
 
             li.nota {
                 margin: 20px;
-                background-color: var(--gray3);
+                background-color: var(--gray);
                 list-style: none;
-                transition: 0.2s;
+                transition: var(--transition-time1);
                 padding: 20px;
                 border-radius: 15px;
 
@@ -373,7 +371,7 @@ section#notas-atualizacao-container {
 
             li.nota:hover {
                 transform: scale(1.05);
-                box-shadow: 5px 5px 5px #b3b3b3;
+                box-shadow: 5px 5px 5px var(--gray1);
             }
 
             li.nota-melhoria {
@@ -424,19 +422,8 @@ section#notas-atualizacao-container {
 
     .topo-notas {
         background-color: var(--gray3);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        * {
-            margin: 10px;
-        } 
-        h2 {
-            font-size: large;
-        }  
-
+        
         button {
-            background: var(--blue1);
             border-radius: 10px;
             border: none;
             font-size: large;
@@ -446,16 +433,70 @@ section#notas-atualizacao-container {
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            transition: 0.25s;
+            transition: var(--transition-time1);
+        }
 
-            #mais-topo-notas {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: larger;
-                width: fit-content;
-                padding: 0;
-                margin: 0 5px 0 0px;
+        #topo-notas-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            * {
+                margin: 10px;
+            }
+
+            h2 {
+                font-size: large;
+            }  
+
+            button {
+                background: var(--blue1);
+
+                img {
+                    width: 20px;
+                    filter: invert(100);
+                }
+
+                #img-topo-notas {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: larger;
+                    width: fit-content;
+                    padding: 0;
+                    margin: 0 5px 0 0px;
+                    color:white;
+                }
+            }
+        }
+        
+        #topo-criar-nota {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            * {
+                margin: 10px;
+            }
+            
+            button:nth-child(1) {
+                background-color: var(--gray2);
+                color: var(--black);
+
+                img {
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+
+            button:nth-child(2) {
+                background-color: var(--blue1);
+
+                img {
+                    width: 20px;
+                    height: 20px;
+                    filter: invert(100%);
+                }
             }
         }
 
@@ -467,6 +508,7 @@ section#notas-atualizacao-container {
 }
 
 section#bloco-notas-container {
+
     #notas-container {
         #nenhuma-nota-ainda {
             display: flex;
@@ -492,9 +534,113 @@ section#bloco-notas-container {
             }
 
         }
+
+        .nota {
+            background-color: var(--gray3);
+            border-radius: 15px;
+            padding: var(--p4);
+            transition: var(--transition-time1);
+            margin-bottom: var(--p5);
+
+            h3 {
+                margin: var(--p2) 0;
+                font-size: large;
+            }
+
+            p.conteudo-nota {
+                margin: var(--p5) 0;
+                font-size: medium;
+            }
+
+            p.data-nota {
+                font-size: small;
+                margin: var(--p4) 0;
+            }
+
+            div {
+                display: flex;
+                justify-content: space-between;
+
+                button {
+                    width: fit-content;
+                    color: var(--white);
+                    border-radius: 10px;
+                    border: none;
+                    font-size: medium;
+                    padding: var(--p2) var(--p3);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    cursor: pointer;
+                    transition: var(--transition-time1);
+                }
+
+                button:nth-child(1) {
+                    background-color: var(--blue1);
+
+                    img {
+                        width: 1em;
+                        height: 1em;
+                        margin: 0.1em 0.4em 0.1em 0.1em;
+                        filter: invert();
+                    }
+                }
+
+                button:nth-child(1):hover {
+                    transform: scale(1.1);
+                }
+
+                button:nth-child(2) {
+                    background-color: var(--red3);
+
+                    svg {
+                        width: 20px;
+                        height: 20px;
+                        color: var(--red1);
+                    }
+                }
+
+                button:nth-child(2):hover {
+                    transform: scale(1.1);
+                    background-color: #f7d7db;
+                }    
+            }
+        }
+
+        .nota:hover {
+            transform: scale(1.01);
+            box-shadow: 5px 5px 5px var(--gray1);
+        }
     }
 
     #criar-nota {
+        display: flex;
+        flex-direction: column;
+        
+        h5 {
+            margin: var(--p2) 0;
+        }
 
+        textarea {
+            font-family: sans-serif;
+            resize: none;
+            padding: 10px;
+            border-radius: 5px;
+            border: solid 3px var(--black);
+            margin-bottom: var(--p3);
+        }
+
+        textarea:focus {
+            border-color: var(--green1);
+            outline: none;
+        }
+
+        textarea#titulo-criar-nota {
+            font-size: large;         
+        }
+
+        textarea#conteudo-criar-nota {
+            font-size: medium;
+        }
     }
 }

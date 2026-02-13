@@ -23,5 +23,11 @@
     --black: #000000;
     --white: #ffffff;
 
-    --date-size: 1rem;
+    --transition-time1: 0.25s;
+    
+    --p1: 0.5%;
+    --p2: 1%;
+    --p3: 1.5%;
+    --p4: 2%;
+    --p5: 2.5%
 }

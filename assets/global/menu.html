@@ -4,13 +4,6 @@
 </head>
 
 <body>
-    <svg width="50" height="50">
-        <use href="#icon-melhoria"></use>
-    </svg>
-
-    <svg width="40" height="40">
-        <use xlink:href="#icon-melhoria"></use>
-    </svg>
     <aside id="menu-lateral" style="display: none;">
         <div id="fechar-menu-lateral">
             <img src="assets/images/icones-uteis/cruz.png" style="width: 50px;" onclick="abrirMenu(true)">
@@ -88,10 +81,20 @@
             </div>
         </header>
         <div class="topo-notas">
-            <h2>Minhas notas</h2>
-            <button onclick="novaNota()">
-                <span id="mais-topo-notas">+</span>Nova nota
-            </button>
+            <div id="topo-notas-container">
+                <h2>Minhas notas</h2>
+                <button onclick="novaNota()">
+                    <img src="assets/images/icones-uteis/edit.svg"> Nova nota
+                </button>
+            </div>
+            <div id="topo-criar-nota" style="display: none;">
+                <button onclick="voltarParaNotas()">
+                    <img src="assets/images/icones-uteis/arrow.svg"> Voltar
+                </button>
+                <button onclick="criarNota()">
+                    <img src="assets/images/icones-uteis/add.svg">Criar nota
+                </button>
+            </div>
         </div>
         <div class="aside-scroll">
             <section id="bloco-notas-container">
@@ -113,8 +116,12 @@
                     </div>
 
                 </div>
-                <div id="criarNota">
 
+                <div id="criar-nota" style="display: none;">
+                    <h5>Título</h5>
+                    <textarea id="titulo-criar-nota" rows="1" placeholder="Digite o título da nota"></textarea>
+                    <h5>Conteúdo</h5>
+                    <textarea id="conteudo-criar-nota" rows="7" placeholder="Digite o conteúdo da nota"></textarea>
                 </div>
             </section>
         </div>
@@ -143,7 +150,5 @@
             </label>
         </div>
     </div>
-    
-
 </body>
 
