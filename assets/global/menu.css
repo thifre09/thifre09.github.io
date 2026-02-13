@@ -183,17 +183,20 @@ div.aside-window {
     z-index: 101;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
 
     .aside-scroll {
+        flex: 1;
         overflow: auto;
-        height: calc(100% - 8vh); /* ajuste conforme header */
         box-sizing: border-box;
         padding: 10px;
+        padding-right: 0px;
     }
 }
 
 #notas-atualizacao {
-    width: 30%;
+    width: clamp(450px, 30%, 1000000px);
 }
 
 header.aside-window-header {
@@ -418,7 +421,10 @@ section#notas-atualizacao-container {
 }
 
 #bloco-notas {
-    width: 50%;
+    width: clamp(650px, 50%, 1000000px);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 
     .topo-notas {
         background-color: var(--gray3);
@@ -470,7 +476,7 @@ section#notas-atualizacao-container {
             }
         }
         
-        #topo-criar-nota {
+        #topo-criar-nota, #topo-editar-nota {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -535,7 +541,15 @@ section#bloco-notas-container {
 
         }
 
+        #notas {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
         .nota {
+            width: clamp(1px, 95%, 10000px);
             background-color: var(--gray3);
             border-radius: 15px;
             padding: var(--p4);
@@ -613,7 +627,12 @@ section#bloco-notas-container {
         }
     }
 
-    #criar-nota {
+    #notas {
+        overflow: auto;
+        
+    }
+
+    #criar-nota, #editar-nota {
         display: flex;
         flex-direction: column;
         

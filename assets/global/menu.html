@@ -87,12 +87,22 @@
                     <img src="assets/images/icones-uteis/edit.svg"> Nova nota
                 </button>
             </div>
+
             <div id="topo-criar-nota" style="display: none;">
                 <button onclick="voltarParaNotas()">
                     <img src="assets/images/icones-uteis/arrow.svg"> Voltar
                 </button>
                 <button onclick="criarNota()">
                     <img src="assets/images/icones-uteis/add.svg">Criar nota
+                </button>
+            </div>
+
+            <div id="topo-editar-nota" style="display: none;">
+                <button onclick="voltarParaNotas()">
+                    <img src="assets/images/icones-uteis/arrow.svg"> Voltar
+                </button>
+                <button onclick="salvarAlteracoesNota()">
+                    <img src="assets/images/icones-uteis/pencil.png">Editar Nota
                 </button>
             </div>
         </div>
@@ -122,6 +132,13 @@
                     <textarea id="titulo-criar-nota" rows="1" placeholder="Digite o título da nota"></textarea>
                     <h5>Conteúdo</h5>
                     <textarea id="conteudo-criar-nota" rows="7" placeholder="Digite o conteúdo da nota"></textarea>
+                </div>
+
+                <div id="editar-nota" style="display: none;">
+                    <h5>Título</h5>
+                    <textarea id="titulo-editar-nota" rows="1" placeholder="Digite o título da nota"></textarea>
+                    <h5>Conteúdo</h5>
+                    <textarea id="conteudo-editar-nota" rows="7" placeholder="Digite o conteúdo da nota"></textarea>
                 </div>
             </section>
         </div>

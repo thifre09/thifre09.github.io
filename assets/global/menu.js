@@ -128,9 +128,9 @@ const relacionado = Object.freeze({
     PAGINA_INICIAL: "Página inicial",
     GERAL: "Geral",
     // Paginas
-    Batatas: "Batatas",
-    Codificador: "Codificador",
-    Cores: "Cores",
+    BATATAS: "Batatas",
+    CODIFICADOR: "Codificador",
+    CORES: "Cores",
     CURIOSIDADES: "Curiosidades",
     REVIEW_DE_JOGOS: "Review de jogos",
     MEMES: "Memes",
@@ -186,8 +186,8 @@ const atualizacoes = [
         new NotaAtualizacao("Adição de novos memes", "Adicionado 4 novos memes à aba de memes.", tipoNota.ATUALIZACAO, relacionado.MEMES),
         new NotaAtualizacao("Adição de novas curiosidades", "Adicionadas curiosidades sobre objetos à aba de curiosidades.", tipoNota.ATUALIZACAO, relacionado.CURIOSIDADES),
         new NotaAtualizacao("Atualização da seção de Review de jogos", "Adicionada a review de 1 jogo, e mudanças no sumário.", tipoNota.ATUALIZACAO, relacionado.REVIEW_DE_JOGOS),
-        new NotaAtualizacao("Criação da aba Codificador", "Essa aba contém um codificador e decodificador de texto, baseado na Cifra de César.", tipoNota.NOVO_RECURSO, relacionado.Codificador),
-        new NotaAtualizacao("Criação da aba Cores", "Essa aba contém uma lista de cores e suas respectivas representações hexadecimais, HSL, HWB e RGB.", tipoNota.NOVO_RECURSO, relacionado.Cores),
+        new NotaAtualizacao("Criação da aba Codificador", "Essa aba contém um codificador e decodificador de texto, baseado na Cifra de César.", tipoNota.NOVO_RECURSO, relacionado.CODIFICADOR),
+        new NotaAtualizacao("Criação da aba Cores", "Essa aba contém uma lista de cores e suas respectivas representações hexadecimais, HSL, HWB e RGB.", tipoNota.NOVO_RECURSO, relacionado.CORES),
         new NotaAtualizacao("Correção de erros gramaticais", "Foram corrigidos diversos erros gramaticais em todo o site.", tipoNota.CORRECAO, relacionado.GERAL)
     ]),
     new Atualizacao("Beta 1.3", "17/12/2024", [
@@ -445,6 +445,7 @@ class Nota {
 }
 
 let notas = []
+let indexEditarNota = 0;
 
 function novaNota() {
     const divTopoCriarNota = document.getElementById("topo-criar-nota");
@@ -456,18 +457,25 @@ function novaNota() {
     const divCriarNota = document.getElementById("criar-nota");
     divNotasContainer.style.display = "none";
     divCriarNota.style.display = "flex";
+
+    document.getElementById("titulo-criar-nota").value = "";
+    document.getElementById("conteudo-criar-nota").value = "";
 }
 
 function voltarParaNotas() {
     const divTopoCriarNota = document.getElementById("topo-criar-nota");
     const divTopoNotasContainer = document.getElementById("topo-notas-container");
+    const divTopoEditarNota = document.getElementById("topo-editar-nota");
     divTopoCriarNota.style.display = "none";
     divTopoNotasContainer.style.display = "flex";
+    divTopoEditarNota.style.display = "none";
 
     const divNotasContainer = document.getElementById("notas-container");
     const divCriarNota = document.getElementById("criar-nota");
+    const divEditarNota = document.getElementById("editar-nota");
     divNotasContainer.style.display = "block";
     divCriarNota.style.display = "none";
+    divEditarNota.style.display = "none";
 }
 
 function criarNota() {
@@ -479,7 +487,7 @@ function criarNota() {
     const titulo = document.getElementById("titulo-criar-nota").value;
     const conteudo = document.getElementById("conteudo-criar-nota").value;
     let nota = new Nota(titulo, conteudo)
-    notas.unshift(nota)
+    notas.push(nota)
 
     const divNota = document.createElement("div");
     divNota.classList.add("nota");
@@ -503,9 +511,12 @@ function criarNota() {
 
     const buttonEditar = document.createElement("button");
     buttonEditar.innerHTML = "<img src='assets/images/icones-uteis/pencil.png'> Editar";
+    indexEditarNota = notas.indexOf(nota)
+    buttonEditar.addEventListener("click", () => editarNota(notas.indexOf(nota)))
     divEditarExcluir.appendChild(buttonEditar);
 
     const buttonExcluir = document.createElement("button");
+    buttonExcluir.addEventListener("click", () => excluirNota(notas.indexOf(nota)));
     buttonExcluir.innerHTML = `
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="3 6 5 6 21 6"/>
@@ -519,6 +530,36 @@ function criarNota() {
     divNota.appendChild(divEditarExcluir);
     const divNotas = document.getElementById("notas");
     divNotas.appendChild(divNota);
+}
+
+function editarNota(index) {
+    indexEditarNota = index;
+    const divTopoEditarNota = document.getElementById("topo-editar-nota");
+    const divTopoNotasContainer = document.getElementById("topo-notas-container");
+    divTopoEditarNota.style.display = "flex";
+    divTopoNotasContainer.style.display = "none";
+
+    const divNotasContainer = document.getElementById("notas-container");
+    const divEditarNota = document.getElementById("editar-nota");
+    divNotasContainer.style.display = "none";
+    divEditarNota.style.display = "flex";
+
+    document.getElementById("titulo-editar-nota").value = notas[index].titulo;
+    document.getElementById("conteudo-editar-nota").value = notas[index].conteudo;
+}
+
+function salvarAlteracoesNota() {
+    notas[indexEditarNota].titulo = document.getElementById("titulo-editar-nota").value;
+    notas[indexEditarNota].conteudo = document.getElementById("conteudo-editar-nota").value;
+    document.querySelectorAll("div.nota h3")[indexEditarNota].textContent = notas[indexEditarNota].titulo;
+    document.querySelectorAll("div.nota p.conteudo-nota")[indexEditarNota].textContent = notas[indexEditarNota].conteudo;
+
+    voltarParaNotas();
+}
+
+function excluirNota(index) {
+    notas.splice(index, 1);
+    document.querySelectorAll("div.nota")[index].remove()
 }
 
 //#endregion
