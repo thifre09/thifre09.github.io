@@ -4,31 +4,33 @@
 }
 
 body {
-    color:var(--black);
+    color: var(--black);
     padding: 0;
     margin: 0;
     font-family: sans-serif;
+    height: 100vh;
 }
 
 h1#title {
     text-align: center;
-    color:var(--blue2);
+    color: var(--blue2);
     transition: var(--transition-time1);
-    text-decoration:none;
+    text-decoration: none;
     text-align: center;
-    margin: 15px;
+    margin: var(--p2);
+    margin-bottom: 0;
 
     a {
-        text-decoration:none;
+        text-decoration: none;
         text-align: center;
     }
 
     a:visited {
         color: var(--blue2);
-        text-decoration:none;
+        text-decoration: none;
         text-align: center;
     }
-    
+
 }
 
 h1#title:hover {
@@ -36,20 +38,22 @@ h1#title:hover {
 }
 
 nav#barra-main {
-    background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet, red); /* Gradiente duplicado */
-    background-size: 300% 100%; /* Aumenta o tamanho do gradiente */
-    animation: rainbow 10s linear infinite; /* Animação contínua */
+    background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet, red);
+    /* Gradiente duplicado */
+    background-size: 300% 100%;
+    /* Aumenta o tamanho do gradiente */
+    animation: rainbow 10s linear infinite;
+    /* Animação contínua */
     min-height: auto;
-    padding: 15px 30px;
+    padding: var(--p2) var(--p5);
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
     position: sticky;
     top: 0;
     color: white;
     z-index: 100;
-    margin: 10px 0 10px 0;
+    margin-top: var(--p2);
 }
-
 
 .botao-menu-lateral {
     width: fit-content;
@@ -59,6 +63,7 @@ nav#barra-main {
         width: 36px;
         position: absolute;
         transition: var(--transition-time1);
+        cursor: pointer;
     }
 
     img:hover {
@@ -76,29 +81,47 @@ h6#titulo {
     color: white;
     text-align: center;
     width: 100%;
-    text-decoration:none;
+    text-decoration: none;
     text-align: center;
 
     > a {
-        text-decoration:none;
+        text-decoration: none;
         text-align: center;
         color: white;
     }
 }
 
 @keyframes abrirMenu {
-    from {right: 100%;}
-    to {right: 70%;}
+    from {
+        right: 100%;
+    }
+
+    to {
+        right: 80%;
+    }
 }
 
 @keyframes fecharMenu {
-    from {right: 70%;}
-    to {right: 100%;}
+    from {
+        right: 80%;
+    }
+
+    to {
+        right: 100%;
+    }
 }
 
 @keyframes rainbow {
-    0% { background-position: 0%; }   /* Começa na posição inicial */
-    100% { background-position: 150%; } /* Move até o final */
+    0% {
+        background-position: 0%;
+    }
+
+    /* Começa na posição inicial */
+    100% {
+        background-position: 150%;
+    }
+
+    /* Move até o final */
 }
 
 /* barra lateral */
@@ -109,47 +132,33 @@ aside#menu-lateral {
     flex-wrap: wrap;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
     position: fixed;
     height: 100vh;
     background-color: rgba(255, 255, 255, 0.637);
-    width: 30%;
+    width: 20%;
     top: 0;
 
-    button {
+    button#fechar-menu-lateral {
+        width: 90%;
         border: none;
-        border-radius: 100px;
-        font-size: larger;
-        padding: 3px;
-        margin: 3%;
-        width: fit-content;
-        background: linear-gradient(40deg, #66BB6A, #00ff0d);
-        transition: var(--transition-time1);
-        box-shadow: 4px 4px 4px #8ca38d;
-    }
-
-    button:hover {
-        transform: scale(1.25);
+        border-radius: 5px;
+        font-size: x-large;
+        margin: var(--p5) 0;
         cursor: pointer;
-        box-shadow: 4px 4px 4px #96da99;
-        background: linear-gradient(40deg, #a6e9aa, #00ff0d);
     }
-}
 
-#fechar-menu-lateral {
-    width: 100%;
-    height: fit-content;
-    margin: 0;
-    padding: 0;
-}
-
-img.fechar {
-    width: 30px;
-    margin: 5px;
-}
-
-img.fechar:hover {
-    transform: scale(1.25);
-    cursor: pointer;
+    button:not(#fechar-menu-lateral) {
+        width: 70%;
+        font-size: large;
+        margin: var(--p5) 0;
+        padding: var(--p4);
+        border: none;
+        border-radius: 5px;
+        background: linear-gradient(90deg, var(--purple1) 0%, var(--purple2) 100%);
+        color: white;
+        cursor: pointer;
+    }
 }
 
 @media (max-width: 600px) {
@@ -158,27 +167,38 @@ img.fechar:hover {
     }
 
     @keyframes abrirMenu {
-        from {right: 100%;}
-        to {right: 50%;}
+        from {
+            right: 100%;
+        }
+
+        to {
+            right: 50%;
+        }
     }
-    
+
     @keyframes fecharMenu {
-        from {right: 50%;}
-        to {right: 100%;}
+        from {
+            right: 50%;
+        }
+
+        to {
+            right: 100%;
+        }
     }
 }
 
 div.aside-window {
-    height: 70vh;
+    height: 80vh;
     background-color: #ffffff;
     border: solid 3px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     overflow: hidden;
-    position: fixed; /* borda aqui */
-    top: 20px;
-    left: 20px;
+    position: fixed;
+    /* borda aqui */
+    top: var(--p5);
+    left: var(--p3);
     cursor: default;
     z-index: 101;
     margin: 0;
@@ -187,11 +207,10 @@ div.aside-window {
     flex-direction: column;
 
     .aside-scroll {
-        flex: 1;
+        height: calc(80vh - clamp(70px, 5vh, 100000px));
         overflow: auto;
         box-sizing: border-box;
         padding: 10px;
-        padding-right: 0px;
     }
 }
 
@@ -201,19 +220,21 @@ div.aside-window {
 
 header.aside-window-header {
     display: flex;
+    justify-content: space-between;
     background: linear-gradient(90deg, var(--purple1) 0%, var(--purple2) 100%);
+    height: clamp(70px, 5vh, 100000px);
 
     div.left-div {
         width: 80%;
         display: flex;
         align-content: center;
         justify-content: flex-start;
-        margin: 1vh 1% 1vh 0.5%;
+        margin-left: var(--p3);
 
         .header-icon {
             width: 40px;
             height: 40px;
-            margin: 10px 15px 10px 25px;
+            margin: 0 5%;
             padding: 0;
             transition: var(--transition-time1);
             color: white;
@@ -226,18 +247,9 @@ header.aside-window-header {
 
             h1 {
                 margin: 0;
-                padding: 0 0 5px 0;
                 width: fit-content;
                 font-size: x-large;
                 color: white;
-           }
-                
-            h2 {
-                margin: 0 0 5px 0;
-                padding: 0px;
-                width: fit-content;
-                font-size: medium;
-                color: rgba(255, 255, 255, 0.792);
             }
         }
     }
@@ -246,8 +258,9 @@ header.aside-window-header {
         width: 20%;
         display: flex;
         align-content: center;
-        justify-content: center;
-        margin: 1vh 1% 1vh 0.5%;
+        justify-content: flex-end;
+        margin-right: 5%;
+
         button {
             width: 30px;
             height: 30px;
@@ -328,7 +341,7 @@ section#notas-atualizacao-container {
 
             li.nota {
                 margin: 20px;
-                background-color: var(--gray);
+                background-color: var(--gray4);
                 list-style: none;
                 transition: var(--transition-time1);
                 padding: 20px;
@@ -351,7 +364,7 @@ section#notas-atualizacao-container {
                         height: 30px;
                         margin-left: 10px;
                     }
-                }      
+                }
 
                 h3 {
                     margin: 15px 0 15px 0;
@@ -380,16 +393,16 @@ section#notas-atualizacao-container {
             li.nota-melhoria {
                 border-left: 4px solid var(--green1);
 
-                .tipo-nota h4{
+                .tipo-nota h4 {
                     color: var(--green1);
                     background-color: var(--green3);
-                }    
+                }
             }
 
             li.nota-atualizacao {
                 border-left: 4px solid var(--blue1);
 
-                .tipo-nota h4{
+                .tipo-nota h4 {
                     color: var(--blue1);
                     background-color: var(--blue3);
                 }
@@ -398,7 +411,7 @@ section#notas-atualizacao-container {
             li.nota-correcao {
                 border-left: 4px solid var(--red1);
 
-                .tipo-nota h4{
+                .tipo-nota h4 {
                     color: var(--red1);
                     background-color: var(--red3);
                 }
@@ -407,17 +420,13 @@ section#notas-atualizacao-container {
             li.nota-novo_recurso {
                 border-left: 4px solid var(--orange1);
 
-                .tipo-nota h4{
+                .tipo-nota h4 {
                     color: var(--orange1);
                     background-color: var(--orange3);
                 }
             }
         }
     }
-}
-
-@media (max-width: 600px) {
-    
 }
 
 #bloco-notas {
@@ -427,8 +436,8 @@ section#notas-atualizacao-container {
     flex-direction: column;
 
     .topo-notas {
-        background-color: var(--gray3);
-        
+        background-color: var(--gray4);
+
         button {
             border-radius: 10px;
             border: none;
@@ -453,7 +462,7 @@ section#notas-atualizacao-container {
 
             h2 {
                 font-size: large;
-            }  
+            }
 
             button {
                 background: var(--blue1);
@@ -471,12 +480,13 @@ section#notas-atualizacao-container {
                     width: fit-content;
                     padding: 0;
                     margin: 0 5px 0 0px;
-                    color:white;
+                    color: white;
                 }
             }
         }
-        
-        #topo-criar-nota, #topo-editar-nota {
+
+        #topo-criar-nota,
+        #topo-editar-nota {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -484,7 +494,7 @@ section#notas-atualizacao-container {
             * {
                 margin: 10px;
             }
-            
+
             button:nth-child(1) {
                 background-color: var(--gray2);
                 color: var(--black);
@@ -521,6 +531,7 @@ section#bloco-notas-container {
             flex-direction: column;
             justify-content: center;
             align-items: center;
+
             svg {
                 width: 150px;
                 color: var(--gray2);
@@ -550,7 +561,7 @@ section#bloco-notas-container {
 
         .nota {
             width: clamp(1px, 95%, 10000px);
-            background-color: var(--gray3);
+            background-color: var(--gray4);
             border-radius: 15px;
             padding: var(--p4);
             transition: var(--transition-time1);
@@ -617,7 +628,7 @@ section#bloco-notas-container {
                 button:nth-child(2):hover {
                     transform: scale(1.1);
                     background-color: #f7d7db;
-                }    
+                }
             }
         }
 
@@ -629,13 +640,14 @@ section#bloco-notas-container {
 
     #notas {
         overflow: auto;
-        
+
     }
 
-    #criar-nota, #editar-nota {
+    #criar-nota,
+    #editar-nota {
         display: flex;
         flex-direction: column;
-        
+
         h5 {
             margin: var(--p2) 0;
         }
@@ -655,11 +667,231 @@ section#bloco-notas-container {
         }
 
         textarea#titulo-criar-nota {
-            font-size: large;         
+            font-size: large;
         }
 
         textarea#conteudo-criar-nota {
             font-size: medium;
         }
+    }
+}
+
+#calculadora {
+    width: clamp(600px, 40%, 1000000px);
+
+    .aside-scroll {
+        display: flex;
+        justify-content: center;
+    }
+}
+
+.calculator {
+    width: 100%;
+    height: fit-content;
+    display: grid;
+    /* Define 7 colunas de larguras iguais */
+    grid-template-columns: repeat(7, 1fr); 
+    gap: 10px; /* Espaçamento entre os botões */
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px var(--gray1);
+
+    .display {
+        /* Ocupa todas as 7 colunas */
+        grid-column: span 7; 
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: space-around;
+        padding: 15px;
+        word-wrap: break-word;
+        word-break: break-all;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        min-height: 80px;
+
+        #current-operand {
+            color: white;
+            font-size: 2rem;
+        }
+
+        #previous-operand {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1rem;
+        }
+    }
+
+    button {
+        /* Botões agora preenchem o espaço da célula do grid */
+        width: 100%; 
+        aspect-ratio: 1 / 1;
+        cursor: pointer;
+        font-size: 1.2rem;
+        border: none;
+        outline: none;
+        background-color: var(--gray2);
+        border-radius: 5px;
+        transition: 0.2s;
+    }
+
+    button:hover {
+        background-color: var(--gray1);
+    }
+
+    button#equal-button {
+        grid-column: span 2;
+        aspect-ratio: auto; 
+        height: 100%;
+        background-color: var(--blue1);
+    }
+
+    button#equal-button:hover {
+        background-color: var(--blue2);
+    }
+
+    button[onClick^="appendNumber"]:not([onClick="appendNumber('.')"]) {
+        background-color: var(--orange1);
+    }
+
+    button[onClick^="appendNumber"]:not([onClick="appendNumber('.')"]):hover {
+        background-color: var(--orange2);
+    }
+
+    button[onClick^="appendOperator"], button[onClick^="calculateSqrt"] {
+        background-color: var(--green1);
+        font-size: 1.5rem;
+    }
+
+    button[onClick^="appendOperator"]:hover, button[onClick^="calculateSqrt"]:hover {
+        background-color: var(--green2);
+    }
+
+    button[onClick="clearDisplay()"], button[onClick="deleteDigit()"] {
+        background-color: var(--red1);
+    }
+
+    button[onClick="clearDisplay()"]:hover, button[onClick="deleteDigit()"]:hover {
+        background-color: var(--red2);
+    }
+}
+
+@media (max-width: 600px) {
+    #notas-atualizacao {
+        width: 90%;
+        height: 90vh;
+        top: 5%;
+        right: 5%;
+        bottom: 5%;
+        left: 5%;
+    }
+
+    #notas-atualizacao .aside-scroll {
+        height: calc(90vh - clamp(70px, 12vh, 100000px));
+    }
+
+    header.aside-window-header {
+        min-height: fit-content;
+        height: clamp(70px, 12vh, 100000px);
+
+        div.left-div {
+            min-height: fit-content;
+        }
+    }
+
+    #bloco-notas {
+        width: 90%;
+        height: 90vh;
+        top: 5%;
+        right: 5%;
+        bottom: 5%;
+        left: 5%;
+
+        .aside-scroll {
+            height: calc(90vh - clamp(70px, 12vh, 100000px)-12vh);
+        }
+
+        .topo-notas {
+            height: 12vh;
+        }
+    }
+
+    #calculadora {
+        width: 90%;
+        height: 90vh;
+        max-height: fit-content;
+        top: 5%;
+        right: 5%;
+        bottom: 5%;
+        left: 5%;
+
+        .aside-scroll {
+            height: calc(90vh - clamp(70px, 12vh, 100000px));
+            max-height: fit-content;
+        }
+    }
+
+    .calculator {
+        grid-template-columns: repeat(4, 1fr); 
+
+        .display {
+            grid-column: span 4; 
+        }
+
+        button#equal-button {
+            grid-column: span 1;
+            aspect-ratio: auto; 
+            height: 100%;
+            background-color: var(--blue1);
+        }
+
+        button[onClick="appendNumber('1')"], button[onClick="appendNumber('2')"], button[onClick="appendNumber('3')"] {
+            grid-row-start: 3;
+        }
+
+        button[onClick="appendNumber('4')"], button[onClick="appendNumber('5')"], button[onClick="appendNumber('6')"] {
+            grid-row-start: 4;
+        }
+
+        button[onClick="appendNumber('7')"], button[onClick="appendNumber('8')"], button[onClick="appendNumber('9')"] {
+            grid-row-start: 5;
+        }
+
+        button[onClick="appendNumber('.')"] {
+            grid-row-start: 2;
+            grid-column-start: 1;
+        }
+
+        button[onClick="appendNumber('0')"] {
+            grid-row-start: 6;
+            grid-column-start: 2;
+        }
+
+        button[onClick^="appendOperator('+')"] {
+            grid-row-start: 5;
+            grid-column-start: 4;
+        }
+
+        button[onClick^="appendOperator('-')"] {
+            grid-row-start: 4;
+            grid-column-start: 4;
+        }
+
+        button[onClick^="appendOperator('*')"] {
+            grid-row-start: 3;
+            grid-column-start: 4;
+        }
+
+        button[onClick^="appendOperator('/')"] {
+            grid-row-start: 2;
+            grid-column-start: 4;
+        }
+
+        button[onClick^="appendOperator('**')"] {
+            grid-row-start: 2;
+            grid-column-start: 3;
+        }
+
+
     }
 }

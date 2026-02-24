@@ -1,0 +1,244 @@
+html, body {
+    height: 100vh;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+
+#conteudo {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+
+    .separador-horizontal {
+        width: 100%;
+        height: 2px;
+        background-color: var(--gray1);
+    }
+
+    .separador-vertical {
+        width: 2px;
+        align-self: stretch;
+        background-color: var(--gray1);
+    }
+}
+
+
+#troca-de-tela {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    #interface-terminal {
+        display: flex;
+        width: fit-content;
+        background-color: var(--gray3);
+        border-radius: 10px;
+
+        button {
+            width: fit-content;
+            font-size: x-large;
+            padding: 7px;
+            margin: 3px;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+        }
+
+        button.interface-terminal-ativo {
+            background-color: white;
+            border-radius: 10px;
+        }
+    }
+}
+
+#interface-grafica {
+    width: 100%;
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    justify-content: center;
+
+    #esquerda {
+        width: 20%;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+
+        #databases {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 5%;
+
+            #database-button {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+
+                p {
+                    font-size: large;
+                    margin: 0;
+                    margin-right: 5px;
+                }
+
+                button {
+                    border: none;
+                    border-radius: 10px;
+                    background-color: transparent;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 5px;
+                    transition: var(--transition-time1);
+
+                    svg {
+                        width: 30px;
+                        height: 30px;
+                    }                      
+                }  
+                
+                button:hover {
+                    background-color: var(--gray3);
+                    transform: scale(1.05);
+                }
+
+            }
+        }
+
+        #button-nova-tabela {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            button#nova-tabela {  
+                width: 90%;
+                border: none;
+                border-radius: 10px;
+                background-color: black;
+                color: white;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 5%;
+                cursor: pointer;
+                transition: var(--transition-time1);
+
+                svg {
+                    width: 20px;
+                    height: 20px;
+                    margin: 8px;
+                    margin-right: 5px;
+                }
+
+                p {
+                    font-size: large;
+                    margin: 8px;
+                    margin-left: 5px;
+                }
+            }
+
+            button#nova-tabela:hover {
+                transform: scale(1.05);
+            }
+        }
+
+        #tabelas {
+            background-color: var(--gray4);
+            flex: 1;
+            min-height: 0;
+            padding: 5%;
+            overflow-y: auto;
+
+            > p {
+                font-size: large;
+            }
+
+            #tabelas-lista {
+                .tabela {
+                    background-color: var(--gray3);
+                    border-radius: 10px;
+                    padding: 5px;
+                    margin: 5px;
+                    cursor: pointer;
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: large;
+                    align-items: center;
+
+                    p:nth-child(2) {
+                        font-size: medium;
+                    }
+                }
+
+                .tabela-ativa {
+                    background-color: var(--blue2);
+                    color: white;
+                }
+            }
+        }
+    }
+
+    #direita {
+        width: 80%;
+
+        #varios-botoes {
+            display: flex;
+            justify-content: space-between;
+
+            #tabela-info-varios-botoes {
+                padding: var(--p3);
+            }
+
+            #botoes-varios-botoes {
+                display: flex;
+                flex: 1;
+                justify-content: flex-end;
+
+                button {
+                    border: none;
+                    border-radius: 10px;
+                    background-color: transparent;           
+                    padding: 5px;
+                    transition: var(--transition-time1);
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: medium;
+                    margin: var(--p3);
+                    
+                }
+
+                svg {
+                    width: 20px;
+                    height: 20px;
+                    margin: 5px;
+                }
+
+                #alter-column {
+                    border: solid 1px var(--gray2);
+                }
+
+                #insert-line {
+                    background-color: black;
+                    color: white;
+                }
+
+                #delete-table {
+                    background-color: var(--red2);
+                    color:white;     
+                }
+            }
+        }
+    }
+}

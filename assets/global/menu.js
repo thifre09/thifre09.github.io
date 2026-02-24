@@ -17,9 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             // Aplicar a todos os elementos
-            mover(document.getElementById('notas-atualizacao'))
-            //mover(document.getElementById('calculadora'));
+            mover(document.getElementById('notas-atualizacao'))         
             mover(document.getElementById('bloco-notas'));
+            mover(document.getElementById('calculadora'));
             //mover(document.getElementById('conquistas-geral'));
             //mover(document.getElementById('configuracoes'));
 
@@ -33,56 +33,62 @@ document.addEventListener('DOMContentLoaded', () => {
 function mover(objeto) {
     let draggedElement = null;
     let shiftX, shiftY;
-    let startX, startY;
     let isDragging = false;
-    const MOVE_THRESHOLD = 5; // pixels de movimento para considerar como arraste
+    let animationFrameId = null;
+    const MOVE_THRESHOLD = 5;
 
-    const moveAt = (pageX, pageY) => {
+    // Valores de destino para a animação
+    let targetX = 0;
+    let targetY = 0;
+
+    const updatePosition = () => {
         if (!draggedElement) return;
-        draggedElement.style.left = `${pageX - shiftX - window.scrollX}px`;
-        draggedElement.style.top = `${pageY - shiftY - window.scrollY}px`;
+
+        // Aplica a posição apenas no momento em que a tela vai atualizar
+        draggedElement.style.left = `${targetX}px`;
+        draggedElement.style.top = `${targetY}px`;
+
+        animationFrameId = requestAnimationFrame(updatePosition);
     };
 
-    // Mouse events
     objeto.addEventListener('mousedown', (e) => {
-        // Se o clique foi em uma imagem dentro do elemento, permita o clique normal
-        if (e.target.tagName === 'IMG') {
-            return;
-        }
-        
+        if (e.target.tagName === 'IMG') return;
+
         draggedElement = objeto;
         const rect = draggedElement.getBoundingClientRect();
+        
         shiftX = e.clientX - rect.left;
         shiftY = e.clientY - rect.top;
-        startX = e.clientX;
-        startY = e.clientY;
-        isDragging = false;
         
+        const startX = e.clientX;
+        const startY = e.clientY;
+        isDragging = false;
+
         const onMouseMove = (e) => {
-            // Verifica se o movimento passou do threshold
             if (!isDragging && 
                 (Math.abs(e.clientX - startX) > MOVE_THRESHOLD || 
-                    Math.abs(e.clientY - startY) > MOVE_THRESHOLD)) {
+                 Math.abs(e.clientY - startY) > MOVE_THRESHOLD)) {
                 isDragging = true;
+                // Inicia o ciclo de animação
+                animationFrameId = requestAnimationFrame(updatePosition);
             }
-            
+
             if (isDragging) {
-                moveAt(e.pageX, e.pageY);
+                // Em vez de mover o DOM aqui, apenas guardamos as coordenadas
+                targetX = e.pageX - shiftX - window.scrollX;
+                targetY = e.pageY - shiftY - window.scrollY;
             }
         };
-        
-        const onMouseUp = (e) => {
+
+        const onMouseUp = () => {
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
             
-            // Se não estava arrastando, permite o clique
-            if (!isDragging && e.target.tagName === 'IMG') {
-                e.target.click();
-            }
-            
+            // Para o ciclo de animação
+            cancelAnimationFrame(animationFrameId);
             draggedElement = null;
         };
-        
+
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
     });
@@ -116,7 +122,6 @@ function abrir(estado, id) {
 // #region Notas da atualização
 
 const tipoNota = Object.freeze({
-    MELHORIA: "melhoria",
     ATUALIZACAO: "atualizacao",
     CORRECAO: "correcao",
     NOVO_RECURSO: "novo_recurso"
@@ -132,12 +137,14 @@ const relacionado = Object.freeze({
     CODIFICADOR: "Codificador",
     CORES: "Cores",
     CURIOSIDADES: "Curiosidades",
-    REVIEW_DE_JOGOS: "Review de jogos",
+    MAYOR_SIMULATOR: "Mayor Simulator",
     MEMES: "Memes",
     NUMEROS: "Números",
     PODER_DO_CSS: "Poder do CSS",
     PYTHON: "Python",
-    QUADRADO_CLICKER: "Quadrado Clicker"
+    QUADRADO_CLICKER: "Quadrado Clicker",
+    REVIEW_DE_JOGOS: "Review de jogos",
+    THIFREBD: "ThifreBD"
 });
 
 class NotaAtualizacao {
@@ -158,7 +165,12 @@ class Atualizacao {
 }
 
 const atualizacoes = [
-    new Atualizacao("Beta 2.2", "19/03/2024", [
+    new Atualizacao("Beta 3.0", "??/??/2026", [
+        new NotaAtualizacao("Criação da página Mayor Simulator", "Foi criado o jogo Mayor Simulator. Nele você administra uma cidade e precisa garantir que os cidadãos fiquem felizes.", tipoNota.NOVO_RECURSO, relacionado.MAYOR_SIMULATOR),
+        new NotaAtualizacao("Criação da página ThifreBD", "", tipoNota.NOVO_RECURSO, relacionado.THIFREBD),
+        new NotaAtualizacao("Atualização do banner principal", "O banner principal foi atualizado com um design completamente novo, mais moderno e responsivo.", tipoNota.ATUALIZACAO, relacionado.BANNER_PRINCIPAL)
+    ]),
+    new Atualizacao("Beta 2.2", "19/03/2025", [
         new NotaAtualizacao("Criação de conquistas gerais para todo o site", "Agora existem conquistas que podem ser desbloqueadas em todas as páginas do site. Elas podem ser acessadas pelo menu lateral.", tipoNota.NOVO_RECURSO, relacionado.GERAL),
         new NotaAtualizacao("Adição de curiosidades sobre história", "Adicionadas curiosidades sobre história à aba de curiosidades.", tipoNota.ATUALIZACAO, relacionado.CURIOSIDADES),
         new NotaAtualizacao("Adição de novos memes", "Adicionado 2 novos memes à aba de memes.", tipoNota.ATUALIZACAO, relacionado.MEMES),
@@ -166,18 +178,18 @@ const atualizacoes = [
         new NotaAtualizacao("Criação da aba O poder do CSS", "Essa aba contém uma coleção de pequenos truques de CSS, mostrando o poder que ele tem para criar coisas incríveis.", tipoNota.NOVO_RECURSO, relacionado.PODER_DO_CSS),
         new NotaAtualizacao("Correção de pequenos bugs", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do site.", tipoNota.CORRECAO, relacionado.GERAL)
     ]),
-    new Atualizacao("Beta 2.1.1", "??/??/????", [
-        new NotaAtualizacao("Mudança nas notas da atualização", "As notas da atualização agora estão mais organizadas.", tipoNota.MELHORIA, relacionado.GERAL),
+    new Atualizacao("Beta 2.1.1", "??/??/2025", [
+        new NotaAtualizacao("Mudança nas notas da atualização", "As notas da atualização agora estão mais organizadas.", tipoNota.ATUALIZACAO, relacionado.GERAL),
         new NotaAtualizacao("Correção de alguns bugs no Quadrado Clicker", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do jogo.", tipoNota.CORRECAO, relacionado.QUADRADO_CLICKER)
     ]),
     new Atualizacao("Beta 2.1", "19/02/2025", [
-        new NotaAtualizacao("Pequenas mudanças no layout de algumas páginas", "Algumas páginas tiveram pequenas mudanças no layout para melhorar a experiência do usuário.", tipoNota.MELHORIA, relacionado.GERAL),
+        new NotaAtualizacao("Pequenas mudanças no layout de algumas páginas", "Algumas páginas tiveram pequenas mudanças no layout para melhorar a experiência do usuário.", tipoNota.ATUALIZACAO, relacionado.GERAL),
         new NotaAtualizacao("Correção de pequenos bugs", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do site.", tipoNota.CORRECAO, relacionado.GERAL),
         new NotaAtualizacao("Atualização no Quadrado clicker", "Adicionado um sistema de conquistas, uma melhoria de triângulo que gera quadrados automaticamente, 3 novos geradores, mudanças nos preços dos geradores e melhorias, melhorias visuais, mais perguntas no quiz matemático, aumento do limite de quadrados e correção de pequenos bugs.", tipoNota.ATUALIZACAO, relacionado.QUADRADO_CLICKER)
     ]),
     new Atualizacao("Beta 2.0", "22/01/2025", [
-        new NotaAtualizacao("Mudanças no layout de quase todas as páginas", "O layout de quase todas as páginas do site foi completamente refeito, com um design mais moderno e responsivo.", tipoNota.MELHORIA, relacionado.GERAL),
-        new NotaAtualizacao("Atualização no banner principal", "O banner principal de cada página foi padronizado, com um design mais moderno e responsivo.", tipoNota.MELHORIA, relacionado.BANNER_PRINCIPAL),
+        new NotaAtualizacao("Mudanças no layout de quase todas as páginas", "O layout de quase todas as páginas do site foi completamente refeito, com um design mais moderno e responsivo.", tipoNota.ATUALIZACAO, relacionado.GERAL),
+        new NotaAtualizacao("Atualização no banner principal", "O banner principal de cada página foi padronizado, com um design mais moderno e responsivo.", tipoNota.ATUALIZACAO, relacionado.BANNER_PRINCIPAL),
         new NotaAtualizacao("Criação de um menu lateral", "Foi criado um menu lateral no banner principal, contendo o bloco de notas, as notas de atualização e a calculadora.", tipoNota.NOVO_RECURSO, relacionado.BANNER_PRINCIPAL),
         new NotaAtualizacao("Criação de uma calculadora", "Foi criada uma calculadora simples.", tipoNota.NOVO_RECURSO, relacionado.BANNER_PRINCIPAL),
         new NotaAtualizacao("Remoção do bloco de notas e notas de atualização do menu principal", "O bloco de notas e as notas de atualização foram removidos do menu principal e adicionados à barra lateral, para melhorar a organização do site.", tipoNota.ATUALIZACAO, relacionado.BANNER_PRINCIPAL),
@@ -196,16 +208,16 @@ const atualizacoes = [
     ]),
     new Atualizacao("Beta 1.2", "??/??/2024", [
         new NotaAtualizacao("Criação da aba curiosidades", "Essa aba contém curiosidades sobre diversos assuntos, divididas 4 em categorias.", tipoNota.NOVO_RECURSO, relacionado.CURIOSIDADES),
-        new NotaAtualizacao("Python:Melhoria no layout", "O layout da aba de Python foi ajustado para se ajustar melhor em celulares.", tipoNota.MELHORIA, relacionado.PYTHON),
+        new NotaAtualizacao("Python:Melhoria no layout", "O layout da aba de Python foi ajustado para se ajustar melhor em celulares.", tipoNota.ATUALIZACAO, relacionado.PYTHON),
         new NotaAtualizacao("Adição de novos memes", "Adicionado 3 novos memes à aba de memes.", tipoNota.ATUALIZACAO, relacionado.MEMES)
     ]),
     new Atualizacao("Beta 1.1", "??/??/2024", [
         new NotaAtualizacao("Criação da aba Batatas", "Essa aba contém um quiz sobre curiosidades aleatórias, com um botão para verificar seus acertos.", tipoNota.NOVO_RECURSO, relacionado.BATATAS),
-        new NotaAtualizacao("Melhoria no banner principal", "O banner principal agora é fixo, e desce junto com o resto da página.", tipoNota.MELHORIA, relacionado.BANNER_PRINCIPAL),
-        new NotaAtualizacao("Mudança no layout de algumas abas", "Algumas abas tiveram seu layout ajustado para se ajustar melhor em celulares.", tipoNota.MELHORIA, relacionado.GERAL),
+        new NotaAtualizacao("Melhoria no banner principal", "O banner principal agora é fixo, e desce junto com o resto da página.", tipoNota.ATUALIZACAO, relacionado.BANNER_PRINCIPAL),
+        new NotaAtualizacao("Mudança no layout de algumas abas", "Algumas abas tiveram seu layout ajustado para se ajustar melhor em celulares.", tipoNota.ATUALIZACAO, relacionado.GERAL),
     ]),
     new Atualizacao("Beta 1.0", "??/??/2024", [
-        new NotaAtualizacao("Pequenas mudanças no layout", "Algumas páginas tiveram seu layout ajustado para melhorar a experiência do usuário.", tipoNota.MELHORIA, relacionado.PAGINA_INICIAL),
+        new NotaAtualizacao("Pequenas mudanças no layout", "Algumas páginas tiveram seu layout ajustado para melhorar a experiência do usuário.", tipoNota.ATUALIZACAO, relacionado.PAGINA_INICIAL),
         new NotaAtualizacao("Continuação do curso de Python", "Adicionado mais seções ao curso de Python. Tabém foi adicionado uma mesagem no final", tipoNota.ATUALIZACAO, relacionado.PYTHON),
         new NotaAtualizacao("Atualizado a seção de Review de jogos", "Adicionada mais reviews de jogos que joguei recentemente.", tipoNota.ATUALIZACAO, relacionado.REVIEW_DE_JOGOS),
         new NotaAtualizacao("Correção de bugs menores", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do site.", tipoNota.CORRECAO, relacionado.GERAL)
@@ -287,53 +299,6 @@ function criarNotasAtualizacao() {
             ulNotas.appendChild(liNota);
 
             switch (nota.tipo) {
-                case tipoNota.MELHORIA:
-                    divTipo.innerHTML += `
-                    <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                        width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000"
-                        preserveAspectRatio="xMidYMid meet">
-
-                        <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                        fill="var(--green1)" stroke="none">
-                            <path d="M3010 5104 c-41 -27 -1710 -1697 -1726 -1726 -18 -35 -18 -72 1 -108
-                            31 -60 33 -60 492 -60 l419 0 -3 -42 c-27 -386 -103 -677 -263 -1003 -127
-                            -260 -281 -476 -485 -680 -132 -132 -239 -220 -399 -326 -174 -116 -433 -243
-                            -611 -299 -113 -36 -146 -52 -160 -80 -31 -59 -10 -138 42 -158 43 -18 145
-                            -39 278 -59 150 -22 560 -25 705 -4 225 31 450 87 644 159 l100 38 41 -81 c68
-                            -137 193 -300 248 -323 45 -20 92 -7 141 38 48 44 101 70 144 70 73 0 150 -48
-                            183 -113 18 -35 20 -50 14 -106 -14 -122 -12 -139 21 -171 44 -45 142 -63 334
-                            -64 322 -2 408 45 373 200 -18 79 -6 129 43 184 39 43 86 63 149 62 58 -2 92
-                            -16 141 -62 80 -74 137 -63 225 43 103 122 178 255 224 394 23 71 25 87 15
-                            117 -12 38 -52 76 -79 76 -10 0 -41 12 -69 26 -112 56 -142 189 -65 292 25 33
-                            89 72 120 72 36 0 82 38 93 77 10 33 9 48 -10 103 -52 159 -169 356 -274 462
-                            -33 34 -43 38 -85 38 -42 0 -54 -5 -94 -40 -54 -48 -103 -70 -154 -70 -46 0
-                            -110 29 -140 61 l-21 24 50 90 c158 283 266 624 300 942 l12 112 439 3 439 3
-                            29 33 c31 35 38 85 18 125 -16 31 -1698 1715 -1731 1733 -36 19 -78 18 -108
-                            -2z m1118 -1674 c-261 -4 -359 -8 -375 -18 -39 -22 -52 -64 -63 -205 -16 -218
-                            -52 -393 -117 -581 -55 -157 -93 -237 -112 -232 -90 26 -123 30 -276 30 -245
-                            0 -345 -23 -380 -89 -17 -30 -17 -39 -5 -103 7 -38 10 -85 6 -105 -14 -73 -73
-                            -129 -157 -148 -60 -14 -111 4 -173 60 -65 59 -95 68 -144 44 -79 -39 -224
-                            -247 -294 -422 -63 -161 -47 -221 70 -254 102 -28 163 -120 148 -222 -5 -29
-                            -17 -57 -34 -75 -48 -52 -329 -177 -527 -235 -237 -69 -407 -95 -665 -101
-                            l-205 -5 115 61 c552 296 995 769 1247 1333 146 327 228 671 240 1013 6 188 3
-                            202 -50 234 -30 19 -53 20 -372 20 l-340 0 705 705 705 705 703 -702 702 -703
-                            -352 -5z m-852 -1248 c6 -4 17 -38 23 -77 40 -233 218 -376 450 -363 66 4 92
-                            11 142 37 l62 32 23 -28 c25 -31 104 -175 104 -189 0 -5 -23 -24 -51 -43 -126
-                            -86 -196 -253 -170 -408 21 -124 83 -218 196 -298 l28 -21 -41 -79 c-23 -44
-                            -52 -93 -64 -108 l-23 -28 -60 28 c-55 25 -70 28 -175 28 -111 0 -118 -1 -183
-                            -33 -128 -63 -216 -184 -238 -327 -6 -39 -16 -73 -23 -77 -6 -4 -56 -8 -111
-                            -8 -55 0 -105 4 -111 8 -6 4 -16 40 -23 81 -16 99 -53 175 -120 242 -125 125
-                            -308 156 -474 82 -56 -25 -58 -26 -72 -7 -29 39 -105 180 -105 194 1 8 21 28
-                            45 43 85 54 154 165 176 282 27 147 -62 344 -186 410 -30 17 -35 24 -30 45 8
-                            30 90 174 109 189 10 8 28 4 72 -16 54 -26 69 -28 174 -28 106 0 120 2 172 28
-                            129 63 217 185 240 331 9 52 17 77 28 80 27 7 205 6 216 -2z"/>
-                            <path d="M3118 1619 c-117 -13 -237 -99 -291 -210 -121 -246 44 -536 316 -556
-                            359 -27 553 402 297 657 -88 89 -190 124 -322 109z m148 -244 c96 -63 80 -221
-                            -29 -274 -55 -27 -82 -26 -137 2 -50 24 -90 88 -90 141 0 41 36 111 68 132 53
-                            35 134 35 188 -1z"/>
-                        </g>
-                    </svg>`;
-                    break;
                 case tipoNota.ATUALIZACAO:
                     divTipo.innerHTML += `
                     <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
@@ -564,6 +529,85 @@ function excluirNota(index) {
 
 //#endregion
 
+// #region Calculadora
+
+let currentInput = '0';
+let previousInput = '';
+let operator = null;
+
+function updateDisplay() {
+    const currentDisplay = document.getElementById('current-operand');
+    const previousDisplay = document.getElementById('previous-operand');
+    currentDisplay.innerText = currentInput;
+    previousDisplay.innerText = operator ? `${previousInput} ${operator}` : '';
+}
+
+function appendNumber(number) {
+    if (number === '.' && currentInput.includes('.')) return;
+    if (currentInput === '0' && number !== '.') {
+        currentInput = number;
+    } else {
+        currentInput += number;
+    }
+    updateDisplay();
+}
+
+function appendOperator(op) {
+    if (currentInput === '') return;
+    if (previousInput !== '') compute();
+    operator = op;
+    previousInput = currentInput;
+    currentInput = '';
+    updateDisplay();
+}
+
+function clearDisplay() {
+    currentInput = '0';
+    previousInput = '';
+    operator = null;
+    updateDisplay();
+}
+
+function deleteDigit() {
+    currentInput = currentInput.toString().slice(0, -1);
+    if (currentInput === '') currentInput = '0';
+    updateDisplay();
+}
+
+function calculateSqrt() {
+    if (currentInput === '') return;
+    const value = parseFloat(currentInput);
+    if (value < 0) {
+        alert("Não é possível calcular raiz de número negativo");
+        return;
+    }
+    currentInput = Math.sqrt(value).toString();
+    updateDisplay();
+}
+
+function compute() {
+    let result;
+    const prev = parseFloat(previousInput);
+    const current = parseFloat(currentInput);
+    if (isNaN(prev) || isNaN(current)) return;
+
+    switch (operator) {
+        case '+': result = prev + current; break;
+        case '-': result = prev - current; break;
+        case '*': result = prev * current; break;
+        case '/': result = prev / current; break;
+        case '**': result = Math.pow(prev, current); break; // Nova operação
+        default: return;
+    }
+
+    currentInput = result.toString();
+    operator = null;
+    previousInput = '';
+    updateDisplay();
+}
+
+//#endregion
+
 //#region Conquistas
 
 class ConquistaGeral {
@@ -683,43 +727,3 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 //#endregion
-
-
-
-/* Configurações */
-
-let estadoBarra = true;
-let estadoArcoIris = true;
-
-function desativarBarra() {
-    let titulo = document.getElementById("title");
-    let barra = document.getElementById("barra-main");
-    let botaoMenu = document.getElementById("botao-menu-lateral-reserva");
-
-    if (estadoBarra) {
-        titulo.style.display = "none";
-        barra.style.display = "none";
-        botaoMenu.style.display = "block";
-        estadoBarra = false;
-    } else if (estadoBarra === false) {
-        titulo.style.display = "block";
-        barra.style.display = "flex";
-        botaoMenu.style.display = "none";
-        estadoBarra = true;
-    }
-}
-
-function desativarArcoIris() {
-    let barra = document.getElementById("barra-main");
-
-    if (estadoArcoIris) {
-        barra.style.background = "green";
-        estadoArcoIris = false;
-    } else if (estadoArcoIris === false) {
-        barra.style.background = "linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet, red)";
-        barra.style.backgroundSize = "300% 100%";
-        estadoArcoIris = true;
-    }
-
-}
-/* Configurações */

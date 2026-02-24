@@ -1,0 +1,7 @@
+function changeToGraficalInterface() {
+
+}
+
+function changeToTerminalInterface() {
+    
+}
