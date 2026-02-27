@@ -306,7 +306,7 @@ function criarNotasAtualizacao() {
                     preserveAspectRatio="xMidYMid meet">
 
                         <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                        fill="#2196F3" stroke="none">
+                        fill="currentColor" stroke="none">
                             <path d="M2265 4703 c-632 -85 -1207 -461 -1550 -1014 -201 -324 -315 -722
                             -315 -1100 l0 -129 -160 0 -160 0 -36 -33 c-46 -42 -56 -105 -26 -152 32 -48
                             750 -867 759 -865 11 2 730 826 755 865 30 47 20 111 -26 152 l-36 33 -186 0
@@ -332,7 +332,7 @@ function criarNotasAtualizacao() {
                     preserveAspectRatio="xMidYMid meet">
 
                         <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                        fill="#f44336" stroke="none">
+                        fill="currentColor" stroke="none">
                             <path d="M1855 4786 c-16 -7 -38 -22 -47 -32 -24 -27 -48 -88 -48 -121 0 -15
                             39 -108 87 -205 l87 -177 -60 -63 c-83 -88 -126 -150 -179 -259 -53 -112 -83
                             -222 -92 -340 l-6 -86 -54 -23 c-82 -34 -165 -101 -218 -174 -26 -36 -49 -66
@@ -371,7 +371,7 @@ function criarNotasAtualizacao() {
                     preserveAspectRatio="xMidYMid meet">
 
                         <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                        fill="#ff9800" stroke="none">
+                        fill="currentColor" stroke="none">
                             <path d="M2375 4793 c-921 -80 -1711 -724 -1963 -1603 -68 -235 -87 -373 -86
                             -635 0 -249 16 -372 78 -598 206 -746 807 -1347 1553 -1553 224 -61 349 -77
                             598 -78 242 -1 343 11 559 65 621 155 1161 592 1453 1174 90 178 171 439 209

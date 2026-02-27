@@ -12,8 +12,9 @@
     <div id="conteudo">
         <div id="troca-de-tela">
             <div id="interface-terminal">
-                <button class="interface-terminal-ativo">Interface gráfica</button>
-                <button class="interface-terminal">Terminal</button>
+                <div class="interface-terminal-indicator"></div>
+                <button id="button-interface-terminal-interface" class="interface-terminal interface-terminal-ativo">Interface gráfica</button>
+                <button id="button-interface-terminal-terminal" class="interface-terminal">Terminal</button>
             </div>
         </div>
 
@@ -23,65 +24,34 @@
             <div id="esquerda">
                 <div id="databases">
                     <div id="database-button">
+                        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-database"></use>
+                        </svg>
                         <p>Database</p>
-                        <button>
-                            <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                            width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000"
-                            preserveAspectRatio="xMidYMid meet">
-                                <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                                fill="currentColor" stroke="none">
-                                    <path d="M1260 4785 c-227 -36 -442 -147 -610 -315 -171 -171 -280 -385 -315
-                                    -620 -22 -141 -22 -2439 0 -2580 74 -488 463 -869 960 -940 95 -13 2435 -13
-                                    2530 0 263 38 525 176 688 363 152 174 244 376 277 602 13 95 13 2435 0 2530
-                                    -52 366 -269 676 -588 843 -123 64 -226 99 -349 117 -138 21 -2461 20 -2593 0z
-                                    m2610 -327 c162 -49 272 -111 374 -214 71 -71 147 -184 176 -262 58 -155 55
-                                    -66 55 -1422 0 -1356 3 -1267 -55 -1422 -66 -177 -261 -372 -438 -438 -156
-                                    -58 -61 -54 -1377 -58 -1296 -3 -1293 -4 -1436 47 -202 72 -398 259 -469 449
-                                    -58 155 -55 66 -55 1422 0 1356 -3 1267 55 1422 70 186 263 374 458 445 143
-                                    53 107 51 1427 50 1116 -2 1235 -4 1285 -19z"/>
-                                    <path d="M2495 3506 c-37 -17 -70 -52 -84 -89 -7 -18 -11 -150 -11 -362 l0
-                                    -334 -349 -3 c-335 -3 -351 -4 -377 -24 -53 -39 -69 -71 -69 -134 0 -63 16
-                                    -95 69 -134 26 -20 42 -21 376 -24 l349 -3 3 -349 c3 -334 4 -350 24 -376 39
-                                    -53 71 -69 134 -69 63 0 95 16 134 69 20 26 21 42 24 376 l3 349 349 3 c334 3
-                                    350 4 376 24 53 39 69 71 69 134 0 63 -16 95 -69 134 -26 20 -42 21 -376 24
-                                    l-349 3 -3 349 c-3 334 -4 350 -24 376 -11 15 -32 37 -46 47 -34 25 -113 32
-                                    -153 13z"/>
-                                </g>
+                        <button onclick="abrirFechar(false, 'criacao-database')">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
                             </svg>
                         </button>
                     </div>
-                    <p>main</p>
+                    <div class="custom-dropdown">
+                        <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
+                            <span class="custom-dropdown-value">Crie uma database</span>
+                        </button>
+                        <ul class="custom-dropdown-menu" tabindex="-1">
+                        </ul>
+                        <input type="hidden" name="column-type" value="text">
+                    </div>
                 </div>
 
                 <div class="separador-horizontal"></div>
 
                 <div id="button-nova-tabela">
-                    <button id="nova-tabela">
-                        <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                        width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000"
-                        preserveAspectRatio="xMidYMid meet">
-
-                            <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                            fill="currentColor" stroke="none">
-                                <path d="M1260 4785 c-227 -36 -442 -147 -610 -315 -171 -171 -280 -385 -315
-                                -620 -22 -141 -22 -2439 0 -2580 74 -488 463 -869 960 -940 95 -13 2435 -13
-                                2530 0 263 38 525 176 688 363 152 174 244 376 277 602 13 95 13 2435 0 2530
-                                -52 366 -269 676 -588 843 -123 64 -226 99 -349 117 -138 21 -2461 20 -2593 0z
-                                m2610 -327 c162 -49 272 -111 374 -214 71 -71 147 -184 176 -262 58 -155 55
-                                -66 55 -1422 0 -1356 3 -1267 -55 -1422 -66 -177 -261 -372 -438 -438 -156
-                                -58 -61 -54 -1377 -58 -1296 -3 -1293 -4 -1436 47 -202 72 -398 259 -469 449
-                                -58 155 -55 66 -55 1422 0 1356 -3 1267 55 1422 70 186 263 374 458 445 143
-                                53 107 51 1427 50 1116 -2 1235 -4 1285 -19z"/>
-                                <path d="M2495 3506 c-37 -17 -70 -52 -84 -89 -7 -18 -11 -150 -11 -362 l0
-                                -334 -349 -3 c-335 -3 -351 -4 -377 -24 -53 -39 -69 -71 -69 -134 0 -63 16
-                                -95 69 -134 26 -20 42 -21 376 -24 l349 -3 3 -349 c3 -334 4 -350 24 -376 39
-                                -53 71 -69 134 -69 63 0 95 16 134 69 20 26 21 42 24 376 l3 349 349 3 c334 3
-                                350 4 376 24 53 39 69 71 69 134 0 63 -16 95 -69 134 -26 20 -42 21 -376 24
-                                l-349 3 -3 349 c-3 334 -4 350 -24 376 -11 15 -32 37 -46 47 -34 25 -113 32
-                                -153 13z"/>
-                            </g>
+                    <button id="nova-tabela" onclick="abrirFechar(false, 'criacao-tabela')">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
                         </svg>
-                        <p>Nova tabela</p>       
+                        <p>Nova tabela</p>
                     </button>
                 </div>
 
@@ -90,38 +60,7 @@
                 <div id="tabelas">
                     <p>Tabelas</p>
                     <ul id="tabelas-lista">
-                        <div class="tabela tabela-ativa">
-                            <p>tabela 1</p>
-                            <p>2</p>
-                        </div>
-                        <div class="tabela">
-                            <p>tabela 2</p>
-                            <p>0</p>
-                        </div>
-                        <div class="tabela">
-                            <p>tabela 3</p>
-                            <p>0</p>
-                        </div>
-                        <div class="tabela">
-                            <p>tabela 3</p>
-                            <p>0</p>
-                        </div>
-                        <div class="tabela">
-                            <p>tabela 3</p>
-                            <p>0</p>
-                        </div>
-                        <div class="tabela">
-                            <p>tabela 3</p>
-                            <p>0</p>
-                        </div>
-                        <div class="tabela">
-                            <p>tabela 3</p>
-                            <p>0</p>
-                        </div>
-                        <div class="tabela">
-                            <p>tabela 3</p>
-                            <p>0</p>
-                        </div>
+                                         
                     </ul>
                 </div>
             </div>
@@ -131,95 +70,25 @@
             <div id="direita">
                 <div id="varios-botoes">
                     <div id="tabela-info-varios-botoes">
-                        <p id="nome-tabela">tabela 1</p>
-                        <p id="linhas-colunas">2 linhas • 3 colunas</p>
+                        <p id="nome-tabela">Crie uma tabela</p>
+                        <p id="linhas-colunas">0 linhas • 0 colunas</p>
                     </div>
 
                     <div id="botoes-varios-botoes">
-                        <button id="alter-column">
-                            <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                            width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000"
-                            preserveAspectRatio="xMidYMid meet">
-                                <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                                fill="#000000" stroke="none">
-                                    <path d="M878 4830 c-293 -73 -518 -299 -588 -593 -19 -80 -20 -124 -20 -1677
-                                    0 -1553 1 -1597 20 -1677 71 -297 297 -522 594 -593 78 -19 130 -20 1676 -20
-                                    1553 0 1597 1 1677 20 297 71 522 297 593 594 19 77 20 125 20 1060 0 971 0
-                                    979 -21 1015 -33 58 -65 76 -136 76 -70 0 -104 -19 -138 -76 -20 -33 -20 -57
-                                    -25 -1019 l-5 -985 -23 -56 c-60 -150 -167 -247 -321 -293 -49 -14 -210 -16
-                                    -1621 -16 -1715 0 -1604 -4 -1724 57 -64 32 -157 125 -189 189 -61 120 -57 9
-                                    -57 1724 0 1411 2 1572 16 1621 46 154 143 261 293 321 l56 23 985 5 c962 5
-                                    986 5 1019 25 49 29 73 67 79 123 5 57 -20 112 -66 147 -27 20 -44 20 -1022
-                                    22 -947 2 -999 1 -1072 -17z"/>
-                                    <path d="M4050 4830 c-30 -11 -57 -20 -59 -20 -3 0 -538 -532 -1188 -1182
-                                    l-1182 -1182 -97 -290 -96 -289 4 -86 c5 -105 38 -180 108 -245 76 -71 140
-                                    -99 241 -104 l85 -4 295 97 294 97 1165 1166 c1325 1327 1225 1213 1225 1387
-                                    0 155 -13 177 -248 413 -231 232 -267 255 -407 260 -65 2 -98 -2 -140 -18z
-                                    m318 -463 c123 -123 162 -168 162 -187 0 -19 -42 -67 -175 -200 l-175 -175
-                                    -187 188 -188 187 175 175 c134 134 181 175 200 175 19 0 64 -38 188 -163z
-                                    m-1253 -1627 l-835 -835 -233 -78 c-128 -42 -242 -77 -253 -77 -26 0 -44 18
-                                    -44 44 0 12 34 124 76 251 l76 230 837 837 836 838 187 -187 188 -188 -835
-                                    -835z"/>
-                                </g>
+                        <button id="alter-column" onclick="abrirFechar(false, 'editar-colunas'); changeAlterarColunasMenu()">
+                            <svg viewBox="0 0 512 512" aria-hidden="true">
+                                <use href="assets/images/icons-sprite.svg#icon-edit"></use>
                             </svg>
                             Alterar colunas</button>
-                        <button id="insert-line">
-                            <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                            width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000"
-                            preserveAspectRatio="xMidYMid meet">
-                                <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                                fill="currentColor" stroke="none">
-                                    <path d="M1260 4785 c-227 -36 -442 -147 -610 -315 -171 -171 -280 -385 -315
-                                    -620 -22 -141 -22 -2439 0 -2580 74 -488 463 -869 960 -940 95 -13 2435 -13
-                                    2530 0 263 38 525 176 688 363 152 174 244 376 277 602 13 95 13 2435 0 2530
-                                    -52 366 -269 676 -588 843 -123 64 -226 99 -349 117 -138 21 -2461 20 -2593 0z
-                                    m2610 -327 c162 -49 272 -111 374 -214 71 -71 147 -184 176 -262 58 -155 55
-                                    -66 55 -1422 0 -1356 3 -1267 -55 -1422 -66 -177 -261 -372 -438 -438 -156
-                                    -58 -61 -54 -1377 -58 -1296 -3 -1293 -4 -1436 47 -202 72 -398 259 -469 449
-                                    -58 155 -55 66 -55 1422 0 1356 -3 1267 55 1422 70 186 263 374 458 445 143
-                                    53 107 51 1427 50 1116 -2 1235 -4 1285 -19z"/>
-                                    <path d="M2495 3506 c-37 -17 -70 -52 -84 -89 -7 -18 -11 -150 -11 -362 l0
-                                    -334 -349 -3 c-335 -3 -351 -4 -377 -24 -53 -39 -69 -71 -69 -134 0 -63 16
-                                    -95 69 -134 26 -20 42 -21 376 -24 l349 -3 3 -349 c3 -334 4 -350 24 -376 39
-                                    -53 71 -69 134 -69 63 0 95 16 134 69 20 26 21 42 24 376 l3 349 349 3 c334 3
-                                    350 4 376 24 53 39 69 71 69 134 0 63 -16 95 -69 134 -26 20 -42 21 -376 24
-                                    l-349 3 -3 349 c-3 334 -4 350 -24 376 -11 15 -32 37 -46 47 -34 25 -113 32
-                                    -153 13z"/>
-                                </g>
+                        <button id="insert-line" onclick="abrirFechar(false, 'inserir-linha'); changeInserirLinhaMenu()">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
                             </svg>
                             Inserir linha
                         </button>
                         <button id="delete-table">
-                            <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                            width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000"
-                            preserveAspectRatio="xMidYMid meet">
-                                <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                                fill="currentColor" stroke="none">
-                                    <path d="M1963 5106 c-102 -33 -176 -97 -222 -196 -25 -53 -26 -62 -29 -282
-                                    l-3 -227 -367 -3 -367 -3 -67 -33 c-77 -38 -130 -92 -167 -171 -26 -56 -26
-                                    -58 -26 -291 0 -233 0 -235 26 -291 48 -101 130 -170 237 -198 33 -9 42 -16
-                                    42 -34 0 -12 38 -656 84 -1432 92 -1549 84 -1466 159 -1610 50 -95 174 -213
-                                    277 -264 147 -72 128 -71 1020 -71 892 0 873 -1 1020 71 103 51 227 169 277
-                                    264 75 144 67 61 159 1610 46 776 84 1420 84 1432 0 18 9 25 43 34 106 28 188
-                                    97 236 198 26 56 26 58 26 291 l0 235 -33 67 c-38 77 -92 130 -171 167 l-56
-                                    26 -367 3 -367 3 -3 227 c-3 221 -4 228 -29 283 -37 79 -90 133 -167 171 l-67
-                                    33 -570 2 c-452 2 -579 -1 -612 -11z m1131 -302 c13 -13 16 -46 16 -210 l0
-                                    -194 -550 0 -550 0 0 194 c0 164 3 197 16 210 14 14 76 16 534 16 458 0 520
-                                    -2 534 -16z m1000 -720 c24 -23 24 -345 0 -368 -14 -14 -167 -16 -1534 -16
-                                    -1367 0 -1520 2 -1534 16 -24 23 -24 345 0 368 14 14 167 16 1534 16 1367 0
-                                    1520 -2 1534 -16z m-294 -693 c0 -34 -160 -2738 -165 -2781 -12 -117 -93 -226
-                                    -203 -278 l-57 -27 -815 0 -815 0 -57 27 c-110 52 -191 161 -203 278 -5 43
-                                    -165 2747 -165 2781 0 5 537 9 1240 9 703 0 1240 -4 1240 -9z"/>
-                                    <path d="M1812 3083 c-42 -20 -70 -56 -78 -100 -7 -35 53 -2203 62 -2261 11
-                                    -73 101 -132 178 -118 49 9 102 62 111 109 7 38 -51 2203 -61 2264 -10 63 -84
-                                    123 -151 123 -15 0 -43 -8 -61 -17z"/>
-                                    <path d="M2488 3079 c-23 -12 -46 -35 -58 -59 -20 -39 -20 -57 -20 -1170 0
-                                    -1114 0 -1131 20 -1170 23 -45 80 -80 130 -80 50 0 107 35 130 80 20 39 20 56
-                                    20 1170 0 1114 0 1131 -20 1170 -37 73 -127 99 -202 59z"/>
-                                    <path d="M3185 3086 c-41 -18 -83 -69 -89 -109 -10 -61 -68 -2226 -61 -2264 9
-                                    -47 62 -100 111 -109 77 -14 167 45 178 118 3 18 20 529 37 1136 25 866 29
-                                    1112 20 1142 -22 76 -123 120 -196 86z"/>
-                                </g>
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
                             </svg>
                             Deletar tabela
                         </button>
@@ -229,12 +98,318 @@
                 <div class="separador-horizontal"></div>
 
                 <div id="tabela-info">
+                    <div id="nenhuma-tabela-selecionada">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-table"></use>
+                        </svg>
+                        <h5>Nenhuma tabela selecionada</h5>
+                        <p>Crie uma tabela para começar</p>
+                    </div>
 
+                    <div id="tabela-selecionada">
+                        <div id="tabela-selecionada-tabela" style="display: none;">
+                            
+                        </div>
+                    </div>
                 </div>
+            </div>
+
+
+        </div>
+
+        <div id="menus-centrais" style="display: none;">
+            <div id="criacao-database" style="display: none;">
+                <div class="menu-criacao-top">
+                    <h1>Criar nova database</h1>
+                    <button onclick="abrirFechar(true, 'criacao-database')">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        </svg>
+                    </button>
+                </div>
+                <label for="nome-database">Nome da database</label>
+                <input type="text" id="nome-database" name="nome-database" rows="1" placeholder="Ex: meu_bd">
+                <button id="criar-database-button" onclick="createDatabase()">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                    </svg>
+                    Criar database
+                </button>
+            </div>
+
+            <div id="criacao-tabela" style="display: none;">
+                <div class="menu-criacao-top">
+                    <h1>Criar nova tabela</h1>
+                    <button onclick="abrirFechar(true, 'criacao-tabela')">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        </svg>
+                    </button>
+                </div>
+
+                <label for="nome-tabela-input">Nome da tabela</label>
+                <input type="text" id="nome-tabela-input" name="nome-tabela-input" rows="1" placeholder="Ex: minha_tabela"></textarea>
+                
+                <div>
+                    <h2>Colunas</h2>
+                    <button onclick="createColumnInterface(document.querySelector('#criacao-tabela ul'))">
+                        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-plus"></use>
+                        </svg>
+                        Nova coluna
+                    </button>
+                </div>
+
+                <ul>
+                    <div>
+                        <input type="text" placeholder="Nome da coluna">
+
+                        <div class="custom-dropdown">
+                            <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
+                                <span class="custom-dropdown-value">Text</span>
+                            </button>
+                            <ul class="custom-dropdown-menu" tabindex="-1">
+                                <li class="custom-dropdown-option custom-dropdown-option-selected" onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment'))">Text</li>
+                                <li class="custom-dropdown-option" onclick="toggleAutoIncrementButton(true, document.getElementById('auto-increment'))">Integer</li>
+                                <li class="custom-dropdown-option" onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment'))">Float</li>
+                                <li class="custom-dropdown-option" onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment'))">Boolean</li>
+                            </ul>
+                            <input type="hidden" name="column-type" value="text">
+                        </div>
+
+                        <div class="caracteristics">
+                            <div class="primary-key">
+                                <input type="checkbox" id="primary-key" onclick="toggleOnPKButton(this)">
+                                <label for="primary-key">Primary key</label>
+                            </div>
+                            <div class="foreign-key">
+                                <input type="checkbox" id="foreign-key" onclick="toggleOnFKButton(this)">
+                                <label for="foreign-key">Foreign key</label>
+                            </div>
+                            <div class="not-null">
+                                <input type="checkbox" id="not-null">
+                                <label for="not-null">Not null</label>
+                            </div>
+                            <div class="unique">
+                                <input type="checkbox" id="unique">
+                                <label for="unique">Unique</label>
+                            </div>
+                            <div class="auto-increment" style="display: none;">
+                                <input type="checkbox" id="auto-increment">
+                                <label for="auto-increment">Auto increment</label>
+                            </div>
+                            <div class="delete-column" onclick="deleteColumnCreationInterface(this)">
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="referencia" style="display: none;">
+                            <p>Referência</p>
+                            <div class="custom-dropdown">
+                                <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
+                                    <span class="custom-dropdown-value">Crie outra tabela</span>
+                                </button>
+                                <ul class="custom-dropdown-menu" tabindex="-1">
+                                </ul>
+                                <input type="hidden" name="column-type" value="text">
+                            </div>
+                            <div class="custom-dropdown" style="display: none;">
+                                <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
+                                    <span class="custom-dropdown-value">Crie uma database</span>
+                                </button>
+                                <ul class="custom-dropdown-menu" tabindex="-1">
+                                </ul>
+                                <input type="hidden" name="column-type" value="text">
+                            </div>
+                        </div>
+                    </div>
+                </ul>
+                <button id="criar-tabela-button" onclick="createTableInterface()">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                    </svg>
+                    Criar tabela
+                </button>
+            </div>
+
+            <div id="editar-colunas" style="display: none;">
+                <div class="menu-criacao-top">
+                    <h1>Editar colunas</h1>
+                    <button onclick="abrirFechar(true, 'editar-colunas')">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        </svg>
+                    </button>
+                </div>
+
+                <div>
+                    <h2>Colunas existentes</h2>
+                </div>
+                <ul id="lista-colunas-existentes">
+                    <p>Crie uma tabela para mostrar as colunas existentes</p>
+                </ul>
+
+                <div>
+                    <h2>Colunas</h2>
+                    <button onclick="createColumnInterface(document.querySelector('#editar-colunas ul:not(#lista-colunas-existentes)'))">
+                        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-plus"></use>
+                        </svg>
+                        Nova coluna
+                    </button>
+                </div>
+                <ul id="criacao-colunas-edit">
+                    <div>
+                        <input type="text" placeholder="Nome da coluna">
+
+                        <div class="custom-dropdown">
+                            <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
+                                <span class="custom-dropdown-value">Text</span>
+                            </button>
+                            <ul class="custom-dropdown-menu" tabindex="-1">
+                                <li class="custom-dropdown-option custom-dropdown-option-selected" onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment-0'))">Text</li>
+                                <li class="custom-dropdown-option" onclick="toggleAutoIncrementButton(true, document.getElementById('auto-increment-0'))">Integer</li>
+                                <li class="custom-dropdown-option" onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment-0'))">Float</li>
+                                <li class="custom-dropdown-option" onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment-0'))">Boolean</li>
+                            </ul>
+                            <input type="hidden" name="column-type" value="text">
+                        </div>
+
+                        <div class="caracteristics">
+                            <div class="primary-key">
+                                <input type="checkbox" id="primary-key-0" onclick="toggleOnPKButton(this)">
+                                <label for="primary-key-0">Primary key</label>
+                            </div>
+                            <div class="foreign-key">
+                                <input type="checkbox" id="foreign-key-0" onclick="toggleOnFKButton(this)">
+                                <label for="foreign-key-0">Foreign key</label>
+                            </div>
+                            <div class="not-null">
+                                <input type="checkbox" id="not-null-0">
+                                <label for="not-null-0">Not null</label>
+                            </div>
+                            <div class="unique">
+                                <input type="checkbox" id="unique-0">
+                                <label for="unique-0">Unique</label>
+                            </div>
+                            <div class="auto-increment" style="display: none;">
+                                <input type="checkbox" id="auto-increment-0">
+                                <label for="auto-increment-0">Auto increment</label>
+                            </div>
+                            <div class="delete-column" onclick="deleteColumnCreationInterface(this)">
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="referencia" style="display: none;">
+                            <p>Referência</p>
+                            <div class="custom-dropdown">
+                                <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
+                                    <span class="custom-dropdown-value">Crie outra tabela</span>
+                                </button>
+                                <ul class="custom-dropdown-menu" tabindex="-1">
+                                </ul>
+                                <input type="hidden" name="column-type" value="text">
+                            </div>
+                            <div class="custom-dropdown" style="display: none;">
+                                <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
+                                    <span class="custom-dropdown-value">Crie uma database</span>
+                                </button>
+                                <ul class="custom-dropdown-menu" tabindex="-1">
+                                </ul>
+                                <input type="hidden" name="column-type" value="text">
+                            </div>
+                        </div>
+                    </div>
+                </ul>
+
+                <button id="Adicionar-coluna-button" onclick="alterColumnsInterface()">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                    </svg>
+                    Adicionar coluna(s)
+                </button>
+                
+            </div>
+
+            <div id="inserir-linha" style="display: none;">
+                <div class="menu-criacao-top">
+                    <h1>Inserir nova linha</h1>
+                    <button onclick="abrirFechar(true, 'inserir-linha')">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        </svg>
+                    </button>
+                </div>
+
+                <ul id="colunas-inserir-linha">
+                    <div>
+                        <h3>Crie uma tabela para começar</h3>
+                    </div>              
+                </ul>
+
+                <button id="inserir-linha-button" onclick="insertRowInterface()">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                    </svg>
+                    Inserir linha
+                </button>
+            </div>
+
+            <div id="editar-linha" style="display: none;">
+                <div class="menu-criacao-top">
+                    <h1>Editar linha</h1>
+                    <button onclick="abrirFechar(true, 'editar-linha')">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        </svg>
+                    </button>
+                </div>
+
+                <ul id="colunas-editar-linha">
+                    <div>
+                        <h3>id</h3>
+                        <p>(INTEGER • PK • NOT NULL)</p>
+                        <input type="text">
+                    </div>
+
+                    <div>
+                        <h3>id</h3>
+                        <p>(BOOLEAN • PK • NOT NULL)</p>
+                        <div class="custom-dropdown">
+                            <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
+                                <span class="custom-dropdown-value">TRUE</span>
+                            </button>
+                            <ul class="custom-dropdown-menu" tabindex="-1">
+                                <li class="custom-dropdown-option custom-dropdown-option-selected">TRUE</li>
+                                <li class="custom-dropdown-option">FALSE</li>
+                            </ul>
+                            <input type="hidden" name="column-type" value="text">
+                        </div>
+                    </div>
+
+                    
+                    
+                </ul>
+
+                <button id="editar-linha-button">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                    </svg>
+                    Editar linha
+                </button>
+            </div>
+
+            <div id="notificacoes" style="display: none;">
+                <h1>ola</h1>
             </div>
         </div>
 
-        <div id="terminaç">
+        <div id="terminal">
 
         </div>
     </div>

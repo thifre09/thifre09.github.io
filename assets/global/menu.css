@@ -161,32 +161,6 @@ aside#menu-lateral {
     }
 }
 
-@media (max-width: 600px) {
-    aside#menu-lateral {
-        width: 50%;
-    }
-
-    @keyframes abrirMenu {
-        from {
-            right: 100%;
-        }
-
-        to {
-            right: 50%;
-        }
-    }
-
-    @keyframes fecharMenu {
-        from {
-            right: 50%;
-        }
-
-        to {
-            right: 100%;
-        }
-    }
-}
-
 div.aside-window {
     height: 80vh;
     background-color: #ffffff;
@@ -390,39 +364,40 @@ section#notas-atualizacao-container {
                 box-shadow: 5px 5px 5px var(--gray1);
             }
 
-            li.nota-melhoria {
-                border-left: 4px solid var(--green1);
-
-                .tipo-nota h4 {
-                    color: var(--green1);
-                    background-color: var(--green3);
-                }
-            }
-
             li.nota-atualizacao {
                 border-left: 4px solid var(--blue1);
 
-                .tipo-nota h4 {
+                .tipo-nota {
                     color: var(--blue1);
-                    background-color: var(--blue3);
+
+                    h4 {
+                        background-color: var(--blue3);
+                    }
                 }
             }
 
             li.nota-correcao {
                 border-left: 4px solid var(--red1);
 
-                .tipo-nota h4 {
+                .tipo-nota {
                     color: var(--red1);
-                    background-color: var(--red3);
+
+                    h4 {
+                        background-color: var(--red3);
+                    }
                 }
             }
 
             li.nota-novo_recurso {
-                border-left: 4px solid var(--orange1);
+                border-left: 4px solid var(--green1);
 
-                .tipo-nota h4 {
-                    color: var(--orange1);
-                    background-color: var(--orange3);
+                .tipo-nota {
+                    color: var(--green1);
+
+                    h4 { 
+                        background-color: var(--green3);
+                    }
+                    
                 }
             }
         }
@@ -777,6 +752,30 @@ section#bloco-notas-container {
 }
 
 @media (max-width: 600px) {
+    aside#menu-lateral {
+        width: 50%;
+    }
+
+    @keyframes abrirMenu {
+        from {
+            right: 100%;
+        }
+
+        to {
+            right: 50%;
+        }
+    }
+
+    @keyframes fecharMenu {
+        from {
+            right: 50%;
+        }
+
+        to {
+            right: 100%;
+        }
+    }
+
     #notas-atualizacao {
         width: 90%;
         height: 90vh;
