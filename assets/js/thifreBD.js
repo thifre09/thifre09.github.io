@@ -84,6 +84,8 @@ let datasbases = [
 ];
 let currentDatabase = datasbases[0];
 let currentTable = null;
+let currentRowIndex = 0;
+let contadorColunas = 1;
 
 function createDatabase() {
     const databaseName = document.getElementById("nome-database").value;
@@ -265,7 +267,6 @@ function createTableInterface() {
     createTable(tableName, columnsList);
 }
 
-let contadorColunas = 1;
 function createColumnInterface(parentElement) {
     const column = document.createElement("div");
     column.innerHTML = `
@@ -355,11 +356,13 @@ function alterColumnsInterface() {
     }
 
     let columnsList = [];
+    let shouldReturn = false;
     const colunasList = document.querySelectorAll("#editar-colunas ul#criacao-colunas-edit > div");
     colunasList.forEach((coluna) => {
         const nomeColuna = coluna.querySelector("input").value;
         if (nomeColuna.trim() === "") {
             openNotifications("<p style='color: red;'>O nome da coluna não pode ser vazio.</p>");
+            shouldReturn = true;
             return;
         }
         const columnType = coluna.querySelector('.custom-dropdown button span.custom-dropdown-value').textContent;
@@ -378,11 +381,14 @@ function alterColumnsInterface() {
             isAutoIncrement: isAutoIncrement
         });
     });
+    if (shouldReturn) {
+        return;
+    }
 
     columnsList.forEach((column) => {
         currentTable.addColumn(column.nome, column.tipo, column.isPK, column.isFk, column.isNotNull, column.isUnique, column.isAutoIncrement);
         currentTable.rows.forEach((row) => {
-            row[column.nome] = column.isAutoIncrement ? column.autoIncrementCounter++ : null;
+            row[column.nome] = column.isAutoIncrement ? currentTable.columns.at(-1).autoIncrementCounter++ : null;
         });
     });
     openNotifications(`<p style="color: green;">Colunas adicionadas com sucesso!</p>`);
@@ -390,6 +396,57 @@ function alterColumnsInterface() {
     changeAlterarColunasMenu();
     document.getElementById("criacao-colunas-edit").innerHTML = "";
     createColumnInterface(document.querySelector('#editar-colunas ul:not(#lista-colunas-existentes)'))
+}
+
+function insertRowInterface() {
+    if (!currentTable) {
+        openNotifications("<p style='color: red;'>Nenhuma tabela selecionada.</p>");
+        return;
+    }
+
+    let row = {};
+    const inserirLinhasList = document.querySelectorAll("#colunas-inserir-linha > div")
+    inserirLinhasList.forEach((div, index) => {
+        const columnName = div.querySelector("h3").textContent;
+        if (div.querySelector("p").textContent.includes("BOOLEAN")) {
+            const boolValue = div.querySelector(".custom-dropdown button span").textContent;
+            row[columnName] = boolValue === "TRUE" ? true : false;
+        } else if (div.querySelector("p").textContent.includes("AUTO_INCREMENT")) {
+            const value = currentTable.columns[index].autoIncrementCounter;
+            currentTable.columns[index].autoIncrementCounter++;
+            row[columnName] = value;
+        } else {
+            const inputValue = div.querySelector("input").value;
+            row[columnName] = inputValue;
+        }
+    });
+
+    insertRow(row);
+    openNotifications(`<p style="color: green;">Linha inserida com sucesso!</p>`);
+    changeInserirLinhaMenu();
+}
+
+function editRowInterface() {
+    let row = {};
+    const inserirLinhasList = document.querySelectorAll("#colunas-editar-linha > div")
+    inserirLinhasList.forEach((div, index) => {
+        const columnName = div.querySelector("h3").textContent;
+        if (div.querySelector("p").textContent.includes("BOOLEAN")) {
+            const boolValue = div.querySelector(".custom-dropdown button span").textContent;
+            row[columnName] = boolValue === "TRUE" ? true : false;
+        } else if (div.querySelector("p").textContent.includes("AUTO_INCREMENT")) {
+            const value = currentTable.rows[currentRowIndex][columnName];
+            row[columnName] = value;
+        } else {
+            const inputValue = div.querySelector("input").value;
+            row[columnName] = inputValue;
+        }
+    });
+
+    currentTable.rows[currentRowIndex] = row;
+    openNotifications(`<p style="color: green;">Linha editada com sucesso!</p>`);
+    changeEditarLinhaMenu(currentRowIndex);
+    changeSelectedTable(currentTable);
 }
 
 function changeAlterarColunasMenu() {
@@ -471,10 +528,12 @@ function changeInserirLinhaMenu() {
     updateCustomDropdowns();
 }
 
-function changeEditarLinhaMenu() {
+function changeEditarLinhaMenu(rowIndex) {
     if (!currentTable) {
         return;
     }
+
+    currentRowIndex = rowIndex;
 
     const inserirLinhasList = document.getElementById("colunas-editar-linha");
     inserirLinhasList.innerHTML = "";
@@ -486,11 +545,11 @@ function changeEditarLinhaMenu() {
                     <p>(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFk ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""})</p>
                     <div class="custom-dropdown">
                         <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
-                            <span class="custom-dropdown-value">TRUE</span>
+                            <span class="custom-dropdown-value">${currentTable.rows[currentRowIndex][column.name]}</span>
                         </button>
                         <ul class="custom-dropdown-menu" tabindex="-1">
-                            <li class="custom-dropdown-option custom-dropdown-option-selected">TRUE</li>
-                            <li class="custom-dropdown-option">FALSE</li>
+                            <li class="custom-dropdown-option ${currentTable.rows[currentRowIndex][column.name] === true ? 'custom-dropdown-option-selected' : ''}">TRUE</li>
+                            <li class="custom-dropdown-option ${currentTable.rows[currentRowIndex][column.name] === false ? 'custom-dropdown-option-selected' : ''}">FALSE</li>
                         </ul>
                         <input type="hidden" name="column-type" value="text">
                     </div>
@@ -510,7 +569,7 @@ function changeEditarLinhaMenu() {
                 <div>
                     <h3>${column.name}</h3>
                     <p>(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFk ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""})</p>
-                    <input type="number" step="${column.type === "Integer" ? "1" : "any"}">
+                    <input type="number" step="${column.type === "Integer" ? "1" : "any"}" value="${currentTable.rows[currentRowIndex][column.name]}">
                 </div>
             `;
         } else {
@@ -518,41 +577,13 @@ function changeEditarLinhaMenu() {
                 <div>
                     <h3>${column.name}</h3>
                     <p>(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFk ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""})</p>
-                    <input type="text">
+                    <input type="text" value="${currentTable.rows[currentRowIndex][column.name]}">
                 </div>
             `;
         }
     });
 
     updateCustomDropdowns();
-}
-
-function insertRowInterface() {
-    if (!currentTable) {
-        openNotifications("<p style='color: red;'>Nenhuma tabela selecionada.</p>");
-        return;
-    }
-
-    let row = {};
-    const inserirLinhasList = document.querySelectorAll("#colunas-inserir-linha > div")
-    inserirLinhasList.forEach((div, index) => {
-        const columnName = div.querySelector("h3").textContent;
-        if (div.querySelector("p").textContent.includes("BOOLEAN")) {
-            const boolValue = div.querySelector(".custom-dropdown button span").textContent;
-            row[columnName] = boolValue === "TRUE" ? true : false;
-        } else if (div.querySelector("p").textContent.includes("AUTO_INCREMENT")) {
-            const value = currentTable.columns[index].autoIncrementCounter;
-            currentTable.columns[index].autoIncrementCounter++;
-            row[columnName] = value;
-        } else {
-            const inputValue = div.querySelector("input").value;
-            row[columnName] = inputValue;
-        }
-    });
-
-    insertRow(row);
-    openNotifications(`<p style="color: green;">Linha inserida com sucesso!</p>`);
-    changeInserirLinhaMenu();
 }
 
 function changeSelectedTable(table) {
@@ -567,7 +598,7 @@ function changeSelectedTable(table) {
         const divColuna = document.createElement("div");
         divColuna.innerHTML = `
             <p>${column.name}</p>
-            <p>${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFk ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO INCREMENT" : ""}</p>
+            <p>${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFk ? " • FK → " + column.FKreference.table + "." + column.FKreference.column : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO INCREMENT" : ""}</p>
         `;
 
 
@@ -580,7 +611,7 @@ function changeSelectedTable(table) {
     document.getElementById("tabela-selecionada-tabela").innerHTML = "";
     document.getElementById("tabela-selecionada-tabela").appendChild(divLinha);
 
-    table.rows.forEach((row) => {
+    table.rows.forEach((row, index) => {
         let divLinha = document.createElement("div");
         divLinha.classList.add("linha-tabela");
         Object.values(row).forEach((value) => {
@@ -590,7 +621,7 @@ function changeSelectedTable(table) {
         });
         divLinha.innerHTML += `
             <div>
-                <button onclick="abrirFechar(false, 'editar-linha'); changeEditarLinhaMenu();">
+                <button onclick="abrirFechar(false, 'editar-linha'); changeEditarLinhaMenu(${index});">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <use href="assets/images/icons-sprite.svg#icon-pencil"></use>
                     </svg>
@@ -730,7 +761,7 @@ function updateReferenceTablesDropdown(columnElement) {
     const selectedTable = tableNames.includes(previousSelectedTable) ? previousSelectedTable : tableNames[0];
 
     tableMenu.innerHTML = tableNames
-        .map((name) => `<li class="custom-dropdown-option${name === selectedTable ? " custom-dropdown-option-selected" : ""}">${name}</li>`)
+        .map((name) => name !== currentTable.name ? `<li class="custom-dropdown-option${name === selectedTable ? " custom-dropdown-option-selected" : ""}">${name}</li>` : "")
         .join("");
 
     tableValue.textContent = selectedTable;
