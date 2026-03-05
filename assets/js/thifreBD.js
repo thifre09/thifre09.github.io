@@ -52,13 +52,13 @@ class Table {
         this.PKs = [];
     }
 
-    addColumn(name, type, isPK = false, isFK = false, isNotNull = false, isUnique = false, isAutoIncrement = false, FKreference = null) {
-        this.columns.push(new Column(name, type, isPK, isFK, isNotNull, isUnique, isAutoIncrement, FKreference));
+    addColumn(name, type, isPK = false, isFK = false, isNotNull = false, isUnique = false, isAutoIncrement = false, FKreference = null, defaultValue = null) {
+        this.columns.push(new Column(name, type, isPK, isFK, isNotNull, isUnique, isAutoIncrement, FKreference, defaultValue));
     }
 }
 
 class Column {
-    constructor(name, type, isPK = false, isFK = false, isNotNull = false, isUnique = false, isAutoIncrement = false, FKreference = null) {
+    constructor(name, type, isPK = false, isFK = false, isNotNull = false, isUnique = false, isAutoIncrement = false, FKreference = null, defaultValue = null) {
         this.name = name;
         this.type = type;
         this.isPK = isPK;
@@ -68,6 +68,7 @@ class Column {
         this.isAutoIncrement = isAutoIncrement;
         this.autoIncrementCounter = 1;
         this.FKreference = FKreference;
+        this.defaultValue = defaultValue;
     }
 }
 
@@ -79,9 +80,7 @@ const types = Object.freeze({
 });
 
 // REMOVER ESSA PARTE DEPOIS
-let datasbases = [
-    new Database("thifreBD")
-];
+let datasbases = [];
 let currentDatabase = datasbases[0];
 let currentTable = null;
 let currentRowIndex = 0;
@@ -123,7 +122,7 @@ function createTable(tableName, columnsList) {
     let table = new Table(tableName);
 
     columnsList.forEach((column) => {
-        table.addColumn(column.nome, column.tipo, column.isPK, column.isFK, column.isNotNull, column.isUnique, column.isAutoIncrement, column.FKreference);
+        table.addColumn(column.nome, column.tipo, column.isPK, column.isFK, column.isNotNull, column.isUnique, column.isAutoIncrement, column.FKreference, column.defaultValue);
 
         if (column.isPK) {
             table.PKs.push(column.nome)
@@ -164,6 +163,76 @@ function createTable(tableName, columnsList) {
     refreshVisibleReferenceDropdowns();
 }
 
+function resetSelectedTableUI() {
+    document.getElementById("nenhuma-tabela-selecionada").style.display = "flex";
+    document.getElementById("tabela-selecionada-tabela").style.display = "none";
+    document.getElementById("tabela-selecionada-tabela").innerHTML = "";
+    document.getElementById("nome-tabela").textContent = "Crie uma tabela";
+    document.getElementById("linhas-colunas").textContent = "0 linhas • 0 colunas";
+}
+
+function rebuildTablesList() {
+    const tabelasLista = document.getElementById("tabelas-lista");
+    tabelasLista.innerHTML = "";
+
+    const tableNames = currentDatabase ? Object.keys(currentDatabase.tables) : [];
+
+    tableNames.forEach((tableName) => {
+        const table = currentDatabase.tables[tableName];
+        const tableElement = document.createElement("div");
+        tableElement.innerHTML = `
+            <p>${table.name}</p>
+            <p>${table.columns.length}</p>
+        `;
+        tableElement.classList.add("tabela");
+
+        if (currentTable && currentTable.name === table.name) {
+            tableElement.classList.add("tabela-ativa");
+        }
+
+        tableElement.addEventListener("click", () => {
+            currentTable = currentDatabase.tables[tableName];
+
+            document.querySelectorAll("#tabelas-lista > div").forEach((sibling) => {
+                sibling.classList.remove("tabela-ativa");
+            });
+
+            tableElement.classList.add("tabela-ativa");
+            changeSelectedTable(currentTable);
+        });
+
+        tabelasLista.appendChild(tableElement);
+    });
+}
+
+function deleteCurrentTableInterface() {
+    if (!currentTable) {
+        openNotifications("<p style='color: red;'>Nenhuma tabela selecionada.</p>");
+        return;
+    }
+
+    const tableName = currentTable.name;
+    delete currentDatabase.tables[tableName];
+
+    const remainingTables = Object.keys(currentDatabase.tables);
+    currentTable = remainingTables.length > 0 ? currentDatabase.tables[remainingTables[0]] : null;
+
+    rebuildTablesList();
+
+    if (currentTable) {
+        changeSelectedTable(currentTable);
+        changeAlterarColunasMenu();
+        changeInserirLinhaMenu();
+    } else {
+        resetSelectedTableUI();
+        document.getElementById("lista-colunas-existentes").innerHTML = "<p>Crie uma tabela para mostrar as colunas existentes</p>";
+        document.getElementById("colunas-inserir-linha").innerHTML = "<div><h3>Crie uma tabela para começar</h3></div>";
+    }
+
+    refreshVisibleReferenceDropdowns();
+    openNotifications(`<p style="color: green;">Tabela "${tableName}" deletada com sucesso!</p>`);
+}
+
 function deleteColumn(name) {
     if (!currentTable) {
         return;
@@ -180,6 +249,85 @@ function insertRow(values) {
     }
 
     currentTable.rows.push(values);
+    changeSelectedTable(currentTable);
+}
+
+function normalizePrimaryKeyValue(value) {
+    if (value === null || value === undefined) {
+        return "__NULL__";
+    }
+
+    if (typeof value === "object") {
+        return JSON.stringify(value);
+    }
+
+    return String(value);
+}
+
+function hasDuplicatePrimaryKey(candidateRow, ignoredRowIndex = null) {
+    if (!currentTable || currentTable.PKs.length === 0) {
+        return false;
+    }
+
+    return currentTable.rows.some((row, index) => {
+        if (ignoredRowIndex !== null && index === ignoredRowIndex) {
+            return false;
+        }
+
+        return currentTable.PKs.every((pkName) => {
+            return normalizePrimaryKeyValue(row[pkName]) === normalizePrimaryKeyValue(candidateRow[pkName]);
+        });
+    });
+}
+
+function getDuplicatedUniqueColumnName(candidateRow, ignoredRowIndex = null) {
+    if (!currentTable) {
+        return null;
+    }
+
+    const uniqueColumns = currentTable.columns.filter((column) => column.isUnique);
+    if (uniqueColumns.length === 0) {
+        return null;
+    }
+
+    for (const column of uniqueColumns) {
+        const candidateValue = candidateRow[column.name];
+
+        if (candidateValue === null || candidateValue === undefined) {
+            continue;
+        }
+
+        const hasDuplicate = currentTable.rows.some((row, index) => {
+            if (ignoredRowIndex !== null && index === ignoredRowIndex) {
+                return false;
+            }
+
+            const existingValue = row[column.name];
+            if (existingValue === null || existingValue === undefined) {
+                return false;
+            }
+
+            return normalizePrimaryKeyValue(existingValue) === normalizePrimaryKeyValue(candidateValue);
+        });
+
+        if (hasDuplicate) {
+            return column.name;
+        }
+    }
+
+    return null;
+}
+
+function deleteRow(rowIndex) {
+    if (!currentTable) {
+        return;
+    }
+
+    if (rowIndex < 0 || rowIndex >= currentTable.rows.length) {
+        return;
+    }
+
+    currentTable.rows.splice(rowIndex, 1);
     changeSelectedTable(currentTable);
 }
 
@@ -240,12 +388,19 @@ function createTableInterface() {
         let isUnique = coluna.querySelector(".unique input").checked;
         let isAutoIncrement = coluna.querySelector(".auto-increment input").checked;
         let FKreference = null;
+        const hasDefault = coluna.querySelector(".default-option input[type='checkbox']").checked;
+        let defaultValue = null;
+
+        if (hasDefault) {
+            const defaultInput = coluna.querySelector(".default-option input[type='text']");
+            defaultValue = defaultInput ? defaultInput.value : null;
+        }
 
         if (isFK) {
             const referenceDropdowns = coluna.querySelectorAll(".referencia .custom-dropdown");
             if (referenceDropdowns.length === 1) {
                 const referencedTable = referenceDropdowns[0].querySelector(".custom-dropdown-value")?.textContent.trim();
-                
+
                 if (referencedTable) {
                     FKreference = referencedTable;
                 }
@@ -269,7 +424,8 @@ function createTableInterface() {
             isNotNull: isNotNull,
             isUnique: isUnique,
             isAutoIncrement: isAutoIncrement,
-            FKreference: FKreference
+            FKreference: FKreference,
+            defaultValue: defaultValue
         });
     });
 
@@ -311,6 +467,10 @@ function createColumnInterface(parentElement) {
                 <input type="checkbox" id="unique-${contadorColunas}">
                 <label for="unique-${contadorColunas}">Unique</label>
             </div>
+            <div class="default-option">
+                <input type="checkbox" id="default-${contadorColunas}" onclick="toggleOnDefaultOptionButton(this)">
+                <label for="default-${contadorColunas}">Default</label>
+            </div>
             <div class="auto-increment" style="display: none;">
                 <input type="checkbox" id="auto-increment-${contadorColunas}">
                 <label for="auto-increment-${contadorColunas}">Auto increment</label>
@@ -332,6 +492,11 @@ function createColumnInterface(parentElement) {
                 </ul>
                 <input type="hidden" name="column-type" value="text">
             </div>
+        </div>
+
+        <div class="default" style="display: none;">
+            <p>Default</p>
+            <input type="text" placeholder="Valor padrão">
         </div>
     `;
 
@@ -372,6 +537,9 @@ function alterColumnsInterface() {
         const isNotNull = coluna.querySelector(".not-null input").checked;
         const isUnique = coluna.querySelector(".unique input").checked;
         const isAutoIncrement = coluna.querySelector(".auto-increment input").checked;
+        const hasDefault = coluna.querySelector(".default-option input[type='checkbox']").checked;
+        const defaultInput = coluna.querySelector(".default input[type='text']");
+        const defaultValue = hasDefault && defaultInput ? defaultInput.value : null;
         columnsList.push({
             nome: nomeColuna,
             tipo: columnType,
@@ -379,7 +547,8 @@ function alterColumnsInterface() {
             isFK: isFK,
             isNotNull: isNotNull,
             isUnique: isUnique,
-            isAutoIncrement: isAutoIncrement
+            isAutoIncrement: isAutoIncrement,
+            defaultValue: defaultValue
         });
     });
     if (shouldReturn) {
@@ -387,9 +556,9 @@ function alterColumnsInterface() {
     }
 
     columnsList.forEach((column) => {
-        currentTable.addColumn(column.nome, column.tipo, column.isPK, column.isFK, column.isNotNull, column.isUnique, column.isAutoIncrement);
+        currentTable.addColumn(column.nome, column.tipo, column.isPK, column.isFK, column.isNotNull, column.isUnique, column.isAutoIncrement, null, column.defaultValue);
         currentTable.rows.forEach((row) => {
-            row[column.nome] = column.isAutoIncrement ? currentTable.columns.at(-1).autoIncrementCounter++ : null;
+            row[column.nome] = column.isAutoIncrement ? currentTable.columns.at(-1).autoIncrementCounter++ : (column.defaultValue !== null && column.defaultValue !== "" ? column.defaultValue : null);
         });
     });
     openNotifications(`<p style="color: green;">Colunas adicionadas com sucesso!</p>`);
@@ -419,7 +588,7 @@ function insertRowInterface() {
             rowInsert[columnName] = value;
         } else if (div.querySelector("p").textContent.includes("FK")) {
             const inputsList = div.querySelectorAll("input");
-            const inputsValues = [...inputsList].map((i) => {return i.value;});
+            const inputsValues = [...inputsList].map((i) => { return i.value; });
             let interseccao = currentDatabase.tables[currentTable.columns[index].FKreference].rows;
             inputsValues.forEach((input, i) => {
                 const lista2 = currentDatabase.tables[currentTable.columns[index].FKreference].rows.filter((r) => {
@@ -436,15 +605,31 @@ function insertRowInterface() {
             }
         } else {
             const inputValue = div.querySelector("input").value;
-            rowInsert[columnName] = inputValue;
+            if (inputValue.trim() === "") {
+                const defaultValue = currentTable.columns[index].defaultValue;
+                rowInsert[columnName] = defaultValue !== null && defaultValue !== "" ? defaultValue : null;
+                if (currentTable.columns[index].isNotNull) {
+                    shouldReturn = true;
+                    openNotifications(`<p style="color: red;">Campo obrigatório não preenchido.</p>`);
+                }
+            } else {
+                rowInsert[columnName] = inputValue;
+            }
         }
     });
 
-    // [(1,1), (1,2), (1,3), (2,1), (2,2)]
-    // [(1,1), (1,2), (1,3)]
-    // [(1,1), (2,1)]
-
     if (shouldReturn) {
+        return;
+    }
+
+    if (hasDuplicatePrimaryKey(rowInsert)) {
+        openNotifications("<p style='color: red;'>Valor de PK já existe.</p>");
+        return;
+    }
+
+    const duplicateUniqueColumn = getDuplicatedUniqueColumnName(rowInsert);
+    if (duplicateUniqueColumn) {
+        openNotifications(`<p style='color: red;'>Valor duplicado em UNIQUE: ${duplicateUniqueColumn}</p>`);
         return;
     }
 
@@ -479,7 +664,16 @@ function editRowInterface() {
             }
         } else {
             const inputValue = div.querySelector("input").value;
-            rowInsert[columnName] = inputValue;
+            if (inputValue.trim() === "") {
+                const defaultValue = currentTable.columns[index].defaultValue;
+                rowInsert[columnName] = defaultValue !== null && defaultValue !== "" ? defaultValue : null;
+                if (currentTable.columns[index].isNotNull) {
+                    shouldReturn = true;
+                    openNotifications(`<p style="color: red;">Campo obrigatório não preenchido.</p>`);
+                }
+            } else {
+                rowInsert[columnName] = inputValue;
+            }
         }
     });
 
@@ -487,10 +681,36 @@ function editRowInterface() {
         return;
     }
 
+    if (hasDuplicatePrimaryKey(rowInsert, currentRowIndex)) {
+        openNotifications("<p style='color: red;'>Valor de PK já existe.</p>");
+        return;
+    }
+
+    const duplicateUniqueColumn = getDuplicatedUniqueColumnName(rowInsert, currentRowIndex);
+    if (duplicateUniqueColumn) {
+        openNotifications(`<p style='color: red;'>Valor duplicado em UNIQUE: ${duplicateUniqueColumn}</p>`);
+        return;
+    }
+
     currentTable.rows[currentRowIndex] = rowInsert;
     openNotifications(`<p style="color: green;">Linha editada com sucesso!</p>`);
     changeEditarLinhaMenu(currentRowIndex);
     changeSelectedTable(currentTable);
+}
+
+function deleteRowInterface(rowIndex) {
+    if (!currentTable) {
+        openNotifications("<p style='color: red;'>Nenhuma tabela selecionada.</p>");
+        return;
+    }
+
+    if (rowIndex < 0 || rowIndex >= currentTable.rows.length) {
+        openNotifications("<p style='color: red;'>Linha inválida.</p>");
+        return;
+    }
+
+    deleteRow(rowIndex);
+    openNotifications("<p style='color: green;'>Linha deletada com sucesso!</p>");
 }
 
 function changeAlterarColunasMenu() {
@@ -504,7 +724,7 @@ function changeAlterarColunasMenu() {
             <div class="item-lista-colunas-existentes">
                 <div>
                     <h3>${column.name}</h3>
-                    <p>${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""}</p>
+                    <p>${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""}${column.defaultValue !== null && column.defaultValue !== "" ? " • DEFAULT " + column.defaultValue : ""}</p>
                 </div>
                 <button class="delete-column" onclick="deleteColumnInterface(this)">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -528,7 +748,7 @@ function changeInserirLinhaMenu() {
             inserirLinhasList.innerHTML += `
                 <div>
                     <h3>${column.name}</h3>
-                    <p>(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""})</p>
+                    <p>(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""}${column.defaultValue !== null && column.defaultValue !== "" ? " • DEFAULT " + column.defaultValue : ""})</p>
                     <div class="custom-dropdown">
                         <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
                             <span class="custom-dropdown-value">TRUE</span>
@@ -546,7 +766,7 @@ function changeInserirLinhaMenu() {
             inserirLinhasList.innerHTML += `
                 <div>
                     <h3>${column.name}</h3>
-                    <p>(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""})</p>
+                    <p>(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""}${column.defaultValue !== null && column.defaultValue !== "" ? " • DEFAULT " + column.defaultValue : ""})</p>
                     <p style="color: var(--gray);">Valor gerado automaticamente</p>
                 </div>
             `;
@@ -556,7 +776,7 @@ function changeInserirLinhaMenu() {
             h3name.textContent = column.name;
             div.appendChild(h3name);
             const pCharacteristics = document.createElement("p");
-            pCharacteristics.textContent = `(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""})`;
+            pCharacteristics.textContent = `(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""}${column.defaultValue !== null && column.defaultValue !== "" ? " • DEFAULT " + column.defaultValue : ""})`;
             div.appendChild(pCharacteristics)
 
             currentDatabase.tables[column.FKreference].PKs.forEach((pk) => {
@@ -590,14 +810,14 @@ function changeInserirLinhaMenu() {
                     inputPK.type = "text";
                     inputPK.placeholder = `(${columnPK.type.toUpperCase()}${columnPK.isPK ? " • PK" : ""}${columnPK.isFK ? " • FK" : ""}${columnPK.isNotNull ? " • NOT NULL" : ""}${columnPK.isUnique ? " • UNIQUE" : ""}${columnPK.isAutoIncrement ? " • AUTO_INCREMENT" : ""})`;
                     div.appendChild(inputPK);
-                }        
+                }
                 inserirLinhasList.appendChild(div);
             });
         } else if (column.type === "Integer" || column.type === "Float") {
             inserirLinhasList.innerHTML += `
                 <div>
                     <h3>${column.name}</h3>
-                    <p>(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""})</p>
+                    <p>(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""}${column.defaultValue !== null && column.defaultValue !== "" ? " • DEFAULT " + column.defaultValue : ""})</p>
                     <input type="number" step="${column.type === "Integer" ? "1" : "any"}">
                 </div>
             `;
@@ -605,7 +825,7 @@ function changeInserirLinhaMenu() {
             inserirLinhasList.innerHTML += `
                 <div>
                     <h3>${column.name}</h3>
-                    <p>(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""})</p>
+                    <p>(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""}${column.defaultValue !== null && column.defaultValue !== "" ? " • DEFAULT " + column.defaultValue : ""})</p>
                     <input type="text">
                 </div>
             `;
@@ -629,7 +849,7 @@ function changeEditarLinhaMenu(rowIndex) {
             inserirLinhasList.innerHTML += `
                 <div>
                     <h3>${column.name}</h3>
-                    <p>(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""})</p>
+                    <p>(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""}${column.defaultValue !== null && column.defaultValue !== "" ? " • DEFAULT " + column.defaultValue : ""})</p>
                     <div class="custom-dropdown">
                         <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
                             <span class="custom-dropdown-value">TRUE</span>
@@ -647,7 +867,7 @@ function changeEditarLinhaMenu(rowIndex) {
             inserirLinhasList.innerHTML += `
                 <div>
                     <h3>${column.name}</h3>
-                    <p>(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""})</p>
+                    <p>(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""}${column.defaultValue !== null && column.defaultValue !== "" ? " • DEFAULT " + column.defaultValue : ""})</p>
                     <p style="color: var(--gray);">Valor gerado automaticamente</p>
                 </div>
             `;
@@ -657,7 +877,7 @@ function changeEditarLinhaMenu(rowIndex) {
             h3name.textContent = column.name;
             div.appendChild(h3name);
             const pCharacteristics = document.createElement("p");
-            pCharacteristics.textContent = `(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""})`;
+            pCharacteristics.textContent = `(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""}${column.defaultValue !== null && column.defaultValue !== "" ? " • DEFAULT " + column.defaultValue : ""})`;
             div.appendChild(pCharacteristics)
 
             currentDatabase.tables[column.FKreference].PKs.forEach((pk) => {
@@ -691,14 +911,14 @@ function changeEditarLinhaMenu(rowIndex) {
                     inputPK.type = "text";
                     inputPK.placeholder = `(${columnPK.type.toUpperCase()}${columnPK.isPK ? " • PK" : ""}${columnPK.isFK ? " • FK" : ""}${columnPK.isNotNull ? " • NOT NULL" : ""}${columnPK.isUnique ? " • UNIQUE" : ""}${columnPK.isAutoIncrement ? " • AUTO_INCREMENT" : ""})`;
                     div.appendChild(inputPK);
-                }        
+                }
                 inserirLinhasList.appendChild(div);
             });
         } else if (column.type === "Integer" || column.type === "Float") {
             inserirLinhasList.innerHTML += `
                 <div>
                     <h3>${column.name}</h3>
-                    <p>(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""})</p>
+                    <p>(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""}${column.defaultValue !== null && column.defaultValue !== "" ? " • DEFAULT " + column.defaultValue : ""})</p>
                     <input type="number" step="${column.type === "Integer" ? "1" : "any"}">
                 </div>
             `;
@@ -706,7 +926,7 @@ function changeEditarLinhaMenu(rowIndex) {
             inserirLinhasList.innerHTML += `
                 <div>
                     <h3>${column.name}</h3>
-                    <p>(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""})</p>
+                    <p>(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""}${column.defaultValue !== null && column.defaultValue !== "" ? " • DEFAULT " + column.defaultValue : ""})</p>
                     <input type="text">
                 </div>
             `;
@@ -728,7 +948,7 @@ function changeSelectedTable(table) {
         const divColuna = document.createElement("div");
         divColuna.innerHTML = `
             <p>${column.name}</p>
-            <p>${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK → " + column.FKreference : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO INCREMENT" : ""}</p>
+            <p>${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK → " + column.FKreference : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO INCREMENT" : ""}${column.defaultValue !== null && column.defaultValue !== "" ? " • DEFAULT " + column.defaultValue : ""}</p>
         `;
 
 
@@ -756,7 +976,7 @@ function changeSelectedTable(table) {
                         <use href="assets/images/icons-sprite.svg#icon-pencil"></use>
                     </svg>
                 </button>
-                <button>
+                <button onclick="deleteRowInterface(${index})">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
                     </svg>
@@ -826,6 +1046,25 @@ function toggleOnFKButton(element) {
     }
 }
 
+function toggleOnDefaultOptionButton(element) {
+    const columnElement = element.parentElement.parentElement.parentElement;
+    const defaultContainer = columnElement.querySelector(".default");
+
+    if (!defaultContainer) {
+        return;
+    }
+
+    if (element.checked) {
+        defaultContainer.style.display = "block";
+    } else {
+        defaultContainer.style.display = "none";
+        const defaultInput = defaultContainer.querySelector("input");
+        if (defaultInput) {
+            defaultInput.value = "";
+        }
+    }
+}
+
 function initializeReferenceDropdown(columnElement) {
     const referencia = columnElement.querySelector(".referencia");
     if (!referencia || referencia.dataset.referenceInitialized === "true") {
@@ -885,7 +1124,7 @@ function updateReferenceTablesDropdown(columnElement) {
     const selectedTable = tableNames.includes(previousSelectedTable) ? previousSelectedTable : tableNames[0];
 
     tableMenu.innerHTML = tableNames
-        .map((name) => name !== currentTable.name ? `<li class="custom-dropdown-option${name === selectedTable ? " custom-dropdown-option-selected" : ""}">${name}</li>` : "")
+        .map((name) => !currentTable || name !== currentTable.name ? `<li class="custom-dropdown-option${name === selectedTable ? " custom-dropdown-option-selected" : ""}">${name}</li>` : "")
         .join("");
 
     tableValue.textContent = selectedTable;
@@ -998,5 +1237,9 @@ document.getElementById("menus-centrais").addEventListener("click", (event) => {
         menu.style.display = "none";
     });
     document.getElementById("menus-centrais").style.display = "none";
+});
+
+document.getElementById("delete-table").addEventListener("click", () => {
+    deleteCurrentTableInterface();
 });
 // #endregion

@@ -13,7 +13,8 @@
         <div id="troca-de-tela">
             <div id="interface-terminal">
                 <div class="interface-terminal-indicator"></div>
-                <button id="button-interface-terminal-interface" class="interface-terminal interface-terminal-ativo">Interface gráfica</button>
+                <button id="button-interface-terminal-interface"
+                    class="interface-terminal interface-terminal-ativo">Interface gráfica</button>
                 <button id="button-interface-terminal-terminal" class="interface-terminal">Terminal</button>
             </div>
         </div>
@@ -60,7 +61,7 @@
                 <div id="tabelas">
                     <p>Tabelas</p>
                     <ul id="tabelas-lista">
-                                         
+
                     </ul>
                 </div>
             </div>
@@ -75,12 +76,14 @@
                     </div>
 
                     <div id="botoes-varios-botoes">
-                        <button id="alter-column" onclick="abrirFechar(false, 'editar-colunas'); changeAlterarColunasMenu()">
+                        <button id="alter-column"
+                            onclick="abrirFechar(false, 'editar-colunas'); changeAlterarColunasMenu()">
                             <svg viewBox="0 0 512 512" aria-hidden="true">
                                 <use href="assets/images/icons-sprite.svg#icon-edit"></use>
                             </svg>
                             Alterar colunas</button>
-                        <button id="insert-line" onclick="abrirFechar(false, 'inserir-linha'); changeInserirLinhaMenu()">
+                        <button id="insert-line"
+                            onclick="abrirFechar(false, 'inserir-linha'); changeInserirLinhaMenu()">
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
                             </svg>
@@ -108,7 +111,7 @@
 
                     <div id="tabela-selecionada">
                         <div id="tabela-selecionada-tabela" style="display: none;">
-                            
+
                         </div>
                     </div>
                 </div>
@@ -148,8 +151,9 @@
                 </div>
 
                 <label for="nome-tabela-input">Nome da tabela</label>
-                <input type="text" id="nome-tabela-input" name="nome-tabela-input" rows="1" placeholder="Ex: minha_tabela"></textarea>
-                
+                <input type="text" id="nome-tabela-input" name="nome-tabela-input" rows="1"
+                    placeholder="Ex: minha_tabela"></textarea>
+
                 <div>
                     <h2>Colunas</h2>
                     <button onclick="createColumnInterface(document.querySelector('#criacao-tabela ul'))">
@@ -169,10 +173,18 @@
                                 <span class="custom-dropdown-value">Text</span>
                             </button>
                             <ul class="custom-dropdown-menu" tabindex="-1">
-                                <li class="custom-dropdown-option custom-dropdown-option-selected" onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment'))">Text</li>
-                                <li class="custom-dropdown-option" onclick="toggleAutoIncrementButton(true, document.getElementById('auto-increment'))">Integer</li>
-                                <li class="custom-dropdown-option" onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment'))">Float</li>
-                                <li class="custom-dropdown-option" onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment'))">Boolean</li>
+                                <li class="custom-dropdown-option custom-dropdown-option-selected"
+                                    onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment'))">
+                                    Text</li>
+                                <li class="custom-dropdown-option"
+                                    onclick="toggleAutoIncrementButton(true, document.getElementById('auto-increment'))">
+                                    Integer</li>
+                                <li class="custom-dropdown-option"
+                                    onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment'))">
+                                    Float</li>
+                                <li class="custom-dropdown-option"
+                                    onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment'))">
+                                    Boolean</li>
                             </ul>
                             <input type="hidden" name="column-type" value="text">
                         </div>
@@ -193,6 +205,10 @@
                             <div class="unique">
                                 <input type="checkbox" id="unique">
                                 <label for="unique">Unique</label>
+                            </div>
+                            <div class="default-option">
+                                <input type="checkbox" id="default" onclick="toggleOnDefaultOptionButton(this)">
+                                <label for="default">Default</label>
                             </div>
                             <div class="auto-increment" style="display: none;">
                                 <input type="checkbox" id="auto-increment">
@@ -215,6 +231,11 @@
                                 </ul>
                                 <input type="hidden" name="column-type" value="text">
                             </div>
+                        </div>
+
+                        <div class="default" style="display: none;">
+                            <p>Default</p>
+                            <input type="text" placeholder="Valor padrão">
                         </div>
                     </div>
                 </ul>
@@ -245,7 +266,8 @@
 
                 <div>
                     <h2>Colunas</h2>
-                    <button onclick="createColumnInterface(document.querySelector('#editar-colunas ul:not(#lista-colunas-existentes)'))">
+                    <button
+                        onclick="createColumnInterface(document.querySelector('#editar-colunas ul:not(#lista-colunas-existentes)'))">
                         <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
                             <use href="assets/images/icons-sprite.svg#icon-plus"></use>
                         </svg>
@@ -261,10 +283,18 @@
                                 <span class="custom-dropdown-value">Text</span>
                             </button>
                             <ul class="custom-dropdown-menu" tabindex="-1">
-                                <li class="custom-dropdown-option custom-dropdown-option-selected" onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment-0'))">Text</li>
-                                <li class="custom-dropdown-option" onclick="toggleAutoIncrementButton(true, document.getElementById('auto-increment-0'))">Integer</li>
-                                <li class="custom-dropdown-option" onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment-0'))">Float</li>
-                                <li class="custom-dropdown-option" onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment-0'))">Boolean</li>
+                                <li class="custom-dropdown-option custom-dropdown-option-selected"
+                                    onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment-0'))">
+                                    Text</li>
+                                <li class="custom-dropdown-option"
+                                    onclick="toggleAutoIncrementButton(true, document.getElementById('auto-increment-0'))">
+                                    Integer</li>
+                                <li class="custom-dropdown-option"
+                                    onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment-0'))">
+                                    Float</li>
+                                <li class="custom-dropdown-option"
+                                    onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment-0'))">
+                                    Boolean</li>
                             </ul>
                             <input type="hidden" name="column-type" value="text">
                         </div>
@@ -285,6 +315,10 @@
                             <div class="unique">
                                 <input type="checkbox" id="unique-0">
                                 <label for="unique-0">Unique</label>
+                            </div>
+                            <div class="default-option">
+                                <input type="checkbox" id="default-0" onclick="toggleOnDefaultOptionButton(this)">
+                                <label for="default-0">Default</label>
                             </div>
                             <div class="auto-increment" style="display: none;">
                                 <input type="checkbox" id="auto-increment-0">
@@ -308,6 +342,11 @@
                                 <input type="hidden" name="column-type" value="text">
                             </div>
                         </div>
+
+                        <div class="default" style="display: none;">
+                            <p>Default</p>
+                            <input type="text" placeholder="Valor padrão">
+                        </div>
                     </div>
                 </ul>
 
@@ -317,7 +356,7 @@
                     </svg>
                     Adicionar coluna(s)
                 </button>
-                
+
             </div>
 
             <div id="inserir-linha" style="display: none;">
@@ -333,7 +372,7 @@
                 <ul id="colunas-inserir-linha">
                     <div>
                         <h3>Crie uma tabela para começar</h3>
-                    </div>              
+                    </div>
                 </ul>
 
                 <button id="inserir-linha-button" onclick="insertRowInterface()">
@@ -376,8 +415,8 @@
                         </div>
                     </div>
 
-                    
-                    
+
+
                 </ul>
 
                 <button id="editar-linha-button" onclick="editRowInterface()">
