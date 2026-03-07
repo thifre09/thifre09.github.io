@@ -72,14 +72,6 @@ class Column {
     }
 }
 
-const types = Object.freeze({
-    TEXT: "text",
-    INTEGER: "integer",
-    FLOAT: "float",
-    BOOLEAN: "boolean",
-});
-
-// REMOVER ESSA PARTE DEPOIS
 let datasbases = [];
 let currentDatabase = datasbases[0];
 let currentTable = null;
@@ -111,11 +103,37 @@ function createDatabase() {
     document.querySelectorAll("#databases .custom-dropdown ul.custom-dropdown-menu li").forEach((li, index) => {
         li.addEventListener("click", () => {
             closeAllDropdowns();
-            currentDatabase = datasbases[index];
-            refreshVisibleReferenceDropdowns();
+            switchDatabase(datasbases[index]);
         });
     });
+
+    switchDatabase(currentDatabase);
     updateCustomDropdowns();
+}
+
+function resetTableMenusForNoSelection() {
+    document.getElementById("lista-colunas-existentes").innerHTML = "<p>Crie uma tabela para mostrar as colunas existentes</p>";
+    document.getElementById("colunas-inserir-linha").innerHTML = "<div><h3>Crie uma tabela para começar</h3></div>";
+}
+
+function switchDatabase(database) {
+    currentDatabase = database;
+
+    const tableNames = currentDatabase ? Object.keys(currentDatabase.tables) : [];
+    currentTable = tableNames.length > 0 ? currentDatabase.tables[tableNames[0]] : null;
+
+    rebuildTablesList();
+
+    if (currentTable) {
+        changeSelectedTable(currentTable);
+        changeAlterarColunasMenu();
+        changeInserirLinhaMenu();
+    } else {
+        resetSelectedTableUI();
+        resetTableMenusForNoSelection();
+    }
+
+    refreshVisibleReferenceDropdowns();
 }
 
 function createTable(tableName, columnsList) {
@@ -239,6 +257,10 @@ function deleteColumn(name) {
     }
 
     currentTable.columns = currentTable.columns.filter(col => col.name !== name);
+    currentTable.PKs = currentTable.PKs.filter(pk => pk !== name);
+    currentTable.rows.forEach(row => {
+        delete row[name];
+    });
     changeSelectedTable(currentTable);
     changeAlterarColunasMenu();
 }
@@ -334,6 +356,7 @@ function deleteRow(rowIndex) {
 // #region Interface
 
 let timeout;
+
 function openNotifications(html) {
     clearTimeout(timeout);
     const notificacoes = document.getElementById("notificacoes");
@@ -944,19 +967,22 @@ function changeSelectedTable(table) {
 
     let divLinha = document.createElement("div");
     divLinha.classList.add("linha-tabela");
-    table.columns.forEach((column) => {
+    table.columns.forEach((column, i) => {
         const divColuna = document.createElement("div");
         divColuna.innerHTML = `
             <p>${column.name}</p>
             <p>${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK → " + column.FKreference : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO INCREMENT" : ""}${column.defaultValue !== null && column.defaultValue !== "" ? " • DEFAULT " + column.defaultValue : ""}</p>
         `;
-
+        divColuna.addEventListener("click", () => {
+            abrirFecharLinhaColuna(false);
+            changeSelectedRowColumn(false, i);
+        });
 
         divLinha.appendChild(divColuna);
     });
-    divLinha.innerHTML += `
-        <div><p>Ações</p></div>
-    `;
+    const headerActions = document.createElement("div");
+    headerActions.innerHTML = "<p>Ações</p>";
+    divLinha.appendChild(headerActions);
 
     document.getElementById("tabela-selecionada-tabela").innerHTML = "";
     document.getElementById("tabela-selecionada-tabela").appendChild(divLinha);
@@ -969,20 +995,24 @@ function changeSelectedTable(table) {
             divCelula.innerHTML = `<p>${value}</p>`;
             divLinha.appendChild(divCelula);
         });
-        divLinha.innerHTML += `
-            <div>
-                <button onclick="abrirFechar(false, 'editar-linha'); changeEditarLinhaMenu(${index});">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <use href="assets/images/icons-sprite.svg#icon-pencil"></use>
-                    </svg>
-                </button>
-                <button onclick="deleteRowInterface(${index})">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
-                    </svg>
-                </button>
-            </div>
+        const rowActions = document.createElement("div");
+        rowActions.innerHTML = `
+            <button onclick="abrirFechar(false, 'editar-linha'); changeEditarLinhaMenu(${index});">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/images/icons-sprite.svg#icon-pencil"></use>
+                </svg>
+            </button>
+            <button onclick="deleteRowInterface(${index})">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
+                </svg>
+            </button>
         `;
+        divLinha.appendChild(rowActions);
+        divLinha.addEventListener("click", () => {
+            abrirFecharLinhaColuna(false);
+            changeSelectedRowColumn(true, index);
+        });
 
         document.getElementById("tabela-selecionada-tabela").appendChild(divLinha);
     });
@@ -1144,6 +1174,46 @@ function refreshVisibleReferenceDropdowns() {
             updateReferenceTablesDropdown(columnElement);
         }
     });
+}
+
+function abrirFecharLinhaColuna(estado) {
+    if (estado) {
+        document.querySelector("#tabela-selecionada-linha-coluna").style.display = "none";
+    } else {
+        document.querySelector("#tabela-selecionada-linha-coluna").style.display = "flex";
+    }
+}
+
+function changeSelectedRowColumn(isRow, index) {
+    const container = document.getElementById("tabela-selecionada-linha-coluna");
+    const h3 = container.querySelector("h3");
+    const h4 = container.querySelector("h4");
+    const ul = container.querySelector("ul");
+    if (isRow) {
+        h3.textContent = `Linha`;
+        h4.textContent = `${currentTable.columns.length} colunas`;
+        ul.innerHTML = "";
+        for (let chave in currentTable.rows[index]) {
+            const div = document.createElement("div");
+            div.innerHTML = `
+                <h5>${chave} (${currentTable.columns.filter((col) => col.name === chave)[0]?.type || ''})</h5>
+                <p>${currentTable.rows[index][chave]}</p>
+            `;
+            ul.appendChild(div);
+        }
+    } else {
+        h3.textContent = `Coluna: ${currentTable.columns[index].name}`;
+        h4.textContent = `${currentTable.rows.length} linhas`;
+        ul.innerHTML = "";
+        currentTable.rows.forEach((row, rowIndex) => {
+            const div = document.createElement("div");
+            div.innerHTML = `
+                <h5>Linha ${rowIndex + 1}</h5>
+                <p>${row[currentTable.columns[index].name]}</p>
+            `;
+            ul.appendChild(div);
+        });
+    }
 }
 
 // #endregion

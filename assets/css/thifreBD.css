@@ -373,7 +373,6 @@ input[type="number"]::-webkit-inner-spin-button {
         #tabela-info {
             display: flex;
             flex-direction: column;
-
             flex: 1;
             overflow: auto;
 
@@ -405,18 +404,20 @@ input[type="number"]::-webkit-inner-spin-button {
 
             #tabela-selecionada {
                 display: flex;
-                flex-direction: column;
-                align-items: center;
+                justify-content: center;
+                width: 100%;
 
                 #tabela-selecionada-tabela {
                     display: flex;
                     flex-direction: column;
-                    width: 90%;
-                    max-width: 90%;
+                    width: 100%;
+                    max-width: 100%;
                     border: solid 2px var(--gray2);
                     border-radius: 15px 15px 0 0;
                     overflow: auto;
-                    margin-top: var(--p3);
+                    margin: var(--p3);
+                    flex: 3;
+                    height: fit-content;
 
                     .linha-tabela {
                         padding: var(--p3);
@@ -425,6 +426,7 @@ input[type="number"]::-webkit-inner-spin-button {
                         min-width: none;
                         border-bottom: solid 2px var(--gray2);
                         min-width: 97%;
+                        cursor: pointer;
 
                         div {
                             flex: 0 0 200px;
@@ -485,10 +487,78 @@ input[type="number"]::-webkit-inner-spin-button {
 
                     .linha-tabela:first-child {
                         background-color: var(--gray4);
+
+                        div:not(:last-child):hover {
+                            background-color: var(--gray3);
+                        }
                     }
 
                     .linha-tabela:last-child {
                         border-bottom: none;
+                    }
+
+                    .linha-tabela:not(:first-child):hover {
+                        background-color: var(--gray3);
+                    }
+                }
+
+                #tabela-selecionada-linha-coluna {
+                    width: 100%;
+                    border: solid 2px var(--gray2);
+                    border-radius: 15px 15px 0 0;
+                    padding: var(--p2);
+                    margin: var(--p3);
+                    margin-left: auto;
+                    display: flex;
+                    flex-direction: column;
+                    flex: 1;
+                    height: fit-content;
+
+                    #tabela-selecionada-linha-coluna-header {
+                        display: flex;
+                        justify-content: space-between;
+
+                        button {
+                            background-color: transparent;
+                            border: none;
+                            border-radius: 5px;
+                            padding: var(--p1);
+                            transition: var(--transition-time1);
+                            cursor: pointer;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            padding: var(--p2);
+
+                            svg {
+                                width: 20px;
+                                height: 20px;
+                            }
+                        }
+
+                        button:hover {
+                            background-color: var(--gray2);
+                        }      
+                    }
+
+                    h4 {
+                        font-size: medium;
+                        font-weight: 100;
+                        color: var(--gray1);
+                    }
+
+                    ul {
+
+                        div {
+                            border: solid 2px var(--gray2);
+                            border-radius: 5px;
+                            padding: var(--p3);
+                            margin: var(--p5) 0;
+
+                            h5 {
+                                margin-bottom: var(--p5);
+                            }
+                        }
                     }
                 }
             }
