@@ -29,7 +29,7 @@ input[type="number"]::-webkit-inner-spin-button {
         width: 100%;
         border: none;
         border-radius: 10px;
-        background-color: var(--gray3);
+        background-color: var(--gray11);
         padding: var(--p5);
         font-size: medium;
         outline: none;
@@ -73,7 +73,7 @@ input[type="number"]::-webkit-inner-spin-button {
         }
 
         .custom-dropdown-option:hover {
-            background-color: var(--gray3);
+            background-color: var(--gray11);
         }
 
         .custom-dropdown-option-selected {
@@ -128,7 +128,7 @@ input[type="number"]::-webkit-inner-spin-button {
         --indicator-width: 0px;
         display: flex;
         width: fit-content;
-        background-color: var(--gray3);
+        background-color: var(--gray11);
         border-radius: 10px;
         position: relative;
         padding: 3px;
@@ -223,7 +223,7 @@ input[type="number"]::-webkit-inner-spin-button {
                 }
 
                 button:hover {
-                    background-color: var(--gray3);
+                    background-color: var(--gray11);
                     transform: scale(1.05);
                 }
 
@@ -281,7 +281,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
             #tabelas-lista {
                 .tabela {
-                    background-color: var(--gray3);
+                    background-color: var(--gray11);
                     border-radius: 10px;
                     padding: 5px;
                     margin: 5px;
@@ -489,7 +489,7 @@ input[type="number"]::-webkit-inner-spin-button {
                         background-color: var(--gray4);
 
                         div:not(:last-child):hover {
-                            background-color: var(--gray3);
+                            background-color: var(--gray11);
                         }
                     }
 
@@ -498,7 +498,7 @@ input[type="number"]::-webkit-inner-spin-button {
                     }
 
                     .linha-tabela:not(:first-child):hover {
-                        background-color: var(--gray3);
+                        background-color: var(--gray11);
                     }
                 }
 
@@ -625,7 +625,7 @@ input[type="number"]::-webkit-inner-spin-button {
             }
 
             button:not(:first-child):hover {
-                background-color: var(--gray3);
+                background-color: var(--gray11);
                 transform: scale(1.05);
             }
 
@@ -664,7 +664,7 @@ input[type="number"]::-webkit-inner-spin-button {
             margin: 0;
             margin-bottom: var(--p5);
             margin-top: var(--p1);
-            background-color: var(--gray3);
+            background-color: var(--gray11);
         }
 
         >button {
@@ -853,5 +853,24 @@ input[type="number"]::-webkit-inner-spin-button {
         p {
             font-size: large;
         }
+    }
+}
+
+#terminal {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    header#terminal-header {
+        display: flex;
+        flex: 1;
+    }
+
+    section#terminal-content {
+        flex: 10;
+    }
+
+    div#terminal-input {
+        flex: 2;
     }
 }

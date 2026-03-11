@@ -790,7 +790,7 @@ function changeInserirLinhaMenu() {
                 <div>
                     <h3>${column.name}</h3>
                     <p>(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""}${column.defaultValue !== null && column.defaultValue !== "" ? " • DEFAULT " + column.defaultValue : ""})</p>
-                    <p style="color: var(--gray);">Valor gerado automaticamente</p>
+                    <p style="color: var(--gray6);">Valor gerado automaticamente</p>
                 </div>
             `;
         } else if (column.isFK) {
@@ -891,7 +891,7 @@ function changeEditarLinhaMenu(rowIndex) {
                 <div>
                     <h3>${column.name}</h3>
                     <p>(${column.type.toUpperCase()}${column.isPK ? " • PK" : ""}${column.isFK ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""}${column.defaultValue !== null && column.defaultValue !== "" ? " • DEFAULT " + column.defaultValue : ""})</p>
-                    <p style="color: var(--gray);">Valor gerado automaticamente</p>
+                    <p style="color: var(--gray6);">Valor gerado automaticamente</p>
                 </div>
             `;
         } else if (column.isFK) {
