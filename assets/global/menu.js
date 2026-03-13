@@ -124,7 +124,8 @@ function abrir(estado, id) {
 const tipoNota = Object.freeze({
     ATUALIZACAO: "atualizacao",
     CORRECAO: "correcao",
-    NOVO_RECURSO: "novo_recurso"
+    NOVO_RECURSO: "novo_recurso",
+    RECURSO_REMOVIDO: "recurso_removido"
 });
 
 const relacionado = Object.freeze({
@@ -391,6 +392,8 @@ function criarNotasAtualizacao() {
                         </g>
                     </svg>
                     `;
+                    break;
+                case tipoNota.RECURSO_REMOVIDO:
                     break;
             }
         });

@@ -6,7 +6,7 @@
 
 div#mayor-simulator {
     font-family: "Jersey 10", sans-serif;
-    background: linear-gradient(to left, #dbdada, rgb(215, 214, 211)0, #e4e4e4);
+    background: var(--gray13);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -14,7 +14,7 @@ div#mayor-simulator {
     height: fit-content;
 
     header {
-        background: linear-gradient(to right, rgb(240, 215, 105), #ecd777, rgb(228, 206, 108));
+        background: var(--yellow7);
         color: rgb(252, 236, 236);
         display: flex;
         align-items: center;
@@ -99,7 +99,7 @@ div#mayor-simulator {
         width: 30%;
         height: 90vh;
         box-sizing: border-box;
-        background-color: #c9a500;
+        background-color: var(--yellow5);
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -326,7 +326,8 @@ div#mayor-simulator {
     }
 
     .img-credits h2 {
-        background-color: #ffbe5d94;
+        background-color: var(--yellow8);
+        opacity: 70%;
         width: 100%;
         position: absolute;
         bottom: 0;

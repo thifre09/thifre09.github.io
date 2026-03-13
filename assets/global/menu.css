@@ -314,7 +314,7 @@ section#notas-atualizacao-container {
 
             li.nota {
                 margin: 20px;
-                background-color: var(--gray69);
+                background-color: var(--gray14);
                 list-style: none;
                 transition: var(--transition-time1);
                 padding: 20px;
@@ -360,7 +360,7 @@ section#notas-atualizacao-container {
 
             li.nota:hover {
                 transform: scale(1.05);
-                box-shadow: 5px 5px 5px var(--gray66);
+                box-shadow: 5px 5px 5px var(--gray11);
             }
 
             li.nota-atualizacao {
@@ -370,31 +370,31 @@ section#notas-atualizacao-container {
                     color: var(--blue5);
 
                     h4 {
-                        background-color: var(--blue8);
+                        background-color: var(--blue9);
                     }
                 }
             }
 
             li.nota-correcao {
-                border-left: 4px solid var(--red6);
+                border-left: 4px solid var(--red5);
 
                 .tipo-nota {
-                    color: var(--red6);
+                    color: var(--red5);
 
                     h4 {
-                        background-color: var(--red8);
+                        background-color: var(--red9);
                     }
                 }
             }
 
             li.nota-novo_recurso {
-                border-left: 4px solid var(--green5);
+                border-left: 4px solid var(--green4);
 
                 .tipo-nota {
-                    color: var(--green5);
+                    color: var(--green4);
 
                     h4 { 
-                        background-color: var(--green8);
+                        background-color: var(--green9);
                     }
                     
                 }
@@ -409,8 +409,12 @@ section#notas-atualizacao-container {
     display: flex;
     flex-direction: column;
 
+    .aside-scroll {
+        height: calc(70vh - clamp(70px, 5vh, 100000px));
+    }
+
     .topo-notas {
-        background-color: var(--gray69);
+        background-color: var(--gray14);
 
         button {
             border-radius: 10px;
@@ -457,10 +461,14 @@ section#notas-atualizacao-container {
                     color: white;
                 }
             }
+
+            button:hover {
+                background: var(--blue4);
+                transform: scale(1.05);
+            }
         }
 
-        #topo-criar-nota,
-        #topo-editar-nota {
+        #topo-criar-nota, #topo-editar-nota {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -470,13 +478,18 @@ section#notas-atualizacao-container {
             }
 
             button:nth-child(1) {
-                background-color: var(--gray67);
+                background-color: var(--gray11);
                 color: var(--black);
 
                 img {
                     width: 20px;
                     height: 20px;
                 }
+            }
+
+            button:nth-child(1):hover {
+                background: var(--gray9);
+                transform: scale(1.05);
             }
 
             button:nth-child(2) {
@@ -488,17 +501,16 @@ section#notas-atualizacao-container {
                     filter: invert(100%);
                 }
             }
-        }
 
-        button:hover {
-            background: var(--blue6);
-            transform: scale(1.05);
-        }
+            button:nth-child(2):hover {
+                background: var(--blue4);
+                transform: scale(1.05);
+            }
+        }   
     }
 }
 
 section#bloco-notas-container {
-
     #notas-container {
         #nenhuma-nota-ainda {
             display: flex;
@@ -508,7 +520,7 @@ section#bloco-notas-container {
 
             svg {
                 width: 150px;
-                color: var(--gray67);
+                color: var(--gray11);
                 margin: 3%;
             }
 
@@ -521,7 +533,7 @@ section#bloco-notas-container {
             h5 {
                 font-size: 0.9rem;
                 margin-top: 2%;
-                color: var(--gray66)
+                color: var(--gray11)
             }
 
         }
@@ -534,8 +546,8 @@ section#bloco-notas-container {
         }
 
         .nota {
-            width: clamp(1px, 95%, 10000px);
-            background-color: var(--gray69);
+            width: clamp(1px, 93%, 10000px);
+            background-color: var(--gray14);
             border-radius: 15px;
             padding: var(--p4);
             transition: var(--transition-time1);
@@ -608,17 +620,15 @@ section#bloco-notas-container {
 
         .nota:hover {
             transform: scale(1.01);
-            box-shadow: 5px 5px 5px var(--gray66);
+            box-shadow: 5px 5px 5px var(--gray11);
         }
     }
 
     #notas {
         overflow: auto;
-
     }
 
-    #criar-nota,
-    #editar-nota {
+    #criar-nota, #editar-nota {
         display: flex;
         flex-direction: column;
 
@@ -636,7 +646,7 @@ section#bloco-notas-container {
         }
 
         textarea:focus {
-            border-color: var(--green5);
+            border-color: var(--green4);
             outline: none;
         }
 
@@ -704,13 +714,13 @@ section#bloco-notas-container {
         font-size: 1.2rem;
         border: none;
         outline: none;
-        background-color: var(--gray67);
+        background-color: var(--gray10);
         border-radius: 5px;
         transition: 0.2s;
     }
 
     button:hover {
-        background-color: var(--gray66);
+        background-color: var(--gray6);
     }
 
     button#equal-button {
@@ -721,7 +731,7 @@ section#bloco-notas-container {
     }
 
     button#equal-button:hover {
-        background-color: var(--blue6);
+        background-color: var(--blue4);
     }
 
     button[onClick^="appendNumber"]:not([onClick="appendNumber('.')"]) {

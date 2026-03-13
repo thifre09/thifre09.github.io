@@ -26,9 +26,9 @@ const categorias = [
         new Cor("#ffb869"), new Cor("#ffd6a7"), new Cor("#ffedd4")
     ]),
     new Categoria("Amarelo", [
-        new Cor("#7e5a0c"), new Cor("#9f6d00"), new Cor("#ca8000"), 
-        new Cor("#f59400"), new Cor("#ffb000"), new Cor("#ffcb03"),
-        new Cor("#ffe469"), new Cor("#ffedab"), new Cor("#fff4d4")
+        new Cor("#733e0a"), new Cor("#894b00"), new Cor("#a65f00"), 
+        new Cor("#d08700"), new Cor("#f0b100"), new Cor("#ffcb03"),
+        new Cor("#ffdf20"), new Cor("#fff085"), new Cor("#fef9c2")
     ]),
     new Categoria("Verde", [
         new Cor("#0d542b"), new Cor("#026630"), new Cor("#008235"),

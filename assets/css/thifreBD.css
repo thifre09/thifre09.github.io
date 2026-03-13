@@ -29,7 +29,7 @@ input[type="number"]::-webkit-inner-spin-button {
         width: 100%;
         border: none;
         border-radius: 10px;
-        background-color: var(--gray11);
+        background-color: var(--gray13);
         padding: var(--p5);
         font-size: medium;
         outline: none;
@@ -55,7 +55,7 @@ input[type="number"]::-webkit-inner-spin-button {
         margin: 6px 0 0;
         padding: 4px;
         border-radius: 10px;
-        border: solid 1px var(--gray2);
+        border: solid 1px var(--gray10);
         background-color: white;
         box-shadow: 0 8px 20px #00000020;
         position: absolute;
@@ -73,16 +73,16 @@ input[type="number"]::-webkit-inner-spin-button {
         }
 
         .custom-dropdown-option:hover {
-            background-color: var(--gray11);
+            background-color: var(--gray13);
         }
 
         .custom-dropdown-option-selected {
-            background-color: var(--blue2);
+            background-color: var(--blue5);
             color: white;
         }
 
         .custom-dropdown-option-selected:hover {
-            background-color: var(--blue1);
+            background-color: var(--blue4);
         }
     }
 }
@@ -108,13 +108,13 @@ input[type="number"]::-webkit-inner-spin-button {
     .separador-horizontal {
         width: 100%;
         height: 2px;
-        background-color: var(--gray1);
+        background-color: var(--gray3);
     }
 
     .separador-vertical {
         width: 2px;
         align-self: stretch;
-        background-color: var(--gray1);
+        background-color: var(--gray3);
     }
 }
 
@@ -128,7 +128,7 @@ input[type="number"]::-webkit-inner-spin-button {
         --indicator-width: 0px;
         display: flex;
         width: fit-content;
-        background-color: var(--gray11);
+        background-color: var(--gray13);
         border-radius: 10px;
         position: relative;
         padding: 3px;
@@ -185,7 +185,7 @@ input[type="number"]::-webkit-inner-spin-button {
             padding: 5%;
 
             .custom-dropdown-trigger {
-                border: solid 2px var(--gray2);
+                border: solid 2px var(--gray10);
                 background-color: transparent;
             }
 
@@ -223,7 +223,7 @@ input[type="number"]::-webkit-inner-spin-button {
                 }
 
                 button:hover {
-                    background-color: var(--gray11);
+                    background-color: var(--gray12);
                     transform: scale(1.05);
                 }
 
@@ -269,7 +269,7 @@ input[type="number"]::-webkit-inner-spin-button {
         }
 
         #tabelas {
-            background-color: var(--gray4);
+            background-color: var(--gray14);
             flex: 1;
             min-height: 0;
             padding: 5%;
@@ -281,7 +281,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
             #tabelas-lista {
                 .tabela {
-                    background-color: var(--gray11);
+                    background-color: var(--gray13);
                     border-radius: 10px;
                     padding: 5px;
                     margin: 5px;
@@ -298,17 +298,17 @@ input[type="number"]::-webkit-inner-spin-button {
                 }
 
                 .tabela:hover {
-                    background-color: var(--gray2);
+                    background-color: var(--gray12);
                     transform: scale(1.02);
                 }
 
                 .tabela-ativa {
-                    background-color: var(--blue2);
+                    background-color: var(--blue5);
                     color: white;
                 }
 
                 .tabela-ativa:hover {
-                    background-color: var(--blue1);
+                    background-color: var(--blue4);
                 }
             }
         }
@@ -354,7 +354,7 @@ input[type="number"]::-webkit-inner-spin-button {
                 }
 
                 #alter-column {
-                    background-color: var(--green1);
+                    background-color: var(--green4);
                     color: white;
                 }
 
@@ -364,7 +364,7 @@ input[type="number"]::-webkit-inner-spin-button {
                 }
 
                 #delete-table {
-                    background-color: var(--red2);
+                    background-color: var(--red4);
                     color: white;
                 }
             }
@@ -386,7 +386,7 @@ input[type="number"]::-webkit-inner-spin-button {
                 svg {
                     width: 150px;
                     height: 150px;
-                    color: var(--gray1);
+                    color: var(--gray10);
 
                 }
 
@@ -397,7 +397,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
                 p {
                     font-size: medium;
-                    color: var(--gray1);
+                    color: var(--gray10);
                     margin: 0;
                 }
             }
@@ -412,7 +412,7 @@ input[type="number"]::-webkit-inner-spin-button {
                     flex-direction: column;
                     width: 100%;
                     max-width: 100%;
-                    border: solid 2px var(--gray2);
+                    border: solid 2px var(--gray10);
                     border-radius: 15px 15px 0 0;
                     overflow: auto;
                     margin: var(--p3);
@@ -424,7 +424,7 @@ input[type="number"]::-webkit-inner-spin-button {
                         display: flex;
                         width: fit-content;
                         min-width: none;
-                        border-bottom: solid 2px var(--gray2);
+                        border-bottom: solid 2px var(--gray10);
                         min-width: 97%;
                         cursor: pointer;
 
@@ -436,7 +436,7 @@ input[type="number"]::-webkit-inner-spin-button {
                             overflow: auto;
 
                             p:nth-child(2) {
-                                color: var(--gray1);
+                                color: var(--gray10);
                                 font-size: small;
                             }
                         }
@@ -463,19 +463,19 @@ input[type="number"]::-webkit-inner-spin-button {
                             }
 
                             button:first-child {
-                                color: var(--green2);
+                                color: var(--green3);
                             }
 
                             button:first-child:hover {
-                                background-color: var(--green3);
+                                background-color: var(--green8);
                             }
 
                             button:last-child {
-                                color: var(--red2)
+                                color: var(--red4)
                             }
 
                             button:last-child:hover {
-                                background-color: var(--red3);
+                                background-color: var(--red8);
                             }
                         }
 
@@ -486,10 +486,10 @@ input[type="number"]::-webkit-inner-spin-button {
                     }
 
                     .linha-tabela:first-child {
-                        background-color: var(--gray4);
+                        background-color: var(--gray14);
 
                         div:not(:last-child):hover {
-                            background-color: var(--gray11);
+                            background-color: var(--gray13);
                         }
                     }
 
@@ -498,13 +498,13 @@ input[type="number"]::-webkit-inner-spin-button {
                     }
 
                     .linha-tabela:not(:first-child):hover {
-                        background-color: var(--gray11);
+                        background-color: var(--gray14);
                     }
                 }
 
                 #tabela-selecionada-linha-coluna {
                     width: 100%;
-                    border: solid 2px var(--gray2);
+                    border: solid 2px var(--gray10);
                     border-radius: 15px 15px 0 0;
                     padding: var(--p2);
                     margin: var(--p3);
@@ -537,20 +537,20 @@ input[type="number"]::-webkit-inner-spin-button {
                         }
 
                         button:hover {
-                            background-color: var(--gray2);
+                            background-color: var(--gray10);
                         }      
                     }
 
                     h4 {
                         font-size: medium;
                         font-weight: 100;
-                        color: var(--gray1);
+                        color: var(--gray10);
                     }
 
                     ul {
 
                         div {
-                            border: solid 2px var(--gray2);
+                            border: solid 2px var(--gray10);
                             border-radius: 5px;
                             padding: var(--p3);
                             margin: var(--p5) 0;
@@ -606,7 +606,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
             button:not(:first-child):not(.menu-criacao-top button) {
                 background-color: transparent;
-                border: solid 2px var(--gray2);
+                border: solid 2px var(--gray10);
                 border-radius: 10px;
                 padding: var(--p1);
                 transition: var(--transition-time1);
@@ -625,7 +625,7 @@ input[type="number"]::-webkit-inner-spin-button {
             }
 
             button:not(:first-child):hover {
-                background-color: var(--gray11);
+                background-color: var(--gray13);
                 transform: scale(1.05);
             }
 
@@ -648,7 +648,7 @@ input[type="number"]::-webkit-inner-spin-button {
             }
 
             button:hover {
-                background-color: var(--gray2);
+                background-color: var(--gray10);
                 transform: scale(1.05);
             }
         }
@@ -664,7 +664,7 @@ input[type="number"]::-webkit-inner-spin-button {
             margin: 0;
             margin-bottom: var(--p5);
             margin-top: var(--p1);
-            background-color: var(--gray11);
+            background-color: var(--gray13);
         }
 
         >button {
@@ -685,7 +685,7 @@ input[type="number"]::-webkit-inner-spin-button {
         }
 
         ul>div:not(#inserir-linha > ul#colunas-inserir-linha div) {
-            border: solid 2px var(--gray2);
+            border: solid 2px var(--gray10);
             border-radius: 5px;
             padding: var(--p4);
             display: flex;
@@ -725,11 +725,11 @@ input[type="number"]::-webkit-inner-spin-button {
                     align-items: center;
 
                     svg {
-                        color: var(--red2);
+                        color: var(--red4);
                     }
 
                     &:hover {
-                        background-color: var(--red3);
+                        background-color: var(--red8);
                         transform: scale(1.05);
                     }
                 }
@@ -747,12 +747,12 @@ input[type="number"]::-webkit-inner-spin-button {
                     top: 0;
                     bottom: 0;
                     width: 1px;
-                    background-color: var(--blue1);
+                    background-color: var(--blue5);
                 }
 
                 p {
                     font-size: small;
-                    color: var(--blue1);
+                    color: var(--blue5);
                 }
             }
 
@@ -768,12 +768,12 @@ input[type="number"]::-webkit-inner-spin-button {
                     top: 0;
                     bottom: 0;
                     width: 1px;
-                    background-color: var(--blue1);
+                    background-color: var(--blue5);
                 }
 
                 p {
                     font-size: small;
-                    color: var(--blue1);
+                    color: var(--blue5);
                 }
 
                 input {
@@ -799,7 +799,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
             p {
                 font-size: small;
-                color: var(--gray1);
+                color: var(--gray10);
                 margin: var(--p5) 0;
             }
         }
@@ -818,11 +818,11 @@ input[type="number"]::-webkit-inner-spin-button {
             background-color: transparent;
 
             svg {
-                color: var(--red2);
+                color: var(--red4);
             }
 
             &:hover {
-                background-color: var(--red3);
+                background-color: var(--red8);
                 transform: scale(1.05);
             }
         }
@@ -834,7 +834,7 @@ input[type="number"]::-webkit-inner-spin-button {
         margin-bottom: var(--p5);
 
         p {
-            color: var(--gray1);
+            color: var(--gray10);
         }
 
     }
@@ -863,14 +863,61 @@ input[type="number"]::-webkit-inner-spin-button {
 
     header#terminal-header {
         display: flex;
+        align-items: center;
+        color: var(--green6);
+        font-weight: 700;
         flex: 1;
+        background-color: var(--gray3);
+
+        p {
+            margin: 0 var(--p2);
+        }
     }
 
     section#terminal-content {
+        padding: var(--p2);
         flex: 10;
+        background-color: var(--gray1);
+
+        .terminal-content-info {
+            color: var(--gray6)
+        }
+
+        .terminal-content-command {
+            color: var(--green6);
+        }
+
+        .terminal-content-error {
+            color: var(--red6);
+        }
+
+        .terminal-content-status {
+            color: var(--blue6);
+        }
     }
 
     div#terminal-input {
-        flex: 2;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: var(--p2);
+        flex: 1;
+        background-color: var(--gray2);
+
+        label {
+            color: var(--green6);
+            margin-right: var(--p2);
+            width: fit-content;
+        }
+
+        input {
+            width: 100%;
+            background: var(--gray2);
+            border: none;
+            outline: none;
+            color: var(--white);
+            font-size: medium;
+            font-weight: 100;
+        }
     }
 }
