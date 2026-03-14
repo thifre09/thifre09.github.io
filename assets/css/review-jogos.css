@@ -1,0 +1,83 @@
+#reviews {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.jogo {
+    width: 90%;
+    background-color: var(--blue8);
+    border: solid 2px var(--black);
+    border-radius: 15px;
+
+    h2 {
+        text-align: center;
+    }
+
+    > div {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 20px;
+
+        img {
+
+            max-width: 30%;
+            border-radius: 10px;
+        }
+
+        div.tabela {
+            max-width: 40%;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+
+            div {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                margin: 0;
+
+                div {
+                    margin: 0;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    border: solid 1px var(--black);
+                    
+                    h3 {
+                        min-height: 3.5em;
+                        flex: 1;
+                        width: 100%;
+                        margin: 0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: medium;
+                        text-align: center;
+                        border-bottom: solid 1px var(--black);
+                        background-color: var(--purple5);
+                    }
+                    
+                    h4 {
+                        width: 100%;
+                        flex: 1;
+                        font-size: xx-large;
+                        text-align: center;
+                        margin: var(--p5);
+                    }
+                }
+            }
+        }
+
+        div.comentarios {
+            p {
+                border: solid 1px var(--black);
+                background-color: var(--gray14);
+                border-radius: 10px;
+                padding: var(--p5);
+                margin: var(--p2) ;
+            }
+        }
+    }
+}

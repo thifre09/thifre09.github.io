@@ -53,6 +53,13 @@ class Table {
     }
 
     addColumn(name, type, isPK = false, isFK = false, isNotNull = false, isUnique = false, isAutoIncrement = false, FKreference = null, defaultValue = null) {
+        const normalizedName = normalizeColumnName(name);
+        const hasColumnWithSameName = this.columns.some((column) => normalizeColumnName(column.name) === normalizedName);
+
+        if (hasColumnWithSameName) {
+            throw new Error(`Já existe uma coluna com o nome "${name}".`);
+        }
+
         this.columns.push(new Column(name, type, isPK, isFK, isNotNull, isUnique, isAutoIncrement, FKreference, defaultValue));
     }
 }
@@ -286,6 +293,26 @@ function normalizePrimaryKeyValue(value) {
     return String(value);
 }
 
+function normalizeColumnName(name) {
+    return String(name || "").trim().toLowerCase();
+}
+
+function findDuplicatedColumnName(columnNames) {
+    const seen = new Set();
+
+    for (const columnName of columnNames) {
+        const normalizedName = normalizeColumnName(columnName);
+
+        if (seen.has(normalizedName)) {
+            return columnName.trim();
+        }
+
+        seen.add(normalizedName);
+    }
+
+    return null;
+}
+
 function hasDuplicatePrimaryKey(candidateRow, ignoredRowIndex = null) {
     if (!currentTable || currentTable.PKs.length === 0) {
         return false;
@@ -397,11 +424,13 @@ function createTableInterface() {
     }
 
     let columnsList = [];
+    let shouldReturn = false;
     const colunasList = document.querySelectorAll("#criacao-tabela ul > div");
     colunasList.forEach((coluna) => {
         const nomeColuna = coluna.querySelector("input").value;
         if (nomeColuna.trim() === "") {
             openNotifications("<p style='color: red;'>O nome da coluna não pode ser vazio.</p>");
+            shouldReturn = true;
             return;
         }
         let columnType = coluna.querySelector('.custom-dropdown button span.custom-dropdown-value').textContent;
@@ -451,6 +480,16 @@ function createTableInterface() {
             defaultValue: defaultValue
         });
     });
+
+    if (shouldReturn) {
+        return;
+    }
+
+    const duplicatedColumnName = findDuplicatedColumnName(columnsList.map((column) => column.nome));
+    if (duplicatedColumnName) {
+        openNotifications(`<p style='color: red;'>Não é permitido repetir o nome de coluna: ${duplicatedColumnName}</p>`);
+        return;
+    }
 
     createTable(tableName, columnsList);
 }
@@ -575,6 +614,19 @@ function alterColumnsInterface() {
         });
     });
     if (shouldReturn) {
+        return;
+    }
+
+    const duplicatedColumnName = findDuplicatedColumnName(columnsList.map((column) => column.nome));
+    if (duplicatedColumnName) {
+        openNotifications(`<p style='color: red;'>Não é permitido repetir o nome de coluna: ${duplicatedColumnName}</p>`);
+        return;
+    }
+
+    const existingColumnNames = new Set(currentTable.columns.map((column) => normalizeColumnName(column.name)));
+    const duplicateWithExisting = columnsList.find((column) => existingColumnNames.has(normalizeColumnName(column.nome)));
+    if (duplicateWithExisting) {
+        openNotifications(`<p style='color: red;'>A coluna ${duplicateWithExisting.nome} já existe na tabela.</p>`);
         return;
     }
 
