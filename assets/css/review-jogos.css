@@ -5,6 +5,7 @@
 }
 
 .jogo {
+    margin: var(--p2);
     width: 90%;
     background-color: var(--blue8);
     border: solid 2px var(--black);
@@ -12,6 +13,7 @@
 
     h2 {
         text-align: center;
+        font-size: xx-large;
     }
 
     > div {
@@ -21,7 +23,6 @@
         padding: 20px;
 
         img {
-
             max-width: 30%;
             border-radius: 10px;
         }
@@ -64,20 +65,57 @@
                         flex: 1;
                         font-size: xx-large;
                         text-align: center;
-                        margin: var(--p5);
                     }
                 }
             }
         }
 
         div.comentarios {
-            p {
+            display: flex;
+            flex-direction: column;
+            max-width: 30%;
+
+            h5 {
+                font-size: large;
+                font-weight: bold;
+                margin: var(--p2);
+                text-align: center;
+            }
+
+            div {
+                flex: 1;
                 border: solid 1px var(--black);
                 background-color: var(--gray14);
                 border-radius: 10px;
                 padding: var(--p5);
                 margin: var(--p2) ;
+                height: 100%;
             }
+        }
+    }
+}
+
+@media (max-width: 1000px) {
+    .jogo > div {
+        flex-direction: column;
+
+        > * {
+            margin: var(--p3);
+        }
+
+        img {
+            max-width: 80%;
+        }
+
+        div.tabela {
+            max-width: 100%;
+            div {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        div.comentarios {
+            max-width: 100%;
         }
     }
 }

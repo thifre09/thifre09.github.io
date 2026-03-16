@@ -60,7 +60,6 @@ nav#barra-main {
 
     img {
         width: 36px;
-        position: absolute;
         transition: var(--transition-time1);
         cursor: pointer;
     }
@@ -89,41 +88,6 @@ h6#titulo {
         color: white;
     }
 }
-
-@keyframes abrirMenu {
-    from {
-        right: 100%;
-    }
-
-    to {
-        right: 80%;
-    }
-}
-
-@keyframes fecharMenu {
-    from {
-        right: 80%;
-    }
-
-    to {
-        right: 100%;
-    }
-}
-
-@keyframes rainbow {
-    0% {
-        background-position: 0%;
-    }
-
-    /* Começa na posição inicial */
-    100% {
-        background-position: 150%;
-    }
-
-    /* Move até o final */
-}
-
-/* barra lateral */
 
 aside#menu-lateral {
     z-index: 101;
@@ -758,6 +722,39 @@ section#bloco-notas-container {
     button[onClick="clearDisplay()"]:hover, button[onClick="deleteDigit()"]:hover {
         background-color: var(--red5);
     }
+}
+
+@keyframes abrirMenu {
+    from {
+        right: 100%;
+    }
+
+    to {
+        right: 80%;
+    }
+}
+
+@keyframes fecharMenu {
+    from {
+        right: 80%;
+    }
+
+    to {
+        right: 100%;
+    }
+}
+
+@keyframes rainbow {
+    0% {
+        background-position: 0%;
+    }
+
+    /* Começa na posição inicial */
+    100% {
+        background-position: 150%;
+    }
+
+    /* Move até o final */
 }
 
 @media (max-width: 600px) {

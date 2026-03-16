@@ -19,37 +19,37 @@ article p {
     margin: 10px;
     padding: 4px;
     text-align: justify;
-    background-color: white;
-    color: black;
+    background-color: var(--white);
+    color: var(--black);
 }
 
 #leis {
-    background-color: #c97200;
-    color: rgb(58, 199, 255);
+    background-color: var(--orange3);
+    color: var(--cyan7);
     
 }
 
 #recordes {
-    background-color: rgb(253, 73, 73);
-    color: rgb(255, 255, 86);
+    background-color: var(--red7);
+    color: var(--yellow7);
 }
 
 #universo {
-    background-color: rgb(26, 32, 116);
-    color: rgb(139, 3, 139);
+    background-color: var(--blue2);
+    color: var(--purple4);
 }
 
 #natureza {
-    background-color: rgb(6, 167, 6);
-    color: greenyellow;
+    background-color: var(--green3);
+    color: var(--green7);
 }
 
 #objetos {
-    background-color: #FF8C00;
-    color: #573000;
+    background-color: var(--orange6);
+    color: var(--orange1);
 }
 
 #historia {
-    background-color: rgb(181, 76, 181);
-    color: rgb(88, 44, 0);
+    background-color: var(--pink4);
+    color: var(--orange1);
 }

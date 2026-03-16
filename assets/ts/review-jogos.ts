@@ -1,14 +1,28 @@
-"use strict";
 class Review {
-    constructor(nome, imagem, notas, comentarioPrincipal = "") {
+    nome: string;
+    imagem: string;
+    notas: Notas;
+    comentarioPrincipal: string;
+
+    constructor(nome: string, imagem: string, notas: Notas, comentarioPrincipal: string = "") {
         this.nome = nome;
         this.imagem = imagem;
         this.notas = notas;
         this.comentarioPrincipal = comentarioPrincipal;
     }
 }
+
 class Notas {
-    constructor(gameplay = 0, historia = 0, graficos = 0, trilhaSonora = 0, tempoJogado = "Não sei", dificuldade = 0, diversao = 0, notaFinal = 0) {
+    gameplay: string | number;
+    historia: string | number;
+    graficos: string | number;
+    trilhaSonora: string | number;
+    tempoJogado: string;
+    dificuldade: string | number;
+    diversao: string | number;
+    notaFinal: string | number;
+
+    constructor(gameplay: string | number = 0, historia: string | number = 0, graficos: string | number = 0, trilhaSonora: string | number = 0, tempoJogado: string = "Não sei", dificuldade: string | number = 0, diversao: string | number = 0, notaFinal: string | number = 0) {
         this.gameplay = gameplay;
         this.historia = historia;
         this.graficos = graficos;
@@ -19,38 +33,48 @@ class Notas {
         this.notaFinal = notaFinal;
     }
 }
+
 function criarReviews() {
-    const reviewsContainer = document.getElementById("reviews");
+    const reviewsContainer = document.getElementById("reviews")!;
     reviews.forEach(review => {
         const jogoDiv = document.createElement("div");
         jogoDiv.classList.add("jogo");
         reviewsContainer.appendChild(jogoDiv);
+
         const h2 = document.createElement("h2");
         h2.textContent = review.nome;
         jogoDiv.appendChild(h2);
+
         const divPrincipal = document.createElement("div");
         jogoDiv.appendChild(divPrincipal);
+
         const img = document.createElement("img");
         img.src = `assets/images/jogos reviews img/${review.imagem}`;
         divPrincipal.appendChild(img);
+
         const tabela = document.createElement("div");
         tabela.classList.add("tabela");
         divPrincipal.appendChild(tabela);
+
         const divDentroTabela = document.createElement("div");
         tabela.appendChild(divDentroTabela);
+
+
         for (const [key, value] of Object.entries(review.notas)) {
             const div = document.createElement("div");
             divDentroTabela.appendChild(div);
+
             const h3 = document.createElement("h3");
             div.appendChild(h3);
+
             const h4 = document.createElement("h4");
             h4.textContent = value.toString();
             div.appendChild(h4);
+
             if (key === "tempoJogado") {
                 h3.textContent = "Tempo jogado";
                 h4.style.backgroundColor = "var(--blue5)";
-            }
-            else if (key === "dificuldade") {
+            } else if (key === "dificuldade") {
                 h3.textContent = "Dificuldade";
                 switch (true) {
                     case value === 10:
@@ -75,8 +99,7 @@ function criarReviews() {
                         h4.style.backgroundColor = "gray";
                         break;
                 }
-            }
-            else if (key === "trilhaSonora") {
+            } else if (key === "trilhaSonora") {
                 h3.textContent = "Trilha sonora";
                 switch (true) {
                     case value === 10:
@@ -101,8 +124,7 @@ function criarReviews() {
                         h4.style.backgroundColor = "gray";
                         break;
                 }
-            }
-            else {
+            } else {
                 h3.textContent = key.charAt(0).toUpperCase() + key.slice(1);
                 switch (true) {
                     case value === 10:
@@ -128,7 +150,10 @@ function criarReviews() {
                         break;
                 }
             }
+
+
         }
+
         const comentarios = document.createElement("div");
         comentarios.classList.add("comentarios");
         divPrincipal.appendChild(comentarios);
@@ -140,7 +165,8 @@ function criarReviews() {
         `;
     });
 }
-let reviews = [
+
+let reviews: Review[] = [
     new Review("A Hat in Time", "a hat in time.jpg", new Notas()),
     new Review("Among Us", "among us.jpeg", new Notas(1, 3, 5, 6, "7h", 8, 9, 10)),
     new Review("Animal Well", "animal well.jpg", new Notas()),
@@ -161,7 +187,7 @@ let reviews = [
     new Review("Demon's Souls", "demons souls.jpg", new Notas()),
     new Review("Detroit: Become Human", "detroit.jpg", new Notas()),
     new Review("Dispatch", "dispatch.jpg", new Notas()),
-    new Review("Doki Doki", "doki doki.jpg", new Notas()),
+    new Review("Doki Doki literature club plus", "doki doki.jpg", new Notas()),
     new Review("Fall guys", "fall guys.jpeg", new Notas()),
     new Review("Forager", "forager.jpg", new Notas()),
     new Review("Fortnite", "fortnite.jpeg", new Notas()),
@@ -175,6 +201,7 @@ let reviews = [
     new Review("Hades 2", "hades 2.jpg", new Notas()),
     new Review("Hogwarts Legacy", "hogwarts legacy.jpeg", new Notas()),
     new Review("Hollow Knight", "hollow knight.jpeg", new Notas()),
+    new Review("Hollow Knight: Silksong", "silksong.jpg", new Notas()),
     new Review("Horizon Forbidden West", "horizon forbidden west.jpeg", new Notas()),
     new Review("Horizon Zero Dawn", "horizon zero dawn.jpeg", new Notas()),
     new Review("Kena: bridge of spirits", "kena bridge of spirits.jpg", new Notas()),
@@ -185,7 +212,6 @@ let reviews = [
     new Review("Red Dead Redemption 2", "red dead 2.jpeg", new Notas()),
     new Review("Sekiro", "sekiro.jpg", new Notas()),
     new Review("Shadow of the colossus", "shadow of the colossus.jpg", new Notas()),
-    new Review("Silksong", "silksong.jpg", new Notas()),
     new Review("Spider-man 2", "spider man 2.jpg", new Notas()),
     new Review("Spider-man Miles Morales", "spider man miles morales.jpg", new Notas()),
     new Review("Spider-man remastered", "spider man remastered.jpg", new Notas()),
@@ -199,3 +225,5 @@ let reviews = [
     new Review("Two Points Hospital", "two point hospital.jpeg", new Notas()),
 ];
 criarReviews();
+
+
