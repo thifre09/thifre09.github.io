@@ -224,6 +224,62 @@ let reviews: Review[] = [
     new Review("The Stanley Parable: Ultra Deluxe", "the stanley parable ultra deluxe.jpg", new Notas()),
     new Review("Two Points Hospital", "two point hospital.jpeg", new Notas()),
 ];
+
+function setupSearch() {
+    const searchInput = document.getElementById("searchInput") as HTMLInputElement;
+    const searchResults = document.getElementById("searchResults")!;
+
+    searchInput.addEventListener("input", (e) => {
+        const query = (e.target as HTMLInputElement).value.toLowerCase().trim();
+
+        if (query.length === 0) {
+            searchResults.classList.remove("active");
+            return;
+        }
+
+        const filteredReviews = reviews.filter(review =>
+            review.nome.toLowerCase().includes(query)
+        );
+
+        if (filteredReviews.length === 0) {
+            searchResults.innerHTML = "<div style='padding: var(--p3); text-align: center; color: var(--black);'>Nenhum jogo encontrado</div>";
+            searchResults.classList.add("active");
+            return;
+        }
+
+        searchResults.innerHTML = filteredReviews
+            .map(
+                (review) => `
+                <div class="search-result-item" onclick="scrollToGame('${review.nome.replace(/'/g, "\\'")}')"  >
+                    <img src="assets/images/jogos reviews img/${review.imagem}" alt="${review.nome}" class="search-result-img">
+                    <span class="search-result-name">${review.nome}</span>
+                </div>
+            `
+            )
+            .join("");
+
+        searchResults.classList.add("active");
+    });
+
+    document.addEventListener("click", (e) => {
+        if (!searchInput.contains(e.target as Node) && !searchResults.contains(e.target as Node)) {
+            searchResults.classList.remove("active");
+        }
+    });
+}
+
+function scrollToGame(gameName: string) {
+    const gameElement = Array.from(document.querySelectorAll(".jogo h2")).find(
+        (h2) => h2.textContent === gameName
+    );
+    if (gameElement) {
+        gameElement.scrollIntoView({ behavior: "smooth", block: "start" });
+        document.getElementById("searchInput")?.blur();
+        (document.getElementById("searchResults") as HTMLElement).classList.remove("active");
+    }
+}
+
 criarReviews();
+setupSearch();
 
 

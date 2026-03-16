@@ -161,7 +161,7 @@ let reviews = [
     new Review("Demon's Souls", "demons souls.jpg", new Notas()),
     new Review("Detroit: Become Human", "detroit.jpg", new Notas()),
     new Review("Dispatch", "dispatch.jpg", new Notas()),
-    new Review("Doki Doki", "doki doki.jpg", new Notas()),
+    new Review("Doki Doki literature club plus", "doki doki.jpg", new Notas()),
     new Review("Fall guys", "fall guys.jpeg", new Notas()),
     new Review("Forager", "forager.jpg", new Notas()),
     new Review("Fortnite", "fortnite.jpeg", new Notas()),
@@ -175,6 +175,7 @@ let reviews = [
     new Review("Hades 2", "hades 2.jpg", new Notas()),
     new Review("Hogwarts Legacy", "hogwarts legacy.jpeg", new Notas()),
     new Review("Hollow Knight", "hollow knight.jpeg", new Notas()),
+    new Review("Hollow Knight: Silksong", "silksong.jpg", new Notas()),
     new Review("Horizon Forbidden West", "horizon forbidden west.jpeg", new Notas()),
     new Review("Horizon Zero Dawn", "horizon zero dawn.jpeg", new Notas()),
     new Review("Kena: bridge of spirits", "kena bridge of spirits.jpg", new Notas()),
@@ -185,7 +186,6 @@ let reviews = [
     new Review("Red Dead Redemption 2", "red dead 2.jpeg", new Notas()),
     new Review("Sekiro", "sekiro.jpg", new Notas()),
     new Review("Shadow of the colossus", "shadow of the colossus.jpg", new Notas()),
-    new Review("Silksong", "silksong.jpg", new Notas()),
     new Review("Spider-man 2", "spider man 2.jpg", new Notas()),
     new Review("Spider-man Miles Morales", "spider man miles morales.jpg", new Notas()),
     new Review("Spider-man remastered", "spider man remastered.jpg", new Notas()),
@@ -198,4 +198,44 @@ let reviews = [
     new Review("The Stanley Parable: Ultra Deluxe", "the stanley parable ultra deluxe.jpg", new Notas()),
     new Review("Two Points Hospital", "two point hospital.jpeg", new Notas()),
 ];
+function setupSearch() {
+    const searchInput = document.getElementById("searchInput");
+    const searchResults = document.getElementById("searchResults");
+    searchInput.addEventListener("input", (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        if (query.length === 0) {
+            searchResults.classList.remove("active");
+            return;
+        }
+        const filteredReviews = reviews.filter(review => review.nome.toLowerCase().includes(query));
+        if (filteredReviews.length === 0) {
+            searchResults.innerHTML = "<div style='padding: var(--p3); text-align: center; color: var(--black);'>Nenhum jogo encontrado</div>";
+            searchResults.classList.add("active");
+            return;
+        }
+        searchResults.innerHTML = filteredReviews
+            .map((review) => `
+                <div class="search-result-item" onclick="scrollToGame('${review.nome.replace(/'/g, "\\'")}')"  >
+                    <img src="assets/images/jogos reviews img/${review.imagem}" alt="${review.nome}" class="search-result-img">
+                    <span class="search-result-name">${review.nome}</span>
+                </div>
+            `)
+            .join("");
+        searchResults.classList.add("active");
+    });
+    document.addEventListener("click", (e) => {
+        if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+            searchResults.classList.remove("active");
+        }
+    });
+}
+function scrollToGame(gameName) {
+    const gameElement = Array.from(document.querySelectorAll(".jogo h2")).find((h2) => h2.textContent === gameName);
+    if (gameElement) {
+        gameElement.scrollIntoView({ behavior: "smooth", block: "start" });
+        document.getElementById("searchInput")?.blur();
+        document.getElementById("searchResults").classList.remove("active");
+    }
+}
 criarReviews();
+setupSearch();

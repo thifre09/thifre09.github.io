@@ -55,11 +55,12 @@ form>div#botoes>button {
     border-radius: 100px;
     background-color: var(--green1);
     color: var(--white);
+    transition: var(--transition-time1);
 }
 
-#criptografar:hover,
-#descriptografar:hover {
-    background-color: rgb(156, 156, 156);
+#criptografar:hover, #descriptografar:hover {
+    background-color: var(--green3);
+    transform: scale(1.05);
     cursor: pointer;
 }
 
@@ -67,6 +68,16 @@ form>div#botoes>button {
     font-size: large;
     text-align: center;
     color: var(--white);
+}
+
+textarea#input {
+    font-family: sans-serif;
+    font-size: medium;
+}
+
+textarea#ajuste {
+    font-family: sans-serif;
+    font-size: medium;
 }
 
 @media (max-width: 600px) {

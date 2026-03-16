@@ -1,3 +1,80 @@
+.search-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    margin: var(--p3) auto;
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: var(--p3);
+    font-size: 1.1em;
+    border: solid 2px var(--black);
+    border-radius: 10px;
+    background-color: var(--gray14);
+    color: var(--black);
+    box-sizing: border-box;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--purple5);
+    background-color: white;
+}
+
+.search-results {
+    width: 100%;
+    max-height: 500px;
+    overflow-y: auto;
+    position: absolute;
+    top: 100%;
+    margin-top: 5px;
+    background-color: white;
+    border: solid 2px var(--black);
+    border-radius: 10px;
+    display: none;
+    z-index: 1000;
+}
+
+.search-results.active {
+    display: flex;
+    flex-direction: column;
+}
+
+.search-result-item {
+    display: flex;
+    align-items: center;
+    padding: var(--p3);
+    border-bottom: solid 1px var(--gray5);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.search-result-item:hover {
+    background-color: var(--blue8);
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: var(--p3);
+}
+
+.search-result-name {
+    font-size: 1em;
+    font-weight: bold;
+    color: var(--black);
+}
+
 #reviews {
     display: flex;
     flex-direction: column;
@@ -16,7 +93,7 @@
         font-size: xx-large;
     }
 
-    > div {
+    >div {
         display: flex;
         align-items: center;
         justify-content: space-around;
@@ -45,7 +122,7 @@
                     flex-direction: column;
                     align-items: center;
                     border: solid 1px var(--black);
-                    
+
                     h3 {
                         min-height: 3.5em;
                         flex: 1;
@@ -59,7 +136,7 @@
                         border-bottom: solid 1px var(--black);
                         background-color: var(--purple5);
                     }
-                    
+
                     h4 {
                         width: 100%;
                         flex: 1;
@@ -88,7 +165,7 @@
                 background-color: var(--gray14);
                 border-radius: 10px;
                 padding: var(--p5);
-                margin: var(--p2) ;
+                margin: var(--p2);
                 height: 100%;
             }
         }
@@ -96,10 +173,10 @@
 }
 
 @media (max-width: 1000px) {
-    .jogo > div {
+    .jogo>div {
         flex-direction: column;
 
-        > * {
+        >* {
             margin: var(--p3);
         }
 
@@ -109,6 +186,7 @@
 
         div.tabela {
             max-width: 100%;
+
             div {
                 grid-template-columns: repeat(2, 1fr);
             }
