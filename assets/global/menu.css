@@ -724,6 +724,10 @@ section#bloco-notas-container {
     }
 }
 
+#configuracoes {
+    width: clamp(400px, 30%, 1000000px);
+}
+
 @keyframes abrirMenu {
     from {
         right: 100%;

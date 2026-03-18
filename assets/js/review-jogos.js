@@ -71,7 +71,7 @@ function criarReviews() {
                     case value >= 0:
                         h4.style.backgroundColor = "var(--green3)";
                         break;
-                    case value === "Não sei":
+                    default:
                         h4.style.backgroundColor = "gray";
                         break;
                 }
@@ -97,7 +97,7 @@ function criarReviews() {
                     case value >= 0:
                         h4.style.backgroundColor = "var(--red3)";
                         break;
-                    case value === "Não sei":
+                    default:
                         h4.style.backgroundColor = "gray";
                         break;
                 }
@@ -108,22 +108,22 @@ function criarReviews() {
                     case value === 10:
                         h4.style.backgroundColor = "var(--green3)";
                         break;
-                    case value >= 8:
+                    case value >= 9:
                         h4.style.backgroundColor = "var(--green5)";
                         break;
-                    case value >= 6:
+                    case value >= 8:
                         h4.style.backgroundColor = "var(--yellow6)";
                         break;
-                    case value >= 4:
+                    case value >= 6:
                         h4.style.backgroundColor = "var(--orange5)";
                         break;
-                    case value >= 2:
+                    case value >= 4:
                         h4.style.backgroundColor = "var(--red4)";
                         break;
                     case value >= 0:
-                        h4.style.backgroundColor = "var(--red3)";
+                        h4.style.backgroundColor = "var(--red2)";
                         break;
-                    case value === "Não sei":
+                    default:
                         h4.style.backgroundColor = "gray";
                         break;
                 }
@@ -141,22 +141,22 @@ function criarReviews() {
     });
 }
 let reviews = [
-    new Review("A Hat in Time", "a hat in time.jpg", new Notas()),
-    new Review("Among Us", "among us.jpeg", new Notas(1, 3, 5, 6, "7h", 8, 9, 10)),
-    new Review("Animal Well", "animal well.jpg", new Notas()),
-    new Review("Astro's Playroom", "astro playroom.jpeg", new Notas()),
-    new Review("Beat Saber", "beat saber.jpg", new Notas()),
-    new Review("Bloodborne", "bloodborne.jpg", new Notas()),
-    new Review("Brawl stars", "brawl stars.jpg", new Notas()),
-    new Review("Bloons TD battles 2", "BTD battles 2.jpeg", new Notas()),
-    new Review("Bloons TD 6", "BTD6.jpeg", new Notas()),
-    new Review("Carto", "carto.jpg", new Notas()),
-    new Review("Celeste", "celeste.jpg", new Notas()),
-    new Review("Civilization 6", "civilization 6.jpg", new Notas()),
-    new Review("Clair Obscur", "clair obscur.jpg", new Notas()),
-    new Review("Clash of clans", "clash of clans.jpg", new Notas()),
-    new Review("Clash royale", "clash royale.jpg", new Notas()),
-    new Review("Control", "control.jpg", new Notas()),
+    new Review("A Hat in Time", "a hat in time.jpg", new Notas(6, 4, 6, 9, "", 2, 7, 6)),
+    new Review("Among Us", "among us.jpeg", new Notas(8, "N/A", 8.5, 9.5, "Não sei", "1-10", 10, 8)),
+    new Review("Animal Well", "animal well.jpg", new Notas(9, "Não sei", 8.5, 8, "", 4, 9.5, 9)),
+    new Review("Astro's Playroom", "astro playroom.jpeg", new Notas(10, "N/A", 10, 9, "", 1, 10, 10)),
+    new Review("Beat Saber", "beat saber.jpg", new Notas(10, "N/A", "N/A", 10, "Não sei", "1-10", 10, 10)),
+    new Review("Bloodborne", "bloodborne.jpg", new Notas(8, 4, 6, 8, "", 7, 8, 9)),
+    new Review("Brawl stars", "brawl stars.jpg", new Notas(9.5, "Não sei", 10, 9.5, "+500h", "4-10", 9, 9)),
+    new Review("Bloons TD battles 2", "BTD battles 2.jpeg", new Notas(9, "N/A", 9, 9.5, "200h", "4-10", 9, 8.5)),
+    new Review("Bloons TD 6", "BTD6.jpeg", new Notas(9, "N/A", 9.5, 9.5, "+50h", 7, 8, 8.5)),
+    new Review("Carto", "carto.jpg", new Notas(8.5, 6.5, 8, 8, "", 2, 7, 8)),
+    new Review("Celeste", "celeste.jpg", new Notas(9, 5, 8.5, 8.5, "", 6, 8.5, 9)),
+    new Review("Civilization 6", "civilization 6.jpg", new Notas(9.5, "N/A", 9, 8, "+33h", 6, "6-9", 9)),
+    new Review("Clair Obscur: expedition 33", "clair obscur.jpg", new Notas(10, 10, 9.5, 10, "", 5, 10, 10)),
+    new Review("Clash of clans", "clash of clans.jpg", new Notas(7, "N/A", 9.5, 9, "Não sei", 5, 6.5, 8.5)),
+    new Review("Clash royale", "clash royale.jpg", new Notas(9.5, "N/A", 9.5, 9, "Não sei", "5-10", 10, 8.5)),
+    new Review("Control", "control.jpg", new Notas(7, 4, 9, 7, "", 4, 6, 5.5)),
     new Review("Death Stranding", "death stranding.jpg", new Notas()),
     new Review("Demon's Souls", "demons souls.jpg", new Notas()),
     new Review("Detroit: Become Human", "detroit.jpg", new Notas()),

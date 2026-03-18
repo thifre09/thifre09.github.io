@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mover(document.getElementById('bloco-notas'));
             mover(document.getElementById('calculadora'));
             //mover(document.getElementById('conquistas-geral'));
-            //mover(document.getElementById('configuracoes'));
+            mover(document.getElementById('configuracoes'));
 
             criarNotasAtualizacao();
         })
@@ -67,7 +67,7 @@ function mover(objeto) {
         const onMouseMove = (e) => {
             if (!isDragging && 
                 (Math.abs(e.clientX - startX) > MOVE_THRESHOLD || 
-                 Math.abs(e.clientY - startY) > MOVE_THRESHOLD)) {
+                Math.abs(e.clientY - startY) > MOVE_THRESHOLD)) {
                 isDragging = true;
                 // Inicia o ciclo de animação
                 animationFrameId = requestAnimationFrame(updatePosition);
