@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu site incrível</title>
+    <link rel="stylesheet" href="assets/css/thifreBD.css">
+</head>
+
+<body data-title="ThifreBD">
+    <div id="conteudo">
+        <div id="troca-de-tela">
+            <div id="interface-terminal">
+                <div class="interface-terminal-indicator"></div>
+                <button id="button-interface-terminal-interface"
+                    class="interface-terminal interface-terminal-ativo">Interface gráfica</button>
+                <button id="button-interface-terminal-terminal" class="interface-terminal">Terminal</button>
+            </div>
+        </div>
+
+        <div class="separador-horizontal"></div>
+
+        <div id="interface-grafica">
+            <div id="esquerda">
+                <div id="databases">
+                    <div id="database-button">
+                        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-database"></use>
+                        </svg>
+                        <p>Database</p>
+                        <button onclick="abrirFechar(false, 'criacao-database')">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="custom-dropdown">
+                        <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
+                            <span class="custom-dropdown-value">Crie uma database</span>
+                        </button>
+                        <ul class="custom-dropdown-menu" tabindex="-1">
+                        </ul>
+                        <input type="hidden" name="column-type" value="text">
+                    </div>
+                </div>
+
+                <div class="separador-horizontal"></div>
+
+                <div id="button-nova-tabela">
+                    <button id="nova-tabela" onclick="abrirFechar(false, 'criacao-tabela')">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                        </svg>
+                        <p>Nova tabela</p>
+                    </button>
+                </div>
+
+                <div class="separador-horizontal"></div>
+
+                <div id="tabelas">
+                    <p>Tabelas</p>
+                    <ul id="tabelas-lista">
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="separador-vertical"></div>
+
+            <div id="direita">
+                <div id="varios-botoes">
+                    <div id="tabela-info-varios-botoes">
+                        <p id="nome-tabela">Crie uma tabela</p>
+                        <p id="linhas-colunas">0 linhas • 0 colunas</p>
+                    </div>
+
+                    <div id="botoes-varios-botoes">
+                        <button id="alter-column"
+                            onclick="abrirFechar(false, 'editar-colunas'); changeAlterarColunasMenu()">
+                            <svg viewBox="0 0 512 512" aria-hidden="true">
+                                <use href="assets/images/icons-sprite.svg#icon-edit"></use>
+                            </svg>
+                            Alterar colunas</button>
+                        <button id="insert-line"
+                            onclick="abrirFechar(false, 'inserir-linha'); changeInserirLinhaMenu()">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                            </svg>
+                            Inserir linha
+                        </button>
+                        <button id="delete-table">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
+                            </svg>
+                            Deletar tabela
+                        </button>
+                    </div>
+                </div>
+
+                <div class="separador-horizontal"></div>
+
+                <div id="tabela-info">
+                    <div id="nenhuma-tabela-selecionada">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-table"></use>
+                        </svg>
+                        <h5>Nenhuma tabela selecionada</h5>
+                        <p>Crie uma tabela para começar</p>
+                    </div>
+
+                    <div id="tabela-selecionada">
+                        <div id="tabela-selecionada-tabela" style="display: none;">
+
+                        </div>
+
+                        <div id="tabela-selecionada-linha-coluna" style="display: none;">
+                            <div id="tabela-selecionada-linha-coluna-header">
+                                <h3>Linha</h3>
+                                <button onclick="abrirFecharLinhaColuna(true)">
+                                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                                        <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                                    </svg>
+                                </button>
+                            </div>
+                            <h4>4 colunas</h4>
+                            <ul>
+                                <div>
+                                    <h5>id(INTEGER)</h5>
+                                    <p>1</p>
+                                </div>
+                                <div>
+                                    <h5>id(INTEGER)</h5>
+                                    <p>1</p>
+                                </div>
+                                <div>
+                                    <h5>id(INTEGER)</h5>
+                                    <p>1</p>
+                                </div>
+                                <div>
+                                    <h5>id(INTEGER)</h5>
+                                    <p>1</p>
+                                </div>
+                                <div>
+                                    <h5>id(INTEGER)</h5>
+                                    <p>1</p>
+                                </div>
+                                <div>
+                                    <h5>id(INTEGER)</h5>
+                                    <p>1</p>
+                                </div>
+                                <div>
+                                    <h5>id(INTEGER)</h5>
+                                    <p>1</p>
+                                </div>
+                                <div>
+                                    <h5>id(INTEGER)</h5>
+                                    <p>1</p>
+                                </div>
+                                <div>
+                                    <h5>id(INTEGER)</h5>
+                                    <p>1</p>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="menus-centrais" style="display: none;">
+            <div id="criacao-database" style="display: none;">
+                <div class="menu-criacao-top">
+                    <h1>Criar nova database</h1>
+                    <button onclick="abrirFechar(true, 'criacao-database')">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        </svg>
+                    </button>
+                </div>
+                <label for="nome-database">Nome da database</label>
+                <input type="text" id="nome-database" name="nome-database" rows="1" placeholder="Ex: meu_bd">
+                <button id="criar-database-button" onclick="createDatabase()">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                    </svg>
+                    Criar database
+                </button>
+            </div>
+
+            <div id="criacao-tabela" style="display: none;">
+                <div class="menu-criacao-top">
+                    <h1>Criar nova tabela</h1>
+                    <button onclick="abrirFechar(true, 'criacao-tabela')">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        </svg>
+                    </button>
+                </div>
+
+                <label for="nome-tabela-input">Nome da tabela</label>
+                <input type="text" id="nome-tabela-input" name="nome-tabela-input" rows="1"
+                    placeholder="Ex: minha_tabela"></textarea>
+
+                <div>
+                    <h2>Colunas</h2>
+                    <button onclick="createColumnInterface(document.querySelector('#criacao-tabela ul'))">
+                        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-plus"></use>
+                        </svg>
+                        Nova coluna
+                    </button>
+                </div>
+
+                <ul>
+                    <div>
+                        <input type="text" placeholder="Nome da coluna">
+
+                        <div class="custom-dropdown">
+                            <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
+                                <span class="custom-dropdown-value">Text</span>
+                            </button>
+                            <ul class="custom-dropdown-menu" tabindex="-1">
+                                <li class="custom-dropdown-option custom-dropdown-option-selected"
+                                    onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment'))">
+                                    Text</li>
+                                <li class="custom-dropdown-option"
+                                    onclick="toggleAutoIncrementButton(true, document.getElementById('auto-increment'))">
+                                    Integer</li>
+                                <li class="custom-dropdown-option"
+                                    onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment'))">
+                                    Float</li>
+                                <li class="custom-dropdown-option"
+                                    onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment'))">
+                                    Boolean</li>
+                            </ul>
+                            <input type="hidden" name="column-type" value="text">
+                        </div>
+
+                        <div class="caracteristics">
+                            <div class="primary-key">
+                                <input type="checkbox" id="primary-key" onclick="toggleOnPKButton(this)">
+                                <label for="primary-key">Primary key</label>
+                            </div>
+                            <div class="foreign-key">
+                                <input type="checkbox" id="foreign-key" onclick="toggleOnFKButton(this)">
+                                <label for="foreign-key">Foreign key</label>
+                            </div>
+                            <div class="not-null">
+                                <input type="checkbox" id="not-null">
+                                <label for="not-null">Not null</label>
+                            </div>
+                            <div class="unique">
+                                <input type="checkbox" id="unique">
+                                <label for="unique">Unique</label>
+                            </div>
+                            <div class="default-option">
+                                <input type="checkbox" id="default" onclick="toggleOnDefaultOptionButton(this)">
+                                <label for="default">Default</label>
+                            </div>
+                            <div class="auto-increment" style="display: none;">
+                                <input type="checkbox" id="auto-increment">
+                                <label for="auto-increment">Auto increment</label>
+                            </div>
+                            <div class="delete-column" onclick="deleteColumnCreationInterface(this)">
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="referencia" style="display: none;">
+                            <p>Referência</p>
+                            <div class="custom-dropdown">
+                                <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
+                                    <span class="custom-dropdown-value">Crie outra tabela</span>
+                                </button>
+                                <ul class="custom-dropdown-menu" tabindex="-1">
+                                </ul>
+                                <input type="hidden" name="column-type" value="text">
+                            </div>
+                        </div>
+
+                        <div class="default" style="display: none;">
+                            <p>Default</p>
+                            <input type="text" placeholder="Valor padrão">
+                        </div>
+                    </div>
+                </ul>
+                <button id="criar-tabela-button" onclick="createTableInterface()">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                    </svg>
+                    Criar tabela
+                </button>
+            </div>
+
+            <div id="editar-colunas" style="display: none;">
+                <div class="menu-criacao-top">
+                    <h1>Editar colunas</h1>
+                    <button onclick="abrirFechar(true, 'editar-colunas')">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        </svg>
+                    </button>
+                </div>
+
+                <div>
+                    <h2>Colunas existentes</h2>
+                </div>
+                <ul id="lista-colunas-existentes">
+                    <p>Crie uma tabela para mostrar as colunas existentes</p>
+                </ul>
+
+                <div>
+                    <h2>Colunas</h2>
+                    <button
+                        onclick="createColumnInterface(document.querySelector('#editar-colunas ul:not(#lista-colunas-existentes)'))">
+                        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-plus"></use>
+                        </svg>
+                        Nova coluna
+                    </button>
+                </div>
+                <ul id="criacao-colunas-edit">
+                    <div>
+                        <input type="text" placeholder="Nome da coluna">
+
+                        <div class="custom-dropdown">
+                            <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
+                                <span class="custom-dropdown-value">Text</span>
+                            </button>
+                            <ul class="custom-dropdown-menu" tabindex="-1">
+                                <li class="custom-dropdown-option custom-dropdown-option-selected"
+                                    onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment-0'))">
+                                    Text</li>
+                                <li class="custom-dropdown-option"
+                                    onclick="toggleAutoIncrementButton(true, document.getElementById('auto-increment-0'))">
+                                    Integer</li>
+                                <li class="custom-dropdown-option"
+                                    onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment-0'))">
+                                    Float</li>
+                                <li class="custom-dropdown-option"
+                                    onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment-0'))">
+                                    Boolean</li>
+                            </ul>
+                            <input type="hidden" name="column-type" value="text">
+                        </div>
+
+                        <div class="caracteristics">
+                            <div class="primary-key">
+                                <input type="checkbox" id="primary-key-0" onclick="toggleOnPKButton(this)">
+                                <label for="primary-key-0">Primary key</label>
+                            </div>
+                            <div class="foreign-key">
+                                <input type="checkbox" id="foreign-key-0" onclick="toggleOnFKButton(this)">
+                                <label for="foreign-key-0">Foreign key</label>
+                            </div>
+                            <div class="not-null">
+                                <input type="checkbox" id="not-null-0">
+                                <label for="not-null-0">Not null</label>
+                            </div>
+                            <div class="unique">
+                                <input type="checkbox" id="unique-0">
+                                <label for="unique-0">Unique</label>
+                            </div>
+                            <div class="default-option">
+                                <input type="checkbox" id="default-0" onclick="toggleOnDefaultOptionButton(this)">
+                                <label for="default-0">Default</label>
+                            </div>
+                            <div class="auto-increment" style="display: none;">
+                                <input type="checkbox" id="auto-increment-0">
+                                <label for="auto-increment-0">Auto increment</label>
+                            </div>
+                            <div class="delete-column" onclick="deleteColumnCreationInterface(this)">
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="referencia" style="display: none;">
+                            <p>Referência</p>
+                            <div class="custom-dropdown">
+                                <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
+                                    <span class="custom-dropdown-value">Crie outra tabela</span>
+                                </button>
+                                <ul class="custom-dropdown-menu" tabindex="-1">
+                                </ul>
+                                <input type="hidden" name="column-type" value="text">
+                            </div>
+                        </div>
+
+                        <div class="default" style="display: none;">
+                            <p>Default</p>
+                            <input type="text" placeholder="Valor padrão">
+                        </div>
+                    </div>
+                </ul>
+
+                <button id="Adicionar-coluna-button" onclick="alterColumnsInterface()">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                    </svg>
+                    Adicionar coluna(s)
+                </button>
+
+            </div>
+
+            <div id="inserir-linha" style="display: none;">
+                <div class="menu-criacao-top">
+                    <h1>Inserir nova linha</h1>
+                    <button onclick="abrirFechar(true, 'inserir-linha')">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        </svg>
+                    </button>
+                </div>
+
+                <ul id="colunas-inserir-linha">
+                    <div>
+                        <h3>Crie uma tabela para começar</h3>
+                    </div>
+                </ul>
+
+                <button id="inserir-linha-button" onclick="insertRowInterface()">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                    </svg>
+                    Inserir linha
+                </button>
+            </div>
+
+            <div id="editar-linha" style="display: none;">
+                <div class="menu-criacao-top">
+                    <h1>Editar linha</h1>
+                    <button onclick="abrirFechar(true, 'editar-linha')">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        </svg>
+                    </button>
+                </div>
+
+                <ul id="colunas-editar-linha">
+                    <div>
+                        <h3>id</h3>
+                        <p>(INTEGER • PK • NOT NULL)</p>
+                        <input type="text">
+                    </div>
+
+                    <div>
+                        <h3>id</h3>
+                        <p>(BOOLEAN • PK • NOT NULL)</p>
+                        <div class="custom-dropdown">
+                            <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
+                                <span class="custom-dropdown-value">TRUE</span>
+                            </button>
+                            <ul class="custom-dropdown-menu" tabindex="-1">
+                                <li class="custom-dropdown-option custom-dropdown-option-selected">TRUE</li>
+                                <li class="custom-dropdown-option">FALSE</li>
+                            </ul>
+                            <input type="hidden" name="column-type" value="text">
+                        </div>
+                    </div>
+
+
+
+                </ul>
+
+                <button id="editar-linha-button" onclick="editRowInterface()">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                    </svg>
+                    Editar linha
+                </button>
+            </div>
+
+            <div id="notificacoes" style="display: none;">
+                <h1>ola</h1>
+            </div>
+        </div>
+
+        <div id="terminal" style="display: none;">
+            <header id="terminal-header">
+                <p>>_ SQL Terminal</p>
+            </header>
+
+            <section id="terminal-content">
+                <p class="terminal-content-info">Bem-vindo ao Terminal SQL!</p>
+                <br>
+                <p class="terminal-content-info">Digite seus comandos SQL abaixo:</p>
+            </section>
+
+            <div id="terminal-input">
+                <label for="terminal-input-field">thifreBD></label>
+                <input type="text" id="terminal-input-field" placeholder="Digite um comando SQL">
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/thifreBD.js"></script>
+    <script src="assets/global/menu.js"></script>
+</body>

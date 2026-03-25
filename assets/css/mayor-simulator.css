@@ -4,446 +4,444 @@
     font-style: normal;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-}
-
-body {
+div#mayor-simulator {
     font-family: "Jersey 10", sans-serif;
-    background: linear-gradient(to left, #dbdada, rgb(215, 214, 211)0, #e4e4e4);
+    background: var(--gray13);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
-
-header {
-    background: linear-gradient(to right, rgb(240, 215, 105), #ecd777, rgb(228, 206, 108));
-    color: rgb(252, 236, 236);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 10vh;
-    width: 100%;
-    font-size: clamp(1.5rem, 1.8vw, 150px);
-    ;
-}
-
-header h1 {
-    text-align: center;
-    color: black;
-    cursor: pointer;
-}
-
-#tela-inicial {
-    width: 100%;
-    height: 90vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 2rem;
-}
-
-#label-cidade {
-    font-size: clamp(25px, 3vw, 100000px);
-    text-align: center;
-    max-width: 100%;
-}
-
-#label-cidade input {
-    font-size: clamp(25px, 3vw, 100000px);
-    width: clamp(250px, 40vw, 100000px);
-}
-
-#btns {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 3%;
-}
-
-.bnt-ord {
-    width: clamp(100px, 13vw, 300px);
-    display: flex;
-    padding: 0;
-    flex-direction: column;
-    cursor: pointer;
-    transition: 0.5s;
-}
-
-.bnt-ord:hover {
-    transform: scale(1.05);
-}
-
-.bnt-ord img {
-    width: clamp(100px, 13vw, 300px);
-    box-sizing: border-box;
-    border: solid 3px #000000;
-}
-
-.bnt-ord button {
-    border: none;
-    font-size: clamp(10px, 3vw, 300px);
-    width: clamp(100px, 13vw, 300px);
-    cursor: pointer;
-    font-family: "Jersey 10", sans-serif;
-}
-
-#jogo {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 90vh;
-}
-
-#left {
-    width: 30%;
-    height: 90vh;
-    box-sizing: border-box;
-    background-color: #c9a500;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-}
-
-#center {
-    width: 40%;
-    height: 90vh;
-    padding: 0;
-    padding-top: 1%;
-    box-sizing: border-box;
-    overflow: auto;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-}
-
-#center div div h1 {
-    font-size: clamp(36px, 3.6vw, 10000px);
-}
-
-#center div div p {
-    font-size: clamp(20px, 2vw, 10000px);
-}
-
-#propostas {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 80%;
-    font-size: 1.3em;
-}
-
-.noticia {
-    margin: 5%;
-    padding: 1%;
-    /*Latuff é judeu XD*/
-}
-
-.noticia, #proposta {
-    overflow: auto;
-    height: auto;
-    /* XD */
-    /*Deu certo*/
-    background-color: white;
-}
-
-#buttons-propose {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-}
-
-#buttons-propose div {
-    width: fit-content;
-
-}
-
-#buttons-propose img {
-    width: 70%;
-    transition: 0.5s;
-    cursor: pointer;
-}
-
-#buttons-propose img:hover {
-    transform: scale(1.05);
-}
-
-#center-img {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#buttons-propose {
-    margin: 20px;
-}
-
-#center-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-#right {
-    width: 30%;
-    height: 90vh;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 1.5rem;
-    font-size: clamp(1.5rem, 1.8vw, 150px);
-    overflow: auto;
-}
-
-#right div h1 {
-    text-align: center;
-}
-
-#geral {
-    text-align: center;
-    padding: 1%;
-}
-
-#right table, tr, td, th {
-    border-collapse: collapse;
-    border: 2px solid;
-    padding: 0 0.5rem;
-    font-size: clamp(2vw, 1.8vw, 100px);
-    text-align: center;
-}
-
-.new {
-    position: relative;
-    width: fit-content;
-    flex-direction: column;
-    display: flex;
-    cursor: pointer;
-}
-
-.new img {
-    transition: 0.3s ease-in-out;
-}
-
-.new img:hover {
-    transform: scale(1.05); 
-}
-
-.new img:first-child {
-    width: clamp(100px, 13vw, 300px);
-}
-
-.new img:nth-child(2) {
-    position: absolute;
-    top: -10px;
-    right: -10px;
-}
-
-.new p {
-    text-align: center;
-    font-size: clamp(25px, 3vw, 1000px);
-}
-
-#tutorial {
-    width: 100%;
-    height: 90vh;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: column;
-    gap: clamp(2rem, 10vw, 99999px);
-}
-
-#tutorial article {
-    flex-basis: calc(100%/3);
-    height: 90vh;
-    box-sizing: border-box;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 3rem;
-}
-
-#tutorial h1 {
-    font-size: clamp(10px, 3vw, 5000px);
-    text-align: center;
-}
-
-#tutorial p {
-    font-size: clamp(10px, 2vw, 5000px);
-    text-align: justify;
-}
-
-.tutorial-text, .tutorial-imgs {
-    box-sizing: border-box;
-}
-
-.tutorial-imgs{
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-.tutorial-imgs img{
-    width: clamp(100px, 12vw, 30000px);
-}
-
-#tutorial-news {
-    position: relative;
-    display: block;
-}
-
-#creditos {
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    height: 85vh;
-    width: 800px;
-    box-sizing: border-box;
-    background-color: white;
-}
-
-.img-credits {
-    width: 200px;
-    height: 200px;
-    border: 5px solid;
-    overflow: hidden;
-    position: relative;
-}
-
-.img-credits img {
-    width: 100%;
-    display: block;
-    transition: opacity 0.3s ease-in-out;
-
-}
-
-.img-credits h2 {
-    background-color: #ffbe5d94;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    text-align: center;
-    transform: translateY(100%);
-    transition: transform 0.3s ease-in-out;
-}
-
-.img-credits:hover h2 {
-    transform: translateY(0%);
-}
-
-.img-credits:hover h2 {
-    display: block;
-    position: absolute;
-}
-
-#tela-fim-de-jogo {
-    position: absolute;
-    top: 50vh;
-    transform: translate(0, -35vh);
-    width: 40%;
     height: fit-content;
-    border: solid 3px #000000;
-    border-radius: 20px;
-    box-sizing: border-box;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: rgba(196, 192, 192, 0.747);
-}
 
-#tela-fim-de-jogo h1 {
-    text-align: center;
-    font-size: clamp(35px, 2.5vw, 10000px);
-}
+    header {
+        background: var(--yellow7);
+        color: rgb(252, 236, 236);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 10vh;
+        width: 100%;
+        font-size: clamp(1.5rem, 1.8vw, 150px);
+    }
 
-#tela-fim-de-jogo p {
-    text-align: center;
-    font-size: clamp(25px, 2vw, 10000px);
-}
+    header h1 {
+        text-align: center;
+        color: black;
+        cursor: pointer;
+    }
 
-@media (max-width: 700px) {
-    label {
-        margin-top: 10%;
+    #tela-inicial {
+        width: 100%;
+        height: 90vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    #label-cidade {
+        font-size: clamp(25px, 3vw, 100000px);
+        text-align: center;
+        max-width: 100%;
+    }
+
+    #label-cidade input {
+        font-size: clamp(25px, 3vw, 100000px);
+        width: clamp(250px, 40vw, 100000px);
     }
 
     #btns {
-        flex-direction: column;
-        gap: 30px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 3%;
     }
 
-    .bnt-ord, .bnt-ord img, .bnt-ord button {
-        width: clamp(100px, 20vw, 300px);
-        font-size: 1.3rem;
+    .bnt-ord {
+        width: clamp(100px, 13vw, 300px);
+        display: flex;
+        padding: 0;
+        flex-direction: column;
+        cursor: pointer;
+        transition: 0.5s;
+    }
+
+    .bnt-ord:hover {
+        transform: scale(1.05);
+    }
+
+    .bnt-ord img {
+        width: clamp(100px, 13vw, 300px);
+        box-sizing: border-box;
+        border: solid 3px #000000;
+    }
+
+    .bnt-ord button {
+        border: none;
+        font-size: clamp(10px, 3vw, 300px);
+        width: clamp(100px, 13vw, 300px);
+        cursor: pointer;
+        font-family: "Jersey 10", sans-serif;
     }
 
     #jogo {
-        flex-direction: column-reverse;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 90vh;
     }
 
     #left {
-        flex-direction: row;
-    }
-
-    #left, #right {
-        width: 100%;
-        height: 27vh;
-    }
-
-    #right {
-        flex-direction: row;
-        font-size: 5vw;
-    }
-
-    #right table, tr, td, th {
-        font-size: clamp(10px, 3.8vw, 5000px);
+        width: 30%;
+        height: 90vh;
+        box-sizing: border-box;
+        background-color: var(--yellow5);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
     }
 
     #center {
-        width: 100%;
-        height: 36vh;
+        width: 40%;
+        height: 90vh;
+        padding: 0;
+        padding-top: 1%;
+        box-sizing: border-box;
+        overflow: auto;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
     }
 
-    #tutorial h1 {
-        font-size: clamp(30px, 7vw, 5000px);
+    #center div div h1 {
+        font-size: clamp(36px, 3.6vw, 10000px);
     }
 
-    #tutorial p{
-        font-size: clamp(20px, 5vw, 5000px);
+    #center div div p {
+        font-size: clamp(20px, 2vw, 10000px);
     }
 
-    #creditos {
-        width: 100%;
-        height: 100%;
+    #propostas {
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        width: 80%;
+        font-size: 1.3em;
+    }
+
+    .noticia {
+        margin: 5%;
+        padding: 1%;
+        /*Latuff é judeu XD*/
+    }
+
+    .noticia, #proposta {
+        overflow: auto;
+        height: auto;
+        /* XD */
+        /*Deu certo*/
+        background-color: white;
+    }
+
+    #buttons-propose {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    #buttons-propose div {
+        width: fit-content;
+
+    }
+
+    #buttons-propose img {
+        width: 70%;
+        transition: 0.5s;
+        cursor: pointer;
+    }
+
+    #buttons-propose img:hover {
+        transform: scale(1.05);
+    }
+
+    #center-img {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #buttons-propose {
+        margin: 20px;
+    }
+
+    #center-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    #right {
+        width: 30%;
+        height: 90vh;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 1.5rem;
+        font-size: clamp(1.5rem, 1.8vw, 150px);
+        overflow: auto;
+    }
+
+    #right div h1 {
+        text-align: center;
+    }
+
+    #geral {
+        text-align: center;
+        padding: 1%;
+    }
+
+    #right table, tr, td, th {
+        border-collapse: collapse;
+        border: 2px solid;
+        padding: 0 0.5rem;
+        font-size: clamp(2vw, 1.8vw, 100px);
+        text-align: center;
+    }
+
+    .new {
+        position: relative;
+        width: fit-content;
+        flex-direction: column;
+        display: flex;
+        cursor: pointer;
+    }
+
+    .new img {
+        transition: 0.3s ease-in-out;
+    }
+
+    .new img:hover {
+        transform: scale(1.05); 
+    }
+
+    .new img:first-child {
+        width: clamp(100px, 13vw, 300px);
+    }
+
+    .new img:nth-child(2) {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+    }
+
+    .new p {
+        text-align: center;
+        font-size: clamp(25px, 3vw, 1000px);
+    }
+
+    #tutorial {
+        width: 100%;
+        height: fit-content;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: column;
+        gap: clamp(2rem, 10vw, 99999px);
+    }
+
+    #tutorial article {
+        flex-basis: calc(100%/3);
+        height: 90vh;
+        box-sizing: border-box;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+    }
+
+    #tutorial h1 {
+        font-size: clamp(10px, 3vw, 5000px);
+        text-align: center;
+    }
+
+    #tutorial p {
+        font-size: clamp(10px, 2vw, 5000px);
+        text-align: justify;
+    }
+
+    .tutorial-text, .tutorial-imgs {
+        box-sizing: border-box;
+    }
+
+    .tutorial-imgs{
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .tutorial-imgs img{
+        width: clamp(100px, 12vw, 30000px);
+    }
+
+    #tutorial-news {
+        position: relative;
+        display: block;
+    }
+
+    #creditos {
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        height: 85vh;
+        width: 800px;
+        box-sizing: border-box;
+        background-color: white;
+    }
+
+    .img-credits {
+        width: 200px;
+        height: 200px;
+        border: 5px solid;
+        overflow: hidden;
+        position: relative;
     }
 
     .img-credits img {
-        max-width: 200px;
+        width: 100%;
+        display: block;
+        transition: opacity 0.3s ease-in-out;
+
+    }
+
+    .img-credits h2 {
+        background-color: var(--yellow8);
+        opacity: 70%;
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        text-align: center;
+        transform: translateY(100%);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .img-credits:hover h2 {
+        transform: translateY(0%);
+    }
+
+    .img-credits:hover h2 {
+        display: block;
+        position: absolute;
     }
 
     #tela-fim-de-jogo {
-        width: 90%;
+        position: absolute;
+        top: 50vh;
+        transform: translate(0, -35vh);
+        width: 40%;
+        height: fit-content;
+        border: solid 3px #000000;
+        border-radius: 20px;
+        box-sizing: border-box;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: rgba(196, 192, 192, 0.747);
     }
 
-    .table-fim-de-jogo td, .table-fim-de-jogo th {
-        font-size: clamp(20px, 7vw, 5000px);
+    #tela-fim-de-jogo h1 {
+        text-align: center;
+        font-size: clamp(35px, 2.5vw, 10000px);
     }
+
+    #tela-fim-de-jogo p {
+        text-align: center;
+        font-size: clamp(25px, 2vw, 10000px);
+    }
+
+    @media (max-width: 700px) {
+        label {
+            margin-top: 10%;
+        }
+
+        #btns {
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .bnt-ord, .bnt-ord img, .bnt-ord button {
+            width: clamp(100px, 20vw, 300px);
+            font-size: 1.3rem;
+        }
+
+        #jogo {
+            flex-direction: column-reverse;
+        }
+
+        #left {
+            flex-direction: row;
+        }
+
+        #left, #right {
+            width: 100%;
+            height: 27vh;
+        }
+
+        #right {
+            flex-direction: row;
+            font-size: 5vw;
+        }
+
+        #right table, tr, td, th {
+            font-size: clamp(10px, 3.8vw, 5000px);
+        }
+
+        #center {
+            width: 100%;
+            height: 36vh;
+        }
+
+        #tutorial h1 {
+            font-size: clamp(30px, 7vw, 5000px);
+        }
+
+        #tutorial p{
+            font-size: clamp(20px, 5vw, 5000px);
+        }
+
+        #creditos {
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .img-credits img {
+            max-width: 200px;
+        }
+
+        #tela-fim-de-jogo {
+            width: 90%;
+        }
+
+        .table-fim-de-jogo td, .table-fim-de-jogo th {
+            font-size: clamp(20px, 7vw, 5000px);
+        }
+    }
+
+
 }

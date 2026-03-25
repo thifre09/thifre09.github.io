@@ -12,7 +12,13 @@
     <script src="assets/global/menu.js"></script>
 
     <div id="container">
+        <canvas id="matrix-bg" aria-hidden="true"></canvas>
         <form id="codificador">
+            <div id="mensagem">
+                <h1>Digite o que deseja criptografar, e o resultado criptografado aparecerá ao apertar em "criptografar"
+                </h1>
+                <h1>Se quiser descriptografar, basta colocar o texto fornecido e clicar em "descriptografar"</h1>
+            </div>
             <label for="input">Digite o texto que deseja codificar</label>
             <textarea id="input" rows="4" placeholder="Digite o que deseja criptografar ou descriptografar"></textarea>
 
@@ -27,11 +33,7 @@
             <h2 id="resultado">Resultado</h2>
         </form>
 
-        <div id="mensagem">
-            <h1>Digite o que deseja criptografar, e o resultado criptografado aparecerá ao apertar em "criptografar"
-            </h1>
-            <h1>Se quiser descriptografar, basta colocar o texto fornecido e clicar em "descriptografar"</h1>
-        </div>
+
     </div>
 
 

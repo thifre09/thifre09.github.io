@@ -1,296 +1,230 @@
 <head>
     <link rel="stylesheet" href="assets/global/menu.css">
+    <link rel="stylesheet" href="assets/global/variables.css">
 </head>
 
-<aside id="menu-lateral" style="display: none;">
-    <div id="fechar-menu-lateral">
-        <img src="assets/images/icones/cruz.png" style="width: 50px;" onclick="abrirMenu(true)">
-    </div>
-    <button onclick="abrirNotasAtualizacao(false)">Notas da atualização</button>
-    <button onclick="abrirCalculadora(false)">Calculadora</button>
-    <button onclick="abrirBlocoNotas(false)">Bloco de notas</button>
-    <button onclick="abrirConquistas(false)">Conquistas</button>
-    <button onclick="abrirConfiguracoes(false)">Configurações</button>
-</aside>
+<body>
+    <div><h1 id="title"><a href="index.html">Meu site incrível</a></h1></div>
 
-<h1 id="title"><a href="index.html">Meu site incrível</a></h1>
+    <nav id="barra-main">
+        <div onclick="abrirMenu(false)" class="botao-menu-lateral"><img src="assets/images/icones-uteis/menu.png"></div>
+        <h6 id="titulo"><a href="#title">Bem vindo ao incrível site</a></h6>
+    </nav>
 
-<nav id="barra-main">
-    <div onclick="abrirMenu(false)" class="botao-menu-lateral"><img src="assets/images/icones/menu.png"></div>
-    <h6 id="titulo"><a href="#title">Bem vindo ao incrível site</a></h6>
-</nav>
+    <div onclick="abrirMenu(false)" class="botao-menu-lateral" id="botao-menu-lateral-reserva" style="display: none;"><img src="assets/images/icones-uteis/menu.png"></div>
 
-<div onclick="abrirMenu(false)" class="botao-menu-lateral" id="botao-menu-lateral-reserva" style="display: none;"><img src="assets/images/icones/menu.png"></div>
+    <aside id="menu-lateral" style="display: none;">
+        <button onclick="abrirMenu(true)" id="fechar-menu-lateral">Fechar</button>
 
-<div id="updates" style="display: none;">
-    <div class="fechar-container">
-        <img src="assets/images/icones/cruz.png" class="fechar" onclick="abrirNotasAtualizacao(true)">
-    </div>
+        <button onclick="abrir(false, 'notas-atualizacao')">
+            <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M852-212 732-332l56-56 120 120-56 56ZM708-692l-56-56 120-120 56 56-120 120Zm-456 0L132-812l56-56 120 120-56 56ZM108-212l-56-56 120-120 56 56-120 120Zm246-75 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-361Z"/></svg>
+            <div>Notas da atualização</div>
+        </button>       
+        <button onclick="abrir(false, 'bloco-notas')">
+            <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/></svg>
+            <div>Bloco de notas</div>
+        </button>
+        <button onclick="abrir(false, 'calculadora')">
+            <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M320-240h60v-80h80v-60h-80v-80h-60v80h-80v60h80v80Zm200-30h200v-60H520v60Zm0-100h200v-60H520v60Zm44-152 56-56 56 56 42-42-56-58 56-56-42-42-56 56-56-56-42 42 56 56-56 58 42 42Zm-314-70h200v-60H250v60Zm-50 472q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/></svg>
+            <div>Calculadora</div>
+        </button>
+        <!--<button onclick="abrir(false, 'conquistas-geral')">Conquistas</button>-->
+        <button onclick="abrir(false, 'configuracoes')">
+            <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z"/></svg>
+            <div>Configurações</div>
+        </button>
 
-    <div class="dropdown">
-        <button id="dropdown-button">Geral</button>
-        <div class="dropdown-content">
-            <button onclick="abrirMudarNotasAtualizacao('geral')">Geral</button>
-            <button onclick="abrirMudarNotasAtualizacao('quadrado-clicker')">Quadrado clicker</button>
+    </aside>
+
+    <div class="aside-window" id="notas-atualizacao" style="display: none;">
+        <header class="aside-window-header">   
+            <div class="left-div">
+                <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M852-212 732-332l56-56 120 120-56 56ZM708-692l-56-56 120-120 56 56-120 120Zm-456 0L132-812l56-56 120 120-56 56ZM108-212l-56-56 120-120 56 56-120 120Zm246-75 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-361Z"/></svg>
+                <div>
+                    <h1>Atualizações</h1>
+                </div>
+            </div>
+            <div class="button-div">
+                <button onclick="abrir(true, 'notas-atualizacao')">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 6 6 18" />
+                        <path d="m6 6 12 12" />
+                    </svg>
+                </button>
+            </div>
+        </header>
+        <div class="aside-scroll">
+            <section id="notas-atualizacao-container">  
+                
+            </section>
         </div>
+
+        <div class="resizer"></div>
     </div>
 
-    <h5>Ver. Beta 2.2</h5>
+    <div class="aside-window" id="bloco-notas" style="display: none;">
+        <header class="aside-window-header">   
+            <div class="left-div">
+                <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/></svg>
+                <div>
+                    <h1>Bloco de notas</h1>
+                </div>
+            </div>
+            <div class="button-div">
+                <button onclick="abrir(true, 'bloco-notas')">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 6 6 18" />
+                        <path d="m6 6 12 12" />
+                    </svg>
+                </button>
+            </div>
+        </header>
+        <div class="topo-notas">
+            <div id="topo-notas-container">
+                <h2>Minhas notas</h2>
+                <button onclick="novaNota()">
+                    <img src="assets/images/icones-uteis/edit.svg"> Nova nota
+                </button>
+            </div>
 
-    <h3>Notas da atualização</h3>
+            <div id="topo-criar-nota" style="display: none;">
+                <button onclick="voltarParaNotas()">
+                    <img src="assets/images/icones-uteis/arrow.svg"> Voltar
+                </button>
+                <button onclick="criarNota()">
+                    <img src="assets/images/icones-uteis/add.svg">Criar nota
+                </button>
+            </div>
 
-    <div id="geral-updates">
+            <div id="topo-editar-nota" style="display: none;">
+                <button onclick="voltarParaNotas()">
+                    <img src="assets/images/icones-uteis/arrow.svg"> Voltar
+                </button>
+                <button onclick="salvarAlteracoesNota()">
+                    <img src="assets/images/icones-uteis/pencil.png">Editar Nota
+                </button>
+            </div>
+        </div>
+        <div class="aside-scroll">
+            <section id="bloco-notas-container">
+                <div id="notas-container">     
+                    <div id="nenhuma-nota-ainda">
+                        <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <line x1="10" y1="9" x2="8" y2="9"/>
+                        </svg>
+                        <h4>Nenhuma nota ainda</h4>
+                        <h5>Clique em "Nova nota" para começar</h5>
+                    </div>
+                    
+                    <div id="notas">
+                        
+                    </div>
 
-        <h4>Beta 2.2</h4>
-        <ul>
-            <li>Adicionado conquistas gerais para todo o site</li>
-            <li>Curiosidades: adicionadas curiosidades sobre história, e pequenas mudanças no layout</li>
-            <li>Memes: adicionados 2 memes</li>
-            <li>Review de jogos: adicionado 7 novas reviews</li>
-            <li>Criação da aba O poder do css</li>
-        </ul>
+                </div>
 
-        <h4>Beta 2.1.1</h4>
-        <ul>
-            <li>Mudança nas notas da atualização</li>
-            <li>Atualização no <span onclick="abrirMudarNotasAtualizacao('quadrado-clicker')">Quadrado clicker</span></li>
-        </ul>
-        
-        <h4>Beta 2.1</h4>
-        <ul>
-            <li><span onclick="abrirMudarNotasAtualizacao('quadrado-clicker')">Quadrado clicker</span>: grande atualização</li>
-            <li>Pequenas mudanças no layout de algumas páginas</li>
-            <li>Correção de pequenos bugs</li>
-        </ul>
+                <div id="criar-nota" style="display: none;">
+                    <h5>Título</h5>
+                    <textarea id="titulo-criar-nota" rows="1" placeholder="Digite o título da nota"></textarea>
+                    <h5>Conteúdo</h5>
+                    <textarea id="conteudo-criar-nota" rows="7" placeholder="Digite o conteúdo da nota"></textarea>
+                </div>
 
-        <h4>Beta 2.0</h4>
-        <ul>
-            <li>Mudanças no layout de quase todas as páginas</li>
-            <li>Padronização do menu</li>
-            <li>Criação	de um menu lateral no menu</li>
-            <li>Criação de uma calculadora</li>
-            <li>Remoção do bloco de notas e notas de atualização do menu principal e adicionado à barra lateral</li>
-            <li>Quadrado clicker: adição de uma opção para colocar imagens no quadrado e balanceamento de algumas melhorias</li>
-            <li>Menu principal: O layout da página foi completamente refeito</li>
-            <li>Memes: adicionado 4 memes</li>
-            <li>Curiosidades: adicionadas curiosidades sobre objetos</li>
-            <li>Review de jogos: adicionado a review de 1 jogo, e mudanças no sumário</li>
-            <li>Criação das abas codificador e cores</li>
-            <li>Mudança na mensagem exibida no menu principal</li>
-            <li>Correção de diversão erros gramaticais</li>
-        </ul>
+                <div id="editar-nota" style="display: none;">
+                    <h5>Título</h5>
+                    <textarea id="titulo-editar-nota" rows="1" placeholder="Digite o título da nota"></textarea>
+                    <h5>Conteúdo</h5>
+                    <textarea id="conteudo-editar-nota" rows="7" placeholder="Digite o conteúdo da nota"></textarea>
+                </div>
+            </section>
+        </div>
 
-        <h4>Beta 1.3</h4>
-        <uL>
-            <li>Criação da aba quadrado clicker</li>
-            <li>Quadrado clicker: Criação do jogo todo</li>
-            <li>Review de jogos: Adicionado novas reviews</li>
-        </uL>
-
-        <h4>Beta 1.2</h4>
-        <ul>
-            <li>Criação da aba curiosidades</li>
-            <li>curiosidades: Adição de 4 categorias de curiosidades</li>
-            <li>Python: Agora a aba se ajusta corretamente no celular</li>
-            <li>Memes: Adicionado 3 memes</li>
-        </ul>
-
-        <h4>Beta 1.1</h4>
-        <ul>
-            <li>Criação da aba Batatas</li>
-            <li>Batatas: Adição de um quiz sobre curiosidades aleatórias</li>
-            <li>Batatas: Adição de um botão para verificar seus acertos</li>
-            <li>Agora a "barra de navegação" desce junto com o resto da página</li>
-            <li>Mudança no layout de algumas abas para se ajustar melhor em celulares</li>
-        </ul>
-
-        <br>
-
-        <h4>Beta 1.0</h4>
-        <ul>
-            <li>Pequenas mudanças no layout de algumas páginas</li>
-            <li>Review de jogos: Adição de mais jogos</li>
-            <li>Python: Criação do tópico "funções"</li>
-            <li>Python: Criação das explicações "for", "while", "break, continue, pass", "Exemplo complexo", "Declarando uma função", "return e None", "Global" e "Exemplo"</li>
-            <li>Python: Adicionado uma mensagem no final da página</li>
-        </ul>
-
-        <br>
-
-        <h4>Alfa 5.1</h4>
-        <ul>
-            <li>Removido o menu de navegação, agora ele fica apenas no menu principal</li>
-            <li>Adicionado a parte central no menu principal</li>
-            <li>Agora no local que o menu de navegação ficava, há uma faixa colorida dando boas vindas</li>
-            <li>Corrigido um bug em que as palavras "editar" e "salvar" não apareciam por completo nas notas</li>
-        </ul>
-
-        <br>
-
-        <h4>Alfa 5.0</h4>
-        <ul>
-            <li>Números: Adição dos números até o 100</li>
-            <li>Python: Adição das explicações "len() e range()", "Funções de conversão" e "input()"</li>
-            <li>Python: Criação do tópico "Loops"</li>
-            <li>Memes: Criação do modelo para todos os memes</li>
-            <li>Memes: Adição de 6 memes</li>
-        </ul>
-
-        <br>
-
-        <h4>Alfa 4.0</h4>
-        <ul>
-            <li>Python: Criação do tópico "if, elif e else" e "Outras funções e operadores básicos"</li>
-            <li>Python: Adição das explicações "Tuplas", "Dicionários", "if", "elif", "else", "if e elif", "Mais exemplos", "and, or e not" e "Parenteses e operações" </li>
-            <li>Criação da aba Review de jogos</li>
-            <li>Review de jogos: Criação do modelo da review de todos os jogos</li>
-            <li>Review de jogos: Adição da review de 21 jogos</li>
-            <li>Números: Adição das descrições dos números até o 61</li>
-            <li>Review de jogos: Criação de um sumário</li>
-        </ul>
-
-        <br>
-
-        <h4>Alfa 3.0</h4>
-        <ul>
-            <li>Python: Exclusão do tópico "valores primitivos" e criação do tópico "variáveis"</li>
-            <li>Python: Adição das explicações "função print", "declarar variáveis", "tipos primitivos", "outros tipos de valores" e "operadores relacionais"</li>
-            <li>Números: Criação do modelo para cada número</li>
-            <li>Números: Adição das descrições dos números até o 50</li>
-            <li>Python: Criação do tópico "Listas, tuplas e dicionários" e adição das explicações "Listas" e "Alterando listas"</li>
-        </ul>
-
-        <br>
-
-        <h4>Alfa 2.0</h4>
-        <ul>
-            <li>Criação das abas: Números e Python</li>
-            <li>Criação de um bloco de notas</li>
-            <li>Python: Adição dos tópicos "conceitos básicos" e "valores primitivos"</li>
-            <li>Python: Adição da explicação "comentários"</li>
-        </ul>
-
-        <br>
-
-        <h4>Alfa 1.0</h4>
-        <ul>
-            <li>Criação do site</li>
-            <li>Criação da aba Memes</li>
-        </ul>
+        <div class="resizer"></div>
     </div>
 
-    <div id="quadrado-clicker-updates" style="display: none;">
-        <h4>Beta 2.1.1</h4>
-        <ul>
-            <li>Correção de alguns bugs</li>
-        </ul>
+    <div class="aside-window" id="calculadora" style="display: none;">
+        <header class="aside-window-header">   
+            <div class="left-div">
+                <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M320-240h60v-80h80v-60h-80v-80h-60v80h-80v60h80v80Zm200-30h200v-60H520v60Zm0-100h200v-60H520v60Zm44-152 56-56 56 56 42-42-56-58 56-56-42-42-56 56-56-56-42 42 56 56-56 58 42 42Zm-314-70h200v-60H250v60Zm-50 472q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/></svg>
+                <div>
+                    <h1>Calculadora</h1>
+                </div>
+            </div>
+            <div class="button-div">
+                <button onclick="abrir(true, 'calculadora')">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 6 6 18" />
+                        <path d="m6 6 12 12" />
+                    </svg>
+                </button>
+            </div>
+        </header>
 
-        <h4>Beta 2.1</h4>
-        <ul>
-            <li>Adicionado um sistema de conquistas</li>
-            <li>Adicionado uma melhoria de triângulo que gera quadrados automaticamente</li>
-            <li>Adicionado 3 novos geradores</li>
-            <li>Mudanças nos preços dos geradores e melhorias</li>
-            <li>Melhorado o sistema de salvamento</li>
-            <li>Melhorias visuais</li>
-            <li>Mais perguntas no quiz matemático</li>
-            <li>Aumentado o limite de quadrados</li>
-            <li>Correção de pequenos bugs</li>
-        </ul>
-    </div>
-        
-</div>
+        <div class="aside-scroll">
+            <div class="calculator">
+                <div class="display">
+                    <div id="previous-operand"></div>
+                    <div id="current-operand">0</div>
+                </div>
+                <button onclick="appendNumber('1')">1</button>
+                <button onclick="appendNumber('2')">2</button>
+                <button onclick="appendNumber('3')">3</button>        
+                <button onclick="appendOperator('**')">xʸ</button> 
+                <button onclick="calculateSqrt()">√</button>
+                <button onclick="clearDisplay()">AC</button>
+                <button onclick="deleteDigit()">DEL</button>
 
-<div id="calculadora" style="display: none;">
-    <div class="fechar-container">
-        <img src="assets/images/icones/cruz.png" class="fechar" onclick="abrirCalculadora(true)">
-    </div>
+                <button onclick="appendNumber('4')">4</button>
+                <button onclick="appendNumber('5')">5</button>
+                <button onclick="appendNumber('6')">6</button>
+                <button onclick="appendOperator('+')">+</button>
+                <button onclick="appendOperator('-')">-</button>
+                <button onclick="appendOperator('*')">×</button>
+                <button onclick="appendOperator('/')">÷</button>  
 
-    <table id="botoes">
-        <tr>
-            <td id="visor-container" colspan="4">
-                <div id="visor">0</div>
-            </td>
-        </tr>
-        <tr>
-            <td><button onclick="apagar('parcial')">CE</button></td>
-            <td><button onclick="simbolosInstantaneos('%')">%</button></td>
-            <td><button onclick="apagar('tudo')">C</button></td>
-            <td><button onclick="apagar('um')"><img src="assets/images/icones/excluir.png"></button></td>
-        </tr>
-        <tr>
-            <td><button onclick="simbolosInstantaneos('1/x')">1/x</button></td>
-            <td><button onclick="simbolosInstantaneos('**')">X²</button></td>
-            <td><button onclick="simbolosInstantaneos('sqrt')"><img src="assets/images/icones/raiz-quadrada.png"></button></td>
-            <td><button onclick="simbolos('/')"><img src="assets/images/icones/dividir.png"></button></td>
-        </tr>
-        <tr>
-            <td><button onclick="numbers(7)">7</button></td>
-            <td><button onclick="numbers(8)">8</button></td>
-            <td><button onclick="numbers(9)">9</button></td>
-            <td><button onclick="simbolos('x')">x</button></td>
-        </tr>
-        <tr>
-            <td><button onclick="numbers(4)">4</button></td>
-            <td><button onclick="numbers(5)">5</button></td>
-            <td><button onclick="numbers(6)">6</button></td>
-            <td><button onclick="simbolos('-')">-</button></td>
-        </tr>
-        <tr>
-            <td><button onclick="numbers(1)">1</button></td>
-            <td><button onclick="numbers(2)">2</button></td>
-            <td><button onclick="numbers(3)">3</button></td>
-            <td><button onclick="simbolos('+')">+</button></td>
-        </tr>
-        <tr>
-            <td><button onclick="simbolosInstantaneos('+/-')">+/-</button></td>
-            <td><button onclick="numbers(0)">0</button></td>
-            <td><button onclick="virgula()">,</button></td>
-            <td><button onclick="calcular()">=</button></td>
-        </tr>
-    </table>
-</div>
+                <button onclick="appendNumber('7')">7</button>
+                <button onclick="appendNumber('8')">8</button>
+                <button onclick="appendNumber('9')">9</button>
+                <button onclick="appendNumber('0')">0</button>
+                <button onclick="appendNumber('.')">.</button>  
+                <button onclick="compute()" id="equal-button">=</button>
+            </div>
+        </div>
 
-<div id="bloco" style="display: none;">
-    <div class="fechar-container">
-        <img src="assets/images/icones/cruz.png" class="fechar" onclick="abrirBlocoNotas(true)">
-    </div>
-    <h2>Notas</h2>
-    <textarea id="newNoteText" rows="4" placeholder="Digite sua nova nota aqui..."></textarea>
-    <button onclick="addNote()">Adicionar Nota</button>
-    <div id="noteContainer" class="note-container">
-        <!-- Notas serão adicionadas aqui -->
-    </div>
-</div>
-
-<div id="conquistasGeral" style="display: none;">
-    <div class="fechar-container">
-        <img src="assets/images/icones/cruz.png" class="fechar" onclick="abrirConquistas(true)">
+        <div class="resizer"></div>
     </div>
 
-    <h2>Conquistas</h2>
-    <div id="conquistas-container"></div>
-</div>
+    <div class="aside-window" id="configuracoes" style="display: none;">
+        <header class="aside-window-header">   
+            <div class="left-div">
+                <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z"/></svg>
+                <div>
+                    <h1>Configurações</h1>
+                </div>
+            </div>
+            <div class="button-div">
+                <button onclick="abrir(true, 'configuracoes')">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 6 6 18" />
+                        <path d="m6 6 12 12" />
+                    </svg>
+                </button>
+            </div>
+        </header>
 
-<div id="configuracoes" style="display: none;">
-    <div class="fechar-container">
-        <img src="assets/images/icones/cruz.png" class="fechar" onclick="abrirConfiguracoes(true)">
-    </div>
-    <h2>Configurações</h2>
+        <div class="aside-scroll">
+            <div>
+                <h2>Desativar menu superior</h2>
+                <input type="checkbox" id="toggle-banner" onchange="toggleBanner()">
+            </div>
+            <p style="margin-top: 50%;">Sim, só tem 1 configuração</p>
+        </div>
 
-    <h3>Desativar a barra principal</h3>
-    <div class="switch">
-        <label>
-            <input type="checkbox" class="toggleSwitch" onclick="desativarBarra()">
-            <span class="slider"></span>
-        </label>
+        <div class="resizer"></div>
     </div>
 
-    <h3>Desativar o efeito arco-íris da barra principal</h3>
-    <div class="switch">
-        <label>
-            <input type="checkbox" class="toggleSwitch" onclick="desativarArcoIris()">
-            <span class="slider"></span>
-        </label>
-    </div>
-</div>
+</body>
+

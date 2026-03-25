@@ -4,21 +4,19 @@ h1 {
 
 h2:not(:first-child) {
     text-align: center;
-    color: #ff320e
+    color: var(--red5)
 }
 
 div.codigo > h3 {
     width: 100%;
-    color: rgb(46, 156, 219)
+    color: var(--blue5);
 }
 
 div.topico {
     display: flex;
-    background-color: #f4f4f4;
     flex-wrap: wrap;
     gap: 0.3%;
     margin: 5px;
-    background-color: #f0f8ff;
 }
 
 div.codigo {
@@ -26,8 +24,8 @@ div.codigo {
     border: solid 1px;
     border-radius: 10px;
     padding: 3px;
-    background-color: #e6f7ff;
-    border-color: #2E9CCB;
+    background-color: var(--blue9);
+    border-color: var(--blue5);
 }
 
 div.explicação {
@@ -36,8 +34,8 @@ div.explicação {
     border-radius: 10px;
     line-height: 1.3;
     padding: 3px;
-    background-color: #f0fff0;
-    border-color: #32CD32;
+    background-color: var(--green9);
+    border-color: var(--green5);
 }
 
 pre.caixa {
@@ -47,15 +45,28 @@ pre.caixa {
     min-width: 85%;
     max-width: 85%;
     width: fit-content;
-    background-color: #dddddd;
+    background-color: var(--gray13);
     border-radius: 5px;
     padding: 5px;
     padding-bottom: 0;
     overflow-x: auto;
 }
 
+ul > a {
+    margin: var(--p2);
+}
+
+li > a {
+    margin: var(--p4);
+}
+
+ul > a, li > a {
+    color: var(--blue2);
+    text-decoration: none;
+}
+
 ul > a:visited, li > a:visited {
-    color: blue;
+    color: var(--blue2);
 }
 
 summary {

@@ -1,24 +1,140 @@
-form {
-    margin: 10px;
+body {
+    display: flex;
+    flex-direction: column;
 }
 
-h2 {
+h1#texto-inicial {
     text-align: center;
+    font-size: larger;
+    margin: var(--p2) 0;
 }
 
-div#botao {
-    text-align: center;
+#main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    #comecar-quiz {
+        padding: 10px 20px;
+        font-size: xx-large;
+        cursor: pointer;
+        border: none;
+        background-color: var(--blue5);
+        color: white;
+        border-radius: 10px;
+        transition: var(--transition-time1);
+
+        &:hover {
+            background-color: var(--blue4);
+            transform: scale(1.05);
+        }
+    }
+
+    #quiz {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        margin-top: 20px;
+
+        #pergunta {
+            width: 100%;
+            border: solid 2px var(--gray1);
+            padding: var(--p5);
+            border-radius: 15px;
+            box-sizing: border-box;
+
+            p#pergunta-texto {
+                text-align: center;
+                font-size: larger;
+                background-color: var(--gray14);
+                border-radius: 10px;
+                padding: var(--p5);
+                margin: var(--p5) 0;
+            }
+            
+            div {
+                display: flex;
+                justify-content: space-between;
+
+                button {
+                    padding: 10px 20px;
+                    font-size: large;
+                    cursor: pointer;
+                    border: none;
+                    background-color: var(--blue5);
+                    color: white;
+                    border-radius: 10px;
+                    transition: var(--transition-time1);
+
+                    &:nth-child(1) {
+                        background-color: var(--green5);
+
+                        &:hover {
+                            background-color: var(--green4);
+                            transform: scale(1.05);
+                        }
+                    }
+
+                    &:nth-child(2) {
+                        background-color: var(--red5);
+
+                        &:hover {
+                            background-color: var(--red4);
+                            transform: scale(1.05);
+                        }
+                    }
+                }
+                
+            }
+        }
+
+        #perguntas-bottom {
+            width: 100%;
+            display: grid;
+            justify-content: center;
+            grid-template-columns: repeat(10, 1fr);
+            gap: var(--p3);
+
+            div {
+                aspect-ratio: 1 / 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: solid 2px var(--gray1);
+                border-radius: 10px;
+                transition: var(--transition-time1);
+                cursor: pointer;
+            }
+
+            div:hover {
+                transform: scale(1.05);
+            }
+        }
+    }
 }
 
-div#botao button {
-    font-size: xx-large;
-}
+@media (max-width: 600px) {
+    #main {
+        #quiz {
+            width: 90%;
 
-label {
-    font-size: large;
-    margin: 10px;
-}
+            #buttons {
+                flex-direction: column;
 
-section#resultados > h3 {
-    text-align: center;
+                button {
+                    margin: var(--p5);
+                }
+            }
+
+            #perguntas-bottom {
+                div {
+                    border-radius: 3px;
+                }
+            }
+        }
+    }
 }
