@@ -171,7 +171,7 @@ class Atualizacao {
 const atualizacoes = [
     new Atualizacao("Beta 3.0", "25/03/2026", [
         new NotaAtualizacao("Criação da página Mayor Simulator", "Foi criado o jogo Mayor Simulator. Nele você administra uma cidade e precisa garantir que os cidadãos fiquem felizes.", tipoNota.NOVO_RECURSO, relacionado.MAYOR_SIMULATOR),
-        new NotaAtualizacao("Criação da página ThifreBD", "Essa página serve como um SGBD simples e intuitivo para iniciantes", tipoNota.NOVO_RECURSO, relacionado.THIFREBD),
+        new NotaAtualizacao("Criação da página ThifreBD", "Essa página serve como um SGBD simples e intuitivo para iniciantes. OBS: o terminal ainda não está funcional.", tipoNota.NOVO_RECURSO, relacionado.THIFREBD),
         new NotaAtualizacao("Atualização da barra lateral", "A barra lateral foi atualizada com um design completamente novo, mais moderno e responsivo.", tipoNota.ATUALIZACAO, relacionado.GERAL),
         new NotaAtualizacao("Padronização das cores", "As cores do site foram padronizadas em quase todas as páginas",tipoNota.ATUALIZACAO, relacionado.GERAL),
         new NotaAtualizacao("Atualização da página Review de jogos", "O layout da página foi melhorado, e mais jogos foram adicionados.", tipoNota.ATUALIZACAO, relacionado.REVIEW_DE_JOGOS),
