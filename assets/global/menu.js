@@ -134,7 +134,6 @@ const tipoNota = Object.freeze({
 
 const relacionado = Object.freeze({
     //Geral
-    BANNER_PRINCIPAL: "Banner principal",
     PAGINA_INICIAL: "Página inicial",
     GERAL: "Geral",
     // Paginas
@@ -170,10 +169,10 @@ class Atualizacao {
 }
 
 const atualizacoes = [
-    new Atualizacao("Beta 3.0", "??/??/2026", [
+    new Atualizacao("Beta 3.0", "25/03/2026", [
         new NotaAtualizacao("Criação da página Mayor Simulator", "Foi criado o jogo Mayor Simulator. Nele você administra uma cidade e precisa garantir que os cidadãos fiquem felizes.", tipoNota.NOVO_RECURSO, relacionado.MAYOR_SIMULATOR),
         new NotaAtualizacao("Criação da página ThifreBD", "Essa página serve como um SGBD simples e intuitivo para iniciantes", tipoNota.NOVO_RECURSO, relacionado.THIFREBD),
-        new NotaAtualizacao("Atualização do banner principal", "O banner principal foi atualizado com um design completamente novo, mais moderno e responsivo.", tipoNota.ATUALIZACAO, relacionado.BANNER_PRINCIPAL),
+        new NotaAtualizacao("Atualização da barra lateral", "A barra lateral foi atualizada com um design completamente novo, mais moderno e responsivo.", tipoNota.ATUALIZACAO, relacionado.GERAL),
         new NotaAtualizacao("Padronização das cores", "As cores do site foram padronizadas em quase todas as páginas",tipoNota.ATUALIZACAO, relacionado.GERAL),
         new NotaAtualizacao("Atualização da página Review de jogos", "O layout da página foi melhorado, e mais jogos foram adicionados.", tipoNota.ATUALIZACAO, relacionado.REVIEW_DE_JOGOS),
         new NotaAtualizacao("Atualização da página Cores", "O layout da página foi completamente refeito. Também foi adicionada a opção de copiar as cores ao clicar no texto delas, e a opção de expandir a cor para a página toda.", tipoNota.ATUALIZACAO, relacionado.CORES),
@@ -184,8 +183,7 @@ const atualizacoes = [
         new NotaAtualizacao("Atualização da página O poder do CSS", "Mudança nas cores da página para padronizar com o resto do site", tipoNota.ATUALIZACAO, relacionado.PODER_DO_CSS),
         new NotaAtualizacao("Correção de pequenos bugs", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do site.", tipoNota.CORRECAO, relacionado.GERAL),
         new NotaAtualizacao("Remoção da página Memes", "Devido à falta de vontade para atualizar a página de memes, ela foi removida. A página ainda pode ser acessada através do link: https://thifre09.github.io/memes", tipoNota.RECURSO_REMOVIDO, relacionado.MEMES),
-        new NotaAtualizacao("Remoção das conquistas gerais", "Devido à problemas com o sistema de conquistas, elas gerais foram removidas. Elas devem voltar em uma atualização futura, com um sistema melhorado.", tipoNota.RECURSO_REMOVIDO, relacionado.BANNER_PRINCIPAL)
-
+        new NotaAtualizacao("Remoção das conquistas gerais", "Devido à problemas com o sistema de conquistas, elas gerais foram removidas. Elas devem voltar em uma atualização futura, com um sistema melhorado.", tipoNota.RECURSO_REMOVIDO, relacionado.GERAL)
     ]),
     new Atualizacao("Beta 2.2", "19/03/2025", [
         new NotaAtualizacao("Criação de conquistas gerais para todo o site", "Agora existem conquistas que podem ser desbloqueadas em todas as páginas do site. Elas podem ser acessadas pelo menu lateral.", tipoNota.NOVO_RECURSO, relacionado.GERAL),
@@ -206,10 +204,10 @@ const atualizacoes = [
     ]),
     new Atualizacao("Beta 2.0", "22/01/2025", [
         new NotaAtualizacao("Mudanças no layout de quase todas as páginas", "O layout de quase todas as páginas do site foi completamente refeito, com um design mais moderno e responsivo.", tipoNota.ATUALIZACAO, relacionado.GERAL),
-        new NotaAtualizacao("Atualização no banner principal", "O banner principal de cada página foi padronizado, com um design mais moderno e responsivo.", tipoNota.ATUALIZACAO, relacionado.BANNER_PRINCIPAL),
-        new NotaAtualizacao("Criação de um menu lateral", "Foi criado um menu lateral no banner principal, contendo o bloco de notas, as notas de atualização e a calculadora.", tipoNota.NOVO_RECURSO, relacionado.BANNER_PRINCIPAL),
-        new NotaAtualizacao("Criação de uma calculadora", "Foi criada uma calculadora simples.", tipoNota.NOVO_RECURSO, relacionado.BANNER_PRINCIPAL),
-        new NotaAtualizacao("Remoção do bloco de notas e notas de atualização do menu principal", "O bloco de notas e as notas de atualização foram removidos do menu principal e adicionados à barra lateral, para melhorar a organização do site.", tipoNota.ATUALIZACAO, relacionado.BANNER_PRINCIPAL),
+        new NotaAtualizacao("Atualização no banner principal", "O banner principal de cada página foi padronizado, com um design mais moderno e responsivo.", tipoNota.ATUALIZACAO, relacionado.GERAL),
+        new NotaAtualizacao("Criação de um menu lateral", "Foi criado um menu lateral no banner principal, contendo o bloco de notas, as notas de atualização e a calculadora.", tipoNota.NOVO_RECURSO, relacionado.GERAL),
+        new NotaAtualizacao("Criação de uma calculadora", "Foi criada uma calculadora simples.", tipoNota.NOVO_RECURSO, relacionado.GERAL),
+        new NotaAtualizacao("Remoção do bloco de notas e notas de atualização do menu principal", "O bloco de notas e as notas de atualização foram removidos do menu principal e adicionados à barra lateral, para melhorar a organização do site.", tipoNota.ATUALIZACAO, relacionado.GERAL),
         new NotaAtualizacao("Atualização do Quadrado Clicker", "Foi adicionada uma opção para colocar imagens no quadrado, e algumas melhorias tiveram seus preços ajustados para melhorar o balanceamento do jogo.", tipoNota.ATUALIZACAO, relacionado.QUADRADO_CLICKER),
         new NotaAtualizacao("Atualização da página principal", "O layout da página do menu principal foi completamente refeito, com um design mais moderno e responsivo.", tipoNota.ATUALIZACAO, relacionado.PAGINA_INICIAL),
         new NotaAtualizacao("Adição de novos memes", "Adicionado 4 novos memes à aba de memes.", tipoNota.ATUALIZACAO, relacionado.MEMES),
@@ -230,7 +228,7 @@ const atualizacoes = [
     ]),
     new Atualizacao("Beta 1.1", "??/??/2024", [
         new NotaAtualizacao("Criação da aba Batatas", "Essa aba contém um quiz sobre curiosidades aleatórias, com um botão para verificar seus acertos.", tipoNota.NOVO_RECURSO, relacionado.BATATAS),
-        new NotaAtualizacao("Melhoria no banner principal", "O banner principal agora é fixo, e desce junto com o resto da página.", tipoNota.ATUALIZACAO, relacionado.BANNER_PRINCIPAL),
+        new NotaAtualizacao("Melhoria no banner principal", "O banner principal agora é fixo, e desce junto com o resto da página.", tipoNota.ATUALIZACAO, relacionado.GERAL),
         new NotaAtualizacao("Mudança no layout de algumas abas", "Algumas abas tiveram seu layout ajustado para se ajustar melhor em celulares.", tipoNota.ATUALIZACAO, relacionado.GERAL),
     ]),
     new Atualizacao("Beta 1.0", "??/??/2024", [
@@ -245,8 +243,8 @@ const atualizacoes = [
         new NotaAtualizacao("Criação da aba Python", "Essa aba contém um minicurso de python, cobrindo o básico até a parte de condicionais.", tipoNota.NOVO_RECURSO, relacionado.PYTHON),
         new NotaAtualizacao("Criação da aba Números", "Essa aba contém uma curiosidade de todos os números de 1 até 100.", tipoNota.NOVO_RECURSO, relacionado.NUMEROS),
         new NotaAtualizacao("Criação da aba Review de jogos", "Essa aba contém reviews de jogos, com uma breve descrição e minha opinião sobre eles.", tipoNota.NOVO_RECURSO, relacionado.REVIEW_DE_JOGOS),
-        new NotaAtualizacao("Criação de um bloco de notas", "Permite criar, editar e excluir notas, com armazenamento local. Ele está localizado na banner principal.", tipoNota.NOVO_RECURSO, relacionado.BANNER_PRINCIPAL),
-        new NotaAtualizacao("Criação do banner principal", "Essa banner é uma faixa que muda de cor e aparece no topo de todas as páginas, dando boas vindas ao usuário e dizendo em qual página do site ele está.", tipoNota.NOVO_RECURSO, relacionado.BANNER_PRINCIPAL)
+        new NotaAtualizacao("Criação de um bloco de notas", "Permite criar, editar e excluir notas, com armazenamento local. Ele está localizado na banner principal.", tipoNota.NOVO_RECURSO, relacionado.GERAL),
+        new NotaAtualizacao("Criação do banner principal", "Essa banner é uma faixa que muda de cor e aparece no topo de todas as páginas, dando boas vindas ao usuário e dizendo em qual página do site ele está.", tipoNota.NOVO_RECURSO, relacionado.GERAL)
     ])
 ];
 
