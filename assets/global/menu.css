@@ -70,6 +70,7 @@ nav#barra-main {
 }
 
 #botao-menu-lateral-reserva {
+    position: fixed;
     margin-left: 10px;
 }
 
@@ -99,7 +100,7 @@ aside#menu-lateral {
     position: fixed;
     height: 100vh;
     background-color: rgba(255, 255, 255, 0.637);
-    width: 20%;
+    width: clamp(300px, 20%, 1000000px);
     top: 0;
 
     button#fechar-menu-lateral {
@@ -121,6 +122,27 @@ aside#menu-lateral {
         background: linear-gradient(90deg, var(--purple4) 0%, var(--purple5) 100%);
         color: white;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: var(--transition-time1);
+
+        svg {
+            width: 40px;
+            height: 40px;
+            margin-left: 10px;
+        }
+
+        div {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    button:not(#fechar-menu-lateral):hover {
+        transform: scale(1.05);
     }
 }
 
@@ -359,6 +381,19 @@ section#notas-atualizacao-container {
 
                     h4 { 
                         background-color: var(--green9);
+                    }
+                    
+                }
+            }
+
+            li.nota-recurso_removido {
+                border-left: 4px solid var(--orange4);
+
+                .tipo-nota {
+                    color: var(--orange5);
+
+                    h4 { 
+                        background-color: var(--orange9);
                     }
                     
                 }
@@ -726,6 +761,19 @@ section#bloco-notas-container {
 
 #configuracoes {
     width: clamp(400px, 30%, 1000000px);
+
+    .aside-scroll {
+        div {
+            display: flex;
+            justify-content: space-between;
+
+            input[type="checkbox"] {
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+            }
+        }
+    }
 }
 
 @keyframes abrirMenu {
@@ -734,13 +782,13 @@ section#bloco-notas-container {
     }
 
     to {
-        right: 80%;
+        right: calc(100% - clamp(300px, 20%, 1000000px));
     }
 }
 
 @keyframes fecharMenu {
     from {
-        right: 80%;
+        right: calc(100% - clamp(300px, 20%, 1000000px));
     }
 
     to {
@@ -763,27 +811,7 @@ section#bloco-notas-container {
 
 @media (max-width: 600px) {
     aside#menu-lateral {
-        width: 50%;
-    }
-
-    @keyframes abrirMenu {
-        from {
-            right: 100%;
-        }
-
-        to {
-            right: 50%;
-        }
-    }
-
-    @keyframes fecharMenu {
-        from {
-            right: 50%;
-        }
-
-        to {
-            right: 100%;
-        }
+        width: 100%;
     }
 
     #notas-atualizacao {
@@ -902,5 +930,25 @@ section#bloco-notas-container {
         }
 
 
+    }
+
+    @keyframes abrirMenu {
+        from {
+            top: 100%;
+        }
+
+        to {
+            top: 0;
+        }
+    }
+
+    @keyframes fecharMenu {
+        from {
+            top: 0%;
+        }
+
+        to {
+            top: 100%;
+        }
     }
 }

@@ -195,7 +195,7 @@ input[type="number"]::-webkit-inner-spin-button {
                 width: 100%;
 
                 svg {
-                    color: var(--blue1)
+                    color: var(--blue4)
                 }
 
                 p {

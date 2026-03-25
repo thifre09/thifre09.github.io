@@ -96,17 +96,21 @@ function mover(objeto) {
 
 function abrirMenu(estado) {
     let barra = document.getElementById("menu-lateral");
-    let botao = document.querySelector(".botao-menu-lateral");
+    let botao = document.getElementById("botao-menu-lateral-reserva");
     if (estado === true) {
         barra.style.animation = "fecharMenu 0.7s normal";
         setTimeout(() => {
             barra.style.display = "none";
-            botao.style.display = "block";
-        }, 700); // Aguarda o tempo da animação (0.7s)
+            if (!bannerAtivo) {
+                botao.style.display = "block";
+            }
+        }, 690);
     } else if (estado === false) {
         barra.style.animation = "abrirMenu 0.7s normal";
         barra.style.display = "flex";
-        botao.style.display = "none";
+        if (!bannerAtivo) {
+            botao.style.display = "none";
+        }
     }
 }
 
@@ -168,8 +172,20 @@ class Atualizacao {
 const atualizacoes = [
     new Atualizacao("Beta 3.0", "??/??/2026", [
         new NotaAtualizacao("Criação da página Mayor Simulator", "Foi criado o jogo Mayor Simulator. Nele você administra uma cidade e precisa garantir que os cidadãos fiquem felizes.", tipoNota.NOVO_RECURSO, relacionado.MAYOR_SIMULATOR),
-        new NotaAtualizacao("Criação da página ThifreBD", "", tipoNota.NOVO_RECURSO, relacionado.THIFREBD),
-        new NotaAtualizacao("Atualização do banner principal", "O banner principal foi atualizado com um design completamente novo, mais moderno e responsivo.", tipoNota.ATUALIZACAO, relacionado.BANNER_PRINCIPAL)
+        new NotaAtualizacao("Criação da página ThifreBD", "Essa página serve como um SGBD simples e intuitivo para iniciantes", tipoNota.NOVO_RECURSO, relacionado.THIFREBD),
+        new NotaAtualizacao("Atualização do banner principal", "O banner principal foi atualizado com um design completamente novo, mais moderno e responsivo.", tipoNota.ATUALIZACAO, relacionado.BANNER_PRINCIPAL),
+        new NotaAtualizacao("Padronização das cores", "As cores do site foram padronizadas em quase todas as páginas",tipoNota.ATUALIZACAO, relacionado.GERAL),
+        new NotaAtualizacao("Atualização da página Review de jogos", "O layout da página foi melhorado, e mais jogos foram adicionados.", tipoNota.ATUALIZACAO, relacionado.REVIEW_DE_JOGOS),
+        new NotaAtualizacao("Atualização da página Cores", "O layout da página foi completamente refeito. Também foi adicionada a opção de copiar as cores ao clicar no texto delas, e a opção de expandir a cor para a página toda.", tipoNota.ATUALIZACAO, relacionado.CORES),
+        new NotaAtualizacao("Atualização da página Codificador", "O layout da página foi completamente refeito", tipoNota.ATUALIZACAO, relacionado.CODIFICADOR),
+        new NotaAtualizacao("Atualização da página Batatas", "O layout da página foi completamente refeito. Agora ela se parece com um quiz.", tipoNota.ATUALIZACAO, relacionado.BATATAS),
+        new NotaAtualizacao("Atualização da página Curiosidades", "Mudança nas cores da página para padronizar com o resto do site", tipoNota.ATUALIZACAO, relacionado.CURIOSIDADES),
+        new NotaAtualizacao("Atualização da página Python", "Mudança nas cores da página para padronizar com o resto do site", tipoNota.ATUALIZACAO, relacionado.PYTHON),
+        new NotaAtualizacao("Atualização da página O poder do CSS", "Mudança nas cores da página para padronizar com o resto do site", tipoNota.ATUALIZACAO, relacionado.PODER_DO_CSS),
+        new NotaAtualizacao("Correção de pequenos bugs", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do site.", tipoNota.CORRECAO, relacionado.GERAL),
+        new NotaAtualizacao("Remoção da página Memes", "Devido à falta de vontade para atualizar a página de memes, ela foi removida. A página ainda pode ser acessada através do link: https://thifre09.github.io/memes", tipoNota.RECURSO_REMOVIDO, relacionado.MEMES),
+        new NotaAtualizacao("Remoção das conquistas gerais", "Devido à problemas com o sistema de conquistas, elas gerais foram removidas. Elas devem voltar em uma atualização futura, com um sistema melhorado.", tipoNota.RECURSO_REMOVIDO, relacionado.BANNER_PRINCIPAL)
+
     ]),
     new Atualizacao("Beta 2.2", "19/03/2025", [
         new NotaAtualizacao("Criação de conquistas gerais para todo o site", "Agora existem conquistas que podem ser desbloqueadas em todas as páginas do site. Elas podem ser acessadas pelo menu lateral.", tipoNota.NOVO_RECURSO, relacionado.GERAL),
@@ -394,6 +410,9 @@ function criarNotasAtualizacao() {
                     `;
                     break;
                 case tipoNota.RECURSO_REMOVIDO:
+                    divTipo.innerHTML += `
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
+                    `;
                     break;
             }
         });
@@ -611,7 +630,7 @@ function compute() {
 
 //#endregion
 
-//#region Conquistas
+// #region Conquistas
 
 class ConquistaGeral {
     constructor(img = "", descricao = "", possui = false) {
@@ -729,4 +748,22 @@ window.addEventListener("DOMContentLoaded", () => {
     verificarConquistasGeral();
 });
 
+//#endregion
+
+// #region Configurações
+let bannerAtivo = true;
+
+function toggleBanner() {
+    if (bannerAtivo) {
+        document.getElementById("barra-main").style.display = "none";
+        document.getElementById("title").style.display = "none";
+        document.getElementById("botao-menu-lateral-reserva").style.display = "block";
+        bannerAtivo = false;
+    } else {
+        document.getElementById("barra-main").style.display = "flex";
+        document.getElementById("title").style.display = "block";
+        document.getElementById("botao-menu-lateral-reserva").style.display = "none";
+        bannerAtivo = true;
+    }
+}
 //#endregion

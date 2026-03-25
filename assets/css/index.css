@@ -1,5 +1,6 @@
 h1 {
     text-align: center;
+    margin: var(--p2);
 }
 
 div#principal {
