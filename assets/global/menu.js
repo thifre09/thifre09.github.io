@@ -169,6 +169,12 @@ class Atualizacao {
 }
 
 const atualizacoes = [
+    new Atualizacao("Beta 3.0.1", "08/04/2026", [
+        new NotaAtualizacao("Correção de pequenos bugs", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do site.", tipoNota.CORRECAO, relacionado.GERAL),
+        new NotaAtualizacao("Adicionado responsividade nas configurações", "A aba de configurações agora é totalmente responsiva.", tipoNota.CORRECAO, relacionado.GERAL),
+        new NotaAtualizacao("Modificação do layout da página principal", "O layout da página principal foi modificado para melhorar a experiência do usuário.", tipoNota.CORRECAO, relacionado.PAGINA_INICIAL),
+        new NotaAtualizacao("Adicionado um ícone de casa no banner principal", "Foi adicionado um ícone de casa no banner principal para que fique mais intuitivo que leva o usuário de volta para a página inicial quando clicado.", tipoNota.ATUALIZACAO, relacionado.GERAL)
+    ]),
     new Atualizacao("Beta 3.0", "25/03/2026", [
         new NotaAtualizacao("Criação da página Mayor Simulator", "Foi criado o jogo Mayor Simulator. Nele você administra uma cidade e precisa garantir que os cidadãos fiquem felizes.", tipoNota.NOVO_RECURSO, relacionado.MAYOR_SIMULATOR),
         new NotaAtualizacao("Criação da página ThifreBD", "Essa página serve como um SGBD simples e intuitivo para iniciantes. OBS: o terminal ainda não está funcional.", tipoNota.NOVO_RECURSO, relacionado.THIFREBD),

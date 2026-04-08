@@ -10,7 +10,8 @@ body {
     font-family: sans-serif;
     min-height: 100vh;
 }
-div {
+
+div#title-div {
     display: flex;
     justify-content: center;
     align-items: center;
