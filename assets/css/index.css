@@ -9,9 +9,8 @@ div#principal {
 }
 
 div#central {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(500px, 100%), 1fr));
     gap: 0.5%;
     width: 100%;
     padding: 10px;
@@ -19,8 +18,6 @@ div#central {
 }
 
 .links {
-    width: 32%;
-    display: block;
     border: 2px solid var(--black);
     border-radius: 10px;
     padding: 60px 0;
@@ -31,20 +28,6 @@ div#central {
     text-align: center;
     margin-bottom: 10px;
     will-change: background-image, transform;
-}
-
-@media (max-width: 650px) {
-    .links {
-        font-size: 2rem;
-        width: 48%;
-    }
-}
-
-@media (max-width: 400px) {
-    .links {
-        font-size: 1.5rem;
-        width: 48%;
-    }
 }
 
 @keyframes texto {
