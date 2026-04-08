@@ -9,43 +9,40 @@ div#principal {
 }
 
 div#central {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
     gap: 0.5%;
     width: 100%;
     padding: 10px;
     box-sizing: border-box;
-}
 
-.links {
-    width: 32%;
-    display: block;
-    border: 2px solid var(--black);
-    border-radius: 10px;
-    padding: 60px 0;
-    color: var(--black);
-    text-decoration: none;
-    transition: background-color 0.3s, transform 0.3s;
-    font-size: 2.5rem;
-    text-align: center;
-    margin-bottom: 10px;
-    will-change: background-image, transform;
-}
-
-@media (max-width: 650px) {
     .links {
-        font-size: 2rem;
-        width: 48%;
+        border: 2px solid var(--black);
+        border-radius: 10px;
+        color: var(--black);
+        text-decoration: none;
+        transition: background-color 0.3s, transform 0.3s;
+        font-size: 2.5rem;
+        text-align: center;
+        padding: 4rem 0;
+        margin-bottom: 10px;
+        will-change: background-image, transform;
+        cursor: pointer;
+
+        a {
+            width: 100%;
+            animation: texto 10s infinite;
+            text-decoration: none;
+
+            &:visited {
+                text-decoration: none;
+                color: inherit;
+            }
+        }
     }
 }
 
-@media (max-width: 400px) {
-    .links {
-        font-size: 1.5rem;
-        width: 48%;
-    }
-}
+
 
 @keyframes texto {
     0% {
@@ -87,57 +84,57 @@ div#central {
 
 #batatas {
     background: no-repeat center;
-    animation: mudarBatatas 40s infinite linear, texto 10s infinite;
+    animation: mudarBatatas 40s infinite linear
 }
 
 #codificador {
     background: no-repeat center;
-    animation: mudarCodificador 40s infinite linear, texto 10s infinite;
+    animation: mudarCodificador 40s infinite linear
 }
 
 #cores {
     background: no-repeat center;
-    animation: mudarCores 40s infinite linear, texto 10s infinite;
+    animation: mudarCores 40s infinite linear
 }
 
 #curiosidades {
     background: no-repeat center;
-    animation: mudarCuriosidades 40s infinite linear, texto 10s infinite;
+    animation: mudarCuriosidades 40s infinite linear
 }
 
 #mayor-simulator {
     background: no-repeat center;
-    animation: mudarMayorSimulator 40s infinite linear, texto 10s infinite;
+    animation: mudarMayorSimulator 40s infinite linear
 }
 
 #numeros {
     background: no-repeat center;
-    animation: mudarNumeros 40s infinite linear, texto 10s infinite;
+    animation: mudarNumeros 40s infinite linear
 }
 
 #poder-do-css {
     background: no-repeat center;
-    animation: mudarPoderDoCss 40s infinite linear, texto 10s infinite;
+    animation: mudarPoderDoCss 40s infinite linear
 }
 
 #python {
     background: no-repeat center;
-    animation: mudarPython 40s infinite linear, texto 10s infinite;
+    animation: mudarPython 40s infinite linear
 }
 
 #quadrado-clicker {
     background: no-repeat center;
-    animation: mudarQuadradoClicker 40s infinite linear, texto 10s infinite;
+    animation: mudarQuadradoClicker 40s infinite linear
 }
 
 #review-jogos {
     background: no-repeat center;
-    animation: mudarReviewJogos 40s infinite linear, texto 10s infinite;
+    animation: mudarReviewJogos 40s infinite linear
 }
 
 #thifreBD {
     background: no-repeat center;
-    animation: mudarThifreBD 40s infinite linear, texto 10s infinite;
+    animation: mudarThifreBD 40s infinite linear
 }
 
 .links:hover {

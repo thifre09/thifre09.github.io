@@ -11,29 +11,43 @@ body {
     min-height: 100vh;
 }
 
-h1#title {
-    text-align: center;
-    color: var(--blue6);
-    transition: var(--transition-time1);
-    text-decoration: none;
-    text-align: center;
-    margin: var(--p2);
-    margin-bottom: 0;
-    z-index: 100;
-    background-color: var(--white);
-
-    a {
-        text-decoration: none;
+div#title-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    h1#title {
         text-align: center;
-    }
-
-    a:visited {
         color: var(--blue6);
+        transition: var(--transition-time1);
         text-decoration: none;
         text-align: center;
-    }
+        margin: var(--p2);
+        margin-bottom: 0;
+        z-index: 100;
+        background-color: var(--white);
 
+        a {
+            text-decoration: none;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: larger;
+
+            svg {
+                width: 35px;
+                aspect-ratio: 1 / 1;
+            }
+        }
+
+        a:visited {
+            color: var(--blue6);
+            text-decoration: none;
+            text-align: center;
+        }
+    }
 }
+
 
 h1#title:hover {
     transform: scale(1.20);
@@ -930,6 +944,15 @@ section#bloco-notas-container {
         }
 
 
+    }
+
+    #configuracoes {
+        width: 90%;
+        height: 90vh;
+        top: 5%;
+        right: 5%;
+        bottom: 5%;
+        left: 5%;
     }
 
     @keyframes abrirMenu {
