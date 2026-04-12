@@ -756,7 +756,7 @@ input[type="number"]::-webkit-inner-spin-button {
                 }
             }
 
-            .default {
+            .default-input-text {
                 position: relative;
                 margin-left: var(--p5);
                 padding-left: var(--p5);
