@@ -116,10 +116,14 @@ class Database {
 class Table {
     name: string;
     columns: Record<string, Column>;
+    rows: Record<string, any>[];
+    indexes: Record<string, Map<any, number[]>>;
 
     constructor(name: string) {
         this.name = name;
         this.columns = {};
+        this.rows = [];
+        this.indexes = {};
     }
 }
 
@@ -165,11 +169,19 @@ let currentTable: string | null = null;
 function createDatabase(database: Database) {
     databases[database.name] = database;
     currentDatabase = database.name;
+    changeDatabaseDropdown();
 }
 
 function createTable(table: Table) {
     databases[currentDatabase!].tables[table.name] = table;
     currentTable = table.name;
+    changeTabelasLista();
+    changeTabelaSelecionadaTabela();
+}
+
+function addColumn(tableName: string, column: Column) {
+    databases[currentDatabase!].tables[tableName].columns[column.name] = column;
+    changeTabelaSelecionadaTabela();
 }
 
 // #endregion
@@ -190,7 +202,6 @@ function createDatabaseInterface() {
 
     createDatabase(new Database(databaseName));
     databaseNameInput.value = "";
-    changeDatabaseDropdown();
     openNotifications(`<p style='color: var(--green4)'>Database "${databaseName}" criada com sucesso!</p>`);
 }
 
@@ -212,7 +223,7 @@ function createTableInterface() {
     const table = new Table(tableName);
     const columnsUl = document.querySelector("#criacao-tabela ul")!;
 
-    for (const columnDiv of Array.from(columnsUl.querySelectorAll(":scope > div"))) {
+    for (const columnDiv of columnsUl.children) {
         const columnNameInput = columnDiv.querySelector("input[type='text']") as HTMLInputElement;
         const columnName = columnNameInput.value.trim().toLowerCase();
         if (columnName === "") {
@@ -243,8 +254,48 @@ function createTableInterface() {
     columnsUl.innerHTML = "";
     createColumnCreationDiv(columnsUl as HTMLElement);
     tableNameInput.value = "";
-    changeTabelasLista();
     openNotifications(`<p style='color: var(--green5)'>Tabela "${tableName}" criada com sucesso!</p>`);
+}
+
+function addColumnsInterface() {
+    const columnsUl = document.querySelector("#editar-colunas ul#criacao-colunas-edit")!;
+    const table = databases[currentDatabase!].tables[currentTable!];
+
+    for (const columnDiv of columnsUl.children) {
+        const columnNameInput = columnDiv.querySelector("input[type='text']") as HTMLInputElement;
+        const columnName = columnNameInput.value.trim().toLowerCase();
+        if (columnName === "") {
+            openNotifications("<p style='color: var(--red5)'>O nome da coluna não pode ser vazio.</p>");
+            return;
+        } else if (table.columns[columnName]) {
+            openNotifications("<p style='color: var(--red5)'>Já existe uma coluna com esse nome.</p>");
+            return;
+        }
+
+        const columnType = columnDiv.querySelector(".custom-dropdown-trigger") as HTMLElement;
+        const isPrimaryKey = columnDiv.querySelector(".primary-key") as HTMLInputElement;
+        const isForeignKey = columnDiv.querySelector(".foreign-key") as HTMLInputElement;
+        const isNotNull = columnDiv.querySelector(".not-null") as HTMLInputElement;
+        const isUnique = columnDiv.querySelector(".unique") as HTMLInputElement;
+        const hasDefault = columnDiv.querySelector(".default") as HTMLInputElement;
+        const isAutoIncrement = columnDiv.querySelector(".auto-increment") as HTMLInputElement;
+
+        const column = new Column(columnName, columnType.textContent!.toLowerCase() as columnType,
+            isPrimaryKey.checked, isForeignKey.checked, isNotNull.checked, isUnique.checked,
+            isAutoIncrement.checked, hasDefault.checked);
+
+        addColumn(table.name, column);
+        openNotifications(`<p style='color: var(--green4)'>Coluna "${columnName}" criada com sucesso!</p>`);
+    }
+
+    columnsUl.innerHTML = "";
+    createColumnCreationDiv(columnsUl as HTMLElement);
+    changeAlterarColunasMenu();
+    openNotifications(`<p style='color: var(--green5)'>Colunas adicionadas com sucesso!</p>`);
+}
+
+function addRowInterface() {
+
 }
 
 function createColumnCreationDiv(parent: HTMLElement) {
@@ -342,6 +393,7 @@ function changeDatabaseDropdown() {
         option.classList.add("custom-dropdown-option");
         option.addEventListener("click", () => {
             currentDatabase = database;
+            changeTabelasLista();
         });
         if (database === currentDatabase) option.classList.add("custom-dropdown-option-selected");
         option.textContent = database;
@@ -368,8 +420,9 @@ function changeTabelasLista() {
             currentTable = tabela;
             tabelasLista.querySelector(".tabela-ativa")?.classList.remove("tabela-ativa");
             option.classList.add("tabela-ativa");
+            changeTabelaSelecionadaTabela();
         });
-        
+
         const name = document.createElement("p");
         name.textContent = tabela;
         option.appendChild(name);
@@ -380,6 +433,81 @@ function changeTabelasLista() {
 
         tabelasLista.appendChild(option);
     }
+}
+
+function changeTabelaSelecionadaTabela() {
+    document.getElementById("nenhuma-tabela-selecionada")!.style.display = "none";
+    const selectedTable = document.getElementById("tabela-selecionada-tabela")!;
+    selectedTable.style.display = "flex";
+
+    const table = databases[currentDatabase!].tables[currentTable!];
+
+    let divLinha = document.createElement("div");
+    divLinha.classList.add("linha-tabela");
+    Object.values(table.columns).forEach((column, i) => {
+        const divColuna = document.createElement("div");
+        divColuna.innerHTML = `
+            <p>${column.name}</p>
+            <p>${column.type.toUpperCase()}${column.isPrimaryKey ? " • PK" : ""}${column.isForeignKey ? " • FK → " + column.reference?.table + ", " + column.reference?.column : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO INCREMENT" : ""}</p>
+        `;
+
+        divLinha.appendChild(divColuna);
+    });
+    const headerActions = document.createElement("div");
+    headerActions.innerHTML = "<p>Ações</p>";
+    divLinha.appendChild(headerActions);
+
+    document.getElementById("tabela-selecionada-tabela")!.innerHTML = "";
+    document.getElementById("tabela-selecionada-tabela")!.appendChild(divLinha);
+
+    table.rows.forEach((row) => {
+        let divLinha = document.createElement("div");
+        divLinha.classList.add("linha-tabela");
+        Object.values(row).forEach((value) => {
+            const divCelula = document.createElement("div");
+            divCelula.innerHTML = `<p>${value}</p>`;
+            divLinha.appendChild(divCelula);
+        });
+        const rowActions = document.createElement("div");
+        rowActions.innerHTML = `
+            <button onclick="abrirFechar(false, 'editar-linha')">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-pencil"></use></svg>
+            </button>
+            <button>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>
+            </button>
+        `;
+        divLinha.appendChild(rowActions);
+
+        document.getElementById("tabela-selecionada-tabela")!.appendChild(divLinha);
+    });
+}
+
+// central menus
+function changeAlterarColunasMenu() {
+    if (currentDatabase === null) return;
+    const menu = document.getElementById("lista-colunas-existentes")!;
+    menu.innerHTML = "";
+    if (currentTable === null) {
+        menu.innerHTML = "<p>Crie uma tabela para mostrar as colunas existentes</p>";
+        return;
+    } else if (Object.keys(databases[currentDatabase!].tables[currentTable!].columns).length === 0) {
+        menu.innerHTML = "<p>Não há colunas nessa tabela</p>";
+        return;
+    }
+    Object.values(databases[currentDatabase!].tables[currentTable!].columns).forEach((column) => {
+        menu.innerHTML += `
+            <div class="item-lista-colunas-existentes">
+                <div>
+                    <h3>${column.name}</h3>
+                    <p>${column.type.toUpperCase()}${column.isPrimaryKey ? " • PK" : ""}${column.isForeignKey ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""}</p>
+                </div>
+                <button class="delete-column" onclick="deleteColumnInterface(this)">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>
+                </button>
+            </div>
+        `;
+    });
 }
 
 //#endregion

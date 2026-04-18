@@ -76,21 +76,15 @@
                     <div id="botoes-varios-botoes">
                         <button id="alter-column"
                             onclick="abrirFechar(false, 'editar-colunas'); changeAlterarColunasMenu()">
-                            <svg viewBox="0 0 512 512" aria-hidden="true">
-                                <use href="assets/images/icons-sprite.svg#icon-edit"></use>
-                            </svg>
+                            <svg viewBox="0 0 512 512" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-edit"></use></svg>
                             Alterar colunas</button>
                         <button id="insert-line"
-                            onclick="abrirFechar(false, 'inserir-linha'); changeInserirLinhaMenu()">
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
-                            </svg>
+                            onclick="abrirFechar(false, 'inserir-linha')">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-square-plus"></use></svg>
                             Inserir linha
                         </button>
                         <button id="delete-table">
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
-                            </svg>
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>
                             Deletar tabela
                         </button>
                     </div>
@@ -100,9 +94,7 @@
 
                 <div id="tabela-info">
                     <div id="nenhuma-tabela-selecionada">
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-table"></use>
-                        </svg>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-table"></use></svg>
                         <h5>Nenhuma tabela selecionada</h5>
                         <p>Crie uma tabela para começar</p>
                     </div>
@@ -289,9 +281,7 @@
                 <div class="menu-criacao-top">
                     <h1>Editar colunas</h1>
                     <button onclick="abrirFechar(true, 'editar-colunas')">
-                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
-                        </svg>
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-close"></use></svg>
                     </button>
                 </div>
 
@@ -304,11 +294,8 @@
 
                 <div>
                     <h2>Colunas</h2>
-                    <button
-                        onclick="createColumnInterface(document.querySelector('#editar-colunas ul:not(#lista-colunas-existentes)'))">
-                        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-plus"></use>
-                        </svg>
+                    <button onclick="createColumnCreationDiv(document.querySelector('#editar-colunas ul#criacao-colunas-edit'))">
+                        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-plus"></use></svg>
                         Nova coluna
                     </button>
                 </div>
@@ -388,10 +375,8 @@
                     </div>
                 </ul>
 
-                <button id="Adicionar-coluna-button" onclick="alterColumnsInterface()">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
-                    </svg>
+                <button id="Adicionar-coluna-button" onclick="addColumnsInterface()">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-square-plus"></use></svg>
                     Adicionar coluna(s)
                 </button>
 

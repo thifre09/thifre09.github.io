@@ -212,7 +212,7 @@ input[type="number"]::-webkit-inner-spin-button {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    padding: 5px;
+                    padding: 3px;
                     transition: var(--transition-time1);
 
                     svg {
