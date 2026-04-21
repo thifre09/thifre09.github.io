@@ -27,9 +27,14 @@
                     <div id="database-button">
                         <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-database"></use></svg>
                         <p>Database</p>
-                        <button onclick="abrirFechar(false, 'criacao-database')">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-square-plus"></use></svg>
-                        </button>
+                        <div>
+                            <button>
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z"/></svg>
+                            </button>
+                            <button onclick="abrirFechar(false, 'criacao-database')">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-square-plus"></use></svg>
+                            </button>
+                        </div>
                     </div>
                     
                     <div class="custom-dropdown">
@@ -39,7 +44,7 @@
                         <ul class="custom-dropdown-menu">
                             
                         </ul>
-                        <input type="hidden" name="column-type" value="text">
+                        <input type="hidden" value="text">
                     </div>
                 </div>
 
@@ -74,14 +79,21 @@
                     </div>
 
                     <div id="botoes-varios-botoes">
+                        
                         <button id="alter-column"
-                            onclick="abrirFechar(false, 'editar-colunas'); changeAlterarColunasMenu()">
+                            onclick="abrirFechar(false, 'editar-colunas'); changeAlterColumnsMenu()">
                             <svg viewBox="0 0 512 512" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-edit"></use></svg>
-                            Alterar colunas</button>
+                            Alterar colunas
+                        </button>
                         <button id="insert-line"
-                            onclick="abrirFechar(false, 'inserir-linha')">
+                            onclick="abrirFechar(false, 'inserir-linha'); changeAddRowMenu()">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-square-plus"></use></svg>
                             Inserir linha
+                        </button>
+                        <button id="edit-table"
+                            onclick="console.log('to do')">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z"/></svg>
+                            Editar tabela
                         </button>
                         <button id="delete-table">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>
@@ -211,44 +223,44 @@
                             <input type="hidden" name="column-type" value="text">
                         </div>
 
-                        <div class="caracteristics">
+                        <div class="characteristics">
                             <div>
                                 <label>
-                                    <input type="checkbox" class="primary-key" name="primary-key">
+                                    <input type="checkbox" class="primary-key" name="primary-key" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
                                     Primary key
                                 </label>
                             </div>
                             <div>
                                 <label>
-                                    <input type="checkbox" class="foreign-key" name="foreign-key">
+                                    <input type="checkbox" class="foreign-key" name="foreign-key" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
                                     Foreign key
                                 </label>
                             </div>
                             <div>
                                 <label>
-                                    <input type="checkbox" class="not-null" name="not-null">
+                                    <input type="checkbox" class="not-null" name="not-null" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
                                     Not null
                                 </label>
                             </div>
                             <div>                                
                                 <label>
-                                    <input type="checkbox" class="unique" name="unique">
+                                    <input type="checkbox" class="unique" name="unique" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
                                     Unique
                                 </label>
                             </div>
                             <div>                                
                                 <label>
-                                    <input type="checkbox" class="default" name="default">
+                                    <input type="checkbox" class="default" name="default" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
                                     Default
                                 </label>
                             </div>
-                            <div style="display: none;">                                
-                                <label>
-                                    <input type="checkbox" class="auto-increment" name="auto-increment">
+                            <div>                                
+                                <label style="display: none;">
+                                    <input type="checkbox" class="auto-increment" name="auto-increment" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
                                     Auto increment
                                 </label>
                             </div>
-                            <div class="delete-column">
+                            <div class="delete-column" onclick="deleteColumnCreationDiv(this)">
                                 <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>
                             </div>
                         </div>
@@ -256,12 +268,12 @@
                         <div class="referencia" style="display: none;">
                             <p>Referência</p>
                             <div class="custom-dropdown">
-                                <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
-                                    <span class="custom-dropdown-value">Crie outra tabela</span>
+                                <button type="button" class="custom-dropdown-trigger">
+                                    Crie outra tabela
                                 </button>
-                                <ul class="custom-dropdown-menu" tabindex="-1">
+                                <ul class="custom-dropdown-menu">
                                 </ul>
-                                <input type="hidden" name="column-type" value="text">
+                                <input type="hidden" value="text">
                             </div>
                         </div>
 
@@ -304,71 +316,75 @@
                         <input type="text" placeholder="Nome da coluna">
 
                         <div class="custom-dropdown">
-                            <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
-                                <span class="custom-dropdown-value">Text</span>
+                            <button class="custom-dropdown-trigger" onclick="openCustomDropdown(this)">
+                                Text
                             </button>
-                            <ul class="custom-dropdown-menu" tabindex="-1">
-                                <li class="custom-dropdown-option custom-dropdown-option-selected"
-                                    onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment-0'))">
-                                    Text</li>
-                                <li class="custom-dropdown-option"
-                                    onclick="toggleAutoIncrementButton(true, document.getElementById('auto-increment-0'))">
-                                    Integer</li>
-                                <li class="custom-dropdown-option"
-                                    onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment-0'))">
-                                    Float</li>
-                                <li class="custom-dropdown-option"
-                                    onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment-0'))">
-                                    Boolean</li>
+                            <ul class="custom-dropdown-menu">
+                                <li class="custom-dropdown-option custom-dropdown-option-selected">Text</li>
+                                <li class="custom-dropdown-option">Integer</li>
+                                <li class="custom-dropdown-option">Float</li>
+                                <li class="custom-dropdown-option">Boolean</li>
+                                <li class="custom-dropdown-option">Date</li>
+                                <li class="custom-dropdown-option">Enum</li>
                             </ul>
                             <input type="hidden" name="column-type" value="text">
                         </div>
 
-                        <div class="caracteristics">
-                            <div class="primary-key">
-                                <input type="checkbox" id="primary-key-0" onclick="toggleOnPKButton(this)">
-                                <label for="primary-key-0">Primary key</label>
+                        <div class="characteristics">
+                            <div>
+                                <label>
+                                    <input type="checkbox" class="primary-key" name="primary-key" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
+                                    Primary key
+                                </label>
                             </div>
-                            <div class="foreign-key">
-                                <input type="checkbox" id="foreign-key-0" onclick="toggleOnFKButton(this)">
-                                <label for="foreign-key-0">Foreign key</label>
+                            <div>
+                                <label>
+                                    <input type="checkbox" class="foreign-key" name="foreign-key" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
+                                    Foreign key
+                                </label>
                             </div>
-                            <div class="not-null">
-                                <input type="checkbox" id="not-null-0">
-                                <label for="not-null-0">Not null</label>
+                            <div>
+                                <label>
+                                    <input type="checkbox" class="not-null" name="not-null" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
+                                    Not null
+                                </label>
                             </div>
-                            <div class="unique">
-                                <input type="checkbox" id="unique-0">
-                                <label for="unique-0">Unique</label>
+                            <div>                                
+                                <label>
+                                    <input type="checkbox" class="unique" name="unique" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
+                                    Unique
+                                </label>
                             </div>
-                            <div class="default-option">
-                                <input type="checkbox" id="default-0" onclick="toggleOnDefaultOptionButton(this)">
-                                <label for="default-0">Default</label>
+                            <div>                                
+                                <label>
+                                    <input type="checkbox" class="default" name="default" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
+                                    Default
+                                </label>
                             </div>
-                            <div class="auto-increment" style="display: none;">
-                                <input type="checkbox" id="auto-increment-0">
-                                <label for="auto-increment-0">Auto increment</label>
+                            <div>                                
+                                <label style="display: none;">
+                                    <input type="checkbox" class="auto-increment" name="auto-increment" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
+                                    Auto increment
+                                </label>
                             </div>
-                            <div class="delete-column" onclick="deleteColumnCreationInterface(this)">
-                                <svg viewBox="0 0 24 24" aria-hidden="true">
-                                    <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
-                                </svg>
+                            <div class="delete-column">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>
                             </div>
                         </div>
 
                         <div class="referencia" style="display: none;">
                             <p>Referência</p>
                             <div class="custom-dropdown">
-                                <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
-                                    <span class="custom-dropdown-value">Crie outra tabela</span>
+                                <button type="button" class="custom-dropdown-trigger">
+                                    Crie outra tabela
                                 </button>
-                                <ul class="custom-dropdown-menu" tabindex="-1">
+                                <ul class="custom-dropdown-menu">
                                 </ul>
-                                <input type="hidden" name="column-type" value="text">
+                                <input type="hidden" value="text">
                             </div>
                         </div>
 
-                        <div class="default" style="display: none;">
+                        <div class="default-input-text" style="display: none;">
                             <p>Default</p>
                             <input type="text" placeholder="Valor padrão">
                         </div>
@@ -386,22 +402,16 @@
                 <div class="menu-criacao-top">
                     <h1>Inserir nova linha</h1>
                     <button onclick="abrirFechar(true, 'inserir-linha')">
-                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
-                        </svg>
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-close"></use></svg>
                     </button>
                 </div>
 
                 <ul id="colunas-inserir-linha">
-                    <div>
-                        <h3>Crie uma tabela para começar</h3>
-                    </div>
+                    <p>Crie uma tabela para começar</p>    
                 </ul>
 
                 <button id="inserir-linha-button" onclick="insertRowInterface()">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
-                    </svg>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-square-plus"></use></svg>
                     Inserir linha
                 </button>
             </div>
@@ -410,42 +420,15 @@
                 <div class="menu-criacao-top">
                     <h1>Editar linha</h1>
                     <button onclick="abrirFechar(true, 'editar-linha')">
-                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
-                        </svg>
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-close"></use></svg>
                     </button>
                 </div>
 
                 <ul id="colunas-editar-linha">
-                    <div>
-                        <h3>id</h3>
-                        <p>(INTEGER • PK • NOT NULL)</p>
-                        <input type="text">
-                    </div>
-
-                    <div>
-                        <h3>id</h3>
-                        <p>(BOOLEAN • PK • NOT NULL)</p>
-                        <div class="custom-dropdown">
-                            <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
-                                <span class="custom-dropdown-value">TRUE</span>
-                            </button>
-                            <ul class="custom-dropdown-menu" tabindex="-1">
-                                <li class="custom-dropdown-option custom-dropdown-option-selected">TRUE</li>
-                                <li class="custom-dropdown-option">FALSE</li>
-                            </ul>
-                            <input type="hidden" name="column-type" value="text">
-                        </div>
-                    </div>
-
-
-
                 </ul>
 
-                <button id="editar-linha-button" onclick="editRowInterface()">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
-                    </svg>
+                <button id="editar-linha-button">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-square-plus"></use></svg>
                     Editar linha
                 </button>
             </div>

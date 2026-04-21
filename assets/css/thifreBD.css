@@ -199,34 +199,40 @@ input[type="number"]::-webkit-inner-spin-button {
                 }
 
                 p {
-                    font-size: large;
+                    font-size: clamp(16px, 1.1rem, 22px);
                     margin: 0;
                     margin-right: 5px;
                 }
 
-                button {
-                    margin-left: auto;
-                    border: none;
-                    border-radius: 10px;
-                    background-color: transparent;
+                div {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    padding: 3px;
-                    transition: var(--transition-time1);
+                    margin-left: auto;
 
-                    svg {
-                        width: 30px;
-                        height: 30px;
-                        color: black
+                    button {
+                        cursor: pointer;
+                        border: none;
+                        border-radius: 10px;
+                        background-color: transparent;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 3px;
+                        transition: var(--transition-time1);
+
+                        svg {
+                            width: 30px;
+                            height: 30px;
+                            color: black
+                        }
+                    }
+
+                    button:hover {
+                        background-color: var(--gray12);
+                        transform: scale(1.05);
                     }
                 }
-
-                button:hover {
-                    background-color: var(--gray12);
-                    transform: scale(1.05);
-                }
-
             }
         }
 
@@ -292,8 +298,18 @@ input[type="number"]::-webkit-inner-spin-button {
                     align-items: center;
                     transition: var(--transition-time1);
 
-                    p:nth-child(2) {
-                        font-size: medium;
+                    p:nth-child(1) {
+                        max-width: 90%;
+                        overflow: hidden;
+                    }
+
+                    button {
+                        background-color: transparent;
+                        border: none;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        cursor: pointer;
                     }
                 }
 
@@ -345,12 +361,20 @@ input[type="number"]::-webkit-inner-spin-button {
                     font-size: medium;
                     margin: var(--p3);
 
+                    &:hover {
+                        transform: scale(1.05);
+                    }
+
+                    svg {
+                        width: 20px;
+                        height: 20px;
+                        margin: 5px;
+                    }
                 }
 
-                svg {
-                    width: 20px;
-                    height: 20px;
-                    margin: 5px;
+                #edit-table {
+                    background-color: var(--blue5);
+                    color: white;
                 }
 
                 #alter-column {
@@ -538,7 +562,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
                         button:hover {
                             background-color: var(--gray10);
-                        }      
+                        }
                     }
 
                     h4 {
@@ -692,7 +716,7 @@ input[type="number"]::-webkit-inner-spin-button {
             flex-direction: column;
             margin-bottom: var(--p5);
 
-            .caracteristics {
+            .characteristics {
                 margin-top: var(--p5);
                 display: flex;
                 flex-wrap: wrap;
