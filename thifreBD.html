@@ -28,7 +28,7 @@
                         <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-database"></use></svg>
                         <p>Database</p>
                         <div>
-                            <button>
+                            <button onclick="abrirFechar(false, 'configurar-database'); changeConfigurarDatabaseMenu()">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z"/></svg>
                             </button>
                             <button onclick="abrirFechar(false, 'criacao-database')">
@@ -81,7 +81,7 @@
                     <div id="botoes-varios-botoes">
                         
                         <button id="alter-column"
-                            onclick="abrirFechar(false, 'editar-colunas'); changeAlterColumnsMenu()">
+                            onclick="abrirFechar(false, 'editar-colunas'); changeEditColumnsMenu()">
                             <svg viewBox="0 0 512 512" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-edit"></use></svg>
                             Alterar colunas
                         </button>
@@ -91,13 +91,9 @@
                             Inserir linha
                         </button>
                         <button id="edit-table"
-                            onclick="console.log('to do')">
+                            onclick="abrirFechar(false, 'configurar-tabela'); changeConfigurarTabelaMenu()">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z"/></svg>
                             Editar tabela
-                        </button>
-                        <button id="delete-table">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>
-                            Deletar tabela
                         </button>
                     </div>
                 </div>
@@ -181,6 +177,24 @@
                 <button id="criar-database-button" onclick="createDatabaseInterface()">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-square-plus"></use></svg>
                     Criar database
+                </button>
+            </div>
+
+            <div id="configurar-database" style="display: none;">
+                <div class="menu-criacao-top">
+                    <h1>Configurar database</h1>
+                    <button onclick="abrirFechar(true, 'configurar-database')"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-close"></use></svg></button>
+                </div>
+                <label for="renomear-database-input">Nome da database</label>
+                <input type="text" id="renomear-database-input" name="renomear-database-input" rows="1" placeholder="Ex: meu_bd">
+                <button onclick="renameDatabaseInterface()">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
+                    Confirmar alterações
+                </button>
+                <br>
+                <button style="background-color: var(--red4)" id="configurar-database-deletar" onclick="abrirFechar(false, 'confirmar-deletar'); changeConfirmDeleteMenu('database')">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>
+                    Deletar database
                 </button>
             </div>
 
@@ -286,6 +300,24 @@
                 <button id="criar-tabela-button" onclick="createTableInterface()">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-square-plus"></use></svg>
                     Criar tabela
+                </button>
+            </div>
+
+            <div id="configurar-tabela" style="display: none;">
+                <div class="menu-criacao-top">
+                    <h1>Configurar tabela</h1>
+                    <button onclick="abrirFechar(true, 'configurar-tabela')"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-close"></use></svg></button>
+                </div>
+                <label for="renomear-tabela-input">Nome da tabela</label>
+                <input type="text" id="renomear-tabela-input" name="renomear-tabela-input" rows="1" placeholder="Ex: minha_tabela">
+                <button>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
+                    Confirmar alterações
+                </button>
+                <br>
+                <button style="background-color: var(--red4)" id="deletar-tabela-button" onclick="abrirFechar(false, 'confirmar-deletar');  changeConfirmDeleteMenu('table')">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>
+                    Deletar tabela
                 </button>
             </div>
 
@@ -430,6 +462,41 @@
                 <button id="editar-linha-button">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-square-plus"></use></svg>
                     Editar linha
+                </button>
+            </div>
+
+            <div id="confirmar-deletar" style="display: none;">
+                <div class="menu-criacao-top">
+                    <h1>Confirmar exclusão</h1>
+                    <button onclick="abrirFechar(true, 'confirmar-deletar')">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-close"></use></svg>
+                    </button>
+                </div>
+                <ul id="confirmar-deletar-lista">
+                    <div>
+                        <h4>Database</h4>
+                        <div>
+                            <p>exemplo_bd</p>
+                            <p>Tabelas: 1</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4>Tabela</h4>
+                        <p>usuarios</p>
+                    </div>
+                    <div>
+                        <h4>Coluna</h4>
+                        <div>
+                            <p>criado_em</p>
+                        </div>
+                        
+                    </div>
+                </ul>
+                <p>Essa ação não pode ser desfeita!</p>
+                <br>
+                <button id="confirmar-deletar-button">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>
+                    Deletar
                 </button>
             </div>
 

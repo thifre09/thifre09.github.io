@@ -38,6 +38,7 @@ input[type="number"]::-webkit-inner-spin-button {
         align-items: center;
         cursor: pointer;
         transition: var(--transition-time1);
+        overflow: hidden;
     }
 
     .custom-dropdown-trigger::after {
@@ -70,6 +71,7 @@ input[type="number"]::-webkit-inner-spin-button {
             border-radius: 8px;
             cursor: pointer;
             transition: var(--transition-time1);
+            overflow: hidden;
         }
 
         .custom-dropdown-option:hover {
@@ -113,6 +115,8 @@ input[type="number"]::-webkit-inner-spin-button {
 
     .separador-vertical {
         width: 2px;
+        min-width: 2px;
+        flex: 0 0 2px;
         align-self: stretch;
         background-color: var(--gray3);
     }
@@ -341,6 +345,12 @@ input[type="number"]::-webkit-inner-spin-button {
 
             #tabela-info-varios-botoes {
                 padding: var(--p3);
+                max-width: 50%;
+
+                p {
+                    max-width: 90%;
+                    overflow: hidden;
+                }
             }
 
             #botoes-varios-botoes {
@@ -716,49 +726,6 @@ input[type="number"]::-webkit-inner-spin-button {
             flex-direction: column;
             margin-bottom: var(--p5);
 
-            .characteristics {
-                margin-top: var(--p5);
-                display: flex;
-                flex-wrap: wrap;
-
-                div:not(.delete-column) {
-                    display: flex;
-                    align-items: center;
-                    margin: var(--p4);
-
-                    input {
-                        margin-right: 5px;
-                        width: 16px;
-                        aspect-ratio: 1 / 1;
-                    }
-
-                    label {
-                        font-size: medium;
-                    }
-                }
-
-                div.delete-column {
-                    margin-left: auto;
-                    cursor: pointer;
-                    padding: var(--p2);
-                    border-radius: 10px;
-                    transition: var(--transition-time1);
-                    aspect-ratio: 1 / 1;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-
-                    svg {
-                        color: var(--red4);
-                    }
-
-                    &:hover {
-                        background-color: var(--red8);
-                        transform: scale(1.05);
-                    }
-                }
-            }
-
             .referencia {
                 position: relative;
                 margin-left: var(--p5);
@@ -806,7 +773,48 @@ input[type="number"]::-webkit-inner-spin-button {
             }
         }
 
+        .characteristics {
+            margin-top: var(--p5);
+            display: flex;
+            flex-wrap: wrap;
 
+            div:not(.delete-column) {
+                display: flex;
+                align-items: center;
+                margin: var(--p4);
+
+                input {
+                    margin-right: 5px;
+                    width: 16px;
+                    aspect-ratio: 1 / 1;
+                }
+
+                label {
+                    font-size: medium;
+                }
+            }
+
+            div.delete-column {
+                margin-left: auto;
+                cursor: pointer;
+                padding: var(--p2);
+                border-radius: 10px;
+                transition: var(--transition-time1);
+                aspect-ratio: 1 / 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                svg {
+                    color: var(--red4);
+                }
+
+                &:hover {
+                    background-color: var(--red8);
+                    transform: scale(1.05);
+                }
+            }
+        }
     }
 
     #editar-colunas>ul#lista-colunas-existentes div.item-lista-colunas-existentes {
@@ -818,13 +826,11 @@ input[type="number"]::-webkit-inner-spin-button {
         div {
             h3 {
                 font-size: large;
-                margin: var(--p5) 0;
             }
 
             p {
                 font-size: small;
                 color: var(--gray10);
-                margin: var(--p5) 0;
             }
         }
 
@@ -861,6 +867,35 @@ input[type="number"]::-webkit-inner-spin-button {
             color: var(--gray10);
         }
 
+    }
+
+    #confirmar-deletar {
+        ul#confirmar-deletar-lista {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: var(--p3);
+
+            div {
+                display: flex;
+                justify-content: space-between;
+                
+                div {
+                    overflow: auto;
+                    white-space: nowrap;
+
+                    p {
+                        margin-right: var(--p5);
+                    }
+                }
+            }
+        }
+        > p {
+            color: var(--red4)
+        }
+
+        button#confirmar-deletar-button {
+            background-color: var(--red4);
+        }
     }
 
     #notificacoes {
