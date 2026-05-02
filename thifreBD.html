@@ -50,19 +50,17 @@
 
                 <div class="separador-horizontal"></div>
 
-                <div id="button-nova-tabela">
-                    <button id="nova-tabela" onclick="abrirFechar(false, 'criacao-tabela')">
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
-                        </svg>
-                        <p>Nova tabela</p>
-                    </button>
-                </div>
-
-                <div class="separador-horizontal"></div>
-
                 <div id="tabelas">
-                    <p>Tabelas</p>
+                    <div>
+                        <svg width="24" height="24"  viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-table"></use></svg>
+                        <p>Tabelas</p>
+                        <div>
+                            <button onclick="abrirFechar(false, 'criacao-tabela')">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-square-plus"></use></svg>
+                            </button>
+                        </div>
+                    </div>
+                    
                     <ul id="tabelas-lista">
 
                     </ul>
@@ -219,83 +217,6 @@
                 </div>
 
                 <ul>
-                    <div>
-                        <input type="text" placeholder="Nome da coluna">
-
-                        <div class="custom-dropdown">
-                            <button class="custom-dropdown-trigger" onclick="openCustomDropdown(this)">
-                                Text
-                            </button>
-                            <ul class="custom-dropdown-menu">
-                                <li class="custom-dropdown-option custom-dropdown-option-selected">Text</li>
-                                <li class="custom-dropdown-option">Integer</li>
-                                <li class="custom-dropdown-option">Float</li>
-                                <li class="custom-dropdown-option">Boolean</li>
-                                <li class="custom-dropdown-option">Date</li>
-                                <li class="custom-dropdown-option">Enum</li>
-                            </ul>
-                            <input type="hidden" name="column-type" value="text">
-                        </div>
-
-                        <div class="characteristics">
-                            <div>
-                                <label>
-                                    <input type="checkbox" class="primary-key" name="primary-key" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
-                                    Primary key
-                                </label>
-                            </div>
-                            <div>
-                                <label>
-                                    <input type="checkbox" class="foreign-key" name="foreign-key" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
-                                    Foreign key
-                                </label>
-                            </div>
-                            <div>
-                                <label>
-                                    <input type="checkbox" class="not-null" name="not-null" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
-                                    Not null
-                                </label>
-                            </div>
-                            <div>                                
-                                <label>
-                                    <input type="checkbox" class="unique" name="unique" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
-                                    Unique
-                                </label>
-                            </div>
-                            <div>                                
-                                <label>
-                                    <input type="checkbox" class="default" name="default" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
-                                    Default
-                                </label>
-                            </div>
-                            <div>                                
-                                <label style="display: none;">
-                                    <input type="checkbox" class="auto-increment" name="auto-increment" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
-                                    Auto increment
-                                </label>
-                            </div>
-                            <div class="delete-column" onclick="deleteColumnCreationDiv(this)">
-                                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>
-                            </div>
-                        </div>
-
-                        <div class="referencia" style="display: none;">
-                            <p>Referência</p>
-                            <div class="custom-dropdown">
-                                <button type="button" class="custom-dropdown-trigger">
-                                    Crie outra tabela
-                                </button>
-                                <ul class="custom-dropdown-menu">
-                                </ul>
-                                <input type="hidden" value="text">
-                            </div>
-                        </div>
-
-                        <div class="default-input-text" style="display: none;">
-                            <p>Default</p>
-                            <input type="text" placeholder="Valor padrão">
-                        </div>
-                    </div>
                 </ul>
                 <button id="criar-tabela-button" onclick="createTableInterface()">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-square-plus"></use></svg>
@@ -310,7 +231,7 @@
                 </div>
                 <label for="renomear-tabela-input">Nome da tabela</label>
                 <input type="text" id="renomear-tabela-input" name="renomear-tabela-input" rows="1" placeholder="Ex: minha_tabela">
-                <button>
+                <button onclick="renameTableInterface()">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
                     Confirmar alterações
                 </button>
@@ -344,83 +265,6 @@
                     </button>
                 </div>
                 <ul id="criacao-colunas-edit">
-                    <div>
-                        <input type="text" placeholder="Nome da coluna">
-
-                        <div class="custom-dropdown">
-                            <button class="custom-dropdown-trigger" onclick="openCustomDropdown(this)">
-                                Text
-                            </button>
-                            <ul class="custom-dropdown-menu">
-                                <li class="custom-dropdown-option custom-dropdown-option-selected">Text</li>
-                                <li class="custom-dropdown-option">Integer</li>
-                                <li class="custom-dropdown-option">Float</li>
-                                <li class="custom-dropdown-option">Boolean</li>
-                                <li class="custom-dropdown-option">Date</li>
-                                <li class="custom-dropdown-option">Enum</li>
-                            </ul>
-                            <input type="hidden" name="column-type" value="text">
-                        </div>
-
-                        <div class="characteristics">
-                            <div>
-                                <label>
-                                    <input type="checkbox" class="primary-key" name="primary-key" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
-                                    Primary key
-                                </label>
-                            </div>
-                            <div>
-                                <label>
-                                    <input type="checkbox" class="foreign-key" name="foreign-key" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
-                                    Foreign key
-                                </label>
-                            </div>
-                            <div>
-                                <label>
-                                    <input type="checkbox" class="not-null" name="not-null" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
-                                    Not null
-                                </label>
-                            </div>
-                            <div>                                
-                                <label>
-                                    <input type="checkbox" class="unique" name="unique" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
-                                    Unique
-                                </label>
-                            </div>
-                            <div>                                
-                                <label>
-                                    <input type="checkbox" class="default" name="default" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
-                                    Default
-                                </label>
-                            </div>
-                            <div>                                
-                                <label style="display: none;">
-                                    <input type="checkbox" class="auto-increment" name="auto-increment" onclick="updateCharacteristics(this.parentElement.parentElement.parentElement)">
-                                    Auto increment
-                                </label>
-                            </div>
-                            <div class="delete-column">
-                                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>
-                            </div>
-                        </div>
-
-                        <div class="referencia" style="display: none;">
-                            <p>Referência</p>
-                            <div class="custom-dropdown">
-                                <button type="button" class="custom-dropdown-trigger">
-                                    Crie outra tabela
-                                </button>
-                                <ul class="custom-dropdown-menu">
-                                </ul>
-                                <input type="hidden" value="text">
-                            </div>
-                        </div>
-
-                        <div class="default-input-text" style="display: none;">
-                            <p>Default</p>
-                            <input type="text" placeholder="Valor padrão">
-                        </div>
-                    </div>
                 </ul>
 
                 <button id="Adicionar-coluna-button" onclick="addColumnsInterface()">

@@ -60,6 +60,11 @@ function abrirFechar(estado, id) {
         }
     }
 }
+function createTimeValue(hours, minutes = 0, seconds = 0) {
+    const d = new Date();
+    d.setHours(hours, minutes, seconds, 0);
+    return d;
+}
 function createExempleDatabase() {
     const databaseName = "thifre_db";
     if (databases[databaseName]) {
@@ -79,9 +84,15 @@ function createExempleDatabase() {
     usuarios.columns["id"] = new Column("id", "integer", true, false, true, true, true, false);
     usuarios.columns["nome"] = new Column("nome", "text", false, false, true, false, false, false);
     usuarios.columns["email"] = new Column("email", "text", false, false, true, true, false, false);
-    usuarios.columns["ativo"] = new Column("ativo", "boolean", false, false, false, false, false, false);
-    usuarios.columns["nota"] = new Column("nota", "float", false, false, false, false, false, false);
-    usuarios.columns["criado_em"] = new Column("criado_em", "date", false, false, false, false, false, false);
+    usuarios.columns["ativo"] = new Column("ativo", "boolean", false, false, false, false, false, true);
+    usuarios.columns["ativo"].defaultValue = true;
+    usuarios.columns["nota"] = new Column("nota", "float", false, false, false, false, false, true);
+    usuarios.columns["nota"].defaultValue = 0;
+    usuarios.columns["criado_em"] = new Column("criado_em", "date", false, false, true, false, false, false, true, false);
+    usuarios.columns["hora_entrada"] = new Column("hora_entrada", "time", false, false, false, false, false, true, false, false);
+    usuarios.columns["hora_entrada"].defaultValue = "09:00";
+    usuarios.columns["perfil"] = new Column("perfil", "enum", false, false, true, false, false, true, false, false, ["admin", "editor", "leitor"]);
+    usuarios.columns["perfil"].defaultValue = "leitor";
     createTable(usuarios);
     const idColumn = usuarios.columns["id"];
     addRow("usuarios", {
@@ -90,7 +101,9 @@ function createExempleDatabase() {
         email: "alice@email.com",
         ativo: true,
         nota: 9.5,
-        criado_em: "2026-01-10"
+        criado_em: new Date("2026-01-10"),
+        hora_entrada: createTimeValue(8, 30),
+        perfil: "admin"
     });
     addRow("usuarios", {
         id: idColumn.increment(),
@@ -98,7 +111,9 @@ function createExempleDatabase() {
         email: "bruno@email.com",
         ativo: false,
         nota: 7.2,
-        criado_em: "2026-02-02"
+        criado_em: new Date("2026-02-02"),
+        hora_entrada: createTimeValue(9, 15),
+        perfil: "editor"
     });
     addRow("usuarios", {
         id: idColumn.increment(),
@@ -106,9 +121,71 @@ function createExempleDatabase() {
         email: "carla@email.com",
         ativo: true,
         nota: 8.8,
-        criado_em: "2026-03-15"
+        criado_em: new Date("2026-03-15"),
+        hora_entrada: createTimeValue(10, 0),
+        perfil: "leitor"
     });
-    currentTable = "usuarios";
+    const posts = new Table("posts");
+    posts.columns["id"] = new Column("id", "integer", true, false, true, true, true, false);
+    posts.columns["usuario_id"] = new Column("usuario_id", "integer", false, true, true, false, false, false, false, false, undefined, { table: "usuarios", column: "id" });
+    posts.columns["titulo"] = new Column("titulo", "text", false, false, true, false, false, false);
+    posts.columns["conteudo"] = new Column("conteudo", "text", false, false, false, false, false, false);
+    posts.columns["publicado"] = new Column("publicado", "boolean", false, false, false, false, false, true);
+    posts.columns["publicado"].defaultValue = false;
+    posts.columns["avaliacao"] = new Column("avaliacao", "float", false, false, false, false, false, true);
+    posts.columns["avaliacao"].defaultValue = 0;
+    posts.columns["status"] = new Column("status", "enum", false, false, true, false, false, true, false, false, ["rascunho", "publicado", "arquivado"]);
+    posts.columns["status"].defaultValue = "rascunho";
+    posts.columns["publicado_em"] = new Column("publicado_em", "date", false, false, false, false, false, false, false, false);
+    createTable(posts);
+    const postIdColumn = posts.columns["id"];
+    addRow("posts", {
+        id: postIdColumn.increment(),
+        usuario_id: 1,
+        titulo: "Primeiro post",
+        conteudo: "Exemplo de conteudo com todos os tipos.",
+        publicado: true,
+        avaliacao: 8.9,
+        status: "publicado",
+        publicado_em: new Date("2026-04-01")
+    });
+    addRow("posts", {
+        id: postIdColumn.increment(),
+        usuario_id: 2,
+        titulo: "Rascunho do Bruno",
+        conteudo: "Ainda em andamento.",
+        publicado: false,
+        avaliacao: 0,
+        status: "rascunho",
+        publicado_em: null
+    });
+    const auditoria = new Table("auditoria");
+    auditoria.columns["id"] = new Column("id", "integer", true, false, true, true, true, false);
+    auditoria.columns["entidade"] = new Column("entidade", "text", false, false, true, false, false, false);
+    auditoria.columns["entidade_id"] = new Column("entidade_id", "integer", false, false, true, false, false, false);
+    auditoria.columns["acao"] = new Column("acao", "enum", false, false, true, false, false, false, false, false, ["INSERT", "UPDATE", "DELETE"]);
+    auditoria.columns["sucesso"] = new Column("sucesso", "boolean", false, false, true, false, false, true);
+    auditoria.columns["sucesso"].defaultValue = true;
+    auditoria.columns["feito_em"] = new Column("feito_em", "date", false, false, true, false, false, false, true, false);
+    createTable(auditoria);
+    const auditIdColumn = auditoria.columns["id"];
+    addRow("auditoria", {
+        id: auditIdColumn.increment(),
+        entidade: "usuarios",
+        entidade_id: 1,
+        acao: "INSERT",
+        sucesso: true,
+        feito_em: new Date("2026-04-20")
+    });
+    addRow("auditoria", {
+        id: auditIdColumn.increment(),
+        entidade: "posts",
+        entidade_id: 1,
+        acao: "UPDATE",
+        sucesso: true,
+        feito_em: new Date("2026-04-22")
+    });
+    currentTable = null;
     changeTabelasLista();
     changeTabelaSelecionadaTabela();
     changeTabelaInfoVariosBotoes();
@@ -122,6 +199,11 @@ function openCustomDropdown(dropdownButton) {
     const dropdown = dropdownButton.parentElement;
     if (dropdown.querySelector("ul").children.length === 0)
         return;
+    document.querySelectorAll(".custom-dropdown.custom-dropdown-open").forEach((openDropdown) => {
+        if (openDropdown !== dropdown) {
+            openDropdown.classList.remove("custom-dropdown-open");
+        }
+    });
     dropdown.classList.toggle("custom-dropdown-open");
 }
 function choseOption(option) {
@@ -151,6 +233,11 @@ function onDropdownChange(dropdown) {
     if (dropdown.querySelector('input[name="column-type"]')) {
         const container = dropdown.closest("div").parentElement;
         updateCharacteristics(container);
+        updateDefaultInput(container);
+    }
+    if (dropdown.querySelector('input[name="reference-table"]')) {
+        const container = dropdown.closest("div").parentElement;
+        updateForeignKeyReferenceColumnOptions(container);
     }
 }
 updateCustomDropdowns();
@@ -171,7 +258,7 @@ class Table {
     }
 }
 class Column {
-    constructor(name, type, isPrimaryKey = false, isForeignKey = false, isNotNull = false, isUnique = false, isAutoIncrement = false, hasDefault = false, enumValues, reference) {
+    constructor(name, type, isPrimaryKey = false, isForeignKey = false, isNotNull = false, isUnique = false, isAutoIncrement = false, hasDefault = false, isAutoDate = false, isAutoTime = false, enumValues, reference) {
         this.incrementCounter = 1;
         this.name = name;
         this.type = type;
@@ -181,12 +268,15 @@ class Column {
         this.isUnique = isUnique;
         this.isAutoIncrement = isAutoIncrement;
         this.hasDefault = hasDefault;
+        this.isAutoDate = isAutoDate;
+        this.isAutoTime = isAutoTime;
         this.enumValues = enumValues;
         this.reference = reference;
     }
     increment() {
-        if (!this.isAutoIncrement)
-            return;
+        if (!this.isAutoIncrement) {
+            throw new Error("Column is not auto increment");
+        }
         return this.incrementCounter++;
     }
 }
@@ -217,9 +307,9 @@ function createTable(table) {
 function addColumn(tableName, column) {
     databases[currentDatabase].tables[tableName].columns[column.name] = column;
     databases[currentDatabase].tables[tableName].indexes[column.name] = new Map();
+    changeTabelaInfoVariosBotoes();
     changeTabelaSelecionadaTabela();
     changeTabelasLista();
-    changeTabelaInfoVariosBotoes();
 }
 function addRow(tableName, row) {
     const table = databases[currentDatabase].tables[tableName];
@@ -359,27 +449,11 @@ function createTableInterface() {
     }
     const table = new Table(tableName);
     const columnsUl = document.querySelector("#criacao-tabela ul");
-    for (const columnDiv of columnsUl.children) {
-        const columnNameInput = columnDiv.querySelector("input[type='text']");
-        const columnName = columnNameInput.value.trim().toLowerCase();
-        if (columnName === "") {
-            openNotifications("<p style='color: var(--red5)'>O nome da coluna não pode ser vazio.</p>");
-            return;
-        }
-        else if (table.columns[columnName]) {
-            openNotifications("<p style='color: var(--red5)'>Já existe uma coluna com esse nome.</p>");
-            return;
-        }
-        const columnType = columnDiv.querySelector(".custom-dropdown-trigger");
-        const isPrimaryKey = columnDiv.querySelector(".primary-key");
-        const isForeignKey = columnDiv.querySelector(".foreign-key");
-        const isNotNull = columnDiv.querySelector(".not-null");
-        const isUnique = columnDiv.querySelector(".unique");
-        const hasDefault = columnDiv.querySelector(".default");
-        const isAutoIncrement = columnDiv.querySelector(".auto-increment");
-        const column = new Column(columnName, columnType.textContent.toLowerCase(), isPrimaryKey.checked, isForeignKey.checked, isNotNull.checked, isUnique.checked, isAutoIncrement.checked, hasDefault.checked);
-        table.columns[columnName] = column;
-        openNotifications(`<p style='color: var(--green4)'>Coluna "${columnName}" criada com sucesso!</p>`);
+    const parsedColumns = parseColumnsFromInputs(columnsUl.children, table.columns);
+    if (parsedColumns === null)
+        return;
+    for (const column of parsedColumns) {
+        table.columns[column.name] = column;
     }
     createTable(table);
     columnsUl.innerHTML = "";
@@ -398,27 +472,54 @@ function addColumnsInterface() {
     }
     const columnsUl = document.querySelector("#editar-colunas ul#criacao-colunas-edit");
     const table = databases[currentDatabase].tables[currentTable];
-    for (const columnDiv of columnsUl.children) {
-        const columnNameInput = columnDiv.querySelector("input[type='text']");
-        const columnName = columnNameInput.value.trim().toLowerCase();
-        if (columnName === "") {
-            openNotifications("<p style='color: var(--red5)'>O nome da coluna não pode ser vazio.</p>");
-            return;
+    const columnsToAdd = parseColumnsFromInputs(columnsUl.children, table.columns);
+    if (columnsToAdd === null)
+        return;
+    for (const column of columnsToAdd) {
+        const columnName = column.name;
+        if (column.isAutoIncrement) {
+            table.rows.forEach((row) => {
+                row[columnName] = column.increment();
+            });
+            table.indexes[columnName] = new Map();
+            table.rows.forEach((row, index) => {
+                const value = row[columnName];
+                table.indexes[columnName].set(value, [index]);
+            });
         }
-        else if (table.columns[columnName]) {
-            openNotifications("<p style='color: var(--red5)'>Já existe uma coluna com esse nome.</p>");
-            return;
+        else if (column.hasDefault) {
+            table.rows.forEach((row) => {
+                row[columnName] = column.defaultValue;
+            });
+            table.indexes[columnName] = new Map();
+            table.rows.forEach((row, index) => {
+                const value = row[columnName];
+                table.indexes[columnName].set(value, (table.indexes[columnName].get(value) || []).concat(index));
+            });
         }
-        const columnType = columnDiv.querySelector(".custom-dropdown-trigger");
-        const isPrimaryKey = columnDiv.querySelector(".primary-key");
-        const isForeignKey = columnDiv.querySelector(".foreign-key");
-        const isNotNull = columnDiv.querySelector(".not-null");
-        const isUnique = columnDiv.querySelector(".unique");
-        const hasDefault = columnDiv.querySelector(".default");
-        const isAutoIncrement = columnDiv.querySelector(".auto-increment");
-        const column = new Column(columnName, columnType.textContent.toLowerCase(), isPrimaryKey.checked, isForeignKey.checked, isNotNull.checked, isUnique.checked, isAutoIncrement.checked, hasDefault.checked);
+        else if (column.isAutoDate || column.isAutoTime) {
+            table.rows.forEach((row) => {
+                row[columnName] = new Date();
+            });
+            table.indexes[columnName] = new Map();
+            table.rows.forEach((row, index) => {
+                const value = row[columnName];
+                table.indexes[columnName].set(value, (table.indexes[columnName].get(value) || []).concat(index));
+            });
+        }
+        else {
+            table.rows.forEach((row) => {
+                row[columnName] = null;
+            });
+            table.indexes[columnName] = new Map();
+            table.rows.forEach((row, index) => {
+                const value = row[columnName];
+                table.indexes[columnName].set(value, (table.indexes[columnName].get(value) || []).concat(index));
+            });
+        }
+    }
+    for (const column of columnsToAdd) {
         addColumn(table.name, column);
-        openNotifications(`<p style='color: var(--green4)'>Coluna "${columnName}" criada com sucesso!</p>`);
     }
     columnsUl.innerHTML = "";
     createColumnCreationDiv(columnsUl);
@@ -426,6 +527,14 @@ function addColumnsInterface() {
     openNotifications(`<p style='color: var(--green5)'>Colunas adicionadas com sucesso!</p>`);
 }
 function insertRowInterface() {
+    function revertAutoIncrementValues() {
+        for (const { column, value } of valuesBeforeIncrement) {
+            const col = table.columns[column];
+            if (col.isAutoIncrement) {
+                col.incrementCounter = value;
+            }
+        }
+    }
     if (currentDatabase === null) {
         openNotifications("<p style='color: var(--red5)'>Nenhuma database selecionada.</p>");
         return;
@@ -438,32 +547,42 @@ function insertRowInterface() {
         openNotifications("<p style='color: var(--red5)'>Não há colunas nessa tabela</p>");
         return;
     }
+    let valuesBeforeIncrement = [];
     const table = databases[currentDatabase].tables[currentTable];
     const rowUl = document.querySelector("#inserir-linha ul#colunas-inserir-linha");
     const row = {};
     for (const column of rowUl.children) {
         const columnName = column.querySelector("h3").textContent;
         if (table.columns[columnName].isAutoIncrement) {
-            row[columnName] = table.columns[columnName].increment();
+            let valueBeforeIncrement = table.columns[columnName].increment();
+            valuesBeforeIncrement.push({ column: columnName, value: valueBeforeIncrement });
+            row[columnName] = valueBeforeIncrement;
             continue;
         }
         if (table.columns[columnName].type === "boolean") {
-            const value = document.querySelector(".custom-dropdown button").textContent;
+            const value = column.querySelector(".custom-dropdown button").textContent;
             if (table.columns[columnName].isUnique && table.indexes[columnName].has(value === "True")) {
                 openNotifications(`<p style='color: var(--red5)'>O valor "${value}" já existe para a coluna "${columnName}".</p>`);
+                revertAutoIncrementValues();
                 return;
             }
             row[columnName] = value === "True";
             continue;
         }
+        if (table.columns[columnName].isAutoDate || table.columns[columnName].isAutoTime) {
+            row[columnName] = new Date();
+            continue;
+        }
         const input = column.querySelector("input");
         if (table.columns[columnName].isUnique && table.indexes[columnName].has(input.value)) {
             openNotifications(`<p style='color: var(--red5)'>O valor "${input.value}" já existe para a coluna "${columnName}".</p>`);
+            revertAutoIncrementValues();
             return;
         }
         if (input.value.trim() === "") {
             if (table.columns[columnName].isNotNull) {
                 openNotifications(`<p style='color: var(--red5)'>A coluna "${columnName}" não pode ser nula.</p>`);
+                revertAutoIncrementValues();
                 return;
             }
             row[columnName] = null;
@@ -474,6 +593,15 @@ function insertRowInterface() {
         }
         else if (table.columns[columnName].type === "float") {
             row[columnName] = parseFloat(input.value);
+        }
+        else if (table.columns[columnName].type === "date") {
+            row[columnName] = new Date(input.value + "T00:00:00");
+        }
+        else if (table.columns[columnName].type === "time") {
+            const [hora, minuto, segundo] = input.value.split(":").map(Number);
+            const data = new Date();
+            data.setHours(hora, minuto, segundo, 0);
+            row[columnName] = data;
         }
         else {
             row[columnName] = input.value;
@@ -496,6 +624,9 @@ function editRowInterface(rowIndex) {
         if (table.columns[columnName].isAutoIncrement) {
             row[columnName] = table.rows[rowIndex][columnName];
         }
+        else if (table.columns[columnName].isAutoDate || table.columns[columnName].isAutoTime) {
+            row[columnName] = table.rows[rowIndex][columnName];
+        }
         else if (table.columns[columnName].type === "boolean") {
             const value = document.querySelector(".custom-dropdown button").textContent;
             row[columnName] = value === "True";
@@ -511,6 +642,15 @@ function editRowInterface(rowIndex) {
             }
             else if (table.columns[columnName].type === "float") {
                 row[columnName] = parseFloat(input.value);
+            }
+            else if (table.columns[columnName].type === "date") {
+                row[columnName] = new Date(input.value + "T00:00:00");
+            }
+            else if (table.columns[columnName].type === "time") {
+                const [hora, minuto, segundo] = input.value.split(":").map(Number);
+                const data = new Date();
+                data.setHours(hora, minuto, segundo, 0);
+                row[columnName] = data;
             }
             else {
                 row[columnName] = input.value;
@@ -559,6 +699,7 @@ function renameTableInterface() {
 }
 function renameColumnInterface() {
 }
+// Other interface functions
 function createColumnCreationDiv(parent) {
     const mainDiv = document.createElement("div");
     // Input de nome da coluna
@@ -575,7 +716,7 @@ function createColumnCreationDiv(parent) {
     dropdownButton.onclick = function () { openCustomDropdown(dropdownButton); };
     const dropdownMenu = document.createElement("ul");
     dropdownMenu.className = "custom-dropdown-menu";
-    const options = ["Text", "Integer", "Float", "Boolean", "Date", "Enum"];
+    const options = ["Text", "Integer", "Float", "Boolean", "Date", "Time", "Enum"];
     options.forEach((option, index) => {
         const li = document.createElement("li");
         li.className = "custom-dropdown-option";
@@ -601,7 +742,9 @@ function createColumnCreationDiv(parent) {
         { className: "not-null", name: "not-null", label: "Not null" },
         { className: "unique", name: "unique", label: "Unique" },
         { className: "default", name: "default", label: "Default" },
-        { className: "auto-increment", name: "auto-increment", label: "Auto increment", hidden: true }
+        { className: "auto-increment", name: "auto-increment", label: "Auto increment", hidden: true },
+        { className: "auto-date", name: "auto-date", label: "Auto date", hidden: true },
+        { className: "auto-time", name: "auto-time", label: "Auto time", hidden: true }
     ];
     characteristicsList.forEach((char) => {
         const div = document.createElement("div");
@@ -627,34 +770,48 @@ function createColumnCreationDiv(parent) {
     mainDiv.appendChild(characteristics);
     // Referência (FK)
     const referenciaDiv = document.createElement("div");
-    referenciaDiv.className = "referencia";
+    referenciaDiv.classList.add("referencia", "post-characteristics");
     referenciaDiv.style.display = "none";
     const referenciaP = document.createElement("p");
     referenciaP.textContent = "Referência";
     referenciaDiv.appendChild(referenciaP);
-    const refCustomDropdown = document.createElement("div");
-    refCustomDropdown.className = "custom-dropdown";
-    const refButton = document.createElement("button");
-    refButton.type = "button";
-    refButton.className = "custom-dropdown-trigger";
-    const refSpan = document.createElement("span");
-    refSpan.className = "custom-dropdown-value";
-    refSpan.textContent = "Crie outra tabela";
-    refButton.appendChild(refSpan);
-    const refMenu = document.createElement("ul");
-    refMenu.className = "custom-dropdown-menu";
-    const refHiddenInput = document.createElement("input");
-    refHiddenInput.type = "hidden";
-    refHiddenInput.name = "column-type";
-    refHiddenInput.value = "text";
-    refCustomDropdown.appendChild(refButton);
-    refCustomDropdown.appendChild(refMenu);
-    refCustomDropdown.appendChild(refHiddenInput);
-    referenciaDiv.appendChild(refCustomDropdown);
+    // Tabela de referência
+    const refTableCustomDropdown = document.createElement("div");
+    refTableCustomDropdown.className = "custom-dropdown";
+    const refTableButton = document.createElement("button");
+    refTableButton.className = "custom-dropdown-trigger";
+    refTableButton.textContent = "Crie outra tabela";
+    refTableButton.onclick = function () { openCustomDropdown(refTableButton); };
+    const refTableMenu = document.createElement("ul");
+    refTableMenu.className = "custom-dropdown-menu";
+    const refTableHiddenInput = document.createElement("input");
+    refTableHiddenInput.type = "hidden";
+    refTableHiddenInput.name = "reference-table";
+    refTableHiddenInput.value = "text";
+    refTableCustomDropdown.appendChild(refTableButton);
+    refTableCustomDropdown.appendChild(refTableMenu);
+    refTableCustomDropdown.appendChild(refTableHiddenInput);
+    referenciaDiv.appendChild(refTableCustomDropdown);
+    // Coluna de referência
+    const refColumnCustomDropdown = document.createElement("div");
+    refColumnCustomDropdown.className = "custom-dropdown";
+    const refColumnButton = document.createElement("button");
+    refColumnButton.className = "custom-dropdown-trigger";
+    refColumnButton.textContent = "Crie outra coluna";
+    refColumnButton.onclick = function () { openCustomDropdown(refColumnButton); };
+    const refColumnMenu = document.createElement("ul");
+    refColumnMenu.className = "custom-dropdown-menu";
+    const refColumnHiddenInput = document.createElement("input");
+    refColumnHiddenInput.type = "hidden";
+    refColumnHiddenInput.value = "text";
+    refColumnCustomDropdown.appendChild(refColumnButton);
+    refColumnCustomDropdown.appendChild(refColumnMenu);
+    refColumnCustomDropdown.appendChild(refColumnHiddenInput);
+    referenciaDiv.appendChild(refColumnCustomDropdown);
     mainDiv.appendChild(referenciaDiv);
     // Default input
     const defaultDiv = document.createElement("div");
-    defaultDiv.className = "default-input-text";
+    defaultDiv.classList.add("default-input-text", "post-characteristics");
     defaultDiv.style.display = "none";
     const defaultP = document.createElement("p");
     defaultP.textContent = "Default";
@@ -664,6 +821,18 @@ function createColumnCreationDiv(parent) {
     defaultInput.placeholder = "Valor padrão";
     defaultDiv.appendChild(defaultInput);
     mainDiv.appendChild(defaultDiv);
+    // Enum values input
+    const enumDiv = document.createElement("div");
+    enumDiv.classList.add("enum-values", "post-characteristics");
+    enumDiv.style.display = "none";
+    const enumP = document.createElement("p");
+    enumP.textContent = "Valores do enum (separados por vírgula)";
+    enumDiv.appendChild(enumP);
+    const enumInput = document.createElement("input");
+    enumInput.type = "text";
+    enumInput.placeholder = "Valores separados por vírgula";
+    enumDiv.appendChild(enumInput);
+    mainDiv.appendChild(enumDiv);
     parent.appendChild(mainDiv);
     updateCustomDropdowns();
 }
@@ -741,7 +910,7 @@ function changeTabelaSelecionadaTabela() {
     const table = databases[currentDatabase].tables[currentTable];
     let divLinha = document.createElement("div");
     divLinha.classList.add("linha-tabela");
-    Object.values(table.columns).forEach((column, i) => {
+    Object.values(table.columns).forEach((column) => {
         const divColuna = document.createElement("div");
         divColuna.innerHTML = `
             <p>${column.name}</p>
@@ -757,9 +926,44 @@ function changeTabelaSelecionadaTabela() {
     table.rows.forEach((row, index) => {
         let divLinha = document.createElement("div");
         divLinha.classList.add("linha-tabela");
-        Object.values(row).forEach((value) => {
+        Object.entries(row).forEach(([colName, value]) => {
             const divCelula = document.createElement("div");
-            divCelula.innerHTML = `<p>${value}</p>`;
+            let displayValue = value;
+            const column = table.columns[colName];
+            if (column && column.type === "date" && value !== null) {
+                let d = null;
+                if (value instanceof Date)
+                    d = value;
+                else if (typeof value === "number")
+                    d = new Date(value);
+                else if (typeof value === "string")
+                    d = new Date(value);
+                if (d && !isNaN(d.getTime())) {
+                    const day = String(d.getDate()).padStart(2, "0");
+                    const month = String(d.getMonth() + 1).padStart(2, "0");
+                    const year = d.getFullYear();
+                    displayValue = `${day}/${month}/${year}`;
+                }
+            }
+            else if (column && column.type === "time" && value !== null) {
+                if (value instanceof Date || typeof value === "number") {
+                    const d = value instanceof Date ? value : new Date(value);
+                    const hours = String(d.getHours()).padStart(2, "0");
+                    const minutes = String(d.getMinutes()).padStart(2, "0");
+                    const seconds = String(d.getSeconds()).padStart(2, "0");
+                    displayValue = `${hours}:${minutes}:${seconds}`;
+                }
+                else if (typeof value === "string") {
+                    displayValue = value;
+                }
+            }
+            else if (value instanceof Date) {
+                const day = String(value.getDate()).padStart(2, "0");
+                const month = String(value.getMonth() + 1).padStart(2, "0");
+                const year = value.getFullYear();
+                displayValue = `${day}/${month}/${year}`;
+            }
+            divCelula.innerHTML = `<p>${displayValue}</p>`;
             divLinha.appendChild(divCelula);
         });
         const rowActions = document.createElement("div");
@@ -791,6 +995,77 @@ function changeTabelaInfoVariosBotoes() {
         tabelaInfo.querySelector("#nome-tabela").textContent = currentTable;
         tabelaInfo.querySelector("#linhas-colunas").textContent = `${Object.keys(databases[currentDatabase].tables[currentTable].rows).length} linhas • ${Object.keys(databases[currentDatabase].tables[currentTable].columns).length} colunas`;
     }
+}
+function parseColumnsFromInputs(columns, existingColumns) {
+    const parsedColumns = [];
+    const knownColumns = new Set(Object.keys(existingColumns));
+    for (const columnDiv of columns) {
+        const columnNameInput = columnDiv.querySelector("input[type='text']");
+        const columnName = columnNameInput.value.trim().toLowerCase();
+        if (columnName === "") {
+            openNotifications("<p style='color: var(--red5)'>O nome da coluna não pode ser vazio.</p>");
+            return null;
+        }
+        else if (knownColumns.has(columnName)) {
+            openNotifications("<p style='color: var(--red5)'>Já existe uma coluna com esse nome.</p>");
+            return null;
+        }
+        const columnTypeElement = columnDiv.querySelector(".custom-dropdown-trigger");
+        const isPrimaryKey = columnDiv.querySelector(".primary-key");
+        const isForeignKey = columnDiv.querySelector(".foreign-key");
+        const isNotNull = columnDiv.querySelector(".not-null");
+        const isUnique = columnDiv.querySelector(".unique");
+        const hasDefault = columnDiv.querySelector(".default");
+        const isAutoIncrement = columnDiv.querySelector(".auto-increment");
+        const isAutoDate = columnDiv.querySelector(".auto-date");
+        const isAutoTime = columnDiv.querySelector(".auto-time");
+        const column = new Column(columnName, columnTypeElement.textContent.toLowerCase(), isPrimaryKey.checked, isForeignKey.checked, isNotNull.checked, isUnique.checked, isAutoIncrement.checked, hasDefault.checked, isAutoDate.checked, isAutoTime.checked);
+        if (hasDefault.checked) {
+            const defaultValue = columnDiv.querySelector(".default-input-text input");
+            if (defaultValue.value.trim() === "") {
+                openNotifications("<p style='color: var(--red5)'>O valor padrão não pode ser vazio.</p>");
+                return null;
+            }
+            if (column.type === "integer") {
+                column.defaultValue = parseInt(defaultValue.value);
+            }
+            else if (column.type === "float") {
+                column.defaultValue = parseFloat(defaultValue.value);
+            }
+            else if (column.type === "boolean") {
+                const boolValue = columnDiv.querySelector(".default-input-text .custom-dropdown-trigger");
+                column.defaultValue = boolValue.textContent === "True";
+            }
+            else if (column.type === "date") {
+                column.defaultValue = new Date(defaultValue.value);
+            }
+            else if (column.type === "time") {
+                column.defaultValue = new Date(defaultValue.value);
+            }
+            else {
+                column.defaultValue = defaultValue.value;
+            }
+        }
+        if (columnTypeElement.textContent === "Enum") {
+            const enumValuesInput = columnDiv.querySelector(".enum-values input");
+            column.enumValues = [...new Set(enumValuesInput.value.split(",").map((v) => v.trim()))];
+        }
+        if (column.isForeignKey) {
+            const referenceTableElement = columnDiv.querySelector(".referencia .custom-dropdown:nth-child(2) .custom-dropdown-trigger");
+            const referenceColumnElement = columnDiv.querySelector(".referencia .custom-dropdown:nth-child(3) .custom-dropdown-trigger");
+            if (referenceTableElement.textContent === "Crie outra tabela" || referenceColumnElement.textContent === "Crie outra coluna") {
+                openNotifications("<p style='color: var(--red5)'>Selecione a tabela e coluna de referência para a chave estrangeira.</p>");
+                return null;
+            }
+            column.reference = {
+                table: referenceTableElement.textContent,
+                column: referenceColumnElement.textContent
+            };
+        }
+        knownColumns.add(columnName);
+        parsedColumns.push(column);
+    }
+    return parsedColumns;
 }
 // central menus
 function changeConfigurarDatabaseMenu() {
@@ -828,21 +1103,22 @@ function changeEditColumnsMenu() {
         const columnNameInput = document.createElement("input");
         columnNameInput.type = "text";
         columnNameInput.placeholder = "Nome da coluna";
+        columnNameInput.value = column.name;
         mainDiv.appendChild(columnNameInput);
         // Dropdown customizado
         const customDropdown = document.createElement("div");
         customDropdown.className = "custom-dropdown";
         const dropdownButton = document.createElement("button");
         dropdownButton.className = "custom-dropdown-trigger";
-        dropdownButton.textContent = "Text";
+        dropdownButton.textContent = column.type.charAt(0).toUpperCase() + column.type.slice(1);
         dropdownButton.onclick = function () { openCustomDropdown(dropdownButton); };
         const dropdownMenu = document.createElement("ul");
         dropdownMenu.className = "custom-dropdown-menu";
-        const options = ["Text", "Integer", "Float", "Boolean", "Date", "Enum"];
+        const options = ["Text", "Integer", "Float", "Boolean", "Date", "Time", "Enum"];
         options.forEach((option, index) => {
             const li = document.createElement("li");
             li.className = "custom-dropdown-option";
-            if (index === 0)
+            if (option.toLowerCase() === column.type)
                 li.classList.add("custom-dropdown-option-selected");
             li.textContent = option;
             dropdownMenu.appendChild(li);
@@ -859,12 +1135,14 @@ function changeEditColumnsMenu() {
         const characteristics = document.createElement("div");
         characteristics.className = "characteristics";
         const characteristicsList = [
-            { className: "primary-key", name: "primary-key", label: "Primary key" },
-            { className: "foreign-key", name: "foreign-key", label: "Foreign key" },
-            { className: "not-null", name: "not-null", label: "Not null" },
-            { className: "unique", name: "unique", label: "Unique" },
-            { className: "default", name: "default", label: "Default" },
-            { className: "auto-increment", name: "auto-increment", label: "Auto increment", hidden: true }
+            { className: "primary-key", key: "isPrimaryKey", name: "primary-key", label: "Primary key" },
+            { className: "foreign-key", key: "isForeignKey", name: "foreign-key", label: "Foreign key" },
+            { className: "not-null", key: "isNotNull", name: "not-null", label: "Not null" },
+            { className: "unique", key: "isUnique", name: "unique", label: "Unique" },
+            { className: "default", key: "hasDefault", name: "default", label: "Default" },
+            { className: "auto-increment", key: "isAutoIncrement", name: "auto-increment", label: "Auto increment", hidden: true },
+            { className: "auto-date", key: "isAutoDate", name: "auto-date", label: "Auto date", hidden: true },
+            { className: "auto-time", key: "isAutoTime", name: "auto-time", label: "Auto time", hidden: true }
         ];
         characteristicsList.forEach((char) => {
             const div = document.createElement("div");
@@ -875,6 +1153,7 @@ function changeEditColumnsMenu() {
             checkbox.type = "checkbox";
             checkbox.className = char.className;
             checkbox.name = char.name;
+            checkbox.checked = Boolean(column[char.key]);
             checkbox.onclick = function () { updateCharacteristics(mainDiv); };
             label.appendChild(checkbox);
             label.appendChild(document.createTextNode(char.label));
@@ -885,39 +1164,53 @@ function changeEditColumnsMenu() {
         const deleteDiv = document.createElement("div");
         deleteDiv.className = "delete-column";
         deleteDiv.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>';
-        deleteDiv.onclick = function () { deleteColumnCreationDiv(deleteDiv); };
+        deleteDiv.onclick = function () { abrirFechar(false, "confirmar-deletar"); changeConfirmDeleteMenu("column", undefined, column.name); };
         characteristics.appendChild(deleteDiv);
         mainDiv.appendChild(characteristics);
         // Referência (FK)
         const referenciaDiv = document.createElement("div");
-        referenciaDiv.className = "referencia";
+        referenciaDiv.classList.add("referencia", "post-characteristics");
         referenciaDiv.style.display = "none";
         const referenciaP = document.createElement("p");
         referenciaP.textContent = "Referência";
         referenciaDiv.appendChild(referenciaP);
-        const refCustomDropdown = document.createElement("div");
-        refCustomDropdown.className = "custom-dropdown";
-        const refButton = document.createElement("button");
-        refButton.type = "button";
-        refButton.className = "custom-dropdown-trigger";
-        const refSpan = document.createElement("span");
-        refSpan.className = "custom-dropdown-value";
-        refSpan.textContent = "Crie outra tabela";
-        refButton.appendChild(refSpan);
-        const refMenu = document.createElement("ul");
-        refMenu.className = "custom-dropdown-menu";
-        const refHiddenInput = document.createElement("input");
-        refHiddenInput.type = "hidden";
-        refHiddenInput.name = "column-type";
-        refHiddenInput.value = "text";
-        refCustomDropdown.appendChild(refButton);
-        refCustomDropdown.appendChild(refMenu);
-        refCustomDropdown.appendChild(refHiddenInput);
-        referenciaDiv.appendChild(refCustomDropdown);
+        // Tabela de referência
+        const refTableCustomDropdown = document.createElement("div");
+        refTableCustomDropdown.className = "custom-dropdown";
+        const refTableButton = document.createElement("button");
+        refTableButton.className = "custom-dropdown-trigger";
+        refTableButton.textContent = column.reference ? column.reference.table : "Crie outra tabela";
+        refTableButton.onclick = function () { openCustomDropdown(refTableButton); };
+        const refTableMenu = document.createElement("ul");
+        refTableMenu.className = "custom-dropdown-menu";
+        const refTableHiddenInput = document.createElement("input");
+        refTableHiddenInput.type = "hidden";
+        refTableHiddenInput.name = "reference-table";
+        refTableHiddenInput.value = "text";
+        refTableCustomDropdown.appendChild(refTableButton);
+        refTableCustomDropdown.appendChild(refTableMenu);
+        refTableCustomDropdown.appendChild(refTableHiddenInput);
+        referenciaDiv.appendChild(refTableCustomDropdown);
+        // Coluna de referência
+        const refColumnCustomDropdown = document.createElement("div");
+        refColumnCustomDropdown.className = "custom-dropdown";
+        const refColumnButton = document.createElement("button");
+        refColumnButton.className = "custom-dropdown-trigger";
+        refColumnButton.textContent = column.reference ? column.reference.column : "Crie outra coluna";
+        refColumnButton.onclick = function () { openCustomDropdown(refColumnButton); };
+        const refColumnMenu = document.createElement("ul");
+        refColumnMenu.className = "custom-dropdown-menu";
+        const refColumnHiddenInput = document.createElement("input");
+        refColumnHiddenInput.type = "hidden";
+        refColumnHiddenInput.value = "text";
+        refColumnCustomDropdown.appendChild(refColumnButton);
+        refColumnCustomDropdown.appendChild(refColumnMenu);
+        refColumnCustomDropdown.appendChild(refColumnHiddenInput);
+        referenciaDiv.appendChild(refColumnCustomDropdown);
         mainDiv.appendChild(referenciaDiv);
         // Default input
         const defaultDiv = document.createElement("div");
-        defaultDiv.className = "default-input-text";
+        defaultDiv.classList.add("default-input-text", "post-characteristics");
         defaultDiv.style.display = "none";
         const defaultP = document.createElement("p");
         defaultP.textContent = "Default";
@@ -925,10 +1218,25 @@ function changeEditColumnsMenu() {
         const defaultInput = document.createElement("input");
         defaultInput.type = "text";
         defaultInput.placeholder = "Valor padrão";
+        defaultInput.value = column.hasDefault ? String(column.defaultValue) : "";
         defaultDiv.appendChild(defaultInput);
         mainDiv.appendChild(defaultDiv);
+        // Enum values input
+        const enumDiv = document.createElement("div");
+        enumDiv.classList.add("enum-values", "post-characteristics");
+        enumDiv.style.display = "none";
+        const enumP = document.createElement("p");
+        enumP.textContent = "Valores do enum (separados por vírgula)";
+        enumDiv.appendChild(enumP);
+        const enumInput = document.createElement("input");
+        enumInput.type = "text";
+        enumInput.placeholder = "Valores separados por vírgula";
+        enumInput.value = column.enumValues ? column.enumValues.join(", ") : "";
+        enumDiv.appendChild(enumInput);
+        mainDiv.appendChild(enumDiv);
         menu.appendChild(mainDiv);
         updateCustomDropdowns();
+        updateCharacteristics(mainDiv);
     });
     updateCustomDropdowns();
 }
@@ -981,57 +1289,64 @@ function changeAddRowMenu() {
             div.appendChild(dropdown);
             updateCustomDropdowns();
         }
+        else if (column.type === "date") {
+            if (column.isAutoDate) {
+                const p = document.createElement("p");
+                p.textContent = "Valor gerado automaticamente";
+                div.appendChild(p);
+            }
+            else {
+                const input = document.createElement("input");
+                input.type = "date";
+                div.appendChild(input);
+            }
+        }
+        else if (column.type === "time") {
+            if (column.isAutoTime) {
+                const p = document.createElement("p");
+                p.textContent = "Valor gerado automaticamente";
+                div.appendChild(p);
+            }
+            else {
+                const input = document.createElement("input");
+                input.type = "time";
+                input.step = "1";
+                div.appendChild(input);
+            }
+        }
+        else if (column.type === "enum") {
+            const dropdown = document.createElement("div");
+            dropdown.className = "custom-dropdown";
+            const button = document.createElement("button");
+            button.className = "custom-dropdown-trigger";
+            button.textContent = column.enumValues ? column.enumValues[0] : "Selecione um valor";
+            button.onclick = function () { openCustomDropdown(button); };
+            dropdown.appendChild(button);
+            const menu = document.createElement("ul");
+            menu.className = "custom-dropdown-menu";
+            column.enumValues.forEach((value, index) => {
+                const li = document.createElement("li");
+                li.className = "custom-dropdown-option";
+                if (index === 0)
+                    li.classList.add("custom-dropdown-option-selected");
+                li.textContent = value;
+                menu.appendChild(li);
+            });
+            dropdown.appendChild(menu);
+            const hiddenInput = document.createElement("input");
+            hiddenInput.type = "hidden";
+            hiddenInput.name = "enum-value";
+            hiddenInput.value = column.enumValues[0];
+            dropdown.appendChild(hiddenInput);
+            div.appendChild(dropdown);
+            updateCustomDropdowns();
+        }
         else {
             const input = document.createElement("input");
             input.type = "text";
             div.appendChild(input);
         }
     });
-}
-function updateCharacteristics(parentDiv) {
-    // pegar inputs
-    const pkInput = parentDiv.querySelector("input.primary-key");
-    const fkInput = parentDiv.querySelector("input.foreign-key");
-    const notNullInput = parentDiv.querySelector("input.not-null");
-    const uniqueInput = parentDiv.querySelector("input.unique");
-    const autoIncInput = parentDiv.querySelector("input.auto-increment");
-    const defaultInput = parentDiv.querySelector("input.default");
-    const typeDropdown = parentDiv.querySelector(".custom-dropdown button");
-    const notNullLabel = notNullInput.parentElement;
-    const autoIncLabel = autoIncInput.parentElement;
-    const state = {
-        pk: pkInput.checked,
-        fk: fkInput.checked,
-        notNull: notNullInput.checked,
-        unique: uniqueInput.checked,
-        autoIncrement: autoIncInput.checked,
-        default: defaultInput.checked,
-        type: typeDropdown.textContent.toLowerCase()
-    };
-    const forced = {
-        notNull: state.pk || state.autoIncrement
-    };
-    const hidden = {
-        notNull: state.pk || state.autoIncrement,
-        autoIncrement: state.type !== "integer"
-    };
-    const disabled = {
-        autoIncrement: state.fk || state.default || state.type !== "integer",
-        default: state.autoIncrement,
-        fk: state.autoIncrement
-    };
-    // NOT NULL
-    notNullInput.checked = state.notNull || forced.notNull;
-    notNullLabel.style.display = hidden.notNull ? "none" : "block";
-    // AUTO INCREMENT
-    autoIncLabel.style.display = hidden.autoIncrement ? "none" : "block";
-    // DEFAULT
-    defaultInput.disabled = disabled.default;
-    // FK
-    fkInput.disabled = disabled.fk;
-    // REFERÊNCIA (FK)
-    const referenciaDiv = parentDiv.parentElement.querySelector("div.referencia");
-    referenciaDiv.style.display = fkInput.checked ? "block" : "none";
 }
 function changeEditRowMenu(rowIndex) {
     if (currentDatabase === null)
@@ -1081,10 +1396,67 @@ function changeEditRowMenu(rowIndex) {
             div.appendChild(dropdown);
             updateCustomDropdowns();
         }
+        else if (column.type === "date") {
+            if (column.isAutoDate) {
+                const p = document.createElement("p");
+                p.textContent = "Valor gerado automaticamente";
+                div.appendChild(p);
+            }
+            else {
+                const input = document.createElement("input");
+                input.type = "date";
+                const value = databases[currentDatabase].tables[currentTable].rows[rowIndex][column.name];
+                input.value = value instanceof Date ? `${String(value.getFullYear()).padStart(4, "0")}-${String(value.getMonth() + 1).padStart(2, "0")}-${String(value.getDate()).padStart(2, "0")}` : "";
+                div.appendChild(input);
+            }
+        }
+        else if (column.type === "time") {
+            if (column.isAutoTime) {
+                const p = document.createElement("p");
+                p.textContent = "Valor gerado automaticamente";
+                div.appendChild(p);
+            }
+            else {
+                const input = document.createElement("input");
+                input.type = "time";
+                input.step = "1";
+                const value = databases[currentDatabase].tables[currentTable].rows[rowIndex][column.name];
+                input.value = value instanceof Date ? `${String(value.getHours()).padStart(2, "0")}:${String(value.getMinutes()).padStart(2, "0")}` : "";
+                div.appendChild(input);
+            }
+        }
+        else if (column.type === "enum") {
+            const dropdown = document.createElement("div");
+            dropdown.className = "custom-dropdown";
+            const button = document.createElement("button");
+            button.className = "custom-dropdown-trigger";
+            button.textContent = column.enumValues ? databases[currentDatabase].tables[currentTable].rows[rowIndex][column.name] : "Selecione um valor";
+            button.onclick = function () { openCustomDropdown(button); };
+            dropdown.appendChild(button);
+            const menu = document.createElement("ul");
+            menu.className = "custom-dropdown-menu";
+            column.enumValues.forEach((value, index) => {
+                const li = document.createElement("li");
+                li.className = "custom-dropdown-option";
+                if (index === column.enumValues?.indexOf(databases[currentDatabase].tables[currentTable].rows[rowIndex][column.name])) {
+                    li.classList.add("custom-dropdown-option-selected");
+                }
+                li.textContent = value;
+                menu.appendChild(li);
+            });
+            dropdown.appendChild(menu);
+            const hiddenInput = document.createElement("input");
+            hiddenInput.type = "hidden";
+            hiddenInput.name = "enum-value";
+            hiddenInput.value = databases[currentDatabase].tables[currentTable].rows[rowIndex][column.name];
+            dropdown.appendChild(hiddenInput);
+            div.appendChild(dropdown);
+            updateCustomDropdowns();
+        }
         else {
             const input = document.createElement("input");
-            input.type = "text";
-            input.value = databases[currentDatabase].tables[currentTable].rows[rowIndex][column.name];
+            const value = databases[currentDatabase].tables[currentTable].rows[rowIndex][column.name];
+            input.value = value;
             div.appendChild(input);
         }
     });
@@ -1171,6 +1543,183 @@ function changeConfirmDeleteMenu(type, rowIndex, columnName) {
         });
     };
 }
+function updateCharacteristics(parentDiv) {
+    // pegar inputs
+    const pkInput = parentDiv.querySelector("input.primary-key");
+    const fkInput = parentDiv.querySelector("input.foreign-key");
+    const notNullInput = parentDiv.querySelector("input.not-null");
+    const uniqueInput = parentDiv.querySelector("input.unique");
+    const defaultInput = parentDiv.querySelector("input.default");
+    const autoIncInput = parentDiv.querySelector("input.auto-increment");
+    const autoDateInput = parentDiv.querySelector("input.auto-date");
+    const autoTimeInput = parentDiv.querySelector("input.auto-time");
+    const typeDropdown = parentDiv.querySelector(".custom-dropdown button");
+    const autoIncLabel = autoIncInput.parentElement;
+    const autoDateLabel = autoDateInput.parentElement;
+    const autoTimeLabel = autoTimeInput.parentElement;
+    const defaultLabel = defaultInput.parentElement;
+    const state = {
+        pk: pkInput.checked,
+        fk: fkInput.checked,
+        notNull: notNullInput.checked,
+        unique: uniqueInput.checked,
+        default: defaultInput.checked,
+        autoIncrement: autoIncInput.checked,
+        autoDate: autoDateInput.checked,
+        autoTime: autoTimeInput.checked,
+        type: typeDropdown.textContent.toLowerCase()
+    };
+    const forcedTrue = {
+        notNull: state.pk || state.autoIncrement
+    };
+    const forcedFalse = {
+        fk: state.autoIncrement || state.autoDate || state.autoTime,
+        default: state.autoIncrement || state.autoDate || state.autoTime || state.type === "boolean",
+        autoIncrement: state.fk || state.default || state.type !== "integer",
+        autoDate: state.fk || state.default || state.type !== "date",
+        autoTime: state.fk || state.default || state.type !== "time",
+    };
+    const hidden = {
+        autoIncrement: state.type !== "integer",
+        autoDate: state.type !== "date",
+        autoTime: state.type !== "time",
+        default: state.type === "boolean",
+    };
+    const disabled = {
+        notNull: state.pk || state.autoIncrement,
+        autoIncrement: state.fk || state.default || state.type !== "integer",
+        autoDate: state.fk || state.default || state.type !== "date",
+        autoTime: state.fk || state.default || state.type !== "time",
+        default: state.autoIncrement || state.autoDate || state.autoTime || state.type === "boolean",
+        fk: state.autoIncrement || state.autoDate || state.autoTime
+    };
+    // NOT NULL
+    notNullInput.checked = state.notNull || forcedTrue.notNull;
+    notNullInput.disabled = disabled.notNull;
+    // AUTO INCREMENT
+    autoIncLabel.style.display = hidden.autoIncrement ? "none" : "block";
+    autoIncInput.checked = state.autoIncrement && !forcedFalse.autoIncrement;
+    autoIncInput.disabled = disabled.autoIncrement;
+    // AUTO DATE
+    autoDateLabel.style.display = hidden.autoDate ? "none" : "block";
+    autoDateInput.checked = state.autoDate && !forcedFalse.autoDate;
+    autoDateInput.disabled = disabled.autoDate;
+    // AUTO TIME
+    autoTimeLabel.style.display = hidden.autoTime ? "none" : "block";
+    autoTimeInput.checked = state.autoTime && !forcedFalse.autoTime;
+    autoTimeInput.disabled = disabled.autoTime;
+    // DEFAULT
+    defaultInput.disabled = disabled.default;
+    defaultInput.checked = state.default && !forcedFalse.default;
+    defaultLabel.style.display = hidden.default ? "none" : "block";
+    // FK
+    fkInput.disabled = disabled.fk;
+    fkInput.checked = state.fk && !forcedFalse.fk;
+    // REFERÊNCIA (FK)
+    const referenciaDiv = parentDiv.querySelector("div.referencia");
+    referenciaDiv.style.display = fkInput.checked ? "block" : "none";
+    updateForeignKeyReferenceTableOptions(parentDiv);
+    updateForeignKeyReferenceColumnOptions(parentDiv);
+    // DEFAULT
+    const defaultDiv = parentDiv.querySelector("div.default-input-text");
+    defaultDiv.style.display = state.default ? "block" : "none";
+    // ENUM
+    const enumDiv = parentDiv.querySelector("div.enum-values");
+    enumDiv.style.display = state.type === "enum" ? "block" : "none";
+}
+function updateDefaultInput(parentDiv) {
+    const type = parentDiv.querySelector(".custom-dropdown button").textContent.toLowerCase();
+    if (type == "boolean") {
+        const defaultDiv = parentDiv.querySelector("div.default-input-text");
+        defaultDiv.innerHTML = `
+        <p>Default</p>
+        <div class="custom-dropdown">
+            <button class="custom-dropdown-trigger" onclick="openCustomDropdown(this)">
+                False
+            </button>
+            <ul class="custom-dropdown-menu">
+                <li class="custom-dropdown-option custom-dropdown-option-selected">False</li>
+                <li class="custom-dropdown-option">True</li>
+            </ul>
+            <input type="hidden" value="text">
+        </div>
+        `;
+        updateCustomDropdowns();
+        return;
+    }
+    const defaultDiv = parentDiv.querySelector("div.default-input-text");
+    if (type === "integer") {
+        defaultDiv.innerHTML = `
+        <p>Default</p>
+        <input type="number" placeholder="Valor padrão">
+        `;
+    }
+    else if (type === "date") {
+        defaultDiv.innerHTML = `
+        <p>Default</p>
+        <input type="date" placeholder="Valor padrão">
+        `;
+    }
+    else if (type === "time") {
+        defaultDiv.innerHTML = `
+        <p>Default</p>
+        <input type="time" placeholder="Valor padrão">
+        `;
+    }
+    else {
+        defaultDiv.innerHTML = `
+        <p>Default</p>
+        <input type="text" placeholder="Valor padrão">
+        `;
+    }
+}
+function updateForeignKeyReferenceTableOptions(parentDiv) {
+    const database = databases[currentDatabase];
+    const shouldFilterCurrentTable = currentTable && database.tables[currentTable];
+    const availableTables = Object.keys(database.tables).filter(tableName => !shouldFilterCurrentTable || tableName !== currentTable);
+    const tableSelect = parentDiv.querySelector(".referencia .custom-dropdown-menu");
+    tableSelect.innerHTML = "";
+    availableTables.forEach((tableName, i) => {
+        tableSelect.innerHTML += `
+            <li class="custom-dropdown-option ${i === 0 ? "custom-dropdown-option-selected" : ""}">${tableName}</li>
+        `;
+    });
+    const refButton = parentDiv.querySelector(".referencia .custom-dropdown-trigger");
+    if (availableTables.length === 0) {
+        refButton.textContent = "Crie outra tabela";
+    }
+    else {
+        refButton.textContent = availableTables[0];
+    }
+    updateCustomDropdowns();
+}
+function updateForeignKeyReferenceColumnOptions(parentDiv) {
+    const database = databases[currentDatabase];
+    const columnSelect = parentDiv.querySelector(".referencia :nth-child(3) .custom-dropdown-menu");
+    const refTableButton = parentDiv.querySelector(".referencia .custom-dropdown-trigger");
+    const refButton = parentDiv.querySelector(".referencia :nth-child(3) .custom-dropdown-trigger");
+    columnSelect.innerHTML = "";
+    const referencedTable = database.tables[refTableButton.textContent];
+    if (!referencedTable) {
+        refButton.textContent = "Crie outra tabela";
+        updateCustomDropdowns();
+        return;
+    }
+    let i = 0;
+    for (let columnName in referencedTable.columns) {
+        columnSelect.innerHTML += `
+            <li class="custom-dropdown-option ${i === 0 ? "custom-dropdown-option-selected" : ""}">${columnName}</li>
+        `;
+        i++;
+    }
+    if (Object.keys(referencedTable.columns).length === 0) {
+        refButton.textContent = "Crie outra coluna";
+    }
+    else {
+        refButton.textContent = Object.keys(referencedTable.columns)[0];
+    }
+    updateCustomDropdowns();
+}
 //#endregion
 document.addEventListener("click", closeAllCustomDropdowns);
 document.getElementById("menus-centrais").addEventListener("click", (event) => {
@@ -1183,3 +1732,5 @@ document.getElementById("menus-centrais").addEventListener("click", (event) => {
     document.getElementById("menus-centrais").style.display = "none";
 });
 createExempleDatabase();
+createColumnCreationDiv(document.querySelector("#criacao-tabela ul"));
+createColumnCreationDiv(document.getElementById("criacao-colunas-edit"));

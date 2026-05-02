@@ -126,13 +126,13 @@ input[type="number"]::-webkit-inner-spin-button {
     width: 100%;
     display: flex;
     justify-content: center;
+    background-color: var(--gray13);
 
     #interface-terminal {
         --indicator-left: 0px;
         --indicator-width: 0px;
         display: flex;
         width: fit-content;
-        background-color: var(--gray13);
         border-radius: 10px;
         position: relative;
         padding: 3px;
@@ -160,10 +160,11 @@ input[type="number"]::-webkit-inner-spin-button {
             cursor: pointer;
             border-radius: 10px;
             transition: color var(--transition-time1);
+            transition: background-color var(--transition-time1);
         }
 
-        button.interface-terminal-ativo {
-            color: black;
+        button:hover:not(.interface-terminal-ativo) {
+            background-color: var(--gray11);
         }
     }
 }
@@ -240,54 +241,51 @@ input[type="number"]::-webkit-inner-spin-button {
             }
         }
 
-        #button-nova-tabela {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            button#nova-tabela {
-                width: 90%;
-                border: none;
-                border-radius: 10px;
-                background-color: black;
-                color: white;
-                padding: 0;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin: 5%;
-                cursor: pointer;
-                transition: var(--transition-time1);
-
-                svg {
-                    width: 20px;
-                    height: 20px;
-                    margin: 8px;
-                    margin-right: 5px;
-                }
-
-                p {
-                    font-size: large;
-                    margin: 8px;
-                    margin-left: 5px;
-                }
-            }
-
-            button#nova-tabela:hover {
-                transform: scale(1.05);
-            }
-        }
-
         #tabelas {
-            background-color: var(--gray14);
             flex: 1;
             min-height: 0;
             padding: 5%;
             overflow-y: auto;
 
-            >p {
-                font-size: large;
-            }
+            div {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                >p {
+                    font-size: clamp(16px, 1.1rem, 22px);
+                }
+
+                div {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-left: auto;
+
+                    button {
+                        cursor: pointer;
+                        border: none;
+                        border-radius: 10px;
+                        background-color: transparent;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 3px;
+                        transition: var(--transition-time1);
+
+                        svg {
+                            width: 30px;
+                            height: 30px;
+                            color: black
+                        }
+                    }
+
+                    button:hover {
+                        background-color: var(--gray12);
+                        transform: scale(1.05);
+                    }
+                }
+            }  
 
             #tabelas-lista {
                 .tabela {
@@ -345,11 +343,19 @@ input[type="number"]::-webkit-inner-spin-button {
 
             #tabela-info-varios-botoes {
                 padding: var(--p3);
-                max-width: 50%;
+                flex: 0 0 auto;
+                min-width: 0;
 
                 p {
-                    max-width: 90%;
+                    width: max-content;
+                    max-width: 100%;
+                    white-space: nowrap;
                     overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                p:first-child {
+                    font-size: clamp(16px, 1.1rem, 220px);
                 }
             }
 
@@ -362,7 +368,7 @@ input[type="number"]::-webkit-inner-spin-button {
                     border: none;
                     border-radius: 10px;
                     background-color: transparent;
-                    padding: 5px;
+                    padding: 0 10px;
                     transition: var(--transition-time1);
                     cursor: pointer;
                     display: flex;
@@ -468,6 +474,7 @@ input[type="number"]::-webkit-inner-spin-button {
                             min-width: 200px;
                             max-height: 50px;
                             overflow: auto;
+                            padding: 0 1rem;
 
                             p:nth-child(2) {
                                 color: var(--gray10);
@@ -479,7 +486,6 @@ input[type="number"]::-webkit-inner-spin-button {
                             flex: 0 0 100px;
                             display: flex;
                             justify-content: center;
-                            align-items: center;
                             width: auto;
                             min-width: max-content;
                             max-width: none;
@@ -726,51 +732,7 @@ input[type="number"]::-webkit-inner-spin-button {
             flex-direction: column;
             margin-bottom: var(--p5);
 
-            .referencia {
-                position: relative;
-                margin-left: var(--p5);
-                padding-left: var(--p5);
-
-                &::before {
-                    content: "";
-                    position: absolute;
-                    left: 0;
-                    top: 0;
-                    bottom: 0;
-                    width: 1px;
-                    background-color: var(--blue5);
-                }
-
-                p {
-                    font-size: small;
-                    color: var(--blue5);
-                }
-            }
-
-            .default-input-text {
-                position: relative;
-                margin-left: var(--p5);
-                padding-left: var(--p5);
-
-                &::before {
-                    content: "";
-                    position: absolute;
-                    left: 0;
-                    top: 0;
-                    bottom: 0;
-                    width: 1px;
-                    background-color: var(--blue5);
-                }
-
-                p {
-                    font-size: small;
-                    color: var(--blue5);
-                }
-
-                input {
-                    margin-bottom: 0;
-                }
-            }
+            
         }
 
         .characteristics {
@@ -813,6 +775,32 @@ input[type="number"]::-webkit-inner-spin-button {
                     background-color: var(--red8);
                     transform: scale(1.05);
                 }
+            }
+        }
+
+        .post-characteristics {
+            position: relative;
+            margin-left: var(--p5);
+            padding-left: var(--p5);
+
+            &::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                width: 1px;
+                background-color: var(--blue5);
+            }
+
+            p {
+                font-size: small;
+                color: var(--blue5);
+            }
+
+            input {
+                width: 95%;
+                margin-bottom: var(--p1);
             }
         }
     }
@@ -878,7 +866,7 @@ input[type="number"]::-webkit-inner-spin-button {
             div {
                 display: flex;
                 justify-content: space-between;
-                
+
                 div {
                     overflow: auto;
                     white-space: nowrap;
@@ -889,7 +877,8 @@ input[type="number"]::-webkit-inner-spin-button {
                 }
             }
         }
-        > p {
+
+        >p {
             color: var(--red4)
         }
 
