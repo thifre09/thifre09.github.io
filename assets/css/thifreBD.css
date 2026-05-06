@@ -553,6 +553,8 @@ input[type="number"]::-webkit-inner-spin-button {
                     flex-direction: column;
                     flex: 1;
                     height: fit-content;
+                    position: sticky;
+                    top: 0;
 
                     #tabela-selecionada-linha-coluna-header {
                         display: flex;
@@ -808,9 +810,6 @@ input[type="number"]::-webkit-inner-spin-button {
     #editar-colunas>ul#lista-colunas-existentes div.item-lista-colunas-existentes {
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-
         div {
             h3 {
                 font-size: large;
@@ -822,7 +821,7 @@ input[type="number"]::-webkit-inner-spin-button {
             }
         }
 
-        button.delete-column {
+        div.delete-column {
             margin-left: auto;
             cursor: pointer;
             padding: var(--p2);

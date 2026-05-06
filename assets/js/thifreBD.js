@@ -185,6 +185,28 @@ function createExempleDatabase() {
         sucesso: true,
         feito_em: new Date("2026-04-22")
     });
+    const tarefas = new Table("tarefas");
+    tarefas.columns["id"] = new Column("id", "integer", true, false, true, true, true, false);
+    tarefas.columns["titulo"] = new Column("titulo", "text", false, false, true, false, false, false);
+    tarefas.columns["concluida"] = new Column("concluida", "boolean", false, false, false, false, false, true);
+    tarefas.columns["concluida"].defaultValue = false;
+    createTable(tarefas);
+    const tarefaIdColumn = tarefas.columns["id"];
+    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Arrumar a mesa", concluida: true });
+    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Responder mensagens", concluida: false });
+    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Revisar o código", concluida: true });
+    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Fazer backup", concluida: false });
+    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Atualizar a documentação", concluida: true });
+    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Testar o build", concluida: true });
+    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Organizar imagens", concluida: false });
+    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Separar ideias novas", concluida: false });
+    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Revisar layout", concluida: true });
+    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Limpar rascunhos", concluida: false });
+    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Publicar atualização", concluida: false });
+    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Conferir links", concluida: true });
+    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Escrever resumo", concluida: false });
+    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Rever cores", concluida: true });
+    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Fechar pendências", concluida: false });
     currentTable = null;
     changeTabelasLista();
     changeTabelaSelecionadaTabela();
@@ -678,6 +700,8 @@ function renameDatabaseInterface() {
         currentDatabase = newName;
         openNotifications("<p style='color: var(--green5)'>Database renomeada com sucesso!</p>");
     }
+    updateCustomDropdowns();
+    changeDatabaseDropdown();
 }
 function renameTableInterface() {
     const tableNameInput = document.getElementById("renomear-tabela-input");
@@ -696,8 +720,9 @@ function renameTableInterface() {
         currentTable = newName;
         openNotifications("<p style='color: var(--green5)'>Tabela renomeada com sucesso!</p>");
     }
-}
-function renameColumnInterface() {
+    changeTabelaInfoVariosBotoes();
+    changeTabelaSelecionadaTabela();
+    changeTabelasLista();
 }
 // Other interface functions
 function createColumnCreationDiv(parent) {
@@ -916,6 +941,10 @@ function changeTabelaSelecionadaTabela() {
             <p>${column.name}</p>
             <p>${column.type.toUpperCase()}${column.isPrimaryKey ? " • PK" : ""}${column.isForeignKey ? " • FK → " + column.reference?.table + ", " + column.reference?.column : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO INCREMENT" : ""}</p>
         `;
+        divColuna.onclick = function () {
+            showHideTabelaSelecionadaLinhaColuna(true);
+            changeTabelaSelecionadaLinhaColuna("column", undefined, column.name);
+        };
         divLinha.appendChild(divColuna);
     });
     const headerActions = document.createElement("div");
@@ -924,7 +953,7 @@ function changeTabelaSelecionadaTabela() {
     document.getElementById("tabela-selecionada-tabela").innerHTML = "";
     document.getElementById("tabela-selecionada-tabela").appendChild(divLinha);
     table.rows.forEach((row, index) => {
-        let divLinha = document.createElement("div");
+        const divLinha = document.createElement("div");
         divLinha.classList.add("linha-tabela");
         Object.entries(row).forEach(([colName, value]) => {
             const divCelula = document.createElement("div");
@@ -975,6 +1004,10 @@ function changeTabelaSelecionadaTabela() {
                 <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>
             </button>
         `;
+        divLinha.onclick = function () {
+            showHideTabelaSelecionadaLinhaColuna(true);
+            changeTabelaSelecionadaLinhaColuna("row", index, undefined);
+        };
         divLinha.appendChild(rowActions);
         document.getElementById("tabela-selecionada-tabela").appendChild(divLinha);
     });
@@ -1067,6 +1100,43 @@ function parseColumnsFromInputs(columns, existingColumns) {
     }
     return parsedColumns;
 }
+function showHideTabelaSelecionadaLinhaColuna(shouldShow) {
+    const tabelaSelecionadaLinhaColuna = document.getElementById("tabela-selecionada-linha-coluna");
+    tabelaSelecionadaLinhaColuna.style.display = shouldShow ? "flex" : "none";
+}
+function changeTabelaSelecionadaLinhaColuna(type, rowIndex, columnName) {
+    const tabelaSelecionadaLinhaColuna = document.getElementById("tabela-selecionada-linha-coluna");
+    const header = tabelaSelecionadaLinhaColuna.querySelector("#tabela-selecionada-linha-coluna-header h3");
+    header.textContent = type === "row" ? "Linha" : "Coluna";
+    const lineColumnsNumber = tabelaSelecionadaLinhaColuna.querySelector("h4");
+    lineColumnsNumber.textContent = type === "row" ? `${Object.keys(databases[currentDatabase].tables[currentTable].columns).length} colunas` : `${Object.keys(databases[currentDatabase].tables[currentTable].rows).length} linhas`;
+    const ul = tabelaSelecionadaLinhaColuna.querySelector("ul");
+    ul.innerHTML = "";
+    if (type === "row") {
+        for (const columnName in databases[currentDatabase].tables[currentTable].columns) {
+            const div = document.createElement("div");
+            const columnType = databases[currentDatabase].tables[currentTable].columns[columnName].type;
+            const value = databases[currentDatabase].tables[currentTable].rows[rowIndex][columnName];
+            div.innerHTML = `
+                <h5>${columnName} (${columnType})</h5>
+                <p>${columnType === "date" ? new Date(value).toLocaleDateString() : columnType === "time" ? new Date(value).toLocaleTimeString() : value}</p>
+            `;
+            ul.appendChild(div);
+        }
+    }
+    else {
+        for (let i = 0; i < databases[currentDatabase].tables[currentTable].rows.length; i++) {
+            const div = document.createElement("div");
+            const value = databases[currentDatabase].tables[currentTable].rows[i][columnName];
+            const columnType = databases[currentDatabase].tables[currentTable].columns[columnName].type.toLocaleLowerCase();
+            div.innerHTML = `
+                <h5>Linha ${i + 1}</h5>
+                <p>${columnType === "date" ? new Date(value).toLocaleDateString() : columnType === "time" ? new Date(value).toLocaleTimeString() : value}</p>
+            `;
+            ul.appendChild(div);
+        }
+    }
+}
 // central menus
 function changeConfigurarDatabaseMenu() {
     const menu = document.getElementById("configurar-database");
@@ -1099,144 +1169,54 @@ function changeEditColumnsMenu() {
     }
     Object.values(databases[currentDatabase].tables[currentTable].columns).forEach((column) => {
         const mainDiv = document.createElement("div");
+        mainDiv.className = "item-lista-colunas-existentes";
+        const secondaryDiv = document.createElement("div");
+        mainDiv.appendChild(secondaryDiv);
         // Input de nome da coluna
-        const columnNameInput = document.createElement("input");
-        columnNameInput.type = "text";
-        columnNameInput.placeholder = "Nome da coluna";
-        columnNameInput.value = column.name;
-        mainDiv.appendChild(columnNameInput);
+        const columnNameH3 = document.createElement("h3");
+        columnNameH3.textContent = column.name;
+        secondaryDiv.appendChild(columnNameH3);
         // Dropdown customizado
-        const customDropdown = document.createElement("div");
-        customDropdown.className = "custom-dropdown";
-        const dropdownButton = document.createElement("button");
-        dropdownButton.className = "custom-dropdown-trigger";
-        dropdownButton.textContent = column.type.charAt(0).toUpperCase() + column.type.slice(1);
-        dropdownButton.onclick = function () { openCustomDropdown(dropdownButton); };
-        const dropdownMenu = document.createElement("ul");
-        dropdownMenu.className = "custom-dropdown-menu";
-        const options = ["Text", "Integer", "Float", "Boolean", "Date", "Time", "Enum"];
-        options.forEach((option, index) => {
-            const li = document.createElement("li");
-            li.className = "custom-dropdown-option";
-            if (option.toLowerCase() === column.type)
-                li.classList.add("custom-dropdown-option-selected");
-            li.textContent = option;
-            dropdownMenu.appendChild(li);
-        });
-        const hiddenInput = document.createElement("input");
-        hiddenInput.type = "hidden";
-        hiddenInput.name = "column-type";
-        hiddenInput.value = "text";
-        customDropdown.appendChild(dropdownButton);
-        customDropdown.appendChild(dropdownMenu);
-        customDropdown.appendChild(hiddenInput);
-        mainDiv.appendChild(customDropdown);
+        const columnTypeH3 = document.createElement("h4");
+        columnTypeH3.textContent = column.type.charAt(0).toUpperCase() + column.type.slice(1);
+        secondaryDiv.appendChild(columnTypeH3);
         // Characteristics
         const characteristics = document.createElement("div");
-        characteristics.className = "characteristics";
         const characteristicsList = [
-            { className: "primary-key", key: "isPrimaryKey", name: "primary-key", label: "Primary key" },
-            { className: "foreign-key", key: "isForeignKey", name: "foreign-key", label: "Foreign key" },
-            { className: "not-null", key: "isNotNull", name: "not-null", label: "Not null" },
-            { className: "unique", key: "isUnique", name: "unique", label: "Unique" },
-            { className: "default", key: "hasDefault", name: "default", label: "Default" },
-            { className: "auto-increment", key: "isAutoIncrement", name: "auto-increment", label: "Auto increment", hidden: true },
-            { className: "auto-date", key: "isAutoDate", name: "auto-date", label: "Auto date", hidden: true },
-            { className: "auto-time", key: "isAutoTime", name: "auto-time", label: "Auto time", hidden: true }
+            { key: "isPrimaryKey", label: "Primary key" },
+            { key: "isForeignKey", label: "Foreign key" },
+            { key: "isNotNull", label: "Not null" },
+            { key: "isUnique", label: "Unique" },
+            { key: "hasDefault", label: "Default" },
+            { key: "isAutoIncrement", label: "Auto increment" },
+            { key: "isAutoDate", label: "Auto date" },
+            { key: "isAutoTime", label: "Auto time" }
         ];
+        const p = document.createElement("p");
         characteristicsList.forEach((char) => {
-            const div = document.createElement("div");
-            const label = document.createElement("label");
-            if (char.hidden)
-                label.style.display = "none";
-            const checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
-            checkbox.className = char.className;
-            checkbox.name = char.name;
-            checkbox.checked = Boolean(column[char.key]);
-            checkbox.onclick = function () { updateCharacteristics(mainDiv); };
-            label.appendChild(checkbox);
-            label.appendChild(document.createTextNode(char.label));
-            div.appendChild(label);
-            characteristics.appendChild(div);
+            if (Boolean(column[char.key])) {
+                if (char.key === "isForeignKey") {
+                    p.textContent += "FK → " + column.reference?.table + ", " + column.reference?.column + " • ";
+                }
+                else if (char.key === "isPrimaryKey") {
+                    p.textContent += "PK • ";
+                }
+                else {
+                    p.textContent += char.label + " • ";
+                }
+                characteristics.appendChild(p);
+            }
         });
+        p.textContent = p.textContent.slice(0, -3);
+        secondaryDiv.appendChild(characteristics);
         // Delete column button
         const deleteDiv = document.createElement("div");
         deleteDiv.className = "delete-column";
         deleteDiv.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>';
         deleteDiv.onclick = function () { abrirFechar(false, "confirmar-deletar"); changeConfirmDeleteMenu("column", undefined, column.name); };
-        characteristics.appendChild(deleteDiv);
-        mainDiv.appendChild(characteristics);
-        // Referência (FK)
-        const referenciaDiv = document.createElement("div");
-        referenciaDiv.classList.add("referencia", "post-characteristics");
-        referenciaDiv.style.display = "none";
-        const referenciaP = document.createElement("p");
-        referenciaP.textContent = "Referência";
-        referenciaDiv.appendChild(referenciaP);
-        // Tabela de referência
-        const refTableCustomDropdown = document.createElement("div");
-        refTableCustomDropdown.className = "custom-dropdown";
-        const refTableButton = document.createElement("button");
-        refTableButton.className = "custom-dropdown-trigger";
-        refTableButton.textContent = column.reference ? column.reference.table : "Crie outra tabela";
-        refTableButton.onclick = function () { openCustomDropdown(refTableButton); };
-        const refTableMenu = document.createElement("ul");
-        refTableMenu.className = "custom-dropdown-menu";
-        const refTableHiddenInput = document.createElement("input");
-        refTableHiddenInput.type = "hidden";
-        refTableHiddenInput.name = "reference-table";
-        refTableHiddenInput.value = "text";
-        refTableCustomDropdown.appendChild(refTableButton);
-        refTableCustomDropdown.appendChild(refTableMenu);
-        refTableCustomDropdown.appendChild(refTableHiddenInput);
-        referenciaDiv.appendChild(refTableCustomDropdown);
-        // Coluna de referência
-        const refColumnCustomDropdown = document.createElement("div");
-        refColumnCustomDropdown.className = "custom-dropdown";
-        const refColumnButton = document.createElement("button");
-        refColumnButton.className = "custom-dropdown-trigger";
-        refColumnButton.textContent = column.reference ? column.reference.column : "Crie outra coluna";
-        refColumnButton.onclick = function () { openCustomDropdown(refColumnButton); };
-        const refColumnMenu = document.createElement("ul");
-        refColumnMenu.className = "custom-dropdown-menu";
-        const refColumnHiddenInput = document.createElement("input");
-        refColumnHiddenInput.type = "hidden";
-        refColumnHiddenInput.value = "text";
-        refColumnCustomDropdown.appendChild(refColumnButton);
-        refColumnCustomDropdown.appendChild(refColumnMenu);
-        refColumnCustomDropdown.appendChild(refColumnHiddenInput);
-        referenciaDiv.appendChild(refColumnCustomDropdown);
-        mainDiv.appendChild(referenciaDiv);
-        // Default input
-        const defaultDiv = document.createElement("div");
-        defaultDiv.classList.add("default-input-text", "post-characteristics");
-        defaultDiv.style.display = "none";
-        const defaultP = document.createElement("p");
-        defaultP.textContent = "Default";
-        defaultDiv.appendChild(defaultP);
-        const defaultInput = document.createElement("input");
-        defaultInput.type = "text";
-        defaultInput.placeholder = "Valor padrão";
-        defaultInput.value = column.hasDefault ? String(column.defaultValue) : "";
-        defaultDiv.appendChild(defaultInput);
-        mainDiv.appendChild(defaultDiv);
-        // Enum values input
-        const enumDiv = document.createElement("div");
-        enumDiv.classList.add("enum-values", "post-characteristics");
-        enumDiv.style.display = "none";
-        const enumP = document.createElement("p");
-        enumP.textContent = "Valores do enum (separados por vírgula)";
-        enumDiv.appendChild(enumP);
-        const enumInput = document.createElement("input");
-        enumInput.type = "text";
-        enumInput.placeholder = "Valores separados por vírgula";
-        enumInput.value = column.enumValues ? column.enumValues.join(", ") : "";
-        enumDiv.appendChild(enumInput);
-        mainDiv.appendChild(enumDiv);
+        mainDiv.appendChild(deleteDiv);
         menu.appendChild(mainDiv);
         updateCustomDropdowns();
-        updateCharacteristics(mainDiv);
     });
     updateCustomDropdowns();
 }
