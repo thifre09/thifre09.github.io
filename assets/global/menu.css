@@ -21,8 +21,6 @@ div#title-div {
         transition: var(--transition-time1);
         text-decoration: none;
         text-align: center;
-        margin: var(--p2);
-        margin-bottom: 0;
         z-index: 100;
         background-color: var(--white);
 
@@ -32,7 +30,7 @@ div#title-div {
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: larger;
+            font-size: var(--fs1);
 
             svg {
                 width: 35px;
@@ -46,26 +44,43 @@ div#title-div {
             text-align: center;
         }
     }
+
+    h1#title:hover {
+        transform: scale(1.1);
+    }
 }
 
 
-h1#title:hover {
-    transform: scale(1.20);
-}
+
 
 nav#barra-main {
     background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet, red);
     background-size: 300% 100%;
     animation: rainbow 10s linear infinite;
     min-height: auto;
-    padding: var(--p2) var(--p5);
+    padding: var(--p1) var(--p3);
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
     position: sticky;
     top: 0;
     color: white;
     z-index: 100;
-    margin-top: var(--p2);
+
+    h6#titulo {
+        font-size: var(--fs2);
+        margin: 0;
+        color: white;
+        text-align: center;
+        width: 100%;
+        text-decoration: none;
+        text-align: center;
+
+        > a {
+            text-decoration: none;
+            text-align: center;
+            color: white;
+        }
+    }
 }
 
 .botao-menu-lateral {
@@ -88,21 +103,7 @@ nav#barra-main {
     margin-left: 10px;
 }
 
-h6#titulo {
-    font-size: xx-large;
-    margin: 0;
-    color: white;
-    text-align: center;
-    width: 100%;
-    text-decoration: none;
-    text-align: center;
 
-    > a {
-        text-decoration: none;
-        text-align: center;
-        color: white;
-    }
-}
 
 aside#menu-lateral {
     z-index: 101;
@@ -121,14 +122,14 @@ aside#menu-lateral {
         width: 90%;
         border: none;
         border-radius: 5px;
-        font-size: x-large;
+        font-size: var(--fs3);
         margin: var(--p5) 0;
         cursor: pointer;
     }
 
     button:not(#fechar-menu-lateral) {
         width: 70%;
-        font-size: large;
+        font-size: var(--fs4);
         margin: var(--p5) 0;
         padding: var(--p4);
         border: none;
@@ -221,7 +222,7 @@ header.aside-window-header {
             h1 {
                 margin: 0;
                 width: fit-content;
-                font-size: x-large;
+                font-size: var(--fs3);
                 color: white;
             }
         }
@@ -287,7 +288,7 @@ section#notas-atualizacao-container {
                 padding: 10px;
                 border-radius: 10px;
                 color: white;
-                font-size: 1.3rem;
+                font-size: var(--fs4);
                 font-weight: 100;
             }
 
@@ -302,7 +303,7 @@ section#notas-atualizacao-container {
                 }
 
                 p.data {
-                    font-size: 1rem;
+                    font-size: var(--fs6);
                     color: #000000;
                     margin-left: 5px;
                 }
@@ -328,7 +329,7 @@ section#notas-atualizacao-container {
                     h4 {
                         width: fit-content;
                         border-radius: 100px;
-                        font-size: small;
+                        font-size: var(--fs6);
                         padding: 5px 10px 5px 10px;
                     }
 
@@ -344,7 +345,7 @@ section#notas-atualizacao-container {
                 }
 
                 p.descricao {
-                    font-size: smaller;
+                    font-size: var(--fs6);
                 }
 
                 p.relacionado {
@@ -432,7 +433,7 @@ section#notas-atualizacao-container {
         button {
             border-radius: 10px;
             border: none;
-            font-size: large;
+            font-size: var(--fs5);
             color: var(--white);
             padding: 5px 10px;
             display: flex;
@@ -452,7 +453,7 @@ section#notas-atualizacao-container {
             }
 
             h2 {
-                font-size: large;
+                font-size: var(--fs5);
             }
 
             button {
@@ -467,7 +468,7 @@ section#notas-atualizacao-container {
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    font-size: larger;
+                    font-size: var(--fs5);
                     width: fit-content;
                     padding: 0;
                     margin: 0 5px 0 0px;
@@ -538,13 +539,13 @@ section#bloco-notas-container {
             }
 
             h4 {
-                font-size: larger;
+                font-size: var(--fs4);
                 margin: 1%;
 
             }
 
             h5 {
-                font-size: 0.9rem;
+                font-size: var(--fs6);
                 margin-top: 2%;
                 color: var(--gray11)
             }

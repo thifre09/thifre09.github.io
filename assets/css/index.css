@@ -1,4 +1,4 @@
-h1 {
+h1#menu-principal-h1 {
     text-align: center;
     margin: var(--p2);
 }

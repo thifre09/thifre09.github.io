@@ -116,4 +116,16 @@
     --p3: 1.5%;
     --p4: 2%;
     --p5: 2.5%;
+
+    /* Font (maior->menor) */
+
+    --fs8: clamp(0.75rem, -0.27vi + 0.82rem, 0.58rem);
+    --fs7: clamp(0.83rem, -0.16vi + 0.87rem, 0.72rem);
+    --fs6: clamp(0.91rem, -0.01vi + 0.91rem, 0.9rem);
+    --fs5: clamp(1rem,     0.19vi + 0.95rem, 1.13rem);
+    --fs4: clamp(1.1rem,   0.47vi + 0.98rem, 1.41rem);
+    --fs3: clamp(1.21rem,  0.84vi + 1rem,    1.76rem);
+    --fs2: clamp(1.33rem,  1.33vi + 1rem,    2.2rem);
+    --fs1: clamp(1.46rem,  1.97vi + 0.97rem, 2.75rem);
+
 }

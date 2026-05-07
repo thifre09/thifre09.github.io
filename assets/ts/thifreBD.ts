@@ -11,9 +11,7 @@ function updateInterfaceTerminalIndicator(activeButton: HTMLElement) {
     interfaceTerminal.style.setProperty("--indicator-width", `${width}px`);
 }
 
-
-updateInterfaceTerminalIndicator(buttonChangeToGraficalInterface);
-
+window.addEventListener('load', () => updateInterfaceTerminalIndicator(buttonChangeToGraficalInterface));
 
 buttonChangeToGraficalInterface.addEventListener("click", () => {
     const interfaceGrafica = document.getElementById("interface-grafica")!;
@@ -82,10 +80,7 @@ function createExempleDatabase() {
     if (databases[databaseName]) {
         currentDatabase = databaseName;
         currentTable = Object.keys(databases[databaseName].tables)[0] ?? null;
-        changeDatabaseDropdown();
-        changeTabelasLista();
-        changeTabelaSelecionadaTabela();
-        changeTabelaInfoVariosBotoes();
+        refreshUI();
         changeEditColumnsMenu();
         changeAddRowMenu();
         openNotifications("<p style='color: var(--yellow5)'>A database de exemplo ja existe e foi selecionada.</p>");
@@ -230,9 +225,7 @@ function createExempleDatabase() {
     addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Fechar pendências", concluida: false });
 
     currentTable = null;
-    changeTabelasLista();
-    changeTabelaSelecionadaTabela();
-    changeTabelaInfoVariosBotoes();
+    refreshUI();
     changeEditColumnsMenu();
     changeAddRowMenu();
     openNotifications("<p style='color: var(--green5)'>Database de exemplo criada com sucesso!</p>");
@@ -257,7 +250,12 @@ function openCustomDropdown(dropdownButton: HTMLElement) {
 
 function choseOption(option: HTMLElement) {
     const dropdown = option.closest(".custom-dropdown")! as HTMLElement;
-    dropdown.querySelector(".custom-dropdown-trigger")!.textContent = option.textContent;
+    const trigger = dropdown.querySelector(".custom-dropdown-trigger") as HTMLElement | null;
+
+    if (trigger) {
+        trigger.textContent = option.textContent;
+    }
+
     dropdown.classList.remove("custom-dropdown-open");
     dropdown.querySelector(".custom-dropdown-option-selected")?.classList.remove("custom-dropdown-option-selected");
     option.classList.add("custom-dropdown-option-selected");
@@ -305,10 +303,12 @@ updateCustomDropdowns();
 class Database {
     name: string;
     tables: Record<string, Table>;
+
+    // quem referencia determinada tabela/coluna
     foreignKeyMap: Record<
-        string, // tabela referenciada
+        string,
         Record<
-            string, // coluna referenciada
+            string,
             Array<{ table: string; column: string }>
         >
     >;
@@ -318,8 +318,77 @@ class Database {
         this.tables = {};
         this.foreignKeyMap = {};
     }
-}
 
+    getTableForeignKeys(tableName: string) {
+        const table = this.tables[tableName];
+
+        const foreignKeys: {
+            column: string;
+            referenceTable: string;
+            referenceColumn: string;
+        }[] = [];
+
+        if (!table) return foreignKeys;
+
+        for (const columnName in table.columns) {
+            const column = table.columns[columnName];
+
+            if (!column.reference) continue;
+
+            foreignKeys.push({
+                column: columnName,
+                referenceTable: column.reference.table,
+                referenceColumn: column.reference.column
+            });
+        }
+
+        return foreignKeys;
+    }
+
+    getReferencesToTable(tableName: string) {
+        return this.foreignKeyMap[tableName] || {};
+    }
+
+    registerForeignKey(fromTable: string, fromColumn: string, toTable: string, toColumn: string) {
+        if (!this.foreignKeyMap[toTable]) {
+            this.foreignKeyMap[toTable] = {};
+        }
+
+        if (!this.foreignKeyMap[toTable][toColumn]) {
+            this.foreignKeyMap[toTable][toColumn] = [];
+        }
+
+        this.foreignKeyMap[toTable][toColumn].push({
+            table: fromTable,
+            column: fromColumn
+        });
+    }
+
+    unregisterForeignKey(fromTable: string, fromColumn: string, toTable: string, toColumn: string) {
+        const refs = this.foreignKeyMap[toTable]?.[toColumn];
+
+        if (!refs) return;
+
+        this.foreignKeyMap[toTable][toColumn] = refs.filter(ref =>
+            !(ref.table === fromTable && ref.column === fromColumn)
+        );
+
+        if (this.foreignKeyMap[toTable][toColumn].length === 0) {
+            delete this.foreignKeyMap[toTable][toColumn];
+        }
+
+        if (Object.keys(this.foreignKeyMap[toTable]).length === 0) {
+            delete this.foreignKeyMap[toTable];
+        }
+    }
+
+    getTableRelationships(tableName: string) {
+        return {
+            outgoing: this.getTableForeignKeys(tableName),
+            incoming: this.getReferencesToTable(tableName)
+        };
+    }
+}
 class Table {
     name: string;
     columns: Record<string, Column>;
@@ -333,7 +402,6 @@ class Table {
         this.indexes = {};
     }
 }
-
 class Column {
     name: string;
     type: columnType;
@@ -391,10 +459,7 @@ function createDatabase(database: Database) {
     databases[database.name] = database;
     currentDatabase = database.name;
     currentTable = null;
-    changeDatabaseDropdown();
-    changeTabelasLista();
-    changeTabelaSelecionadaTabela();
-    changeTabelaInfoVariosBotoes();
+    refreshUI();
 }
 
 function createTable(table: Table) {
@@ -407,13 +472,11 @@ function createTable(table: Table) {
 
         if (!column.reference) continue;
 
-        registerForeignKey(table.name, columnName, column.reference.table, column.reference.column);
+        db.registerForeignKey(table.name, columnName, column.reference.table, column.reference.column);
     }
     db.tables[table.name] = table;
     currentTable = table.name;
-    changeTabelasLista();
-    changeTabelaSelecionadaTabela();
-    changeTabelaInfoVariosBotoes();
+    refreshUI();
 }
 
 function addColumn(tableName: string, column: Column) {
@@ -421,12 +484,10 @@ function addColumn(tableName: string, column: Column) {
     databases[currentDatabase!].tables[tableName].indexes[column.name] = new Map();
 
     if (column.reference) {
-        registerForeignKey(tableName, column.name, column.reference.table, column.reference.column);
+        databases[currentDatabase!].registerForeignKey(tableName, column.name, column.reference.table, column.reference.column);
     }
 
-    changeTabelaInfoVariosBotoes();
-    changeTabelaSelecionadaTabela();
-    changeTabelasLista();
+    refreshUI();
 }
 
 function addRow(tableName: string, row: Record<string, any>) {
@@ -442,8 +503,7 @@ function addRow(tableName: string, row: Record<string, any>) {
         }
         table.indexes[col].get(value)!.push(rowIndex);
     }
-    changeTabelaSelecionadaTabela();
-    changeTabelaInfoVariosBotoes();
+    refreshUI();
 }
 
 function editRow(tableName: string, oldRowIndex: number, newRow: Record<string, any>) {
@@ -479,8 +539,7 @@ function editRow(tableName: string, oldRowIndex: number, newRow: Record<string, 
         indexMap.get(newValue)!.push(oldRowIndex);
     }
 
-    changeTabelaSelecionadaTabela();
-    changeTabelaInfoVariosBotoes();
+    refreshUI();
 }
 
 function deleteDatabase(databaseName: string) {
@@ -489,30 +548,23 @@ function deleteDatabase(databaseName: string) {
         currentDatabase = null;
         currentTable = null;
     }
-    changeDatabaseDropdown();
-    changeTabelasLista();
-    changeTabelaSelecionadaTabela();
-    changeTabelaInfoVariosBotoes();
+    refreshUI();
 }
 
 function deleteTable(tableName: string) {
     const db = databases[currentDatabase!];
+    const table = db.tables[tableName];
 
-    for (const col of Object.values(db.tables[tableName].columns)) {
-        if (col.reference) {
-            const arr = db.foreignKeyMap[col.reference.table]?.[col.reference.column];
-            if (arr) {
-                const updatedRefs = arr.filter(ref => ref.table !== tableName);
-                if (updatedRefs.length > 0) {
-                    db.foreignKeyMap[col.reference.table][col.reference.column] = updatedRefs;
-                } else {
-                    delete db.foreignKeyMap[col.reference.table][col.reference.column];
-                    if (Object.keys(db.foreignKeyMap[col.reference.table]).length === 0) {
-                        delete db.foreignKeyMap[col.reference.table];
-                    }
-                }
-            }
-        }
+    // 🧹 remove todas as FKs QUE SAEM dessa tabela
+    for (const column of Object.values(table.columns)) {
+        if (!column.reference) continue;
+
+        db.unregisterForeignKey(
+            tableName,
+            column.name,
+            column.reference.table,
+            column.reference.column
+        );
     }
 
     delete db.tables[tableName];
@@ -521,9 +573,7 @@ function deleteTable(tableName: string) {
         currentTable = null;
     }
 
-    changeTabelasLista();
-    changeTabelaSelecionadaTabela();
-    changeTabelaInfoVariosBotoes();
+    refreshUI();
 }
 
 function deleteColumn(tableName: string, columnName: string) {
@@ -531,19 +581,14 @@ function deleteColumn(tableName: string, columnName: string) {
     const table = db.tables[tableName];
 
     const column = table.columns[columnName];
+
     if (column.reference) {
-        const arr = db.foreignKeyMap[column.reference.table]?.[column.reference.column];
-        if (arr) {
-            const updatedRefs = arr.filter(ref => !(ref.table === tableName && ref.column === columnName));
-            if (updatedRefs.length > 0) {
-                db.foreignKeyMap[column.reference.table][column.reference.column] = updatedRefs;
-            } else {
-                delete db.foreignKeyMap[column.reference.table][column.reference.column];
-                if (Object.keys(db.foreignKeyMap[column.reference.table]).length === 0) {
-                    delete db.foreignKeyMap[column.reference.table];
-                }
-            }
-        }
+        db.unregisterForeignKey(
+            tableName,
+            columnName,
+            column.reference.table,
+            column.reference.column
+        );
     }
 
     table.indexes[columnName]?.clear();
@@ -555,9 +600,7 @@ function deleteColumn(tableName: string, columnName: string) {
 
     delete table.columns[columnName];
 
-    changeTabelaSelecionadaTabela();
-    changeTabelaInfoVariosBotoes();
-    changeTabelasLista();
+    refreshUI();
 }
 
 function deleteRow(tableName: string, rowIndex: number) {
@@ -594,24 +637,7 @@ function deleteRow(tableName: string, rowIndex: number) {
         }
     }
 
-    changeTabelaSelecionadaTabela();
-    changeTabelaInfoVariosBotoes();
-}
-
-function registerForeignKey(fromTable: string, fromColumn: string, toTable: string, toColumn: string) {
-    const db = databases[currentDatabase!];
-    if (!db.foreignKeyMap[toTable]) {
-        db.foreignKeyMap[toTable] = {};
-    }
-
-    if (!db.foreignKeyMap[toTable][toColumn]) {
-        db.foreignKeyMap[toTable][toColumn] = [];
-    }
-
-    db.foreignKeyMap[toTable][toColumn].push({
-        table: fromTable,
-        column: fromColumn
-    });
+    refreshUI();
 }
 
 // #endregion
@@ -920,18 +946,18 @@ function renameTableInterface() {
         openNotifications("<p style='color: var(--green5)'>Tabela renomeada com sucesso!</p>");
     }
 
-    changeTabelaInfoVariosBotoes();
-    changeTabelaSelecionadaTabela();
-    changeTabelasLista();
+    refreshUI();
 }
 
 // Other interface functions
 
 function createColumnCreationDiv(parent: HTMLElement) {
     const mainDiv = document.createElement("div");
+    mainDiv.className = "outlined"
 
     // Input de nome da coluna
     const columnNameInput = document.createElement("input");
+    columnNameInput.className = "menu-central-input";
     columnNameInput.type = "text";
     columnNameInput.placeholder = "Nome da coluna";
     mainDiv.appendChild(columnNameInput);
@@ -969,7 +995,7 @@ function createColumnCreationDiv(parent: HTMLElement) {
 
     // Characteristics
     const characteristics = document.createElement("div");
-    characteristics.className = "characteristics";
+    characteristics.className = "flex-wrap-div";
 
     const characteristicsList = [
         { className: "primary-key", name: "primary-key", label: "Primary key" },
@@ -983,25 +1009,23 @@ function createColumnCreationDiv(parent: HTMLElement) {
     ];
 
     characteristicsList.forEach((char) => {
-        const div = document.createElement("div");
-
         const label = document.createElement("label");
+        label.classList.add("checkbox-div");
         if (char.hidden) label.style.display = "none";
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
-        checkbox.className = char.className;
+        checkbox.classList.add(char.className);
         checkbox.name = char.name;
         checkbox.onclick = function () { updateCharacteristics(mainDiv); };
 
         label.appendChild(checkbox);
         label.appendChild(document.createTextNode(char.label));
-        div.appendChild(label);
-        characteristics.appendChild(div);
+        characteristics.appendChild(label);
     });
 
     // Delete column button
     const deleteDiv = document.createElement("div");
-    deleteDiv.className = "delete-column";
+    deleteDiv.className = "last-item-flex-wrap-div trash-icon";
     deleteDiv.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>';
     deleteDiv.onclick = function () { deleteColumnCreationDiv(deleteDiv); };
     characteristics.appendChild(deleteDiv);
@@ -1076,6 +1100,7 @@ function createColumnCreationDiv(parent: HTMLElement) {
     const defaultInput = document.createElement("input");
     defaultInput.type = "text";
     defaultInput.placeholder = "Valor padrão";
+    defaultInput.classList.add("menu-central-input");
     defaultDiv.appendChild(defaultInput);
 
     mainDiv.appendChild(defaultDiv);
@@ -1092,6 +1117,7 @@ function createColumnCreationDiv(parent: HTMLElement) {
     const enumInput = document.createElement("input");
     enumInput.type = "text";
     enumInput.placeholder = "Valores separados por vírgula";
+    enumInput.classList.add("menu-central-input");
     enumDiv.appendChild(enumInput);
 
     mainDiv.appendChild(enumDiv);
@@ -1114,18 +1140,10 @@ function changeDatabaseDropdown() {
     for (let database in databases) {
         const option = document.createElement("li");
         option.classList.add("custom-dropdown-option");
-        option.addEventListener("click", () => {
-            currentDatabase = database;
-            currentTable = null;
-            changeTabelasLista();
-            changeTabelaSelecionadaTabela();
-            changeTabelaInfoVariosBotoes();
-        });
         if (database === currentDatabase) option.classList.add("custom-dropdown-option-selected");
         option.textContent = database;
         menu.appendChild(option);
     }
-
     updateCustomDropdowns();
 }
 
@@ -1141,14 +1159,12 @@ function changeTabelasLista() {
         } else {
             option.classList.add("tabela");
         }
-        tabelasLista.querySelector(".tabela-ativa")?.classList.remove("tabela-ativa");
 
         option.addEventListener("click", () => {
             currentTable = tabela;
             tabelasLista.querySelector(".tabela-ativa")?.classList.remove("tabela-ativa");
             option.classList.add("tabela-ativa");
-            changeTabelaSelecionadaTabela();
-            changeTabelaInfoVariosBotoes();
+            refreshUI();
             showHideTabelaSelecionadaLinhaColuna(false);
         });
 
@@ -1397,6 +1413,13 @@ function changeTabelaSelecionadaLinhaColuna(type: "row" | "column", rowIndex?: n
     }
 }
 
+function refreshUI() {
+    changeDatabaseDropdown();
+    changeTabelasLista();
+    changeTabelaSelecionadaTabela();
+    changeTabelaInfoVariosBotoes();
+}
+
 // central menus
 function changeConfigurarDatabaseMenu() {
     const menu = document.getElementById("configurar-database")!;
@@ -1431,20 +1454,22 @@ function changeEditColumnsMenu() {
 
     Object.values(databases[currentDatabase!].tables[currentTable!].columns).forEach((column) => {
         const mainDiv = document.createElement("div");
-        mainDiv.className = "item-lista-colunas-existentes";
+        mainDiv.className = "outlined menu-central-justify-between";
 
         const secondaryDiv = document.createElement("div");
         mainDiv.appendChild(secondaryDiv);
 
         // Input de nome da coluna
         const columnNameH3 = document.createElement("h3");
+        columnNameH3.classList.add("text2");
         columnNameH3.textContent = column.name;
         secondaryDiv.appendChild(columnNameH3);
 
         // Dropdown customizado
-        const columnTypeH3 = document.createElement("h4");
-        columnTypeH3.textContent = column.type.charAt(0).toUpperCase() + column.type.slice(1);
-        secondaryDiv.appendChild(columnTypeH3);
+        const columnTypeH4 = document.createElement("h4");
+        columnTypeH4.classList.add("text2");
+        columnTypeH4.textContent = column.type.charAt(0).toUpperCase() + column.type.slice(1);
+        secondaryDiv.appendChild(columnTypeH4);
 
         // Characteristics
         const characteristics = document.createElement("div");
@@ -1464,6 +1489,8 @@ function changeEditColumnsMenu() {
             ];
 
         const p = document.createElement("p");
+        p.classList.add("text3");
+        p.style.color = "var(--gray6)";
         characteristicsList.forEach((char) => {
             if (Boolean(column[char.key])) {
                 if (char.key === "isForeignKey") {
@@ -1471,7 +1498,7 @@ function changeEditColumnsMenu() {
                 } else if (char.key === "isPrimaryKey") {
                     p.textContent += "PK • ";
                 } else {
-                    p.textContent += char.label + " • ";
+                    p.textContent += char.label.toUpperCase() + " • ";
                 }
                 characteristics.appendChild(p);
             }
@@ -1482,7 +1509,7 @@ function changeEditColumnsMenu() {
 
         // Delete column button
         const deleteDiv = document.createElement("div");
-        deleteDiv.className = "delete-column";
+        deleteDiv.className = "last-item-flex-wrap-div trash-icon";
         deleteDiv.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>';
         deleteDiv.onclick = function () { abrirFechar(false, "confirmar-deletar"); changeConfirmDeleteMenu("column", undefined, column.name); };
         mainDiv.appendChild(deleteDiv);
@@ -1525,6 +1552,7 @@ function changeAddRowMenu() {
             div.appendChild(p);
         } else if (column.type === "integer" || column.type === "float") {
             const input = document.createElement("input");
+            input.classList.add("menu-central-input");
             input.type = "number";
             input.step = "any";
             div.appendChild(input);
@@ -1551,6 +1579,7 @@ function changeAddRowMenu() {
             } else {
                 const input = document.createElement("input");
                 input.type = "date";
+                input.classList.add("menu-central-input");
                 div.appendChild(input);
             }
         } else if (column.type === "time") {
@@ -1560,6 +1589,7 @@ function changeAddRowMenu() {
                 div.appendChild(p);
             } else {
                 const input = document.createElement("input");
+                input.classList.add("menu-central-input");
                 input.type = "time";
                 input.step = "1";
                 div.appendChild(input);
@@ -1595,6 +1625,7 @@ function changeAddRowMenu() {
             updateCustomDropdowns();
         } else {
             const input = document.createElement("input");
+            input.classList.add("menu-central-input");
             input.type = "text";
             div.appendChild(input);
         }
@@ -1631,6 +1662,7 @@ function changeEditRowMenu(rowIndex: number) {
             div.appendChild(p);
         } else if (column.type === "integer" || column.type === "float") {
             const input = document.createElement("input");
+            input.classList.add("menu-central-input");
             input.type = "number";
             input.step = "any";
             input.value = databases[currentDatabase!].tables[currentTable!].rows[rowIndex][column.name];
@@ -1657,6 +1689,7 @@ function changeEditRowMenu(rowIndex: number) {
                 div.appendChild(p);
             } else {
                 const input = document.createElement("input");
+                input.classList.add("menu-central-input");
                 input.type = "date";
                 const value = databases[currentDatabase!].tables[currentTable!].rows[rowIndex][column.name];
                 input.value = value instanceof Date ? `${String(value.getFullYear()).padStart(4, "0")}-${String(value.getMonth() + 1).padStart(2, "0")}-${String(value.getDate()).padStart(2, "0")}` : "";
@@ -1670,6 +1703,7 @@ function changeEditRowMenu(rowIndex: number) {
                 div.appendChild(p);
             } else {
                 const input = document.createElement("input");
+                input.classList.add("menu-central-input");
                 input.type = "time";
                 input.step = "1";
                 const value = databases[currentDatabase!].tables[currentTable!].rows[rowIndex][column.name];
@@ -1709,6 +1743,7 @@ function changeEditRowMenu(rowIndex: number) {
             updateCustomDropdowns();
         } else {
             const input = document.createElement("input");
+            input.classList.add("menu-central-input");
             const value = databases[currentDatabase!].tables[currentTable!].rows[rowIndex][column.name];
             input.value = value;
             div.appendChild(input);
@@ -1719,37 +1754,66 @@ function changeEditRowMenu(rowIndex: number) {
 function changeSearchMenu() {
     const searchColumnsDiv = document.getElementById("colunas-pesquisa")!;
     searchColumnsDiv.innerHTML = "";
+    const currentTableObj = databases[currentDatabase!].tables[currentTable!];
     if (currentDatabase === null) {
-        searchColumnsDiv.innerHTML = "<p>Crie uma tabela para mostrar as colunas existentes</p>";
+        searchColumnsDiv.innerHTML = "<p>Selecione uma tabela para mostrar as colunas existentes</p>";
         return;
     } else if (currentTable === null) {
-        searchColumnsDiv.innerHTML = "<p>Crie uma tabela para mostrar as colunas existentes</p>";
+        searchColumnsDiv.innerHTML = "<p>Selecione uma tabela para mostrar as colunas existentes</p>";
         return;
-    } else if (Object.keys(databases[currentDatabase!].tables[currentTable!].columns).length === 0) {
+    } else if (Object.keys(currentTableObj.columns).length === 0) {
         searchColumnsDiv.innerHTML = "<p>Não há colunas nessa tabela</p>";
         return;
     }
 
-    const div = document.createElement("div");
-    searchColumnsDiv.appendChild(div);
-
     const label = document.createElement("label");
+    label.classList.add("checkbox-div");
     label.innerHTML += `
     <input type="checkbox" name="search-column" value="todas-as-colunas" checked>
     Todas as colunas (*)
     `;
-    div.appendChild(label);
+    searchColumnsDiv.appendChild(label);
     Object.values(databases[currentDatabase!].tables[currentTable!].columns).forEach((column) => {
-        const div = document.createElement("div");
-        searchColumnsDiv.appendChild(div);
-
         const label = document.createElement("label");
+        label.classList.add("checkbox-div");
         label.innerHTML += `
         <input type="checkbox" name="search-column" value="${column.name}">
         ${column.name} (${column.type.toUpperCase()})
         `;
-        div.appendChild(label);
+        searchColumnsDiv.appendChild(label);
     });
+
+    // Joins
+    const referencesDiv = document.querySelector("#references-search")!;
+    referencesDiv.innerHTML = "";
+    const currentTableReferences: { columnName: string; reference: reference }[] = [];
+    for (const columnName in currentTableObj.columns) {
+        const column = currentTableObj.columns[columnName];
+        if (column.isForeignKey && column.reference) {
+            currentTableReferences.push({ columnName, reference: column.reference });
+        }
+    }
+
+    if (currentTableReferences.length === 0) {
+        referencesDiv.innerHTML = "<p>Não há chaves estrangeiras nessa tabela para realizar joins</p>";
+    } else {
+        currentTableReferences.forEach((ref) => {
+            const buttonRef = document.createElement("button");
+            buttonRef.classList.add("outlined");
+            buttonRef.innerHTML = `
+            <p class="text2">${ref.columnName} → ${ref.reference.table}, ${ref.reference.column}</p>
+            `;
+            referencesDiv.appendChild(buttonRef);
+        });
+    }
+
+    const isReferenceByDiv = document.querySelector("#is-referenced-by-search")! as HTMLDivElement;
+    const referencedBy: { tableName: string; columnName: string; }[] = [];
+
+    if (referencedBy.length === 0) {
+        isReferenceByDiv.innerHTML = "<p>Essa tabela não é referenciada por nenhuma chave estrangeira para realizar joins</p>";
+    }
+
 }
 
 function changeConfirmDeleteMenu(type: "database" | "table" | "column" | "row", rowIndex?: number, columnName?: string) {
@@ -1766,11 +1830,11 @@ function changeConfirmDeleteMenu(type: "database" | "table" | "column" | "row", 
 
     if (type === "database" || type === "table" || type === "column" || type === "row") {
         menuUl.innerHTML += `
-        <div>
-            <h4>Database</h4>
+        <div class="outlined">
+            <h4 class="text2">Database</h4>
             <div>
-                <p>${currentDatabase}</p>
-                <p>Tabelas: ${Object.keys(databases[currentDatabase!].tables).length}</p>
+                <p class="text3">${currentDatabase}</p>
+                <p class="text3">Tabelas: ${Object.keys(databases[currentDatabase!].tables).length}</p>
             </div>
         </div>
         `;
@@ -1778,11 +1842,11 @@ function changeConfirmDeleteMenu(type: "database" | "table" | "column" | "row", 
 
     if (type === "table" || type === "column" || type === "row") {
         menuUl.innerHTML += `
-        <div>
-            <h4>Tabela</h4>
+        <div class="outlined">
+            <h4 class="text2">Tabela</h4>
             <div>
-                <p>${currentTable}</p>
-                <p>Colunas: ${Object.keys(databases[currentDatabase!].tables[currentTable!].columns).length}</p>
+                <p class="text3">${currentTable}</p>
+                <p class="text3">Colunas: ${Object.keys(databases[currentDatabase!].tables[currentTable!].columns).length}</p>
             </div>
         </div>
         `;
@@ -1791,11 +1855,11 @@ function changeConfirmDeleteMenu(type: "database" | "table" | "column" | "row", 
     if (type === "column") {
         if (!columnName) return;
         menuUl.innerHTML += `
-        <div>
-            <h4>Coluna</h4>
+        <div class="outlined">
+            <h4 class="text2">Coluna</h4>
             <div>
-                <p>${databases[currentDatabase!].tables[currentTable!].columns[columnName].name}</p>
-                <p>${databases[currentDatabase!].tables[currentTable!].columns[columnName].type.toLocaleUpperCase()}</p>
+                <p class="text3">${databases[currentDatabase!].tables[currentTable!].columns[columnName].name}</p>
+                <p class="text3">${databases[currentDatabase!].tables[currentTable!].columns[columnName].type.toLocaleUpperCase()}</p>
             </div>
         </div>
         `;
@@ -1803,11 +1867,54 @@ function changeConfirmDeleteMenu(type: "database" | "table" | "column" | "row", 
 
     if (type === "row") {
         const row = databases[currentDatabase!].tables[currentTable!].rows[rowIndex!];
+
+        const formattedEntries = Object.entries(row).map(([key, value]) => {
+            const column = databases[currentDatabase!].tables[currentTable!].columns[key];
+            let display: any = value;
+
+            if (column) {
+                if (column.type === "date" && value !== null) {
+                    let d: Date | null = null;
+                    if (value instanceof Date) d = value;
+                    else if (typeof value === "number") d = new Date(value);
+                    else if (typeof value === "string") d = new Date(value);
+                    if (d && !isNaN(d.getTime())) {
+                        const day = String(d.getDate()).padStart(2, "0");
+                        const month = String(d.getMonth() + 1).padStart(2, "0");
+                        const year = d.getFullYear();
+                        display = `${day}/${month}/${year}`;
+                    }
+                } else if (column.type === "time" && value !== null) {
+                    if (value instanceof Date || typeof value === "number") {
+                        const d = value instanceof Date ? value : new Date(value);
+                        const hours = String(d.getHours()).padStart(2, "0");
+                        const minutes = String(d.getMinutes()).padStart(2, "0");
+                        const seconds = String(d.getSeconds()).padStart(2, "0");
+                        display = `${hours}:${minutes}:${seconds}`;
+                    } else if (typeof value === "string") {
+                        display = value;
+                    }
+                } else if (value instanceof Date) {
+                    const day = String(value.getDate()).padStart(2, "0");
+                    const month = String(value.getMonth() + 1).padStart(2, "0");
+                    const year = value.getFullYear();
+                    display = `${day}/${month}/${year}`;
+                }
+            } else if (value instanceof Date) {
+                const day = String(value.getDate()).padStart(2, "0");
+                const month = String(value.getMonth() + 1).padStart(2, "0");
+                const year = value.getFullYear();
+                display = `${day}/${month}/${year}`;
+            }
+
+            return `<p class="text3">${key}: ${display}</p>`;
+        }).join("");
+
         menuUl.innerHTML += `
-        <div>
-            <h4>Linha</h4>
-            <div>
-                ${Object.entries(row).map(([key, value]) => `<p>${key}: ${value}</p>`).join("")}
+        <div class="outlined">
+            <h4 class="text2">Linha</h4>
+            <div >
+                ${formattedEntries}
             </div>
         </div>
         `;
@@ -1927,24 +2034,24 @@ function updateCharacteristics(parentDiv: Element) {
     notNullInput.disabled = disabled.notNull;
 
     // AUTO INCREMENT
-    autoIncLabel.style.display = hidden.autoIncrement ? "none" : "block";
+    autoIncLabel.style.display = hidden.autoIncrement ? "none" : "flex";
     autoIncInput.checked = state.autoIncrement && !forcedFalse.autoIncrement;
     autoIncInput.disabled = disabled.autoIncrement;
 
     // AUTO DATE
-    autoDateLabel.style.display = hidden.autoDate ? "none" : "block";
+    autoDateLabel.style.display = hidden.autoDate ? "none" : "flex";
     autoDateInput.checked = state.autoDate && !forcedFalse.autoDate;
     autoDateInput.disabled = disabled.autoDate;
 
     // AUTO TIME
-    autoTimeLabel.style.display = hidden.autoTime ? "none" : "block";
+    autoTimeLabel.style.display = hidden.autoTime ? "none" : "flex";
     autoTimeInput.checked = state.autoTime && !forcedFalse.autoTime;
     autoTimeInput.disabled = disabled.autoTime;
 
     // DEFAULT
     defaultInput.disabled = disabled.default;
     defaultInput.checked = state.default && !forcedFalse.default;
-    defaultLabel.style.display = hidden.default ? "none" : "block";
+    defaultLabel.style.display = hidden.default ? "none" : "flex";
 
     // FK
     fkInput.disabled = disabled.fk;
@@ -1990,22 +2097,22 @@ function updateDefaultInput(parentDiv: Element) {
     if (type === "integer") {
         defaultDiv.innerHTML = `
         <p>Default</p>
-        <input type="number" placeholder="Valor padrão">
+        <input class="menu-central-input" type="number" placeholder="Valor padrão">
         `;
     } else if (type === "date") {
         defaultDiv.innerHTML = `
         <p>Default</p>
-        <input type="date" placeholder="Valor padrão">
+        <input class="menu-central-input" type="date" placeholder="Valor padrão">
         `;
     } else if (type === "time") {
         defaultDiv.innerHTML = `
         <p>Default</p>
-        <input type="time" placeholder="Valor padrão">
+        <input class="menu-central-input" type="time" placeholder="Valor padrão">
         `;
     } else {
         defaultDiv.innerHTML = `
         <p>Default</p>
-        <input type="text" placeholder="Valor padrão">
+        <input class="menu-central-input" type="text" placeholder="Valor padrão">
         `;
     }
 }
