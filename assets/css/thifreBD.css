@@ -161,6 +161,9 @@ input[type="number"]::-webkit-inner-spin-button {
             border-radius: 10px;
             transition: color var(--transition-time1);
             transition: background-color var(--transition-time1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         button:hover:not(.interface-terminal-ativo) {
@@ -403,9 +406,9 @@ input[type="number"]::-webkit-inner-spin-button {
                     color: white;
                 }
 
-                #delete-table {
-                    background-color: var(--red4);
-                    color: white;
+                #search {
+                    background-color: var(--gray10);
+                    color: var(--white);
                 }
             }
         }
@@ -747,14 +750,17 @@ input[type="number"]::-webkit-inner-spin-button {
                 align-items: center;
                 margin: var(--p4);
 
-                input {
-                    margin-right: 5px;
-                    width: 16px;
-                    aspect-ratio: 1 / 1;
-                }
-
                 label {
                     font-size: medium;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    input {
+                        margin-right: 5px;
+                        width: 16px;
+                        aspect-ratio: 1 / 1;
+                    }
                 }
             }
 
@@ -854,6 +860,11 @@ input[type="number"]::-webkit-inner-spin-button {
             color: var(--gray10);
         }
 
+    }
+
+    #colunas-pesquisa {
+        display: flex;
+        
     }
 
     #confirmar-deletar {

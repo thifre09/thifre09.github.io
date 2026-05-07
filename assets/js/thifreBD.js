@@ -269,6 +269,7 @@ class Database {
     constructor(name) {
         this.name = name;
         this.tables = {};
+        this.foreignKeyMap = {};
     }
 }
 class Table {
@@ -317,10 +318,17 @@ function createDatabase(database) {
     changeTabelaInfoVariosBotoes();
 }
 function createTable(table) {
+    const db = databases[currentDatabase];
     for (const columnName in table.columns) {
         table.indexes[columnName] = new Map();
     }
-    databases[currentDatabase].tables[table.name] = table;
+    for (const columnName in table.columns) {
+        const column = table.columns[columnName];
+        if (!column.reference)
+            continue;
+        registerForeignKey(table.name, columnName, column.reference.table, column.reference.column);
+    }
+    db.tables[table.name] = table;
     currentTable = table.name;
     changeTabelasLista();
     changeTabelaSelecionadaTabela();
@@ -329,6 +337,9 @@ function createTable(table) {
 function addColumn(tableName, column) {
     databases[currentDatabase].tables[tableName].columns[column.name] = column;
     databases[currentDatabase].tables[tableName].indexes[column.name] = new Map();
+    if (column.reference) {
+        registerForeignKey(tableName, column.name, column.reference.table, column.reference.column);
+    }
     changeTabelaInfoVariosBotoes();
     changeTabelaSelecionadaTabela();
     changeTabelasLista();
@@ -387,7 +398,25 @@ function deleteDatabase(databaseName) {
     changeTabelaInfoVariosBotoes();
 }
 function deleteTable(tableName) {
-    delete databases[currentDatabase].tables[tableName];
+    const db = databases[currentDatabase];
+    for (const col of Object.values(db.tables[tableName].columns)) {
+        if (col.reference) {
+            const arr = db.foreignKeyMap[col.reference.table]?.[col.reference.column];
+            if (arr) {
+                const updatedRefs = arr.filter(ref => ref.table !== tableName);
+                if (updatedRefs.length > 0) {
+                    db.foreignKeyMap[col.reference.table][col.reference.column] = updatedRefs;
+                }
+                else {
+                    delete db.foreignKeyMap[col.reference.table][col.reference.column];
+                    if (Object.keys(db.foreignKeyMap[col.reference.table]).length === 0) {
+                        delete db.foreignKeyMap[col.reference.table];
+                    }
+                }
+            }
+        }
+    }
+    delete db.tables[tableName];
     if (currentTable === tableName) {
         currentTable = null;
     }
@@ -396,8 +425,25 @@ function deleteTable(tableName) {
     changeTabelaInfoVariosBotoes();
 }
 function deleteColumn(tableName, columnName) {
-    const table = databases[currentDatabase].tables[tableName];
-    table.indexes[columnName].clear();
+    const db = databases[currentDatabase];
+    const table = db.tables[tableName];
+    const column = table.columns[columnName];
+    if (column.reference) {
+        const arr = db.foreignKeyMap[column.reference.table]?.[column.reference.column];
+        if (arr) {
+            const updatedRefs = arr.filter(ref => !(ref.table === tableName && ref.column === columnName));
+            if (updatedRefs.length > 0) {
+                db.foreignKeyMap[column.reference.table][column.reference.column] = updatedRefs;
+            }
+            else {
+                delete db.foreignKeyMap[column.reference.table][column.reference.column];
+                if (Object.keys(db.foreignKeyMap[column.reference.table]).length === 0) {
+                    delete db.foreignKeyMap[column.reference.table];
+                }
+            }
+        }
+    }
+    table.indexes[columnName]?.clear();
     delete table.indexes[columnName];
     for (const row of table.rows) {
         delete row[columnName];
@@ -436,6 +482,19 @@ function deleteRow(tableName, rowIndex) {
     }
     changeTabelaSelecionadaTabela();
     changeTabelaInfoVariosBotoes();
+}
+function registerForeignKey(fromTable, fromColumn, toTable, toColumn) {
+    const db = databases[currentDatabase];
+    if (!db.foreignKeyMap[toTable]) {
+        db.foreignKeyMap[toTable] = {};
+    }
+    if (!db.foreignKeyMap[toTable][toColumn]) {
+        db.foreignKeyMap[toTable][toColumn] = [];
+    }
+    db.foreignKeyMap[toTable][toColumn].push({
+        table: fromTable,
+        column: fromColumn
+    });
 }
 // #endregion
 // #region Interface functions
@@ -607,7 +666,12 @@ function insertRowInterface() {
                 revertAutoIncrementValues();
                 return;
             }
-            row[columnName] = null;
+            if (table.columns[columnName].hasDefault) {
+                row[columnName] = table.columns[columnName].defaultValue;
+            }
+            else {
+                row[columnName] = null;
+            }
             continue;
         }
         if (table.columns[columnName].type === "integer") {
@@ -684,6 +748,14 @@ function editRowInterface(rowIndex) {
     openNotifications(`<p style='color: var(--green5)'>Linha editada com sucesso!</p>`);
 }
 function renameDatabaseInterface() {
+    if (currentDatabase === null) {
+        openNotifications("<p style='color: var(--red5)'>Nenhuma database selecionada.</p>");
+        return;
+    }
+    else if (currentTable !== null) {
+        openNotifications("<p style='color: var(--red5)'>Feche a tabela selecionada para renomear a database.</p>");
+        return;
+    }
     const databaseNameInput = document.getElementById("renomear-database-input");
     const db = databases[currentDatabase];
     const newName = databaseNameInput.value.trim().toLowerCase();
@@ -704,6 +776,14 @@ function renameDatabaseInterface() {
     changeDatabaseDropdown();
 }
 function renameTableInterface() {
+    if (currentDatabase === null) {
+        openNotifications("<p style='color: var(--red5)'>Nenhuma database selecionada.</p>");
+        return;
+    }
+    else if (currentTable === null) {
+        openNotifications("<p style='color: var(--red5)'>Nenhuma tabela selecionada.</p>");
+        return;
+    }
     const tableNameInput = document.getElementById("renomear-tabela-input");
     const table = databases[currentDatabase].tables[currentTable];
     const newName = tableNameInput.value.trim().toLowerCase();
@@ -908,6 +988,7 @@ function changeTabelasLista() {
             option.classList.add("tabela-ativa");
             changeTabelaSelecionadaTabela();
             changeTabelaInfoVariosBotoes();
+            showHideTabelaSelecionadaLinhaColuna(false);
         });
         const name = document.createElement("p");
         name.textContent = tabela;
@@ -1073,7 +1154,8 @@ function parseColumnsFromInputs(columns, existingColumns) {
                 column.defaultValue = new Date(defaultValue.value);
             }
             else if (column.type === "time") {
-                column.defaultValue = new Date(defaultValue.value);
+                const [hours, minutes, seconds] = defaultValue.value.split(":").map(Number);
+                column.defaultValue = createTimeValue(hours, minutes || 0, seconds || 0);
             }
             else {
                 column.defaultValue = defaultValue.value;
@@ -1441,6 +1523,40 @@ function changeEditRowMenu(rowIndex) {
         }
     });
 }
+function changeSearchMenu() {
+    const searchColumnsDiv = document.getElementById("colunas-pesquisa");
+    searchColumnsDiv.innerHTML = "";
+    if (currentDatabase === null) {
+        searchColumnsDiv.innerHTML = "<p>Crie uma tabela para mostrar as colunas existentes</p>";
+        return;
+    }
+    else if (currentTable === null) {
+        searchColumnsDiv.innerHTML = "<p>Crie uma tabela para mostrar as colunas existentes</p>";
+        return;
+    }
+    else if (Object.keys(databases[currentDatabase].tables[currentTable].columns).length === 0) {
+        searchColumnsDiv.innerHTML = "<p>Não há colunas nessa tabela</p>";
+        return;
+    }
+    const div = document.createElement("div");
+    searchColumnsDiv.appendChild(div);
+    const label = document.createElement("label");
+    label.innerHTML += `
+    <input type="checkbox" name="search-column" value="todas-as-colunas" checked>
+    Todas as colunas (*)
+    `;
+    div.appendChild(label);
+    Object.values(databases[currentDatabase].tables[currentTable].columns).forEach((column) => {
+        const div = document.createElement("div");
+        searchColumnsDiv.appendChild(div);
+        const label = document.createElement("label");
+        label.innerHTML += `
+        <input type="checkbox" name="search-column" value="${column.name}">
+        ${column.name} (${column.type.toUpperCase()})
+        `;
+        div.appendChild(label);
+    });
+}
 function changeConfirmDeleteMenu(type, rowIndex, columnName) {
     const menuUl = document.getElementById("confirmar-deletar-lista");
     menuUl.innerHTML = "";
@@ -1505,10 +1621,30 @@ function changeConfirmDeleteMenu(type, rowIndex, columnName) {
             openNotifications("<p style='color: var(--green5)'>Database deletada com sucesso!</p>");
         }
         else if (type === "table") {
+            const refs = databases[currentDatabase].foreignKeyMap[currentTable];
+            if (refs && Object.keys(refs).length > 0) {
+                const mensagens = [];
+                for (const column in refs) {
+                    for (const ref of refs[column]) {
+                        mensagens.push(`${ref.table}.${ref.column}`);
+                    }
+                }
+                openNotifications(`<p style='color: var(--red5)'>Não é possível deletar a tabela. Referenciada por:<br>
+                    ${mensagens.join("<br>")}
+                    </p>`);
+                return;
+            }
             deleteTable(currentTable);
             openNotifications("<p style='color: var(--green5)'>Tabela deletada com sucesso!</p>");
         }
         else if (type === "column") {
+            const refs = databases[currentDatabase].foreignKeyMap[currentTable]?.[columnName];
+            if (refs && refs.length > 0) {
+                openNotifications(`<p style='color: var(--red5)'>Não é possível deletar a coluna. Referenciada por:<br>
+                    ${refs.map(r => `${r.table}.${r.column}`).join("<br>")}
+                    </p>`);
+                return;
+            }
             deleteColumn(currentTable, columnName);
             openNotifications("<p style='color: var(--green5)'>Coluna deletada com sucesso!</p>");
         }
