@@ -668,6 +668,7 @@ input[type="number"]::-webkit-inner-spin-button {
         display: flex;
         justify-content: space-between;
         margin: var(--p2) 0;
+        gap: var(--p1)
     }
 
     svg {
@@ -764,6 +765,7 @@ input[type="number"]::-webkit-inner-spin-button {
         transition: var(--transition-time1);
         margin: var(--p2) 0;
         overflow: auto;
+        min-height: fit-content;
 
         svg {
             width: 15px;
@@ -846,6 +848,33 @@ input[type="number"]::-webkit-inner-spin-button {
 
         p {
             color: var(--blue5);
+        }
+    }
+
+    .reference-button {
+        width: 1;
+        display: flex;
+        align-items: center;
+        padding: var(--p2) var(--p4);
+        border: none;
+        border-radius: 10px;
+        background: var(--blue2);
+        color: white;
+        cursor: pointer;
+        transition: var(--transition-time1);
+
+        &:hover {
+            background-color: var(--blue3);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+        }
+    }
+
+    .reference-button-active {
+        background: var(--green2);
+
+        &:hover {
+            background-color: var(--green3);
         }
     }
 

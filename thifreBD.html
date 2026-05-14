@@ -464,26 +464,36 @@
                     <h2 class="text2">Relacionamentos</h2>
                 </div>
 
-                <h4>Referencia</h4>
+                <h4 class="text3">Referencia</h4>
                 <div id="references-search">
-                    <button>z → usuario.id</button>
                 </div>
 
-                <h4>Referenciada por</h4>
+                <h4 class="text3">Referenciada por</h4>
                 <div id="is-referenced-by-search">
-                    <button>pedido.usuario_id → usuario.id</button>
                 </div>
 
                 <div class="menu-central-justify-between">
                     <h2 class="text2">Condições de pesquisa</h2>
                     <button class="outlined-button"
-                        onclick="createColumnCreationDiv(document.querySelector('#editar-colunas ul#criacao-colunas-edit'))">
+                        onclick="createWhereConditionDiv()">
                         <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
                             <use href="assets/images/icons-sprite.svg#icon-plus"></use>
                         </svg>
                         Nova condição
                     </button>
                 </div>
+
+                <div id="where-conditions">
+                    
+                </div>
+
+                <button class="large-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                        fill="currentColor">
+                        <path
+                            d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
+                    </svg>Pesquisar
+                </button>
 
             </div>
 

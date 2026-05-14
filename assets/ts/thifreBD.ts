@@ -74,6 +74,90 @@ function createTimeValue(hours: number, minutes: number = 0, seconds: number = 0
     return d;
 }
 
+/**
+ * Garante que um valor seja uma instância válida de Date
+ * @param value - Valor a ser convertido (Date, string, number ou null)
+ * @returns Instância de Date válida ou null
+ */
+function ensureDate(value: any): Date | null {
+    if (value === null || value === undefined) return null;
+    
+    if (value instanceof Date) {
+        return isNaN(value.getTime()) ? null : value;
+    }
+    
+    if (typeof value === 'string') {
+        const parsed = new Date(value);
+        return isNaN(parsed.getTime()) ? null : parsed;
+    }
+    
+    if (typeof value === 'number') {
+        const parsed = new Date(value);
+        return isNaN(parsed.getTime()) ? null : parsed;
+    }
+    
+    return null;
+}
+
+/**
+ * Formata uma Date para exibição de data (DD/MM/YYYY)
+ * @param value - Valor a ser formatado
+ * @returns String formatada ou valor original
+ */
+function formatDateForDisplay(value: any): string {
+    const date = ensureDate(value);
+    if (!date) return String(value || '');
+    
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+}
+
+/**
+ * Formata uma Date para exibição de hora (HH:MM:SS)
+ * @param value - Valor a ser formatado
+ * @returns String formatada ou valor original
+ */
+function formatTimeForDisplay(value: any): string {
+    const date = ensureDate(value);
+    if (!date) return String(value || '');
+    
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+    return `${hours}:${minutes}:${seconds}`;
+}
+
+/**
+ * Formata uma Date para input HTML (YYYY-MM-DD)
+ * @param value - Valor a ser formatado
+ * @returns String formatada para input date ou string vazia
+ */
+function formatDateForInput(value: any): string {
+    const date = ensureDate(value);
+    if (!date) return '';
+    
+    const year = String(date.getFullYear()).padStart(4, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}
+
+/**
+ * Formata uma Date para input HTML (HH:MM)
+ * @param value - Valor a ser formatado
+ * @returns String formatada para input time ou string vazia
+ */
+function formatTimeForInput(value: any): string {
+    const date = ensureDate(value);
+    if (!date) return '';
+    
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    return `${hours}:${minutes}`;
+}
+
 function createExempleDatabase() {
     const databaseName = "thifre_db";
 
@@ -319,7 +403,10 @@ class Database {
         this.foreignKeyMap = {};
     }
 
-    getTableForeignKeys(tableName: string) {
+    getTableForeignKeys(tableName: string): {
+        column: string; referenceTable: string;
+        referenceColumn: string
+    }[] {
         const table = this.tables[tableName];
 
         const foreignKeys: {
@@ -345,8 +432,15 @@ class Database {
         return foreignKeys;
     }
 
-    getReferencesToTable(tableName: string) {
+    getReferencesToTable(tableName: string): Record<string, Array<{ table: string; column: string }>> {
         return this.foreignKeyMap[tableName] || {};
+    }
+
+    getTableRelationships(tableName: string) {
+        return {
+            outgoing: this.getTableForeignKeys(tableName),
+            incoming: this.getReferencesToTable(tableName)
+        };
     }
 
     registerForeignKey(fromTable: string, fromColumn: string, toTable: string, toColumn: string) {
@@ -380,13 +474,6 @@ class Database {
         if (Object.keys(this.foreignKeyMap[toTable]).length === 0) {
             delete this.foreignKeyMap[toTable];
         }
-    }
-
-    getTableRelationships(tableName: string) {
-        return {
-            outgoing: this.getTableForeignKeys(tableName),
-            incoming: this.getReferencesToTable(tableName)
-        };
     }
 }
 class Table {
@@ -835,12 +922,15 @@ function insertRowInterface() {
         } else if (table.columns[columnName].type === "float") {
             row[columnName] = parseFloat(input.value);
         } else if (table.columns[columnName].type === "date") {
-            row[columnName] = new Date(input.value + "T00:00:00");
+            // Garante que sempre é uma instância de Date
+            const dateValue = new Date(input.value + "T00:00:00");
+            row[columnName] = !isNaN(dateValue.getTime()) ? dateValue : null;
         } else if (table.columns[columnName].type === "time") {
+            // Garante que sempre é uma instância de Date
             const [hora, minuto, segundo] = input.value.split(":").map(Number);
-            const data = new Date();
-            data.setHours(hora, minuto, segundo, 0);
-            row[columnName] = data;
+            const timeValue = new Date();
+            timeValue.setHours(hora, minuto, segundo || 0, 0);
+            row[columnName] = !isNaN(timeValue.getTime()) ? timeValue : null;
         } else {
             row[columnName] = input.value;
         }
@@ -862,32 +952,62 @@ function editRowInterface(rowIndex: number) {
     for (const column of rowUl.children) {
         const columnName = column.querySelector("h3")!.textContent!;
         if (table.columns[columnName].isAutoIncrement) {
-            row[columnName] = table.rows[rowIndex][columnName];
-        } else if (table.columns[columnName].isAutoDate || table.columns[columnName].isAutoTime) {
-            row[columnName] = table.rows[rowIndex][columnName];
-        } else if (table.columns[columnName].type === "boolean") {
-            const value = document.querySelector(".custom-dropdown button")!.textContent!;
+            row[columnName] = table.rows[rowIndex][columnName];;
+            continue;
+        }
+
+        if (table.columns[columnName].type === "boolean") {
+            const value = column.querySelector(".custom-dropdown button")!.textContent!;
+            if (table.columns[columnName].isUnique && table.indexes[columnName].has(value === "True")) {
+                if (value === "True" && table.rows[rowIndex][columnName] !== true) {
+                    openNotifications(`<p style='color: var(--red5)'>O valor "${value}" já existe para a coluna "${columnName}".</p>`);
+                    return;
+                }
+            }
             row[columnName] = value === "True";
-        } else {
-            const input = column.querySelector("input") as HTMLInputElement;
-            if (input.value.trim() === "") {
-                row[columnName] = null;
-                continue;
+            continue;
+        }
+
+        if (table.columns[columnName].isAutoDate || table.columns[columnName].isAutoTime) {
+            row[columnName] = new Date();
+            continue;
+        }
+
+        const input = column.querySelector("input") as HTMLInputElement;
+        if (table.columns[columnName].isUnique && table.indexes[columnName].has(input.value)) {
+            if (input.value !== table.rows[rowIndex][columnName]) {
+                openNotifications(`<p style='color: var(--red5)'>O valor "${input.value}" já existe para a coluna "${columnName}".</p>`);
+                return;
             }
-            if (table.columns[columnName].type === "integer") {
-                row[columnName] = parseInt(input.value);
-            } else if (table.columns[columnName].type === "float") {
-                row[columnName] = parseFloat(input.value);
-            } else if (table.columns[columnName].type === "date") {
-                row[columnName] = new Date(input.value + "T00:00:00");
-            } else if (table.columns[columnName].type === "time") {
-                const [hora, minuto, segundo] = input.value.split(":").map(Number);
-                const data = new Date();
-                data.setHours(hora, minuto, segundo, 0);
-                row[columnName] = data;
+        }
+        if (input.value.trim() === "") {
+            if (table.columns[columnName].isNotNull) {
+                openNotifications(`<p style='color: var(--red5)'>A coluna "${columnName}" não pode ser nula.</p>`);
+                return;
+            }
+            if (table.columns[columnName].hasDefault) {
+                row[columnName] = table.columns[columnName].defaultValue;
             } else {
-                row[columnName] = input.value;
+                row[columnName] = null;
             }
+            continue;
+        }
+        if (table.columns[columnName].type === "integer") {
+            row[columnName] = parseInt(input.value);
+        } else if (table.columns[columnName].type === "float") {
+            row[columnName] = parseFloat(input.value);
+        } else if (table.columns[columnName].type === "date") {
+            // Garante que sempre é uma instância de Date
+            const dateValue = new Date(input.value + "T00:00:00");
+            row[columnName] = !isNaN(dateValue.getTime()) ? dateValue : null;
+        } else if (table.columns[columnName].type === "time") {
+            // Garante que sempre é uma instância de Date
+            const [hora, minuto, segundo] = input.value.split(":").map(Number);
+            const timeValue = new Date();
+            timeValue.setHours(hora, minuto, segundo || 0, 0);
+            row[columnName] = !isNaN(timeValue.getTime()) ? timeValue : null;
+        } else {
+            row[columnName] = input.value;
         }
     }
 
@@ -951,6 +1071,291 @@ function renameTableInterface() {
 
 // Other interface functions
 
+function changeDatabaseDropdown() {
+    const dropdown = document.querySelector("#databases .custom-dropdown") as HTMLElement;
+    const trigger = dropdown.querySelector(".custom-dropdown-trigger") as HTMLElement;
+    trigger.textContent = currentDatabase ? currentDatabase : "Selecione uma database";
+    const menu = dropdown.querySelector(".custom-dropdown-menu") as HTMLElement;
+    menu.innerHTML = "";
+    for (let database in databases) {
+        const option = document.createElement("li");
+        option.classList.add("custom-dropdown-option");
+        if (database === currentDatabase) option.classList.add("custom-dropdown-option-selected");
+        option.textContent = database;
+        menu.appendChild(option);
+    }
+    updateCustomDropdowns();
+}
+
+function changeTabelasLista() {
+    const tabelasLista = document.getElementById("tabelas-lista")!;
+    tabelasLista.innerHTML = "";
+    if (currentDatabase === null) return;
+
+    for (let tabela in databases[currentDatabase!].tables) {
+        const option = document.createElement("div");
+        if (tabela === currentTable) {
+            option.classList.add("tabela", "tabela-ativa");
+        } else {
+            option.classList.add("tabela");
+        }
+
+        option.addEventListener("click", () => {
+            currentTable = tabela;
+            tabelasLista.querySelector(".tabela-ativa")?.classList.remove("tabela-ativa");
+            option.classList.add("tabela-ativa");
+            refreshUI();
+            showHideTabelaSelecionadaLinhaColuna(false);
+        });
+
+        const name = document.createElement("p");
+        name.textContent = tabela;
+        option.appendChild(name);
+
+        const size = document.createElement("p");
+        size.textContent = `${Object.keys(databases[currentDatabase!].tables[tabela].columns).length}`;
+        option.appendChild(size);
+
+        tabelasLista.appendChild(option);
+    }
+}
+
+function changeTabelaSelecionadaTabela() {
+    if (currentDatabase === null) {
+        document.getElementById("nenhuma-tabela-selecionada")!.style.display = "flex";
+        document.getElementById("tabela-selecionada-tabela")!.style.display = "none";
+        return;
+    } else if (currentTable === null) {
+        document.getElementById("nenhuma-tabela-selecionada")!.style.display = "flex";
+        document.getElementById("tabela-selecionada-tabela")!.style.display = "none";
+        return;
+    }
+    document.getElementById("nenhuma-tabela-selecionada")!.style.display = "none";
+    const selectedTable = document.getElementById("tabela-selecionada-tabela")!;
+    selectedTable.style.display = "flex";
+
+    const table = databases[currentDatabase!].tables[currentTable!];
+
+    let divLinha = document.createElement("div");
+    divLinha.classList.add("linha-tabela");
+    Object.values(table.columns).forEach((column) => {
+        const divColuna = document.createElement("div");
+        divColuna.innerHTML = `
+            <p>${column.name}</p>
+            <p>${column.type.toUpperCase()}${column.isPrimaryKey ? " • PK" : ""}${column.isForeignKey ? " • FK → " + column.reference?.table + ", " + column.reference?.column : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO INCREMENT" : ""}</p>
+        `;
+
+        divColuna.onclick = function () {
+            showHideTabelaSelecionadaLinhaColuna(true);
+            changeTabelaSelecionadaLinhaColuna("column", undefined, column.name);
+        }
+
+        divLinha.appendChild(divColuna);
+    });
+    const headerActions = document.createElement("div");
+    headerActions.innerHTML = "<p>Ações</p>";
+    divLinha.appendChild(headerActions);
+
+    document.getElementById("tabela-selecionada-tabela")!.innerHTML = "";
+    document.getElementById("tabela-selecionada-tabela")!.appendChild(divLinha);
+
+    table.rows.forEach((row, index) => {
+        const divLinha = document.createElement("div");
+        divLinha.classList.add("linha-tabela");
+        Object.entries(row).forEach(([colName, value]) => {
+            const divCelula = document.createElement("div");
+            let displayValue: any = value;
+            const column = table.columns[colName];
+
+            if (column && column.type === "date" && value !== null) {
+                displayValue = formatDateForDisplay(value);
+            } else if (column && column.type === "time" && value !== null) {
+                displayValue = formatTimeForDisplay(value);
+            } else if (value instanceof Date) {
+                displayValue = formatDateForDisplay(value);
+            }
+
+            divCelula.innerHTML = `<p>${displayValue}</p>`;
+            divLinha.appendChild(divCelula);
+        });
+        const rowActions = document.createElement("div");
+        rowActions.innerHTML = `
+            <button onclick="abrirFechar(false, 'editar-linha'); changeEditRowMenu(${index})">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-pencil"></use></svg>
+            </button>
+            <button onclick="abrirFechar(false, 'confirmar-deletar'); changeConfirmDeleteMenu('row', ${index}, undefined)">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>
+            </button>
+        `;
+
+        divLinha.onclick = function () {
+            showHideTabelaSelecionadaLinhaColuna(true);
+            changeTabelaSelecionadaLinhaColuna("row", index, undefined);
+        }
+        divLinha.appendChild(rowActions);
+
+        document.getElementById("tabela-selecionada-tabela")!.appendChild(divLinha);
+    });
+}
+
+function changeTabelaInfoVariosBotoes() {
+    if (currentDatabase === null) {
+        const tabelaInfo = document.getElementById("tabela-info-varios-botoes")!;
+        tabelaInfo.querySelector("#nome-tabela")!.textContent = "Nenhuma tabela selecionada";
+        tabelaInfo.querySelector("#linhas-colunas")!.textContent = "0 linhas • 0 colunas";
+    } else if (currentTable === null) {
+        const tabelaInfo = document.getElementById("tabela-info-varios-botoes")!;
+        tabelaInfo.querySelector("#nome-tabela")!.textContent = "Nenhuma tabela selecionada";
+        tabelaInfo.querySelector("#linhas-colunas")!.textContent = "0 linhas • 0 colunas";
+    } else {
+        const tabelaInfo = document.getElementById("tabela-info-varios-botoes")!;
+        tabelaInfo.querySelector("#nome-tabela")!.textContent = currentTable;
+        tabelaInfo.querySelector("#linhas-colunas")!.textContent = `${Object.keys(databases[currentDatabase!].tables[currentTable!].rows).length} linhas • ${Object.keys(databases[currentDatabase!].tables[currentTable!].columns).length} colunas`;
+    }
+}
+
+function parseColumnsFromInputs(columns: HTMLCollection, existingColumns: Record<string, Column>): Column[] | null {
+    const parsedColumns: Column[] = [];
+    const knownColumns = new Set(Object.keys(existingColumns));
+
+    for (const columnDiv of columns) {
+        const columnNameInput = columnDiv.querySelector("input[type='text']") as HTMLInputElement;
+        const columnName = columnNameInput.value.trim().toLowerCase();
+        if (columnName === "") {
+            openNotifications("<p style='color: var(--red5)'>O nome da coluna não pode ser vazio.</p>");
+            return null;
+        } else if (knownColumns.has(columnName)) {
+            openNotifications("<p style='color: var(--red5)'>Já existe uma coluna com esse nome.</p>");
+            return null;
+        }
+
+        const columnTypeElement = columnDiv.querySelector(".custom-dropdown-trigger") as HTMLElement;
+        const isPrimaryKey = columnDiv.querySelector(".primary-key") as HTMLInputElement;
+        const isForeignKey = columnDiv.querySelector(".foreign-key") as HTMLInputElement;
+        const isNotNull = columnDiv.querySelector(".not-null") as HTMLInputElement;
+        const isUnique = columnDiv.querySelector(".unique") as HTMLInputElement;
+        const hasDefault = columnDiv.querySelector(".default") as HTMLInputElement;
+        const isAutoIncrement = columnDiv.querySelector(".auto-increment") as HTMLInputElement;
+        const isAutoDate = columnDiv.querySelector(".auto-date") as HTMLInputElement;
+        const isAutoTime = columnDiv.querySelector(".auto-time") as HTMLInputElement;
+
+        const column = new Column(columnName, columnTypeElement.textContent!.toLowerCase() as columnType,
+            isPrimaryKey.checked, isForeignKey.checked, isNotNull.checked, isUnique.checked,
+            isAutoIncrement.checked, hasDefault.checked, isAutoDate.checked, isAutoTime.checked);
+
+        if (hasDefault.checked) {
+            const defaultValue = columnDiv.querySelector(".default-input-text input") as HTMLInputElement;
+            if (defaultValue.value.trim() === "") {
+                openNotifications("<p style='color: var(--red5)'>O valor padrão não pode ser vazio.</p>");
+                return null;
+            }
+
+            if (column.type === "integer") {
+                column.defaultValue = parseInt(defaultValue.value);
+            } else if (column.type === "float") {
+                column.defaultValue = parseFloat(defaultValue.value);
+            } else if (column.type === "boolean") {
+                const boolValue = columnDiv.querySelector(".default-input-text .custom-dropdown-trigger") as HTMLElement;
+                column.defaultValue = boolValue.textContent === "True";
+            } else if (column.type === "date") {
+                column.defaultValue = new Date(defaultValue.value);
+            } else if (column.type === "time") {
+                const [hours, minutes, seconds] = defaultValue.value.split(":").map(Number);
+                column.defaultValue = createTimeValue(hours, minutes || 0, seconds || 0);
+            } else {
+                column.defaultValue = defaultValue.value;
+            }
+        }
+
+        if (columnTypeElement.textContent === "Enum") {
+            const enumValuesInput = columnDiv.querySelector(".enum-values input") as HTMLInputElement;
+            column.enumValues = [...new Set(enumValuesInput.value.split(",").map((v) => v.trim()))];
+        }
+
+        if (column.isForeignKey) {
+            const referenceTableElement = columnDiv.querySelector(".referencia .custom-dropdown:nth-child(2) .custom-dropdown-trigger") as HTMLElement;
+            const referenceColumnElement = columnDiv.querySelector(".referencia .custom-dropdown:nth-child(3) .custom-dropdown-trigger") as HTMLElement;
+            if (referenceTableElement.textContent === "Crie outra tabela" || referenceColumnElement.textContent === "Crie outra coluna") {
+                openNotifications("<p style='color: var(--red5)'>Selecione a tabela e coluna de referência para a chave estrangeira.</p>");
+                return null;
+            }
+            column.reference = {
+                table: referenceTableElement.textContent!,
+                column: referenceColumnElement.textContent!
+            };
+        }
+
+        knownColumns.add(columnName);
+        parsedColumns.push(column);
+    }
+
+    return parsedColumns;
+}
+
+function showHideTabelaSelecionadaLinhaColuna(shouldShow: boolean) {
+    const tabelaSelecionadaLinhaColuna = document.getElementById("tabela-selecionada-linha-coluna")!;
+    tabelaSelecionadaLinhaColuna.style.display = shouldShow ? "flex" : "none";
+}
+
+function changeTabelaSelecionadaLinhaColuna(type: "row" | "column", rowIndex?: number, columnName?: string) {
+    const tabelaSelecionadaLinhaColuna = document.getElementById("tabela-selecionada-linha-coluna")!;
+    const header = tabelaSelecionadaLinhaColuna.querySelector("#tabela-selecionada-linha-coluna-header h3")!;
+    header.textContent = type === "row" ? "Linha" : "Coluna";
+
+    const lineColumnsNumber = tabelaSelecionadaLinhaColuna.querySelector("h4")!;
+    lineColumnsNumber.textContent = type === "row" ? `${Object.keys(databases[currentDatabase!].tables[currentTable!].columns).length} colunas` : `${Object.keys(databases[currentDatabase!].tables[currentTable!].rows).length} linhas`;
+
+    const ul = tabelaSelecionadaLinhaColuna.querySelector("ul")!;
+    ul.innerHTML = "";
+    if (type === "row") {
+        for (const columnName in databases[currentDatabase!].tables[currentTable!].columns) {
+            const div = document.createElement("div");
+            const columnType = databases[currentDatabase!].tables[currentTable!].columns[columnName].type;
+            const value = databases[currentDatabase!].tables[currentTable!].rows[rowIndex!][columnName];
+            let displayValue: string;
+            if (columnType === "date") {
+                displayValue = formatDateForDisplay(value);
+            } else if (columnType === "time") {
+                displayValue = formatTimeForDisplay(value);
+            } else {
+                displayValue = String(value || '');
+            }
+            div.innerHTML = `
+                <h5>${columnName} (${columnType})</h5>
+                <p>${displayValue}</p>
+            `;
+            ul.appendChild(div);
+        }
+    } else {
+        for (let i = 0; i < databases[currentDatabase!].tables[currentTable!].rows.length; i++) {
+            const div = document.createElement("div");
+            const value = databases[currentDatabase!].tables[currentTable!].rows[i][columnName!];
+            const columnType = databases[currentDatabase!].tables[currentTable!].columns[columnName!].type.toLocaleLowerCase();
+            let displayValue: string;
+            if (columnType === "date") {
+                displayValue = formatDateForDisplay(value);
+            } else if (columnType === "time") {
+                displayValue = formatTimeForDisplay(value);
+            } else {
+                displayValue = String(value || '');
+            }
+            div.innerHTML = `
+                <h5>Linha ${i + 1}</h5>
+                <p>${displayValue}</p>
+            `;
+            ul.appendChild(div);
+        }
+    }
+}
+
+function refreshUI() {
+    changeDatabaseDropdown();
+    changeTabelasLista();
+    changeTabelaSelecionadaTabela();
+    changeTabelaInfoVariosBotoes();
+}
+
+// central menus
 function createColumnCreationDiv(parent: HTMLElement) {
     const mainDiv = document.createElement("div");
     mainDiv.className = "outlined"
@@ -1131,296 +1536,77 @@ function deleteColumnCreationDiv(button: HTMLElement) {
     div.remove();
 }
 
-function changeDatabaseDropdown() {
-    const dropdown = document.querySelector("#databases .custom-dropdown") as HTMLElement;
-    const trigger = dropdown.querySelector(".custom-dropdown-trigger") as HTMLElement;
-    trigger.textContent = currentDatabase ? currentDatabase : "Selecione uma database";
-    const menu = dropdown.querySelector(".custom-dropdown-menu") as HTMLElement;
-    menu.innerHTML = "";
-    for (let database in databases) {
-        const option = document.createElement("li");
-        option.classList.add("custom-dropdown-option");
-        if (database === currentDatabase) option.classList.add("custom-dropdown-option-selected");
-        option.textContent = database;
-        menu.appendChild(option);
-    }
+function createWhereConditionDiv() {
+    const whereConditionsContainer = document.getElementById("where-conditions")!;
+    const mainDiv = document.createElement("div");
+    mainDiv.className = "outlined";
+    whereConditionsContainer.appendChild(mainDiv);
+
+    const topDiv = document.createElement("div");
+    topDiv.className = "menu-central-justify-between";
+    mainDiv.appendChild(topDiv);
+
+    const columnsDropdown = document.createElement("div");
+    columnsDropdown.className = "custom-dropdown";
+    topDiv.appendChild(columnsDropdown);
+    const columnsDropdownButton = document.createElement("button");
+    columnsDropdownButton.className = "custom-dropdown-trigger";
+    columnsDropdownButton.textContent = "Text";
+    columnsDropdownButton.onclick = function () { openCustomDropdown(columnsDropdownButton); };
+    columnsDropdown.appendChild(columnsDropdownButton);
+    const columnsDropdownMenu = document.createElement("ul");
+    columnsDropdownMenu.className = "custom-dropdown-menu";
+    //adicionar as colunas
+    columnsDropdown.appendChild(columnsDropdownMenu);
+
+    const columnsHiddenInput = document.createElement("input");
+    columnsHiddenInput.type = "hidden";
+    columnsHiddenInput.name = "column";
+    columnsDropdown.appendChild(columnsHiddenInput);
+
+    const operatorDropdown = document.createElement("div");
+    operatorDropdown.className = "custom-dropdown";
+    topDiv.appendChild(operatorDropdown);
+    const operatorDropdownButton = document.createElement("button");
+    operatorDropdownButton.className = "custom-dropdown-trigger";
+    operatorDropdownButton.textContent = "=";
+    operatorDropdownButton.onclick = function () { openCustomDropdown(operatorDropdownButton); };
+    operatorDropdown.appendChild(operatorDropdownButton);
+    const operatorDropdownMenu = document.createElement("ul");
+    operatorDropdownMenu.className = "custom-dropdown-menu";
+    const options = ["=", "!=", ">", "<", ">=", "<="];
+    options.forEach((option, index) => {
+        const li = document.createElement("li");
+        li.className = "custom-dropdown-option";
+        if (index === 0) li.classList.add("custom-dropdown-option-selected");
+        li.textContent = option;
+        operatorDropdownMenu.appendChild(li);
+    });
+    operatorDropdown.appendChild(operatorDropdownMenu);
+    const operatorHiddenInput = document.createElement("input");
+    operatorHiddenInput.type = "hidden";
+    operatorHiddenInput.name = "operator";
+    operatorDropdown.appendChild(operatorHiddenInput);
+
+    const bottomDiv = document.createElement("div");
+    bottomDiv.className = "menu-central-justify-between";
+    mainDiv.appendChild(bottomDiv);
+
+    const valueInput = document.createElement("input");
+    valueInput.type = "text";
+    valueInput.placeholder = "Valor da condição";
+    valueInput.className = "menu-central-input";
+    bottomDiv.appendChild(valueInput);
+
+    const deleteDiv = document.createElement("div");
+    deleteDiv.className = "flex-wrap-div";
+    deleteDiv.innerHTML = '<svg class="trash-icon last-item-flex-wrap-div" height="24" width="24" viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>';
+    deleteDiv.onclick = function () { mainDiv.remove(); };
+    bottomDiv.appendChild(deleteDiv);
+
     updateCustomDropdowns();
 }
 
-function changeTabelasLista() {
-    const tabelasLista = document.getElementById("tabelas-lista")!;
-    tabelasLista.innerHTML = "";
-    if (currentDatabase === null) return;
-
-    for (let tabela in databases[currentDatabase!].tables) {
-        const option = document.createElement("div");
-        if (tabela === currentTable) {
-            option.classList.add("tabela", "tabela-ativa");
-        } else {
-            option.classList.add("tabela");
-        }
-
-        option.addEventListener("click", () => {
-            currentTable = tabela;
-            tabelasLista.querySelector(".tabela-ativa")?.classList.remove("tabela-ativa");
-            option.classList.add("tabela-ativa");
-            refreshUI();
-            showHideTabelaSelecionadaLinhaColuna(false);
-        });
-
-        const name = document.createElement("p");
-        name.textContent = tabela;
-        option.appendChild(name);
-
-        const size = document.createElement("p");
-        size.textContent = `${Object.keys(databases[currentDatabase!].tables[tabela].columns).length}`;
-        option.appendChild(size);
-
-        tabelasLista.appendChild(option);
-    }
-}
-
-function changeTabelaSelecionadaTabela() {
-    if (currentDatabase === null) {
-        document.getElementById("nenhuma-tabela-selecionada")!.style.display = "flex";
-        document.getElementById("tabela-selecionada-tabela")!.style.display = "none";
-        return;
-    } else if (currentTable === null) {
-        document.getElementById("nenhuma-tabela-selecionada")!.style.display = "flex";
-        document.getElementById("tabela-selecionada-tabela")!.style.display = "none";
-        return;
-    }
-    document.getElementById("nenhuma-tabela-selecionada")!.style.display = "none";
-    const selectedTable = document.getElementById("tabela-selecionada-tabela")!;
-    selectedTable.style.display = "flex";
-
-    const table = databases[currentDatabase!].tables[currentTable!];
-
-    let divLinha = document.createElement("div");
-    divLinha.classList.add("linha-tabela");
-    Object.values(table.columns).forEach((column) => {
-        const divColuna = document.createElement("div");
-        divColuna.innerHTML = `
-            <p>${column.name}</p>
-            <p>${column.type.toUpperCase()}${column.isPrimaryKey ? " • PK" : ""}${column.isForeignKey ? " • FK → " + column.reference?.table + ", " + column.reference?.column : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO INCREMENT" : ""}</p>
-        `;
-
-        divColuna.onclick = function () {
-            showHideTabelaSelecionadaLinhaColuna(true);
-            changeTabelaSelecionadaLinhaColuna("column", undefined, column.name);
-        }
-
-        divLinha.appendChild(divColuna);
-    });
-    const headerActions = document.createElement("div");
-    headerActions.innerHTML = "<p>Ações</p>";
-    divLinha.appendChild(headerActions);
-
-    document.getElementById("tabela-selecionada-tabela")!.innerHTML = "";
-    document.getElementById("tabela-selecionada-tabela")!.appendChild(divLinha);
-
-    table.rows.forEach((row, index) => {
-        const divLinha = document.createElement("div");
-        divLinha.classList.add("linha-tabela");
-        Object.entries(row).forEach(([colName, value]) => {
-            const divCelula = document.createElement("div");
-            let displayValue: any = value;
-            const column = table.columns[colName];
-
-            if (column && column.type === "date" && value !== null) {
-                let d: Date | null = null;
-                if (value instanceof Date) d = value;
-                else if (typeof value === "number") d = new Date(value);
-                else if (typeof value === "string") d = new Date(value);
-
-                if (d && !isNaN(d.getTime())) {
-                    const day = String(d.getDate()).padStart(2, "0");
-                    const month = String(d.getMonth() + 1).padStart(2, "0");
-                    const year = d.getFullYear();
-                    displayValue = `${day}/${month}/${year}`;
-                }
-            } else if (column && column.type === "time" && value !== null) {
-                if (value instanceof Date || typeof value === "number") {
-                    const d = value instanceof Date ? value : new Date(value);
-                    const hours = String(d.getHours()).padStart(2, "0");
-                    const minutes = String(d.getMinutes()).padStart(2, "0");
-                    const seconds = String(d.getSeconds()).padStart(2, "0");
-                    displayValue = `${hours}:${minutes}:${seconds}`;
-                } else if (typeof value === "string") {
-                    displayValue = value;
-                }
-            } else if (value instanceof Date) {
-                const day = String(value.getDate()).padStart(2, "0");
-                const month = String(value.getMonth() + 1).padStart(2, "0");
-                const year = value.getFullYear();
-                displayValue = `${day}/${month}/${year}`;
-            }
-
-            divCelula.innerHTML = `<p>${displayValue}</p>`;
-            divLinha.appendChild(divCelula);
-        });
-        const rowActions = document.createElement("div");
-        rowActions.innerHTML = `
-            <button onclick="abrirFechar(false, 'editar-linha'); changeEditRowMenu(${index})">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-pencil"></use></svg>
-            </button>
-            <button onclick="abrirFechar(false, 'confirmar-deletar'); changeConfirmDeleteMenu('row', ${index}, undefined)">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>
-            </button>
-        `;
-
-        divLinha.onclick = function () {
-            showHideTabelaSelecionadaLinhaColuna(true);
-            changeTabelaSelecionadaLinhaColuna("row", index, undefined);
-        }
-        divLinha.appendChild(rowActions);
-
-        document.getElementById("tabela-selecionada-tabela")!.appendChild(divLinha);
-    });
-}
-
-function changeTabelaInfoVariosBotoes() {
-    if (currentDatabase === null) {
-        const tabelaInfo = document.getElementById("tabela-info-varios-botoes")!;
-        tabelaInfo.querySelector("#nome-tabela")!.textContent = "Nenhuma tabela selecionada";
-        tabelaInfo.querySelector("#linhas-colunas")!.textContent = "0 linhas • 0 colunas";
-    } else if (currentTable === null) {
-        const tabelaInfo = document.getElementById("tabela-info-varios-botoes")!;
-        tabelaInfo.querySelector("#nome-tabela")!.textContent = "Nenhuma tabela selecionada";
-        tabelaInfo.querySelector("#linhas-colunas")!.textContent = "0 linhas • 0 colunas";
-    } else {
-        const tabelaInfo = document.getElementById("tabela-info-varios-botoes")!;
-        tabelaInfo.querySelector("#nome-tabela")!.textContent = currentTable;
-        tabelaInfo.querySelector("#linhas-colunas")!.textContent = `${Object.keys(databases[currentDatabase!].tables[currentTable!].rows).length} linhas • ${Object.keys(databases[currentDatabase!].tables[currentTable!].columns).length} colunas`;
-    }
-}
-
-function parseColumnsFromInputs(columns: HTMLCollection, existingColumns: Record<string, Column>): Column[] | null {
-    const parsedColumns: Column[] = [];
-    const knownColumns = new Set(Object.keys(existingColumns));
-
-    for (const columnDiv of columns) {
-        const columnNameInput = columnDiv.querySelector("input[type='text']") as HTMLInputElement;
-        const columnName = columnNameInput.value.trim().toLowerCase();
-        if (columnName === "") {
-            openNotifications("<p style='color: var(--red5)'>O nome da coluna não pode ser vazio.</p>");
-            return null;
-        } else if (knownColumns.has(columnName)) {
-            openNotifications("<p style='color: var(--red5)'>Já existe uma coluna com esse nome.</p>");
-            return null;
-        }
-
-        const columnTypeElement = columnDiv.querySelector(".custom-dropdown-trigger") as HTMLElement;
-        const isPrimaryKey = columnDiv.querySelector(".primary-key") as HTMLInputElement;
-        const isForeignKey = columnDiv.querySelector(".foreign-key") as HTMLInputElement;
-        const isNotNull = columnDiv.querySelector(".not-null") as HTMLInputElement;
-        const isUnique = columnDiv.querySelector(".unique") as HTMLInputElement;
-        const hasDefault = columnDiv.querySelector(".default") as HTMLInputElement;
-        const isAutoIncrement = columnDiv.querySelector(".auto-increment") as HTMLInputElement;
-        const isAutoDate = columnDiv.querySelector(".auto-date") as HTMLInputElement;
-        const isAutoTime = columnDiv.querySelector(".auto-time") as HTMLInputElement;
-
-        const column = new Column(columnName, columnTypeElement.textContent!.toLowerCase() as columnType,
-            isPrimaryKey.checked, isForeignKey.checked, isNotNull.checked, isUnique.checked,
-            isAutoIncrement.checked, hasDefault.checked, isAutoDate.checked, isAutoTime.checked);
-
-        if (hasDefault.checked) {
-            const defaultValue = columnDiv.querySelector(".default-input-text input") as HTMLInputElement;
-            if (defaultValue.value.trim() === "") {
-                openNotifications("<p style='color: var(--red5)'>O valor padrão não pode ser vazio.</p>");
-                return null;
-            }
-
-            if (column.type === "integer") {
-                column.defaultValue = parseInt(defaultValue.value);
-            } else if (column.type === "float") {
-                column.defaultValue = parseFloat(defaultValue.value);
-            } else if (column.type === "boolean") {
-                const boolValue = columnDiv.querySelector(".default-input-text .custom-dropdown-trigger") as HTMLElement;
-                column.defaultValue = boolValue.textContent === "True";
-            } else if (column.type === "date") {
-                column.defaultValue = new Date(defaultValue.value);
-            } else if (column.type === "time") {
-                const [hours, minutes, seconds] = defaultValue.value.split(":").map(Number);
-                column.defaultValue = createTimeValue(hours, minutes || 0, seconds || 0);
-            } else {
-                column.defaultValue = defaultValue.value;
-            }
-        }
-
-        if (columnTypeElement.textContent === "Enum") {
-            const enumValuesInput = columnDiv.querySelector(".enum-values input") as HTMLInputElement;
-            column.enumValues = [...new Set(enumValuesInput.value.split(",").map((v) => v.trim()))];
-        }
-
-        if (column.isForeignKey) {
-            const referenceTableElement = columnDiv.querySelector(".referencia .custom-dropdown:nth-child(2) .custom-dropdown-trigger") as HTMLElement;
-            const referenceColumnElement = columnDiv.querySelector(".referencia .custom-dropdown:nth-child(3) .custom-dropdown-trigger") as HTMLElement;
-            if (referenceTableElement.textContent === "Crie outra tabela" || referenceColumnElement.textContent === "Crie outra coluna") {
-                openNotifications("<p style='color: var(--red5)'>Selecione a tabela e coluna de referência para a chave estrangeira.</p>");
-                return null;
-            }
-            column.reference = {
-                table: referenceTableElement.textContent!,
-                column: referenceColumnElement.textContent!
-            };
-        }
-
-        knownColumns.add(columnName);
-        parsedColumns.push(column);
-    }
-
-    return parsedColumns;
-}
-
-function showHideTabelaSelecionadaLinhaColuna(shouldShow: boolean) {
-    const tabelaSelecionadaLinhaColuna = document.getElementById("tabela-selecionada-linha-coluna")!;
-    tabelaSelecionadaLinhaColuna.style.display = shouldShow ? "flex" : "none";
-}
-
-function changeTabelaSelecionadaLinhaColuna(type: "row" | "column", rowIndex?: number, columnName?: string) {
-    const tabelaSelecionadaLinhaColuna = document.getElementById("tabela-selecionada-linha-coluna")!;
-    const header = tabelaSelecionadaLinhaColuna.querySelector("#tabela-selecionada-linha-coluna-header h3")!;
-    header.textContent = type === "row" ? "Linha" : "Coluna";
-
-    const lineColumnsNumber = tabelaSelecionadaLinhaColuna.querySelector("h4")!;
-    lineColumnsNumber.textContent = type === "row" ? `${Object.keys(databases[currentDatabase!].tables[currentTable!].columns).length} colunas` : `${Object.keys(databases[currentDatabase!].tables[currentTable!].rows).length} linhas`;
-
-    const ul = tabelaSelecionadaLinhaColuna.querySelector("ul")!;
-    ul.innerHTML = "";
-    if (type === "row") {
-        for (const columnName in databases[currentDatabase!].tables[currentTable!].columns) {
-            const div = document.createElement("div");
-            const columnType = databases[currentDatabase!].tables[currentTable!].columns[columnName].type;
-            const value = databases[currentDatabase!].tables[currentTable!].rows[rowIndex!][columnName];
-            div.innerHTML = `
-                <h5>${columnName} (${columnType})</h5>
-                <p>${columnType === "date" ? new Date(value).toLocaleDateString() : columnType === "time" ? new Date(value).toLocaleTimeString() : value}</p>
-            `;
-            ul.appendChild(div);
-        }
-    } else {
-        for (let i = 0; i < databases[currentDatabase!].tables[currentTable!].rows.length; i++) {
-            const div = document.createElement("div");
-            const value = databases[currentDatabase!].tables[currentTable!].rows[i][columnName!];
-            const columnType = databases[currentDatabase!].tables[currentTable!].columns[columnName!].type.toLocaleLowerCase();
-            div.innerHTML = `
-                <h5>Linha ${i + 1}</h5>
-                <p>${columnType === "date" ? new Date(value).toLocaleDateString() : columnType === "time" ? new Date(value).toLocaleTimeString() : value}</p>
-            `;
-            ul.appendChild(div);
-        }
-    }
-}
-
-function refreshUI() {
-    changeDatabaseDropdown();
-    changeTabelasLista();
-    changeTabelaSelecionadaTabela();
-    changeTabelaInfoVariosBotoes();
-}
-
-// central menus
 function changeConfigurarDatabaseMenu() {
     const menu = document.getElementById("configurar-database")!;
     if (currentDatabase === null) {
@@ -1692,7 +1878,7 @@ function changeEditRowMenu(rowIndex: number) {
                 input.classList.add("menu-central-input");
                 input.type = "date";
                 const value = databases[currentDatabase!].tables[currentTable!].rows[rowIndex][column.name];
-                input.value = value instanceof Date ? `${String(value.getFullYear()).padStart(4, "0")}-${String(value.getMonth() + 1).padStart(2, "0")}-${String(value.getDate()).padStart(2, "0")}` : "";
+                input.value = formatDateForInput(value);
                 div.appendChild(input);
             }
 
@@ -1707,7 +1893,7 @@ function changeEditRowMenu(rowIndex: number) {
                 input.type = "time";
                 input.step = "1";
                 const value = databases[currentDatabase!].tables[currentTable!].rows[rowIndex][column.name];
-                input.value = value instanceof Date ? `${String(value.getHours()).padStart(2, "0")}:${String(value.getMinutes()).padStart(2, "0")}` : "";
+                input.value = formatTimeForInput(value);
                 div.appendChild(input);
             }
         } else if (column.type === "enum") {
@@ -1786,32 +1972,57 @@ function changeSearchMenu() {
     // Joins
     const referencesDiv = document.querySelector("#references-search")!;
     referencesDiv.innerHTML = "";
-    const currentTableReferences: { columnName: string; reference: reference }[] = [];
-    for (const columnName in currentTableObj.columns) {
-        const column = currentTableObj.columns[columnName];
-        if (column.isForeignKey && column.reference) {
-            currentTableReferences.push({ columnName, reference: column.reference });
-        }
-    }
 
+    const isReferenceByDiv = document.querySelector("#is-referenced-by-search")! as HTMLDivElement;
+    isReferenceByDiv.innerHTML = "";
+
+    const relationships = databases[currentDatabase!].getTableRelationships(currentTable!);
+    const currentTableReferences = relationships.outgoing;
+    const referencedBy = relationships.incoming;
+
+    // OUTGOING
     if (currentTableReferences.length === 0) {
-        referencesDiv.innerHTML = "<p>Não há chaves estrangeiras nessa tabela para realizar joins</p>";
+        referencesDiv.innerHTML =
+            "<p>Não há chaves estrangeiras nessa tabela para realizar joins</p>";
     } else {
         currentTableReferences.forEach((ref) => {
             const buttonRef = document.createElement("button");
-            buttonRef.classList.add("outlined");
+            buttonRef.classList.add("reference-button");
             buttonRef.innerHTML = `
-            <p class="text2">${ref.columnName} → ${ref.reference.table}, ${ref.reference.column}</p>
+                <p class="text2">
+                    ${ref.column}
+                    → ${ref.referenceTable}.${ref.referenceColumn}
+                </p>
             `;
+            buttonRef.onclick = function () {
+                buttonRef.classList.toggle("reference-button-active");
+            };
+
             referencesDiv.appendChild(buttonRef);
         });
     }
 
-    const isReferenceByDiv = document.querySelector("#is-referenced-by-search")! as HTMLDivElement;
-    const referencedBy: { tableName: string; columnName: string; }[] = [];
-
-    if (referencedBy.length === 0) {
+    // INCOMING
+    if (Object.keys(referencedBy).length === 0) {
         isReferenceByDiv.innerHTML = "<p>Essa tabela não é referenciada por nenhuma chave estrangeira para realizar joins</p>";
+    } else {
+        Object.entries(referencedBy).forEach(([columnName, refs]) => {
+            refs.forEach((ref) => {
+                const buttonRef = document.createElement("button");
+                buttonRef.classList.add("reference-button");
+                buttonRef.innerHTML = `
+                    <p class="text2">
+                        ${ref.table}.${ref.column}
+                        → ${columnName}
+                    </p>
+                `;
+                buttonRef.onclick = function () {
+                    buttonRef.classList.toggle("reference-button-active");
+                };
+
+                isReferenceByDiv.appendChild(buttonRef);
+            });
+        });
     }
 
 }
@@ -1874,37 +2085,10 @@ function changeConfirmDeleteMenu(type: "database" | "table" | "column" | "row", 
 
             if (column) {
                 if (column.type === "date" && value !== null) {
-                    let d: Date | null = null;
-                    if (value instanceof Date) d = value;
-                    else if (typeof value === "number") d = new Date(value);
-                    else if (typeof value === "string") d = new Date(value);
-                    if (d && !isNaN(d.getTime())) {
-                        const day = String(d.getDate()).padStart(2, "0");
-                        const month = String(d.getMonth() + 1).padStart(2, "0");
-                        const year = d.getFullYear();
-                        display = `${day}/${month}/${year}`;
-                    }
+                    display = formatDateForDisplay(value);
                 } else if (column.type === "time" && value !== null) {
-                    if (value instanceof Date || typeof value === "number") {
-                        const d = value instanceof Date ? value : new Date(value);
-                        const hours = String(d.getHours()).padStart(2, "0");
-                        const minutes = String(d.getMinutes()).padStart(2, "0");
-                        const seconds = String(d.getSeconds()).padStart(2, "0");
-                        display = `${hours}:${minutes}:${seconds}`;
-                    } else if (typeof value === "string") {
-                        display = value;
-                    }
-                } else if (value instanceof Date) {
-                    const day = String(value.getDate()).padStart(2, "0");
-                    const month = String(value.getMonth() + 1).padStart(2, "0");
-                    const year = value.getFullYear();
-                    display = `${day}/${month}/${year}`;
+                    display = formatTimeForDisplay(value);
                 }
-            } else if (value instanceof Date) {
-                const day = String(value.getDate()).padStart(2, "0");
-                const month = String(value.getMonth() + 1).padStart(2, "0");
-                const year = value.getFullYear();
-                display = `${day}/${month}/${year}`;
             }
 
             return `<p class="text3">${key}: ${display}</p>`;
@@ -2190,3 +2374,9 @@ document.getElementById("menus-centrais")!.addEventListener("click", (event) => 
 createExempleDatabase();
 createColumnCreationDiv(document.querySelector("#criacao-tabela ul")!);
 createColumnCreationDiv(document.getElementById("criacao-colunas-edit")!);
+
+// To Do
+// -Pesquisar(Dashboard)
+// -Terminal
+// -Salvar em arquivo e carregar do arquivo
+// -Modelo lógico (diagrama de entidade relacionamento)
