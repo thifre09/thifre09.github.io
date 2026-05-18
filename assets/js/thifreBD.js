@@ -152,7 +152,7 @@ function createExempleDatabase() {
         openNotifications("<p style='color: var(--yellow5)'>A database de exemplo ja existe e foi selecionada.</p>");
         return;
     }
-    createDatabase(new Database(databaseName));
+    SGBDFunctions.createDatabase(new Database(databaseName));
     const usuarios = new Table("usuarios");
     usuarios.columns["id"] = new Column("id", "integer", true, false, true, true, true, false);
     usuarios.columns["nome"] = new Column("nome", "text", false, false, true, false, false, false);
@@ -166,9 +166,9 @@ function createExempleDatabase() {
     usuarios.columns["hora_entrada"].defaultValue = "09:00";
     usuarios.columns["perfil"] = new Column("perfil", "enum", false, false, true, false, false, true, false, false, ["admin", "editor", "leitor"]);
     usuarios.columns["perfil"].defaultValue = "leitor";
-    createTable(usuarios);
+    SGBDFunctions.createTable(usuarios);
     const idColumn = usuarios.columns["id"];
-    addRow("usuarios", {
+    SGBDFunctions.addRow("usuarios", {
         id: idColumn.increment(),
         nome: "Alice",
         email: "alice@email.com",
@@ -178,7 +178,7 @@ function createExempleDatabase() {
         hora_entrada: createTimeValue(8, 30),
         perfil: "admin"
     });
-    addRow("usuarios", {
+    SGBDFunctions.addRow("usuarios", {
         id: idColumn.increment(),
         nome: "Bruno",
         email: "bruno@email.com",
@@ -188,7 +188,7 @@ function createExempleDatabase() {
         hora_entrada: createTimeValue(9, 15),
         perfil: "editor"
     });
-    addRow("usuarios", {
+    SGBDFunctions.addRow("usuarios", {
         id: idColumn.increment(),
         nome: "Carla",
         email: "carla@email.com",
@@ -210,9 +210,9 @@ function createExempleDatabase() {
     posts.columns["status"] = new Column("status", "enum", false, false, true, false, false, true, false, false, ["rascunho", "publicado", "arquivado"]);
     posts.columns["status"].defaultValue = "rascunho";
     posts.columns["publicado_em"] = new Column("publicado_em", "date", false, false, false, false, false, false, false, false);
-    createTable(posts);
+    SGBDFunctions.createTable(posts);
     const postIdColumn = posts.columns["id"];
-    addRow("posts", {
+    SGBDFunctions.addRow("posts", {
         id: postIdColumn.increment(),
         usuario_id: 1,
         titulo: "Primeiro post",
@@ -222,7 +222,7 @@ function createExempleDatabase() {
         status: "publicado",
         publicado_em: new Date("2026-04-01")
     });
-    addRow("posts", {
+    SGBDFunctions.addRow("posts", {
         id: postIdColumn.increment(),
         usuario_id: 2,
         titulo: "Rascunho do Bruno",
@@ -240,9 +240,9 @@ function createExempleDatabase() {
     auditoria.columns["sucesso"] = new Column("sucesso", "boolean", false, false, true, false, false, true);
     auditoria.columns["sucesso"].defaultValue = true;
     auditoria.columns["feito_em"] = new Column("feito_em", "date", false, false, true, false, false, false, true, false);
-    createTable(auditoria);
+    SGBDFunctions.createTable(auditoria);
     const auditIdColumn = auditoria.columns["id"];
-    addRow("auditoria", {
+    SGBDFunctions.addRow("auditoria", {
         id: auditIdColumn.increment(),
         entidade: "usuarios",
         entidade_id: 1,
@@ -250,7 +250,7 @@ function createExempleDatabase() {
         sucesso: true,
         feito_em: new Date("2026-04-20")
     });
-    addRow("auditoria", {
+    SGBDFunctions.addRow("auditoria", {
         id: auditIdColumn.increment(),
         entidade: "posts",
         entidade_id: 1,
@@ -263,23 +263,23 @@ function createExempleDatabase() {
     tarefas.columns["titulo"] = new Column("titulo", "text", false, false, true, false, false, false);
     tarefas.columns["concluida"] = new Column("concluida", "boolean", false, false, false, false, false, true);
     tarefas.columns["concluida"].defaultValue = false;
-    createTable(tarefas);
+    SGBDFunctions.createTable(tarefas);
     const tarefaIdColumn = tarefas.columns["id"];
-    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Arrumar a mesa", concluida: true });
-    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Responder mensagens", concluida: false });
-    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Revisar o código", concluida: true });
-    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Fazer backup", concluida: false });
-    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Atualizar a documentação", concluida: true });
-    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Testar o build", concluida: true });
-    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Organizar imagens", concluida: false });
-    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Separar ideias novas", concluida: false });
-    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Revisar layout", concluida: true });
-    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Limpar rascunhos", concluida: false });
-    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Publicar atualização", concluida: false });
-    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Conferir links", concluida: true });
-    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Escrever resumo", concluida: false });
-    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Rever cores", concluida: true });
-    addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Fechar pendências", concluida: false });
+    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Arrumar a mesa", concluida: true });
+    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Responder mensagens", concluida: false });
+    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Revisar o código", concluida: true });
+    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Fazer backup", concluida: false });
+    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Atualizar a documentação", concluida: true });
+    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Testar o build", concluida: true });
+    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Organizar imagens", concluida: false });
+    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Separar ideias novas", concluida: false });
+    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Revisar layout", concluida: true });
+    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Limpar rascunhos", concluida: false });
+    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Publicar atualização", concluida: false });
+    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Conferir links", concluida: true });
+    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Escrever resumo", concluida: false });
+    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Rever cores", concluida: true });
+    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Fechar pendências", concluida: false });
     currentTable = null;
     refreshUI();
     changeEditColumnsMenu();
@@ -427,148 +427,208 @@ class Column {
         return this.incrementCounter++;
     }
 }
-let databases = {};
-let currentDatabase = null;
-let currentTable = null;
-//#endregion
-// #region SGBD functions
-function createDatabase(database) {
-    databases[database.name] = database;
-    currentDatabase = database.name;
-    currentTable = null;
-    refreshUI();
-}
-function createTable(table) {
-    const db = databases[currentDatabase];
-    for (const columnName in table.columns) {
-        table.indexes[columnName] = new Map();
+class TerminalSession {
+    constructor(name) {
+        this.name = name;
+        this.history = [];
+        this.active = true;
     }
-    for (const columnName in table.columns) {
-        const column = table.columns[columnName];
-        if (!column.reference)
-            continue;
-        db.registerForeignKey(table.name, columnName, column.reference.table, column.reference.column);
+    createEntry(command, output, type) {
+        this.history.push({ database: currentDatabase, command, output, type, timestamp: new Date() });
     }
-    db.tables[table.name] = table;
-    currentTable = table.name;
-    refreshUI();
 }
-function addColumn(tableName, column) {
-    databases[currentDatabase].tables[tableName].columns[column.name] = column;
-    databases[currentDatabase].tables[tableName].indexes[column.name] = new Map();
-    if (column.reference) {
-        databases[currentDatabase].registerForeignKey(tableName, column.name, column.reference.table, column.reference.column);
+class SGBDFunctions {
+    static createDatabase(database) {
+        databases[database.name] = database;
+        currentDatabase = database.name;
+        currentTable = null;
+        refreshUI();
     }
-    refreshUI();
-}
-function addRow(tableName, row) {
-    const table = databases[currentDatabase].tables[tableName];
-    const rowIndex = table.rows.length;
-    table.rows.push(row);
-    for (const col in table.indexes) {
-        const value = row[col];
-        if (!table.indexes[col].has(value)) {
-            table.indexes[col].set(value, []);
+    static createTable(table) {
+        const db = databases[currentDatabase];
+        for (const columnName in table.columns) {
+            table.indexes[columnName] = new Map();
         }
-        table.indexes[col].get(value).push(rowIndex);
+        for (const columnName in table.columns) {
+            const column = table.columns[columnName];
+            if (!column.reference)
+                continue;
+            db.registerForeignKey(table.name, columnName, column.reference.table, column.reference.column);
+        }
+        db.tables[table.name] = table;
+        currentTable = table.name;
+        refreshUI();
     }
-    refreshUI();
-}
-function editRow(tableName, oldRowIndex, newRow) {
-    const table = databases[currentDatabase].tables[tableName];
-    const oldRow = table.rows[oldRowIndex];
-    for (const col in table.indexes) {
-        const oldValue = oldRow[col];
-        const indexMap = table.indexes[col];
-        if (indexMap.has(oldValue)) {
-            const arr = indexMap.get(oldValue);
-            const pos = arr.indexOf(oldRowIndex);
-            if (pos !== -1)
-                arr.splice(pos, 1);
-            if (arr.length === 0) {
-                indexMap.delete(oldValue);
+    static addColumn(tableName, column) {
+        databases[currentDatabase].tables[tableName].columns[column.name] = column;
+        databases[currentDatabase].tables[tableName].indexes[column.name] = new Map();
+        if (column.reference) {
+            databases[currentDatabase].registerForeignKey(tableName, column.name, column.reference.table, column.reference.column);
+        }
+        refreshUI();
+    }
+    static addRow(tableName, row) {
+        const table = databases[currentDatabase].tables[tableName];
+        const rowIndex = table.rows.length;
+        table.rows.push(row);
+        for (const col in table.indexes) {
+            const value = row[col];
+            if (!table.indexes[col].has(value)) {
+                table.indexes[col].set(value, []);
             }
+            table.indexes[col].get(value).push(rowIndex);
         }
+        refreshUI();
     }
-    table.rows[oldRowIndex] = newRow;
-    for (const col in table.indexes) {
-        const newValue = newRow[col];
-        const indexMap = table.indexes[col];
-        if (!indexMap.has(newValue)) {
-            indexMap.set(newValue, []);
-        }
-        indexMap.get(newValue).push(oldRowIndex);
-    }
-    refreshUI();
-}
-function deleteDatabase(databaseName) {
-    delete databases[databaseName];
-    if (currentDatabase === databaseName) {
-        currentDatabase = null;
-        currentTable = null;
-    }
-    refreshUI();
-}
-function deleteTable(tableName) {
-    const db = databases[currentDatabase];
-    const table = db.tables[tableName];
-    // 🧹 remove todas as FKs QUE SAEM dessa tabela
-    for (const column of Object.values(table.columns)) {
-        if (!column.reference)
-            continue;
-        db.unregisterForeignKey(tableName, column.name, column.reference.table, column.reference.column);
-    }
-    delete db.tables[tableName];
-    if (currentTable === tableName) {
-        currentTable = null;
-    }
-    refreshUI();
-}
-function deleteColumn(tableName, columnName) {
-    const db = databases[currentDatabase];
-    const table = db.tables[tableName];
-    const column = table.columns[columnName];
-    if (column.reference) {
-        db.unregisterForeignKey(tableName, columnName, column.reference.table, column.reference.column);
-    }
-    table.indexes[columnName]?.clear();
-    delete table.indexes[columnName];
-    for (const row of table.rows) {
-        delete row[columnName];
-    }
-    delete table.columns[columnName];
-    refreshUI();
-}
-function deleteRow(tableName, rowIndex) {
-    const table = databases[currentDatabase].tables[tableName];
-    const row = table.rows[rowIndex];
-    for (const col in table.indexes) {
-        const value = row[col];
-        const indexMap = table.indexes[col];
-        if (!indexMap.has(value))
-            continue;
-        const arr = indexMap.get(value);
-        const pos = arr.indexOf(rowIndex);
-        if (pos !== -1)
-            arr.splice(pos, 1);
-        if (arr.length === 0) {
-            indexMap.delete(value);
-        }
-    }
-    table.rows.splice(rowIndex, 1);
-    for (const col in table.indexes) {
-        const indexMap = table.indexes[col];
-        for (const [value, arr] of indexMap.entries()) {
-            for (let i = 0; i < arr.length; i++) {
-                if (arr[i] > rowIndex) {
-                    arr[i]--;
+    static editRow(tableName, oldRowIndex, newRow) {
+        const table = databases[currentDatabase].tables[tableName];
+        const oldRow = table.rows[oldRowIndex];
+        for (const col in table.indexes) {
+            const oldValue = oldRow[col];
+            const indexMap = table.indexes[col];
+            if (indexMap.has(oldValue)) {
+                const arr = indexMap.get(oldValue);
+                const pos = arr.indexOf(oldRowIndex);
+                if (pos !== -1)
+                    arr.splice(pos, 1);
+                if (arr.length === 0) {
+                    indexMap.delete(oldValue);
                 }
             }
         }
+        table.rows[oldRowIndex] = newRow;
+        for (const col in table.indexes) {
+            const newValue = newRow[col];
+            const indexMap = table.indexes[col];
+            if (!indexMap.has(newValue)) {
+                indexMap.set(newValue, []);
+            }
+            indexMap.get(newValue).push(oldRowIndex);
+        }
+        refreshUI();
     }
-    refreshUI();
+    static deleteDatabase(databaseName) {
+        delete databases[databaseName];
+        if (currentDatabase === databaseName) {
+            currentDatabase = null;
+            currentTable = null;
+        }
+        refreshUI();
+    }
+    static deleteTable(tableName) {
+        const db = databases[currentDatabase];
+        const table = db.tables[tableName];
+        // 🧹 remove todas as FKs QUE SAEM dessa tabela
+        for (const column of Object.values(table.columns)) {
+            if (!column.reference)
+                continue;
+            db.unregisterForeignKey(tableName, column.name, column.reference.table, column.reference.column);
+        }
+        delete db.tables[tableName];
+        if (currentTable === tableName) {
+            currentTable = null;
+        }
+        refreshUI();
+    }
+    static deleteColumn(tableName, columnName) {
+        const db = databases[currentDatabase];
+        const table = db.tables[tableName];
+        const column = table.columns[columnName];
+        if (column.reference) {
+            db.unregisterForeignKey(tableName, columnName, column.reference.table, column.reference.column);
+        }
+        table.indexes[columnName]?.clear();
+        delete table.indexes[columnName];
+        for (const row of table.rows) {
+            delete row[columnName];
+        }
+        delete table.columns[columnName];
+        refreshUI();
+    }
+    static deleteRow(tableName, rowIndex) {
+        const table = databases[currentDatabase].tables[tableName];
+        const row = table.rows[rowIndex];
+        for (const col in table.indexes) {
+            const value = row[col];
+            const indexMap = table.indexes[col];
+            if (!indexMap.has(value))
+                continue;
+            const arr = indexMap.get(value);
+            const pos = arr.indexOf(rowIndex);
+            if (pos !== -1)
+                arr.splice(pos, 1);
+            if (arr.length === 0) {
+                indexMap.delete(value);
+            }
+        }
+        table.rows.splice(rowIndex, 1);
+        for (const col in table.indexes) {
+            const indexMap = table.indexes[col];
+            for (const [value, arr] of indexMap.entries()) {
+                for (let i = 0; i < arr.length; i++) {
+                    if (arr[i] > rowIndex) {
+                        arr[i]--;
+                    }
+                }
+            }
+        }
+        refreshUI();
+    }
 }
-// #endregion
+class SQLCommandHandler {
+    static execute(tokens) {
+        const command = tokens[0]?.toUpperCase();
+        switch (command) {
+            case "CREATE":
+                SQLCommandHandler.create(tokens);
+            case "DELETE":
+                SQLCommandHandler.delete(tokens);
+            case "DROP":
+                SQLCommandHandler.drop(tokens);
+            case "INSERT":
+                SQLCommandHandler.insert(tokens);
+            case "UPDATE":
+                SQLCommandHandler.update(tokens);
+            case "USE":
+                SQLCommandHandler.use(tokens);
+            default:
+                throw new Error("Comando inválido");
+        }
+    }
+    static create(tokens) {
+        function createDatabase(tokens) {
+            const databaseName = tokens[2];
+            SGBDFunctions.createDatabase(new Database(databaseName));
+        }
+        function createTable(tokens) {
+            const tableName = tokens[2];
+        }
+        const target = tokens[1]?.toUpperCase();
+        switch (target) {
+            case "DATABASE":
+                createDatabase(tokens);
+            case "TABLE":
+                createTable(tokens);
+            default:
+                throw new Error("CREATE inválido");
+        }
+    }
+    static drop(tokens) {
+    }
+    static insert(tokens) {
+    }
+    static update(tokens) {
+    }
+    static delete(tokens) {
+    }
+    static use(tokens) {
+    }
+}
+let databases = {};
+let currentDatabase = null;
+let currentTable = null;
+let terminalSessions = [];
+//#endregion
 // #region Interface functions
 function createDatabaseInterface() {
     const databaseNameInput = document.getElementById("nome-database-input");
@@ -581,7 +641,7 @@ function createDatabaseInterface() {
         openNotifications("<p style='color: var(--red5)'>Já existe uma database com esse nome.</p>");
         return;
     }
-    createDatabase(new Database(databaseName));
+    SGBDFunctions.createDatabase(new Database(databaseName));
     databaseNameInput.value = "";
     openNotifications(`<p style='color: var(--green4)'>Database "${databaseName}" criada com sucesso!</p>`);
 }
@@ -608,7 +668,7 @@ function createTableInterface() {
     for (const column of parsedColumns) {
         table.columns[column.name] = column;
     }
-    createTable(table);
+    SGBDFunctions.createTable(table);
     columnsUl.innerHTML = "";
     createColumnCreationDiv(columnsUl);
     tableNameInput.value = "";
@@ -672,7 +732,7 @@ function addColumnsInterface() {
         }
     }
     for (const column of columnsToAdd) {
-        addColumn(table.name, column);
+        SGBDFunctions.addColumn(table.name, column);
     }
     columnsUl.innerHTML = "";
     createColumnCreationDiv(columnsUl);
@@ -768,7 +828,7 @@ function insertRowInterface() {
             row[columnName] = input.value;
         }
     }
-    addRow(currentTable, row);
+    SGBDFunctions.addRow(currentTable, row);
     changeAddRowMenu();
     openNotifications(`<p style='color: var(--green5)'>Linha inserida com sucesso!</p>`);
 }
@@ -796,6 +856,17 @@ function editRowInterface(rowIndex) {
                 }
             }
             row[columnName] = value === "True";
+            continue;
+        }
+        if (table.columns[columnName].type === "enum") {
+            const value = column.querySelector(".custom-dropdown button").textContent.trim();
+            if (table.columns[columnName].isUnique && table.indexes[columnName].has(value)) {
+                if (value !== table.rows[rowIndex][columnName]) {
+                    openNotifications(`<p style='color: var(--red5)'>O valor "${value}" já existe para a coluna "${columnName}".</p>`);
+                    return;
+                }
+            }
+            row[columnName] = value;
             continue;
         }
         if (table.columns[columnName].isAutoDate || table.columns[columnName].isAutoTime) {
@@ -844,7 +915,7 @@ function editRowInterface(rowIndex) {
             row[columnName] = input.value;
         }
     }
-    editRow(currentTable, rowIndex, row);
+    SGBDFunctions.editRow(currentTable, rowIndex, row);
     changeEditRowMenu(rowIndex);
     openNotifications(`<p style='color: var(--green5)'>Linha editada com sucesso!</p>`);
 }
@@ -1659,17 +1730,20 @@ function changeEditRowMenu(rowIndex) {
         else if (column.type === "enum") {
             const dropdown = document.createElement("div");
             dropdown.className = "custom-dropdown";
+            const currentValue = databases[currentDatabase].tables[currentTable].rows[rowIndex][column.name];
+            const enumValues = column.enumValues ?? [];
+            const selectedValue = enumValues.includes(currentValue) ? currentValue : (enumValues[0] ?? "");
             const button = document.createElement("button");
             button.className = "custom-dropdown-trigger";
-            button.textContent = column.enumValues ? databases[currentDatabase].tables[currentTable].rows[rowIndex][column.name] : "Selecione um valor";
+            button.textContent = selectedValue || "Selecione um valor";
             button.onclick = function () { openCustomDropdown(button); };
             dropdown.appendChild(button);
             const menu = document.createElement("ul");
             menu.className = "custom-dropdown-menu";
-            column.enumValues.forEach((value, index) => {
+            enumValues.forEach((value) => {
                 const li = document.createElement("li");
                 li.className = "custom-dropdown-option";
-                if (index === column.enumValues?.indexOf(databases[currentDatabase].tables[currentTable].rows[rowIndex][column.name])) {
+                if (value === selectedValue) {
                     li.classList.add("custom-dropdown-option-selected");
                 }
                 li.textContent = value;
@@ -1679,7 +1753,7 @@ function changeEditRowMenu(rowIndex) {
             const hiddenInput = document.createElement("input");
             hiddenInput.type = "hidden";
             hiddenInput.name = "enum-value";
-            hiddenInput.value = databases[currentDatabase].tables[currentTable].rows[rowIndex][column.name];
+            hiddenInput.value = selectedValue;
             dropdown.appendChild(hiddenInput);
             div.appendChild(dropdown);
             updateCustomDropdowns();
@@ -1850,7 +1924,7 @@ function changeConfirmDeleteMenu(type, rowIndex, columnName) {
     const deleteButton = document.getElementById("confirmar-deletar-button");
     deleteButton.onclick = () => {
         if (type === "database") {
-            deleteDatabase(currentDatabase);
+            SGBDFunctions.deleteDatabase(currentDatabase);
             openNotifications("<p style='color: var(--green5)'>Database deletada com sucesso!</p>");
         }
         else if (type === "table") {
@@ -1867,7 +1941,7 @@ function changeConfirmDeleteMenu(type, rowIndex, columnName) {
                     </p>`);
                 return;
             }
-            deleteTable(currentTable);
+            SGBDFunctions.deleteTable(currentTable);
             openNotifications("<p style='color: var(--green5)'>Tabela deletada com sucesso!</p>");
         }
         else if (type === "column") {
@@ -1878,11 +1952,11 @@ function changeConfirmDeleteMenu(type, rowIndex, columnName) {
                     </p>`);
                 return;
             }
-            deleteColumn(currentTable, columnName);
+            SGBDFunctions.deleteColumn(currentTable, columnName);
             openNotifications("<p style='color: var(--green5)'>Coluna deletada com sucesso!</p>");
         }
         else if (type === "row") {
-            deleteRow(currentTable, rowIndex);
+            SGBDFunctions.deleteRow(currentTable, rowIndex);
             openNotifications("<p style='color: var(--green5)'>Linha deletada com sucesso!</p>");
         }
         document.getElementById("menus-centrais").style.display = "none";
@@ -2070,6 +2144,30 @@ function updateForeignKeyReferenceColumnOptions(parentDiv) {
     updateCustomDropdowns();
 }
 //#endregion
+// #region Terminal
+const commandTextarea = document.querySelector("#terminal-input-field");
+function executeCommand() {
+    const command = commandTextarea.value.trim();
+    const tokens = command.split(/\s+/);
+    if (tokens.length === 0)
+        return;
+}
+function createTerminalSession() {
+}
+commandTextarea.addEventListener("input", () => {
+    commandTextarea.style.height = "auto";
+    commandTextarea.style.height = commandTextarea.scrollHeight + "px";
+});
+commandTextarea.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault(); // impede quebra de linha
+        executeCommand();
+        commandTextarea.value = "";
+        commandTextarea.style.height = "auto";
+        commandTextarea.style.height = commandTextarea.scrollHeight + "px";
+    }
+});
+// #endregion
 document.addEventListener("click", closeAllCustomDropdowns);
 document.getElementById("menus-centrais").addEventListener("click", (event) => {
     if (event.target !== event.currentTarget)
@@ -2086,6 +2184,5 @@ createColumnCreationDiv(document.getElementById("criacao-colunas-edit"));
 // To Do
 // -Pesquisar(Dashboard)
 // -Terminal
-// -Consertar editar linha
 // -Salvar em arquivo e carregar do arquivo
 // -Modelo lógico (diagrama de entidade relacionamento)

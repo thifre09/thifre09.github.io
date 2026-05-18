@@ -15,6 +15,7 @@ div#title-div {
     display: flex;
     justify-content: center;
     align-items: center;
+
     h1#title {
         text-align: center;
         color: var(--blue6);
@@ -75,7 +76,7 @@ nav#barra-main {
         text-decoration: none;
         text-align: center;
 
-        > a {
+        >a {
             text-decoration: none;
             text-align: center;
             color: white;
@@ -394,10 +395,10 @@ section#notas-atualizacao-container {
                 .tipo-nota {
                     color: var(--green4);
 
-                    h4 { 
+                    h4 {
                         background-color: var(--green9);
                     }
-                    
+
                 }
             }
 
@@ -407,10 +408,10 @@ section#notas-atualizacao-container {
                 .tipo-nota {
                     color: var(--orange5);
 
-                    h4 { 
+                    h4 {
                         background-color: var(--orange9);
                     }
-                    
+
                 }
             }
         }
@@ -482,7 +483,8 @@ section#notas-atualizacao-container {
             }
         }
 
-        #topo-criar-nota, #topo-editar-nota {
+        #topo-criar-nota,
+        #topo-editar-nota {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -520,7 +522,7 @@ section#notas-atualizacao-container {
                 background: var(--blue4);
                 transform: scale(1.05);
             }
-        }   
+        }
     }
 }
 
@@ -642,7 +644,8 @@ section#bloco-notas-container {
         overflow: auto;
     }
 
-    #criar-nota, #editar-nota {
+    #criar-nota,
+    #editar-nota {
         display: flex;
         flex-direction: column;
 
@@ -688,15 +691,16 @@ section#bloco-notas-container {
     height: fit-content;
     display: grid;
     /* Define 7 colunas de larguras iguais */
-    grid-template-columns: repeat(7, 1fr); 
-    gap: 10px; /* Espaçamento entre os botões */
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    /* Espaçamento entre os botões */
     padding: 20px;
     border-radius: 15px;
     box-shadow: 0 10px 25px var(--gray66);
 
     .display {
         /* Ocupa todas as 7 colunas */
-        grid-column: span 7; 
+        grid-column: span 7;
         background-color: rgba(0, 0, 0, 0.7);
         display: flex;
         flex-direction: column;
@@ -722,7 +726,7 @@ section#bloco-notas-container {
 
     button {
         /* Botões agora preenchem o espaço da célula do grid */
-        width: 100%; 
+        width: 100%;
         aspect-ratio: 1 / 1;
         cursor: pointer;
         font-size: 1.2rem;
@@ -739,7 +743,7 @@ section#bloco-notas-container {
 
     button#equal-button {
         grid-column: span 2;
-        aspect-ratio: auto; 
+        aspect-ratio: auto;
         height: 100%;
         background-color: var(--blue5);
     }
@@ -756,20 +760,24 @@ section#bloco-notas-container {
         background-color: var(--orange5);
     }
 
-    button[onClick^="appendOperator"], button[onClick^="calculateSqrt"] {
+    button[onClick^="appendOperator"],
+    button[onClick^="calculateSqrt"] {
         background-color: var(--green5);
         font-size: 1.5rem;
     }
 
-    button[onClick^="appendOperator"]:hover, button[onClick^="calculateSqrt"]:hover {
+    button[onClick^="appendOperator"]:hover,
+    button[onClick^="calculateSqrt"]:hover {
         background-color: var(--green4);
     }
 
-    button[onClick="clearDisplay()"], button[onClick="deleteDigit()"] {
+    button[onClick="clearDisplay()"],
+    button[onClick="deleteDigit()"] {
         background-color: var(--red6);
     }
 
-    button[onClick="clearDisplay()"]:hover, button[onClick="deleteDigit()"]:hover {
+    button[onClick="clearDisplay()"]:hover,
+    button[onClick="deleteDigit()"]:hover {
         background-color: var(--red5);
     }
 }
@@ -884,28 +892,34 @@ section#bloco-notas-container {
     }
 
     .calculator {
-        grid-template-columns: repeat(4, 1fr); 
+        grid-template-columns: repeat(4, 1fr);
 
         .display {
-            grid-column: span 4; 
+            grid-column: span 4;
         }
 
         button#equal-button {
             grid-column: span 1;
-            aspect-ratio: auto; 
+            aspect-ratio: auto;
             height: 100%;
             background-color: var(--blue5);
         }
 
-        button[onClick="appendNumber('1')"], button[onClick="appendNumber('2')"], button[onClick="appendNumber('3')"] {
+        button[onClick="appendNumber('1')"],
+        button[onClick="appendNumber('2')"],
+        button[onClick="appendNumber('3')"] {
             grid-row-start: 3;
         }
 
-        button[onClick="appendNumber('4')"], button[onClick="appendNumber('5')"], button[onClick="appendNumber('6')"] {
+        button[onClick="appendNumber('4')"],
+        button[onClick="appendNumber('5')"],
+        button[onClick="appendNumber('6')"] {
             grid-row-start: 4;
         }
 
-        button[onClick="appendNumber('7')"], button[onClick="appendNumber('8')"], button[onClick="appendNumber('9')"] {
+        button[onClick="appendNumber('7')"],
+        button[onClick="appendNumber('8')"],
+        button[onClick="appendNumber('9')"] {
             grid-row-start: 5;
         }
 

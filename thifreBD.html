@@ -210,10 +210,11 @@
             <div id="criacao-database" style="display: none;">
                 <div class="menu-central-justify-between">
                     <h1 class="text1">Criar nova database</h1>
-                    <button class="close-button" onclick="abrirFechar(true, 'criacao-database')"><svg class="icon"
-                            viewBox="0 0 24 24" aria-hidden="true">
+                    <button class="close-button" onclick="abrirFechar(true, 'criacao-database')">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
                             <use href="assets/images/icons-sprite.svg#icon-close"></use>
-                        </svg></button>
+                        </svg>
+                    </button>
                 </div>
                 <label for="nome-database-input">Nome da database</label>
                 <input class="menu-central-input" type="text" id="nome-database-input" name="nome-database-input"
@@ -229,10 +230,11 @@
             <div id="configurar-database" style="display: none;">
                 <div class="menu-central-justify-between">
                     <h1 class="text1">Configurar database</h1>
-                    <button class="close-button" onclick="abrirFechar(true, 'configurar-database')"><svg class="icon"
-                            viewBox="0 0 24 24" aria-hidden="true">
+                    <button class="close-button" onclick="abrirFechar(true, 'configurar-database')">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
                             <use href="assets/images/icons-sprite.svg#icon-close"></use>
-                        </svg></button>
+                        </svg>
+                    </button>
                 </div>
                 <label for="renomear-database-input">Nome da database</label>
                 <input class="menu-central-input" type="text" id="renomear-database-input"
@@ -256,10 +258,11 @@
             <div id="criacao-tabela" style="display: none;">
                 <div class="menu-central-justify-between">
                     <h1 class="text1">Criar nova tabela</h1>
-                    <button class="close-button" onclick="abrirFechar(true, 'criacao-tabela')"><svg viewBox="0 0 24 24"
-                            aria-hidden="true">
+                    <button class="close-button" onclick="abrirFechar(true, 'criacao-tabela')">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
                             <use href="assets/images/icons-sprite.svg#icon-close"></use>
-                        </svg></button>
+                        </svg>
+                    </button>
                 </div>
 
                 <label for="nome-tabela-input">Nome da tabela</label>
@@ -474,8 +477,7 @@
 
                 <div class="menu-central-justify-between">
                     <h2 class="text2">Condições de pesquisa</h2>
-                    <button class="outlined-button"
-                        onclick="createWhereConditionDiv()">
+                    <button class="outlined-button" onclick="createWhereConditionDiv()">
                         <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
                             <use href="assets/images/icons-sprite.svg#icon-plus"></use>
                         </svg>
@@ -484,7 +486,7 @@
                 </div>
 
                 <div id="where-conditions">
-                    
+
                 </div>
 
                 <button class="large-button">
@@ -504,18 +506,55 @@
 
         <div id="terminal" style="display: none;">
             <header id="terminal-header">
-                <p>>_ SQL Terminal</p>
+                <div id="configure-terminal-sessions">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                        fill="currentColor">
+                        <path
+                            d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z" />
+                    </svg>
+                </div>
+                <div id="terminal-sessions">
+                    <div class="terminal-session">
+                        <p>terminal 1</p>
+                        <button>
+                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="terminal-session">
+                        <p>terminal 2</p>
+                        <button>
+                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="terminal-session  terminal-session-ativo">
+                        <p>terminal 3</p>
+                        <button>
+                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <button id="create-new-terminal-session">
+                    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-plus"></use>
+                    </svg>
+                </button>
             </header>
 
-            <section id="terminal-content">
+            <section id="terminal-history">
                 <p class="terminal-content-info">Bem-vindo ao Terminal SQL!</p>
                 <br>
                 <p class="terminal-content-info">Digite seus comandos SQL abaixo:</p>
             </section>
 
             <div id="terminal-input">
-                <label for="terminal-input-field">thifreBD></label>
-                <input type="text" id="terminal-input-field" placeholder="Digite um comando SQL">
+                <span for="terminal-input-field">thifreBD $</span>
+                <textarea rows="1" type="text" id="terminal-input-field" placeholder="Digite um comando SQL"></textarea>
             </div>
         </div>
     </div>

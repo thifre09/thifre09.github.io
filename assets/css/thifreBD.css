@@ -823,7 +823,7 @@ input[type="number"]::-webkit-inner-spin-button {
         &:hover {
             background-color: var(--red8);
         }
-        
+
     }
 
     .post-characteristics {
@@ -903,17 +903,72 @@ input[type="number"]::-webkit-inner-spin-button {
     header#terminal-header {
         display: flex;
         align-items: center;
-        color: var(--green6);
-        font-weight: 700;
-        flex: 1;
+        min-height: 35px;
+        flex: 0 0 auto;
         background-color: var(--gray3);
 
-        p {
+        div#configure-terminal-sessions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--p1);
+            cursor: pointer;
+
+            svg {
+                width: 30px;
+                height: 30px;
+                color: var(--green6);
+                transition: var(--transition-time1);
+            }
+
+            &:hover svg {
+                color: var(--white);
+            }
+        }
+
+        div#terminal-sessions {
+            display: flex;
             margin: 0 var(--p2);
+            gap: var(--p2);
+
+            div.terminal-session {
+                display: flex;
+                gap: var(--p5);
+                border-radius: 10px;
+                cursor: pointer;
+                padding: var(--p2) var(--p4);
+                width: fit-content;
+
+                p {
+                    color: white;
+                }
+
+                button {
+                    border: none;
+                    outline: none;
+                    background-color: transparent;
+
+                    svg {
+                        width: 20px;
+                        aspect-ratio: 1 / 1;
+                        color: var(--red5);
+                    }
+                }
+
+                &:hover {
+                    background-color: var(--gray6);
+                }
+            }
+        }
+
+        button#create-new-terminal-session {
+            border: none;
+            outline: none;
+            background-color: transparent;
         }
     }
 
-    section#terminal-content {
+    section#terminal-history {
         padding: var(--p2);
         flex: 10;
         background-color: var(--gray1);
@@ -943,13 +998,14 @@ input[type="number"]::-webkit-inner-spin-button {
         flex: 1;
         background-color: var(--gray2);
 
-        label {
+        span {
             color: var(--green6);
             margin-right: var(--p2);
             width: fit-content;
+            white-space: nowrap;
         }
 
-        input {
+        textarea {
             width: 100%;
             background: var(--gray2);
             border: none;
@@ -957,6 +1013,11 @@ input[type="number"]::-webkit-inner-spin-button {
             color: var(--white);
             font-size: medium;
             font-weight: 100;
+            resize: none;
+            font-family: sans-serif;
+            min-height: 24px;
+            max-height: 45vh;
+            line-height: 1.4;
         }
     }
 }
