@@ -321,7 +321,7 @@ function closeAllCustomDropdowns(event) {
 function updateCustomDropdowns() {
     document.querySelectorAll(".custom-dropdown").forEach((dropdown) => {
         dropdown.querySelectorAll(".custom-dropdown-option").forEach((option) => {
-            option.addEventListener("click", () => choseOption(option));
+            option.onclick = () => choseOption(option);
         });
     });
 }
@@ -334,6 +334,14 @@ function onDropdownChange(dropdown) {
     if (dropdown.querySelector('input[name="reference-table"]')) {
         const container = dropdown.closest("div").parentElement;
         updateForeignKeyReferenceColumnOptions(container);
+    }
+    if (dropdown.querySelector('input[name="database-dropdown"]')) {
+        const selectedOption = dropdown.querySelector(".custom-dropdown-option-selected");
+        if (selectedOption) {
+            currentDatabase = selectedOption.textContent || "";
+            currentTable = null;
+            refreshUI();
+        }
     }
 }
 updateCustomDropdowns();
@@ -432,11 +440,31 @@ class TerminalSession {
         this.name = name;
         this.history = [];
         this.active = true;
+        TerminalSession.sessionCount++;
     }
     createEntry(command, output, type) {
-        this.history.push({ database: currentDatabase, command, output, type, timestamp: new Date() });
+        this.history.push({ database: currentDatabase, command: command, output, type, timestamp: new Date() });
+        this.updateTerminalUI();
+    }
+    updateTerminalUI() {
+        const terminalHistoryDiv = document.getElementById("terminal-history");
+        terminalHistoryDiv.innerHTML = "";
+        this.history.forEach(entry => {
+            const entryElement = document.createElement("div");
+            entryElement.classList.add("terminal-entry");
+            entryElement.innerHTML = `
+                <div class="terminal-command terminal-content-green">$ ${entry.command}</div>
+                <div class="command-output">
+                    ${entry.output.map(line => `<p class="terminal-content-${entry.type === "success" ? "blue" : entry.type === "error" ? "red" : "gray"}">${line}</p>`).join('')}
+                </div>
+                <p class="command-timestamp terminal-content-gray">${entry.timestamp.toLocaleTimeString()}</p>
+            `;
+            terminalHistoryDiv.appendChild(entryElement);
+        });
     }
 }
+TerminalSession.sessionCount = 1;
+TerminalSession.historyIndex = 0;
 class SGBDFunctions {
     static createDatabase(database) {
         databases[database.name] = database;
@@ -575,59 +603,11 @@ class SGBDFunctions {
         refreshUI();
     }
 }
-class SQLCommandHandler {
-    static execute(tokens) {
-        const command = tokens[0]?.toUpperCase();
-        switch (command) {
-            case "CREATE":
-                SQLCommandHandler.create(tokens);
-            case "DELETE":
-                SQLCommandHandler.delete(tokens);
-            case "DROP":
-                SQLCommandHandler.drop(tokens);
-            case "INSERT":
-                SQLCommandHandler.insert(tokens);
-            case "UPDATE":
-                SQLCommandHandler.update(tokens);
-            case "USE":
-                SQLCommandHandler.use(tokens);
-            default:
-                throw new Error("Comando inválido");
-        }
-    }
-    static create(tokens) {
-        function createDatabase(tokens) {
-            const databaseName = tokens[2];
-            SGBDFunctions.createDatabase(new Database(databaseName));
-        }
-        function createTable(tokens) {
-            const tableName = tokens[2];
-        }
-        const target = tokens[1]?.toUpperCase();
-        switch (target) {
-            case "DATABASE":
-                createDatabase(tokens);
-            case "TABLE":
-                createTable(tokens);
-            default:
-                throw new Error("CREATE inválido");
-        }
-    }
-    static drop(tokens) {
-    }
-    static insert(tokens) {
-    }
-    static update(tokens) {
-    }
-    static delete(tokens) {
-    }
-    static use(tokens) {
-    }
-}
 let databases = {};
 let currentDatabase = null;
 let currentTable = null;
 let terminalSessions = [];
+let currentTerminalSession = 0;
 //#endregion
 // #region Interface functions
 function createDatabaseInterface() {
@@ -2145,15 +2125,40 @@ function updateForeignKeyReferenceColumnOptions(parentDiv) {
 }
 //#endregion
 // #region Terminal
+function getCurrentTerminalSession() {
+    return terminalSessions[currentTerminalSession];
+}
 const commandTextarea = document.querySelector("#terminal-input-field");
 function executeCommand() {
     const command = commandTextarea.value.trim();
-    const tokens = command.split(/\s+/);
-    if (tokens.length === 0)
-        return;
+    SQL.execute(command);
 }
 function createTerminalSession() {
+    const terminalSession = new TerminalSession(`Terminal ${TerminalSession.sessionCount}`);
+    terminalSessions.push(terminalSession);
+    currentTerminalSession = terminalSessions.length - 1;
+    const terminalSessionsContainer = document.getElementById("terminal-sessions");
+    terminalSessionsContainer.querySelector(".terminal-session-active")?.classList.remove("terminal-session-active");
+    const sessionDiv = document.createElement("div");
+    sessionDiv.classList.add("terminal-session", "terminal-session-active");
+    terminalSessionsContainer.appendChild(sessionDiv);
+    const p = document.createElement("p");
+    p.textContent = terminalSession.name;
+    sessionDiv.appendChild(p);
+    const closeButton = document.createElement("button");
+    closeButton.innerHTML = `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+        <use href="assets/images/icons-sprite.svg#icon-close"></use>
+    </svg>`;
+    closeButton.onclick = function () {
+        if (terminalSessions.length === 1)
+            return; // não permite fechar a última sessão
+        terminalSessionsContainer.removeChild(sessionDiv);
+        currentTerminalSession = 0;
+    };
+    sessionDiv.appendChild(closeButton);
 }
+createTerminalSession();
 commandTextarea.addEventListener("input", () => {
     commandTextarea.style.height = "auto";
     commandTextarea.style.height = commandTextarea.scrollHeight + "px";
@@ -2165,6 +2170,33 @@ commandTextarea.addEventListener("keydown", (event) => {
         commandTextarea.value = "";
         commandTextarea.style.height = "auto";
         commandTextarea.style.height = commandTextarea.scrollHeight + "px";
+    }
+    if (event.key === "ArrowUp") {
+        const session = getCurrentTerminalSession();
+        if (session.history.length === 0)
+            return;
+        if (TerminalSession.historyIndex === session.history.length)
+            return;
+        event.preventDefault();
+        TerminalSession.historyIndex++;
+        commandTextarea.value = session.history[session.history.length - TerminalSession.historyIndex].command;
+        commandTextarea.style.height = "auto";
+        commandTextarea.style.height = commandTextarea.scrollHeight + "px";
+    }
+    else if (event.key === "ArrowDown") {
+        const session = getCurrentTerminalSession();
+        if (session.history.length === 0)
+            return;
+        if (TerminalSession.historyIndex === 1)
+            return;
+        TerminalSession.historyIndex--;
+        commandTextarea.value = session.history[session.history.length - TerminalSession.historyIndex].command;
+        commandTextarea.style.height = "auto";
+        commandTextarea.style.height = commandTextarea.scrollHeight + "px";
+        event.preventDefault();
+    }
+    else {
+        TerminalSession.historyIndex = 0;
     }
 });
 // #endregion
@@ -2186,3 +2218,118 @@ createColumnCreationDiv(document.getElementById("criacao-colunas-edit"));
 // -Terminal
 // -Salvar em arquivo e carregar do arquivo
 // -Modelo lógico (diagrama de entidade relacionamento)
+// #region SQL namespace
+var SQL;
+(function (SQL) {
+    function execute(fullCommand) {
+        const tokens = tokenizeSQL(fullCommand);
+        const command = tokens[0]?.toLowerCase();
+        switch (command) {
+            case "create":
+                new SQLCreate(fullCommand, tokens).execute();
+                break;
+            case "delete":
+                break;
+            case "drop":
+                break;
+            case "insert":
+                break;
+            case "update":
+                break;
+            case "use":
+                break;
+            default:
+                getCurrentTerminalSession().createEntry(fullCommand, ["Comando não reconhecido"], "error");
+        }
+    }
+    SQL.execute = execute;
+    class SQLCreate {
+        constructor(fullCommand, tokens) {
+            this.fullCommand = fullCommand;
+            this.tokens = tokens;
+        }
+        execute() {
+            const target = this.tokens[1]?.toLowerCase();
+            switch (target) {
+                case "database":
+                    this.database();
+                    break;
+                case "table":
+                    this.table();
+                    break;
+                default:
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando CREATE incorreto"], "error");
+            }
+        }
+        database() {
+            if (this.tokens.length < 3) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando CREATE DATABASE incorreto", "Nome da database é obrigatório"], "error");
+                return;
+            }
+            else if (this.tokens.length > 3) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando CREATE DATABASE incorreto", "Nome da database deve ser uma única palavra"], "error");
+                return;
+            }
+            if (databases[this.tokens[2]]) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma database com o nome "${this.tokens[2]}"`], "error");
+                return;
+            }
+            const databaseName = this.tokens[2];
+            SGBDFunctions.createDatabase(new Database(databaseName));
+            getCurrentTerminalSession().createEntry(this.fullCommand, [`Database "${databaseName}" criada com sucesso!`], "success");
+        }
+        table() {
+        }
+    }
+    SQL.SQLCreate = SQLCreate;
+    class SystemCommands {
+        static use(fullCommand, tokens) {
+            const target = tokens[1]?.toLowerCase();
+            if (!target) {
+                getCurrentTerminalSession().createEntry(fullCommand, ["Comando USE incorreto", "Nome da database é obrigatório"], "error");
+                return;
+            }
+            else if (tokens.length > 2) {
+                getCurrentTerminalSession().createEntry(fullCommand, ["Comando USE incorreto", "Nome da database deve ser uma única palavra"], "error");
+                return;
+            }
+            if (!databases[target]) {
+                getCurrentTerminalSession().createEntry(fullCommand, [`Database "${target}" não existe`], "error");
+                return;
+            }
+            currentDatabase = target;
+            currentTable = null;
+            refreshUI();
+            getCurrentTerminalSession().createEntry(fullCommand, [`Database "${target}" selecionada`], "success");
+        }
+    }
+    SQL.SystemCommands = SystemCommands;
+    function tokenizeSQL(sql) {
+        const tokens = [];
+        let current = "";
+        for (let i = 0; i < sql.length; i++) {
+            const char = sql[i];
+            if (/\s/.test(char)) {
+                if (current) {
+                    tokens.push(current);
+                    current = "";
+                }
+                continue;
+            }
+            if ("(),;".includes(char)) {
+                if (current) {
+                    tokens.push(current);
+                    current = "";
+                }
+                tokens.push(char);
+                continue;
+            }
+            current += char;
+        }
+        if (current) {
+            tokens.push(current);
+        }
+        return tokens;
+    }
+})(SQL || (SQL = {}));
+// #endregion
