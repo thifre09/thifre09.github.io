@@ -1,7 +1,8 @@
 // #region Change interface terminal
 
-const buttonChangeToGraficalInterface = document.getElementById("button-interface-terminal-interface")!;
-const buttonChangeToTerminalInterface = document.getElementById("button-interface-terminal-terminal")!;
+const buttonChangeToGrafical = document.getElementById("button-header-interface")!;
+const buttonChangeToTerminal = document.getElementById("button-header-terminal")!;
+const buttonChangeToSave = document.getElementById("button-header-save")!;
 const interfaceTerminal = document.getElementById("interface-terminal")!;
 
 function updateInterfaceTerminalIndicator(activeButton: HTMLElement) {
@@ -11,26 +12,33 @@ function updateInterfaceTerminalIndicator(activeButton: HTMLElement) {
     interfaceTerminal.style.setProperty("--indicator-width", `${width}px`);
 }
 
-window.addEventListener('load', () => updateInterfaceTerminalIndicator(buttonChangeToGraficalInterface));
+window.addEventListener('load', () => updateInterfaceTerminalIndicator(buttonChangeToGrafical));
 
-buttonChangeToGraficalInterface.addEventListener("click", () => {
-    const interfaceGrafica = document.getElementById("interface-grafica")!;
-    const terminal = document.getElementById("terminal")!;
-    interfaceGrafica.style.display = "flex";
-    terminal.style.display = "none";
-    buttonChangeToGraficalInterface.classList.add("interface-terminal-ativo");
-    buttonChangeToTerminalInterface.classList.remove("interface-terminal-ativo");
-    updateInterfaceTerminalIndicator(buttonChangeToGraficalInterface);
+buttonChangeToGrafical.addEventListener("click", () => {
+    const interfaceGrafica = document.getElementById("interface-grafica")!.style.display = "flex";
+    document.getElementById("terminal")!.style.display = "none";
+    document.getElementById("save")!.style.display = "none";
+    document.querySelector(".interface-terminal-ativo")?.classList.remove("interface-terminal-ativo");
+    buttonChangeToGrafical.classList.add("interface-terminal-ativo");
+    updateInterfaceTerminalIndicator(buttonChangeToGrafical);
 });
 
-buttonChangeToTerminalInterface.addEventListener("click", () => {
-    const interfaceGrafica = document.getElementById("interface-grafica")!;
-    const terminal = document.getElementById("terminal")!;
-    interfaceGrafica.style.display = "none";
-    terminal.style.display = "flex";
-    buttonChangeToGraficalInterface.classList.remove("interface-terminal-ativo");
-    buttonChangeToTerminalInterface.classList.add("interface-terminal-ativo");
-    updateInterfaceTerminalIndicator(buttonChangeToTerminalInterface);
+buttonChangeToTerminal.addEventListener("click", () => {
+    document.getElementById("interface-grafica")!.style.display = "none";
+    document.getElementById("terminal")!.style.display = "flex";
+    document.getElementById("save")!.style.display = "none";
+    document.querySelector(".interface-terminal-ativo")?.classList.remove("interface-terminal-ativo");
+    buttonChangeToTerminal.classList.add("interface-terminal-ativo");
+    updateInterfaceTerminalIndicator(buttonChangeToTerminal);
+});
+
+buttonChangeToSave.addEventListener("click", () => {
+    document.getElementById("interface-grafica")!.style.display = "none";
+    document.getElementById("terminal")!.style.display = "none";
+    document.getElementById("save")!.style.display = "flex";
+    document.querySelector(".interface-terminal-ativo")?.classList.remove("interface-terminal-ativo");
+    buttonChangeToSave.classList.add("interface-terminal-ativo");
+    updateInterfaceTerminalIndicator(buttonChangeToSave);
 });
 
 // #endregion
@@ -181,10 +189,10 @@ function createExempleDatabase() {
     usuarios.columns["ativo"].defaultValue = true;
     usuarios.columns["nota"] = new Column("nota", "float", false, false, false, false, false, true);
     usuarios.columns["nota"].defaultValue = 0;
-    usuarios.columns["criado_em"] = new Column("criado_em", "date", false, false, true, false, false, false, true, false);
-    usuarios.columns["hora_entrada"] = new Column("hora_entrada", "time", false, false, false, false, false, true, false, false);
+    usuarios.columns["criado_em"] = new Column("criado_em", "date", false, false, true, false, false, false, true);
+    usuarios.columns["hora_entrada"] = new Column("hora_entrada", "time", false, false, false, false, false, true, false);
     usuarios.columns["hora_entrada"].defaultValue = "09:00";
-    usuarios.columns["perfil"] = new Column("perfil", "enum", false, false, true, false, false, true, false, false, ["admin", "editor", "leitor"]);
+    usuarios.columns["perfil"] = new Column("perfil", "enum", false, false, true, false, false, true, false, ["admin", "editor", "leitor"]);
     usuarios.columns["perfil"].defaultValue = "leitor";
     SGBDFunctions.createTable(usuarios);
 
@@ -222,16 +230,16 @@ function createExempleDatabase() {
 
     const posts = new Table("posts");
     posts.columns["id"] = new Column("id", "integer", true, false, true, true, true, false);
-    posts.columns["usuario_id"] = new Column("usuario_id", "integer", false, true, true, false, false, false, false, false, undefined, { table: "usuarios", column: "id" });
+    posts.columns["usuario_id"] = new Column("usuario_id", "integer", false, true, true, false, false, false, false, undefined, { table: "usuarios", column: "id" });
     posts.columns["titulo"] = new Column("titulo", "text", false, false, true, false, false, false);
     posts.columns["conteudo"] = new Column("conteudo", "text", false, false, false, false, false, false);
     posts.columns["publicado"] = new Column("publicado", "boolean", false, false, false, false, false, true);
     posts.columns["publicado"].defaultValue = false;
     posts.columns["avaliacao"] = new Column("avaliacao", "float", false, false, false, false, false, true);
     posts.columns["avaliacao"].defaultValue = 0;
-    posts.columns["status"] = new Column("status", "enum", false, false, true, false, false, true, false, false, ["rascunho", "publicado", "arquivado"]);
+    posts.columns["status"] = new Column("status", "enum", false, false, true, false, false, true, false, ["rascunho", "publicado", "arquivado"]);
     posts.columns["status"].defaultValue = "rascunho";
-    posts.columns["publicado_em"] = new Column("publicado_em", "date", false, false, false, false, false, false, false, false);
+    posts.columns["publicado_em"] = new Column("publicado_em", "date", false, false, false, false, false, false, false);
     SGBDFunctions.createTable(posts);
 
     const postIdColumn = posts.columns["id"];
@@ -260,10 +268,10 @@ function createExempleDatabase() {
     auditoria.columns["id"] = new Column("id", "integer", true, false, true, true, true, false);
     auditoria.columns["entidade"] = new Column("entidade", "text", false, false, true, false, false, false);
     auditoria.columns["entidade_id"] = new Column("entidade_id", "integer", false, false, true, false, false, false);
-    auditoria.columns["acao"] = new Column("acao", "enum", false, false, true, false, false, false, false, false, ["INSERT", "UPDATE", "DELETE"]);
+    auditoria.columns["acao"] = new Column("acao", "enum", false, false, true, false, false, false, false, ["INSERT", "UPDATE", "DELETE"]);
     auditoria.columns["sucesso"] = new Column("sucesso", "boolean", false, false, true, false, false, true);
     auditoria.columns["sucesso"].defaultValue = true;
-    auditoria.columns["feito_em"] = new Column("feito_em", "date", false, false, true, false, false, false, true, false);
+    auditoria.columns["feito_em"] = new Column("feito_em", "date", false, false, true, false, false, false, true);
     SGBDFunctions.createTable(auditoria);
 
     const auditIdColumn = auditoria.columns["id"];
@@ -509,8 +517,7 @@ class Column {
     isUnique: boolean;
     isAutoIncrement: boolean;
     hasDefault: boolean;
-    isAutoDate: boolean;
-    isAutoTime: boolean;
+    isCurrentTimestamp: boolean;
     enumValues?: string[];
     reference?: reference;
     incrementCounter: number = 1;
@@ -518,8 +525,8 @@ class Column {
 
     constructor(name: string, type: columnType, isPrimaryKey: boolean = false, isForeignKey: boolean = false,
         isNotNull: boolean = false, isUnique: boolean = false, isAutoIncrement: boolean = false,
-        hasDefault: boolean = false, isAutoDate: boolean = false, isAutoTime: boolean = false,
-        enumValues?: string[], reference?: reference) {
+        hasDefault: boolean = false, isCurrentTimestamp: boolean = false, enumValues?: string[], 
+        reference?: reference) {
         this.name = name;
         this.type = type;
         this.isPrimaryKey = isPrimaryKey;
@@ -528,8 +535,8 @@ class Column {
         this.isUnique = isUnique;
         this.isAutoIncrement = isAutoIncrement;
         this.hasDefault = hasDefault;
-        this.isAutoDate = isAutoDate;
-        this.isAutoTime = isAutoTime;
+        this.isCurrentTimestamp = isCurrentTimestamp;
+        this.isCurrentTimestamp = isCurrentTimestamp;
         this.enumValues = enumValues;
         this.reference = reference;
     }
@@ -872,7 +879,7 @@ function addColumnsInterface() {
                 const value = row[columnName];
                 table.indexes[columnName].set(value, (table.indexes[columnName].get(value) || []).concat(index));
             });
-        } else if (column.isAutoDate || column.isAutoTime) {
+        } else if (column.isCurrentTimestamp || column.isCurrentTimestamp) {
             table.rows.forEach((row) => {
                 row[columnName] = new Date();
             });
@@ -949,7 +956,7 @@ function insertRowInterface() {
             continue;
         }
 
-        if (table.columns[columnName].isAutoDate || table.columns[columnName].isAutoTime) {
+        if (table.columns[columnName].isCurrentTimestamp || table.columns[columnName].isCurrentTimestamp) {
             row[columnName] = new Date();
             continue;
         }
@@ -1036,7 +1043,7 @@ function editRowInterface(rowIndex: number) {
             continue;
         }
 
-        if (table.columns[columnName].isAutoDate || table.columns[columnName].isAutoTime) {
+        if (table.columns[columnName].isCurrentTimestamp || table.columns[columnName].isCurrentTimestamp) {
             row[columnName] = new Date();
             continue;
         }
@@ -1304,12 +1311,11 @@ function parseColumnsFromInputs(columns: HTMLCollection, existingColumns: Record
         const isUnique = columnDiv.querySelector(".unique") as HTMLInputElement;
         const hasDefault = columnDiv.querySelector(".default") as HTMLInputElement;
         const isAutoIncrement = columnDiv.querySelector(".auto-increment") as HTMLInputElement;
-        const isAutoDate = columnDiv.querySelector(".auto-date") as HTMLInputElement;
-        const isAutoTime = columnDiv.querySelector(".auto-time") as HTMLInputElement;
+        const isCurrentTimestamp = columnDiv.querySelector(".auto-date") as HTMLInputElement;
 
         const column = new Column(columnName, columnTypeElement.textContent!.toLowerCase() as columnType,
             isPrimaryKey.checked, isForeignKey.checked, isNotNull.checked, isUnique.checked,
-            isAutoIncrement.checked, hasDefault.checked, isAutoDate.checked, isAutoTime.checked);
+            isAutoIncrement.checked, hasDefault.checked, isCurrentTimestamp.checked);
 
         if (hasDefault.checked) {
             const defaultValue = columnDiv.querySelector(".default-input-text input") as HTMLInputElement;
@@ -1477,8 +1483,8 @@ function createColumnCreationDiv(parent: HTMLElement) {
         { className: "unique", name: "unique", label: "Unique" },
         { className: "default", name: "default", label: "Default" },
         { className: "auto-increment", name: "auto-increment", label: "Auto increment", hidden: true },
-        { className: "auto-date", name: "auto-date", label: "Auto date", hidden: true },
-        { className: "auto-time", name: "auto-time", label: "Auto time", hidden: true }
+        { className: "auto-date", name: "auto-date", label: "Current timestamp", hidden: true },
+        { className: "auto-time", name: "auto-time", label: "Current timestamp", hidden: true }
     ];
 
     characteristicsList.forEach((char) => {
@@ -1738,8 +1744,8 @@ function changeEditColumnsMenu() {
                 { key: "isUnique", label: "Unique" },
                 { key: "hasDefault", label: "Default" },
                 { key: "isAutoIncrement", label: "Auto increment" },
-                { key: "isAutoDate", label: "Auto date" },
-                { key: "isAutoTime", label: "Auto time" }
+                { key: "isCurrentTimestamp", label: "Current timestamp" },
+                { key: "isCurrentTimestamp", label: "Current timestamp" }
             ];
 
         const p = document.createElement("p");
@@ -1826,7 +1832,7 @@ function changeAddRowMenu() {
             div.appendChild(dropdown);
             updateCustomDropdowns();
         } else if (column.type === "date") {
-            if (column.isAutoDate) {
+            if (column.isCurrentTimestamp) {
                 const p = document.createElement("p");
                 p.textContent = "Valor gerado automaticamente";
                 div.appendChild(p);
@@ -1837,7 +1843,7 @@ function changeAddRowMenu() {
                 div.appendChild(input);
             }
         } else if (column.type === "time") {
-            if (column.isAutoTime) {
+            if (column.isCurrentTimestamp) {
                 const p = document.createElement("p");
                 p.textContent = "Valor gerado automaticamente";
                 div.appendChild(p);
@@ -1937,7 +1943,7 @@ function changeEditRowMenu(rowIndex: number) {
             div.appendChild(dropdown);
             updateCustomDropdowns();
         } else if (column.type === "date") {
-            if (column.isAutoDate) {
+            if (column.isCurrentTimestamp) {
                 const p = document.createElement("p");
                 p.textContent = "Valor gerado automaticamente";
                 div.appendChild(p);
@@ -1951,7 +1957,7 @@ function changeEditRowMenu(rowIndex: number) {
             }
 
         } else if (column.type === "time") {
-            if (column.isAutoTime) {
+            if (column.isCurrentTimestamp) {
                 const p = document.createElement("p");
                 p.textContent = "Valor gerado automaticamente";
                 div.appendChild(p);
@@ -2235,14 +2241,12 @@ function updateCharacteristics(parentDiv: Element) {
     const uniqueInput = parentDiv.querySelector("input.unique") as HTMLInputElement;
     const defaultInput = parentDiv.querySelector("input.default") as HTMLInputElement;
     const autoIncInput = parentDiv.querySelector("input.auto-increment") as HTMLInputElement;
-    const autoDateInput = parentDiv.querySelector("input.auto-date") as HTMLInputElement;
-    const autoTimeInput = parentDiv.querySelector("input.auto-time") as HTMLInputElement;
+    const currentTimestampInput = parentDiv.querySelector("input.auto-date") as HTMLInputElement;
 
     const typeDropdown = parentDiv.querySelector(".custom-dropdown button") as HTMLElement;
 
     const autoIncLabel = autoIncInput.parentElement as HTMLElement;
-    const autoDateLabel = autoDateInput.parentElement as HTMLElement;
-    const autoTimeLabel = autoTimeInput.parentElement as HTMLElement;
+    const currentTimestampLabel = currentTimestampInput.parentElement as HTMLElement;
     const defaultLabel = defaultInput.parentElement as HTMLElement;
 
     const state = {
@@ -2252,8 +2256,7 @@ function updateCharacteristics(parentDiv: Element) {
         unique: uniqueInput.checked,
         default: defaultInput.checked,
         autoIncrement: autoIncInput.checked,
-        autoDate: autoDateInput.checked,
-        autoTime: autoTimeInput.checked,
+        currentTimestamp: currentTimestampInput.checked,
         type: typeDropdown.textContent!.toLowerCase() as columnType
     };
 
@@ -2262,27 +2265,25 @@ function updateCharacteristics(parentDiv: Element) {
     };
 
     const forcedFalse = {
-        fk: state.autoIncrement || state.autoDate || state.autoTime,
-        default: state.autoIncrement || state.autoDate || state.autoTime || state.type === "boolean",
+        fk: state.autoIncrement || state.currentTimestamp || state.currentTimestamp,
+        default: state.autoIncrement || state.currentTimestamp || state.currentTimestamp || state.type === "boolean",
         autoIncrement: state.fk || state.default || state.type !== "integer",
-        autoDate: state.fk || state.default || state.type !== "date",
-        autoTime: state.fk || state.default || state.type !== "time",
+        currentTimestamp: state.fk || state.default || state.type !== "date" && state.type !== "time",
+
     }
 
     const hidden = {
         autoIncrement: state.type !== "integer",
-        autoDate: state.type !== "date",
-        autoTime: state.type !== "time",
+        currentTimestamp: state.type !== "date" && state.type !== "time",
         default: state.type === "boolean",
     };
 
     const disabled = {
         notNull: state.pk || state.autoIncrement,
         autoIncrement: state.fk || state.default || state.type !== "integer",
-        autoDate: state.fk || state.default || state.type !== "date",
-        autoTime: state.fk || state.default || state.type !== "time",
-        default: state.autoIncrement || state.autoDate || state.autoTime || state.type === "boolean",
-        fk: state.autoIncrement || state.autoDate || state.autoTime
+        currentTimestamp: state.fk || state.default || state.type !== "date" && state.type !== "time",
+        default: state.autoIncrement || state.currentTimestamp || state.currentTimestamp || state.type === "boolean",
+        fk: state.autoIncrement || state.currentTimestamp || state.currentTimestamp
     };
 
     // NOT NULL
@@ -2295,14 +2296,14 @@ function updateCharacteristics(parentDiv: Element) {
     autoIncInput.disabled = disabled.autoIncrement;
 
     // AUTO DATE
-    autoDateLabel.style.display = hidden.autoDate ? "none" : "flex";
-    autoDateInput.checked = state.autoDate && !forcedFalse.autoDate;
-    autoDateInput.disabled = disabled.autoDate;
+    currentTimestampLabel.style.display = hidden.currentTimestamp ? "none" : "flex";
+    currentTimestampInput.checked = state.currentTimestamp && !forcedFalse.currentTimestamp;
+    currentTimestampInput.disabled = disabled.currentTimestamp;
 
     // AUTO TIME
-    autoTimeLabel.style.display = hidden.autoTime ? "none" : "flex";
-    autoTimeInput.checked = state.autoTime && !forcedFalse.autoTime;
-    autoTimeInput.disabled = disabled.autoTime;
+    currentTimestampLabel.style.display = hidden.currentTimestamp ? "none" : "flex";
+    currentTimestampInput.checked = state.currentTimestamp && !forcedFalse.currentTimestamp;
+    currentTimestampInput.disabled = disabled.currentTimestamp;
 
     // DEFAULT
     defaultInput.disabled = disabled.default;
@@ -2501,9 +2502,15 @@ commandTextarea.addEventListener("keydown", (event) => {
     } else if (event.key === "ArrowDown") {
         const session = getCurrentTerminalSession();
         if (session.history.length === 0) return;
+        if (TerminalSession.historyIndex === 0) return;
         if (TerminalSession.historyIndex === 1) {
             commandTextarea.value = "";
-        };
+            TerminalSession.historyIndex = 0;
+            commandTextarea.style.height = "auto";
+            commandTextarea.style.height = commandTextarea.scrollHeight + "px";
+            event.preventDefault();
+            return;
+        }
         TerminalSession.historyIndex--;
         commandTextarea.value = session.history[session.history.length - TerminalSession.historyIndex].command;
         commandTextarea.style.height = "auto";
@@ -2534,7 +2541,7 @@ createColumnCreationDiv(document.getElementById("criacao-colunas-edit")!);
 // To Do
 // -Pesquisar(Dashboard)
 // -Terminal
-// -Salvar em arquivo e carregar do arquivo
+// -Salvar e carregar
 // -Modelo lógico (diagrama de entidade relacionamento)
 
 // #region SQL namespace
@@ -2563,6 +2570,7 @@ namespace SQL {
                 break;
 
             case "use":
+                new SystemCommands(fullCommand, tokens).use();
                 break;
 
             default:
@@ -2640,35 +2648,237 @@ namespace SQL {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando CREATE TABLE incorreto", "Sintaxe inválida para a definição da tabela"], "error");
                 return;
             }
-            const len = this.tokens.length;
-            const keyWords = ["primary", "key", "foreign", "not", "null", "unique", "default", "auto_increment", "auto_date", "auto_time"];
+            if (keyWords.includes(this.tokens[2].toLowerCase())) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da tabela é uma palavra-chave reservada"], "error");
+                return;
+            }
+
+            let table = new Table(tableName);
+            const columnDefs = splitColumnDefinitions(this.tokens.slice(4, -1));
+
+            for (const columnDef of columnDefs) {
+                const { column, error } = parseColumn(columnDef);
+                if (error) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando CREATE TABLE incorreto", error], "error");
+                    return;
+                }
+                table.columns[column!.name] = column!;
+            }
+            
+            SGBDFunctions.createTable(table);
+            getCurrentTerminalSession().createEntry(this.fullCommand, [`Tabela "${tableName}" criada com sucesso!`], "success");
         }
+
     }
 
     export class SystemCommands {
-        static use(fullCommand: string, tokens: string[]) {
-            const target = tokens[1]?.toLowerCase();
+        private fullCommand: string;
+        private tokens: string[];
+
+        constructor(fullCommand: string, tokens: string[]) {
+            this.fullCommand = fullCommand;
+            this.tokens = tokens;
+        }
+        use() {
+            const target = this.tokens[1]?.toLowerCase();
 
             if (!target) {
-                getCurrentTerminalSession().createEntry(fullCommand, ["Comando USE incorreto", "Nome da database é obrigatório"], "error");
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando USE incorreto", "Nome da database é obrigatório"], "error");
                 return;
             }
-            if (tokens.length > 2) {
-                getCurrentTerminalSession().createEntry(fullCommand, ["Comando USE incorreto", "Nome da database deve ser uma única palavra"], "error");
+            if (this.tokens.length > 2) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando USE incorreto", "Nome da database deve ser uma única palavra"], "error");
                 return;
             }
             if (!databases[target]) {
-                getCurrentTerminalSession().createEntry(fullCommand, [`Database "${target}" não existe`], "error");
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Database "${target}" não existe`], "error");
                 return;
             }
             currentDatabase = target;
             currentTable = null;
             refreshUI();
-            getCurrentTerminalSession().createEntry(fullCommand, [`Database "${target}" selecionada`], "success");
+            getCurrentTerminalSession().createEntry(this.fullCommand, [`Database "${target}" selecionada`], "success");
         }
     }
 
-    function tokenizeSQL(sql: string): string[] {
+    export function parseColumn(columnDef: string[]): {column: Column | null, error: string | null} {
+        function validateCompoundKeyword(first: string, second: string, name: string): number | string {
+            const firstCount = countTokenSequence(columnDef, first);
+            const compoundCount = countTokenSequence(columnDef, first, second);
+            if (firstCount !== compoundCount) {
+                return `${name}: ${first.toUpperCase()} deve ser seguido de ${second.toUpperCase()}`;
+            }
+            if (compoundCount > 1) {
+                return `${name}: definido mais de uma vez`;
+            }
+            return compoundCount;
+        }
+
+        function validateSingleKeyword(keyword: string, name: string): number | string {
+            const count = countTokenSequence(columnDef, keyword);
+            if (count > 1) {
+                return `${name} definido mais de uma vez`;
+            }
+            return count;
+        }
+
+        if (columnDef.length < 2) {
+            return {column: null, error: "Definição de coluna inválida"};
+        }
+        if (!isValidSQLName(columnDef[0])) {
+            return {column: null, error: `Nome de coluna inválido: "${columnDef[0]}"`};
+        }
+        if (keyWords.includes(columnDef[0].toLowerCase())) {
+            return {column: null, error: `Nome de coluna não pode ser uma palavra-chave reservada: "${columnDef[0]}"`};
+        }
+
+        const columnName = columnDef[0];
+        const columnType = columnDef[1].toLowerCase() as columnType;
+        if (!(["integer", "text", "date", "time", "boolean", "enum"].includes(columnType))) {
+            return {column: null, error: `Tipo de coluna inválido: "${columnDef[1]}"`};
+        }
+
+        const characteristics = {
+            pk: false,
+            fk: false,
+            notNull: false,
+            unique: false,
+            autoIncrement: false,
+            default: false,
+            currentTimestamp: false,
+            enumValues: [] as string[],
+            reference: undefined as reference | undefined
+        };
+
+        const primaryValidation = validateCompoundKeyword("primary", "key", "PRIMARY KEY");
+        if (typeof primaryValidation === "string") {
+            return {column: null, error: primaryValidation};
+        }
+        characteristics.pk = primaryValidation === 1;
+
+        const foreignValidation = validateCompoundKeyword("foreign", "key", "FOREIGN KEY");
+        if (typeof foreignValidation === "string") {
+            return {column: null, error: foreignValidation};
+        }
+        characteristics.fk = foreignValidation === 1;
+
+        const notNullValidation = validateCompoundKeyword("not", "null", "NOT NULL");
+        if (typeof notNullValidation === "string") {
+            return {column: null, error: notNullValidation};
+        }
+        characteristics.notNull = notNullValidation === 1;
+
+        const uniqueValidation = validateSingleKeyword("unique", "UNIQUE");
+        if (typeof uniqueValidation === "string") {
+            return {column: null, error: uniqueValidation};
+        }
+        characteristics.unique = uniqueValidation === 1;
+
+        const autoIncrementValidation = validateSingleKeyword("auto_increment", "AUTO_INCREMENT");
+        if (typeof autoIncrementValidation === "string") {
+            return {column: null, error: autoIncrementValidation};
+        }
+        characteristics.autoIncrement = autoIncrementValidation === 1;
+
+        const defaultValidation = validateSingleKeyword("default", "DEFAULT");
+        if (typeof defaultValidation === "string") {
+            return {column: null, error: defaultValidation};
+        }
+        characteristics.default = defaultValidation === 1;
+
+        if (characteristics.default) {
+            const defaultIndex = columnDef.findIndex(token => token.toLowerCase() === "default");
+            if (defaultIndex === -1 || defaultIndex === columnDef.length - 1) {
+                return {column: null, error: "DEFAULT deve ser seguido de um valor"};
+            }
+        }
+
+        if (columnType === "enum") {
+            const enumStartIndex = columnDef.findIndex(token => token === "(");
+            if (enumStartIndex === -1) {
+                return {column: null, error: "ENUM inválido: falta parêntese de abertura"};
+            }
+
+            const enumEndIndex = columnDef.findIndex(token => token === ")");
+            if (enumEndIndex === -1) {
+                return {column: null, error: "ENUM inválido: falta parêntese de fechamento"};
+            }
+
+            const enumValues = columnDef.slice(enumStartIndex + 1, enumEndIndex);
+            if (enumValues.length === 0) {
+                return {column: null, error: "ENUM deve possuir pelo menos um valor"};
+            }
+
+            for (let i = 0; i < enumValues.length; i++) {
+                const token = enumValues[i];
+                if (i % 2 === 0) {
+                    if (token === ",") {
+                        return {column: null, error: "Valor ENUM inválido"};
+                    }
+                } else {
+                    if (token !== ",") {
+                        return {column: null, error: "Valores ENUM devem ser separados por vírgula"};
+                    }
+                }
+            }
+            characteristics.enumValues = enumValues.filter(token => token !== ",");
+        }
+
+        return {
+            column: new Column(columnName, columnType, characteristics.pk, characteristics.fk, 
+                characteristics.notNull, characteristics.unique, characteristics.autoIncrement,
+                characteristics.default, characteristics.currentTimestamp, characteristics.enumValues, 
+                characteristics.reference),error: null
+        };
+    }
+
+    export function countTokenSequence(tokens: string[], ...sequence: string[]): number {
+        const lowerTokens = tokens.map(token => token.toLowerCase());
+        const lowerSequence = sequence.map(token => token.toLowerCase());
+        let count = 0;
+        for (let i = 0; i <= lowerTokens.length - lowerSequence.length; i++) {
+            let matches = true;
+            for (let j = 0; j < lowerSequence.length; j++) {
+                if (lowerTokens[i + j] !== lowerSequence[j]) {
+                    matches = false;
+                    break;
+                }
+            }
+            if (matches) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    export function splitColumnDefinitions(tokens: string[]): string[][] {
+        const columns: string[][] = [];
+        let current: string[] = [];
+        let depth = 0;
+
+        for (const token of tokens) {
+            if (token === "(") {
+                depth++;
+            }
+            if (token === ")") {
+                depth--;
+            }
+            if (token === "," && depth === 0) {
+                columns.push(current);
+                current = [];
+                continue;
+            }
+            current.push(token);
+        }
+
+        if (current.length > 0) {
+            columns.push(current);
+        }
+
+        return columns;
+    }
+    
+    export function tokenizeSQL(sql: string): string[] {
 
         const tokens: string[] = [];
 
@@ -2710,9 +2920,17 @@ namespace SQL {
         return tokens;
     }
 
-    function isValidSQLName(name: string): boolean {
+    export function isValidSQLName(name: string): boolean {
         return /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name);
     }
+
+    export const keyWords = [
+        "primary", "key", "foreign", "not", "null", "unique", "default", "auto_increment", "where", 
+        "select", "from", "insert", "into", "values", "update", "set", "delete", "create", "table", 
+        "database", "use", "drop", "alter", "add", "column", "enum", "references", "on", "and", "or", 
+        "in", "is", "integer", "float", "text", "date", "time", "boolean"
+    ];
+
 }
 
 // #endregion
