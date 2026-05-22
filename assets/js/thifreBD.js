@@ -4,6 +4,10 @@ const buttonChangeToGrafical = document.getElementById("button-header-interface"
 const buttonChangeToTerminal = document.getElementById("button-header-terminal");
 const buttonChangeToSave = document.getElementById("button-header-save");
 const interfaceTerminal = document.getElementById("interface-terminal");
+/**
+ * Atualiza a posição e a largura do indicador da interface ativa.
+ * @param activeButton - Botão atualmente selecionado.
+ */
 function updateInterfaceTerminalIndicator(activeButton) {
     const left = activeButton.offsetLeft;
     const width = activeButton.offsetWidth;
@@ -38,6 +42,10 @@ buttonChangeToSave.addEventListener("click", () => {
 // #endregion
 // #region Others
 let timeout;
+/**
+ * Exibe uma notificação temporária no painel de mensagens.
+ * @param html - Conteúdo HTML da notificação.
+ */
 function openNotifications(html) {
     clearTimeout(timeout);
     const notificacoes = document.getElementById("notificacoes");
@@ -47,6 +55,11 @@ function openNotifications(html) {
         notificacoes.style.display = "none";
     }, 3000);
 }
+/**
+ * Abre ou fecha um menu central e oculta o contêiner quando todos estiverem fechados.
+ * @param estado - `false` para abrir e `true` para fechar.
+ * @param id - Id do painel que deve ser manipulado.
+ */
 function abrirFechar(estado, id) {
     const elemento = document.getElementById(id);
     if (estado === false) {
@@ -67,6 +80,13 @@ function abrirFechar(estado, id) {
         }
     }
 }
+/**
+ * Cria uma `Date` usando apenas o componente de hora.
+ * @param hours - Hora.
+ * @param minutes - Minutos opcionais.
+ * @param seconds - Segundos opcionais.
+ * @returns Data ajustada para o horário informado.
+ */
 function createTimeValue(hours, minutes = 0, seconds = 0) {
     const d = new Date();
     d.setHours(hours, minutes, seconds, 0);
@@ -148,6 +168,9 @@ function formatTimeForInput(value) {
     const minutes = String(date.getMinutes()).padStart(2, "0");
     return `${hours}:${minutes}`;
 }
+/**
+ * Cria ou seleciona a database de exemplo com tabelas e registros pré-carregados.
+ */
 function createExempleDatabase() {
     const databaseName = "thifre_db";
     if (databases[databaseName]) {
@@ -295,6 +318,10 @@ function createExempleDatabase() {
 }
 // #endregion
 // #region Custom dropdowns
+/**
+ * Alterna a abertura de um dropdown customizado.
+ * @param dropdownButton - Botão que controla o dropdown.
+ */
 function openCustomDropdown(dropdownButton) {
     const dropdown = dropdownButton.parentElement;
     if (dropdown.querySelector("ul").children.length === 0)
@@ -306,6 +333,10 @@ function openCustomDropdown(dropdownButton) {
     });
     dropdown.classList.toggle("custom-dropdown-open");
 }
+/**
+ * Seleciona uma opção de dropdown e atualiza o estado associado.
+ * @param option - Opção clicada.
+ */
 function choseOption(option) {
     const dropdown = option.closest(".custom-dropdown");
     const trigger = dropdown.querySelector(".custom-dropdown-trigger");
@@ -317,6 +348,10 @@ function choseOption(option) {
     option.classList.add("custom-dropdown-option-selected");
     onDropdownChange(dropdown);
 }
+/**
+ * Fecha todos os dropdowns customizados quando o clique ocorre fora deles.
+ * @param event - Evento de clique da página.
+ */
 function closeAllCustomDropdowns(event) {
     const target = event.target;
     if (target.closest(".custom-dropdown"))
@@ -325,6 +360,9 @@ function closeAllCustomDropdowns(event) {
         dropdown.classList.remove("custom-dropdown-open");
     });
 }
+/**
+ * Reconecta os handlers das opções de todos os dropdowns customizados.
+ */
 function updateCustomDropdowns() {
     document.querySelectorAll(".custom-dropdown").forEach((dropdown) => {
         dropdown.querySelectorAll(".custom-dropdown-option").forEach((option) => {
@@ -332,6 +370,10 @@ function updateCustomDropdowns() {
         });
     });
 }
+/**
+ * Aplica os efeitos colaterais de uma mudança em um dropdown customizado.
+ * @param dropdown - Dropdown alterado.
+ */
 function onDropdownChange(dropdown) {
     if (dropdown.querySelector('input[name="column-type"]')) {
         const container = dropdown.closest("div").parentElement;
@@ -354,12 +396,24 @@ function onDropdownChange(dropdown) {
 updateCustomDropdowns();
 // #endregion
 // #region classes and variables
+/**
+ * Representa uma database em memória com tabelas e relacionamentos.
+ */
 class Database {
+    /**
+     * Cria uma database vazia com o nome informado.
+     * @param name - Nome da database.
+     */
     constructor(name) {
         this.name = name;
         this.tables = {};
         this.foreignKeyMap = {};
     }
+    /**
+     * Lista as chaves estrangeiras que saem de uma tabela.
+     * @param tableName - Nome da tabela de origem.
+     * @returns Relações de saída da tabela.
+     */
     getTableForeignKeys(tableName) {
         const table = this.tables[tableName];
         const foreignKeys = [];
@@ -377,15 +431,31 @@ class Database {
         }
         return foreignKeys;
     }
+    /**
+     * Retorna as referências recebidas por uma tabela.
+     * @param tableName - Nome da tabela alvo.
+     * @returns Mapa de colunas referenciadas.
+     */
     getReferencesToTable(tableName) {
         return this.foreignKeyMap[tableName] || {};
     }
+    /**
+     * Resume os relacionamentos de uma tabela em entrada e saída.
+     * @param tableName - Nome da tabela consultada.
+     */
     getTableRelationships(tableName) {
         return {
             outgoing: this.getTableForeignKeys(tableName),
             incoming: this.getReferencesToTable(tableName)
         };
     }
+    /**
+     * Registra uma chave estrangeira apontando para outra tabela.
+     * @param fromTable - Tabela de origem.
+     * @param fromColumn - Coluna de origem.
+     * @param toTable - Tabela referenciada.
+     * @param toColumn - Coluna referenciada.
+     */
     registerForeignKey(fromTable, fromColumn, toTable, toColumn) {
         if (!this.foreignKeyMap[toTable]) {
             this.foreignKeyMap[toTable] = {};
@@ -398,6 +468,13 @@ class Database {
             column: fromColumn
         });
     }
+    /**
+     * Remove o vínculo de uma chave estrangeira registrada.
+     * @param fromTable - Tabela de origem.
+     * @param fromColumn - Coluna de origem.
+     * @param toTable - Tabela referenciada.
+     * @param toColumn - Coluna referenciada.
+     */
     unregisterForeignKey(fromTable, fromColumn, toTable, toColumn) {
         const refs = this.foreignKeyMap[toTable]?.[toColumn];
         if (!refs)
@@ -411,7 +488,14 @@ class Database {
         }
     }
 }
+/**
+ * Representa uma tabela em memória com colunas, linhas e índices.
+ */
 class Table {
+    /**
+     * Cria uma tabela vazia com o nome informado.
+     * @param name - Nome da tabela.
+     */
     constructor(name) {
         this.name = name;
         this.columns = {};
@@ -419,7 +503,24 @@ class Table {
         this.indexes = {};
     }
 }
+/**
+ * Descreve uma coluna e suas restrições na estrutura da tabela.
+ */
 class Column {
+    /**
+     * Cria uma coluna com metadados e restrições.
+     * @param name - Nome da coluna.
+     * @param type - Tipo lógico da coluna.
+     * @param isPrimaryKey - Indica chave primária.
+     * @param isForeignKey - Indica chave estrangeira.
+     * @param isNotNull - Indica restrição NOT NULL.
+     * @param isUnique - Indica restrição UNIQUE.
+     * @param isAutoIncrement - Indica incremento automático.
+     * @param hasDefault - Indica valor padrão.
+     * @param isCurrentTimestamp - Indica timestamp automático.
+     * @param enumValues - Valores permitidos para ENUM.
+     * @param reference - Referência usada por FOREIGN KEY.
+     */
     constructor(name, type, isPrimaryKey = false, isForeignKey = false, isNotNull = false, isUnique = false, isAutoIncrement = false, hasDefault = false, isCurrentTimestamp = false, enumValues, reference) {
         this.incrementCounter = 1;
         this.name = name;
@@ -435,6 +536,10 @@ class Column {
         this.enumValues = enumValues;
         this.reference = reference;
     }
+    /**
+     * Retorna o próximo valor da sequência de auto incremento.
+     * @returns Próximo número da coluna.
+     */
     increment() {
         if (!this.isAutoIncrement) {
             throw new Error("Column is not auto increment");
@@ -442,17 +547,33 @@ class Column {
         return this.incrementCounter++;
     }
 }
+/**
+ * Guarda o histórico e o estado de uma sessão do terminal SQL.
+ */
 class TerminalSession {
+    /**
+     * Cria uma nova sessão de terminal.
+     * @param name - Nome visível da sessão.
+     */
     constructor(name) {
         this.name = name;
         this.history = [];
         this.active = true;
         TerminalSession.sessionCount++;
     }
+    /**
+     * Adiciona uma entrada ao histórico da sessão.
+     * @param command - Comando executado.
+     * @param output - Linhas de saída.
+     * @param type - Tipo visual da entrada.
+     */
     createEntry(command, output, type) {
         this.history.push({ database: currentDatabase, command: command, output, type, timestamp: new Date() });
         this.updateTerminalUI();
     }
+    /**
+     * Re-renderiza o histórico da sessão na interface.
+     */
     updateTerminalUI() {
         const terminalHistoryDiv = document.getElementById("terminal-history");
         terminalHistoryDiv.innerHTML = "";
@@ -472,13 +593,24 @@ class TerminalSession {
 }
 TerminalSession.sessionCount = 1;
 TerminalSession.historyIndex = 0;
+/**
+ * Centraliza as operações de criação, edição e remoção das estruturas do banco.
+ */
 class SGBDFunctions {
+    /**
+     * Registra uma database e a torna a selecionada.
+     * @param database - Database a ser criada.
+     */
     static createDatabase(database) {
         databases[database.name] = database;
         currentDatabase = database.name;
         currentTable = null;
         refreshUI();
     }
+    /**
+     * Adiciona uma tabela à database atual.
+     * @param table - Tabela a ser criada.
+     */
     static createTable(table) {
         const db = databases[currentDatabase];
         for (const columnName in table.columns) {
@@ -494,6 +626,11 @@ class SGBDFunctions {
         currentTable = table.name;
         refreshUI();
     }
+    /**
+     * Adiciona uma coluna a uma tabela existente.
+     * @param tableName - Nome da tabela alvo.
+     * @param column - Coluna a ser adicionada.
+     */
     static addColumn(tableName, column) {
         databases[currentDatabase].tables[tableName].columns[column.name] = column;
         databases[currentDatabase].tables[tableName].indexes[column.name] = new Map();
@@ -502,6 +639,11 @@ class SGBDFunctions {
         }
         refreshUI();
     }
+    /**
+     * Insere uma linha e atualiza os índices da tabela.
+     * @param tableName - Nome da tabela alvo.
+     * @param row - Dados da nova linha.
+     */
     static addRow(tableName, row) {
         const table = databases[currentDatabase].tables[tableName];
         const rowIndex = table.rows.length;
@@ -515,6 +657,12 @@ class SGBDFunctions {
         }
         refreshUI();
     }
+    /**
+     * Substitui uma linha existente e reconstrói os índices afetados.
+     * @param tableName - Nome da tabela alvo.
+     * @param oldRowIndex - Índice da linha antiga.
+     * @param newRow - Novo conteúdo da linha.
+     */
     static editRow(tableName, oldRowIndex, newRow) {
         const table = databases[currentDatabase].tables[tableName];
         const oldRow = table.rows[oldRowIndex];
@@ -542,6 +690,10 @@ class SGBDFunctions {
         }
         refreshUI();
     }
+    /**
+     * Remove uma database do armazenamento em memória.
+     * @param databaseName - Nome da database.
+     */
     static deleteDatabase(databaseName) {
         delete databases[databaseName];
         if (currentDatabase === databaseName) {
@@ -550,6 +702,10 @@ class SGBDFunctions {
         }
         refreshUI();
     }
+    /**
+     * Remove uma tabela e desfaz as chaves estrangeiras de saída.
+     * @param tableName - Nome da tabela.
+     */
     static deleteTable(tableName) {
         const db = databases[currentDatabase];
         const table = db.tables[tableName];
@@ -565,6 +721,11 @@ class SGBDFunctions {
         }
         refreshUI();
     }
+    /**
+     * Remove uma coluna e limpa seus índices e dados.
+     * @param tableName - Nome da tabela.
+     * @param columnName - Nome da coluna.
+     */
     static deleteColumn(tableName, columnName) {
         const db = databases[currentDatabase];
         const table = db.tables[tableName];
@@ -580,6 +741,11 @@ class SGBDFunctions {
         delete table.columns[columnName];
         refreshUI();
     }
+    /**
+     * Remove uma linha e ajusta os índices remanescentes.
+     * @param tableName - Nome da tabela.
+     * @param rowIndex - Índice da linha a remover.
+     */
     static deleteRow(tableName, rowIndex) {
         const table = databases[currentDatabase].tables[tableName];
         const row = table.rows[rowIndex];
@@ -617,6 +783,9 @@ let terminalSessions = [];
 let currentTerminalSession = 0;
 //#endregion
 // #region Interface functions
+/**
+ * Cria uma nova database a partir do campo de entrada da interface.
+ */
 function createDatabaseInterface() {
     const databaseNameInput = document.getElementById("nome-database-input");
     const databaseName = databaseNameInput.value.trim().toLowerCase();
@@ -632,6 +801,9 @@ function createDatabaseInterface() {
     databaseNameInput.value = "";
     openNotifications(`<p style='color: var(--green4)'>Database "${databaseName}" criada com sucesso!</p>`);
 }
+/**
+ * Cria uma nova tabela com as colunas definidas na interface.
+ */
 function createTableInterface() {
     const tableNameInput = document.getElementById("nome-tabela-input");
     const tableName = tableNameInput.value.trim().toLowerCase();
@@ -661,6 +833,9 @@ function createTableInterface() {
     tableNameInput.value = "";
     openNotifications(`<p style='color: var(--green5)'>Tabela "${tableName}" criada com sucesso!</p>`);
 }
+/**
+ * Adiciona colunas à tabela atualmente selecionada.
+ */
 function addColumnsInterface() {
     if (currentDatabase === null) {
         openNotifications("<p style='color: var(--red5)'>Nenhuma database selecionada.</p>");
@@ -726,7 +901,13 @@ function addColumnsInterface() {
     changeEditColumnsMenu();
     openNotifications(`<p style='color: var(--green5)'>Colunas adicionadas com sucesso!</p>`);
 }
+/**
+ * Lê os campos do formulário e insere uma nova linha na tabela atual.
+ */
 function insertRowInterface() {
+    /**
+     * Restaura os valores de auto incremento caso a inserção falhe.
+     */
     function revertAutoIncrementValues() {
         for (const { column, value } of valuesBeforeIncrement) {
             const col = table.columns[column];
@@ -819,6 +1000,10 @@ function insertRowInterface() {
     changeAddRowMenu();
     openNotifications(`<p style='color: var(--green5)'>Linha inserida com sucesso!</p>`);
 }
+/**
+ * Atualiza uma linha existente a partir do formulário de edição.
+ * @param rowIndex - Índice da linha que será alterada.
+ */
 function editRowInterface(rowIndex) {
     if (Object.keys(databases[currentDatabase].tables[currentTable].columns).length === 0) {
         openNotifications("<p style='color: var(--red5)'>Não há colunas nessa tabela</p>");
@@ -906,6 +1091,9 @@ function editRowInterface(rowIndex) {
     changeEditRowMenu(rowIndex);
     openNotifications(`<p style='color: var(--green5)'>Linha editada com sucesso!</p>`);
 }
+/**
+ * Renomeia a database atualmente selecionada.
+ */
 function renameDatabaseInterface() {
     if (currentDatabase === null) {
         openNotifications("<p style='color: var(--red5)'>Nenhuma database selecionada.</p>");
@@ -934,6 +1122,9 @@ function renameDatabaseInterface() {
     updateCustomDropdowns();
     changeDatabaseDropdown();
 }
+/**
+ * Renomeia a tabela atualmente selecionada.
+ */
 function renameTableInterface() {
     if (currentDatabase === null) {
         openNotifications("<p style='color: var(--red5)'>Nenhuma database selecionada.</p>");
@@ -962,6 +1153,9 @@ function renameTableInterface() {
     refreshUI();
 }
 // Other interface functions
+/**
+ * Recria as opções do seletor de databases.
+ */
 function changeDatabaseDropdown() {
     const dropdown = document.querySelector("#databases .custom-dropdown");
     const trigger = dropdown.querySelector(".custom-dropdown-trigger");
@@ -978,6 +1172,9 @@ function changeDatabaseDropdown() {
     }
     updateCustomDropdowns();
 }
+/**
+ * Recria a lista lateral com as tabelas da database selecionada.
+ */
 function changeTabelasLista() {
     const tabelasLista = document.getElementById("tabelas-lista");
     tabelasLista.innerHTML = "";
@@ -1007,6 +1204,9 @@ function changeTabelasLista() {
         tabelasLista.appendChild(option);
     }
 }
+/**
+ * Re-renderiza a visualização detalhada da tabela selecionada.
+ */
 function changeTabelaSelecionadaTabela() {
     if (currentDatabase === null) {
         document.getElementById("nenhuma-tabela-selecionada").style.display = "flex";
@@ -1077,6 +1277,9 @@ function changeTabelaSelecionadaTabela() {
         document.getElementById("tabela-selecionada-tabela").appendChild(divLinha);
     });
 }
+/**
+ * Atualiza o resumo exibido no painel de ações da tabela.
+ */
 function changeTabelaInfoVariosBotoes() {
     if (currentDatabase === null) {
         const tabelaInfo = document.getElementById("tabela-info-varios-botoes");
@@ -1094,6 +1297,12 @@ function changeTabelaInfoVariosBotoes() {
         tabelaInfo.querySelector("#linhas-colunas").textContent = `${Object.keys(databases[currentDatabase].tables[currentTable].rows).length} linhas • ${Object.keys(databases[currentDatabase].tables[currentTable].columns).length} colunas`;
     }
 }
+/**
+ * Converte os blocos de criação de colunas em instâncias de `Column`.
+ * @param columns - Conjunto de blocos da interface.
+ * @param existingColumns - Colunas já existentes para validação de nomes duplicados.
+ * @returns Lista de colunas válidas ou `null` quando houver erro.
+ */
 function parseColumnsFromInputs(columns, existingColumns) {
     const parsedColumns = [];
     const knownColumns = new Set(Object.keys(existingColumns));
@@ -1165,10 +1374,20 @@ function parseColumnsFromInputs(columns, existingColumns) {
     }
     return parsedColumns;
 }
+/**
+ * Mostra ou oculta o painel de detalhe de linha ou coluna.
+ * @param shouldShow - Define se o painel deve aparecer.
+ */
 function showHideTabelaSelecionadaLinhaColuna(shouldShow) {
     const tabelaSelecionadaLinhaColuna = document.getElementById("tabela-selecionada-linha-coluna");
     tabelaSelecionadaLinhaColuna.style.display = shouldShow ? "flex" : "none";
 }
+/**
+ * Atualiza o painel de detalhes para uma linha ou coluna específica.
+ * @param type - Tipo do detalhe a exibir.
+ * @param rowIndex - Índice da linha, quando aplicável.
+ * @param columnName - Nome da coluna, quando aplicável.
+ */
 function changeTabelaSelecionadaLinhaColuna(type, rowIndex, columnName) {
     const tabelaSelecionadaLinhaColuna = document.getElementById("tabela-selecionada-linha-coluna");
     const header = tabelaSelecionadaLinhaColuna.querySelector("#tabela-selecionada-linha-coluna-header h3");
@@ -1222,6 +1441,9 @@ function changeTabelaSelecionadaLinhaColuna(type, rowIndex, columnName) {
         }
     }
 }
+/**
+ * Sincroniza todos os painéis e listas com o estado atual do banco.
+ */
 function refreshUI() {
     changeDatabaseDropdown();
     changeTabelasLista();
@@ -1229,6 +1451,10 @@ function refreshUI() {
     changeTabelaInfoVariosBotoes();
 }
 // central menus
+/**
+ * Cria um bloco de formulário para configuração de uma coluna.
+ * @param parent - Elemento pai que receberá o bloco.
+ */
 function createColumnCreationDiv(parent) {
     const mainDiv = document.createElement("div");
     mainDiv.className = "outlined";
@@ -1368,10 +1594,17 @@ function createColumnCreationDiv(parent) {
     parent.appendChild(mainDiv);
     updateCustomDropdowns();
 }
+/**
+ * Remove um bloco de criação de coluna da interface.
+ * @param button - Botão de remoção do bloco.
+ */
 function deleteColumnCreationDiv(button) {
     const div = button.parentElement.parentElement;
     div.remove();
 }
+/**
+ * Cria um bloco visual para montar uma condição de busca.
+ */
 function createWhereConditionDiv() {
     const whereConditionsContainer = document.getElementById("where-conditions");
     const mainDiv = document.createElement("div");
@@ -1435,6 +1668,9 @@ function createWhereConditionDiv() {
     bottomDiv.appendChild(deleteDiv);
     updateCustomDropdowns();
 }
+/**
+ * Atualiza o campo do menu de configuração de database.
+ */
 function changeConfigurarDatabaseMenu() {
     const menu = document.getElementById("configurar-database");
     if (currentDatabase === null) {
@@ -1443,6 +1679,9 @@ function changeConfigurarDatabaseMenu() {
     }
     menu.querySelector("input").value = currentDatabase;
 }
+/**
+ * Atualiza o campo do menu de configuração de tabela.
+ */
 function changeConfigurarTabelaMenu() {
     const menu = document.getElementById("configurar-tabela");
     if (currentDatabase === null || currentTable === null) {
@@ -1451,6 +1690,9 @@ function changeConfigurarTabelaMenu() {
     }
     menu.querySelector("input").value = currentTable;
 }
+/**
+ * Recria o menu de edição de colunas da tabela atual.
+ */
 function changeEditColumnsMenu() {
     if (currentDatabase === null)
         return;
@@ -1521,6 +1763,9 @@ function changeEditColumnsMenu() {
     });
     updateCustomDropdowns();
 }
+/**
+ * Recria o menu de inserção de linhas da tabela atual.
+ */
 function changeAddRowMenu() {
     if (currentDatabase === null)
         return;
@@ -1633,6 +1878,10 @@ function changeAddRowMenu() {
         }
     });
 }
+/**
+ * Recria o menu de edição de uma linha específica.
+ * @param rowIndex - Índice da linha que será editada.
+ */
 function changeEditRowMenu(rowIndex) {
     if (currentDatabase === null)
         return;
@@ -1753,6 +2002,9 @@ function changeEditRowMenu(rowIndex) {
         }
     });
 }
+/**
+ * Recria o menu de pesquisa e suas opções de join.
+ */
 function changeSearchMenu() {
     const searchColumnsDiv = document.getElementById("colunas-pesquisa");
     searchColumnsDiv.innerHTML = "";
@@ -1837,6 +2089,12 @@ function changeSearchMenu() {
         });
     }
 }
+/**
+ * Prepara a confirmação de exclusão para database, tabela, coluna ou linha.
+ * @param type - Tipo do item que será removido.
+ * @param rowIndex - Índice da linha, quando aplicável.
+ * @param columnName - Nome da coluna, quando aplicável.
+ */
 function changeConfirmDeleteMenu(type, rowIndex, columnName) {
     const menuUl = document.getElementById("confirmar-deletar-lista");
     menuUl.innerHTML = "";
@@ -1952,6 +2210,10 @@ function changeConfirmDeleteMenu(type, rowIndex, columnName) {
         });
     };
 }
+/**
+ * Atualiza a exibição e as restrições dos campos de características da coluna.
+ * @param parentDiv - Container do bloco de criação/edição da coluna.
+ */
 function updateCharacteristics(parentDiv) {
     // pegar inputs
     const pkInput = parentDiv.querySelector("input.primary-key");
@@ -2030,6 +2292,10 @@ function updateCharacteristics(parentDiv) {
     const enumDiv = parentDiv.querySelector("div.enum-values");
     enumDiv.style.display = state.type === "enum" ? "block" : "none";
 }
+/**
+ * Troca o tipo do campo de valor padrão conforme o tipo da coluna.
+ * @param parentDiv - Container do bloco de criação/edição da coluna.
+ */
 function updateDefaultInput(parentDiv) {
     const type = parentDiv.querySelector(".custom-dropdown button").textContent.toLowerCase();
     if (type == "boolean") {
@@ -2076,6 +2342,10 @@ function updateDefaultInput(parentDiv) {
         `;
     }
 }
+/**
+ * Atualiza as tabelas disponíveis para referência de chave estrangeira.
+ * @param parentDiv - Container do bloco de criação/edição da coluna.
+ */
 function updateForeignKeyReferenceTableOptions(parentDiv) {
     const database = databases[currentDatabase];
     const shouldFilterCurrentTable = currentTable && database.tables[currentTable];
@@ -2096,6 +2366,10 @@ function updateForeignKeyReferenceTableOptions(parentDiv) {
     }
     updateCustomDropdowns();
 }
+/**
+ * Atualiza as colunas disponíveis na tabela de referência selecionada.
+ * @param parentDiv - Container do bloco de criação/edição da coluna.
+ */
 function updateForeignKeyReferenceColumnOptions(parentDiv) {
     const database = databases[currentDatabase];
     const columnSelect = parentDiv.querySelector(".referencia :nth-child(3) .custom-dropdown-menu");
@@ -2125,14 +2399,24 @@ function updateForeignKeyReferenceColumnOptions(parentDiv) {
 }
 //#endregion
 // #region Terminal
+/**
+ * Retorna a sessão de terminal atualmente ativa.
+ * @returns Sessão selecionada.
+ */
 function getCurrentTerminalSession() {
     return terminalSessions[currentTerminalSession];
 }
 const commandTextarea = document.querySelector("#terminal-input-field");
+/**
+ * Executa o comando digitado no terminal SQL.
+ */
 function executeCommand() {
     const command = commandTextarea.value.trim();
     SQL.execute(command);
 }
+/**
+ * Cria uma nova aba de terminal e a torna ativa.
+ */
 function createTerminalSession() {
     const terminalSession = new TerminalSession(`Terminal ${TerminalSession.sessionCount}`);
     terminalSessions.push(terminalSession);
@@ -2226,9 +2510,17 @@ createColumnCreationDiv(document.getElementById("criacao-colunas-edit"));
 // -Terminal
 // -Salvar e carregar
 // -Modelo lógico (diagrama de entidade relacionamento)
+// -Editar colunas
 // #region SQL namespace
+/**
+ * Processa comandos SQL digitados no terminal.
+ */
 var SQL;
 (function (SQL) {
+    /**
+     * Executa o comando SQL completo após tokenização.
+     * @param fullCommand - Texto original digitado.
+     */
     function execute(fullCommand) {
         const tokens = tokenizeSQL(fullCommand);
         if (tokens.length === 0)
@@ -2254,11 +2546,22 @@ var SQL;
         }
     }
     SQL.execute = execute;
+    /**
+     * Implementa o comando SQL CREATE.
+     */
     class SQLCreate {
+        /**
+         * Cria um executor para um comando CREATE tokenizado.
+         * @param fullCommand - Texto original do comando.
+         * @param tokens - Tokens gerados a partir do comando.
+         */
         constructor(fullCommand, tokens) {
             this.fullCommand = fullCommand;
             this.tokens = tokens;
         }
+        /**
+         * Direciona o comando CREATE para database ou table.
+         */
         execute() {
             const target = this.tokens[1]?.toLowerCase();
             switch (target) {
@@ -2272,6 +2575,9 @@ var SQL;
                     getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando CREATE incorreto"], "error");
             }
         }
+        /**
+         * Executa CREATE DATABASE.
+         */
         database() {
             if (this.tokens.length < 3) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando CREATE DATABASE incorreto", "Nome da database é obrigatório"], "error");
@@ -2297,6 +2603,9 @@ var SQL;
             SGBDFunctions.createDatabase(new Database(databaseName));
             getCurrentTerminalSession().createEntry(this.fullCommand, [`Database "${databaseName}" criada com sucesso!`], "success");
         }
+        /**
+         * Executa CREATE TABLE.
+         */
         table() {
             const tableName = this.tokens[2];
             if (currentDatabase === null) {
@@ -2334,11 +2643,22 @@ var SQL;
         }
     }
     SQL.SQLCreate = SQLCreate;
+    /**
+     * Agrupa comandos de sistema como USE.
+     */
     class SystemCommands {
+        /**
+         * Cria um executor para comandos de sistema tokenizados.
+         * @param fullCommand - Texto original do comando.
+         * @param tokens - Tokens gerados a partir do comando.
+         */
         constructor(fullCommand, tokens) {
             this.fullCommand = fullCommand;
             this.tokens = tokens;
         }
+        /**
+         * Executa o comando USE para trocar a database ativa.
+         */
         use() {
             const target = this.tokens[1]?.toLowerCase();
             if (!target) {
@@ -2360,7 +2680,15 @@ var SQL;
         }
     }
     SQL.SystemCommands = SystemCommands;
+    /**
+     * Analisa uma definição de coluna do SQL e cria a instância correspondente.
+     * @param columnDef - Tokens que compõem a definição da coluna.
+     * @returns Coluna parseada ou mensagem de erro.
+     */
     function parseColumn(columnDef) {
+        /**
+         * Valida palavras-chave compostas, como PRIMARY KEY ou NOT NULL.
+         */
         function validateCompoundKeyword(first, second, name) {
             const firstCount = countTokenSequence(columnDef, first);
             const compoundCount = countTokenSequence(columnDef, first, second);
@@ -2372,6 +2700,9 @@ var SQL;
             }
             return compoundCount;
         }
+        /**
+         * Valida palavras-chave simples, como UNIQUE ou DEFAULT.
+         */
         function validateSingleKeyword(keyword, name) {
             const count = countTokenSequence(columnDef, keyword);
             if (count > 1) {
@@ -2393,42 +2724,92 @@ var SQL;
         if (!(["integer", "text", "date", "time", "boolean", "enum"].includes(columnType))) {
             return { column: null, error: `Tipo de coluna inválido: "${columnDef[1]}"` };
         }
-        const characteristics = {
-            pk: false,
-            fk: false,
-            notNull: false,
-            unique: false,
-            autoIncrement: false,
-            default: false,
-            currentTimestamp: false,
-            enumValues: [],
-            reference: undefined
-        };
+        const column = new Column(columnName, columnType, false, false, false, false, false, false, false);
         const primaryValidation = validateCompoundKeyword("primary", "key", "PRIMARY KEY");
         if (typeof primaryValidation === "string") {
             return { column: null, error: primaryValidation };
         }
-        characteristics.pk = primaryValidation === 1;
+        column.isPrimaryKey = primaryValidation === 1;
         const foreignValidation = validateCompoundKeyword("foreign", "key", "FOREIGN KEY");
         if (typeof foreignValidation === "string") {
             return { column: null, error: foreignValidation };
         }
-        characteristics.fk = foreignValidation === 1;
+        column.isForeignKey = foreignValidation === 1;
         const notNullValidation = validateCompoundKeyword("not", "null", "NOT NULL");
         if (typeof notNullValidation === "string") {
             return { column: null, error: notNullValidation };
         }
-        characteristics.notNull = notNullValidation === 1;
+        column.isNotNull = notNullValidation === 1;
         const uniqueValidation = validateSingleKeyword("unique", "UNIQUE");
         if (typeof uniqueValidation === "string") {
             return { column: null, error: uniqueValidation };
         }
-        characteristics.unique = uniqueValidation === 1;
+        column.isUnique = uniqueValidation === 1;
         const autoIncrementValidation = validateSingleKeyword("auto_increment", "AUTO_INCREMENT");
         if (typeof autoIncrementValidation === "string") {
             return { column: null, error: autoIncrementValidation };
         }
-        characteristics.autoIncrement = autoIncrementValidation === 1;
+        column.isAutoIncrement = autoIncrementValidation === 1;
+        const defaultValidation = validateSingleKeyword("default", "DEFAULT");
+        if (typeof defaultValidation === "string") {
+            return { column: null, error: defaultValidation };
+        }
+        column.hasDefault = defaultValidation === 1;
+        if (column.hasDefault) {
+            const defaultIndex = columnDef.findIndex(token => token.toLowerCase() === "default");
+            if (defaultIndex === -1 || defaultIndex === columnDef.length - 1) {
+                return { column: null, error: "DEFAULT deve ser seguido de um valor" };
+            }
+            const defaultValue = columnDef[defaultIndex + 1];
+            switch (columnType) {
+                case "integer":
+                    if (!/^-?\d+$/.test(defaultValue)) {
+                        return { column: null, error: "Valor DEFAULT inválido para INTEGER" };
+                    }
+                    break;
+                case "float":
+                    if (!/^-?\d+(\.\d+)?$/.test(defaultValue)) {
+                        return { column: null, error: "Valor DEFAULT inválido para FLOAT" };
+                    }
+                    break;
+                case "boolean":
+                    if (defaultValue.toLowerCase() !== "true" && defaultValue.toLowerCase() !== "false") {
+                        return { column: null, error: "Valor DEFAULT inválido para BOOLEAN" };
+                    }
+                    break;
+                case "text":
+                    if (!(defaultValue.startsWith("'") && defaultValue.endsWith("'") ||
+                        defaultValue.startsWith('"') && defaultValue.endsWith('"'))) {
+                        return { column: null, error: "Texto DEFAULT deve estar entre aspas" };
+                    }
+                    break;
+                case "date":
+                    const isCurrentDate = defaultValue.toUpperCase() === "CURRENT_TIMESTAMP";
+                    const cleanValue = defaultValue.slice(1, -1);
+                    const parsedDate = ensureDate(cleanValue);
+                    if (!(isCurrentDate || parsedDate)) {
+                        return { column: null, error: "Valor DEFAULT inválido para DATE" };
+                    }
+                    if (isCurrentDate) {
+                        column.hasDefault = false;
+                        column.isCurrentTimestamp = true;
+                    }
+                    break;
+                case "time":
+                    const isCurrentTime = defaultValue.toUpperCase() === "CURRENT_TIMESTAMP";
+                    const cleanTimeValue = defaultValue.slice(1, -1);
+                    const validTime = /^\d{2}:\d{2}:\d{2}$/.test(cleanTimeValue);
+                    if (!(isCurrentTime || validTime)) {
+                        return { column: null, error: "Valor DEFAULT inválido para TIME" };
+                    }
+                    if (isCurrentTime) {
+                        column.hasDefault = false;
+                        column.isCurrentTimestamp = true;
+                    }
+                    break;
+            }
+            column.defaultValue = defaultValue;
+        }
         if (columnType === "enum") {
             const enumStartIndex = columnDef.findIndex(token => token === "(");
             if (enumStartIndex === -1) {
@@ -2455,13 +2836,17 @@ var SQL;
                     }
                 }
             }
-            characteristics.enumValues = enumValues.filter(token => token !== ",");
+            column.enumValues = enumValues.filter(token => token !== ",");
         }
-        return {
-            column: new Column(columnName, columnType, characteristics.pk, characteristics.fk, characteristics.notNull, characteristics.unique, characteristics.autoIncrement, characteristics.default, characteristics.currentTimestamp, characteristics.enumValues, characteristics.reference), error: null
-        };
+        return { column: column, error: null };
     }
     SQL.parseColumn = parseColumn;
+    /**
+     * Conta quantas vezes uma sequência de tokens aparece.
+     * @param tokens - Lista de tokens de entrada.
+     * @param sequence - Sequência a ser procurada.
+     * @returns Número de ocorrências encontradas.
+     */
     function countTokenSequence(tokens, ...sequence) {
         const lowerTokens = tokens.map(token => token.toLowerCase());
         const lowerSequence = sequence.map(token => token.toLowerCase());
@@ -2481,6 +2866,11 @@ var SQL;
         return count;
     }
     SQL.countTokenSequence = countTokenSequence;
+    /**
+     * Divide a lista de tokens em definições de colunas separadas por vírgula.
+     * @param tokens - Tokens da cláusula de colunas.
+     * @returns Lista de definições de coluna.
+     */
     function splitColumnDefinitions(tokens) {
         const columns = [];
         let current = [];
@@ -2505,6 +2895,11 @@ var SQL;
         return columns;
     }
     SQL.splitColumnDefinitions = splitColumnDefinitions;
+    /**
+     * Tokeniza uma string SQL em palavras e símbolos relevantes.
+     * @param sql - Texto SQL original.
+     * @returns Lista de tokens resultantes.
+     */
     function tokenizeSQL(sql) {
         const tokens = [];
         let current = "";
@@ -2533,10 +2928,18 @@ var SQL;
         return tokens;
     }
     SQL.tokenizeSQL = tokenizeSQL;
+    /**
+     * Verifica se um nome segue o padrão permitido para identificadores SQL.
+     * @param name - Nome a ser validado.
+     * @returns `true` quando o nome é válido.
+     */
     function isValidSQLName(name) {
         return /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name);
     }
     SQL.isValidSQLName = isValidSQLName;
+    /**
+     * Palavras reservadas reconhecidas pelo parser SQL.
+     */
     SQL.keyWords = [
         "primary", "key", "foreign", "not", "null", "unique", "default", "auto_increment", "where",
         "select", "from", "insert", "into", "values", "update", "set", "delete", "create", "table",
