@@ -2,6 +2,7 @@
 // #region Change interface terminal
 const buttonChangeToGrafical = document.getElementById("button-header-interface");
 const buttonChangeToTerminal = document.getElementById("button-header-terminal");
+const buttonChangeToLogical = document.getElementById("button-header-logical");
 const buttonChangeToSave = document.getElementById("button-header-save");
 const interfaceTerminal = document.getElementById("interface-terminal");
 /**
@@ -14,31 +15,45 @@ function updateInterfaceTerminalIndicator(activeButton) {
     interfaceTerminal.style.setProperty("--indicator-left", `${left}px`);
     interfaceTerminal.style.setProperty("--indicator-width", `${width}px`);
 }
-window.addEventListener('load', () => updateInterfaceTerminalIndicator(buttonChangeToGrafical));
-buttonChangeToGrafical.addEventListener("click", () => {
-    const interfaceGrafica = document.getElementById("interface-grafica").style.display = "flex";
+function changeTo(id) {
+    document.getElementById("interface-grafica").style.display = "none";
     document.getElementById("terminal").style.display = "none";
+    document.getElementById("logical").style.display = "none";
     document.getElementById("save").style.display = "none";
+    document.getElementById(id).style.display = "flex";
     document.querySelector(".interface-terminal-ativo")?.classList.remove("interface-terminal-ativo");
-    buttonChangeToGrafical.classList.add("interface-terminal-ativo");
-    updateInterfaceTerminalIndicator(buttonChangeToGrafical);
+    switch (id) {
+        case "interface-grafica":
+            buttonChangeToGrafical.classList.add("interface-terminal-ativo");
+            updateInterfaceTerminalIndicator(buttonChangeToGrafical);
+            break;
+        case "terminal":
+            buttonChangeToTerminal.classList.add("interface-terminal-ativo");
+            updateInterfaceTerminalIndicator(buttonChangeToTerminal);
+            break;
+        case "logical":
+            buttonChangeToLogical.classList.add("interface-terminal-ativo");
+            updateInterfaceTerminalIndicator(buttonChangeToLogical);
+            break;
+        case "save":
+            buttonChangeToSave.classList.add("interface-terminal-ativo");
+            updateInterfaceTerminalIndicator(buttonChangeToSave);
+            break;
+    }
+}
+buttonChangeToGrafical.addEventListener("click", () => {
+    changeTo("interface-grafica");
 });
 buttonChangeToTerminal.addEventListener("click", () => {
-    document.getElementById("interface-grafica").style.display = "none";
-    document.getElementById("terminal").style.display = "flex";
-    document.getElementById("save").style.display = "none";
-    document.querySelector(".interface-terminal-ativo")?.classList.remove("interface-terminal-ativo");
-    buttonChangeToTerminal.classList.add("interface-terminal-ativo");
-    updateInterfaceTerminalIndicator(buttonChangeToTerminal);
+    changeTo("terminal");
+});
+buttonChangeToLogical.addEventListener("click", () => {
+    changeTo("logical");
 });
 buttonChangeToSave.addEventListener("click", () => {
-    document.getElementById("interface-grafica").style.display = "none";
-    document.getElementById("terminal").style.display = "none";
-    document.getElementById("save").style.display = "flex";
-    document.querySelector(".interface-terminal-ativo")?.classList.remove("interface-terminal-ativo");
-    buttonChangeToSave.classList.add("interface-terminal-ativo");
-    updateInterfaceTerminalIndicator(buttonChangeToSave);
+    changeTo("save");
 });
+window.addEventListener('load', () => updateInterfaceTerminalIndicator(buttonChangeToGrafical));
 // #endregion
 // #region Others
 let timeout;
@@ -178,7 +193,7 @@ function createExempleDatabase() {
         currentTable = Object.keys(databases[databaseName].tables)[0] ?? null;
         refreshUI();
         changeEditColumnsMenu();
-        changeAddRowMenu();
+        changeInsertRowMenu();
         openNotifications("<p style='color: var(--yellow5)'>A database de exemplo ja existe e foi selecionada.</p>");
         return;
     }
@@ -198,7 +213,7 @@ function createExempleDatabase() {
     usuarios.columns["perfil"].defaultValue = "leitor";
     SGBDFunctions.createTable(usuarios);
     const idColumn = usuarios.columns["id"];
-    SGBDFunctions.addRow("usuarios", {
+    SGBDFunctions.insertRow("usuarios", {
         id: idColumn.increment(),
         nome: "Alice",
         email: "alice@email.com",
@@ -208,7 +223,7 @@ function createExempleDatabase() {
         hora_entrada: createTimeValue(8, 30),
         perfil: "admin"
     });
-    SGBDFunctions.addRow("usuarios", {
+    SGBDFunctions.insertRow("usuarios", {
         id: idColumn.increment(),
         nome: "Bruno",
         email: "bruno@email.com",
@@ -218,7 +233,7 @@ function createExempleDatabase() {
         hora_entrada: createTimeValue(9, 15),
         perfil: "editor"
     });
-    SGBDFunctions.addRow("usuarios", {
+    SGBDFunctions.insertRow("usuarios", {
         id: idColumn.increment(),
         nome: "Carla",
         email: "carla@email.com",
@@ -242,7 +257,7 @@ function createExempleDatabase() {
     posts.columns["publicado_em"] = new Column("publicado_em", "date", false, false, false, false, false, false, false);
     SGBDFunctions.createTable(posts);
     const postIdColumn = posts.columns["id"];
-    SGBDFunctions.addRow("posts", {
+    SGBDFunctions.insertRow("posts", {
         id: postIdColumn.increment(),
         usuario_id: 1,
         titulo: "Primeiro post",
@@ -252,7 +267,7 @@ function createExempleDatabase() {
         status: "publicado",
         publicado_em: new Date("2026-04-01")
     });
-    SGBDFunctions.addRow("posts", {
+    SGBDFunctions.insertRow("posts", {
         id: postIdColumn.increment(),
         usuario_id: 2,
         titulo: "Rascunho do Bruno",
@@ -272,7 +287,7 @@ function createExempleDatabase() {
     auditoria.columns["feito_em"] = new Column("feito_em", "date", false, false, true, false, false, false, true);
     SGBDFunctions.createTable(auditoria);
     const auditIdColumn = auditoria.columns["id"];
-    SGBDFunctions.addRow("auditoria", {
+    SGBDFunctions.insertRow("auditoria", {
         id: auditIdColumn.increment(),
         entidade: "usuarios",
         entidade_id: 1,
@@ -280,7 +295,7 @@ function createExempleDatabase() {
         sucesso: true,
         feito_em: new Date("2026-04-20")
     });
-    SGBDFunctions.addRow("auditoria", {
+    SGBDFunctions.insertRow("auditoria", {
         id: auditIdColumn.increment(),
         entidade: "posts",
         entidade_id: 1,
@@ -295,25 +310,25 @@ function createExempleDatabase() {
     tarefas.columns["concluida"].defaultValue = false;
     SGBDFunctions.createTable(tarefas);
     const tarefaIdColumn = tarefas.columns["id"];
-    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Arrumar a mesa", concluida: true });
-    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Responder mensagens", concluida: false });
-    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Revisar o código", concluida: true });
-    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Fazer backup", concluida: false });
-    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Atualizar a documentação", concluida: true });
-    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Testar o build", concluida: true });
-    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Organizar imagens", concluida: false });
-    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Separar ideias novas", concluida: false });
-    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Revisar layout", concluida: true });
-    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Limpar rascunhos", concluida: false });
-    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Publicar atualização", concluida: false });
-    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Conferir links", concluida: true });
-    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Escrever resumo", concluida: false });
-    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Rever cores", concluida: true });
-    SGBDFunctions.addRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Fechar pendências", concluida: false });
+    SGBDFunctions.insertRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Arrumar a mesa", concluida: true });
+    SGBDFunctions.insertRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Responder mensagens", concluida: false });
+    SGBDFunctions.insertRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Revisar o código", concluida: true });
+    SGBDFunctions.insertRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Fazer backup", concluida: false });
+    SGBDFunctions.insertRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Atualizar a documentação", concluida: true });
+    SGBDFunctions.insertRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Testar o build", concluida: true });
+    SGBDFunctions.insertRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Organizar imagens", concluida: false });
+    SGBDFunctions.insertRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Separar ideias novas", concluida: false });
+    SGBDFunctions.insertRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Revisar layout", concluida: true });
+    SGBDFunctions.insertRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Limpar rascunhos", concluida: false });
+    SGBDFunctions.insertRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Publicar atualização", concluida: false });
+    SGBDFunctions.insertRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Conferir links", concluida: true });
+    SGBDFunctions.insertRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Escrever resumo", concluida: false });
+    SGBDFunctions.insertRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Rever cores", concluida: true });
+    SGBDFunctions.insertRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Fechar pendências", concluida: false });
     currentTable = null;
     refreshUI();
     changeEditColumnsMenu();
-    changeAddRowMenu();
+    changeInsertRowMenu();
     openNotifications("<p style='color: var(--green5)'>Database de exemplo criada com sucesso!</p>");
 }
 // #endregion
@@ -644,7 +659,7 @@ class SGBDFunctions {
      * @param tableName - Nome da tabela alvo.
      * @param row - Dados da nova linha.
      */
-    static addRow(tableName, row) {
+    static insertRow(tableName, row) {
         const table = databases[currentDatabase].tables[tableName];
         const rowIndex = table.rows.length;
         table.rows.push(row);
@@ -996,8 +1011,8 @@ function insertRowInterface() {
             row[columnName] = input.value;
         }
     }
-    SGBDFunctions.addRow(currentTable, row);
-    changeAddRowMenu();
+    SGBDFunctions.insertRow(currentTable, row);
+    changeInsertRowMenu();
     openNotifications(`<p style='color: var(--green5)'>Linha inserida com sucesso!</p>`);
 }
 /**
@@ -1362,6 +1377,10 @@ function parseColumnsFromInputs(columns, existingColumns) {
             const referenceColumnElement = columnDiv.querySelector(".referencia .custom-dropdown:nth-child(3) .custom-dropdown-trigger");
             if (referenceTableElement.textContent === "Crie outra tabela" || referenceColumnElement.textContent === "Crie outra coluna") {
                 openNotifications("<p style='color: var(--red5)'>Selecione a tabela e coluna de referência para a chave estrangeira.</p>");
+                return null;
+            }
+            if (databases[currentDatabase].tables[referenceTableElement.textContent].columns[referenceColumnElement.textContent].type !== column.type) {
+                openNotifications("<p style='color: var(--red5)'>O tipo da coluna de referência não corresponde ao tipo da coluna.</p>");
                 return null;
             }
             column.reference = {
@@ -1761,12 +1780,15 @@ function changeEditColumnsMenu() {
         menu.appendChild(mainDiv);
         updateCustomDropdowns();
     });
+    const criacaoColunasEdit = document.getElementById("criacao-colunas-edit");
+    criacaoColunasEdit.innerHTML = "";
+    createColumnCreationDiv(criacaoColunasEdit);
     updateCustomDropdowns();
 }
 /**
  * Recria o menu de inserção de linhas da tabela atual.
  */
-function changeAddRowMenu() {
+function changeInsertRowMenu() {
     if (currentDatabase === null)
         return;
     const menuUl = document.querySelector("#colunas-inserir-linha");
@@ -2384,9 +2406,11 @@ function updateForeignKeyReferenceColumnOptions(parentDiv) {
     }
     let i = 0;
     for (let columnName in referencedTable.columns) {
-        columnSelect.innerHTML += `
-            <li class="custom-dropdown-option ${i === 0 ? "custom-dropdown-option-selected" : ""}">${columnName}</li>
-        `;
+        if (referencedTable.columns[columnName].isPrimaryKey || referencedTable.columns[columnName].isUnique) {
+            columnSelect.innerHTML += `
+                <li class="custom-dropdown-option ${i === 0 ? "custom-dropdown-option-selected" : ""}">${columnName}</li>
+            `;
+        }
         i++;
     }
     if (Object.keys(referencedTable.columns).length === 0) {
@@ -2511,6 +2535,7 @@ createColumnCreationDiv(document.getElementById("criacao-colunas-edit"));
 // -Salvar e carregar
 // -Modelo lógico (diagrama de entidade relacionamento)
 // -Editar colunas
+// -Selenium IDE
 // #region SQL namespace
 /**
  * Processa comandos SQL digitados no terminal.
@@ -2522,27 +2547,31 @@ var SQL;
      * @param fullCommand - Texto original digitado.
      */
     function execute(fullCommand) {
-        const tokens = tokenizeSQL(fullCommand);
-        if (tokens.length === 0)
-            return;
-        const command = tokens[0]?.toLowerCase();
-        switch (command) {
-            case "create":
-                new SQLCreate(fullCommand, tokens).execute();
-                break;
-            case "delete":
-                break;
-            case "drop":
-                break;
-            case "insert":
-                break;
-            case "update":
-                break;
-            case "use":
-                new SystemCommands(fullCommand, tokens).use();
-                break;
-            default:
-                getCurrentTerminalSession().createEntry(fullCommand, ["Comando não reconhecido"], "error");
+        const commands = fullCommand.split(";").map(command => command.trim()).filter(command => command.length > 0);
+        for (const commandText of commands) {
+            const tokens = tokenizeSQL(commandText);
+            if (tokens.length === 0)
+                return;
+            const command = tokens[0]?.toLowerCase();
+            switch (command) {
+                case "create":
+                    new SQLCreate(commandText, tokens).execute();
+                    break;
+                case "delete":
+                    break;
+                case "drop":
+                    break;
+                case "insert":
+                    new SQLInsert(commandText, tokens).insert();
+                    break;
+                case "update":
+                    break;
+                case "use":
+                    new SystemCommands(commandText, tokens).use();
+                    break;
+                default:
+                    getCurrentTerminalSession().createEntry(commandText, ["Comando não reconhecido"], "error");
+            }
         }
     }
     SQL.execute = execute;
@@ -2550,11 +2579,6 @@ var SQL;
      * Implementa o comando SQL CREATE.
      */
     class SQLCreate {
-        /**
-         * Cria um executor para um comando CREATE tokenizado.
-         * @param fullCommand - Texto original do comando.
-         * @param tokens - Tokens gerados a partir do comando.
-         */
         constructor(fullCommand, tokens) {
             this.fullCommand = fullCommand;
             this.tokens = tokens;
@@ -2643,6 +2667,109 @@ var SQL;
         }
     }
     SQL.SQLCreate = SQLCreate;
+    class SQLInsert {
+        constructor(fullCommand, tokens) {
+            this.fullCommand = fullCommand;
+            this.tokens = tokens;
+        }
+        // ver () dentro de strings
+        insert() {
+            const t = this.tokens;
+            if (currentDatabase === null) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhuma database selecionada"], "error");
+                return;
+            }
+            if (t[1].toLowerCase() !== "into") {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Sintaxe inválida"], "error");
+                return;
+            }
+            const tableName = t[2];
+            if (!databases[currentDatabase].tables[tableName]) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Tabela "${tableName}" não existe na database "${currentDatabase}"`], "error");
+                return;
+            }
+            const table = databases[currentDatabase].tables[tableName];
+            let specifyColumns = false;
+            if (t[3] === "(") {
+                specifyColumns = true;
+                const endValuesIndex = t.findIndex(token => token === ")");
+                if (endValuesIndex === -1) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Sintaxe inválida: falta parêntese de fechamento para lista de colunas"], "error");
+                    return;
+                }
+                const columnValues = t.slice(3 + 1, endValuesIndex);
+                if (columnValues.length === 0) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Valores inválidos: nenhum valor fornecido"], "error");
+                    return;
+                }
+                for (let i = 0; i < columnValues.length; i++) {
+                    const token = columnValues[i];
+                    if (i % 2 === 0 && token === ",") {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Valor inválido"], "error");
+                        return;
+                    }
+                    else {
+                        if (token !== ",") {
+                            getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Valores devem ser separados por vírgula"], "error");
+                            return;
+                        }
+                    }
+                }
+                const columnsToBeInserted = columnValues.filter(token => token !== ",");
+                if (columnsToBeInserted.length === 0) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Nenhuma coluna fornecida para inserção"], "error");
+                    return;
+                }
+                if (columnsToBeInserted.some(columnName => !table.columns[columnName])) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Coluna(s) inválida(s)"], "error");
+                    return;
+                }
+                if (columnsToBeInserted.length !== new Set(columnsToBeInserted).size) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Coluna(s) duplicada(s)"], "error");
+                    return;
+                }
+                if (t[endValuesIndex + 1]?.toLowerCase() !== "values") {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Sintaxe inválida: valores devem ser especificados após a lista de colunas"], "error");
+                    return;
+                }
+                let depth = 0;
+                let columnIndex = 0;
+                let rowsToBeInserted = [];
+                let row = {};
+                let value = "";
+                for (let i = endValuesIndex + 2; i < t.length; i++) {
+                    const token = t[i];
+                    if (token === "(") {
+                        depth++;
+                        continue;
+                    }
+                    else if (token === ")") {
+                        depth--;
+                        continue;
+                    }
+                    if (token !== ",") {
+                        value += token;
+                    }
+                    else {
+                        row[columnsToBeInserted[columnIndex]] = value;
+                        value = "";
+                        columnIndex++;
+                    }
+                    if (depth === 0 && Object.keys(row).length > 0) {
+                        rowsToBeInserted.push(row);
+                    }
+                }
+                if (depth !== 0) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Sintaxe inválida: parênteses desbalanceados"], "error");
+                    return;
+                }
+                for (const row of rowsToBeInserted) {
+                    SGBDFunctions.insertRow(tableName, row);
+                }
+            }
+        }
+    }
+    SQL.SQLInsert = SQLInsert;
     /**
      * Agrupa comandos de sistema como USE.
      */
@@ -2721,7 +2848,7 @@ var SQL;
         }
         const columnName = columnDef[0];
         const columnType = columnDef[1].toLowerCase();
-        if (!(["integer", "text", "date", "time", "boolean", "enum"].includes(columnType))) {
+        if (!(["integer", "float", "text", "date", "time", "boolean", "enum"].includes(columnType))) {
             return { column: null, error: `Tipo de coluna inválido: "${columnDef[1]}"` };
         }
         const column = new Column(columnName, columnType, false, false, false, false, false, false, false);
@@ -2798,7 +2925,8 @@ var SQL;
                 case "time":
                     const isCurrentTime = defaultValue.toUpperCase() === "CURRENT_TIMESTAMP";
                     const cleanTimeValue = defaultValue.slice(1, -1);
-                    const validTime = /^\d{2}:\d{2}:\d{2}$/.test(cleanTimeValue);
+                    const [hours, minutes, seconds] = cleanTimeValue.split(":").map(Number);
+                    const validTime = hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59 && seconds >= 0 && seconds <= 59;
                     if (!(isCurrentTime || validTime)) {
                         return { column: null, error: "Valor DEFAULT inválido para TIME" };
                     }
@@ -2809,6 +2937,42 @@ var SQL;
                     break;
             }
             column.defaultValue = defaultValue;
+        }
+        const hasReferences = columnDef.some(token => token.toLowerCase() === "references");
+        if (hasReferences && !column.isForeignKey) {
+            return { column: null, error: "REFERENCES só pode ser usado com FOREIGN KEY" };
+        }
+        if (column.isForeignKey) {
+            const referencesCount = columnDef.filter(token => token.toLowerCase() === "references").length;
+            if (referencesCount > 1) {
+                return { column: null, error: "Apenas um REFERENCES é permitido" };
+            }
+            const referencesIndex = columnDef.findIndex(token => token.toLowerCase() === "references");
+            if (referencesIndex <= 0 || columnDef[referencesIndex - 1].toLowerCase() !== "key") {
+                return { column: null, error: "FOREIGN KEY deve ser seguido de REFERENCES" };
+            }
+            if (referencesIndex + 4 >= columnDef.length || columnDef[referencesIndex + 2] !== "(" ||
+                columnDef[referencesIndex + 4] !== ")") {
+                return { column: null, error: "REFERENCES inválido" };
+            }
+            const refTable = databases[currentDatabase].tables[columnDef[referencesIndex + 1]];
+            if (refTable === undefined) {
+                return { column: null, error: `Tabela de referência "${columnDef[referencesIndex + 1]}" não existe` };
+            }
+            const refColumn = refTable.columns[columnDef[referencesIndex + 3]];
+            if (refColumn === undefined) {
+                return { column: null, error: `Coluna de referência "${columnDef[referencesIndex + 3]}" não existe na tabela "${columnDef[referencesIndex + 1]}"` };
+            }
+            if (refColumn.type !== columnType) {
+                return { column: null, error: `Tipo da coluna de referência "${columnDef[referencesIndex + 3]}" na tabela "${columnDef[referencesIndex + 1]}" não corresponde ao tipo da coluna atual` };
+            }
+            if (!refColumn.isUnique && !refColumn.isPrimaryKey) {
+                return { column: null, error: `Coluna de referência "${columnDef[referencesIndex + 3]}" na tabela "${columnDef[referencesIndex + 1]}" não é UNIQUE` };
+            }
+            column.reference = {
+                table: columnDef[referencesIndex + 1],
+                column: columnDef[referencesIndex + 3]
+            };
         }
         if (columnType === "enum") {
             const enumStartIndex = columnDef.findIndex(token => token === "(");
