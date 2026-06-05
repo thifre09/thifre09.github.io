@@ -4,6 +4,7 @@ const buttonChangeToGrafical = document.getElementById("button-header-interface"
 const buttonChangeToTerminal = document.getElementById("button-header-terminal");
 const buttonChangeToLogical = document.getElementById("button-header-logical");
 const buttonChangeToSave = document.getElementById("button-header-save");
+const buttonChangeToHelp = document.getElementById("button-header-help");
 const interfaceTerminal = document.getElementById("interface-terminal");
 /**
  * Atualiza a posição e a largura do indicador da interface ativa.
@@ -20,6 +21,7 @@ function changeTo(id) {
     document.getElementById("terminal").style.display = "none";
     document.getElementById("logical").style.display = "none";
     document.getElementById("save").style.display = "none";
+    document.getElementById("help").style.display = "none";
     document.getElementById(id).style.display = "flex";
     document.querySelector(".interface-terminal-ativo")?.classList.remove("interface-terminal-ativo");
     switch (id) {
@@ -39,6 +41,10 @@ function changeTo(id) {
             buttonChangeToSave.classList.add("interface-terminal-ativo");
             updateInterfaceTerminalIndicator(buttonChangeToSave);
             break;
+        case "help":
+            buttonChangeToHelp.classList.add("interface-terminal-ativo");
+            updateInterfaceTerminalIndicator(buttonChangeToHelp);
+            break;
     }
 }
 buttonChangeToGrafical.addEventListener("click", () => {
@@ -52,6 +58,9 @@ buttonChangeToLogical.addEventListener("click", () => {
 });
 buttonChangeToSave.addEventListener("click", () => {
     changeTo("save");
+});
+buttonChangeToHelp.addEventListener("click", () => {
+    changeTo("help");
 });
 window.addEventListener('load', () => updateInterfaceTerminalIndicator(buttonChangeToGrafical));
 // #endregion
@@ -127,6 +136,22 @@ function ensureDate(value) {
         return isNaN(parsed.getTime()) ? null : parsed;
     }
     return null;
+}
+function ensureTime(value) {
+    if (typeof value !== "string")
+        return null;
+    const match = value.match(/^(\d{2}):(\d{2}):(\d{2})$/);
+    if (!match)
+        return null;
+    const hours = Number(match[1]);
+    const minutes = Number(match[2]);
+    const seconds = Number(match[3]);
+    if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59 || seconds < 0 || seconds > 59) {
+        return null;
+    }
+    const date = new Date();
+    date.setHours(hours, minutes, seconds, 0);
+    return date;
 }
 /**
  * Formata uma Date para exibição de data (DD/MM/YYYY)
@@ -516,6 +541,17 @@ class Table {
         this.columns = {};
         this.rows = [];
         this.indexes = {};
+    }
+    /**
+     * Restaura os valores de auto incremento caso a inserção falhe.
+    */
+    revertAutoIncrementValues(valuesBeforeIncrement) {
+        for (const { column, value } of valuesBeforeIncrement) {
+            const col = this.columns[column];
+            if (col.isAutoIncrement) {
+                col.incrementCounter = value;
+            }
+        }
     }
 }
 /**
@@ -920,17 +956,6 @@ function addColumnsInterface() {
  * Lê os campos do formulário e insere uma nova linha na tabela atual.
  */
 function insertRowInterface() {
-    /**
-     * Restaura os valores de auto incremento caso a inserção falhe.
-     */
-    function revertAutoIncrementValues() {
-        for (const { column, value } of valuesBeforeIncrement) {
-            const col = table.columns[column];
-            if (col.isAutoIncrement) {
-                col.incrementCounter = value;
-            }
-        }
-    }
     if (currentDatabase === null) {
         openNotifications("<p style='color: var(--red5)'>Nenhuma database selecionada.</p>");
         return;
@@ -959,7 +984,7 @@ function insertRowInterface() {
             const value = column.querySelector(".custom-dropdown button").textContent;
             if (table.columns[columnName].isUnique && table.indexes[columnName].has(value === "True")) {
                 openNotifications(`<p style='color: var(--red5)'>O valor "${value}" já existe para a coluna "${columnName}".</p>`);
-                revertAutoIncrementValues();
+                table.revertAutoIncrementValues(valuesBeforeIncrement);
                 return;
             }
             row[columnName] = value === "True";
@@ -972,13 +997,13 @@ function insertRowInterface() {
         const input = column.querySelector("input");
         if (table.columns[columnName].isUnique && table.indexes[columnName].has(input.value)) {
             openNotifications(`<p style='color: var(--red5)'>O valor "${input.value}" já existe para a coluna "${columnName}".</p>`);
-            revertAutoIncrementValues();
+            table.revertAutoIncrementValues(valuesBeforeIncrement);
             return;
         }
         if (input.value.trim() === "") {
             if (table.columns[columnName].isNotNull) {
                 openNotifications(`<p style='color: var(--red5)'>A coluna "${columnName}" não pode ser nula.</p>`);
-                revertAutoIncrementValues();
+                table.revertAutoIncrementValues(valuesBeforeIncrement);
                 return;
             }
             if (table.columns[columnName].hasDefault) {
@@ -1259,10 +1284,10 @@ function changeTabelaSelecionadaTabela() {
     table.rows.forEach((row, index) => {
         const divLinha = document.createElement("div");
         divLinha.classList.add("linha-tabela");
-        Object.entries(row).forEach(([colName, value]) => {
+        Object.values(table.columns).forEach((column) => {
             const divCelula = document.createElement("div");
+            let value = row[column.name];
             let displayValue = value;
-            const column = table.columns[colName];
             if (column && column.type === "date" && value !== null) {
                 displayValue = formatDateForDisplay(value);
             }
@@ -1468,6 +1493,7 @@ function refreshUI() {
     changeTabelasLista();
     changeTabelaSelecionadaTabela();
     changeTabelaInfoVariosBotoes();
+    showHideTabelaSelecionadaLinhaColuna(false);
 }
 // central menus
 /**
@@ -2260,7 +2286,8 @@ function updateCharacteristics(parentDiv) {
         type: typeDropdown.textContent.toLowerCase()
     };
     const forcedTrue = {
-        notNull: state.pk || state.autoIncrement
+        notNull: state.pk || state.autoIncrement,
+        unique: state.autoIncrement
     };
     const forcedFalse = {
         fk: state.autoIncrement || state.currentTimestamp || state.currentTimestamp,
@@ -2275,6 +2302,7 @@ function updateCharacteristics(parentDiv) {
     };
     const disabled = {
         notNull: state.pk || state.autoIncrement,
+        unique: state.autoIncrement,
         autoIncrement: state.fk || state.default || state.type !== "integer",
         currentTimestamp: state.fk || state.default || state.type !== "date" && state.type !== "time",
         default: state.autoIncrement || state.currentTimestamp || state.currentTimestamp || state.type === "boolean",
@@ -2283,6 +2311,9 @@ function updateCharacteristics(parentDiv) {
     // NOT NULL
     notNullInput.checked = state.notNull || forcedTrue.notNull;
     notNullInput.disabled = disabled.notNull;
+    // UNIQUE
+    uniqueInput.checked = state.unique || forcedTrue.unique;
+    uniqueInput.disabled = disabled.unique;
     // AUTO INCREMENT
     autoIncLabel.style.display = hidden.autoIncrement ? "none" : "flex";
     autoIncInput.checked = state.autoIncrement && !forcedFalse.autoIncrement;
@@ -2531,11 +2562,12 @@ createColumnCreationDiv(document.querySelector("#criacao-tabela ul"));
 createColumnCreationDiv(document.getElementById("criacao-colunas-edit"));
 // To Do
 // -Pesquisar(Dashboard)
+// -Editar colunas (Dashboard)
 // -Terminal
 // -Salvar e carregar
 // -Modelo lógico (diagrama de entidade relacionamento)
-// -Editar colunas
-// -Selenium IDE
+// -validar se as caracteristicas são compatíveis no SQLCreate.table. EX: auto_increment não pode ter default
+// -Aba de ajuda
 // #region SQL namespace
 /**
  * Processa comandos SQL digitados no terminal.
@@ -2679,7 +2711,7 @@ var SQL;
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhuma database selecionada"], "error");
                 return;
             }
-            if (t[1].toLowerCase() !== "into") {
+            if (t.length < 7 || t[1]?.toLowerCase() !== "into") {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Sintaxe inválida"], "error");
                 return;
             }
@@ -2689,9 +2721,8 @@ var SQL;
                 return;
             }
             const table = databases[currentDatabase].tables[tableName];
-            let specifyColumns = false;
+            let columnsToBeInserted = [];
             if (t[3] === "(") {
-                specifyColumns = true;
                 const endValuesIndex = t.findIndex(token => token === ")");
                 if (endValuesIndex === -1) {
                     getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Sintaxe inválida: falta parêntese de fechamento para lista de colunas"], "error");
@@ -2708,14 +2739,12 @@ var SQL;
                         getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Valor inválido"], "error");
                         return;
                     }
-                    else {
-                        if (token !== ",") {
-                            getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Valores devem ser separados por vírgula"], "error");
-                            return;
-                        }
+                    else if (i % 2 === 1 && token !== ",") {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Valores devem ser separados por vírgula"], "error");
+                        return;
                     }
                 }
-                const columnsToBeInserted = columnValues.filter(token => token !== ",");
+                columnsToBeInserted = columnValues.filter(token => token !== ",");
                 if (columnsToBeInserted.length === 0) {
                     getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Nenhuma coluna fornecida para inserção"], "error");
                     return;
@@ -2732,41 +2761,280 @@ var SQL;
                     getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Sintaxe inválida: valores devem ser especificados após a lista de colunas"], "error");
                     return;
                 }
-                let depth = 0;
-                let columnIndex = 0;
-                let rowsToBeInserted = [];
-                let row = {};
-                let value = "";
-                for (let i = endValuesIndex + 2; i < t.length; i++) {
-                    const token = t[i];
-                    if (token === "(") {
-                        depth++;
-                        continue;
+                this.getRowValuesAndInsert(endValuesIndex + 2, tableName, columnsToBeInserted);
+                return;
+            }
+            for (const column in table.columns) {
+                columnsToBeInserted.push(column);
+            }
+            if (columnsToBeInserted.length === 0) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Nenhuma coluna fornecida para inserção"], "error");
+                return;
+            }
+            if (t[3]?.toLowerCase() !== "values") {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Sintaxe inválida: valores devem ser especificados após a lista de colunas"], "error");
+                return;
+            }
+            this.getRowValuesAndInsert(4, tableName, columnsToBeInserted);
+        }
+        getRowValuesAndInsert(startIndex, tableName, columnsToBeInserted) {
+            const t = this.tokens;
+            const table = databases[currentDatabase].tables[tableName];
+            let depth = 0;
+            let columnIndex = 0;
+            const rowsToBeInserted = [];
+            let row = {};
+            let value = "";
+            for (let i = startIndex; i < t.length; i++) {
+                const token = t[i];
+                if (token === "(") {
+                    depth++;
+                    if (depth === 1) {
+                        row = {};
+                        columnIndex = 0;
+                        value = "";
                     }
-                    else if (token === ")") {
-                        depth--;
-                        continue;
+                    continue;
+                }
+                if (token === ")") {
+                    if (depth !== 1) {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Sintaxe inválida"], "error");
+                        return;
                     }
-                    if (token !== ",") {
-                        value += token;
+                    row[columnsToBeInserted[columnIndex]] = value;
+                    depth--;
+                    if (columnIndex + 1 !== columnsToBeInserted.length) {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Quantidade de valores diferente da quantidade de colunas"], "error");
+                        return;
+                    }
+                    rowsToBeInserted.push({ ...row });
+                    row = {};
+                    columnIndex = 0;
+                    value = "";
+                    continue;
+                }
+                if (token === "," && depth === 1) {
+                    row[columnsToBeInserted[columnIndex]] = value;
+                    value = "";
+                    columnIndex++;
+                    if (columnIndex >= columnsToBeInserted.length) {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Valores em excesso"], "error");
+                        return;
+                    }
+                    continue;
+                }
+                if (token === "," && depth === 0) {
+                    continue;
+                }
+                value += token;
+            }
+            if (depth !== 0) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Sintaxe inválida: parênteses desbalanceados"], "error");
+                return;
+            }
+            if (rowsToBeInserted.length === 0) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Nenhuma linha fornecida"], "error");
+                return;
+            }
+            const validatedRows = this.validateRowsTypes(rowsToBeInserted, table);
+            if (typeof validatedRows === "string") {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", validatedRows], "error");
+                return;
+            }
+            let valuesBeforeIncrement = [];
+            for (let i = 0; i < validatedRows.length; i++) {
+                for (const columnName in table.columns) {
+                    if (!columnsToBeInserted.includes(columnName)) {
+                        if (table.columns[columnName].isNotNull) {
+                            if (table.columns[columnName].defaultValue !== undefined) {
+                                validatedRows[i][columnName] = table.columns[columnName].defaultValue;
+                                continue;
+                            }
+                            else if (table.columns[columnName].isAutoIncrement) {
+                                valuesBeforeIncrement.push({ column: columnName, value: table.columns[columnName].incrementCounter });
+                                validatedRows[i][columnName] = table.columns[columnName].increment();
+                                continue;
+                            }
+                            else {
+                                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", `Coluna "${columnName}" é NOT NULL e não foi fornecido valor ou valor padrão`], "error");
+                                table.revertAutoIncrementValues(valuesBeforeIncrement);
+                                return;
+                            }
+                        }
+                        if (table.columns[columnName].isAutoIncrement) {
+                            valuesBeforeIncrement.push({ column: columnName, value: table.columns[columnName].incrementCounter });
+                            validatedRows[i][columnName] = table.columns[columnName].increment();
+                            continue;
+                        }
+                        if (table.columns[columnName].isCurrentTimestamp) {
+                            validatedRows[i][columnName] = new Date();
+                            continue;
+                        }
+                        if (table.columns[columnName].defaultValue !== undefined) {
+                            validatedRows[i][columnName] = table.columns[columnName].defaultValue;
+                            continue;
+                        }
+                        validatedRows[i][columnName] = null;
                     }
                     else {
-                        row[columnsToBeInserted[columnIndex]] = value;
-                        value = "";
-                        columnIndex++;
+                        if (table.columns[columnName].isNotNull) {
+                            if (validatedRows[i][columnName] === null || validatedRows[i][columnName] === undefined) {
+                                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", `Coluna "${columnName}" é NOT NULL e foi fornecido valor nulo`], "error");
+                                table.revertAutoIncrementValues(valuesBeforeIncrement);
+                                return;
+                            }
+                            if (table.columns[columnName].isAutoIncrement) {
+                                if (!(table.columns[columnName].incrementCounter > validatedRows[i][columnName])) {
+                                    table.columns[columnName].incrementCounter = validatedRows[i][columnName] + 1;
+                                }
+                            }
+                        }
                     }
-                    if (depth === 0 && Object.keys(row).length > 0) {
-                        rowsToBeInserted.push(row);
-                    }
-                }
-                if (depth !== 0) {
-                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Sintaxe inválida: parênteses desbalanceados"], "error");
-                    return;
-                }
-                for (const row of rowsToBeInserted) {
-                    SGBDFunctions.insertRow(tableName, row);
                 }
             }
+            for (const columnName in table.columns) {
+                if (table.columns[columnName].isUnique) {
+                    const existingValues = new Set(table.rows.map(r => r[columnName]));
+                    const insertedValues = new Set();
+                    for (const row of validatedRows) {
+                        const value = row[columnName];
+                        if (value === null)
+                            continue;
+                        if (existingValues.has(value)) {
+                            getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", `Coluna "${columnName}" é UNIQUE e o valor fornecido já existe`], "error");
+                            table.revertAutoIncrementValues(valuesBeforeIncrement);
+                            return;
+                        }
+                        if (insertedValues.has(value)) {
+                            getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", `Coluna "${columnName}" é UNIQUE e o valor fornecido se repete em outra linha a ser inserida`], "error");
+                            table.revertAutoIncrementValues(valuesBeforeIncrement);
+                            return;
+                        }
+                        insertedValues.add(value);
+                    }
+                }
+                if (table.columns[columnName].isForeignKey) {
+                    const referencedTable = databases[currentDatabase].tables[table.columns[columnName].reference.table];
+                    const referencedColumn = table.columns[columnName].reference.column;
+                    if (!referencedTable) {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", `Coluna "${columnName}" é FOREIGN KEY e a tabela referenciada "${table.columns[columnName].reference.table}" não existe`], "error");
+                        table.revertAutoIncrementValues(valuesBeforeIncrement);
+                        return;
+                    }
+                    if (!referencedTable.columns[referencedColumn]) {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", `Coluna "${columnName}" é FOREIGN KEY e a coluna referenciada "${table.columns[columnName].reference.column}" não existe na tabela "${table.columns[columnName].reference.table}"`], "error");
+                        table.revertAutoIncrementValues(valuesBeforeIncrement);
+                        return;
+                    }
+                    for (const row of validatedRows) {
+                        const value = row[columnName];
+                        if (value === null)
+                            continue;
+                        const exists = referencedTable.rows.some(ro => ro[referencedColumn] === value);
+                        if (!exists) {
+                            getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", `Coluna "${columnName}" é FOREIGN KEY e o valor fornecido não existe na tabela referenciada`], "error");
+                            table.revertAutoIncrementValues(valuesBeforeIncrement);
+                            return;
+                        }
+                    }
+                }
+            }
+            for (const row of validatedRows) {
+                SGBDFunctions.insertRow(tableName, row);
+            }
+            getCurrentTerminalSession().createEntry(this.fullCommand, [`${validatedRows.length} linha(s) inserida(s) na tabela "${tableName}"`], "success");
+        }
+        validateRowsTypes(rows, table) {
+            const newRows = [];
+            for (const row of rows) {
+                const newRow = {};
+                for (const columnName in row) {
+                    if (typeof row[columnName] === "string" && row[columnName].toUpperCase() === "NULL") {
+                        newRow[columnName] = null;
+                        continue;
+                    }
+                    switch (table.columns[columnName].type) {
+                        case "integer":
+                            const intValue = parseInt(row[columnName]);
+                            if (isNaN(intValue)) {
+                                return "Valor inválido para coluna do tipo INTEGER";
+                            }
+                            newRow[columnName] = intValue;
+                            break;
+                        case "boolean":
+                            if (row[columnName].toLowerCase() === "true") {
+                                newRow[columnName] = true;
+                            }
+                            else if (row[columnName].toLowerCase() === "false") {
+                                newRow[columnName] = false;
+                            }
+                            else {
+                                return "Valor inválido para coluna do tipo BOOLEAN";
+                            }
+                            break;
+                        case "float":
+                            const floatValue = parseFloat(row[columnName]);
+                            if (isNaN(floatValue)) {
+                                return "Valor inválido para coluna do tipo FLOAT";
+                            }
+                            newRow[columnName] = floatValue;
+                            break;
+                        case "text":
+                            let text = row[columnName];
+                            if ((text.startsWith("'") && text.endsWith("'")) || (text.startsWith('"') && text.endsWith('"'))) {
+                                text = text.substring(1, text.length - 1);
+                                newRow[columnName] = text;
+                            }
+                            else {
+                                return "Valor inválido para coluna do tipo TEXT";
+                            }
+                            break;
+                        case "date":
+                            let date = row[columnName];
+                            if ((date.startsWith("'") && date.endsWith("'")) || (date.startsWith('"') && date.endsWith('"'))) {
+                                date = date.substring(1, date.length - 1);
+                                const parsedDate = ensureDate(date);
+                                if (!parsedDate)
+                                    return "Valor inválido para coluna do tipo DATE";
+                                newRow[columnName] = parsedDate;
+                            }
+                            else {
+                                return "Valor inválido para coluna do tipo DATE";
+                            }
+                            break;
+                        case "time":
+                            let time = row[columnName];
+                            if ((time.startsWith("'") && time.endsWith("'")) || (time.startsWith('"') && time.endsWith('"'))) {
+                                time = time.substring(1, time.length - 1);
+                                const parsedTime = ensureTime(time);
+                                if (!parsedTime)
+                                    return "Valor inválido para coluna do tipo TIME";
+                                newRow[columnName] = parsedTime;
+                            }
+                            else {
+                                return "Valor inválido para coluna do tipo TIME";
+                            }
+                            break;
+                        case "enum":
+                            let enumValue = row[columnName];
+                            if ((enumValue.startsWith("'") && enumValue.endsWith("'")) || (enumValue.startsWith('"') && enumValue.endsWith('"'))) {
+                                enumValue = enumValue.substring(1, enumValue.length - 1);
+                                if (table.columns[columnName].enumValues?.includes(enumValue)) {
+                                    newRow[columnName] = enumValue;
+                                }
+                                else {
+                                    return "Valor inválido para coluna do tipo ENUM";
+                                }
+                            }
+                            else {
+                                return "Valor inválido para coluna do tipo ENUM";
+                            }
+                            break;
+                    }
+                }
+                newRows.push(newRow);
+            }
+            return newRows;
         }
     }
     SQL.SQLInsert = SQLInsert;
@@ -2847,7 +3115,8 @@ var SQL;
             return { column: null, error: `Nome de coluna não pode ser uma palavra-chave reservada: "${columnDef[0]}"` };
         }
         const columnName = columnDef[0];
-        const columnType = columnDef[1].toLowerCase();
+        const rawColumnType = columnDef[1].toLowerCase();
+        const columnType = (rawColumnType === "int" ? "integer" : rawColumnType);
         if (!(["integer", "float", "text", "date", "time", "boolean", "enum"].includes(columnType))) {
             return { column: null, error: `Tipo de coluna inválido: "${columnDef[1]}"` };
         }
@@ -2993,6 +3262,9 @@ var SQL;
                     if (token === ",") {
                         return { column: null, error: "Valor ENUM inválido" };
                     }
+                    if (!token.startsWith('"') || !token.endsWith('"')) {
+                        return { column: null, error: "Valores ENUM devem estar entre aspas" };
+                    }
                 }
                 else {
                     if (token !== ",") {
@@ -3000,7 +3272,54 @@ var SQL;
                     }
                 }
             }
-            column.enumValues = enumValues.filter(token => token !== ",");
+            column.enumValues = enumValues.filter(token => token !== ",").map(token => {
+                if (token.startsWith('"') && token.endsWith('"')) {
+                    return token.slice(1, -1);
+                }
+                return token;
+            });
+        }
+        // Verificação da integridade com outras características da coluna
+        // PRIMARY KEY implica NOT NULL
+        if (column.isPrimaryKey) {
+            column.isNotNull = true;
+        }
+        // AUTO_INCREMENT
+        if (column.isAutoIncrement) {
+            if (columnType !== "integer") {
+                return { column: null, error: "AUTO_INCREMENT só pode ser usado em colunas INTEGER" };
+            }
+            if (column.isForeignKey) {
+                return { column: null, error: "AUTO_INCREMENT não pode ser usado com FOREIGN KEY" };
+            }
+            if (column.hasDefault) {
+                return { column: null, error: "AUTO_INCREMENT não pode ser usado com DEFAULT" };
+            }
+            if (column.isCurrentTimestamp) {
+                return { column: null, error: "AUTO_INCREMENT não pode ser usado com CURRENT_TIMESTAMP" };
+            }
+            column.isNotNull = true;
+        }
+        // CURRENT_TIMESTAMP
+        if (column.isCurrentTimestamp) {
+            if (columnType !== "date" && columnType !== "time") {
+                return { column: null, error: "CURRENT_TIMESTAMP só pode ser usado em colunas DATE ou TIME" };
+            }
+            if (column.isForeignKey) {
+                return { column: null, error: "CURRENT_TIMESTAMP não pode ser usado com FOREIGN KEY" };
+            }
+            if (column.hasDefault) {
+                return { column: null, error: "CURRENT_TIMESTAMP não pode ser usado com DEFAULT" };
+            }
+        }
+        // FOREIGN KEY
+        if (column.isForeignKey) {
+            if (column.isAutoIncrement) {
+                return { column: null, error: "FOREIGN KEY não pode ser usado com AUTO_INCREMENT" };
+            }
+            if (column.isCurrentTimestamp) {
+                return { column: null, error: "FOREIGN KEY não pode ser usado com CURRENT_TIMESTAMP" };
+            }
         }
         return { column: column, error: null };
     }
@@ -3111,4 +3430,105 @@ var SQL;
         "in", "is", "integer", "float", "text", "date", "time", "boolean"
     ];
 })(SQL || (SQL = {}));
+// #endregion
+// #region save and load
+function selectAction(div) {
+    document.querySelector(".acao-escolhida")?.classList.remove("acao-escolhida");
+    div.classList.add("acao-escolhida");
+}
+function selectOption(div) {
+    document.querySelector(".opcao-escolhida")?.classList.remove("opcao-escolhida");
+    div.classList.add("opcao-escolhida");
+}
+function confirmSaveOrLoad() {
+    const selectedAction = document.querySelector(".acao-escolhida");
+    const selectedOption = document.querySelector(".opcao-escolhida");
+    if (!selectedAction || !selectedOption) {
+        alert("Por favor, selecione uma ação e uma opção.");
+        return;
+    }
+    const action = selectedAction.id;
+    const option = selectedOption.id;
+    if (action === "save") {
+        if (option === "salvar-local") {
+            saveToLocalStorage();
+        }
+        else if (option === "salvar-json") {
+            saveToJson();
+        }
+        else if (option === "salvar-sql") {
+            saveToSql();
+        }
+    }
+    else if (action === "load") {
+        if (option === "carregar-local") {
+            loadFromLocalStorage();
+        }
+        else if (option === "carregar-json") {
+            loadFromJson();
+        }
+        else if (option === "carregar-sql") {
+            loadFromSql();
+        }
+    }
+}
+function saveToLocalStorage() {
+    localStorage.setItem("databases", JSON.stringify(databases));
+}
+function loadFromLocalStorage() {
+    const databasesJson = localStorage.getItem("databases");
+    if (!databasesJson)
+        return;
+    const parsedDatabases = JSON.parse(databasesJson);
+    databases = {};
+    for (const dbName in parsedDatabases) {
+        const dbData = parsedDatabases[dbName];
+        const db = new Database(dbData.name);
+        db.foreignKeyMap = dbData.foreignKeyMap || {};
+        for (const tableName in dbData.tables) {
+            const tableData = dbData.tables[tableName];
+            const table = new Table(tableData.name);
+            // Colunas
+            for (const columnName in tableData.columns) {
+                const colData = tableData.columns[columnName];
+                const column = new Column(colData.name, colData.type, colData.isPrimaryKey, colData.isForeignKey, colData.isNotNull, colData.isUnique, colData.isAutoIncrement, colData.hasDefault, colData.isCurrentTimestamp, colData.enumValues, colData.reference);
+                column.incrementCounter = colData.incrementCounter;
+                column.defaultValue = colData.defaultValue;
+                table.columns[columnName] = column;
+            }
+            // Linhas
+            table.rows = tableData.rows || [];
+            // Reconstruir índices
+            for (const columnName in table.columns) {
+                table.indexes[columnName] = new Map();
+            }
+            table.rows.forEach((row, rowIndex) => {
+                for (const columnName in table.indexes) {
+                    const value = row[columnName];
+                    if (!table.indexes[columnName].has(value)) {
+                        table.indexes[columnName].set(value, []);
+                    }
+                    table.indexes[columnName].get(value).push(rowIndex);
+                }
+            });
+            db.tables[tableName] = table;
+        }
+        databases[dbName] = db;
+    }
+    currentDatabase = localStorage.getItem("currentDatabase") || null;
+    currentTable = localStorage.getItem("currentTable") || null;
+    if (currentDatabase === "")
+        currentDatabase = null;
+    if (currentTable === "")
+        currentTable = null;
+    refreshUI();
+}
+function saveToJson() {
+}
+function loadFromJson() {
+}
+function saveToSql() {
+}
+function loadFromSql() {
+}
 // #endregion

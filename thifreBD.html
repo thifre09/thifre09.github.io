@@ -15,43 +15,46 @@
             <div id="interface-terminal">
                 <div class="interface-terminal-indicator"></div>
                 <button id="button-header-interface" class="interface-terminal interface-terminal-ativo">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                        fill="currentColor">
+                    <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--blue4)">
                         <path
                             d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h240v-560H200v560Zm320 0h240v-280H520v280Zm0-360h240v-200H520v200Z" />
                     </svg>
                     Dashboard
                 </button>
                 <button id="button-header-terminal" class="interface-terminal">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                        fill="currentColor">
+                    <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--green4)">
                         <path
                             d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H160v400Zm140-40-56-56 103-104-104-104 57-56 160 160-160 160Zm180 0v-80h240v80H480Z" />
                     </svg>
                     Terminal
                 </button>
                 <button id="button-header-logical" class="interface-terminal">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                        fill="currentColor">
+                    <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--purple4)">
                         <path
                             d="M296-270q-42 35-87.5 32T129-269q-34-28-46.5-73.5T99-436l75-124q-25-22-39.5-53T120-680q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47q-9 0-18-1t-17-3l-77 130q-11 18-7 35.5t17 28.5q13 11 31 12.5t35-12.5l420-361q42-35 88-31.5t80 31.5q34 28 46 73.5T861-524l-75 124q25 22 39.5 53t14.5 67q0 66-47 113t-113 47q-66 0-113-47t-47-113q0-66 47-113t113-47q9 0 17.5 1t16.5 3l78-130q11-18 7-35.5T782-630q-13-11-31-12.5T716-630L296-270Zm40.5-353.5Q360-647 360-680t-23.5-56.5Q313-760 280-760t-56.5 23.5Q200-713 200-680t23.5 56.5Q247-600 280-600t56.5-23.5Zm400 400Q760-247 760-280t-23.5-56.5Q713-360 680-360t-56.5 23.5Q600-313 600-280t23.5 56.5Q647-200 680-200t56.5-23.5ZM280-680Zm400 400Z" />
                     </svg>
                     Lógico
                 </button>
                 <button id="button-header-save" class="interface-terminal">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                        fill="currentColor">
+                    <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--orange4)">
                         <path
                             d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160Zm-80 34L646-760H200v560h560v-446ZM565-275q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35ZM240-560h360v-160H240v160Zm-40-86v446-560 114Z" />
                     </svg>
                     Salvar
+                </button>
+                <button id="button-header-help" class="interface-terminal">
+                    <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--cyan4)">
+                        <path
+                            d="M513.5-254.5Q528-269 528-290t-14.5-35.5Q499-340 478-340t-35.5 14.5Q428-311 428-290t14.5 35.5Q457-240 478-240t35.5-14.5ZM442-394h74q0-33 7.5-52t42.5-52q26-26 41-49.5t15-56.5q0-56-41-86t-97-30q-57 0-92.5 30T342-618l66 26q5-18 22.5-39t53.5-21q32 0 48 17.5t16 38.5q0 20-12 37.5T506-526q-44 39-54 59t-10 73Zm38 314q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                    </svg>
+                    Ajuda
                 </button>
             </div>
         </div>
 
         <div class="separador-horizontal"></div>
 
-        <div id="interface-grafica">
+        <div id="interface-grafica" style="display: none;">
             <div id="esquerda">
                 <div id="databases">
                     <div id="database-button">
@@ -557,6 +560,83 @@
         </div>
 
         <div id="save">
+            <div id="acoes-salvar">
+                <div onclick="selectAction(this)" id="save-action" class="acao-escolhida">
+                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                        <path
+                            d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                    </svg>
+                    <div>
+                        <h2>Salvar</h2>
+                        <p>Salve seu progresso para continuar depois</p>
+                    </div>
+                </div>
+                <div onclick="selectAction(this)" id="load-action">
+                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                        <path
+                            d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                    </svg>
+                    <div>
+                        <h2>Carregar</h2>
+                        <p>Carregue um arquivo existente</p>
+                    </div>
+                </div>
+            </div>
+            <div id="opcoes-salvar">
+                <div onclick="selectOption(this)" id="salvar-local" class="opcao-escolhida">
+                    <div>
+                        <svg viewBox="0 -960 960 960" fill="currentColor">
+                            <path
+                                d="M160-280h640v-240H160v240Zm562.5-77.5Q740-375 740-400t-17.5-42.5Q705-460 680-460t-42.5 17.5Q620-425 620-400t17.5 42.5Q655-340 680-340t42.5-17.5ZM880-600H767l-80-80H273l-80 80H80l137-137q11-11 25.5-17t30.5-6h414q16 0 30.5 6t25.5 17l137 137ZM160-200q-33 0-56.5-23.5T80-280v-320h800v320q0 33-23.5 56.5T800-200H160Z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2>Local</h2>
+                        <p>Salve seu progresso no dispositivo</p>
+                    </div>
+                </div>
+                <div onclick="selectOption(this)" id="salvar-json">
+                    <div>
+                        <svg viewBox="0 -960 960 960" fill="currentColor">
+                            <path
+                                d="M560-160v-80h120q17 0 28.5-11.5T720-280v-80q0-38 22-69t58-44v-14q-36-13-58-44t-22-69v-80q0-17-11.5-28.5T680-720H560v-80h120q50 0 85 35t35 85v80q0 17 11.5 28.5T840-560h40v160h-40q-17 0-28.5 11.5T800-360v80q0 50-35 85t-85 35H560Zm-280 0q-50 0-85-35t-35-85v-80q0-17-11.5-28.5T120-400H80v-160h40q17 0 28.5-11.5T160-600v-80q0-50 35-85t85-35h120v80H280q-17 0-28.5 11.5T240-680v80q0 38-22 69t-58 44v14q36 13 58 44t22 69v80q0 17 11.5 28.5T280-240h120v80H280Z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2>Json</h2>
+                        <p>Salve seu progresso em formato JSON</p>
+                    </div>
+                </div>
+                <div onclick="selectOption(this)" id="salvar-sql">
+                    <div>
+                        <svg viewBox="0 -960 960 960" fill="currentColor">
+                            <path
+                                d="M480-120q-151 0-255.5-46.5T120-280v-400q0-66 105.5-113T480-840q149 0 254.5 47T840-680v400q0 67-104.5 113.5T480-120Zm0-479q89 0 179-25.5T760-679q-11-29-100.5-55T480-760q-91 0-178.5 25.5T200-679q14 30 101.5 55T480-599Zm0 199q42 0 81-4t74.5-11.5q35.5-7.5 67-18.5t57.5-25v-120q-26 14-57.5 25t-67 18.5Q600-528 561-524t-81 4q-42 0-82-4t-75.5-11.5Q287-543 256-554t-56-25v120q25 14 56 25t66.5 18.5Q358-408 398-404t82 4Zm0 200q46 0 93.5-7t87.5-18.5q40-11.5 67-26t32-29.5v-98q-26 14-57.5 25t-67 18.5Q600-328 561-324t-81 4q-42 0-82-4t-75.5-11.5Q287-343 256-354t-56-25v99q5 15 31.5 29t66.5 25.5q40 11.5 88 18.5t94 7Z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2>SQL</h2>
+                        <p>Salve seu progresso em formato SQL</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="save-button-div">
+                <button onclick="confirmSaveOrLoad()">
+                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                        <path
+                            d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                    </svg>
+                    Confirmar
+                </button>
+            </div>
+
+            <div id="save-notification">
+                <p>Progresso salvo com sucesso!</p>
+            </div>
+        </div>
+
+        <div id="help">
 
         </div>
     </div>
