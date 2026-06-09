@@ -67,6 +67,14 @@ window.addEventListener('load', () => updateInterfaceTerminalIndicator(buttonCha
 // #region Others
 let timeout;
 /**
+ * Verifica se um nome segue o padrão permitido para identificadores SQL.
+ * @param name - Nome a ser validado.
+ * @returns `true` quando o nome é válido.
+ */
+function isValidSQLName(name) {
+    return /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name);
+}
+/**
  * Exibe uma notificação temporária no painel de mensagens.
  * @param html - Conteúdo HTML da notificação.
  */
@@ -212,6 +220,7 @@ function formatTimeForInput(value) {
  * Cria ou seleciona a database de exemplo com tabelas e registros pré-carregados.
  */
 function createExempleDatabase() {
+    const originalLocalStorage = localStorage.getItem("thifre_db");
     const databaseName = "thifre_db";
     if (databases[databaseName]) {
         currentDatabase = databaseName;
@@ -355,6 +364,7 @@ function createExempleDatabase() {
     changeEditColumnsMenu();
     changeInsertRowMenu();
     openNotifications("<p style='color: var(--green5)'>Database de exemplo criada com sucesso!</p>");
+    localStorage.setItem("thifre_db", originalLocalStorage || "");
 }
 // #endregion
 // #region Custom dropdowns
@@ -657,6 +667,7 @@ class SGBDFunctions {
         currentDatabase = database.name;
         currentTable = null;
         refreshUI();
+        saveToLocalStorage();
     }
     /**
      * Adiciona uma tabela à database atual.
@@ -676,6 +687,7 @@ class SGBDFunctions {
         db.tables[table.name] = table;
         currentTable = table.name;
         refreshUI();
+        saveToLocalStorage();
     }
     /**
      * Adiciona uma coluna a uma tabela existente.
@@ -689,6 +701,7 @@ class SGBDFunctions {
             databases[currentDatabase].registerForeignKey(tableName, column.name, column.reference.table, column.reference.column);
         }
         refreshUI();
+        saveToLocalStorage();
     }
     /**
      * Insere uma linha e atualiza os índices da tabela.
@@ -707,6 +720,7 @@ class SGBDFunctions {
             table.indexes[col].get(value).push(rowIndex);
         }
         refreshUI();
+        saveToLocalStorage();
     }
     /**
      * Substitui uma linha existente e reconstrói os índices afetados.
@@ -740,6 +754,7 @@ class SGBDFunctions {
             indexMap.get(newValue).push(oldRowIndex);
         }
         refreshUI();
+        saveToLocalStorage();
     }
     /**
      * Remove uma database do armazenamento em memória.
@@ -752,6 +767,7 @@ class SGBDFunctions {
             currentTable = null;
         }
         refreshUI();
+        saveToLocalStorage();
     }
     /**
      * Remove uma tabela e desfaz as chaves estrangeiras de saída.
@@ -771,6 +787,7 @@ class SGBDFunctions {
             currentTable = null;
         }
         refreshUI();
+        saveToLocalStorage();
     }
     /**
      * Remove uma coluna e limpa seus índices e dados.
@@ -791,6 +808,7 @@ class SGBDFunctions {
         }
         delete table.columns[columnName];
         refreshUI();
+        saveToLocalStorage();
     }
     /**
      * Remove uma linha e ajusta os índices remanescentes.
@@ -825,6 +843,29 @@ class SGBDFunctions {
             }
         }
         refreshUI();
+        saveToLocalStorage();
+    }
+    static renameDatabase(oldName, newName) {
+        const db = databases[oldName];
+        if (!db)
+            return;
+        delete databases[currentDatabase];
+        db.name = newName;
+        databases[newName] = db;
+        currentDatabase = newName;
+        refreshUI();
+        saveToLocalStorage();
+    }
+    static renameTable(oldName, newName) {
+        const t = databases[currentDatabase].tables[oldName];
+        if (!t)
+            return;
+        delete databases[currentDatabase].tables[oldName];
+        t.name = newName;
+        databases[currentDatabase].tables[newName] = t;
+        currentTable = newName;
+        refreshUI();
+        saveToLocalStorage();
     }
 }
 let databases = {};
@@ -839,9 +880,13 @@ let currentTerminalSession = 0;
  */
 function createDatabaseInterface() {
     const databaseNameInput = document.getElementById("nome-database-input");
-    const databaseName = databaseNameInput.value.trim().toLowerCase();
+    const databaseName = databaseNameInput.value.trim();
     if (databaseName === "") {
         openNotifications("<p style='color: var(--red5)'>O nome da database não pode ser vazio.</p>");
+        return;
+    }
+    else if (!isValidSQLName(databaseName)) {
+        openNotifications("<p style='color: var(--red5)'>O nome da database não segue o padrão permitido.</p>");
         return;
     }
     else if (databases[databaseName]) {
@@ -857,9 +902,13 @@ function createDatabaseInterface() {
  */
 function createTableInterface() {
     const tableNameInput = document.getElementById("nome-tabela-input");
-    const tableName = tableNameInput.value.trim().toLowerCase();
+    const tableName = tableNameInput.value.trim();
     if (tableName === "") {
         openNotifications("<p style='color: var(--red5)'>O nome da tabela não pode ser vazio.</p>");
+        return;
+    }
+    else if (!isValidSQLName(tableName)) {
+        openNotifications("<p style='color: var(--red5)'>O nome da tabela não segue o padrão permitido.</p>");
         return;
     }
     else if (currentDatabase === null) {
@@ -1144,7 +1193,6 @@ function renameDatabaseInterface() {
         return;
     }
     const databaseNameInput = document.getElementById("renomear-database-input");
-    const db = databases[currentDatabase];
     const newName = databaseNameInput.value.trim().toLowerCase();
     if (newName === "") {
         openNotifications("<p style='color: var(--red5)'>O nome da database não pode ser vazio.</p>");
@@ -1153,10 +1201,7 @@ function renameDatabaseInterface() {
         openNotifications("<p style='color: var(--red5)'>Já existe uma database com esse nome.</p>");
     }
     else {
-        delete databases[currentDatabase];
-        db.name = newName;
-        databases[newName] = db;
-        currentDatabase = newName;
+        SGBDFunctions.renameDatabase(currentDatabase, newName);
         openNotifications("<p style='color: var(--green5)'>Database renomeada com sucesso!</p>");
     }
     updateCustomDropdowns();
@@ -1175,7 +1220,6 @@ function renameTableInterface() {
         return;
     }
     const tableNameInput = document.getElementById("renomear-tabela-input");
-    const table = databases[currentDatabase].tables[currentTable];
     const newName = tableNameInput.value.trim().toLowerCase();
     if (newName === "") {
         openNotifications("<p style='color: var(--red5)'>O nome da tabela não pode ser vazio.</p>");
@@ -1184,10 +1228,7 @@ function renameTableInterface() {
         openNotifications("<p style='color: var(--red5)'>Já existe uma tabela com esse nome.</p>");
     }
     else {
-        delete databases[currentDatabase].tables[currentTable];
-        table.name = newName;
-        databases[currentDatabase].tables[newName] = table;
-        currentTable = newName;
+        SGBDFunctions.renameTable(currentTable, newName);
         openNotifications("<p style='color: var(--green5)'>Tabela renomeada com sucesso!</p>");
     }
     refreshUI();
@@ -1448,12 +1489,18 @@ function changeTabelaSelecionadaLinhaColuna(type, rowIndex, columnName) {
             let displayValue;
             if (columnType === "date") {
                 displayValue = formatDateForDisplay(value);
+                if (displayValue === "")
+                    displayValue = "null";
             }
             else if (columnType === "time") {
                 displayValue = formatTimeForDisplay(value);
+                if (displayValue === "")
+                    displayValue = "null";
             }
             else {
-                displayValue = String(value || '');
+                displayValue = String(value);
+                if (displayValue === "")
+                    displayValue = "null";
             }
             div.innerHTML = `
                 <h5>${columnName} (${columnType})</h5>
@@ -1470,12 +1517,18 @@ function changeTabelaSelecionadaLinhaColuna(type, rowIndex, columnName) {
             let displayValue;
             if (columnType === "date") {
                 displayValue = formatDateForDisplay(value);
+                if (displayValue === "")
+                    displayValue = "null";
             }
             else if (columnType === "time") {
                 displayValue = formatTimeForDisplay(value);
+                if (displayValue === "")
+                    displayValue = "null";
             }
             else {
-                displayValue = String(value || '');
+                displayValue = String(value);
+                if (displayValue === "")
+                    displayValue = "null";
             }
             div.innerHTML = `
                 <h5>Linha ${i + 1}</h5>
@@ -2564,9 +2617,8 @@ createColumnCreationDiv(document.getElementById("criacao-colunas-edit"));
 // -Pesquisar(Dashboard)
 // -Editar colunas (Dashboard)
 // -Terminal
-// -Salvar e carregar
+// -Salvar e carregar em SQL
 // -Modelo lógico (diagrama de entidade relacionamento)
-// -validar se as caracteristicas são compatíveis no SQLCreate.table. EX: auto_increment não pode ter default
 // -Aba de ajuda
 // #region SQL namespace
 /**
@@ -2586,6 +2638,8 @@ var SQL;
                 return;
             const command = tokens[0]?.toLowerCase();
             switch (command) {
+                case "alter":
+                    break;
                 case "create":
                     new SQLCreate(commandText, tokens).execute();
                     break;
@@ -2595,6 +2649,8 @@ var SQL;
                     break;
                 case "insert":
                     new SQLInsert(commandText, tokens).insert();
+                    break;
+                case "select":
                     break;
                 case "update":
                     break;
@@ -2607,6 +2663,56 @@ var SQL;
         }
     }
     SQL.execute = execute;
+    class SQLAlter {
+        constructor(fullCommand, tokens) {
+            this.fullCommand = fullCommand;
+            this.tokens = tokens;
+        }
+        execute() {
+            const target = this.tokens[1]?.toLowerCase();
+            switch (target) {
+                case "database":
+                    this.database();
+                    break;
+                case "table":
+                    this.table();
+                    break;
+                default:
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando CREATE incorreto"], "error");
+            }
+        }
+        database() {
+            if (this.tokens.length < 6 || this.tokens.length > 6) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando CREATE DATABASE incorreto", "Sintaxe incorreta"], "error");
+                return;
+            }
+            if (databases[this.tokens[5]]) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma database com o nome "${this.tokens[2]}"`], "error");
+                return;
+            }
+            if (!isValidSQLName(this.tokens[5])) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da database inválido"], "error");
+                return;
+            }
+            if (databases[this.tokens[5]]) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma database com o nome "${this.tokens[5]}"`], "error");
+                return;
+            }
+            if (databases[this.tokens[2]] === undefined) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Database "${this.tokens[2]}" não existe`], "error");
+                return;
+            }
+            if (this.tokens[3]?.toLowerCase() !== "rename" || this.tokens[4]?.toLowerCase() !== "to") {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER DATABASE incorreto", "Sintaxe incorreta"], "error");
+                return;
+            }
+            SGBDFunctions.renameDatabase(this.tokens[2], this.tokens[5]);
+            getCurrentTerminalSession().createEntry(this.fullCommand, [`Database "${this.tokens[2]}" renomeada para "${this.tokens[5]}" com sucesso!`], "success");
+        }
+        table() {
+        }
+    }
+    SQL.SQLAlter = SQLAlter;
     /**
      * Implementa o comando SQL CREATE.
      */
@@ -3081,30 +3187,6 @@ var SQL;
      * @returns Coluna parseada ou mensagem de erro.
      */
     function parseColumn(columnDef) {
-        /**
-         * Valida palavras-chave compostas, como PRIMARY KEY ou NOT NULL.
-         */
-        function validateCompoundKeyword(first, second, name) {
-            const firstCount = countTokenSequence(columnDef, first);
-            const compoundCount = countTokenSequence(columnDef, first, second);
-            if (firstCount !== compoundCount) {
-                return `${name}: ${first.toUpperCase()} deve ser seguido de ${second.toUpperCase()}`;
-            }
-            if (compoundCount > 1) {
-                return `${name}: definido mais de uma vez`;
-            }
-            return compoundCount;
-        }
-        /**
-         * Valida palavras-chave simples, como UNIQUE ou DEFAULT.
-         */
-        function validateSingleKeyword(keyword, name) {
-            const count = countTokenSequence(columnDef, keyword);
-            if (count > 1) {
-                return `${name} definido mais de uma vez`;
-            }
-            return count;
-        }
         if (columnDef.length < 2) {
             return { column: null, error: "Definição de coluna inválida" };
         }
@@ -3121,32 +3203,32 @@ var SQL;
             return { column: null, error: `Tipo de coluna inválido: "${columnDef[1]}"` };
         }
         const column = new Column(columnName, columnType, false, false, false, false, false, false, false);
-        const primaryValidation = validateCompoundKeyword("primary", "key", "PRIMARY KEY");
+        const primaryValidation = validateCompoundKeyword("primary", "key", "PRIMARY KEY", columnDef);
         if (typeof primaryValidation === "string") {
             return { column: null, error: primaryValidation };
         }
         column.isPrimaryKey = primaryValidation === 1;
-        const foreignValidation = validateCompoundKeyword("foreign", "key", "FOREIGN KEY");
+        const foreignValidation = validateCompoundKeyword("foreign", "key", "FOREIGN KEY", columnDef);
         if (typeof foreignValidation === "string") {
             return { column: null, error: foreignValidation };
         }
         column.isForeignKey = foreignValidation === 1;
-        const notNullValidation = validateCompoundKeyword("not", "null", "NOT NULL");
+        const notNullValidation = validateCompoundKeyword("not", "null", "NOT NULL", columnDef);
         if (typeof notNullValidation === "string") {
             return { column: null, error: notNullValidation };
         }
         column.isNotNull = notNullValidation === 1;
-        const uniqueValidation = validateSingleKeyword("unique", "UNIQUE");
+        const uniqueValidation = validateSingleKeyword("unique", "UNIQUE", columnDef);
         if (typeof uniqueValidation === "string") {
             return { column: null, error: uniqueValidation };
         }
         column.isUnique = uniqueValidation === 1;
-        const autoIncrementValidation = validateSingleKeyword("auto_increment", "AUTO_INCREMENT");
+        const autoIncrementValidation = validateSingleKeyword("auto_increment", "AUTO_INCREMENT", columnDef);
         if (typeof autoIncrementValidation === "string") {
             return { column: null, error: autoIncrementValidation };
         }
         column.isAutoIncrement = autoIncrementValidation === 1;
-        const defaultValidation = validateSingleKeyword("default", "DEFAULT");
+        const defaultValidation = validateSingleKeyword("default", "DEFAULT", columnDef);
         if (typeof defaultValidation === "string") {
             return { column: null, error: defaultValidation };
         }
@@ -3325,6 +3407,32 @@ var SQL;
     }
     SQL.parseColumn = parseColumn;
     /**
+     * Valida palavras-chave compostas, como PRIMARY KEY ou NOT NULL.
+     */
+    function validateCompoundKeyword(first, second, name, words) {
+        const firstCount = countTokenSequence(words, first);
+        const compoundCount = countTokenSequence(words, first, second);
+        if (firstCount !== compoundCount) {
+            return `${name}: ${first.toUpperCase()} deve ser seguido de ${second.toUpperCase()}`;
+        }
+        if (compoundCount > 1) {
+            return `${name}: definido mais de uma vez`;
+        }
+        return compoundCount;
+    }
+    SQL.validateCompoundKeyword = validateCompoundKeyword;
+    /**
+     * Valida palavras-chave simples, como UNIQUE ou DEFAULT.
+     */
+    function validateSingleKeyword(keyword, name, words) {
+        const count = countTokenSequence(words, keyword);
+        if (count > 1) {
+            return `${name} definido mais de uma vez`;
+        }
+        return count;
+    }
+    SQL.validateSingleKeyword = validateSingleKeyword;
+    /**
      * Conta quantas vezes uma sequência de tokens aparece.
      * @param tokens - Lista de tokens de entrada.
      * @param sequence - Sequência a ser procurada.
@@ -3412,15 +3520,6 @@ var SQL;
     }
     SQL.tokenizeSQL = tokenizeSQL;
     /**
-     * Verifica se um nome segue o padrão permitido para identificadores SQL.
-     * @param name - Nome a ser validado.
-     * @returns `true` quando o nome é válido.
-     */
-    function isValidSQLName(name) {
-        return /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name);
-    }
-    SQL.isValidSQLName = isValidSQLName;
-    /**
      * Palavras reservadas reconhecidas pelo parser SQL.
      */
     SQL.keyWords = [
@@ -3440,6 +3539,7 @@ function selectOption(div) {
     document.querySelector(".opcao-escolhida")?.classList.remove("opcao-escolhida");
     div.classList.add("opcao-escolhida");
 }
+let timeoutSaveOrLoad;
 function confirmSaveOrLoad() {
     const selectedAction = document.querySelector(".acao-escolhida");
     const selectedOption = document.querySelector(".opcao-escolhida");
@@ -3447,9 +3547,10 @@ function confirmSaveOrLoad() {
         alert("Por favor, selecione uma ação e uma opção.");
         return;
     }
+    const notification = document.querySelector("#save-notification");
     const action = selectedAction.id;
     const option = selectedOption.id;
-    if (action === "save") {
+    if (action === "save-action") {
         if (option === "salvar-local") {
             saveToLocalStorage();
         }
@@ -3459,17 +3560,27 @@ function confirmSaveOrLoad() {
         else if (option === "salvar-sql") {
             saveToSql();
         }
+        notification.querySelector("p").innerText = "Dados salvos com sucesso!";
+        notification.style.display = "block";
+        timeoutSaveOrLoad = setTimeout(() => {
+            notification.style.display = "none";
+        }, 3000);
     }
-    else if (action === "load") {
-        if (option === "carregar-local") {
+    else if (action === "load-action") {
+        if (option === "salvar-local") {
             loadFromLocalStorage();
         }
-        else if (option === "carregar-json") {
+        else if (option === "salvar-json") {
             loadFromJson();
         }
-        else if (option === "carregar-sql") {
+        else if (option === "salvar-sql") {
             loadFromSql();
         }
+        notification.querySelector("p").innerText = "Dados carregados com sucesso!";
+        notification.style.display = "block";
+        timeoutSaveOrLoad = setTimeout(() => {
+            notification.style.display = "none";
+        }, 3000);
     }
 }
 function saveToLocalStorage() {
@@ -3515,8 +3626,6 @@ function loadFromLocalStorage() {
         }
         databases[dbName] = db;
     }
-    currentDatabase = localStorage.getItem("currentDatabase") || null;
-    currentTable = localStorage.getItem("currentTable") || null;
     if (currentDatabase === "")
         currentDatabase = null;
     if (currentTable === "")
@@ -3524,11 +3633,97 @@ function loadFromLocalStorage() {
     refreshUI();
 }
 function saveToJson() {
+    const data = {
+        databases
+    };
+    const json = JSON.stringify(data, null, 4);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "thifreBD.json";
+    a.click();
+    URL.revokeObjectURL(url);
 }
 function loadFromJson() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json,application/json";
+    input.onchange = (event) => {
+        const file = event.target.files?.[0];
+        if (!file)
+            return;
+        const reader = new FileReader();
+        reader.onload = () => {
+            try {
+                const data = JSON.parse(reader.result);
+                if (data.databases === undefined || typeof data.databases !== "object") {
+                    throw new Error("Formato de arquivo inválido: propriedade 'databases' ausente ou incorreta");
+                }
+                const previousDatabase = currentDatabase;
+                const previousTable = currentTable;
+                let databasesCopy = {};
+                for (const dbName in data.databases) {
+                    const dbData = data.databases[dbName];
+                    const db = new Database(dbData.name);
+                    db.foreignKeyMap = dbData.foreignKeyMap || {};
+                    for (const tableName in dbData.tables) {
+                        const tableData = dbData.tables[tableName];
+                        const table = new Table(tableData.name);
+                        // Colunas
+                        for (const columnName in tableData.columns) {
+                            const colData = tableData.columns[columnName];
+                            const column = new Column(colData.name, colData.type, colData.isPrimaryKey, colData.isForeignKey, colData.isNotNull, colData.isUnique, colData.isAutoIncrement, colData.hasDefault, colData.isCurrentTimestamp, colData.enumValues, colData.reference);
+                            column.incrementCounter = colData.incrementCounter;
+                            column.defaultValue = colData.defaultValue;
+                            table.columns[columnName] = column;
+                        }
+                        // Linhas
+                        table.rows = tableData.rows || [];
+                        // Reconstruir índices
+                        for (const columnName in table.columns) {
+                            table.indexes[columnName] = new Map();
+                        }
+                        table.rows.forEach((row, rowIndex) => {
+                            for (const columnName in table.indexes) {
+                                const value = row[columnName];
+                                if (!table.indexes[columnName].has(value)) {
+                                    table.indexes[columnName].set(value, []);
+                                }
+                                table.indexes[columnName].get(value).push(rowIndex);
+                            }
+                        });
+                        db.tables[tableName] = table;
+                    }
+                    databasesCopy[dbName] = db;
+                }
+                databases = databasesCopy;
+                currentDatabase = previousDatabase && databases[previousDatabase] ? previousDatabase : Object.keys(databases)[0] ?? null;
+                if (currentDatabase !== null) {
+                    const currentDb = databases[currentDatabase];
+                    currentTable = previousTable && currentDb.tables[previousTable] ? previousTable : Object.keys(currentDb.tables)[0] ?? null;
+                }
+                else {
+                    currentTable = null;
+                }
+                refreshUI();
+            }
+            catch (error) {
+                console.error(error);
+                alert("Arquivo JSON inválido.");
+            }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
 }
 function saveToSql() {
+    alert("Função de exportação para SQL ainda não implementada.");
 }
 function loadFromSql() {
+    alert("Função de importação de SQL ainda não implementada.");
 }
+document.addEventListener("DOMContentLoaded", () => {
+    loadFromLocalStorage();
+});
 // #endregion
