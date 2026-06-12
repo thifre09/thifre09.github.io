@@ -1147,7 +1147,7 @@ function addColumnsInterface() {
         openNotifications("<p style='color: var(--red5)'>Nenhuma tabela selecionada.</p>");
         return;
     }
-    const columnsUl = document.querySelector("#editar-colunas ul#criacao-colunas-edit")!;
+    const columnsUl = document.querySelector("#adicionar-colunas ul#criacao-colunas-edit")!;
     const table = databases[currentDatabase!].tables[currentTable!];
 
     const columnsToAdd = parseColumnsFromInputs(columnsUl.children, table.columns);
@@ -2953,6 +2953,8 @@ createColumnCreationDiv(document.getElementById("criacao-colunas-edit")!);
 // -Salvar e carregar em SQL
 // -Modelo lógico (diagrama de entidade relacionamento)
 // -Aba de ajuda
+// -Permitir sincronização com banco real
+// -Implementar rename column no terminal
 
 // #region SQL namespace
 
@@ -3016,6 +3018,10 @@ namespace SQL {
         }
 
         execute() {
+            if (this.tokens.length < 6) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER incorreto", "Sintaxe incorreta"], "error");
+                return;
+            }
             const target = this.tokens[1]?.toLowerCase();
 
             switch (target) {
@@ -3028,13 +3034,13 @@ namespace SQL {
                     break;
 
                 default:
-                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando CREATE incorreto"], "error");
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER incorreto"], "error");
             }
         }
 
         database() {
             if (this.tokens.length < 6 || this.tokens.length > 6) {
-                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando CREATE DATABASE incorreto", "Sintaxe incorreta"], "error");
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER DATABASE incorreto", "Sintaxe incorreta"], "error");
                 return;
             }
             if (databases[this.tokens[5]]) {
@@ -3062,7 +3068,93 @@ namespace SQL {
         }
 
         table() {
-            
+            const tableName = this.tokens[2];
+            if (currentDatabase === null) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhuma database selecionada"], "error");
+                return;
+            }
+            if (databases[currentDatabase!].tables[tableName] === undefined) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Tabela "${tableName}" não existe na database "${currentDatabase}"`], "error");
+                return;
+            }
+
+            const action = this.tokens[3]?.toLowerCase();
+            switch (action) {
+                case "rename":
+                    this.rename();
+                    break;
+                case "add":
+                    this.addColumn();
+                    break;
+                case "drop":
+                    this.dropColumn();
+                    break;
+                case "alter":
+                    this.alterColumn();
+                    break;
+                default:
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Ação não reconhecida"], "error");
+            }
+        }
+
+        rename() {
+            const word5 = this.tokens[4]?.toLowerCase();
+            if (word5 === "to") {
+                if (this.tokens.length !== 6) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
+                    return;
+                }
+                const newName = this.tokens[5];
+                if (!isValidSQLName(newName)) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da tabela inválido"], "error");
+                    return;
+                }
+                if (databases[currentDatabase!].tables[newName]) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma tabela com o nome "${newName}" nessa database`], "error");
+                    return;
+                }
+                SGBDFunctions.renameTable(this.tokens[2], newName);
+            }
+            else if (word5 === "column") {
+                if (this.tokens.length !== 8) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
+                    return;
+                }
+                const columnName = this.tokens[5];
+                if (databases[currentDatabase!].tables[this.tokens[2]].columns[columnName] === undefined) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${columnName}" não existe na tabela "${this.tokens[2]}"`], "error");
+                    return;
+                }
+                if (this.tokens[6]?.toLowerCase() !== "to") {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
+                    return;
+                }
+                const newName = this.tokens[7];
+                if (!isValidSQLName(newName)) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da coluna inválido"], "error");
+                    return;
+                }
+                if (databases[currentDatabase!].tables[this.tokens[2]].columns[newName] !== undefined) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma coluna com o nome "${newName}" na tabela "${this.tokens[2]}"`], "error");
+                    return;
+                }
+                // SGBDFunctions.renameColumn(this.tokens[2], columnName, newName);
+            }
+            else {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
+            }
+        }
+
+        addColumn() {
+
+        }
+
+        dropColumn() {
+
+        }
+
+        alterColumn() {
+
         }
     }
 

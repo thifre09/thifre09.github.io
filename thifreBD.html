@@ -122,14 +122,6 @@
                     </div>
 
                     <div id="botoes-varios-botoes">
-
-                        <button id="alter-column"
-                            onclick="abrirFechar(false, 'editar-colunas'); changeEditColumnsMenu()">
-                            <svg viewBox="0 0 512 512" aria-hidden="true">
-                                <use href="assets/images/icons-sprite.svg#icon-edit"></use>
-                            </svg>
-                            Alterar colunas
-                        </button>
                         <button id="insert-line" onclick="abrirFechar(false, 'inserir-linha'); changeInsertRowMenu()">
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
@@ -267,7 +259,7 @@
                     Confirmar alterações
                 </button>
                 <button class="large-button" style="background-color: var(--red4)" id="configurar-database-deletar"
-                    onclick="abrirFechar(false, 'confirmar-deletar'); changeConfirmDeleteMenu('database')">
+                    onclick="abrirFechar(false, 'confirmar-deletar'); abrirFechar(true, 'configurar-database'); changeConfirmDeleteMenu('database')">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
                     </svg>
@@ -329,8 +321,22 @@
                     </svg>
                     Confirmar alterações
                 </button>
+                <button class="large-button" style="background-color: var(--green4)"
+                    onclick="abrirFechar(false, 'alterar-colunas'); abrirFechar(true, 'configurar-tabela'); changeEditColumnsMenu()">
+                    <svg viewBox="0 0 512 512" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-edit"></use>
+                    </svg>
+                    Alterar colunas
+                </button>
+                <button class="large-button" style="background-color: var(--purple4)"
+                    onclick="abrirFechar(false, 'adicionar-colunas'); abrirFechar(true, 'configurar-tabela'); changeEditColumnsMenu()">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                    </svg>
+                    Adicionar colunas
+                </button>
                 <button class="large-button" style="background-color: var(--red4)" id="deletar-tabela-button"
-                    onclick="abrirFechar(false, 'confirmar-deletar');  changeConfirmDeleteMenu('table')">
+                    onclick="abrirFechar(false, 'confirmar-deletar'); abrirFechar(true, 'configurar-tabela'); changeConfirmDeleteMenu('table')">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
                     </svg>
@@ -338,10 +344,10 @@
                 </button>
             </div>
 
-            <div id="editar-colunas" style="display: none;">
+            <div id="alterar-colunas" style="display: none;">
                 <div class="menu-central-justify-between">
-                    <h1 class="text1">Editar colunas</h1>
-                    <button class="close-button" onclick="abrirFechar(true, 'editar-colunas')">
+                    <h1 class="text1">Alterar colunas</h1>
+                    <button class="close-button" onclick="abrirFechar(true, 'alterar-colunas')">
                         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
                             <use href="assets/images/icons-sprite.svg#icon-close"></use>
                         </svg>
@@ -356,10 +362,22 @@
                     <p>Crie uma tabela para mostrar as colunas existentes</p>
                 </ul>
 
+            </div>
+
+            <div id="adicionar-colunas" style="display: none;">
+                <div class="menu-central-justify-between">
+                    <h1 class="text1">Adicionar colunas</h1>
+                    <button class="close-button" onclick="abrirFechar(true, 'adicionar-colunas')">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        </svg>
+                    </button>
+                </div>
+
                 <div class="menu-central-justify-between">
                     <h2 class="text2">Colunas</h2>
                     <button class="outlined-button"
-                        onclick="createColumnCreationDiv(document.querySelector('#editar-colunas ul#criacao-colunas-edit'))">
+                        onclick="createColumnCreationDiv(document.querySelector('#adicionar-colunas ul#criacao-colunas-edit'))">
                         <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
                             <use href="assets/images/icons-sprite.svg#icon-plus"></use>
                         </svg>
