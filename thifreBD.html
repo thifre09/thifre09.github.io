@@ -279,7 +279,7 @@
 
                 <label for="nome-tabela-input">Nome da tabela</label>
                 <input class="menu-central-input" type="text" id="nome-tabela-input" name="nome-tabela-input" rows="1"
-                    placeholder="Ex: minha_tabela"></textarea>
+                    placeholder="Ex: minha_tabela">
 
                 <div class="menu-central-justify-between">
                     <h2 class="text2">Colunas</h2>
@@ -315,7 +315,7 @@
                 <input class="menu-central-input" type="text" id="renomear-tabela-input" name="renomear-tabela-input"
                     rows="1" placeholder="Ex: minha_tabela">
                 <button class="large-button" onclick="renameTableInterface()">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                    <svg height="24px" viewBox="0 -960 960 960" width="24px"
                         fill="currentColor">
                         <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
                     </svg>
@@ -328,7 +328,7 @@
                     </svg>
                     Alterar colunas
                 </button>
-                <button class="large-button" style="background-color: var(--purple4)"
+                <button class="large-button" style="background-color: var(--blue4)"
                     onclick="abrirFechar(false, 'adicionar-colunas'); abrirFechar(true, 'configurar-tabela'); changeEditColumnsMenu()">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
@@ -361,6 +361,13 @@
                 <ul id="lista-colunas-existentes">
                     <p>Crie uma tabela para mostrar as colunas existentes</p>
                 </ul>
+
+                <button class="large-button" id="alterar-colunas-button" onclick="alterColumnsInterface()">
+                    <svg viewBox="0 0 512 512" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-edit"></use>
+                    </svg>
+                    Alterar colunas
+                </button>
 
             </div>
 

@@ -164,6 +164,12 @@ input[type="number"]::-webkit-inner-spin-button {
             display: flex;
             justify-content: center;
             align-items: center;
+
+            svg {
+                width: 30px;
+                height: 30px;
+                margin-right: var(--p4);
+            }
         }
 
         button:hover:not(.interface-terminal-ativo) {
@@ -181,6 +187,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
     #esquerda {
         width: 20%;
+        min-width: 200px;
         display: flex;
         flex-direction: column;
         min-height: 0;
@@ -340,7 +347,7 @@ input[type="number"]::-webkit-inner-spin-button {
     }
 
     #direita {
-        width: 80%;
+        width: min(80%, calc(100% - 200px));
         display: flex;
         flex-direction: column;
 

@@ -18,8 +18,6 @@ function updateInterfaceTerminalIndicator(activeButton: HTMLElement) {
     interfaceTerminal.style.setProperty("--indicator-width", `${width}px`);
 }
 
-
-
 function changeTo(id: "interface-grafica" | "terminal" | "logical" | "save" | "help") {
     document.getElementById("interface-grafica")!.style.display = "none";
     document.getElementById("terminal")!.style.display = "none";
@@ -254,8 +252,6 @@ function createExempleDatabase() {
         currentDatabase = databaseName;
         currentTable = Object.keys(databases[databaseName].tables)[0] ?? null;
         refreshUI();
-        changeEditColumnsMenu();
-        changeInsertRowMenu();
         openNotifications("<p style='color: var(--yellow5)'>A database de exemplo ja existe e foi selecionada.</p>");
         return;
     }
@@ -399,8 +395,6 @@ function createExempleDatabase() {
 
     currentTable = null;
     refreshUI();
-    changeEditColumnsMenu();
-    changeInsertRowMenu();
     openNotifications("<p style='color: var(--green5)'>Database de exemplo criada com sucesso!</p>");
 }
 
@@ -475,9 +469,7 @@ function updateCustomDropdowns() {
 function onDropdownChange(dropdown: HTMLElement) {
     if (dropdown.querySelector('input[name="column-type"]')) {
         const container = dropdown.closest("div")!.parentElement!;
-
         updateCharacteristics(container);
-        updateDefaultInput(container);
     }
 
     if (dropdown.querySelector('input[name="reference-table"]')) {
@@ -508,7 +500,229 @@ class Database {
     name: string;
     tables: Record<string, Table>;
 
-    // quem referencia determinada tabela/coluna
+    /**
+     * Mapa reverso de chaves estrangeiras.
+     *
+     * Em vez de armazenar apenas "para onde cada coluna aponta",
+     * este mapa armazena "quem aponta para cada tabela/coluna".
+     *
+     * A informação normal da FK já existe dentro das colunas:
+     *
+     * usuarios.id
+     *
+     * pedidos.usuario_id -> usuarios.id
+     *
+     * Nesse exemplo, a coluna "usuario_id" da tabela "pedidos"
+     * possui uma propriedade:
+     *
+     * {
+     *     table: "usuarios",
+     *     column: "id"
+     * }
+     *
+     * Isso permite descobrir facilmente:
+     *
+     * "Para onde esta coluna aponta?"
+     *
+     * Porém, responder a pergunta inversa:
+     *
+     * "Quem aponta para usuarios.id?"
+     *
+     * exigiria percorrer TODAS as tabelas e TODAS as colunas da
+     * database procurando referências.
+     *
+     * Para evitar isso existe o foreignKeyMap.
+     *
+     * ------------------------------------------------------------------
+     * ESTRUTURA
+     * ------------------------------------------------------------------
+     *
+     * foreignKeyMap[
+     *     tabelaReferenciada
+     * ][
+     *     colunaReferenciada
+     * ] = [
+     *     {
+     *         table: tabelaOrigem,
+     *         column: colunaOrigem
+     *     }
+     * ]
+     *
+     * Ou seja:
+     *
+     * foreignKeyMap["usuarios"]["id"]
+     *
+     * retorna todas as colunas que apontam para:
+     *
+     * usuarios.id
+     *
+     * ------------------------------------------------------------------
+     * EXEMPLO 1
+     * ------------------------------------------------------------------
+     *
+     * usuarios
+     * └─ id
+     *
+     * pedidos
+     * └─ usuario_id -> usuarios.id
+     *
+     * Resultado:
+     *
+     * {
+     *     usuarios: {
+     *         id: [
+     *             {
+     *                 table: "pedidos",
+     *                 column: "usuario_id"
+     *             }
+     *         ]
+     *     }
+     * }
+     *
+     * ------------------------------------------------------------------
+     * EXEMPLO 2
+     * ------------------------------------------------------------------
+     *
+     * usuarios
+     * └─ id
+     *
+     * pedidos
+     * └─ usuario_id -> usuarios.id
+     *
+     * comentarios
+     * └─ autor_id -> usuarios.id
+     *
+     * Resultado:
+     *
+     * {
+     *     usuarios: {
+     *         id: [
+     *             {
+     *                 table: "pedidos",
+     *                 column: "usuario_id"
+     *             },
+     *             {
+     *                 table: "comentarios",
+     *                 column: "autor_id"
+     *             }
+     *         ]
+     *     }
+     * }
+     *
+     * ------------------------------------------------------------------
+     * EXEMPLO 3
+     * ------------------------------------------------------------------
+     *
+     * usuarios
+     * ├─ id
+     * └─ cargo_id
+     *
+     * pedidos
+     * └─ usuario_id -> usuarios.id
+     *
+     * funcionarios
+     * └─ cargo_usuario -> usuarios.cargo_id
+     *
+     * Resultado:
+     *
+     * {
+     *     usuarios: {
+     *         id: [
+     *             {
+     *                 table: "pedidos",
+     *                 column: "usuario_id"
+     *             }
+     *         ],
+     *
+     *         cargo_id: [
+     *             {
+     *                 table: "funcionarios",
+     *                 column: "cargo_usuario"
+     *             }
+     *         ]
+     *     }
+     * }
+     *
+     * ------------------------------------------------------------------
+     * PARA QUE SERVE
+     * ------------------------------------------------------------------
+     *
+     * O foreignKeyMap permite descobrir instantaneamente quais
+     * colunas dependem de determinada tabela ou coluna.
+     *
+     * Isso é extremamente útil em operações como:
+     *
+     * - DELETE TABLE
+     * - DELETE COLUMN
+     * - RENAME TABLE
+     * - RENAME COLUMN
+     * - ALTER COLUMN
+     *
+     * Exemplo:
+     *
+     * Se o usuário renomear:
+     *
+     * usuarios.id
+     *
+     * para:
+     *
+     * usuarios.codigo
+     *
+     * basta consultar:
+     *
+     * foreignKeyMap["usuarios"]["id"]
+     *
+     * para obter todas as colunas que apontam para ela e atualizar
+     * suas referências automaticamente.
+     *
+     * Sem este mapa seria necessário percorrer todas as tabelas da
+     * database procurando FKs manualmente.
+     *
+     * ------------------------------------------------------------------
+     * RELAÇÃO COM registerForeignKey()
+     * ------------------------------------------------------------------
+     *
+     * Sempre que uma FK é criada:
+     *
+     * pedidos.usuario_id -> usuarios.id
+     *
+     * é executado:
+     *
+     * registerForeignKey(
+     *     "pedidos",
+     *     "usuario_id",
+     *     "usuarios",
+     *     "id"
+     * );
+     *
+     * que produz:
+     *
+     * foreignKeyMap["usuarios"]["id"].push({
+     *     table: "pedidos",
+     *     column: "usuario_id"
+     * });
+     *
+     * ------------------------------------------------------------------
+     * RELAÇÃO COM unregisterForeignKey()
+     * ------------------------------------------------------------------
+     *
+     * Quando a FK é removida:
+     *
+     * pedidos.usuario_id
+     *
+     * deixa de apontar para:
+     *
+     * usuarios.id
+     *
+     * o método unregisterForeignKey remove o registro correspondente
+     * do foreignKeyMap.
+     *
+     * Caso uma coluna não receba mais referências, ela é removida do
+     * mapa.
+     *
+     * Caso uma tabela não receba mais referências em nenhuma coluna,
+     * ela também é removida do mapa.
+     */
     foreignKeyMap: Record<
         string,
         Record<
@@ -563,8 +777,24 @@ class Database {
 
     /**
      * Retorna as referências recebidas por uma tabela.
+     *
+     * Estrutura do retorno:
+     *
+     * {
+     *     colunaReferenciada: [
+     *         {
+     *             table: tabelaOrigem,
+     *             column: colunaOrigem
+     *         }
+     *     ]
+     * }
+     *
+     * Cada chave representa uma coluna da tabela informada e seu valor
+     * contém todas as colunas de outras tabelas que possuem uma chave
+     * estrangeira apontando para ela.
+     *
      * @param tableName - Nome da tabela alvo.
-     * @returns Mapa de colunas referenciadas.
+     * @returns Mapa de referências agrupadas por coluna referenciada.
      */
     getReferencesToTable(tableName: string): Record<string, Array<{ table: string; column: string }>> {
         return this.foreignKeyMap[tableName] || {};
@@ -627,13 +857,33 @@ class Database {
             delete this.foreignKeyMap[toTable];
         }
     }
+
+    /**
+     * Atualiza o nome de uma coluna referenciada dentro do foreignKeyMap
+     * e em todas as FKs que apontam para ela.
+     *
+     * @param tableName - Tabela que contém a coluna renomeada.
+     * @param oldColumnName - Nome antigo da coluna.
+     * @param newColumnName - Novo nome da coluna.
+     */
+    updateColumnForeignKeyMap(tableName: string, oldColumnName: string, newColumnName: string) {
+        const refs = this.foreignKeyMap[tableName]?.[oldColumnName] ?? [];
+
+        for (const ref of refs) {
+            this.tables[ref.table].columns[ref.column].reference!.column = newColumnName;
+        }
+
+        if (this.foreignKeyMap[tableName]?.[oldColumnName]) {
+            this.foreignKeyMap[tableName][newColumnName] = this.foreignKeyMap[tableName][oldColumnName];
+            delete this.foreignKeyMap[tableName][oldColumnName];
+        }
+    }
 }
 
 /**
  * Representa uma tabela em memória com colunas, linhas e índices.
  */
 class Table {
-
     name: string;
     columns: Record<string, Column>;
     rows: Record<string, any>[];
@@ -660,6 +910,45 @@ class Table {
                 col.incrementCounter = value;
             }
         }
+    }
+
+    remakeIndexes() {
+        this.indexes = {};
+
+        for (const columnName in this.columns) {
+            this.indexes[columnName] = new Map();
+        }
+
+        for (let rowIndex = 0; rowIndex < this.rows.length; rowIndex++) {
+            const row = this.rows[rowIndex];
+
+            for (const columnName in this.columns) {
+                const value = row[columnName];
+                const indexMap = this.indexes[columnName];
+
+                if (!indexMap.has(value)) {
+                    indexMap.set(value, []);
+                }
+
+                indexMap.get(value)!.push(rowIndex);
+            }
+        }
+    }
+
+    remakeColumnIndex(columnName: string) {
+        const indexMap = new Map<any, number[]>();
+
+        for (let rowIndex = 0; rowIndex < this.rows.length; rowIndex++) {
+            const value = this.rows[rowIndex][columnName];
+
+            if (!indexMap.has(value)) {
+                indexMap.set(value, []);
+            }
+
+            indexMap.get(value)!.push(rowIndex);
+        }
+
+        this.indexes[columnName] = indexMap;
     }
 }
 
@@ -707,7 +996,6 @@ class Column {
         this.isUnique = isUnique;
         this.isAutoIncrement = isAutoIncrement;
         this.hasDefault = hasDefault;
-        this.isCurrentTimestamp = isCurrentTimestamp;
         this.isCurrentTimestamp = isCurrentTimestamp;
         this.enumValues = enumValues;
         this.reference = reference;
@@ -1031,12 +1319,134 @@ class SGBDFunctions {
     }
 
     static renameTable(oldName: string, newName: string) {
+        const db = databases[currentDatabase!];
         const t = databases[currentDatabase!].tables[oldName];
         if (!t) return;
         delete databases[currentDatabase!].tables[oldName];
         t.name = newName;
         databases[currentDatabase!].tables[newName] = t;
         currentTable = newName;
+
+        const incomingRefs = db.getReferencesToTable(oldName);
+
+        for (const columnRefs of Object.values(incomingRefs)) {
+            for (const ref of columnRefs) {
+                db.tables[ref.table].columns[ref.column].reference!.table = newName;
+            }
+        }
+
+        if (db.foreignKeyMap[oldName]) {
+            db.foreignKeyMap[newName] = db.foreignKeyMap[oldName];
+            delete db.foreignKeyMap[oldName];
+        }
+
+        refreshUI();
+        saveToLocalStorage();
+    }
+
+    static alterColumn(tableName: string, oldColumnName: string, newColumn: Column) {
+        function convertRowValue(value: any, newType: columnType): any {
+            if (value === null || value === undefined) return value;
+
+            if (newType === "text") {
+                return String(value);
+            }
+            else if (newType === "integer") {
+                return parseInt(value);
+            }
+            else if (newType === "float") {
+                return parseFloat(value);
+            }
+            else if (newType === "boolean") {
+                return value === true || value === "true" || value === 1 || value === "1";
+            }
+            else if (newType === "date") {
+                return ensureDate(value);
+            }
+            else if (newType === "time") {
+                return ensureTime(value);
+            }
+        }
+
+        const db = databases[currentDatabase!];
+        const table = db.tables[tableName];
+        const oldColumn = table.columns[oldColumnName];
+
+        if (JSON.stringify(oldColumn) === JSON.stringify(newColumn)) return;
+
+        newColumn.incrementCounter = oldColumn.incrementCounter;
+
+        if (!oldColumn.isAutoIncrement && newColumn.isAutoIncrement) {
+            newColumn.incrementCounter = table.rows.reduce((max, row) => {
+                const value = Number(row[oldColumnName]);
+                return Number.isFinite(value) ? Math.max(max, value) : max;
+            }, 0) + 1;
+        }
+
+        if (oldColumnName !== newColumn.name) {
+
+            for (const row of table.rows) {
+                row[newColumn.name] = row[oldColumnName];
+                delete row[oldColumnName];
+            }
+
+            table.indexes[newColumn.name] = table.indexes[oldColumnName];
+
+            delete table.indexes[oldColumnName];
+            delete table.columns[oldColumnName];
+
+            db.updateColumnForeignKeyMap(tableName, oldColumnName, newColumn.name);
+
+            if (oldColumn.reference) {
+                db.unregisterForeignKey(
+                    tableName,
+                    oldColumnName,
+                    oldColumn.reference.table,
+                    oldColumn.reference.column
+                );
+            }
+
+            if (newColumn.reference) {
+                db.registerForeignKey(
+                    tableName,
+                    newColumn.name,
+                    newColumn.reference.table,
+                    newColumn.reference.column
+                );
+            }
+        }
+
+        table.columns[newColumn.name] = newColumn;
+
+        if (JSON.stringify(oldColumn.reference) !== JSON.stringify(newColumn.reference)) {
+            if (oldColumn.reference) {
+                db.unregisterForeignKey(
+                    tableName,
+                    oldColumnName,
+                    oldColumn.reference.table,
+                    oldColumn.reference.column
+                );
+            }
+
+            if (newColumn.reference) {
+                db.registerForeignKey(
+                    tableName,
+                    newColumn.name,
+                    newColumn.reference.table,
+                    newColumn.reference.column
+                );
+            }
+        }
+
+        if (oldColumn.type !== newColumn.type) {
+            for (const row of table.rows) {
+                row[newColumn.name] = convertRowValue(row[newColumn.name], newColumn.type);
+            }
+        }
+
+        if (oldColumn.type !== newColumn.type || oldColumnName !== newColumn.name) {
+            table.remakeColumnIndex(newColumn.name);
+        }
 
         refreshUI();
         saveToLocalStorage();
@@ -1052,6 +1462,23 @@ interface TerminalEntry {
     output: string[];
     type: "success" | "error" | "info";
     timestamp: Date;
+}
+
+interface ColumnInputs {
+    columnName: string;
+    columnType: columnType;
+    isPrimaryKey: boolean;
+    isForeignKey: boolean;
+    isNotNull: boolean;
+    isUnique: boolean;
+    hasDefault: boolean;
+    isAutoIncrement: boolean;
+    isCurrentTimestamp: boolean;
+    defaultValue: string;
+    defaultBooleanValue: boolean;
+    enumValues: string[];
+    referenceTable: string;
+    referenceColumn: string;
 }
 
 /**
@@ -1175,7 +1602,7 @@ function addColumnsInterface() {
                 const value = row[columnName];
                 table.indexes[columnName].set(value, (table.indexes[columnName].get(value) || []).concat(index));
             });
-        } else if (column.isCurrentTimestamp || column.isCurrentTimestamp) {
+        } else if (column.isCurrentTimestamp) {
             table.rows.forEach((row) => {
                 row[columnName] = new Date();
             });
@@ -1204,7 +1631,6 @@ function addColumnsInterface() {
 
     columnsUl.innerHTML = "";
     createColumnCreationDiv(columnsUl as HTMLElement);
-    changeEditColumnsMenu();
     openNotifications(`<p style='color: var(--green5)'>Colunas adicionadas com sucesso!</p>`);
 }
 
@@ -1246,7 +1672,7 @@ function insertRowInterface() {
             continue;
         }
 
-        if (table.columns[columnName].isCurrentTimestamp || table.columns[columnName].isCurrentTimestamp) {
+        if (table.columns[columnName].isCurrentTimestamp) {
             row[columnName] = new Date();
             continue;
         }
@@ -1337,7 +1763,7 @@ function editRowInterface(rowIndex: number) {
             continue;
         }
 
-        if (table.columns[columnName].isCurrentTimestamp || table.columns[columnName].isCurrentTimestamp) {
+        if (table.columns[columnName].isCurrentTimestamp) {
             row[columnName] = new Date();
             continue;
         }
@@ -1434,6 +1860,64 @@ function renameTableInterface() {
     }
 
     refreshUI();
+}
+
+function alterColumnsInterface() {
+    const table = databases[currentDatabase!].tables[currentTable!];
+    const columnsUl = document.getElementById("lista-colunas-existentes")!;
+    let columnsToAlter = parseColumnsFromInputs(columnsUl.children, {});
+    if (columnsToAlter === null) return;
+
+    for (let i = 0; i < columnsToAlter.length; i++) {
+        const newColumn = columnsToAlter[i];
+        const columnDiv = columnsUl.children[i];
+        const oldColumnName = columnDiv.getAttribute("column-name")!;
+
+        if (newColumn.isNotNull) {
+            for (const row of table.rows) {
+                if (row[oldColumnName] === null || row[oldColumnName] === undefined) {
+                    openNotifications("<p style='color: var(--red5)'>Existem valores nulos nessa coluna.</p>");
+                    return;
+                }
+            }
+        }
+
+        if (newColumn.isUnique) {
+            const values = new Set();
+            for (const row of table.rows) {
+                const value = row[oldColumnName];
+
+                if (values.has(value)) {
+                    openNotifications("<p style='color: var(--red5)'>Existem valores duplicados nessa coluna.</p>");
+                    return;
+                }
+
+                values.add(value);
+            }
+        }
+
+        if (newColumn.reference) {
+            const refTable = databases[currentDatabase!].tables[newColumn.reference.table];
+
+            const refIndex = refTable.indexes[newColumn.reference.column];
+
+            for (const row of table.rows) {
+                const value = row[oldColumnName];
+
+                if (value !== null && value !== undefined && !refIndex.has(value)) {
+                    openNotifications("<p style='color: var(--red5)'>Existem valores nessa coluna que não correspondem a nenhuma entrada na tabela referenciada.</p>");
+                    return;
+                }
+            }
+        }
+    }
+
+    for (let i = 0; i < columnsToAlter.length; i++) {
+        const columnDiv = columnsUl.children[i];
+        const newColumn = columnsToAlter[i];
+        SGBDFunctions.alterColumn(currentTable!, columnDiv.getAttribute("column-name")!, newColumn);
+    }
+    openNotifications("<p style='color: var(--green5)'>Colunas alteradas com sucesso!</p>");
 }
 
 // Other interface functions
@@ -1604,80 +2088,120 @@ function parseColumnsFromInputs(columns: HTMLCollection, existingColumns: Record
     const knownColumns = new Set(Object.keys(existingColumns));
 
     for (const columnDiv of columns) {
-        const columnNameInput = columnDiv.querySelector("input[type='text']") as HTMLInputElement;
-        const columnName = columnNameInput.value.trim().toLowerCase();
-        if (columnName === "") {
-            openNotifications("<p style='color: var(--red5)'>O nome da coluna não pode ser vazio.</p>");
-            return null;
-        } else if (knownColumns.has(columnName)) {
-            openNotifications("<p style='color: var(--red5)'>Já existe uma coluna com esse nome.</p>");
-            return null;
-        }
+        const columnInputs = readColumnInputs(columnDiv as HTMLElement);
+        const column = buildColumnFromInputs(columnInputs, knownColumns);
+        if (column === null) return null;
 
-        const columnTypeElement = columnDiv.querySelector(".custom-dropdown-trigger") as HTMLElement;
-        const isPrimaryKey = columnDiv.querySelector(".primary-key") as HTMLInputElement;
-        const isForeignKey = columnDiv.querySelector(".foreign-key") as HTMLInputElement;
-        const isNotNull = columnDiv.querySelector(".not-null") as HTMLInputElement;
-        const isUnique = columnDiv.querySelector(".unique") as HTMLInputElement;
-        const hasDefault = columnDiv.querySelector(".default") as HTMLInputElement;
-        const isAutoIncrement = columnDiv.querySelector(".auto-increment") as HTMLInputElement;
-        const isCurrentTimestamp = columnDiv.querySelector(".auto-date") as HTMLInputElement;
-
-        const column = new Column(columnName, columnTypeElement.textContent!.toLowerCase() as columnType,
-            isPrimaryKey.checked, isForeignKey.checked, isNotNull.checked, isUnique.checked,
-            isAutoIncrement.checked, hasDefault.checked, isCurrentTimestamp.checked);
-
-        if (hasDefault.checked) {
-            const defaultValue = columnDiv.querySelector(".default-input-text input") as HTMLInputElement;
-            if (defaultValue.value.trim() === "") {
-                openNotifications("<p style='color: var(--red5)'>O valor padrão não pode ser vazio.</p>");
-                return null;
-            }
-
-            if (column.type === "integer") {
-                column.defaultValue = parseInt(defaultValue.value);
-            } else if (column.type === "float") {
-                column.defaultValue = parseFloat(defaultValue.value);
-            } else if (column.type === "boolean") {
-                const boolValue = columnDiv.querySelector(".default-input-text .custom-dropdown-trigger") as HTMLElement;
-                column.defaultValue = boolValue.textContent === "True";
-            } else if (column.type === "date") {
-                column.defaultValue = new Date(defaultValue.value);
-            } else if (column.type === "time") {
-                const [hours, minutes, seconds] = defaultValue.value.split(":").map(Number);
-                column.defaultValue = createTimeValue(hours, minutes || 0, seconds || 0);
-            } else {
-                column.defaultValue = defaultValue.value;
-            }
-        }
-
-        if (columnTypeElement.textContent === "Enum") {
-            const enumValuesInput = columnDiv.querySelector(".enum-values input") as HTMLInputElement;
-            column.enumValues = [...new Set(enumValuesInput.value.split(",").map((v) => v.trim()))];
-        }
-
-        if (column.isForeignKey) {
-            const referenceTableElement = columnDiv.querySelector(".referencia .custom-dropdown:nth-child(2) .custom-dropdown-trigger") as HTMLElement;
-            const referenceColumnElement = columnDiv.querySelector(".referencia .custom-dropdown:nth-child(3) .custom-dropdown-trigger") as HTMLElement;
-            if (referenceTableElement.textContent === "Crie outra tabela" || referenceColumnElement.textContent === "Crie outra coluna") {
-                openNotifications("<p style='color: var(--red5)'>Selecione a tabela e coluna de referência para a chave estrangeira.</p>");
-                return null;
-            }
-            if (databases[currentDatabase!].tables[referenceTableElement.textContent!].columns[referenceColumnElement.textContent!].type !== column.type) {
-                openNotifications("<p style='color: var(--red5)'>O tipo da coluna de referência não corresponde ao tipo da coluna.</p>");
-                return null;
-            }
-            column.reference = {
-                table: referenceTableElement.textContent!,
-                column: referenceColumnElement.textContent!
-            };
-        }
-
-        knownColumns.add(columnName);
+        knownColumns.add(columnInputs.columnName);
         parsedColumns.push(column);
     }
 
     return parsedColumns;
+}
+
+/**
+ * Lê os valores do formulário de coluna sem aplicar validações.
+ * @param columnDiv - Bloco de formulário da coluna.
+ * @returns Dados brutos da coluna.
+ */
+function readColumnInputs(columnDiv: HTMLElement): ColumnInputs {
+    const columnNameInput = columnDiv.querySelector("input[type='text']") as HTMLInputElement;
+    const columnTypeElement = columnDiv.querySelector(".custom-dropdown-trigger") as HTMLElement;
+    const isPrimaryKey = columnDiv.querySelector(".primary-key") as HTMLInputElement;
+    const isForeignKey = columnDiv.querySelector(".foreign-key") as HTMLInputElement;
+    const isNotNull = columnDiv.querySelector(".not-null") as HTMLInputElement;
+    const isUnique = columnDiv.querySelector(".unique") as HTMLInputElement;
+    const hasDefault = columnDiv.querySelector(".default") as HTMLInputElement;
+    const isAutoIncrement = columnDiv.querySelector(".auto-increment") as HTMLInputElement;
+    const isCurrentTimestamp = columnDiv.querySelector(".auto-date") as HTMLInputElement;
+    const defaultValueInput = columnDiv.querySelector(".default-input-text input") as HTMLInputElement | null;
+    const defaultBooleanButton = columnDiv.querySelector(".default-input-text .custom-dropdown-trigger") as HTMLElement | null;
+    const enumValuesInput = columnDiv.querySelector(".enum-values input") as HTMLInputElement | null;
+    const referenceTableElement = columnDiv.querySelector(".referencia .custom-dropdown:nth-child(2) .custom-dropdown-trigger") as HTMLElement | null;
+    const referenceColumnElement = columnDiv.querySelector(".referencia .custom-dropdown:nth-child(3) .custom-dropdown-trigger") as HTMLElement | null;
+
+    return {
+        columnName: columnNameInput.value.trim().toLowerCase(),
+        columnType: columnTypeElement.textContent!.toLowerCase() as columnType,
+        isPrimaryKey: isPrimaryKey.checked,
+        isForeignKey: isForeignKey.checked,
+        isNotNull: isNotNull.checked,
+        isUnique: isUnique.checked,
+        hasDefault: hasDefault.checked,
+        isAutoIncrement: isAutoIncrement.checked,
+        isCurrentTimestamp: isCurrentTimestamp.checked,
+        defaultValue: defaultValueInput?.value ?? "",
+        defaultBooleanValue: defaultBooleanButton?.textContent === "True",
+        enumValues: enumValuesInput ? [...new Set(enumValuesInput.value.split(",").map((value) => value.trim()))] : [],
+        referenceTable: referenceTableElement?.textContent ?? "",
+        referenceColumn: referenceColumnElement?.textContent ?? ""
+    };
+}
+
+/**
+ * Valida os dados de uma coluna e converte o resultado em `Column`.
+ * @param columnInputs - Dados brutos lidos do formulário.
+ * @param knownColumns - Nomes já utilizados no conjunto atual.
+ * @returns Instância válida de `Column` ou `null` quando houver erro.
+ */
+function buildColumnFromInputs(columnInputs: ColumnInputs, knownColumns: Set<string>): Column | null {
+    if (columnInputs.columnName === "") {
+        openNotifications("<p style='color: var(--red5)'>O nome da coluna não pode ser vazio.</p>");
+        return null;
+    } else if (knownColumns.has(columnInputs.columnName)) {
+        openNotifications("<p style='color: var(--red5)'>Já existe uma coluna com esse nome.</p>");
+        return null;
+    }
+
+    const column = new Column(columnInputs.columnName, columnInputs.columnType,
+        columnInputs.isPrimaryKey, columnInputs.isForeignKey, columnInputs.isNotNull,
+        columnInputs.isUnique, columnInputs.isAutoIncrement, columnInputs.hasDefault,
+        columnInputs.isCurrentTimestamp);
+
+    if (columnInputs.hasDefault) {
+        if (columnInputs.defaultValue.trim() === "" && columnInputs.columnType !== "boolean") {
+            openNotifications("<p style='color: var(--red5)'>O valor padrão não pode ser vazio.</p>");
+            return null;
+        }
+
+        if (column.type === "integer") {
+            column.defaultValue = parseInt(columnInputs.defaultValue);
+        } else if (column.type === "float") {
+            column.defaultValue = parseFloat(columnInputs.defaultValue);
+        } else if (column.type === "boolean") {
+            column.defaultValue = columnInputs.defaultBooleanValue;
+        } else if (column.type === "date") {
+            column.defaultValue = new Date(columnInputs.defaultValue);
+        } else if (column.type === "time") {
+            const [hours, minutes, seconds] = columnInputs.defaultValue.split(":").map(Number);
+            column.defaultValue = createTimeValue(hours, minutes || 0, seconds || 0);
+        } else {
+            column.defaultValue = columnInputs.defaultValue;
+        }
+    }
+
+    if (columnInputs.columnType === "enum") {
+        column.enumValues = columnInputs.enumValues;
+    }
+
+    if (column.isForeignKey) {
+        if (columnInputs.referenceTable === "Crie outra tabela" || columnInputs.referenceColumn === "Crie outra coluna") {
+            openNotifications("<p style='color: var(--red5)'>Selecione a tabela e coluna de referência para a chave estrangeira.</p>");
+            return null;
+        }
+
+        if (databases[currentDatabase!].tables[columnInputs.referenceTable].columns[columnInputs.referenceColumn].type !== column.type) {
+            openNotifications("<p style='color: var(--red5)'>O tipo da coluna de referência não corresponde ao tipo da coluna.</p>");
+            return null;
+        }
+
+        column.reference = {
+            table: columnInputs.referenceTable,
+            column: columnInputs.referenceColumn
+        };
+    }
+
+    return column;
 }
 
 /**
@@ -1834,6 +2358,9 @@ function createColumnCreationDiv(parent: HTMLElement) {
         checkbox.classList.add(char.className);
         checkbox.name = char.name;
         checkbox.onclick = function () { updateCharacteristics(mainDiv); };
+        if (char.name === "default") {
+            checkbox.onclick = function () { updateCharacteristics(mainDiv); updateDefaultInput(mainDiv); }
+        }
 
         label.appendChild(checkbox);
         label.appendChild(document.createTextNode(char.label));
@@ -2068,67 +2595,197 @@ function changeEditColumnsMenu() {
 
     Object.values(databases[currentDatabase!].tables[currentTable!].columns).forEach((column) => {
         const mainDiv = document.createElement("div");
-        mainDiv.className = "outlined menu-central-justify-between";
-
-        const secondaryDiv = document.createElement("div");
-        mainDiv.appendChild(secondaryDiv);
+        mainDiv.className = "outlined"
+        mainDiv.setAttribute("column-name", column.name);
 
         // Input de nome da coluna
-        const columnNameH3 = document.createElement("h3");
-        columnNameH3.classList.add("text2");
-        columnNameH3.textContent = column.name;
-        secondaryDiv.appendChild(columnNameH3);
+        const columnNameInput = document.createElement("input");
+        columnNameInput.className = "menu-central-input";
+        columnNameInput.type = "text";
+        columnNameInput.placeholder = "Nome da coluna";
+        columnNameInput.value = column.name;
+        mainDiv.appendChild(columnNameInput);
 
         // Dropdown customizado
-        const columnTypeH4 = document.createElement("h4");
-        columnTypeH4.classList.add("text2");
-        columnTypeH4.textContent = column.type.charAt(0).toUpperCase() + column.type.slice(1);
-        secondaryDiv.appendChild(columnTypeH4);
+        const customDropdown = document.createElement("div");
+        customDropdown.className = "custom-dropdown";
+
+        const dropdownButton = document.createElement("button");
+        dropdownButton.className = "custom-dropdown-trigger";
+        dropdownButton.textContent = column.type;
+        dropdownButton.onclick = function () { openCustomDropdown(dropdownButton); };
+
+        const dropdownMenu = document.createElement("ul");
+        dropdownMenu.className = "custom-dropdown-menu";
+        const allowedConversions: Record<columnType, string[]> = {
+            text: ["Text", "Integer", "Float", "Boolean", "Date", "Time"],
+            integer: ["Text", "Integer", "Float", "Boolean", "Date", "Time"],
+            float: ["Text", "Integer", "Float", "Boolean", "Date", "Time"],
+            boolean: ["Text", "Integer", "Float", "Boolean"],
+            date: ["Text", "Integer", "Float", "Date"],
+            time: ["Text", "Integer", "Float", "Time"],
+            enum: ["Enum"]
+        };
+
+        let options = allowedConversions[column.type];
+        options.forEach((option) => {
+            const li = document.createElement("li");
+            li.className = "custom-dropdown-option";
+            if (option.toLowerCase() === column.type.toLowerCase()) li.classList.add("custom-dropdown-option-selected");
+            li.textContent = option;
+            dropdownMenu.appendChild(li);
+        });
+
+        const hiddenInput = document.createElement("input");
+        hiddenInput.type = "hidden";
+        hiddenInput.name = "column-type";
+        hiddenInput.value = "text";
+
+        customDropdown.appendChild(dropdownButton);
+        customDropdown.appendChild(dropdownMenu);
+        customDropdown.appendChild(hiddenInput);
+        mainDiv.appendChild(customDropdown);
 
         // Characteristics
         const characteristics = document.createElement("div");
+        characteristics.className = "flex-wrap-div";
 
-        const characteristicsList: {
-            key: keyof Column;
-            label: string;
-        }[] = [
-                { key: "isPrimaryKey", label: "Primary key" },
-                { key: "isForeignKey", label: "Foreign key" },
-                { key: "isNotNull", label: "Not null" },
-                { key: "isUnique", label: "Unique" },
-                { key: "hasDefault", label: "Default" },
-                { key: "isAutoIncrement", label: "Auto increment" },
-                { key: "isCurrentTimestamp", label: "Current timestamp" },
-                { key: "isCurrentTimestamp", label: "Current timestamp" }
-            ];
+        const characteristicsList = [
+            { className: "primary-key", name: "primary-key", label: "Primary key" },
+            { className: "foreign-key", name: "foreign-key", label: "Foreign key" },
+            { className: "not-null", name: "not-null", label: "Not null" },
+            { className: "unique", name: "unique", label: "Unique" },
+            { className: "default", name: "default", label: "Default" },
+            { className: "auto-increment", name: "auto-increment", label: "Auto increment", hidden: true },
+            { className: "auto-date", name: "auto-date", label: "Current timestamp", hidden: true },
+            { className: "auto-time", name: "auto-time", label: "Current timestamp", hidden: true }
+        ];
 
-        const p = document.createElement("p");
-        p.classList.add("text3");
-        p.style.color = "var(--gray6)";
         characteristicsList.forEach((char) => {
-            if (Boolean(column[char.key])) {
-                if (char.key === "isForeignKey") {
-                    p.textContent += "FK → " + column.reference?.table + ", " + column.reference?.column + " • ";
-                } else if (char.key === "isPrimaryKey") {
-                    p.textContent += "PK • ";
-                } else {
-                    p.textContent += char.label.toUpperCase() + " • ";
-                }
-                characteristics.appendChild(p);
+            const label = document.createElement("label");
+            label.classList.add("checkbox-div");
+            if (char.hidden) label.style.display = "none";
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.classList.add(char.className);
+            checkbox.name = char.name;
+            checkbox.onclick = function () { updateCharacteristics(mainDiv); };
+            if (char.name === "default") {
+                checkbox.onclick = function () { updateCharacteristics(mainDiv); updateDefaultInput(mainDiv); }
             }
-        });
-        p.textContent = p.textContent.slice(0, -3);
 
-        secondaryDiv.appendChild(characteristics);
+            checkbox.checked =
+                (char.className === "primary-key" && column.isPrimaryKey) ||
+                (char.className === "foreign-key" && column.isForeignKey) ||
+                (char.className === "not-null" && column.isNotNull) ||
+                (char.className === "unique" && column.isUnique) ||
+                (char.className === "default" && column.hasDefault) ||
+                (char.className === "auto-increment" && column.isAutoIncrement) ||
+                ((char.className === "auto-date" || char.className === "auto-time") && column.isCurrentTimestamp);
+
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(char.label));
+            characteristics.appendChild(label);
+        });
 
         // Delete column button
         const deleteDiv = document.createElement("div");
         deleteDiv.className = "last-item-flex-wrap-div trash-icon";
         deleteDiv.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>';
-        deleteDiv.onclick = function () { abrirFechar(false, "confirmar-deletar"); changeConfirmDeleteMenu("column", undefined, column.name); };
-        mainDiv.appendChild(deleteDiv);
-        menu.appendChild(mainDiv);
+        deleteDiv.onclick = function () { deleteColumnCreationDiv(deleteDiv); };
+        characteristics.appendChild(deleteDiv);
 
+        mainDiv.appendChild(characteristics);
+
+        // Referência (FK)
+        const referenciaDiv = document.createElement("div");
+        referenciaDiv.classList.add("referencia", "post-characteristics");
+        referenciaDiv.style.display = "none";
+
+        const referenciaP = document.createElement("p");
+        referenciaP.textContent = "Referência";
+        referenciaDiv.appendChild(referenciaP);
+
+        // Tabela de referência
+
+        const refTableCustomDropdown = document.createElement("div");
+        refTableCustomDropdown.className = "custom-dropdown";
+
+        const refTableButton = document.createElement("button");
+        refTableButton.className = "custom-dropdown-trigger";
+        refTableButton.textContent = "Crie outra tabela";
+        refTableButton.onclick = function () { openCustomDropdown(refTableButton); };
+
+        const refTableMenu = document.createElement("ul");
+        refTableMenu.className = "custom-dropdown-menu";
+
+        const refTableHiddenInput = document.createElement("input");
+        refTableHiddenInput.type = "hidden";
+        refTableHiddenInput.name = "reference-table";
+        refTableHiddenInput.value = "text";
+
+        refTableCustomDropdown.appendChild(refTableButton);
+        refTableCustomDropdown.appendChild(refTableMenu);
+        refTableCustomDropdown.appendChild(refTableHiddenInput);
+        referenciaDiv.appendChild(refTableCustomDropdown);
+
+        // Coluna de referência
+
+        const refColumnCustomDropdown = document.createElement("div");
+        refColumnCustomDropdown.className = "custom-dropdown";
+
+        const refColumnButton = document.createElement("button");
+        refColumnButton.className = "custom-dropdown-trigger";
+        refColumnButton.textContent = "Crie outra coluna";
+        refColumnButton.onclick = function () { openCustomDropdown(refColumnButton); };
+
+        const refColumnMenu = document.createElement("ul");
+        refColumnMenu.className = "custom-dropdown-menu";
+
+        const refColumnHiddenInput = document.createElement("input");
+        refColumnHiddenInput.type = "hidden";
+        refColumnHiddenInput.value = "text";
+
+        refColumnCustomDropdown.appendChild(refColumnButton);
+        refColumnCustomDropdown.appendChild(refColumnMenu);
+        refColumnCustomDropdown.appendChild(refColumnHiddenInput);
+        referenciaDiv.appendChild(refColumnCustomDropdown);
+
+        mainDiv.appendChild(referenciaDiv);
+
+        // Default input
+        const defaultDiv = document.createElement("div");
+        defaultDiv.classList.add("default-input-text", "post-characteristics");
+        defaultDiv.style.display = "none";
+
+        const defaultP = document.createElement("p");
+        defaultP.textContent = "Default";
+        defaultDiv.appendChild(defaultP);
+
+        mainDiv.appendChild(defaultDiv);
+
+        updateDefaultInput(mainDiv, column.defaultValue);
+
+        // Enum values input
+        const enumDiv = document.createElement("div");
+        enumDiv.classList.add("enum-values", "post-characteristics");
+        enumDiv.style.display = "none";
+
+        const enumP = document.createElement("p");
+        enumP.textContent = "Valores do enum (separados por vírgula)";
+        enumDiv.appendChild(enumP);
+
+        const enumInput = document.createElement("input");
+        enumInput.type = "text";
+        enumInput.placeholder = "Valores separados por vírgula";
+        enumInput.classList.add("menu-central-input");
+        enumInput.value = column.enumValues ? column.enumValues.join(", ") : "";
+        enumDiv.appendChild(enumInput);
+
+        mainDiv.appendChild(enumDiv);
+
+        menu.appendChild(mainDiv);
+        updateCharacteristics(mainDiv);
         updateCustomDropdowns();
     });
 
@@ -2625,7 +3282,6 @@ function updateCharacteristics(parentDiv: Element) {
 
     const autoIncLabel = autoIncInput.parentElement as HTMLElement;
     const currentTimestampLabel = currentTimestampInput.parentElement as HTMLElement;
-    const defaultLabel = defaultInput.parentElement as HTMLElement;
 
     const state = {
         pk: pkInput.checked,
@@ -2640,29 +3296,27 @@ function updateCharacteristics(parentDiv: Element) {
 
     const forcedTrue = {
         notNull: state.pk || state.autoIncrement,
-        unique: state.autoIncrement
+        unique: state.autoIncrement || state.pk,
     };
 
     const forcedFalse = {
         fk: state.autoIncrement || state.currentTimestamp || state.currentTimestamp,
-        default: state.autoIncrement || state.currentTimestamp || state.currentTimestamp || state.type === "boolean",
+        default: state.autoIncrement || state.currentTimestamp || state.currentTimestamp,
         autoIncrement: state.fk || state.default || state.type !== "integer",
         currentTimestamp: state.fk || state.default || state.type !== "date" && state.type !== "time",
-
     }
 
     const hidden = {
         autoIncrement: state.type !== "integer",
         currentTimestamp: state.type !== "date" && state.type !== "time",
-        default: state.type === "boolean",
     };
 
     const disabled = {
         notNull: state.pk || state.autoIncrement,
-        unique: state.autoIncrement,
+        unique: state.autoIncrement || state.pk,
         autoIncrement: state.fk || state.default || state.type !== "integer",
         currentTimestamp: state.fk || state.default || state.type !== "date" && state.type !== "time",
-        default: state.autoIncrement || state.currentTimestamp || state.currentTimestamp || state.type === "boolean",
+        default: state.autoIncrement || state.currentTimestamp || state.currentTimestamp,
         fk: state.autoIncrement || state.currentTimestamp || state.currentTimestamp
     };
 
@@ -2684,15 +3338,11 @@ function updateCharacteristics(parentDiv: Element) {
     currentTimestampInput.checked = state.currentTimestamp && !forcedFalse.currentTimestamp;
     currentTimestampInput.disabled = disabled.currentTimestamp;
 
-    // AUTO TIME
-    currentTimestampLabel.style.display = hidden.currentTimestamp ? "none" : "flex";
-    currentTimestampInput.checked = state.currentTimestamp && !forcedFalse.currentTimestamp;
-    currentTimestampInput.disabled = disabled.currentTimestamp;
-
     // DEFAULT
     defaultInput.disabled = disabled.default;
     defaultInput.checked = state.default && !forcedFalse.default;
-    defaultLabel.style.display = hidden.default ? "none" : "flex";
+    const defaultDiv = parentDiv.querySelector("div.default-input-text") as HTMLElement;
+    defaultDiv.style.display = state.default ? "block" : "none";
 
     // FK
     fkInput.disabled = disabled.fk;
@@ -2704,10 +3354,6 @@ function updateCharacteristics(parentDiv: Element) {
     updateForeignKeyReferenceTableOptions(parentDiv);
     updateForeignKeyReferenceColumnOptions(parentDiv);
 
-    // DEFAULT
-    const defaultDiv = parentDiv.querySelector("div.default-input-text") as HTMLElement;
-    defaultDiv.style.display = state.default ? "block" : "none";
-
     // ENUM
     const enumDiv = parentDiv.querySelector("div.enum-values") as HTMLElement;
     enumDiv.style.display = state.type === "enum" ? "block" : "none";
@@ -2717,19 +3363,20 @@ function updateCharacteristics(parentDiv: Element) {
  * Troca o tipo do campo de valor padrão conforme o tipo da coluna.
  * @param parentDiv - Container do bloco de criação/edição da coluna.
  */
-function updateDefaultInput(parentDiv: Element) {
+function updateDefaultInput(parentDiv: Element, initialValue?: any) {
     const type = (parentDiv.querySelector(".custom-dropdown button") as HTMLElement).textContent!.toLowerCase();
     if (type == "boolean") {
         const defaultDiv = parentDiv.querySelector("div.default-input-text") as HTMLElement;
+        const isTrue = initialValue !== undefined && initialValue !== null && String(initialValue).toLowerCase() === "true";
         defaultDiv.innerHTML = `
         <p>Default</p>
         <div class="custom-dropdown">
             <button class="custom-dropdown-trigger" onclick="openCustomDropdown(this)">
-                False
+                ${isTrue ? "True" : "False"}
             </button>
             <ul class="custom-dropdown-menu">
-                <li class="custom-dropdown-option custom-dropdown-option-selected">False</li>
-                <li class="custom-dropdown-option">True</li>
+                <li class="custom-dropdown-option ${isTrue ? "" : "custom-dropdown-option-selected"}">False</li>
+                <li class="custom-dropdown-option ${isTrue ? "custom-dropdown-option-selected" : ""}">True</li>
             </ul>
             <input type="hidden" value="text">
         </div>
@@ -2759,6 +3406,11 @@ function updateDefaultInput(parentDiv: Element) {
         <p>Default</p>
         <input class="menu-central-input" type="text" placeholder="Valor padrão">
         `;
+    }
+
+    const input = defaultDiv.querySelector("input") as HTMLInputElement | null;
+    if (input && initialValue !== undefined && initialValue !== null) {
+        input.value = String(initialValue);
     }
 }
 
@@ -2955,6 +3607,7 @@ createColumnCreationDiv(document.getElementById("criacao-colunas-edit")!);
 // -Aba de ajuda
 // -Permitir sincronização com banco real
 // -Implementar rename column no terminal
+// -ver () dentro de strings no insert
 
 // #region SQL namespace
 
@@ -3272,7 +3925,6 @@ namespace SQL {
             this.tokens = tokens;
         }
 
-        // ver () dentro de strings
         insert() {
             const t = this.tokens;
             if (currentDatabase === null) {

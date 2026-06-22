@@ -125,6 +125,40 @@ function createTimeValue(hours, minutes = 0, seconds = 0) {
     return d;
 }
 /**
+ * Verifica se um valor já existe no índice de UNIQUE da coluna.
+ * @param table - Tabela alvo.
+ * @param columnName - Nome da coluna.
+ * @param value - Valor candidato.
+ * @param ignoredRowIndex - Linha a ser ignorada na comparação, quando aplicável.
+ * @returns `true` quando já existe conflito de unicidade.
+ */
+function hasUniqueValueConflict(table, columnName, value, ignoredRowIndex) {
+    if (value === null || value === undefined)
+        return false;
+    const indexMap = table.indexes[columnName];
+    if (!indexMap)
+        return false;
+    if (value instanceof Date) {
+        const valueTime = value.getTime();
+        for (const [indexedValue, rowIndexes] of indexMap.entries()) {
+            if (!(indexedValue instanceof Date))
+                continue;
+            if (indexedValue.getTime() !== valueTime)
+                continue;
+            return ignoredRowIndex === undefined
+                ? true
+                : rowIndexes.some((rowIndex) => rowIndex !== ignoredRowIndex);
+        }
+        return false;
+    }
+    const rowIndexes = indexMap.get(value);
+    if (!rowIndexes)
+        return false;
+    return ignoredRowIndex === undefined
+        ? true
+        : rowIndexes.some((rowIndex) => rowIndex !== ignoredRowIndex);
+}
+/**
  * Garante que um valor seja uma instância válida de Date
  * @param value - Valor a ser convertido (Date, string, number ou null)
  * @returns Instância de Date válida ou null
@@ -225,8 +259,6 @@ function createExempleDatabase() {
         currentDatabase = databaseName;
         currentTable = Object.keys(databases[databaseName].tables)[0] ?? null;
         refreshUI();
-        changeEditColumnsMenu();
-        changeInsertRowMenu();
         openNotifications("<p style='color: var(--yellow5)'>A database de exemplo ja existe e foi selecionada.</p>");
         return;
     }
@@ -360,8 +392,6 @@ function createExempleDatabase() {
     SGBDFunctions.insertRow("tarefas", { id: tarefaIdColumn.increment(), titulo: "Fechar pendências", concluida: false });
     currentTable = null;
     refreshUI();
-    changeEditColumnsMenu();
-    changeInsertRowMenu();
     openNotifications("<p style='color: var(--green5)'>Database de exemplo criada com sucesso!</p>");
 }
 // #endregion
@@ -426,7 +456,6 @@ function onDropdownChange(dropdown) {
     if (dropdown.querySelector('input[name="column-type"]')) {
         const container = dropdown.closest("div").parentElement;
         updateCharacteristics(container);
-        updateDefaultInput(container);
     }
     if (dropdown.querySelector('input[name="reference-table"]')) {
         const container = dropdown.closest("div").parentElement;
@@ -481,8 +510,24 @@ class Database {
     }
     /**
      * Retorna as referências recebidas por uma tabela.
+     *
+     * Estrutura do retorno:
+     *
+     * {
+     *     colunaReferenciada: [
+     *         {
+     *             table: tabelaOrigem,
+     *             column: colunaOrigem
+     *         }
+     *     ]
+     * }
+     *
+     * Cada chave representa uma coluna da tabela informada e seu valor
+     * contém todas as colunas de outras tabelas que possuem uma chave
+     * estrangeira apontando para ela.
+     *
      * @param tableName - Nome da tabela alvo.
-     * @returns Mapa de colunas referenciadas.
+     * @returns Mapa de referências agrupadas por coluna referenciada.
      */
     getReferencesToTable(tableName) {
         return this.foreignKeyMap[tableName] || {};
@@ -535,6 +580,24 @@ class Database {
             delete this.foreignKeyMap[toTable];
         }
     }
+    /**
+     * Atualiza o nome de uma coluna referenciada dentro do foreignKeyMap
+     * e em todas as FKs que apontam para ela.
+     *
+     * @param tableName - Tabela que contém a coluna renomeada.
+     * @param oldColumnName - Nome antigo da coluna.
+     * @param newColumnName - Novo nome da coluna.
+     */
+    updateColumnForeignKeyMap(tableName, oldColumnName, newColumnName) {
+        const refs = this.foreignKeyMap[tableName]?.[oldColumnName] ?? [];
+        for (const ref of refs) {
+            this.tables[ref.table].columns[ref.column].reference.column = newColumnName;
+        }
+        if (this.foreignKeyMap[tableName]?.[oldColumnName]) {
+            this.foreignKeyMap[tableName][newColumnName] = this.foreignKeyMap[tableName][oldColumnName];
+            delete this.foreignKeyMap[tableName][oldColumnName];
+        }
+    }
 }
 /**
  * Representa uma tabela em memória com colunas, linhas e índices.
@@ -560,6 +623,34 @@ class Table {
                 col.incrementCounter = value;
             }
         }
+    }
+    remakeIndexes() {
+        this.indexes = {};
+        for (const columnName in this.columns) {
+            this.indexes[columnName] = new Map();
+        }
+        for (let rowIndex = 0; rowIndex < this.rows.length; rowIndex++) {
+            const row = this.rows[rowIndex];
+            for (const columnName in this.columns) {
+                const value = row[columnName];
+                const indexMap = this.indexes[columnName];
+                if (!indexMap.has(value)) {
+                    indexMap.set(value, []);
+                }
+                indexMap.get(value).push(rowIndex);
+            }
+        }
+    }
+    remakeColumnIndex(columnName) {
+        const indexMap = new Map();
+        for (let rowIndex = 0; rowIndex < this.rows.length; rowIndex++) {
+            const value = this.rows[rowIndex][columnName];
+            if (!indexMap.has(value)) {
+                indexMap.set(value, []);
+            }
+            indexMap.get(value).push(rowIndex);
+        }
+        this.indexes[columnName] = indexMap;
     }
 }
 /**
@@ -590,7 +681,6 @@ class Column {
         this.isUnique = isUnique;
         this.isAutoIncrement = isAutoIncrement;
         this.hasDefault = hasDefault;
-        this.isCurrentTimestamp = isCurrentTimestamp;
         this.isCurrentTimestamp = isCurrentTimestamp;
         this.enumValues = enumValues;
         this.reference = reference;
@@ -855,6 +945,7 @@ class SGBDFunctions {
         saveToLocalStorage();
     }
     static renameTable(oldName, newName) {
+        const db = databases[currentDatabase];
         const t = databases[currentDatabase].tables[oldName];
         if (!t)
             return;
@@ -862,6 +953,81 @@ class SGBDFunctions {
         t.name = newName;
         databases[currentDatabase].tables[newName] = t;
         currentTable = newName;
+        const incomingRefs = db.getReferencesToTable(oldName);
+        for (const columnRefs of Object.values(incomingRefs)) {
+            for (const ref of columnRefs) {
+                db.tables[ref.table].columns[ref.column].reference.table = newName;
+            }
+        }
+        if (db.foreignKeyMap[oldName]) {
+            db.foreignKeyMap[newName] = db.foreignKeyMap[oldName];
+            delete db.foreignKeyMap[oldName];
+        }
+        refreshUI();
+        saveToLocalStorage();
+    }
+    static alterColumn(tableName, oldColumnName, newColumn) {
+        function convertRowValue(value, newType) {
+            if (value === null || value === undefined)
+                return value;
+            if (newType === "text") {
+                return String(value);
+            }
+            else if (newType === "integer") {
+                return parseInt(value);
+            }
+            else if (newType === "float") {
+                return parseFloat(value);
+            }
+            else if (newType === "boolean") {
+                return value === true || value === "true" || value === 1 || value === "1";
+            }
+            else if (newType === "date") {
+                return ensureDate(value);
+            }
+            else if (newType === "time") {
+                return ensureTime(value);
+            }
+        }
+        const db = databases[currentDatabase];
+        const table = db.tables[tableName];
+        const oldColumn = table.columns[oldColumnName];
+        if (JSON.stringify(oldColumn) === JSON.stringify(newColumn))
+            return;
+        newColumn.incrementCounter = oldColumn.incrementCounter;
+        if (oldColumnName !== newColumn.name) {
+            for (const row of table.rows) {
+                row[newColumn.name] = row[oldColumnName];
+                delete row[oldColumnName];
+            }
+            table.indexes[newColumn.name] = table.indexes[oldColumnName];
+            delete table.indexes[oldColumnName];
+            delete table.columns[oldColumnName];
+            db.updateColumnForeignKeyMap(tableName, oldColumnName, newColumn.name);
+            if (oldColumn.reference) {
+                db.unregisterForeignKey(tableName, oldColumnName, oldColumn.reference.table, oldColumn.reference.column);
+            }
+            if (newColumn.reference) {
+                db.registerForeignKey(tableName, newColumn.name, newColumn.reference.table, newColumn.reference.column);
+            }
+        }
+        table.columns[newColumn.name] = newColumn;
+        if (JSON.stringify(oldColumn.reference) !== JSON.stringify(newColumn.reference)) {
+            if (oldColumn.reference) {
+                db.unregisterForeignKey(tableName, oldColumnName, oldColumn.reference.table, oldColumn.reference.column);
+            }
+            if (newColumn.reference) {
+                db.registerForeignKey(tableName, newColumn.name, newColumn.reference.table, newColumn.reference.column);
+            }
+        }
+        if (oldColumn.type !== newColumn.type) {
+            for (const row of table.rows) {
+                row[newColumn.name] = convertRowValue(row[newColumn.name], newColumn.type);
+            }
+        }
+        if (oldColumn.type !== newColumn.type || oldColumnName !== newColumn.name) {
+            table.remakeColumnIndex(newColumn.name);
+        }
         refreshUI();
         saveToLocalStorage();
     }
@@ -996,7 +1162,6 @@ function addColumnsInterface() {
     }
     columnsUl.innerHTML = "";
     createColumnCreationDiv(columnsUl);
-    changeEditColumnsMenu();
     openNotifications(`<p style='color: var(--green5)'>Colunas adicionadas com sucesso!</p>`);
 }
 /**
@@ -1029,12 +1194,13 @@ function insertRowInterface() {
         }
         if (table.columns[columnName].type === "boolean") {
             const value = column.querySelector(".custom-dropdown button").textContent;
-            if (table.columns[columnName].isUnique && table.indexes[columnName].has(value === "True")) {
+            const booleanValue = value === "True";
+            if (table.columns[columnName].isUnique && hasUniqueValueConflict(table, columnName, booleanValue)) {
                 openNotifications(`<p style='color: var(--red5)'>O valor "${value}" já existe para a coluna "${columnName}".</p>`);
                 table.revertAutoIncrementValues(valuesBeforeIncrement);
                 return;
             }
-            row[columnName] = value === "True";
+            row[columnName] = booleanValue;
             continue;
         }
         if (table.columns[columnName].isCurrentTimestamp || table.columns[columnName].isCurrentTimestamp) {
@@ -1042,11 +1208,6 @@ function insertRowInterface() {
             continue;
         }
         const input = column.querySelector("input");
-        if (table.columns[columnName].isUnique && table.indexes[columnName].has(input.value)) {
-            openNotifications(`<p style='color: var(--red5)'>O valor "${input.value}" já existe para a coluna "${columnName}".</p>`);
-            table.revertAutoIncrementValues(valuesBeforeIncrement);
-            return;
-        }
         if (input.value.trim() === "") {
             if (table.columns[columnName].isNotNull) {
                 openNotifications(`<p style='color: var(--red5)'>A coluna "${columnName}" não pode ser nula.</p>`);
@@ -1081,6 +1242,11 @@ function insertRowInterface() {
         }
         else {
             row[columnName] = input.value;
+        }
+        if (table.columns[columnName].isUnique && hasUniqueValueConflict(table, columnName, row[columnName])) {
+            openNotifications(`<p style='color: var(--red5)'>O valor "${input.value}" já existe para a coluna "${columnName}".</p>`);
+            table.revertAutoIncrementValues(valuesBeforeIncrement);
+            return;
         }
     }
     SGBDFunctions.insertRow(currentTable, row);
@@ -1108,18 +1274,19 @@ function editRowInterface(rowIndex) {
         }
         if (table.columns[columnName].type === "boolean") {
             const value = column.querySelector(".custom-dropdown button").textContent;
-            if (table.columns[columnName].isUnique && table.indexes[columnName].has(value === "True")) {
-                if (value === "True" && table.rows[rowIndex][columnName] !== true) {
+            const booleanValue = value === "True";
+            if (table.columns[columnName].isUnique && hasUniqueValueConflict(table, columnName, booleanValue, rowIndex)) {
+                if (booleanValue !== table.rows[rowIndex][columnName]) {
                     openNotifications(`<p style='color: var(--red5)'>O valor "${value}" já existe para a coluna "${columnName}".</p>`);
                     return;
                 }
             }
-            row[columnName] = value === "True";
+            row[columnName] = booleanValue;
             continue;
         }
         if (table.columns[columnName].type === "enum") {
             const value = column.querySelector(".custom-dropdown button").textContent.trim();
-            if (table.columns[columnName].isUnique && table.indexes[columnName].has(value)) {
+            if (table.columns[columnName].isUnique && hasUniqueValueConflict(table, columnName, value, rowIndex)) {
                 if (value !== table.rows[rowIndex][columnName]) {
                     openNotifications(`<p style='color: var(--red5)'>O valor "${value}" já existe para a coluna "${columnName}".</p>`);
                     return;
@@ -1133,12 +1300,6 @@ function editRowInterface(rowIndex) {
             continue;
         }
         const input = column.querySelector("input");
-        if (table.columns[columnName].isUnique && table.indexes[columnName].has(input.value)) {
-            if (input.value !== table.rows[rowIndex][columnName]) {
-                openNotifications(`<p style='color: var(--red5)'>O valor "${input.value}" já existe para a coluna "${columnName}".</p>`);
-                return;
-            }
-        }
         if (input.value.trim() === "") {
             if (table.columns[columnName].isNotNull) {
                 openNotifications(`<p style='color: var(--red5)'>A coluna "${columnName}" não pode ser nula.</p>`);
@@ -1172,6 +1333,10 @@ function editRowInterface(rowIndex) {
         }
         else {
             row[columnName] = input.value;
+        }
+        if (table.columns[columnName].isUnique && hasUniqueValueConflict(table, columnName, row[columnName], rowIndex)) {
+            openNotifications(`<p style='color: var(--red5)'>O valor "${input.value}" já existe para a coluna "${columnName}".</p>`);
+            return;
         }
     }
     SGBDFunctions.editRow(currentTable, rowIndex, row);
@@ -1230,6 +1395,54 @@ function renameTableInterface() {
         openNotifications("<p style='color: var(--green5)'>Tabela renomeada com sucesso!</p>");
     }
     refreshUI();
+}
+function alterColumnsInterface() {
+    const table = databases[currentDatabase].tables[currentTable];
+    const columnsUl = document.getElementById("lista-colunas-existentes");
+    let columnsToAlter = parseColumnsFromInputs(columnsUl.children, {});
+    if (columnsToAlter === null)
+        return;
+    for (let i = 0; i < columnsToAlter.length; i++) {
+        const newColumn = columnsToAlter[i];
+        const columnDiv = columnsUl.children[i];
+        const oldColumnName = columnDiv.getAttribute("column-name");
+        if (newColumn.isNotNull) {
+            for (const row of table.rows) {
+                if (row[oldColumnName] === null || row[oldColumnName] === undefined) {
+                    openNotifications("<p style='color: var(--red5)'>Existem valores nulos nessa coluna.</p>");
+                    return;
+                }
+            }
+        }
+        if (newColumn.isUnique) {
+            const values = new Set();
+            for (const row of table.rows) {
+                const value = row[oldColumnName];
+                if (values.has(value)) {
+                    openNotifications("<p style='color: var(--red5)'>Existem valores duplicados nessa coluna.</p>");
+                    return;
+                }
+                values.add(value);
+            }
+        }
+        if (newColumn.reference) {
+            const refTable = databases[currentDatabase].tables[newColumn.reference.table];
+            const refIndex = refTable.indexes[newColumn.reference.column];
+            for (const row of table.rows) {
+                const value = row[oldColumnName];
+                if (value !== null && value !== undefined && !refIndex.has(value)) {
+                    openNotifications("<p style='color: var(--red5)'>Existem valores nessa coluna que não correspondem a nenhuma entrada na tabela referenciada.</p>");
+                    return;
+                }
+            }
+        }
+    }
+    for (let i = 0; i < columnsToAlter.length; i++) {
+        const columnDiv = columnsUl.children[i];
+        const newColumn = columnsToAlter[i];
+        SGBDFunctions.alterColumn(currentTable, columnDiv.getAttribute("column-name"), newColumn);
+    }
+    openNotifications("<p style='color: var(--green5)'>Colunas alteradas com sucesso!</p>");
 }
 // Other interface functions
 /**
@@ -1386,76 +1599,111 @@ function parseColumnsFromInputs(columns, existingColumns) {
     const parsedColumns = [];
     const knownColumns = new Set(Object.keys(existingColumns));
     for (const columnDiv of columns) {
-        const columnNameInput = columnDiv.querySelector("input[type='text']");
-        const columnName = columnNameInput.value.trim().toLowerCase();
-        if (columnName === "") {
-            openNotifications("<p style='color: var(--red5)'>O nome da coluna não pode ser vazio.</p>");
+        const columnInputs = readColumnInputs(columnDiv);
+        const column = buildColumnFromInputs(columnInputs, knownColumns);
+        if (column === null)
             return null;
-        }
-        else if (knownColumns.has(columnName)) {
-            openNotifications("<p style='color: var(--red5)'>Já existe uma coluna com esse nome.</p>");
-            return null;
-        }
-        const columnTypeElement = columnDiv.querySelector(".custom-dropdown-trigger");
-        const isPrimaryKey = columnDiv.querySelector(".primary-key");
-        const isForeignKey = columnDiv.querySelector(".foreign-key");
-        const isNotNull = columnDiv.querySelector(".not-null");
-        const isUnique = columnDiv.querySelector(".unique");
-        const hasDefault = columnDiv.querySelector(".default");
-        const isAutoIncrement = columnDiv.querySelector(".auto-increment");
-        const isCurrentTimestamp = columnDiv.querySelector(".auto-date");
-        const column = new Column(columnName, columnTypeElement.textContent.toLowerCase(), isPrimaryKey.checked, isForeignKey.checked, isNotNull.checked, isUnique.checked, isAutoIncrement.checked, hasDefault.checked, isCurrentTimestamp.checked);
-        if (hasDefault.checked) {
-            const defaultValue = columnDiv.querySelector(".default-input-text input");
-            if (defaultValue.value.trim() === "") {
-                openNotifications("<p style='color: var(--red5)'>O valor padrão não pode ser vazio.</p>");
-                return null;
-            }
-            if (column.type === "integer") {
-                column.defaultValue = parseInt(defaultValue.value);
-            }
-            else if (column.type === "float") {
-                column.defaultValue = parseFloat(defaultValue.value);
-            }
-            else if (column.type === "boolean") {
-                const boolValue = columnDiv.querySelector(".default-input-text .custom-dropdown-trigger");
-                column.defaultValue = boolValue.textContent === "True";
-            }
-            else if (column.type === "date") {
-                column.defaultValue = new Date(defaultValue.value);
-            }
-            else if (column.type === "time") {
-                const [hours, minutes, seconds] = defaultValue.value.split(":").map(Number);
-                column.defaultValue = createTimeValue(hours, minutes || 0, seconds || 0);
-            }
-            else {
-                column.defaultValue = defaultValue.value;
-            }
-        }
-        if (columnTypeElement.textContent === "Enum") {
-            const enumValuesInput = columnDiv.querySelector(".enum-values input");
-            column.enumValues = [...new Set(enumValuesInput.value.split(",").map((v) => v.trim()))];
-        }
-        if (column.isForeignKey) {
-            const referenceTableElement = columnDiv.querySelector(".referencia .custom-dropdown:nth-child(2) .custom-dropdown-trigger");
-            const referenceColumnElement = columnDiv.querySelector(".referencia .custom-dropdown:nth-child(3) .custom-dropdown-trigger");
-            if (referenceTableElement.textContent === "Crie outra tabela" || referenceColumnElement.textContent === "Crie outra coluna") {
-                openNotifications("<p style='color: var(--red5)'>Selecione a tabela e coluna de referência para a chave estrangeira.</p>");
-                return null;
-            }
-            if (databases[currentDatabase].tables[referenceTableElement.textContent].columns[referenceColumnElement.textContent].type !== column.type) {
-                openNotifications("<p style='color: var(--red5)'>O tipo da coluna de referência não corresponde ao tipo da coluna.</p>");
-                return null;
-            }
-            column.reference = {
-                table: referenceTableElement.textContent,
-                column: referenceColumnElement.textContent
-            };
-        }
-        knownColumns.add(columnName);
+        knownColumns.add(columnInputs.columnName);
         parsedColumns.push(column);
     }
     return parsedColumns;
+}
+/**
+ * Lê os valores do formulário de coluna sem aplicar validações.
+ * @param columnDiv - Bloco de formulário da coluna.
+ * @returns Dados brutos da coluna.
+ */
+function readColumnInputs(columnDiv) {
+    const columnNameInput = columnDiv.querySelector("input[type='text']");
+    const columnTypeElement = columnDiv.querySelector(".custom-dropdown-trigger");
+    const isPrimaryKey = columnDiv.querySelector(".primary-key");
+    const isForeignKey = columnDiv.querySelector(".foreign-key");
+    const isNotNull = columnDiv.querySelector(".not-null");
+    const isUnique = columnDiv.querySelector(".unique");
+    const hasDefault = columnDiv.querySelector(".default");
+    const isAutoIncrement = columnDiv.querySelector(".auto-increment");
+    const isCurrentTimestamp = columnDiv.querySelector(".auto-date");
+    const defaultValueInput = columnDiv.querySelector(".default-input-text input");
+    const defaultBooleanButton = columnDiv.querySelector(".default-input-text .custom-dropdown-trigger");
+    const enumValuesInput = columnDiv.querySelector(".enum-values input");
+    const referenceTableElement = columnDiv.querySelector(".referencia .custom-dropdown:nth-child(2) .custom-dropdown-trigger");
+    const referenceColumnElement = columnDiv.querySelector(".referencia .custom-dropdown:nth-child(3) .custom-dropdown-trigger");
+    return {
+        columnName: columnNameInput.value.trim().toLowerCase(),
+        columnType: columnTypeElement.textContent.toLowerCase(),
+        isPrimaryKey: isPrimaryKey.checked,
+        isForeignKey: isForeignKey.checked,
+        isNotNull: isNotNull.checked,
+        isUnique: isUnique.checked,
+        hasDefault: hasDefault.checked,
+        isAutoIncrement: isAutoIncrement.checked,
+        isCurrentTimestamp: isCurrentTimestamp.checked,
+        defaultValue: defaultValueInput?.value ?? "",
+        defaultBooleanValue: defaultBooleanButton?.textContent === "True",
+        enumValues: enumValuesInput ? [...new Set(enumValuesInput.value.split(",").map((value) => value.trim()))] : [],
+        referenceTable: referenceTableElement?.textContent ?? "",
+        referenceColumn: referenceColumnElement?.textContent ?? ""
+    };
+}
+/**
+ * Valida os dados de uma coluna e converte o resultado em `Column`.
+ * @param columnInputs - Dados brutos lidos do formulário.
+ * @param knownColumns - Nomes já utilizados no conjunto atual.
+ * @returns Instância válida de `Column` ou `null` quando houver erro.
+ */
+function buildColumnFromInputs(columnInputs, knownColumns) {
+    if (columnInputs.columnName === "") {
+        openNotifications("<p style='color: var(--red5)'>O nome da coluna não pode ser vazio.</p>");
+        return null;
+    }
+    else if (knownColumns.has(columnInputs.columnName)) {
+        openNotifications("<p style='color: var(--red5)'>Já existe uma coluna com esse nome.</p>");
+        return null;
+    }
+    const column = new Column(columnInputs.columnName, columnInputs.columnType, columnInputs.isPrimaryKey, columnInputs.isForeignKey, columnInputs.isNotNull, columnInputs.isUnique, columnInputs.isAutoIncrement, columnInputs.hasDefault, columnInputs.isCurrentTimestamp);
+    if (columnInputs.hasDefault) {
+        if (columnInputs.defaultValue.trim() === "" && columnInputs.columnType !== "boolean") {
+            openNotifications("<p style='color: var(--red5)'>O valor padrão não pode ser vazio.</p>");
+            return null;
+        }
+        if (column.type === "integer") {
+            column.defaultValue = parseInt(columnInputs.defaultValue);
+        }
+        else if (column.type === "float") {
+            column.defaultValue = parseFloat(columnInputs.defaultValue);
+        }
+        else if (column.type === "boolean") {
+            column.defaultValue = columnInputs.defaultBooleanValue;
+        }
+        else if (column.type === "date") {
+            column.defaultValue = new Date(columnInputs.defaultValue);
+        }
+        else if (column.type === "time") {
+            const [hours, minutes, seconds] = columnInputs.defaultValue.split(":").map(Number);
+            column.defaultValue = createTimeValue(hours, minutes || 0, seconds || 0);
+        }
+        else {
+            column.defaultValue = columnInputs.defaultValue;
+        }
+    }
+    if (columnInputs.columnType === "enum") {
+        column.enumValues = columnInputs.enumValues;
+    }
+    if (column.isForeignKey) {
+        if (columnInputs.referenceTable === "Crie outra tabela" || columnInputs.referenceColumn === "Crie outra coluna") {
+            openNotifications("<p style='color: var(--red5)'>Selecione a tabela e coluna de referência para a chave estrangeira.</p>");
+            return null;
+        }
+        if (databases[currentDatabase].tables[columnInputs.referenceTable].columns[columnInputs.referenceColumn].type !== column.type) {
+            openNotifications("<p style='color: var(--red5)'>O tipo da coluna de referência não corresponde ao tipo da coluna.</p>");
+            return null;
+        }
+        column.reference = {
+            table: columnInputs.referenceTable,
+            column: columnInputs.referenceColumn
+        };
+    }
+    return column;
 }
 /**
  * Mostra ou oculta o painel de detalhe de linha ou coluna.
@@ -1609,6 +1857,9 @@ function createColumnCreationDiv(parent) {
         checkbox.classList.add(char.className);
         checkbox.name = char.name;
         checkbox.onclick = function () { updateCharacteristics(mainDiv); };
+        if (char.name === "default") {
+            checkbox.onclick = function () { updateCharacteristics(mainDiv); updateDefaultInput(mainDiv); };
+        }
         label.appendChild(checkbox);
         label.appendChild(document.createTextNode(char.label));
         characteristics.appendChild(label);
@@ -1804,57 +2055,161 @@ function changeEditColumnsMenu() {
     }
     Object.values(databases[currentDatabase].tables[currentTable].columns).forEach((column) => {
         const mainDiv = document.createElement("div");
-        mainDiv.className = "outlined menu-central-justify-between";
-        const secondaryDiv = document.createElement("div");
-        mainDiv.appendChild(secondaryDiv);
+        mainDiv.className = "outlined";
+        mainDiv.setAttribute("column-name", column.name);
         // Input de nome da coluna
-        const columnNameH3 = document.createElement("h3");
-        columnNameH3.classList.add("text2");
-        columnNameH3.textContent = column.name;
-        secondaryDiv.appendChild(columnNameH3);
+        const columnNameInput = document.createElement("input");
+        columnNameInput.className = "menu-central-input";
+        columnNameInput.type = "text";
+        columnNameInput.placeholder = "Nome da coluna";
+        columnNameInput.value = column.name;
+        mainDiv.appendChild(columnNameInput);
         // Dropdown customizado
-        const columnTypeH4 = document.createElement("h4");
-        columnTypeH4.classList.add("text2");
-        columnTypeH4.textContent = column.type.charAt(0).toUpperCase() + column.type.slice(1);
-        secondaryDiv.appendChild(columnTypeH4);
+        const customDropdown = document.createElement("div");
+        customDropdown.className = "custom-dropdown";
+        const dropdownButton = document.createElement("button");
+        dropdownButton.className = "custom-dropdown-trigger";
+        dropdownButton.textContent = column.type;
+        dropdownButton.onclick = function () { openCustomDropdown(dropdownButton); };
+        const dropdownMenu = document.createElement("ul");
+        dropdownMenu.className = "custom-dropdown-menu";
+        const allowedConversions = {
+            text: ["Text", "Integer", "Float", "Boolean", "Date", "Time"],
+            integer: ["Text", "Integer", "Float", "Boolean", "Date", "Time"],
+            float: ["Text", "Integer", "Float", "Boolean", "Date", "Time"],
+            boolean: ["Text", "Integer", "Float", "Boolean"],
+            date: ["Text", "Integer", "Float", "Date"],
+            time: ["Text", "Integer", "Float", "Time"],
+            enum: ["Enum"]
+        };
+        let options = allowedConversions[column.type];
+        options.forEach((option) => {
+            const li = document.createElement("li");
+            li.className = "custom-dropdown-option";
+            if (option.toLowerCase() === column.type.toLowerCase())
+                li.classList.add("custom-dropdown-option-selected");
+            li.textContent = option;
+            dropdownMenu.appendChild(li);
+        });
+        const hiddenInput = document.createElement("input");
+        hiddenInput.type = "hidden";
+        hiddenInput.name = "column-type";
+        hiddenInput.value = "text";
+        customDropdown.appendChild(dropdownButton);
+        customDropdown.appendChild(dropdownMenu);
+        customDropdown.appendChild(hiddenInput);
+        mainDiv.appendChild(customDropdown);
         // Characteristics
         const characteristics = document.createElement("div");
+        characteristics.className = "flex-wrap-div";
         const characteristicsList = [
-            { key: "isPrimaryKey", label: "Primary key" },
-            { key: "isForeignKey", label: "Foreign key" },
-            { key: "isNotNull", label: "Not null" },
-            { key: "isUnique", label: "Unique" },
-            { key: "hasDefault", label: "Default" },
-            { key: "isAutoIncrement", label: "Auto increment" },
-            { key: "isCurrentTimestamp", label: "Current timestamp" },
-            { key: "isCurrentTimestamp", label: "Current timestamp" }
+            { className: "primary-key", name: "primary-key", label: "Primary key" },
+            { className: "foreign-key", name: "foreign-key", label: "Foreign key" },
+            { className: "not-null", name: "not-null", label: "Not null" },
+            { className: "unique", name: "unique", label: "Unique" },
+            { className: "default", name: "default", label: "Default" },
+            { className: "auto-increment", name: "auto-increment", label: "Auto increment", hidden: true },
+            { className: "auto-date", name: "auto-date", label: "Current timestamp", hidden: true },
+            { className: "auto-time", name: "auto-time", label: "Current timestamp", hidden: true }
         ];
-        const p = document.createElement("p");
-        p.classList.add("text3");
-        p.style.color = "var(--gray6)";
         characteristicsList.forEach((char) => {
-            if (Boolean(column[char.key])) {
-                if (char.key === "isForeignKey") {
-                    p.textContent += "FK → " + column.reference?.table + ", " + column.reference?.column + " • ";
-                }
-                else if (char.key === "isPrimaryKey") {
-                    p.textContent += "PK • ";
-                }
-                else {
-                    p.textContent += char.label.toUpperCase() + " • ";
-                }
-                characteristics.appendChild(p);
+            const label = document.createElement("label");
+            label.classList.add("checkbox-div");
+            if (char.hidden)
+                label.style.display = "none";
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.classList.add(char.className);
+            checkbox.name = char.name;
+            checkbox.onclick = function () { updateCharacteristics(mainDiv); };
+            if (char.name === "default") {
+                checkbox.onclick = function () { updateCharacteristics(mainDiv); updateDefaultInput(mainDiv); };
             }
+            checkbox.checked =
+                (char.className === "primary-key" && column.isPrimaryKey) ||
+                    (char.className === "foreign-key" && column.isForeignKey) ||
+                    (char.className === "not-null" && column.isNotNull) ||
+                    (char.className === "unique" && column.isUnique) ||
+                    (char.className === "default" && column.hasDefault) ||
+                    (char.className === "auto-increment" && column.isAutoIncrement) ||
+                    ((char.className === "auto-date" || char.className === "auto-time") && column.isCurrentTimestamp);
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(char.label));
+            characteristics.appendChild(label);
         });
-        p.textContent = p.textContent.slice(0, -3);
-        secondaryDiv.appendChild(characteristics);
         // Delete column button
         const deleteDiv = document.createElement("div");
         deleteDiv.className = "last-item-flex-wrap-div trash-icon";
         deleteDiv.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>';
-        deleteDiv.onclick = function () { abrirFechar(false, "confirmar-deletar"); changeConfirmDeleteMenu("column", undefined, column.name); };
-        mainDiv.appendChild(deleteDiv);
+        deleteDiv.onclick = function () { deleteColumnCreationDiv(deleteDiv); };
+        characteristics.appendChild(deleteDiv);
+        mainDiv.appendChild(characteristics);
+        // Referência (FK)
+        const referenciaDiv = document.createElement("div");
+        referenciaDiv.classList.add("referencia", "post-characteristics");
+        referenciaDiv.style.display = "none";
+        const referenciaP = document.createElement("p");
+        referenciaP.textContent = "Referência";
+        referenciaDiv.appendChild(referenciaP);
+        // Tabela de referência
+        const refTableCustomDropdown = document.createElement("div");
+        refTableCustomDropdown.className = "custom-dropdown";
+        const refTableButton = document.createElement("button");
+        refTableButton.className = "custom-dropdown-trigger";
+        refTableButton.textContent = "Crie outra tabela";
+        refTableButton.onclick = function () { openCustomDropdown(refTableButton); };
+        const refTableMenu = document.createElement("ul");
+        refTableMenu.className = "custom-dropdown-menu";
+        const refTableHiddenInput = document.createElement("input");
+        refTableHiddenInput.type = "hidden";
+        refTableHiddenInput.name = "reference-table";
+        refTableHiddenInput.value = "text";
+        refTableCustomDropdown.appendChild(refTableButton);
+        refTableCustomDropdown.appendChild(refTableMenu);
+        refTableCustomDropdown.appendChild(refTableHiddenInput);
+        referenciaDiv.appendChild(refTableCustomDropdown);
+        // Coluna de referência
+        const refColumnCustomDropdown = document.createElement("div");
+        refColumnCustomDropdown.className = "custom-dropdown";
+        const refColumnButton = document.createElement("button");
+        refColumnButton.className = "custom-dropdown-trigger";
+        refColumnButton.textContent = "Crie outra coluna";
+        refColumnButton.onclick = function () { openCustomDropdown(refColumnButton); };
+        const refColumnMenu = document.createElement("ul");
+        refColumnMenu.className = "custom-dropdown-menu";
+        const refColumnHiddenInput = document.createElement("input");
+        refColumnHiddenInput.type = "hidden";
+        refColumnHiddenInput.value = "text";
+        refColumnCustomDropdown.appendChild(refColumnButton);
+        refColumnCustomDropdown.appendChild(refColumnMenu);
+        refColumnCustomDropdown.appendChild(refColumnHiddenInput);
+        referenciaDiv.appendChild(refColumnCustomDropdown);
+        mainDiv.appendChild(referenciaDiv);
+        // Default input
+        const defaultDiv = document.createElement("div");
+        defaultDiv.classList.add("default-input-text", "post-characteristics");
+        defaultDiv.style.display = "none";
+        const defaultP = document.createElement("p");
+        defaultP.textContent = "Default";
+        defaultDiv.appendChild(defaultP);
+        mainDiv.appendChild(defaultDiv);
+        updateDefaultInput(mainDiv, column.defaultValue);
+        // Enum values input
+        const enumDiv = document.createElement("div");
+        enumDiv.classList.add("enum-values", "post-characteristics");
+        enumDiv.style.display = "none";
+        const enumP = document.createElement("p");
+        enumP.textContent = "Valores do enum (separados por vírgula)";
+        enumDiv.appendChild(enumP);
+        const enumInput = document.createElement("input");
+        enumInput.type = "text";
+        enumInput.placeholder = "Valores separados por vírgula";
+        enumInput.classList.add("menu-central-input");
+        enumInput.value = column.enumValues ? column.enumValues.join(", ") : "";
+        enumDiv.appendChild(enumInput);
+        mainDiv.appendChild(enumDiv);
         menu.appendChild(mainDiv);
+        updateCharacteristics(mainDiv);
         updateCustomDropdowns();
     });
     const criacaoColunasEdit = document.getElementById("criacao-colunas-edit");
@@ -2325,7 +2680,6 @@ function updateCharacteristics(parentDiv) {
     const typeDropdown = parentDiv.querySelector(".custom-dropdown button");
     const autoIncLabel = autoIncInput.parentElement;
     const currentTimestampLabel = currentTimestampInput.parentElement;
-    const defaultLabel = defaultInput.parentElement;
     const state = {
         pk: pkInput.checked,
         fk: fkInput.checked,
@@ -2338,25 +2692,24 @@ function updateCharacteristics(parentDiv) {
     };
     const forcedTrue = {
         notNull: state.pk || state.autoIncrement,
-        unique: state.autoIncrement
+        unique: state.autoIncrement || state.pk,
     };
     const forcedFalse = {
         fk: state.autoIncrement || state.currentTimestamp || state.currentTimestamp,
-        default: state.autoIncrement || state.currentTimestamp || state.currentTimestamp || state.type === "boolean",
+        default: state.autoIncrement || state.currentTimestamp || state.currentTimestamp,
         autoIncrement: state.fk || state.default || state.type !== "integer",
         currentTimestamp: state.fk || state.default || state.type !== "date" && state.type !== "time",
     };
     const hidden = {
         autoIncrement: state.type !== "integer",
         currentTimestamp: state.type !== "date" && state.type !== "time",
-        default: state.type === "boolean",
     };
     const disabled = {
         notNull: state.pk || state.autoIncrement,
-        unique: state.autoIncrement,
+        unique: state.autoIncrement || state.pk,
         autoIncrement: state.fk || state.default || state.type !== "integer",
         currentTimestamp: state.fk || state.default || state.type !== "date" && state.type !== "time",
-        default: state.autoIncrement || state.currentTimestamp || state.currentTimestamp || state.type === "boolean",
+        default: state.autoIncrement || state.currentTimestamp || state.currentTimestamp,
         fk: state.autoIncrement || state.currentTimestamp || state.currentTimestamp
     };
     // NOT NULL
@@ -2373,14 +2726,11 @@ function updateCharacteristics(parentDiv) {
     currentTimestampLabel.style.display = hidden.currentTimestamp ? "none" : "flex";
     currentTimestampInput.checked = state.currentTimestamp && !forcedFalse.currentTimestamp;
     currentTimestampInput.disabled = disabled.currentTimestamp;
-    // AUTO TIME
-    currentTimestampLabel.style.display = hidden.currentTimestamp ? "none" : "flex";
-    currentTimestampInput.checked = state.currentTimestamp && !forcedFalse.currentTimestamp;
-    currentTimestampInput.disabled = disabled.currentTimestamp;
     // DEFAULT
     defaultInput.disabled = disabled.default;
     defaultInput.checked = state.default && !forcedFalse.default;
-    defaultLabel.style.display = hidden.default ? "none" : "flex";
+    const defaultDiv = parentDiv.querySelector("div.default-input-text");
+    defaultDiv.style.display = state.default ? "block" : "none";
     // FK
     fkInput.disabled = disabled.fk;
     fkInput.checked = state.fk && !forcedFalse.fk;
@@ -2389,9 +2739,6 @@ function updateCharacteristics(parentDiv) {
     referenciaDiv.style.display = fkInput.checked ? "block" : "none";
     updateForeignKeyReferenceTableOptions(parentDiv);
     updateForeignKeyReferenceColumnOptions(parentDiv);
-    // DEFAULT
-    const defaultDiv = parentDiv.querySelector("div.default-input-text");
-    defaultDiv.style.display = state.default ? "block" : "none";
     // ENUM
     const enumDiv = parentDiv.querySelector("div.enum-values");
     enumDiv.style.display = state.type === "enum" ? "block" : "none";
@@ -2400,19 +2747,20 @@ function updateCharacteristics(parentDiv) {
  * Troca o tipo do campo de valor padrão conforme o tipo da coluna.
  * @param parentDiv - Container do bloco de criação/edição da coluna.
  */
-function updateDefaultInput(parentDiv) {
+function updateDefaultInput(parentDiv, initialValue) {
     const type = parentDiv.querySelector(".custom-dropdown button").textContent.toLowerCase();
     if (type == "boolean") {
         const defaultDiv = parentDiv.querySelector("div.default-input-text");
+        const isTrue = initialValue !== undefined && initialValue !== null && String(initialValue).toLowerCase() === "true";
         defaultDiv.innerHTML = `
         <p>Default</p>
         <div class="custom-dropdown">
             <button class="custom-dropdown-trigger" onclick="openCustomDropdown(this)">
-                False
+                ${isTrue ? "True" : "False"}
             </button>
             <ul class="custom-dropdown-menu">
-                <li class="custom-dropdown-option custom-dropdown-option-selected">False</li>
-                <li class="custom-dropdown-option">True</li>
+                <li class="custom-dropdown-option ${isTrue ? "" : "custom-dropdown-option-selected"}">False</li>
+                <li class="custom-dropdown-option ${isTrue ? "custom-dropdown-option-selected" : ""}">True</li>
             </ul>
             <input type="hidden" value="text">
         </div>
@@ -2444,6 +2792,10 @@ function updateDefaultInput(parentDiv) {
         <p>Default</p>
         <input class="menu-central-input" type="text" placeholder="Valor padrão">
         `;
+    }
+    const input = defaultDiv.querySelector("input");
+    if (input && initialValue !== undefined && initialValue !== null) {
+        input.value = String(initialValue);
     }
 }
 /**
@@ -2620,6 +2972,7 @@ createColumnCreationDiv(document.getElementById("criacao-colunas-edit"));
 // -Aba de ajuda
 // -Permitir sincronização com banco real
 // -Implementar rename column no terminal
+// -ver () dentro de strings no insert
 // #region SQL namespace
 /**
  * Processa comandos SQL digitados no terminal.
@@ -2893,7 +3246,6 @@ var SQL;
             this.fullCommand = fullCommand;
             this.tokens = tokens;
         }
-        // ver () dentro de strings
         insert() {
             const t = this.tokens;
             if (currentDatabase === null) {
