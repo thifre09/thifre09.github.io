@@ -16,6 +16,10 @@ function updateInterfaceTerminalIndicator(activeButton) {
     interfaceTerminal.style.setProperty("--indicator-left", `${left}px`);
     interfaceTerminal.style.setProperty("--indicator-width", `${width}px`);
 }
+/**
+ * Troca a interface visível no painel (gráfica, terminal, logical, save ou help).
+ * @param id - Identificador da interface a ser exibida.
+ */
 function changeTo(id) {
     document.getElementById("interface-grafica").style.display = "none";
     document.getElementById("terminal").style.display = "none";
@@ -125,40 +129,6 @@ function createTimeValue(hours, minutes = 0, seconds = 0) {
     return d;
 }
 /**
- * Verifica se um valor já existe no índice de UNIQUE da coluna.
- * @param table - Tabela alvo.
- * @param columnName - Nome da coluna.
- * @param value - Valor candidato.
- * @param ignoredRowIndex - Linha a ser ignorada na comparação, quando aplicável.
- * @returns `true` quando já existe conflito de unicidade.
- */
-function hasUniqueValueConflict(table, columnName, value, ignoredRowIndex) {
-    if (value === null || value === undefined)
-        return false;
-    const indexMap = table.indexes[columnName];
-    if (!indexMap)
-        return false;
-    if (value instanceof Date) {
-        const valueTime = value.getTime();
-        for (const [indexedValue, rowIndexes] of indexMap.entries()) {
-            if (!(indexedValue instanceof Date))
-                continue;
-            if (indexedValue.getTime() !== valueTime)
-                continue;
-            return ignoredRowIndex === undefined
-                ? true
-                : rowIndexes.some((rowIndex) => rowIndex !== ignoredRowIndex);
-        }
-        return false;
-    }
-    const rowIndexes = indexMap.get(value);
-    if (!rowIndexes)
-        return false;
-    return ignoredRowIndex === undefined
-        ? true
-        : rowIndexes.some((rowIndex) => rowIndex !== ignoredRowIndex);
-}
-/**
  * Garante que um valor seja uma instância válida de Date
  * @param value - Valor a ser convertido (Date, string, number ou null)
  * @returns Instância de Date válida ou null
@@ -179,6 +149,11 @@ function ensureDate(value) {
     }
     return null;
 }
+/**
+ * Converte uma string no formato `HH:MM:SS` em um objeto `Date` representando essa hora.
+ * @param value - String a ser convertida (ex.: "08:30:00").
+ * @returns `Date` com a hora definida ou `null` se a string for inválida.
+ */
 function ensureTime(value) {
     if (typeof value !== "string")
         return null;
@@ -695,6 +670,12 @@ class Column {
         }
         return this.incrementCounter++;
     }
+    clone() {
+        const copy = new Column(this.name, this.type, this.isPrimaryKey, this.isForeignKey, this.isNotNull, this.isUnique, this.isAutoIncrement, this.hasDefault, this.isCurrentTimestamp, this.enumValues ? [...this.enumValues] : undefined, this.reference ? { ...this.reference } : undefined);
+        copy.incrementCounter = this.incrementCounter;
+        copy.defaultValue = this.defaultValue;
+        return copy;
+    }
 }
 /**
  * Guarda o histórico e o estado de uma sessão do terminal SQL.
@@ -967,6 +948,13 @@ class SGBDFunctions {
         saveToLocalStorage();
     }
     static alterColumn(tableName, oldColumnName, newColumn) {
+        /**
+         * Converte um valor de célula para o tipo de coluna informado.
+         * Usado ao alterar o tipo de uma coluna existente para adaptar os valores já presentes.
+         * @param value - Valor atual da célula.
+         * @param newType - Tipo de coluna destino.
+         * @returns Valor convertido apropriado para `newType` ou o valor original quando não aplicável.
+         */
         function convertRowValue(value, newType) {
             if (value === null || value === undefined)
                 return value;
@@ -995,6 +983,12 @@ class SGBDFunctions {
         if (JSON.stringify(oldColumn) === JSON.stringify(newColumn))
             return;
         newColumn.incrementCounter = oldColumn.incrementCounter;
+        if (!oldColumn.isAutoIncrement && newColumn.isAutoIncrement) {
+            newColumn.incrementCounter = table.rows.reduce((max, row) => {
+                const value = Number(row[oldColumnName]);
+                return Number.isFinite(value) ? Math.max(max, value) : max;
+            }, 0) + 1;
+        }
         if (oldColumnName !== newColumn.name) {
             for (const row of table.rows) {
                 row[newColumn.name] = row[oldColumnName];
@@ -1115,6 +1109,12 @@ function addColumnsInterface() {
     if (columnsToAdd === null)
         return;
     for (const column of columnsToAdd) {
+        if (column.isNotNull && !column.hasDefault && !column.isAutoIncrement && !column.isCurrentTimestamp) {
+            openNotifications(`<p style='color: var(--red5)'>Não é possível adicionar a coluna "${column.name}" com NOT NULL sem valor padrão.</p>`);
+            return;
+        }
+    }
+    for (const column of columnsToAdd) {
         const columnName = column.name;
         if (column.isAutoIncrement) {
             table.rows.forEach((row) => {
@@ -1136,7 +1136,7 @@ function addColumnsInterface() {
                 table.indexes[columnName].set(value, (table.indexes[columnName].get(value) || []).concat(index));
             });
         }
-        else if (column.isCurrentTimestamp || column.isCurrentTimestamp) {
+        else if (column.isCurrentTimestamp) {
             table.rows.forEach((row) => {
                 row[columnName] = new Date();
             });
@@ -1194,20 +1194,24 @@ function insertRowInterface() {
         }
         if (table.columns[columnName].type === "boolean") {
             const value = column.querySelector(".custom-dropdown button").textContent;
-            const booleanValue = value === "True";
-            if (table.columns[columnName].isUnique && hasUniqueValueConflict(table, columnName, booleanValue)) {
+            if (table.columns[columnName].isUnique && table.indexes[columnName].has(value === "True")) {
                 openNotifications(`<p style='color: var(--red5)'>O valor "${value}" já existe para a coluna "${columnName}".</p>`);
                 table.revertAutoIncrementValues(valuesBeforeIncrement);
                 return;
             }
-            row[columnName] = booleanValue;
+            row[columnName] = value === "True";
             continue;
         }
-        if (table.columns[columnName].isCurrentTimestamp || table.columns[columnName].isCurrentTimestamp) {
+        if (table.columns[columnName].isCurrentTimestamp) {
             row[columnName] = new Date();
             continue;
         }
         const input = column.querySelector("input");
+        if (table.columns[columnName].isUnique && table.indexes[columnName].has(input.value)) {
+            openNotifications(`<p style='color: var(--red5)'>O valor "${input.value}" já existe para a coluna "${columnName}".</p>`);
+            table.revertAutoIncrementValues(valuesBeforeIncrement);
+            return;
+        }
         if (input.value.trim() === "") {
             if (table.columns[columnName].isNotNull) {
                 openNotifications(`<p style='color: var(--red5)'>A coluna "${columnName}" não pode ser nula.</p>`);
@@ -1242,11 +1246,6 @@ function insertRowInterface() {
         }
         else {
             row[columnName] = input.value;
-        }
-        if (table.columns[columnName].isUnique && hasUniqueValueConflict(table, columnName, row[columnName])) {
-            openNotifications(`<p style='color: var(--red5)'>O valor "${input.value}" já existe para a coluna "${columnName}".</p>`);
-            table.revertAutoIncrementValues(valuesBeforeIncrement);
-            return;
         }
     }
     SGBDFunctions.insertRow(currentTable, row);
@@ -1274,19 +1273,18 @@ function editRowInterface(rowIndex) {
         }
         if (table.columns[columnName].type === "boolean") {
             const value = column.querySelector(".custom-dropdown button").textContent;
-            const booleanValue = value === "True";
-            if (table.columns[columnName].isUnique && hasUniqueValueConflict(table, columnName, booleanValue, rowIndex)) {
-                if (booleanValue !== table.rows[rowIndex][columnName]) {
+            if (table.columns[columnName].isUnique && table.indexes[columnName].has(value === "True")) {
+                if (value === "True" && table.rows[rowIndex][columnName] !== true) {
                     openNotifications(`<p style='color: var(--red5)'>O valor "${value}" já existe para a coluna "${columnName}".</p>`);
                     return;
                 }
             }
-            row[columnName] = booleanValue;
+            row[columnName] = value === "True";
             continue;
         }
         if (table.columns[columnName].type === "enum") {
             const value = column.querySelector(".custom-dropdown button").textContent.trim();
-            if (table.columns[columnName].isUnique && hasUniqueValueConflict(table, columnName, value, rowIndex)) {
+            if (table.columns[columnName].isUnique && table.indexes[columnName].has(value)) {
                 if (value !== table.rows[rowIndex][columnName]) {
                     openNotifications(`<p style='color: var(--red5)'>O valor "${value}" já existe para a coluna "${columnName}".</p>`);
                     return;
@@ -1295,11 +1293,17 @@ function editRowInterface(rowIndex) {
             row[columnName] = value;
             continue;
         }
-        if (table.columns[columnName].isCurrentTimestamp || table.columns[columnName].isCurrentTimestamp) {
+        if (table.columns[columnName].isCurrentTimestamp) {
             row[columnName] = new Date();
             continue;
         }
         const input = column.querySelector("input");
+        if (table.columns[columnName].isUnique && table.indexes[columnName].has(input.value)) {
+            if (input.value !== table.rows[rowIndex][columnName]) {
+                openNotifications(`<p style='color: var(--red5)'>O valor "${input.value}" já existe para a coluna "${columnName}".</p>`);
+                return;
+            }
+        }
         if (input.value.trim() === "") {
             if (table.columns[columnName].isNotNull) {
                 openNotifications(`<p style='color: var(--red5)'>A coluna "${columnName}" não pode ser nula.</p>`);
@@ -1333,10 +1337,6 @@ function editRowInterface(rowIndex) {
         }
         else {
             row[columnName] = input.value;
-        }
-        if (table.columns[columnName].isUnique && hasUniqueValueConflict(table, columnName, row[columnName], rowIndex)) {
-            openNotifications(`<p style='color: var(--red5)'>O valor "${input.value}" já existe para a coluna "${columnName}".</p>`);
-            return;
         }
     }
     SGBDFunctions.editRow(currentTable, rowIndex, row);
@@ -2141,7 +2141,10 @@ function changeEditColumnsMenu() {
         const deleteDiv = document.createElement("div");
         deleteDiv.className = "last-item-flex-wrap-div trash-icon";
         deleteDiv.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>';
-        deleteDiv.onclick = function () { deleteColumnCreationDiv(deleteDiv); };
+        deleteDiv.onclick = function () {
+            abrirFechar(false, 'confirmar-deletar');
+            changeConfirmDeleteMenu('column', undefined, column.name);
+        };
         characteristics.appendChild(deleteDiv);
         mainDiv.appendChild(characteristics);
         // Referência (FK)
@@ -2900,79 +2903,7 @@ function createTerminalSession() {
     };
     sessionDiv.appendChild(closeButton);
 }
-createTerminalSession();
-commandTextarea.addEventListener("input", () => {
-    commandTextarea.style.height = "auto";
-    commandTextarea.style.height = commandTextarea.scrollHeight + "px";
-});
-commandTextarea.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" && !event.shiftKey) {
-        event.preventDefault(); // impede quebra de linha
-        executeCommand();
-        commandTextarea.value = "";
-        commandTextarea.style.height = "auto";
-        commandTextarea.style.height = commandTextarea.scrollHeight + "px";
-    }
-    if (event.key === "ArrowUp") {
-        const session = getCurrentTerminalSession();
-        if (session.history.length === 0)
-            return;
-        if (TerminalSession.historyIndex === session.history.length)
-            return;
-        event.preventDefault();
-        TerminalSession.historyIndex++;
-        commandTextarea.value = session.history[session.history.length - TerminalSession.historyIndex].command;
-        commandTextarea.style.height = "auto";
-        commandTextarea.style.height = commandTextarea.scrollHeight + "px";
-    }
-    else if (event.key === "ArrowDown") {
-        const session = getCurrentTerminalSession();
-        if (session.history.length === 0)
-            return;
-        if (TerminalSession.historyIndex === 0)
-            return;
-        if (TerminalSession.historyIndex === 1) {
-            commandTextarea.value = "";
-            TerminalSession.historyIndex = 0;
-            commandTextarea.style.height = "auto";
-            commandTextarea.style.height = commandTextarea.scrollHeight + "px";
-            event.preventDefault();
-            return;
-        }
-        TerminalSession.historyIndex--;
-        commandTextarea.value = session.history[session.history.length - TerminalSession.historyIndex].command;
-        commandTextarea.style.height = "auto";
-        commandTextarea.style.height = commandTextarea.scrollHeight + "px";
-        event.preventDefault();
-    }
-    else {
-        TerminalSession.historyIndex = 0;
-    }
-});
 // #endregion
-document.addEventListener("click", closeAllCustomDropdowns);
-document.getElementById("menus-centrais").addEventListener("click", (event) => {
-    if (event.target !== event.currentTarget)
-        return;
-    document.querySelectorAll("#menus-centrais > div").forEach((m) => {
-        const menu = m;
-        menu.style.display = "none";
-    });
-    document.getElementById("menus-centrais").style.display = "none";
-});
-createExempleDatabase();
-createColumnCreationDiv(document.querySelector("#criacao-tabela ul"));
-createColumnCreationDiv(document.getElementById("criacao-colunas-edit"));
-// To Do
-// -Pesquisar(Dashboard)
-// -Editar colunas (Dashboard)
-// -Terminal
-// -Salvar e carregar em SQL
-// -Modelo lógico (diagrama de entidade relacionamento)
-// -Aba de ajuda
-// -Permitir sincronização com banco real
-// -Implementar rename column no terminal
-// -ver () dentro de strings no insert
 // #region SQL namespace
 /**
  * Processa comandos SQL digitados no terminal.
@@ -3135,7 +3066,9 @@ var SQL;
                     getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma coluna com o nome "${newName}" na tabela "${this.tokens[2]}"`], "error");
                     return;
                 }
-                // SGBDFunctions.renameColumn(this.tokens[2], columnName, newName);
+                const newColumn = databases[currentDatabase].tables[this.tokens[2]].columns[columnName].clone();
+                newColumn.name = newName;
+                SGBDFunctions.alterColumn(this.tokens[2], columnName, newColumn);
             }
             else {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
@@ -3966,15 +3899,27 @@ var SQL;
 })(SQL || (SQL = {}));
 // #endregion
 // #region save and load
+/**
+ * Marca visualmente a ação de salvar/carregar selecionada pela UI.
+ * @param div - Elemento que representa a ação clicada.
+ */
 function selectAction(div) {
     document.querySelector(".acao-escolhida")?.classList.remove("acao-escolhida");
     div.classList.add("acao-escolhida");
 }
+/**
+ * Marca visualmente a opção (local/json/sql) selecionada pela UI.
+ * @param div - Elemento que representa a opção clicada.
+ */
 function selectOption(div) {
     document.querySelector(".opcao-escolhida")?.classList.remove("opcao-escolhida");
     div.classList.add("opcao-escolhida");
 }
 let timeoutSaveOrLoad;
+/**
+ * Executa a ação de salvar ou carregar baseada nas seleções atuais na interface.
+ * Decide entre salvar/carregar localmente, em JSON ou em SQL.
+ */
 function confirmSaveOrLoad() {
     const selectedAction = document.querySelector(".acao-escolhida");
     const selectedOption = document.querySelector(".opcao-escolhida");
@@ -4018,9 +3963,15 @@ function confirmSaveOrLoad() {
         }, 3000);
     }
 }
+/**
+ * Persiste o estado atual de `databases` no `localStorage` do navegador.
+ */
 function saveToLocalStorage() {
     localStorage.setItem("databases", JSON.stringify(databases));
 }
+/**
+ * Restaura o estado de `databases` a partir do `localStorage`, reconstruindo objetos em memória.
+ */
 function loadFromLocalStorage() {
     const databasesJson = localStorage.getItem("databases");
     if (!databasesJson)
@@ -4067,6 +4018,9 @@ function loadFromLocalStorage() {
         currentTable = null;
     refreshUI();
 }
+/**
+ * Gera e inicia o download de um arquivo JSON contendo o estado atual de `databases`.
+ */
 function saveToJson() {
     const data = {
         databases
@@ -4080,6 +4034,10 @@ function saveToJson() {
     a.click();
     URL.revokeObjectURL(url);
 }
+/**
+ * Abre um seletor de arquivo para carregar um arquivo JSON com o estado das databases
+ * e aplica os dados carregados ao estado em memória.
+ */
 function loadFromJson() {
     const input = document.createElement("input");
     input.type = "file";
@@ -4152,9 +4110,15 @@ function loadFromJson() {
     };
     input.click();
 }
+/**
+ * Exporta os dados atuais para SQL (não implementado atualmente).
+ */
 function saveToSql() {
     alert("Função de exportação para SQL ainda não implementada.");
 }
+/**
+ * Importa dados a partir de um arquivo SQL (não implementado atualmente).
+ */
 function loadFromSql() {
     alert("Função de importação de SQL ainda não implementada.");
 }
@@ -4162,3 +4126,96 @@ document.addEventListener("DOMContentLoaded", () => {
     loadFromLocalStorage();
 });
 // #endregion
+// #region help
+function createHelpButtons() {
+    const helpButtons = document.querySelectorAll("#help-left > div");
+    helpButtons.forEach((button, index) => {
+        button.addEventListener("click", () => showHelp(index));
+    });
+}
+function showHelp(index) {
+    const helpRight = document.getElementById("help-right");
+    const helpButtons = document.querySelectorAll("#help-left > div");
+    const helpLeft = document.getElementById("help-left");
+    for (let i = 0; i < helpButtons.length; i++) {
+        const child = helpRight.children[i];
+        child.style.display = (i === index) ? "block" : "none";
+    }
+    helpLeft.querySelector(".help-active")?.classList.remove("help-active");
+    helpButtons[index].classList.add("help-active");
+}
+showHelp(1);
+// #endregion
+createTerminalSession();
+commandTextarea.addEventListener("input", () => {
+    commandTextarea.style.height = "auto";
+    commandTextarea.style.height = commandTextarea.scrollHeight + "px";
+});
+commandTextarea.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault(); // impede quebra de linha
+        executeCommand();
+        commandTextarea.value = "";
+        commandTextarea.style.height = "auto";
+        commandTextarea.style.height = commandTextarea.scrollHeight + "px";
+    }
+    if (event.key === "ArrowUp") {
+        const session = getCurrentTerminalSession();
+        if (session.history.length === 0)
+            return;
+        if (TerminalSession.historyIndex === session.history.length)
+            return;
+        event.preventDefault();
+        TerminalSession.historyIndex++;
+        commandTextarea.value = session.history[session.history.length - TerminalSession.historyIndex].command;
+        commandTextarea.style.height = "auto";
+        commandTextarea.style.height = commandTextarea.scrollHeight + "px";
+    }
+    else if (event.key === "ArrowDown") {
+        const session = getCurrentTerminalSession();
+        if (session.history.length === 0)
+            return;
+        if (TerminalSession.historyIndex === 0)
+            return;
+        if (TerminalSession.historyIndex === 1) {
+            commandTextarea.value = "";
+            TerminalSession.historyIndex = 0;
+            commandTextarea.style.height = "auto";
+            commandTextarea.style.height = commandTextarea.scrollHeight + "px";
+            event.preventDefault();
+            return;
+        }
+        TerminalSession.historyIndex--;
+        commandTextarea.value = session.history[session.history.length - TerminalSession.historyIndex].command;
+        commandTextarea.style.height = "auto";
+        commandTextarea.style.height = commandTextarea.scrollHeight + "px";
+        event.preventDefault();
+    }
+    else {
+        TerminalSession.historyIndex = 0;
+    }
+});
+document.addEventListener("click", closeAllCustomDropdowns);
+document.getElementById("menus-centrais").addEventListener("click", (event) => {
+    if (event.target !== event.currentTarget)
+        return;
+    document.querySelectorAll("#menus-centrais > div").forEach((m) => {
+        const menu = m;
+        menu.style.display = "none";
+    });
+    document.getElementById("menus-centrais").style.display = "none";
+});
+createExempleDatabase();
+createColumnCreationDiv(document.querySelector("#criacao-tabela ul"));
+createColumnCreationDiv(document.getElementById("criacao-colunas-edit"));
+createHelpButtons();
+// To Do
+// -Pesquisar(Dashboard)
+// -Editar colunas (Dashboard)
+// -Terminal
+// -Salvar e carregar em SQL
+// -Modelo lógico (diagrama de entidade relacionamento)
+// -Aba de ajuda
+// -Permitir sincronização com banco real
+// -Implementar rename column no terminal
+// -ver () dentro de strings no insert

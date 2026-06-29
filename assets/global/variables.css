@@ -128,11 +128,5 @@
     --fs7: clamp(0.83rem, -0.16vi + 0.87rem, 0.72rem);
     --fs8: clamp(0.75rem, -0.27vi + 0.82rem, 0.58rem);
     
-    
-    
-    
-    
-    
-    
-
+    --z-max: calc(10e100000);
 }

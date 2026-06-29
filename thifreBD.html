@@ -54,7 +54,7 @@
 
         <div class="separador-horizontal"></div>
 
-        <div id="interface-grafica">
+        <div id="interface-grafica" style="display: none;">
             <div id="esquerda">
                 <div id="databases">
                     <div id="database-button">
@@ -315,8 +315,7 @@
                 <input class="menu-central-input" type="text" id="renomear-tabela-input" name="renomear-tabela-input"
                     rows="1" placeholder="Ex: minha_tabela">
                 <button class="large-button" onclick="renameTableInterface()">
-                    <svg height="24px" viewBox="0 -960 960 960" width="24px"
-                        fill="currentColor">
+                    <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
                         <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
                     </svg>
                     Confirmar alterações
@@ -580,7 +579,7 @@
             </div>
         </div>
 
-        <div id="logical">
+        <div id="logical" style="display: none;">
 
         </div>
 
@@ -662,7 +661,287 @@
         </div>
 
         <div id="help">
+            <section id="help-left">
+                <p>Como usar</p>
+                <div>Introdução</div>
+                <div>Dashboard</div>
+                <div>Terminal</div>
+                <div>Salvar</div>
+                <p>Especificações</p>
+                <div>Tipos de dados</div>
+                <div>Restrições</div>
+                <div>Comandos</div>
+                <div>Erros comuns</div>
+            </section>
+            <div class="separador-vertical"></div>
+            <section id="help-right">
+                <div style="display: none;">
+                    <h1>Introdução</h1>
 
+                    <p>Bem-vindo ao ThifreBD, um sistema de gerenciamento de banco de dados relacional (SGBD) que
+                        permite criar, gerenciar e consultar bancos de dados de forma intuitiva e eficiente. Com o
+                        ThifreBD, você pode criar tabelas, inserir dados, realizar consultas SQL.</p>
+                    <p>Há 2 formas de usar o ThifreBD: o dashboard e o terminal.</p>
+
+                    <div class="help-flex-divs" style="--size: 47%">
+                        <div class="help-box">
+                            <div class="help-icon-text">
+                                <svg viewBox="0 -960 960 960" fill="currentColor"
+                                    style="--cor-fundo: var(--blue9); --cor-borda: var(--blue4); --cor-icone: var(--blue4)">
+                                    <path
+                                        d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h240v-560H200v560Zm320 0h240v-280H520v280Zm0-360h240v-200H520v200Z" />
+                                </svg>
+                                <h2>Dashboard (Interface Gráfica)</h2>
+                            </div>
+                            <p>A interface gráfica permite que você crie e gerencie bancos de dados de forma visual e
+                                intuitiva.</p>
+                            <ul style="--cor-primaria: var(--blue4)">
+                                <li>
+                                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                                        <path
+                                            d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                                    </svg>
+                                    Ideal para quem prefere interação visual
+                                </li>
+                                <li>
+                                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                                        <path
+                                            d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                                    </svg>
+                                    Visualização intuitiva dos dados
+                                </li>
+                                <li>
+                                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                                        <path
+                                            d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                                    </svg>
+                                    Sem necessidade de escrever código SQL
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="help-box">
+                            <div class="help-icon-text">
+                                <svg viewBox="0 -960 960 960" fill="currentColor"
+                                    style="--cor-fundo: var(--green9); --cor-borda: var(--green4); --cor-icone: var(--green4)">
+                                    <path
+                                        d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H160v400Zm140-40-56-56 103-104-104-104 57-56 160 160-160 160Zm180 0v-80h240v80H480Z" />
+                                </svg>
+                                <h2>Terminal (SQL)</h2>
+                            </div>
+                            <p>O terminal permite que você execute comandos SQL diretamente para interagir com o banco
+                                de dados.</p>
+                            <ul style="--cor-primaria: var(--green4)">
+                                <li>
+                                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                                        <path
+                                            d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                                    </svg>
+                                    Ideal para quem prefere trabalhar com comandos SQL
+                                </li>
+                                <li>
+                                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                                        <path
+                                            d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                                    </svg>
+                                    Mais rápido para usuários experientes
+                                </li>
+                                <li>
+                                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                                        <path
+                                            d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                                    </svg>
+                                    Consultas e manipulação de dados mais avançadas
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="help-box">
+                        <div class="help-icon-text">
+                            <svg viewBox="0 -960 960 960" fill="currentcolor">
+                                <path
+                                    d="m40-120 440-760 440 760H40Zm138-80h604L480-720 178-200Zm330.5-51.5Q520-263 520-280t-11.5-28.5Q497-320 480-320t-28.5 11.5Q440-297 440-280t11.5 28.5Q463-240 480-240t28.5-11.5ZM440-360h80v-200h-80v200Zm40-100Z" />
+                            </svg>
+                            <p>Importante</p>
+                        </div>
+                        Nas 2 formas, os dados são os mesmos. Então alterar algo no dashboard também afetará os dados no
+                        terminal, e vice-versa. Por isso, é possível trabalhar com ambos os métodos simultaneamente.
+                    </div>
+
+                    <hr>
+
+                    <h2>Como funciona</h2>
+
+                    <div class="help-flex-divs" style="--size: 22%">
+                        <div class="help-box">
+                            <div class="help-icon-text" style="--cor-icone: var(--blue4)">
+                                <svg viewBox="0 -960 960 960" fill="currentColor">
+                                    <path
+                                        d="M480-120q-151 0-255.5-46.5T120-280v-400q0-66 105.5-113T480-840q149 0 254.5 47T840-680v400q0 67-104.5 113.5T480-120Zm0-479q89 0 179-25.5T760-679q-11-29-100.5-55T480-760q-91 0-178.5 25.5T200-679q14 30 101.5 55T480-599Zm0 199q42 0 81-4t74.5-11.5q35.5-7.5 67-18.5t57.5-25v-120q-26 14-57.5 25t-67 18.5Q600-528 561-524t-81 4q-42 0-82-4t-75.5-11.5Q287-543 256-554t-56-25v120q25 14 56 25t66.5 18.5Q358-408 398-404t82 4Zm0 200q46 0 93.5-7t87.5-18.5q40-11.5 67-26t32-29.5v-98q-26 14-57.5 25t-67 18.5Q600-328 561-324t-81 4q-42 0-82-4t-75.5-11.5Q287-343 256-354t-56-25v99q5 15 31.5 29t66.5 25.5q40 11.5 88 18.5t94 7Z" />
+                                </svg>
+
+                                <h3>Database</h3>
+                            </div>
+                            <p>Contém um conjunto de tabelas</p>
+                        </div>
+                        <div class="help-box">
+                            <div class="help-icon-text" style="--cor-icone: var(--green4)">
+                                <svg viewBox="0 -960 960 960" fill="currentColor">
+                                    <path
+                                        d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm240-240H200v160h240v-160Zm80 0v160h240v-160H520Zm-80-80v-160H200v160h240Zm80 0h240v-160H520v160ZM200-680h560v-80H200v80Z" />
+                                </svg>
+                                <h3>Tabela</h3>
+                            </div>
+                            <p>Contém um conjunto de colunas e linhas</p>
+                        </div>
+                        <div class="help-box">
+                            <div class="help-icon-text" style="--cor-icone: var(--red4)">
+                                <svg viewBox="0 -960 960 960" fill="currentColor">
+                                    <path
+                                        d="M121-280v-400q0-33 23.5-56.5T201-760h559q33 0 56.5 23.5T840-680v400q0 33-23.5 56.5T760-200H201q-33 0-56.5-23.5T121-280Zm79 0h133v-400H200v400Zm213 0h133v-400H413v400Zm213 0h133v-400H626v400Z" />
+                                </svg>
+                                <h3>Coluna</h3>
+                            </div>
+                            <p>Representa uma característica ou atributo da tabela</p>
+                        </div>
+                        <div class="help-box">
+                            <div class="help-icon-text" style="--cor-icone: var(--yellow4)">
+                                <svg viewBox="0 -960 960 960" fill="currentColor">
+                                    <path
+                                        d="M760-200v-120H200v120h560Zm0-200v-160H200v160h560Zm0-240v-120H200v120h560ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Z" />
+                                </svg>
+                                <h3>Linha</h3>
+                            </div>
+                            <p>Representa um registro ou instância da tabela</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div style="display: none;">
+                    <h1>Dashboard</h1>
+
+                    <p>O dashboard permite usar o sistema através de uma interface gráfica intuitiva, sem que sejam
+                        necessários conhecimentos de SQL</p>
+
+                    <hr>
+
+                    <h2>Lado esquerdo</h2>
+                    <div class="help-flex-divs" style="--size: 70%;">
+                        <img src="assets/images/thifreBD/dashboard-left.png" alt="Visão da esquerda do dashboard"
+                            style="--width: 22%; --border-color: var(--gray4);">
+                        <div class="help-box">
+                            <p>Na esquerda, é possível criar uma nova database e uma tabela.</p>
+                            <p>Para criar uma nova database, basta clicar no botão de + do lado da palavra "Database".
+                            </p>
+                            <p>Para criar uma nova tabela, selecione uma database existente e clique no botão de + do
+                                lado da palavra "Tabela". Tentar criar tabela sem selecionar uma database não é
+                                permitido.</p>
+                            <p>Para editar uma database existente, clique no botão de edição ao lado da palavra
+                                "Database".</p>
+                            <p>Para mudar a database ativa, clique no dropdown de databases, que possui o nome da
+                                database selecionada. Caso nenhuma database esteja selecionada, o dropdown mostrará
+                                "Selecione uma database". Ao mudar a database, todas as suas tabelas serão exibidas na
+                                parte de tabelas.</p>
+                            <p>Clicar no nome de uma tabela irá selecioná-la e mostrar suas informações na direita.</p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <h2>Lado direito</h2>
+                    <img src="assets/images/thifreBD/dashboard-right1.png" alt="Visão da direita do dashboard"
+                        style="--border-color: var(--gray4)">
+                    <p>Na topo esquerdo, é mostrado o nome da tabela atual, o número de linhas e o número de colunas.
+                    </p>
+                    <p>No topo direito, há 3 botões: um para adicionar uma nova linha, outro para editar a tabela e um
+                        terceiro para fazer uma pesquisa com base na tabela.</p>
+                    <p>Na parte inferior, é possível visualizar o conteúdo da tabela selecionada. A primeira linha
+                        mostra os nomes das colunas e suas características (tipo, chave primária, etc.).</p>
+                    <p>Ao clicar em "editar tabela", o seguinte menu será exibido:</p>
+
+                    <div class="help-flex-divs" style="--size: 47%">
+                        <img src="assets/images/thifreBD/edit-table-menu.png" alt="Menu de edição da tabela"
+                            style="--border-color: var(--gray4)">
+
+                        <div class="help-box">
+                            <p>O primeiro botão permite mudar o nome da tabela, basta alterar o nome, e clicar em
+                                "Confirmar alterações".</p>
+                            <p>O segundo botão permite modificar as colunas existentes da tabela. O terceiro botão
+                                permite adicionar novas colunas. E o quarto botão permite excluir a tabela.</p>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div style="display: none;">
+                    <h1>Terminal</h1>
+                </div>
+
+                <div style="display: none;">
+                    <h1>Salvar</h1>
+                </div>
+
+                <div style="display: none;">
+                    <h1>Tipos de dados</h1>
+
+                    <p>Os tipos de dados são utilizados para definir o tipo de valor que pode ser armazenado em uma coluna de uma tabela. Cada tipo de dado tem suas características e limitações específicas.</p>
+
+                    <hr>
+
+                    <h2>Tipos de dados suportados</h2>
+                    <table>
+                        <tr>
+                            <th>Tipo de dado</th>
+                            <th>Descrição</th>
+                            <th>Exemplo</th>
+                        </tr>
+                        <tr>
+                            <td>INT</td>
+                            <td>Armazena números inteiros.</td>
+                            <td>42</td>
+                        </tr>
+                        <tr>
+                            <td>INT</td>
+                            <td>Armazena números inteiros.</td>
+                            <td>42</td>
+                        </tr>
+                        <tr>
+                            <td>INT</td>
+                            <td>Armazena números inteiros.</td>
+                            <td>42</td>
+                        </tr>
+                        <tr>
+                            <td>INT</td>
+                            <td>Armazena números inteiros.</td>
+                            <td>42</td>
+                        </tr>
+                        <tr>
+                            <td>INT</td>
+                            <td>Armazena números inteiros.</td>
+                            <td>42</td>
+                        </tr>
+                        <tr>
+                            <td>INT</td>
+                            <td>Armazena números inteiros.</td>
+                            <td>42</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div style="display: none;">
+                    <h1>Restrições</h1>
+                </div>
+
+                <div style="display: none;">
+                    <h1>Comandos</h1>
+                </div>
+
+                <div style="display: none;">
+                    <h1>Erros comuns</h1>
+                </div>
+            </section>
         </div>
     </div>
 

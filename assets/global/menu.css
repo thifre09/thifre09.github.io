@@ -51,9 +51,6 @@ div#title-div {
     }
 }
 
-
-
-
 nav#barra-main {
     background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet, red);
     background-size: 300% 100%;
@@ -102,12 +99,11 @@ nav#barra-main {
 #botao-menu-lateral-reserva {
     position: fixed;
     margin-left: 10px;
+    z-index: var(--z-max);
 }
 
-
-
 aside#menu-lateral {
-    z-index: 101;
+    z-index: var(--z-max);
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
@@ -175,7 +171,7 @@ div.aside-window {
     top: var(--p5);
     left: var(--p3);
     cursor: default;
-    z-index: 101;
+    z-index: var(--z-max);
     margin: 0;
     padding: 0;
     display: flex;

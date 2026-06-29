@@ -18,6 +18,10 @@ function updateInterfaceTerminalIndicator(activeButton: HTMLElement) {
     interfaceTerminal.style.setProperty("--indicator-width", `${width}px`);
 }
 
+/**
+ * Troca a interface visível no painel (gráfica, terminal, logical, save ou help).
+ * @param id - Identificador da interface a ser exibida.
+ */
 function changeTo(id: "interface-grafica" | "terminal" | "logical" | "save" | "help") {
     document.getElementById("interface-grafica")!.style.display = "none";
     document.getElementById("terminal")!.style.display = "none";
@@ -163,6 +167,11 @@ function ensureDate(value: any): Date | null {
     return null;
 }
 
+/**
+ * Converte uma string no formato `HH:MM:SS` em um objeto `Date` representando essa hora.
+ * @param value - String a ser convertida (ex.: "08:30:00").
+ * @returns `Date` com a hora definida ou `null` se a string for inválida.
+ */
 function ensureTime(value: any): Date | null {
     if (typeof value !== "string") return null;
 
@@ -1011,6 +1020,16 @@ class Column {
         }
         return this.incrementCounter++;
     }
+
+    clone(): Column {
+        const copy = new Column(this.name, this.type, this.isPrimaryKey, this.isForeignKey, this.isNotNull, 
+            this.isUnique, this.isAutoIncrement, this.hasDefault, this.isCurrentTimestamp, 
+            this.enumValues ? [...this.enumValues] : undefined, this.reference ? { ...this.reference } : undefined
+        );
+        copy.incrementCounter = this.incrementCounter;
+        copy.defaultValue = this.defaultValue;
+        return copy;
+    }
 }
 
 /**
@@ -1020,7 +1039,7 @@ class TerminalSession {
     static sessionCount = 1;
     static historyIndex = 0;
     name: string;
-    history: TerminalEntry[];
+    history: ITerminalEntry[];
     active: boolean;
 
     /**
@@ -1345,6 +1364,13 @@ class SGBDFunctions {
     }
 
     static alterColumn(tableName: string, oldColumnName: string, newColumn: Column) {
+        /**
+         * Converte um valor de célula para o tipo de coluna informado.
+         * Usado ao alterar o tipo de uma coluna existente para adaptar os valores já presentes.
+         * @param value - Valor atual da célula.
+         * @param newType - Tipo de coluna destino.
+         * @returns Valor convertido apropriado para `newType` ou o valor original quando não aplicável.
+         */
         function convertRowValue(value: any, newType: columnType): any {
             if (value === null || value === undefined) return value;
 
@@ -1456,7 +1482,7 @@ class SGBDFunctions {
 /**
  * Representa uma entrada registrada no histórico do terminal.
  */
-interface TerminalEntry {
+interface ITerminalEntry {
     database: string | null;
     command: string;
     output: string[];
@@ -1464,7 +1490,7 @@ interface TerminalEntry {
     timestamp: Date;
 }
 
-interface ColumnInputs {
+interface IColumnInputs {
     columnName: string;
     columnType: columnType;
     isPrimaryKey: boolean;
@@ -1548,7 +1574,6 @@ function createTableInterface() {
 
     const table = new Table(tableName);
     const columnsUl = document.querySelector("#criacao-tabela ul")!;
-
     const parsedColumns = parseColumnsFromInputs(columnsUl.children, table.columns);
     if (parsedColumns === null) return;
 
@@ -1579,6 +1604,13 @@ function addColumnsInterface() {
 
     const columnsToAdd = parseColumnsFromInputs(columnsUl.children, table.columns);
     if (columnsToAdd === null) return;
+
+    for (const column of columnsToAdd) {
+        if (column.isNotNull && !column.hasDefault && !column.isAutoIncrement && !column.isCurrentTimestamp) {
+            openNotifications(`<p style='color: var(--red5)'>Não é possível adicionar a coluna "${column.name}" com NOT NULL sem valor padrão.</p>`);
+            return;
+        }
+    }
 
     for (const column of columnsToAdd) {
         const columnName = column.name;
@@ -2104,7 +2136,7 @@ function parseColumnsFromInputs(columns: HTMLCollection, existingColumns: Record
  * @param columnDiv - Bloco de formulário da coluna.
  * @returns Dados brutos da coluna.
  */
-function readColumnInputs(columnDiv: HTMLElement): ColumnInputs {
+function readColumnInputs(columnDiv: HTMLElement): IColumnInputs {
     const columnNameInput = columnDiv.querySelector("input[type='text']") as HTMLInputElement;
     const columnTypeElement = columnDiv.querySelector(".custom-dropdown-trigger") as HTMLElement;
     const isPrimaryKey = columnDiv.querySelector(".primary-key") as HTMLInputElement;
@@ -2144,7 +2176,7 @@ function readColumnInputs(columnDiv: HTMLElement): ColumnInputs {
  * @param knownColumns - Nomes já utilizados no conjunto atual.
  * @returns Instância válida de `Column` ou `null` quando houver erro.
  */
-function buildColumnFromInputs(columnInputs: ColumnInputs, knownColumns: Set<string>): Column | null {
+function buildColumnFromInputs(columnInputs: IColumnInputs, knownColumns: Set<string>): Column | null {
     if (columnInputs.columnName === "") {
         openNotifications("<p style='color: var(--red5)'>O nome da coluna não pode ser vazio.</p>");
         return null;
@@ -2692,7 +2724,10 @@ function changeEditColumnsMenu() {
         const deleteDiv = document.createElement("div");
         deleteDiv.className = "last-item-flex-wrap-div trash-icon";
         deleteDiv.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>';
-        deleteDiv.onclick = function () { deleteColumnCreationDiv(deleteDiv); };
+        deleteDiv.onclick = function () { 
+            abrirFechar(false, 'confirmar-deletar'); 
+            changeConfirmDeleteMenu('column', undefined, column.name); 
+        };
         characteristics.appendChild(deleteDiv);
 
         mainDiv.appendChild(characteristics);
@@ -3534,80 +3569,7 @@ function createTerminalSession() {
     sessionDiv.appendChild(closeButton);
 }
 
-createTerminalSession();
-
-commandTextarea.addEventListener("input", () => {
-    commandTextarea.style.height = "auto";
-    commandTextarea.style.height = commandTextarea.scrollHeight + "px";
-});
-
-commandTextarea.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" && !event.shiftKey) {
-        event.preventDefault(); // impede quebra de linha
-        executeCommand();
-        commandTextarea.value = "";
-        commandTextarea.style.height = "auto";
-        commandTextarea.style.height = commandTextarea.scrollHeight + "px";
-    }
-
-    if (event.key === "ArrowUp") {
-        const session = getCurrentTerminalSession();
-        if (session.history.length === 0) return;
-        if (TerminalSession.historyIndex === session.history.length) return;
-        event.preventDefault();
-        TerminalSession.historyIndex++;
-        commandTextarea.value = session.history[session.history.length - TerminalSession.historyIndex].command;
-        commandTextarea.style.height = "auto";
-        commandTextarea.style.height = commandTextarea.scrollHeight + "px";
-    } else if (event.key === "ArrowDown") {
-        const session = getCurrentTerminalSession();
-        if (session.history.length === 0) return;
-        if (TerminalSession.historyIndex === 0) return;
-        if (TerminalSession.historyIndex === 1) {
-            commandTextarea.value = "";
-            TerminalSession.historyIndex = 0;
-            commandTextarea.style.height = "auto";
-            commandTextarea.style.height = commandTextarea.scrollHeight + "px";
-            event.preventDefault();
-            return;
-        }
-        TerminalSession.historyIndex--;
-        commandTextarea.value = session.history[session.history.length - TerminalSession.historyIndex].command;
-        commandTextarea.style.height = "auto";
-        commandTextarea.style.height = commandTextarea.scrollHeight + "px";
-        event.preventDefault();
-    } else {
-        TerminalSession.historyIndex = 0;
-    }
-});
-
 // #endregion
-
-document.addEventListener("click", closeAllCustomDropdowns);
-document.getElementById("menus-centrais")!.addEventListener("click", (event) => {
-    if (event.target !== event.currentTarget) return;
-
-    document.querySelectorAll("#menus-centrais > div").forEach((m) => {
-        const menu = m as HTMLElement;
-        menu.style.display = "none";
-    });
-    document.getElementById("menus-centrais")!.style.display = "none";
-});
-
-createExempleDatabase();
-createColumnCreationDiv(document.querySelector("#criacao-tabela ul")!);
-createColumnCreationDiv(document.getElementById("criacao-colunas-edit")!);
-
-// To Do
-// -Pesquisar(Dashboard)
-// -Editar colunas (Dashboard)
-// -Terminal
-// -Salvar e carregar em SQL
-// -Modelo lógico (diagrama de entidade relacionamento)
-// -Aba de ajuda
-// -Permitir sincronização com banco real
-// -Implementar rename column no terminal
-// -ver () dentro de strings no insert
 
 // #region SQL namespace
 
@@ -3791,7 +3753,9 @@ namespace SQL {
                     getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma coluna com o nome "${newName}" na tabela "${this.tokens[2]}"`], "error");
                     return;
                 }
-                // SGBDFunctions.renameColumn(this.tokens[2], columnName, newName);
+                const newColumn: Column = databases[currentDatabase!].tables[this.tokens[2]].columns[columnName].clone();
+                newColumn.name = newName;
+                SGBDFunctions.alterColumn(this.tokens[2], columnName, newColumn);
             }
             else {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
@@ -3799,7 +3763,7 @@ namespace SQL {
         }
 
         addColumn() {
-
+            
         }
 
         dropColumn() {
@@ -4716,17 +4680,29 @@ namespace SQL {
 
 // #region save and load
 
+/**
+ * Marca visualmente a ação de salvar/carregar selecionada pela UI.
+ * @param div - Elemento que representa a ação clicada.
+ */
 function selectAction(div: HTMLDivElement) {
     document.querySelector(".acao-escolhida")?.classList.remove("acao-escolhida");
     div.classList.add("acao-escolhida");
 }
 
+/**
+ * Marca visualmente a opção (local/json/sql) selecionada pela UI.
+ * @param div - Elemento que representa a opção clicada.
+ */
 function selectOption(div: HTMLDivElement) {
     document.querySelector(".opcao-escolhida")?.classList.remove("opcao-escolhida");
     div.classList.add("opcao-escolhida");
 }
 
 let timeoutSaveOrLoad: number;
+/**
+ * Executa a ação de salvar ou carregar baseada nas seleções atuais na interface.
+ * Decide entre salvar/carregar localmente, em JSON ou em SQL.
+ */
 function confirmSaveOrLoad() {
     const selectedAction = document.querySelector(".acao-escolhida");
     const selectedOption = document.querySelector(".opcao-escolhida");
@@ -4769,10 +4745,16 @@ function confirmSaveOrLoad() {
     }
 }
 
+/**
+ * Persiste o estado atual de `databases` no `localStorage` do navegador.
+ */
 function saveToLocalStorage() {
     localStorage.setItem("databases", JSON.stringify(databases));
 }
 
+/**
+ * Restaura o estado de `databases` a partir do `localStorage`, reconstruindo objetos em memória.
+ */
 function loadFromLocalStorage() {
     const databasesJson = localStorage.getItem("databases");
 
@@ -4849,6 +4831,9 @@ function loadFromLocalStorage() {
     refreshUI();
 }
 
+/**
+ * Gera e inicia o download de um arquivo JSON contendo o estado atual de `databases`.
+ */
 function saveToJson() {
     const data = {
         databases
@@ -4867,6 +4852,10 @@ function saveToJson() {
     URL.revokeObjectURL(url);
 }
 
+/**
+ * Abre um seletor de arquivo para carregar um arquivo JSON com o estado das databases
+ * e aplica os dados carregados ao estado em memória.
+ */
 function loadFromJson() {
     const input = document.createElement("input");
     input.type = "file";
@@ -4974,10 +4963,16 @@ function loadFromJson() {
     input.click();
 }
 
+/**
+ * Exporta os dados atuais para SQL (não implementado atualmente).
+ */
 function saveToSql() {
     alert("Função de exportação para SQL ainda não implementada.");
 }
 
+/**
+ * Importa dados a partir de um arquivo SQL (não implementado atualmente).
+ */
 function loadFromSql() {
     alert("Função de importação de SQL ainda não implementada.");
 }
@@ -4987,3 +4982,103 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // #endregion
+
+// #region help
+
+function createHelpButtons() {
+    const helpButtons = document.querySelectorAll("#help-left > div");
+    helpButtons.forEach((button, index) => {
+        button.addEventListener("click", () => showHelp(index));
+    });
+}
+
+function showHelp(index: number) {
+    const helpRight = document.getElementById("help-right")!;
+    const helpButtons = document.querySelectorAll("#help-left > div");
+    const helpLeft = document.getElementById("help-left")!;
+    for (let i = 0; i < helpButtons.length; i++) {
+        const child = helpRight.children[i] as HTMLElement;
+        child.style.display = (i === index) ? "block" : "none";
+    }
+    helpLeft.querySelector(".help-active")?.classList.remove("help-active");
+    helpButtons[index].classList.add("help-active");
+}
+
+showHelp(1);
+
+// #endregion
+
+createTerminalSession();
+
+commandTextarea.addEventListener("input", () => {
+    commandTextarea.style.height = "auto";
+    commandTextarea.style.height = commandTextarea.scrollHeight + "px";
+});
+
+commandTextarea.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault(); // impede quebra de linha
+        executeCommand();
+        commandTextarea.value = "";
+        commandTextarea.style.height = "auto";
+        commandTextarea.style.height = commandTextarea.scrollHeight + "px";
+    }
+
+    if (event.key === "ArrowUp") {
+        const session = getCurrentTerminalSession();
+        if (session.history.length === 0) return;
+        if (TerminalSession.historyIndex === session.history.length) return;
+        event.preventDefault();
+        TerminalSession.historyIndex++;
+        commandTextarea.value = session.history[session.history.length - TerminalSession.historyIndex].command;
+        commandTextarea.style.height = "auto";
+        commandTextarea.style.height = commandTextarea.scrollHeight + "px";
+    } else if (event.key === "ArrowDown") {
+        const session = getCurrentTerminalSession();
+        if (session.history.length === 0) return;
+        if (TerminalSession.historyIndex === 0) return;
+        if (TerminalSession.historyIndex === 1) {
+            commandTextarea.value = "";
+            TerminalSession.historyIndex = 0;
+            commandTextarea.style.height = "auto";
+            commandTextarea.style.height = commandTextarea.scrollHeight + "px";
+            event.preventDefault();
+            return;
+        }
+        TerminalSession.historyIndex--;
+        commandTextarea.value = session.history[session.history.length - TerminalSession.historyIndex].command;
+        commandTextarea.style.height = "auto";
+        commandTextarea.style.height = commandTextarea.scrollHeight + "px";
+        event.preventDefault();
+    } else {
+        TerminalSession.historyIndex = 0;
+    }
+});
+
+document.addEventListener("click", closeAllCustomDropdowns);
+document.getElementById("menus-centrais")!.addEventListener("click", (event) => {
+    if (event.target !== event.currentTarget) return;
+
+    document.querySelectorAll("#menus-centrais > div").forEach((m) => {
+        const menu = m as HTMLElement;
+        menu.style.display = "none";
+    });
+    document.getElementById("menus-centrais")!.style.display = "none";
+});
+
+createExempleDatabase();
+createColumnCreationDiv(document.querySelector("#criacao-tabela ul")!);
+createColumnCreationDiv(document.getElementById("criacao-colunas-edit")!);
+
+createHelpButtons();
+
+// To Do
+// -Pesquisar(Dashboard)
+// -Editar colunas (Dashboard)
+// -Terminal
+// -Salvar e carregar em SQL
+// -Modelo lógico (diagrama de entidade relacionamento)
+// -Aba de ajuda
+// -Permitir sincronização com banco real
+// -Implementar rename column no terminal
+// -ver () dentro de strings no insert
