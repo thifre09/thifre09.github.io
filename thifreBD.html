@@ -850,7 +850,7 @@
 
                     <h2>Lado direito</h2>
                     <img src="assets/images/thifreBD/dashboard-right1.png" alt="Visão da direita do dashboard"
-                        style="--border-color: var(--gray4)">
+                        style="--border-color: var(--gray4); --width: 96%;">
                     <p>Na topo esquerdo, é mostrado o nome da tabela atual, o número de linhas e o número de colunas.
                     </p>
                     <p>No topo direito, há 3 botões: um para adicionar uma nova linha, outro para editar a tabela e um
@@ -859,9 +859,9 @@
                         mostra os nomes das colunas e suas características (tipo, chave primária, etc.).</p>
                     <p>Ao clicar em "editar tabela", o seguinte menu será exibido:</p>
 
-                    <div class="help-flex-divs" style="--size: 47%">
+                    <div class="help-flex-divs" style="--size: 46%">
                         <img src="assets/images/thifreBD/edit-table-menu.png" alt="Menu de edição da tabela"
-                            style="--border-color: var(--gray4)">
+                            style="--border-color: var(--gray4); --width: 47%">
 
                         <div class="help-box">
                             <p>O primeiro botão permite mudar o nome da tabela, basta alterar o nome, e clicar em
@@ -897,34 +897,39 @@
                             <th>Exemplo</th>
                         </tr>
                         <tr>
-                            <td>INT</td>
-                            <td>Armazena números inteiros.</td>
-                            <td>42</td>
+                            <td>Text</td>
+                            <td>Armazena texto.</td>
+                            <td>"Olá, mundo!", "batata"</td>
                         </tr>
                         <tr>
-                            <td>INT</td>
+                            <td>Integer</td>
                             <td>Armazena números inteiros.</td>
-                            <td>42</td>
+                            <td>42, -5</td>
                         </tr>
                         <tr>
-                            <td>INT</td>
-                            <td>Armazena números inteiros.</td>
-                            <td>42</td>
+                            <td>Float</td>
+                            <td>Armazena números decimais.</td>
+                            <td>3.14, -2.5</td>
                         </tr>
                         <tr>
-                            <td>INT</td>
-                            <td>Armazena números inteiros.</td>
-                            <td>42</td>
+                            <td>Boolean</td>
+                            <td>Armazena valores lógicos.</td>
+                            <td>true, false</td>
                         </tr>
                         <tr>
-                            <td>INT</td>
-                            <td>Armazena números inteiros.</td>
-                            <td>42</td>
+                            <td>Date</td>
+                            <td>Armazena datas.</td>
+                            <td>"2023-10-01", "1990-05-15"</td>
                         </tr>
                         <tr>
-                            <td>INT</td>
-                            <td>Armazena números inteiros.</td>
-                            <td>42</td>
+                            <td>Time</td>
+                            <td>Armazena horas.</td>
+                            <td>"14:30:00", "09:15:30"</td>
+                        </tr>
+                        <tr>
+                            <td>Enum</td>
+                            <td>Armazena valores pré-definidos.</td>
+                            <td>"vermelho", "azul"</td>
                         </tr>
                     </table>
                 </div>

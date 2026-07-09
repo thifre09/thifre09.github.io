@@ -1482,6 +1482,124 @@ class SGBDFunctions {
     }
 }
 
+
+
+namespace DataTypes {
+    abstract class DataType {
+        abstract readonly name: string;
+        abstract validate(value: any): boolean;
+        abstract parse(value: any): any;
+    }
+
+    class TextType extends DataType {
+        readonly name = "TEXT";
+
+        validate(value: any): boolean {
+            return typeof value === "string";
+        }
+
+        parse(value: any): string {
+            return String(value);
+        }
+    }
+
+    class IntegerType extends DataType {
+        readonly name = "INTEGER";
+
+        validate(value: any): boolean {
+            return typeof value === "number" && Number.isInteger(value);
+        }
+
+        parse(value: any): number {
+            return Number(value);
+        }
+    }
+
+    class FloatType extends DataType {
+        readonly name = "FLOAT";
+
+        validate(value: any): boolean {
+            return typeof value === "number" && !Number.isFinite(value);
+        }
+
+        parse(value: any): number {
+            return Number(value);
+        }
+    }
+
+    class BooleanType extends DataType {
+        readonly name = "BOOLEAN";
+
+        validate(value: any): boolean {
+            return value === true ||
+                value === false ||
+                value === "true" ||
+                value === "false";
+        }
+
+        parse(value: any): boolean | null {
+            if (value === true || value === "true")
+                return true;
+
+            if (value === false || value === "false")
+                return false;
+
+            return null;
+        }
+    }
+
+    class DateType extends DataType {
+        readonly name = "DATE";
+
+        validate(value: any): boolean {
+            return value instanceof Date && !isNaN(value.getTime());
+        }
+
+        parse(value: any): Date {
+            return new Date(value);
+        }
+    }
+
+    class TimeType extends DataType {
+        readonly name = "TIME";
+
+        validate(value: any): boolean {
+            return typeof value === "string" && /^([0-9]{2}:[0-9]{2}:[0-9]{2})$/.test(value);
+        }
+
+        parse(value: any): string {
+            return String(value);
+        }
+    }
+
+    class EnumType extends DataType {
+        readonly name = "ENUM";
+        private readonly allowedValues: string[];
+
+        constructor(allowedValues: string[]) {
+            super();
+            this.allowedValues = allowedValues;
+        }
+
+        validate(value: any): boolean {
+            return typeof value === "string" && this.allowedValues.includes(value);
+        }
+
+        parse(value: any): string {
+            return String(value);
+        }
+
+        getAllowedValues(): string[] {
+            return this.allowedValues;
+        }
+
+        setAllowedValues(newValues: string[]): void {
+            this.allowedValues.length = 0;
+            this.allowedValues.push(...newValues);
+        }
+    }
+}
+
 /**
  * Representa uma entrada registrada no histórico do terminal.
  */
@@ -5107,13 +5225,17 @@ createHelpButtons();
 
 // To Do
 // -Corrigir PK no terminal
+// -Criar um sistema de arquivos
 // -Aba de ajuda
 // -Criar classes para cada tipo
+// -Corrigir Date
 // -AST para comandos SQL
 // -Constraints de integridade
 // -ver () dentro de strings no insert
 // -Terminal
 // -Salvar e carregar em SQL
+// -Salvar e carregar com Banco de dados
 // -Modelo lógico (diagrama de entidade relacionamento)
 // -Pesquisar(Dashboard)
 // -Permitir sincronização com banco real
+// -Adicionar varchar
