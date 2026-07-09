@@ -1323,6 +1323,8 @@ input[type="number"]::-webkit-inner-spin-button {
 
                 svg {
                     width: 20px;
+                    min-width: 20px;
+                    flex: 0 0 20px;
                     aspect-ratio: 1 / 1;
                     margin-right: var(--p3);
                     color: var(--cor-primaria);
@@ -1391,6 +1393,10 @@ input[type="number"]::-webkit-inner-spin-button {
                     background-color: var(--cor-fundo);
                     border: solid 2px var(--cor-borda);
                     color: var(--cor-icone);
+
+                    &.nom {
+                        padding: 0;
+                    }
                 }
 
                 h4 {
@@ -1404,6 +1410,16 @@ input[type="number"]::-webkit-inner-spin-button {
                 background-color: var(--gray14);
                 border: solid 2px var(--gray10);
                 border-radius: 10px;
+
+                >* {
+                    margin: var(--p1);
+                    padding: 0;
+                }
+            }
+
+            .nom {
+                padding: 0;
+                margin: 0;
             }
         }
     }

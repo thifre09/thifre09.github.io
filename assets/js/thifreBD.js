@@ -248,7 +248,7 @@ function createExempleDatabase() {
     usuarios.columns["nota"].defaultValue = 0;
     usuarios.columns["criado_em"] = new Column("criado_em", "date", false, false, true, false, false, false, true);
     usuarios.columns["hora_entrada"] = new Column("hora_entrada", "time", false, false, false, false, false, true, false);
-    usuarios.columns["hora_entrada"].defaultValue = "09:00";
+    usuarios.columns["hora_entrada"].defaultValue = createTimeValue(9, 0);
     usuarios.columns["perfil"] = new Column("perfil", "enum", false, false, true, false, false, true, false, ["admin", "editor", "leitor"]);
     usuarios.columns["perfil"].defaultValue = "leitor";
     SGBDFunctions.createTable(usuarios);
@@ -743,7 +743,7 @@ class SGBDFunctions {
      * @param table - Tabela a ser criada.
      */
     static createTable(table) {
-        const db = databases[currentDatabase];
+        const db = getCurrentDatabase();
         for (const columnName in table.columns) {
             table.indexes[columnName] = new Map();
         }
@@ -764,10 +764,10 @@ class SGBDFunctions {
      * @param column - Coluna a ser adicionada.
      */
     static addColumn(tableName, column) {
-        databases[currentDatabase].tables[tableName].columns[column.name] = column;
-        databases[currentDatabase].tables[tableName].indexes[column.name] = new Map();
+        getTable(tableName).columns[column.name] = column;
+        getTable(tableName).indexes[column.name] = new Map();
         if (column.reference) {
-            databases[currentDatabase].registerForeignKey(tableName, column.name, column.reference.table, column.reference.column);
+            getCurrentDatabase().registerForeignKey(tableName, column.name, column.reference.table, column.reference.column);
         }
         refreshUI();
         saveToLocalStorage();
@@ -778,7 +778,7 @@ class SGBDFunctions {
      * @param row - Dados da nova linha.
      */
     static insertRow(tableName, row) {
-        const table = databases[currentDatabase].tables[tableName];
+        const table = getTable(tableName);
         const rowIndex = table.rows.length;
         table.rows.push(row);
         for (const col in table.indexes) {
@@ -798,7 +798,7 @@ class SGBDFunctions {
      * @param newRow - Novo conteúdo da linha.
      */
     static editRow(tableName, oldRowIndex, newRow) {
-        const table = databases[currentDatabase].tables[tableName];
+        const table = getTable(tableName);
         const oldRow = table.rows[oldRowIndex];
         for (const col in table.indexes) {
             const oldValue = oldRow[col];
@@ -843,8 +843,8 @@ class SGBDFunctions {
      * @param tableName - Nome da tabela.
      */
     static deleteTable(tableName) {
-        const db = databases[currentDatabase];
-        const table = db.tables[tableName];
+        const db = getCurrentDatabase();
+        const table = getTable(tableName);
         // 🧹 remove todas as FKs QUE SAEM dessa tabela
         for (const column of Object.values(table.columns)) {
             if (!column.reference)
@@ -864,8 +864,8 @@ class SGBDFunctions {
      * @param columnName - Nome da coluna.
      */
     static deleteColumn(tableName, columnName) {
-        const db = databases[currentDatabase];
-        const table = db.tables[tableName];
+        const db = getCurrentDatabase();
+        const table = getTable(tableName);
         const column = table.columns[columnName];
         if (column.reference) {
             db.unregisterForeignKey(tableName, columnName, column.reference.table, column.reference.column);
@@ -885,7 +885,7 @@ class SGBDFunctions {
      * @param rowIndex - Índice da linha a remover.
      */
     static deleteRow(tableName, rowIndex) {
-        const table = databases[currentDatabase].tables[tableName];
+        const table = getTable(tableName);
         const row = table.rows[rowIndex];
         for (const col in table.indexes) {
             const value = row[col];
@@ -918,7 +918,7 @@ class SGBDFunctions {
         const db = databases[oldName];
         if (!db)
             return;
-        delete databases[currentDatabase];
+        delete databases[oldName];
         db.name = newName;
         databases[newName] = db;
         currentDatabase = newName;
@@ -926,13 +926,13 @@ class SGBDFunctions {
         saveToLocalStorage();
     }
     static renameTable(oldName, newName) {
-        const db = databases[currentDatabase];
-        const t = databases[currentDatabase].tables[oldName];
+        const db = getCurrentDatabase();
+        const t = db.tables[oldName];
         if (!t)
             return;
-        delete databases[currentDatabase].tables[oldName];
+        delete db.tables[oldName];
         t.name = newName;
-        databases[currentDatabase].tables[newName] = t;
+        db.tables[newName] = t;
         currentTable = newName;
         const incomingRefs = db.getReferencesToTable(oldName);
         for (const columnRefs of Object.values(incomingRefs)) {
@@ -959,6 +959,9 @@ class SGBDFunctions {
             if (value === null || value === undefined)
                 return value;
             if (newType === "text") {
+                if (getTable(tableName).columns[oldColumnName].type === "enum") {
+                    getTable(tableName).columns[oldColumnName].enumValues = undefined;
+                }
                 return String(value);
             }
             else if (newType === "integer") {
@@ -977,7 +980,7 @@ class SGBDFunctions {
                 return ensureTime(value);
             }
         }
-        const db = databases[currentDatabase];
+        const db = getCurrentDatabase();
         const table = db.tables[tableName];
         const oldColumn = table.columns[oldColumnName];
         if (JSON.stringify(oldColumn) === JSON.stringify(newColumn))
@@ -1031,6 +1034,15 @@ let currentDatabase = null;
 let currentTable = null;
 let terminalSessions = [];
 let currentTerminalSession = 0;
+function getCurrentDatabase() {
+    return currentDatabase ? databases[currentDatabase] : null;
+}
+function getCurrentTable() {
+    return currentDatabase && currentTable ? getCurrentDatabase().tables[currentTable] : null;
+}
+function getTable(tableName) {
+    return currentDatabase ? getCurrentDatabase().tables[tableName] || null : null;
+}
 //#endregion
 // #region Interface functions
 /**
@@ -1073,7 +1085,7 @@ function createTableInterface() {
         openNotifications("<p style='color: var(--red5)'>Nenhuma database selecionada.</p>");
         return;
     }
-    else if (databases[currentDatabase].tables[tableName]) {
+    else if (getTable(tableName)) {
         openNotifications("<p style='color: var(--red5)'>Já existe uma tabela com esse nome.</p>");
         return;
     }
@@ -1104,7 +1116,7 @@ function addColumnsInterface() {
         return;
     }
     const columnsUl = document.querySelector("#adicionar-colunas ul#criacao-colunas-edit");
-    const table = databases[currentDatabase].tables[currentTable];
+    const table = getTable(currentTable);
     const columnsToAdd = parseColumnsFromInputs(columnsUl.children, table.columns);
     if (columnsToAdd === null)
         return;
@@ -1176,12 +1188,12 @@ function insertRowInterface() {
         openNotifications("<p style='color: var(--red5)'>Nenhuma tabela selecionada.</p>");
         return;
     }
-    else if (Object.keys(databases[currentDatabase].tables[currentTable].columns).length === 0) {
+    else if (Object.keys(getTable(currentTable).columns).length === 0) {
         openNotifications("<p style='color: var(--red5)'>Não há colunas nessa tabela</p>");
         return;
     }
     let valuesBeforeIncrement = [];
-    const table = databases[currentDatabase].tables[currentTable];
+    const table = getTable(currentTable);
     const rowUl = document.querySelector("#inserir-linha ul#colunas-inserir-linha");
     const row = {};
     for (const column of rowUl.children) {
@@ -1257,11 +1269,11 @@ function insertRowInterface() {
  * @param rowIndex - Índice da linha que será alterada.
  */
 function editRowInterface(rowIndex) {
-    if (Object.keys(databases[currentDatabase].tables[currentTable].columns).length === 0) {
+    if (Object.keys(getTable(currentTable).columns).length === 0) {
         openNotifications("<p style='color: var(--red5)'>Não há colunas nessa tabela</p>");
         return;
     }
-    const table = databases[currentDatabase].tables[currentTable];
+    const table = getTable(currentTable);
     const rowUl = document.querySelector("#editar-linha ul#colunas-editar-linha");
     const row = {};
     for (const column of rowUl.children) {
@@ -1387,7 +1399,7 @@ function renameTableInterface() {
     if (newName === "") {
         openNotifications("<p style='color: var(--red5)'>O nome da tabela não pode ser vazio.</p>");
     }
-    else if (databases[currentDatabase].tables[newName]) {
+    else if (getCurrentDatabase().tables[newName]) {
         openNotifications("<p style='color: var(--red5)'>Já existe uma tabela com esse nome.</p>");
     }
     else {
@@ -1397,7 +1409,7 @@ function renameTableInterface() {
     refreshUI();
 }
 function alterColumnsInterface() {
-    const table = databases[currentDatabase].tables[currentTable];
+    const table = getCurrentTable();
     const columnsUl = document.getElementById("lista-colunas-existentes");
     let columnsToAlter = parseColumnsFromInputs(columnsUl.children, {});
     if (columnsToAlter === null)
@@ -1426,7 +1438,7 @@ function alterColumnsInterface() {
             }
         }
         if (newColumn.reference) {
-            const refTable = databases[currentDatabase].tables[newColumn.reference.table];
+            const refTable = getCurrentDatabase().tables[newColumn.reference.table];
             const refIndex = refTable.indexes[newColumn.reference.column];
             for (const row of table.rows) {
                 const value = row[oldColumnName];
@@ -1434,6 +1446,12 @@ function alterColumnsInterface() {
                     openNotifications("<p style='color: var(--red5)'>Existem valores nessa coluna que não correspondem a nenhuma entrada na tabela referenciada.</p>");
                     return;
                 }
+            }
+        }
+        if (newColumn.type === "enum") {
+            if (newColumn.enumValues !== getCurrentTable().columns[oldColumnName].enumValues) {
+                openNotifications("<p style='color: var(--red5)'>Os valores do enum não podem ser alterados.</p>");
+                return;
             }
         }
     }
@@ -1472,7 +1490,7 @@ function changeTabelasLista() {
     tabelasLista.innerHTML = "";
     if (currentDatabase === null)
         return;
-    for (let tabela in databases[currentDatabase].tables) {
+    for (let tabela in getCurrentDatabase().tables) {
         const option = document.createElement("div");
         if (tabela === currentTable) {
             option.classList.add("tabela", "tabela-ativa");
@@ -1491,7 +1509,7 @@ function changeTabelasLista() {
         name.textContent = tabela;
         option.appendChild(name);
         const size = document.createElement("p");
-        size.textContent = `${Object.keys(databases[currentDatabase].tables[tabela].columns).length}`;
+        size.textContent = `${Object.keys(getCurrentDatabase().tables[tabela].columns).length}`;
         option.appendChild(size);
         tabelasLista.appendChild(option);
     }
@@ -1513,7 +1531,7 @@ function changeTabelaSelecionadaTabela() {
     document.getElementById("nenhuma-tabela-selecionada").style.display = "none";
     const selectedTable = document.getElementById("tabela-selecionada-tabela");
     selectedTable.style.display = "flex";
-    const table = databases[currentDatabase].tables[currentTable];
+    const table = getTable(currentTable);
     let divLinha = document.createElement("div");
     divLinha.classList.add("linha-tabela");
     Object.values(table.columns).forEach((column) => {
@@ -1586,7 +1604,7 @@ function changeTabelaInfoVariosBotoes() {
     else {
         const tabelaInfo = document.getElementById("tabela-info-varios-botoes");
         tabelaInfo.querySelector("#nome-tabela").textContent = currentTable;
-        tabelaInfo.querySelector("#linhas-colunas").textContent = `${Object.keys(databases[currentDatabase].tables[currentTable].rows).length} linhas • ${Object.keys(databases[currentDatabase].tables[currentTable].columns).length} colunas`;
+        tabelaInfo.querySelector("#linhas-colunas").textContent = `${Object.keys(getTable(currentTable).rows).length} linhas • ${Object.keys(getTable(currentTable).columns).length} colunas`;
     }
 }
 /**
@@ -1694,7 +1712,7 @@ function buildColumnFromInputs(columnInputs, knownColumns) {
             openNotifications("<p style='color: var(--red5)'>Selecione a tabela e coluna de referência para a chave estrangeira.</p>");
             return null;
         }
-        if (databases[currentDatabase].tables[columnInputs.referenceTable].columns[columnInputs.referenceColumn].type !== column.type) {
+        if (getCurrentDatabase().tables[columnInputs.referenceTable].columns[columnInputs.referenceColumn].type !== column.type) {
             openNotifications("<p style='color: var(--red5)'>O tipo da coluna de referência não corresponde ao tipo da coluna.</p>");
             return null;
         }
@@ -1724,14 +1742,14 @@ function changeTabelaSelecionadaLinhaColuna(type, rowIndex, columnName) {
     const header = tabelaSelecionadaLinhaColuna.querySelector("#tabela-selecionada-linha-coluna-header h3");
     header.textContent = type === "row" ? "Linha" : "Coluna";
     const lineColumnsNumber = tabelaSelecionadaLinhaColuna.querySelector("h4");
-    lineColumnsNumber.textContent = type === "row" ? `${Object.keys(databases[currentDatabase].tables[currentTable].columns).length} colunas` : `${Object.keys(databases[currentDatabase].tables[currentTable].rows).length} linhas`;
+    lineColumnsNumber.textContent = type === "row" ? `${Object.keys(getTable(currentTable).columns).length} colunas` : `${Object.keys(getTable(currentTable).rows).length} linhas`;
     const ul = tabelaSelecionadaLinhaColuna.querySelector("ul");
     ul.innerHTML = "";
     if (type === "row") {
-        for (const columnName in databases[currentDatabase].tables[currentTable].columns) {
+        for (const columnName in getTable(currentTable).columns) {
             const div = document.createElement("div");
-            const columnType = databases[currentDatabase].tables[currentTable].columns[columnName].type;
-            const value = databases[currentDatabase].tables[currentTable].rows[rowIndex][columnName];
+            const columnType = getTable(currentTable).columns[columnName].type;
+            const value = getTable(currentTable).rows[rowIndex][columnName];
             let displayValue;
             if (columnType === "date") {
                 displayValue = formatDateForDisplay(value);
@@ -1756,10 +1774,10 @@ function changeTabelaSelecionadaLinhaColuna(type, rowIndex, columnName) {
         }
     }
     else {
-        for (let i = 0; i < databases[currentDatabase].tables[currentTable].rows.length; i++) {
+        for (let i = 0; i < getTable(currentTable).rows.length; i++) {
             const div = document.createElement("div");
-            const value = databases[currentDatabase].tables[currentTable].rows[i][columnName];
-            const columnType = databases[currentDatabase].tables[currentTable].columns[columnName].type.toLocaleLowerCase();
+            const value = getTable(currentTable).rows[i][columnName];
+            const columnType = getTable(currentTable).columns[columnName].type.toLocaleLowerCase();
             let displayValue;
             if (columnType === "date") {
                 displayValue = formatDateForDisplay(value);
@@ -2049,11 +2067,11 @@ function changeEditColumnsMenu() {
         menu.innerHTML = "<p>Crie uma tabela para mostrar as colunas existentes</p>";
         return;
     }
-    else if (Object.keys(databases[currentDatabase].tables[currentTable].columns).length === 0) {
+    else if (Object.keys(getTable(currentTable).columns).length === 0) {
         menu.innerHTML = "<p>Não há colunas nessa tabela</p>";
         return;
     }
-    Object.values(databases[currentDatabase].tables[currentTable].columns).forEach((column) => {
+    Object.values(getTable(currentTable).columns).forEach((column) => {
         const mainDiv = document.createElement("div");
         mainDiv.className = "outlined";
         mainDiv.setAttribute("column-name", column.name);
@@ -2080,7 +2098,7 @@ function changeEditColumnsMenu() {
             boolean: ["Text", "Integer", "Float", "Boolean"],
             date: ["Text", "Integer", "Float", "Date"],
             time: ["Text", "Integer", "Float", "Time"],
-            enum: ["Enum"]
+            enum: ["text", "Enum"]
         };
         let options = allowedConversions[column.type];
         options.forEach((option) => {
@@ -2232,11 +2250,11 @@ function changeInsertRowMenu() {
         menuUl.innerHTML = "<p>Crie uma tabela para mostrar as colunas existentes</p>";
         return;
     }
-    else if (Object.keys(databases[currentDatabase].tables[currentTable].columns).length === 0) {
+    else if (Object.keys(getTable(currentTable).columns).length === 0) {
         menuUl.innerHTML = "<p>Não há colunas nessa tabela</p>";
         return;
     }
-    Object.values(databases[currentDatabase].tables[currentTable].columns).forEach((column) => {
+    Object.values(getTable(currentTable).columns).forEach((column) => {
         const div = document.createElement("div");
         menuUl.appendChild(div);
         const h3 = document.createElement("h3");
@@ -2344,13 +2362,13 @@ function changeEditRowMenu(rowIndex) {
         return;
     const menuUl = document.getElementById("colunas-editar-linha");
     menuUl.innerHTML = "";
-    if (Object.keys(databases[currentDatabase].tables[currentTable].columns).length === 0) {
+    if (Object.keys(getTable(currentTable).columns).length === 0) {
         menuUl.innerHTML = "<p>Não há colunas nessa tabela</p>";
         return;
     }
     const editButton = menuUl.parentElement.querySelector("button#editar-linha-button");
     editButton.onclick = function () { editRowInterface(rowIndex); };
-    Object.values(databases[currentDatabase].tables[currentTable].columns).forEach((column) => {
+    Object.values(getTable(currentTable).columns).forEach((column) => {
         const div = document.createElement("div");
         menuUl.appendChild(div);
         const h3 = document.createElement("h3");
@@ -2369,7 +2387,7 @@ function changeEditRowMenu(rowIndex) {
             input.classList.add("menu-central-input");
             input.type = "number";
             input.step = "any";
-            input.value = databases[currentDatabase].tables[currentTable].rows[rowIndex][column.name];
+            input.value = getTable(currentTable).rows[rowIndex][column.name];
             div.appendChild(input);
         }
         else if (column.type === "boolean") {
@@ -2377,11 +2395,11 @@ function changeEditRowMenu(rowIndex) {
             dropdown.className = "custom-dropdown";
             dropdown.innerHTML = `
             <button class="custom-dropdown-trigger" onclick="openCustomDropdown(this)">
-                ${databases[currentDatabase].tables[currentTable].rows[rowIndex][column.name] ? "True" : "False"}
+                ${getTable(currentTable).rows[rowIndex][column.name] ? "True" : "False"}
             </button>
             <ul class="custom-dropdown-menu">
-                <li class="custom-dropdown-option ${databases[currentDatabase].tables[currentTable].rows[rowIndex][column.name] ? '' : 'custom-dropdown-option-selected'}">False</li>
-                <li class="custom-dropdown-option ${databases[currentDatabase].tables[currentTable].rows[rowIndex][column.name] ? 'custom-dropdown-option-selected' : ''}">True</li>
+                <li class="custom-dropdown-option ${getTable(currentTable).rows[rowIndex][column.name] ? '' : 'custom-dropdown-option-selected'}">False</li>
+                <li class="custom-dropdown-option ${getTable(currentTable).rows[rowIndex][column.name] ? 'custom-dropdown-option-selected' : ''}">True</li>
             </ul>
             <input type="hidden" value="text">
             `;
@@ -2398,7 +2416,7 @@ function changeEditRowMenu(rowIndex) {
                 const input = document.createElement("input");
                 input.classList.add("menu-central-input");
                 input.type = "date";
-                const value = databases[currentDatabase].tables[currentTable].rows[rowIndex][column.name];
+                const value = getTable(currentTable).rows[rowIndex][column.name];
                 input.value = formatDateForInput(value);
                 div.appendChild(input);
             }
@@ -2414,7 +2432,7 @@ function changeEditRowMenu(rowIndex) {
                 input.classList.add("menu-central-input");
                 input.type = "time";
                 input.step = "1";
-                const value = databases[currentDatabase].tables[currentTable].rows[rowIndex][column.name];
+                const value = getTable(currentTable).rows[rowIndex][column.name];
                 input.value = formatTimeForInput(value);
                 div.appendChild(input);
             }
@@ -2422,7 +2440,7 @@ function changeEditRowMenu(rowIndex) {
         else if (column.type === "enum") {
             const dropdown = document.createElement("div");
             dropdown.className = "custom-dropdown";
-            const currentValue = databases[currentDatabase].tables[currentTable].rows[rowIndex][column.name];
+            const currentValue = getTable(currentTable).rows[rowIndex][column.name];
             const enumValues = column.enumValues ?? [];
             const selectedValue = enumValues.includes(currentValue) ? currentValue : (enumValues[0] ?? "");
             const button = document.createElement("button");
@@ -2453,7 +2471,7 @@ function changeEditRowMenu(rowIndex) {
         else {
             const input = document.createElement("input");
             input.classList.add("menu-central-input");
-            const value = databases[currentDatabase].tables[currentTable].rows[rowIndex][column.name];
+            const value = getTable(currentTable).rows[rowIndex][column.name];
             input.value = value;
             div.appendChild(input);
         }
@@ -2465,7 +2483,7 @@ function changeEditRowMenu(rowIndex) {
 function changeSearchMenu() {
     const searchColumnsDiv = document.getElementById("colunas-pesquisa");
     searchColumnsDiv.innerHTML = "";
-    const currentTableObj = databases[currentDatabase].tables[currentTable];
+    const currentTableObj = getTable(currentTable);
     if (currentDatabase === null) {
         searchColumnsDiv.innerHTML = "<p>Selecione uma tabela para mostrar as colunas existentes</p>";
         return;
@@ -2485,7 +2503,7 @@ function changeSearchMenu() {
     Todas as colunas (*)
     `;
     searchColumnsDiv.appendChild(label);
-    Object.values(databases[currentDatabase].tables[currentTable].columns).forEach((column) => {
+    Object.values(getTable(currentTable).columns).forEach((column) => {
         const label = document.createElement("label");
         label.classList.add("checkbox-div");
         label.innerHTML += `
@@ -2499,7 +2517,7 @@ function changeSearchMenu() {
     referencesDiv.innerHTML = "";
     const isReferenceByDiv = document.querySelector("#is-referenced-by-search");
     isReferenceByDiv.innerHTML = "";
-    const relationships = databases[currentDatabase].getTableRelationships(currentTable);
+    const relationships = getCurrentDatabase().getTableRelationships(currentTable);
     const currentTableReferences = relationships.outgoing;
     const referencedBy = relationships.incoming;
     // OUTGOING
@@ -2569,7 +2587,7 @@ function changeConfirmDeleteMenu(type, rowIndex, columnName) {
             <h4 class="text2">Database</h4>
             <div>
                 <p class="text3">${currentDatabase}</p>
-                <p class="text3">Tabelas: ${Object.keys(databases[currentDatabase].tables).length}</p>
+                <p class="text3">Tabelas: ${Object.keys(getCurrentDatabase().tables).length}</p>
             </div>
         </div>
         `;
@@ -2580,7 +2598,7 @@ function changeConfirmDeleteMenu(type, rowIndex, columnName) {
             <h4 class="text2">Tabela</h4>
             <div>
                 <p class="text3">${currentTable}</p>
-                <p class="text3">Colunas: ${Object.keys(databases[currentDatabase].tables[currentTable].columns).length}</p>
+                <p class="text3">Colunas: ${Object.keys(getTable(currentTable).columns).length}</p>
             </div>
         </div>
         `;
@@ -2592,16 +2610,16 @@ function changeConfirmDeleteMenu(type, rowIndex, columnName) {
         <div class="outlined">
             <h4 class="text2">Coluna</h4>
             <div>
-                <p class="text3">${databases[currentDatabase].tables[currentTable].columns[columnName].name}</p>
-                <p class="text3">${databases[currentDatabase].tables[currentTable].columns[columnName].type.toLocaleUpperCase()}</p>
+                <p class="text3">${getTable(currentTable).columns[columnName].name}</p>
+                <p class="text3">${getTable(currentTable).columns[columnName].type.toLocaleUpperCase()}</p>
             </div>
         </div>
         `;
     }
     if (type === "row") {
-        const row = databases[currentDatabase].tables[currentTable].rows[rowIndex];
+        const row = getTable(currentTable).rows[rowIndex];
         const formattedEntries = Object.entries(row).map(([key, value]) => {
-            const column = databases[currentDatabase].tables[currentTable].columns[key];
+            const column = getTable(currentTable).columns[key];
             let display = value;
             if (column) {
                 if (column.type === "date" && value !== null) {
@@ -2629,7 +2647,7 @@ function changeConfirmDeleteMenu(type, rowIndex, columnName) {
             openNotifications("<p style='color: var(--green5)'>Database deletada com sucesso!</p>");
         }
         else if (type === "table") {
-            const refs = databases[currentDatabase].foreignKeyMap[currentTable];
+            const refs = getCurrentDatabase().foreignKeyMap[currentTable];
             if (refs && Object.keys(refs).length > 0) {
                 const mensagens = [];
                 for (const column in refs) {
@@ -2646,7 +2664,7 @@ function changeConfirmDeleteMenu(type, rowIndex, columnName) {
             openNotifications("<p style='color: var(--green5)'>Tabela deletada com sucesso!</p>");
         }
         else if (type === "column") {
-            const refs = databases[currentDatabase].foreignKeyMap[currentTable]?.[columnName];
+            const refs = getCurrentDatabase().foreignKeyMap[currentTable]?.[columnName];
             if (refs && refs.length > 0) {
                 openNotifications(`<p style='color: var(--red5)'>Não é possível deletar a coluna. Referenciada por:<br>
                     ${refs.map(r => `${r.table}.${r.column}`).join("<br>")}
@@ -2800,13 +2818,21 @@ function updateDefaultInput(parentDiv, initialValue) {
     if (input && initialValue !== undefined && initialValue !== null) {
         input.value = String(initialValue);
     }
+    if (type === "date" && initialValue !== undefined && initialValue !== null) {
+        const input = defaultDiv.querySelector("input");
+        input.value = formatDateForInput(initialValue);
+    }
+    if (type === "time" && initialValue !== undefined && initialValue !== null) {
+        const input = defaultDiv.querySelector("input");
+        input.value = formatTimeForInput(initialValue);
+    }
 }
 /**
  * Atualiza as tabelas disponíveis para referência de chave estrangeira.
  * @param parentDiv - Container do bloco de criação/edição da coluna.
  */
 function updateForeignKeyReferenceTableOptions(parentDiv) {
-    const database = databases[currentDatabase];
+    const database = getCurrentDatabase();
     const shouldFilterCurrentTable = currentTable && database.tables[currentTable];
     const availableTables = Object.keys(database.tables).filter(tableName => !shouldFilterCurrentTable || tableName !== currentTable);
     const tableSelect = parentDiv.querySelector(".referencia .custom-dropdown-menu");
@@ -2830,7 +2856,7 @@ function updateForeignKeyReferenceTableOptions(parentDiv) {
  * @param parentDiv - Container do bloco de criação/edição da coluna.
  */
 function updateForeignKeyReferenceColumnOptions(parentDiv) {
-    const database = databases[currentDatabase];
+    const database = getCurrentDatabase();
     const columnSelect = parentDiv.querySelector(".referencia :nth-child(3) .custom-dropdown-menu");
     const refTableButton = parentDiv.querySelector(".referencia .custom-dropdown-trigger");
     const refButton = parentDiv.querySelector(".referencia :nth-child(3) .custom-dropdown-trigger");
@@ -3003,7 +3029,7 @@ var SQL;
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhuma database selecionada"], "error");
                 return;
             }
-            if (databases[currentDatabase].tables[tableName] === undefined) {
+            if (getCurrentDatabase().tables[tableName] === undefined) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, [`Tabela "${tableName}" não existe na database "${currentDatabase}"`], "error");
                 return;
             }
@@ -3037,7 +3063,7 @@ var SQL;
                     getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da tabela inválido"], "error");
                     return;
                 }
-                if (databases[currentDatabase].tables[newName]) {
+                if (getCurrentDatabase().tables[newName]) {
                     getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma tabela com o nome "${newName}" nessa database`], "error");
                     return;
                 }
@@ -3049,7 +3075,7 @@ var SQL;
                     return;
                 }
                 const columnName = this.tokens[5];
-                if (databases[currentDatabase].tables[this.tokens[2]].columns[columnName] === undefined) {
+                if (getTable(this.tokens[2]).columns[columnName] === undefined) {
                     getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${columnName}" não existe na tabela "${this.tokens[2]}"`], "error");
                     return;
                 }
@@ -3062,11 +3088,11 @@ var SQL;
                     getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da coluna inválido"], "error");
                     return;
                 }
-                if (databases[currentDatabase].tables[this.tokens[2]].columns[newName] !== undefined) {
+                if (getTable(this.tokens[2]).columns[newName] !== undefined) {
                     getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma coluna com o nome "${newName}" na tabela "${this.tokens[2]}"`], "error");
                     return;
                 }
-                const newColumn = databases[currentDatabase].tables[this.tokens[2]].columns[columnName].clone();
+                const newColumn = getTable(this.tokens[2]).columns[columnName].clone();
                 newColumn.name = newName;
                 SGBDFunctions.alterColumn(this.tokens[2], columnName, newColumn);
             }
@@ -3147,7 +3173,7 @@ var SQL;
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da tabela inválido"], "error");
                 return;
             }
-            if (databases[currentDatabase].tables[tableName]) {
+            if (getCurrentDatabase().tables[tableName]) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma tabela com o nome "${tableName}" nessa database`], "error");
                 return;
             }
@@ -3190,11 +3216,11 @@ var SQL;
                 return;
             }
             const tableName = t[2];
-            if (!databases[currentDatabase].tables[tableName]) {
+            if (!getCurrentDatabase().tables[tableName]) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, [`Tabela "${tableName}" não existe na database "${currentDatabase}"`], "error");
                 return;
             }
-            const table = databases[currentDatabase].tables[tableName];
+            const table = getTable(tableName);
             let columnsToBeInserted = [];
             if (t[3] === "(") {
                 const endValuesIndex = t.findIndex(token => token === ")");
@@ -3253,7 +3279,7 @@ var SQL;
         }
         getRowValuesAndInsert(startIndex, tableName, columnsToBeInserted) {
             const t = this.tokens;
-            const table = databases[currentDatabase].tables[tableName];
+            const table = getTable(tableName);
             let depth = 0;
             let columnIndex = 0;
             const rowsToBeInserted = [];
@@ -3388,7 +3414,7 @@ var SQL;
                     }
                 }
                 if (table.columns[columnName].isForeignKey) {
-                    const referencedTable = databases[currentDatabase].tables[table.columns[columnName].reference.table];
+                    const referencedTable = getTable(table.columns[columnName].reference.table);
                     const referencedColumn = table.columns[columnName].reference.column;
                     if (!referencedTable) {
                         getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", `Coluna "${columnName}" é FOREIGN KEY e a tabela referenciada "${table.columns[columnName].reference.table}" não existe`], "error");
@@ -3674,8 +3700,8 @@ var SQL;
                 columnDef[referencesIndex + 4] !== ")") {
                 return { column: null, error: "REFERENCES inválido" };
             }
-            const refTable = databases[currentDatabase].tables[columnDef[referencesIndex + 1]];
-            if (refTable === undefined) {
+            const refTable = getTable(columnDef[referencesIndex + 1]);
+            if (refTable === null) {
                 return { column: null, error: `Tabela de referência "${columnDef[referencesIndex + 1]}" não existe` };
             }
             const refColumn = refTable.columns[columnDef[referencesIndex + 3]];
@@ -4093,8 +4119,8 @@ function loadFromJson() {
                 databases = databasesCopy;
                 currentDatabase = previousDatabase && databases[previousDatabase] ? previousDatabase : Object.keys(databases)[0] ?? null;
                 if (currentDatabase !== null) {
-                    const currentDb = databases[currentDatabase];
-                    currentTable = previousTable && currentDb.tables[previousTable] ? previousTable : Object.keys(currentDb.tables)[0] ?? null;
+                    const currentDb = getCurrentDatabase();
+                    currentTable = currentDb && previousTable && currentDb.tables[previousTable] ? previousTable : Object.keys(currentDb?.tables ?? {})[0] ?? null;
                 }
                 else {
                     currentTable = null;
@@ -4144,7 +4170,7 @@ function showHelp(index) {
     helpLeft.querySelector(".help-active")?.classList.remove("help-active");
     helpButtons[index].classList.add("help-active");
 }
-showHelp(1);
+showHelp(0);
 // #endregion
 createTerminalSession();
 commandTextarea.addEventListener("input", () => {
@@ -4205,17 +4231,17 @@ document.getElementById("menus-centrais").addEventListener("click", (event) => {
     });
     document.getElementById("menus-centrais").style.display = "none";
 });
-createExempleDatabase();
 createColumnCreationDiv(document.querySelector("#criacao-tabela ul"));
 createColumnCreationDiv(document.getElementById("criacao-colunas-edit"));
 createHelpButtons();
 // To Do
-// -Pesquisar(Dashboard)
-// -Editar colunas (Dashboard)
+// -Aba de ajuda
+// -Criar classes para cada tipo
+// -AST para comandos SQL
+// -Constraints de integridade
+// -ver () dentro de strings no insert
 // -Terminal
 // -Salvar e carregar em SQL
 // -Modelo lógico (diagrama de entidade relacionamento)
-// -Aba de ajuda
+// -Pesquisar(Dashboard)
 // -Permitir sincronização com banco real
-// -Implementar rename column no terminal
-// -ver () dentro de strings no insert
