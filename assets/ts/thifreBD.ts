@@ -130,128 +130,6 @@ function abrirFechar(estado: boolean, id: string) {
 }
 
 /**
- * Cria uma `Date` usando apenas o componente de hora.
- * @param hours - Hora.
- * @param minutes - Minutos opcionais.
- * @param seconds - Segundos opcionais.
- * @returns Data ajustada para o horário informado.
- */
-function createTimeValue(hours: number, minutes: number = 0, seconds: number = 0): Date {
-    const d = new Date();
-    d.setHours(hours, minutes, seconds, 0);
-    return d;
-}
-
-/**
- * Garante que um valor seja uma instância válida de Date
- * @param value - Valor a ser convertido (Date, string, number ou null)
- * @returns Instância de Date válida ou null
- */
-function ensureDate(value: any): Date | null {
-    if (value === null || value === undefined) return null;
-
-    if (value instanceof Date) {
-        return isNaN(value.getTime()) ? null : value;
-    }
-
-    if (typeof value === 'string') {
-        const parsed = new Date(value);
-        return isNaN(parsed.getTime()) ? null : parsed;
-    }
-
-    if (typeof value === 'number') {
-        const parsed = new Date(value);
-        return isNaN(parsed.getTime()) ? null : parsed;
-    }
-
-    return null;
-}
-
-/**
- * Converte uma string no formato `HH:MM:SS` em um objeto `Date` representando essa hora.
- * @param value - String a ser convertida (ex.: "08:30:00").
- * @returns `Date` com a hora definida ou `null` se a string for inválida.
- */
-function ensureTime(value: any): Date | null {
-    if (typeof value !== "string") return null;
-
-    const match = value.match(/^(\d{2}):(\d{2}):(\d{2})$/);
-
-    if (!match) return null;
-    const hours = Number(match[1]);
-    const minutes = Number(match[2]);
-    const seconds = Number(match[3]);
-
-    if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59 || seconds < 0 || seconds > 59) {
-        return null;
-    }
-
-    const date = new Date();
-    date.setHours(hours, minutes, seconds, 0);
-
-    return date;
-}
-
-/**
- * Formata uma Date para exibição de data (DD/MM/YYYY)
- * @param value - Valor a ser formatado
- * @returns String formatada ou valor original
- */
-function formatDateForDisplay(value: any): string {
-    const date = ensureDate(value);
-    if (!date) return String(value || '');
-
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
-}
-
-/**
- * Formata uma Date para exibição de hora (HH:MM:SS)
- * @param value - Valor a ser formatado
- * @returns String formatada ou valor original
- */
-function formatTimeForDisplay(value: any): string {
-    const date = ensureDate(value);
-    if (!date) return String(value || '');
-
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-    const seconds = String(date.getSeconds()).padStart(2, "0");
-    return `${hours}:${minutes}:${seconds}`;
-}
-
-/**
- * Formata uma Date para input HTML (YYYY-MM-DD)
- * @param value - Valor a ser formatado
- * @returns String formatada para input date ou string vazia
- */
-function formatDateForInput(value: any): string {
-    const date = ensureDate(value);
-    if (!date) return '';
-
-    const year = String(date.getFullYear()).padStart(4, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-}
-
-/**
- * Formata uma Date para input HTML (HH:MM)
- * @param value - Valor a ser formatado
- * @returns String formatada para input time ou string vazia
- */
-function formatTimeForInput(value: any): string {
-    const date = ensureDate(value);
-    if (!date) return '';
-
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-    return `${hours}:${minutes}`;
-}
-
-/**
  * Cria ou seleciona a database de exemplo com tabelas e registros pré-carregados.
  */
 function createExempleDatabase() {
@@ -405,6 +283,10 @@ function createExempleDatabase() {
     currentTable = null;
     refreshUI();
     openNotifications("<p style='color: var(--green5)'>Database de exemplo criada com sucesso!</p>");
+}
+
+function compareTypes(type1: DataTypes.DataType, type2: DataTypes.DataType): boolean {
+    return type1.constructor === type2.constructor;
 }
 
 // #endregion
@@ -895,7 +777,7 @@ class Database {
 class Table {
     name: string;
     columns: Record<string, Column>;
-    rows: Record<string, any>[];
+    rows: TRow[];
     indexes: Record<string, Map<any, number[]>>;
 
     /**
@@ -966,7 +848,7 @@ class Table {
  */
 class Column {
     name: string;
-    type: columnType;
+    type: DataTypes.DataType;
     isPrimaryKey: boolean;
     isForeignKey: boolean;
     isNotNull: boolean;
@@ -975,7 +857,7 @@ class Column {
     hasDefault: boolean;
     isCurrentTimestamp: boolean;
     enumValues?: string[];
-    reference?: reference;
+    reference?: TReference;
     incrementCounter: number = 1;
     defaultValue: any;
 
@@ -993,7 +875,7 @@ class Column {
      * @param enumValues - Valores permitidos para ENUM.
      * @param reference - Referência usada por FOREIGN KEY.
      */
-    constructor(name: string, type: columnType, isPrimaryKey: boolean = false, isForeignKey: boolean = false,
+    constructor(name: string, type: DataTypes.DataType, isPrimaryKey: boolean = false, isForeignKey: boolean = false,
         isNotNull: boolean = false, isUnique: boolean = false, isAutoIncrement: boolean = false,
         hasDefault: boolean = false, isCurrentTimestamp: boolean = false, enumValues?: string[],
         reference?: reference) {
@@ -1371,30 +1253,11 @@ class SGBDFunctions {
          * @param newType - Tipo de coluna destino.
          * @returns Valor convertido apropriado para `newType` ou o valor original quando não aplicável.
          */
-        function convertRowValue(value: any, newType: columnType): any {
-            if (value === null || value === undefined) return value;
+        function convertRowValue(value: any, newType: DataTypes.DataType): any {
+            if (value === null || value === undefined)
+                return value;
 
-            if (newType === "text") {
-                if (getTable(tableName)!.columns[oldColumnName].type === "enum") {
-                    getTable(tableName)!.columns[oldColumnName].enumValues = undefined;
-                }
-                return String(value);
-            }
-            else if (newType === "integer") {
-                return parseInt(value);
-            }
-            else if (newType === "float") {
-                return parseFloat(value);
-            }
-            else if (newType === "boolean") {
-                return value === true || value === "true" || value === 1 || value === "1";
-            }
-            else if (newType === "date") {
-                return ensureDate(value);
-            }
-            else if (newType === "time") {
-                return ensureTime(value);
-            }
+            return newType.parse(value);
         }
 
         const db = getCurrentDatabase()!;
@@ -1482,16 +1345,121 @@ class SGBDFunctions {
     }
 }
 
+class SQLTime {
+    hours: number;
+    minutes: number;
+    seconds: number;
 
+    constructor(hours: number, minutes: number = 0, seconds: number = 0) {
+        this.hours = hours;
+        this.minutes = minutes;
+        this.seconds = seconds;
+    }
+
+    static fromString(value: string): SQLTime | null {
+
+        const match = value.match(/^(\d{2}):(\d{2}):(\d{2})$/);
+
+        if (!match)
+            return null;
+
+        const [, h, m, s] = match.map(Number);
+
+        if (
+            h < 0 || h > 23 ||
+            m < 0 || m > 59 ||
+            s < 0 || s > 59
+        )
+            return null;
+
+        return new SQLTime(h, m, s);
+
+    }
+
+    static fromNumber(value: number): SQLTime | null {
+        if (!Number.isFinite(value))
+            return null;
+
+        value = Math.floor(value);
+
+        if (value < 0 || value >= 24 * 60 * 60)
+            return null;
+
+        const hours = Math.floor(value / 3600);
+        value %= 3600;
+
+        const minutes = Math.floor(value / 60);
+        const seconds = value % 60;
+
+        return new SQLTime(hours, minutes, seconds);
+    }
+
+    static now(): SQLTime {
+        const now = new Date();
+        return new SQLTime(now.getHours(), now.getMinutes(), now.getSeconds());
+    }
+
+    toString(): string {
+        return [
+            this.hours.toString().padStart(2, "0"),
+            this.minutes.toString().padStart(2, "0"),
+            this.seconds.toString().padStart(2, "0")
+        ].join(":");
+    }
+}
+
+class SQLDate {
+    year: number;
+    month: number;
+    day: number;
+
+    constructor(year: number, month: number, day: number) {
+        this.year = year;
+        this.month = month;
+        this.day = day;
+    }
+
+    static fromString(value: string): SQLDate | null {
+
+        const match = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+        if (!match)
+            return null;
+
+        const [, y, m, d] = match.map(Number);
+
+        if (
+            y < 0 ||
+            m < 1 || m > 12 ||
+            d < 1 || d > 31
+        )
+            return null;
+
+        return new SQLDate(y, m, d);
+    }
+
+    static now(): SQLDate {
+        const now = new Date();
+        return new SQLDate(now.getFullYear(), now.getMonth() + 1, now.getDate());
+    }
+
+    toString(): string {
+        return [
+            this.year.toString().padStart(4, "0"),
+            this.month.toString().padStart(2, "0"),
+            this.day.toString().padStart(2, "0")
+        ].join("-");
+    }
+}
 
 namespace DataTypes {
-    abstract class DataType {
+    export abstract class DataType {
         abstract readonly name: string;
         abstract validate(value: any): boolean;
         abstract parse(value: any): any;
     }
 
-    class TextType extends DataType {
+    export class TextType extends DataType {
         readonly name = "TEXT";
 
         validate(value: any): boolean {
@@ -1503,7 +1471,7 @@ namespace DataTypes {
         }
     }
 
-    class IntegerType extends DataType {
+    export class IntegerType extends DataType {
         readonly name = "INTEGER";
 
         validate(value: any): boolean {
@@ -1515,7 +1483,7 @@ namespace DataTypes {
         }
     }
 
-    class FloatType extends DataType {
+    export class FloatType extends DataType {
         readonly name = "FLOAT";
 
         validate(value: any): boolean {
@@ -1527,7 +1495,7 @@ namespace DataTypes {
         }
     }
 
-    class BooleanType extends DataType {
+    export class BooleanType extends DataType {
         readonly name = "BOOLEAN";
 
         validate(value: any): boolean {
@@ -1548,31 +1516,53 @@ namespace DataTypes {
         }
     }
 
-    class DateType extends DataType {
+    export class DateType extends DataType {
+
         readonly name = "DATE";
 
         validate(value: any): boolean {
-            return value instanceof Date && !isNaN(value.getTime());
+            return value instanceof SQLDate;
         }
 
-        parse(value: any): Date {
-            return new Date(value);
+        parse(value: any): SQLDate | null {
+
+            if (value instanceof SQLDate)
+                return value;
+
+            if (typeof value !== "string")
+                return null;
+
+            return SQLDate.fromString(value);
+
         }
+
     }
 
-    class TimeType extends DataType {
+    export class TimeType extends DataType {
+
         readonly name = "TIME";
 
         validate(value: any): boolean {
-            return typeof value === "string" && /^([0-9]{2}:[0-9]{2}:[0-9]{2})$/.test(value);
+            return value instanceof SQLTime;
         }
 
-        parse(value: any): string {
-            return String(value);
+        parse(value: any): SQLTime | null {
+
+            if (value instanceof SQLTime)
+                return value;
+
+            if (typeof value === "string")
+                return SQLTime.fromString(value);
+            else if (typeof value === "number")
+                return SQLTime.fromNumber(value);
+
+            return null;
+
         }
+
     }
 
-    class EnumType extends DataType {
+    export class EnumType extends DataType {
         readonly name = "ENUM";
         private readonly allowedValues: string[];
 
@@ -1613,7 +1603,7 @@ interface ITerminalEntry {
 
 interface IColumnInputs {
     columnName: string;
-    columnType: columnType;
+    columnType: DataTypes.DataType;
     isPrimaryKey: boolean;
     isForeignKey: boolean;
     isNotNull: boolean;
@@ -1628,17 +1618,25 @@ interface IColumnInputs {
     referenceColumn: string;
 }
 
-/**
- * Tipos de coluna aceitos pelo banco em memória.
- */
-type columnType = "text" | "integer" | "float" | "boolean" | "date" | "time" | "enum";
+type TRow = Record<string, any>;
 
-/**
- * Estrutura usada para representar uma referência de chave estrangeira.
- */
-type reference = { table: string; column: string; };
+type TReference = { table: string; column: string; };
 
 let databases: Record<string, Database> = {};
+
+const types = {
+    INTEGER: new DataTypes.IntegerType(),
+    FLOAT: new DataTypes.FloatType(),
+    TEXT: new DataTypes.TextType(),
+    BOOLEAN: new DataTypes.BooleanType(),
+    DATE: new DataTypes.DateType(),
+    TIME: new DataTypes.TimeType(),
+
+    ENUM(values: string[]) {
+        return new DataTypes.EnumType(values);
+    }
+};
+
 let currentDatabase: string | null = null;
 let currentTable: string | null = null;
 let terminalSessions: TerminalSession[] = [];
@@ -1816,68 +1814,59 @@ function insertRowInterface() {
     let valuesBeforeIncrement: { column: string, value: number }[] = [];
     const table = getTable(currentTable!)!;
     const rowUl = document.querySelector("#inserir-linha ul#colunas-inserir-linha")!;
-    const row: Record<string, any> = {};
-    for (const column of rowUl.children) {
-        const columnName = column.querySelector("h3")!.textContent!;
-        if (table.columns[columnName].isAutoIncrement) {
+    const row: TRow = {};
+    for (const columnElement of rowUl.children) {
+        const columnName = columnElement.querySelector("h3")!.textContent!;
+        const column = table.columns[columnName];
+
+        if (column.isAutoIncrement) {
             let valueBeforeIncrement = table.columns[columnName].increment();
             valuesBeforeIncrement.push({ column: columnName, value: valueBeforeIncrement });
             row[columnName] = valueBeforeIncrement;
             continue;
         }
-
-        if (table.columns[columnName].type === "boolean") {
-            const value = column.querySelector(".custom-dropdown button")!.textContent!;
-            if (table.columns[columnName].isUnique && table.indexes[columnName].has(value === "True")) {
-                openNotifications(`<p style='color: var(--red5)'>O valor "${value}" já existe para a coluna "${columnName}".</p>`);
-                table.revertAutoIncrementValues(valuesBeforeIncrement);
-                return;
+        if (column.isCurrentTimestamp) {
+            if (compareTypes(column.type, types.DATE)) {
+                row[columnName] = SQLDate.now();
+            } else if (compareTypes(column.type, types.TIME)) {
+                row[columnName] = SQLTime.now();
             }
-            row[columnName] = value === "True";
             continue;
         }
 
-        if (table.columns[columnName].isCurrentTimestamp) {
-            row[columnName] = new Date();
-            continue;
+        let rawValue: string;
+        if (compareTypes(column.type, types.BOOLEAN)) {
+            rawValue = columnElement.querySelector(".custom-dropdown button")!.textContent!;
+        } else {
+            rawValue = (columnElement.querySelector("input") as HTMLInputElement).value.trim();
         }
 
-        const input = column.querySelector("input") as HTMLInputElement;
-        if (table.columns[columnName].isUnique && table.indexes[columnName].has(input.value)) {
-            openNotifications(`<p style='color: var(--red5)'>O valor "${input.value}" já existe para a coluna "${columnName}".</p>`);
-            table.revertAutoIncrementValues(valuesBeforeIncrement);
-            return;
-        }
-        if (input.value.trim() === "") {
-            if (table.columns[columnName].isNotNull) {
+        if (rawValue === "") {
+            if (column.isNotNull) {
                 openNotifications(`<p style='color: var(--red5)'>A coluna "${columnName}" não pode ser nula.</p>`);
                 table.revertAutoIncrementValues(valuesBeforeIncrement);
                 return;
             }
-            if (table.columns[columnName].hasDefault) {
-                row[columnName] = table.columns[columnName].defaultValue;
-            } else {
-                row[columnName] = null;
-            }
+            row[columnName] = column.hasDefault ? column.defaultValue : null;
             continue;
         }
-        if (table.columns[columnName].type === "integer") {
-            row[columnName] = parseInt(input.value);
-        } else if (table.columns[columnName].type === "float") {
-            row[columnName] = parseFloat(input.value);
-        } else if (table.columns[columnName].type === "date") {
-            // Garante que sempre é uma instância de Date
-            const dateValue = new Date(input.value + "T00:00:00");
-            row[columnName] = !isNaN(dateValue.getTime()) ? dateValue : null;
-        } else if (table.columns[columnName].type === "time") {
-            // Garante que sempre é uma instância de Date
-            const [hora, minuto, segundo] = input.value.split(":").map(Number);
-            const timeValue = new Date();
-            timeValue.setHours(hora, minuto, segundo || 0, 0);
-            row[columnName] = !isNaN(timeValue.getTime()) ? timeValue : null;
-        } else {
-            row[columnName] = input.value;
+
+        const value = column.type.parse(rawValue);
+        if (value === null) {
+            openNotifications(
+                `<p style='color: var(--red5)'>Valor inválido para a coluna "${columnName}".</p>`
+            );
+
+            table.revertAutoIncrementValues(valuesBeforeIncrement);
+            return;
         }
+        if (table.columns[columnName].isUnique && table.indexes[columnName].has(value)) {
+            openNotifications(`<p style='color: var(--red5)'>O valor "${value}" já existe para a coluna "${columnName}".</p>`);
+            table.revertAutoIncrementValues(valuesBeforeIncrement);
+            return;
+        }
+        
+        row[columnName] = value;
     }
     SGBDFunctions.insertRow(currentTable!, row);
     changeInsertRowMenu();
@@ -1897,78 +1886,51 @@ function editRowInterface(rowIndex: number) {
     const table = getTable(currentTable!)!;
     const rowUl = document.querySelector("#editar-linha ul#colunas-editar-linha")!;
     const row: Record<string, any> = {};
-    for (const column of rowUl.children) {
-        const columnName = column.querySelector("h3")!.textContent!;
-        if (table.columns[columnName].isAutoIncrement) {
+    for (const columnElement of rowUl.children) {
+        const columnName = columnElement.querySelector("h3")!.textContent!;
+        const column = table.columns[columnName];
+
+        if (column.isAutoIncrement) {
             row[columnName] = table.rows[rowIndex][columnName];;
             continue;
         }
-
-        if (table.columns[columnName].type === "boolean") {
-            const value = column.querySelector(".custom-dropdown button")!.textContent!;
-            if (table.columns[columnName].isUnique && table.indexes[columnName].has(value === "True")) {
-                if (value === "True" && table.rows[rowIndex][columnName] !== true) {
-                    openNotifications(`<p style='color: var(--red5)'>O valor "${value}" já existe para a coluna "${columnName}".</p>`);
-                    return;
-                }
+        if (column.isCurrentTimestamp) {
+            if (compareTypes(column.type, types.DATE)) {
+                row[columnName] = SQLDate.now();
+            } else if (compareTypes(column.type, types.TIME)) {
+                row[columnName] = SQLTime.now();
             }
-            row[columnName] = value === "True";
             continue;
         }
 
-        if (table.columns[columnName].type === "enum") {
-            const value = column.querySelector(".custom-dropdown button")!.textContent!.trim();
-            if (table.columns[columnName].isUnique && table.indexes[columnName].has(value)) {
-                if (value !== table.rows[rowIndex][columnName]) {
-                    openNotifications(`<p style='color: var(--red5)'>O valor "${value}" já existe para a coluna "${columnName}".</p>`);
-                    return;
-                }
-            }
-            row[columnName] = value;
-            continue;
+        let rawValue: string;
+        if (compareTypes(column.type, types.BOOLEAN)) {
+            rawValue = columnElement.querySelector(".custom-dropdown button")!.textContent!;
+        } else {
+            rawValue = (columnElement.querySelector("input") as HTMLInputElement).value.trim();
         }
 
-        if (table.columns[columnName].isCurrentTimestamp) {
-            row[columnName] = new Date();
-            continue;
-        }
-
-        const input = column.querySelector("input") as HTMLInputElement;
-        if (table.columns[columnName].isUnique && table.indexes[columnName].has(input.value)) {
-            if (input.value !== table.rows[rowIndex][columnName]) {
-                openNotifications(`<p style='color: var(--red5)'>O valor "${input.value}" já existe para a coluna "${columnName}".</p>`);
-                return;
-            }
-        }
-        if (input.value.trim() === "") {
-            if (table.columns[columnName].isNotNull) {
+        if (rawValue === "") {
+            if (column.isNotNull) {
                 openNotifications(`<p style='color: var(--red5)'>A coluna "${columnName}" não pode ser nula.</p>`);
                 return;
             }
-            if (table.columns[columnName].hasDefault) {
-                row[columnName] = table.columns[columnName].defaultValue;
-            } else {
-                row[columnName] = null;
-            }
+            row[columnName] = column.hasDefault ? column.defaultValue : null;
             continue;
         }
-        if (table.columns[columnName].type === "integer") {
-            row[columnName] = parseInt(input.value);
-        } else if (table.columns[columnName].type === "float") {
-            row[columnName] = parseFloat(input.value);
-        } else if (table.columns[columnName].type === "date") {
-            // Garante que sempre é uma instância de Date
-            const dateValue = new Date(input.value + "T00:00:00");
-            row[columnName] = !isNaN(dateValue.getTime()) ? dateValue : null;
-        } else if (table.columns[columnName].type === "time") {
-            // Garante que sempre é uma instância de Date
-            const [hora, minuto, segundo] = input.value.split(":").map(Number);
-            const timeValue = new Date();
-            timeValue.setHours(hora, minuto, segundo || 0, 0);
-            row[columnName] = !isNaN(timeValue.getTime()) ? timeValue : null;
-        } else {
-            row[columnName] = input.value;
+
+        const value = column.type.parse(rawValue);
+        if (value === null) {
+            openNotifications(`<p style='color: var(--red5)'>Valor inválido para a coluna "${columnName}".</p>`);
+
+            return;
         }
+        if (table.columns[columnName].isUnique && table.indexes[columnName].has(value)) {
+            openNotifications(`<p style='color: var(--red5)'>O valor "${value}" já existe para a coluna "${columnName}".</p>`);
+            return;
+        }
+        
+        row[columnName] = value;
     }
 
     SGBDFunctions.editRow(currentTable!, rowIndex, row);
@@ -2076,7 +2038,7 @@ function alterColumnsInterface() {
             }
         }
 
-        if (newColumn.type === "enum") {
+        if (newColumn.type instanceof DataTypes.EnumType) {
             if (newColumn.enumValues !== getCurrentTable()!.columns[oldColumnName].enumValues) {
                 openNotifications("<p style='color: var(--red5)'>Os valores do enum não podem ser alterados.</p>");
                 return;
@@ -2174,7 +2136,7 @@ function changeTabelaSelecionadaTabela() {
         const divColuna = document.createElement("div");
         divColuna.innerHTML = `
             <p>${column.name}</p>
-            <p>${column.type.toUpperCase()}${column.isPrimaryKey ? " • PK" : ""}${column.isForeignKey ? " • FK → " + column.reference?.table + ", " + column.reference?.column : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO INCREMENT" : ""}</p>
+            <p>${column.type.name.toUpperCase()}${column.isPrimaryKey ? " • PK" : ""}${column.isForeignKey ? " • FK → " + column.reference?.table + ", " + column.reference?.column : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO INCREMENT" : ""}</p>
         `;
 
         divColuna.onclick = function () {
@@ -2182,7 +2144,7 @@ function changeTabelaSelecionadaTabela() {
             changeTabelaSelecionadaLinhaColuna("column", undefined, column.name);
         }
 
-        divLinha.appendChild(divColuna);
+        divLinha.appendChild(divColuna); 
     });
     const headerActions = document.createElement("div");
     headerActions.innerHTML = "<p>Ações</p>";
@@ -5238,4 +5200,4 @@ createHelpButtons();
 // -Modelo lógico (diagrama de entidade relacionamento)
 // -Pesquisar(Dashboard)
 // -Permitir sincronização com banco real
-// -Adicionar varchar
+// -Adicionar mais tipos de dados (JSON, BLOB, varchar, decimal, etc)
