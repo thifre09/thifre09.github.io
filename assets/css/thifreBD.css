@@ -191,158 +191,60 @@ input[type="number"]::-webkit-inner-spin-button {
         display: flex;
         flex-direction: column;
         min-height: 0;
+        overflow: auto;
+        font-size: var(--fs5);
 
-        #databases {
+        details, p {
+            margin-left: calc(2*var(--p5));
+        }
+
+        details > summary span {
+            transition: var(--transition-time1);
+        }
+
+        details[open] > summary span {
+            transform: rotate(90deg);
+        }
+
+        summary {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            padding: 5%;
 
-            .custom-dropdown-trigger {
-                border: solid 2px var(--gray10);
-                background-color: transparent;
+            span {
+                svg {
+                    width: 20px;
+                    height: 20px;
+                    display: block;
+                }
             }
 
-            #database-button {
-                display: flex;
+            div {
+                display: inline-flex;
+                justify-content: space-between;
                 align-items: center;
-                width: 100%;
+                flex: 1;
+
+                >p {
+                    margin: 0;
+                }
 
                 svg {
-                    color: var(--blue4)
+                    width: 20px;
+                    height: 20px;
+                    display: none;
                 }
+            }
 
-                p {
-                    font-size: var(--fs4);
-                    margin: 0;
-                    margin-right: 5px;
-                }
-
-                div {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    margin-left: auto;
-
-                    button {
-                        cursor: pointer;
-                        border: none;
-                        border-radius: 10px;
-                        background-color: transparent;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        padding: 3px;
-                        transition: var(--transition-time1);
-
-                        svg {
-                            width: 30px;
-                            height: 30px;
-                            color: black
-                        }
-                    }
-
-                    button:hover {
-                        background-color: var(--gray12);
-                        transform: scale(1.05);
-                    }
+            &:hover {
+                svg {
+                    display: block;
+                    cursor: pointer;
                 }
             }
         }
 
-        #tabelas {
-            flex: 1;
-            min-height: 0;
-            padding: 5%;
-            overflow-y: auto;
-
-            div {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-
-                >p {
-                    font-size: var(--fs4);
-                }
-
-                div {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    margin-left: auto;
-
-                    button {
-                        cursor: pointer;
-                        border: none;
-                        border-radius: 10px;
-                        background-color: transparent;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        padding: 3px;
-                        transition: var(--transition-time1);
-
-                        svg {
-                            width: 30px;
-                            height: 30px;
-                            color: black
-                        }
-                    }
-
-                    button:hover {
-                        background-color: var(--gray12);
-                        transform: scale(1.05);
-                    }
-                }
-            }
-
-            #tabelas-lista {
-                .tabela {
-                    background-color: var(--gray13);
-                    border-radius: 10px;
-                    padding: 5px;
-                    margin: 5px;
-                    cursor: pointer;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    transition: var(--transition-time1);
-
-                    p:nth-child(1) {
-                        max-width: 90%;
-                        font-size: var(--fs5);
-                        overflow: hidden;
-                    }
-
-                    p:nth-child(2) {
-                        font-size: var(--fs6);
-                    }
-
-                    button {
-                        background-color: transparent;
-                        border: none;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        cursor: pointer;
-                    }
-                }
-
-                .tabela:hover {
-                    background-color: var(--gray12);
-                    transform: scale(1.02);
-                }
-
-                .tabela-ativa {
-                    background-color: var(--blue5);
-                    color: white;
-                }
-
-                .tabela-ativa:hover {
-                    background-color: var(--blue4);
-                }
-            }
+        .summary-active {
+            background-color: var(--blue3);
+            color: white;
         }
     }
 
