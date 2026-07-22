@@ -136,7 +136,7 @@ function createExempleDatabase() {
         currentTable = null;
     }
     if (!db.schemas[schemaName]) {
-        const schema = new DB.Schema(schemaName, databaseName);
+        const schema = new DB.Schema(schemaName, db);
         SGBDFunctions.createSchema(schema);
     }
     else {
@@ -148,15 +148,15 @@ function createExempleDatabase() {
     // CLIENTES
     // =========================
     if (!schema.tables["clientes"]) {
-        const table = new DB.Table("clientes", schemaName);
-        table.columns["id"] = new DB.Column("id", "clientes", types.INTEGER, true, false, true, true, true, false, false);
-        table.columns["nome"] = new DB.Column("nome", "clientes", types.TEXT, false, false, true, false, false, false, false);
-        table.columns["email"] = new DB.Column("email", "clientes", types.TEXT, false, false, true, false, false, false, false);
-        table.columns["telefone"] = new DB.Column("telefone", "clientes", types.TEXT, false, false, false, false, false, false, false);
-        table.columns["ativo"] = new DB.Column("ativo", "clientes", types.BOOLEAN, false, false, true, false, false, false, false);
-        table.columns["cadastro"] = new DB.Column("cadastro", "clientes", types.DATE, false, false, true, false, false, false, false);
+        const table = new DB.Table("clientes", schema);
+        table.columns["id"] = new DB.Column("id", table, types.INTEGER, true, false, true, true, true, false, false);
+        table.columns["nome"] = new DB.Column("nome", table, types.TEXT, false, false, true, false, false, false, false);
+        table.columns["email"] = new DB.Column("email", table, types.TEXT, false, false, true, false, false, false, false);
+        table.columns["telefone"] = new DB.Column("telefone", table, types.TEXT, false, false, false, false, false, false, false);
+        table.columns["ativo"] = new DB.Column("ativo", table, types.BOOLEAN, false, false, true, false, false, false, false);
+        table.columns["cadastro"] = new DB.Column("cadastro", table, types.DATE, false, false, true, false, false, false, false);
         SGBDFunctions.createTable(table);
-        SGBDFunctions.insertRow("public", "clientes", new DB.Row("clientes", {
+        SGBDFunctions.insertRow("clientes", new DB.Row(table, {
             id: 1,
             nome: "Ana Silva",
             email: "ana@email.com",
@@ -164,7 +164,7 @@ function createExempleDatabase() {
             ativo: true,
             cadastro: new SQLDate(2025, 1, 10)
         }));
-        SGBDFunctions.insertRow("public", "clientes", new DB.Row("clientes", {
+        SGBDFunctions.insertRow("clientes", new DB.Row(table, {
             id: 2,
             nome: "Bruno Costa",
             email: "bruno@email.com",
@@ -172,7 +172,7 @@ function createExempleDatabase() {
             ativo: true,
             cadastro: new SQLDate(2025, 2, 5)
         }));
-        SGBDFunctions.insertRow("public", "clientes", new DB.Row("clientes", {
+        SGBDFunctions.insertRow("clientes", new DB.Row(table, {
             id: 3,
             nome: "Carla Mendes",
             email: "carla@email.com",
@@ -180,7 +180,7 @@ function createExempleDatabase() {
             ativo: false,
             cadastro: new SQLDate(2025, 3, 18)
         }));
-        SGBDFunctions.insertRow("public", "clientes", new DB.Row("clientes", {
+        SGBDFunctions.insertRow("clientes", new DB.Row(table, {
             id: 4,
             nome: "Daniel Souza",
             email: "daniel@email.com",
@@ -188,7 +188,7 @@ function createExempleDatabase() {
             ativo: true,
             cadastro: new SQLDate(2025, 4, 12)
         }));
-        SGBDFunctions.insertRow("public", "clientes", new DB.Row("clientes", {
+        SGBDFunctions.insertRow("clientes", new DB.Row(table, {
             id: 5,
             nome: "Eduarda Lima",
             email: "eduarda@email.com",
@@ -202,60 +202,60 @@ function createExempleDatabase() {
     // CATEGORIAS
     // =========================
     if (!schema.tables["categorias"]) {
-        const table = new DB.Table("categorias", schemaName);
-        table.columns["id"] = new DB.Column("id", "categorias", types.INTEGER, true, false, true, true, true, false, false);
-        table.columns["nome"] = new DB.Column("nome", "categorias", types.TEXT, false, false, true, false, false, false, false);
+        const table = new DB.Table("categorias", schema);
+        table.columns["id"] = new DB.Column("id", table, types.INTEGER, true, false, true, true, true, false, false);
+        table.columns["nome"] = new DB.Column("nome", table, types.TEXT, false, false, true, false, false, false, false);
         SGBDFunctions.createTable(table);
-        SGBDFunctions.insertRow("public", "categorias", new DB.Row("categorias", { id: 1, nome: "Informática" }));
-        SGBDFunctions.insertRow("public", "categorias", new DB.Row("categorias", { id: 2, nome: "Periféricos" }));
-        SGBDFunctions.insertRow("public", "categorias", new DB.Row("categorias", { id: 3, nome: "Escritório" }));
-        SGBDFunctions.insertRow("public", "categorias", new DB.Row("categorias", { id: 4, nome: "Áudio" }));
+        SGBDFunctions.insertRow("categorias", new DB.Row(table, { id: 1, nome: "Informática" }));
+        SGBDFunctions.insertRow("categorias", new DB.Row(table, { id: 2, nome: "Periféricos" }));
+        SGBDFunctions.insertRow("categorias", new DB.Row(table, { id: 3, nome: "Escritório" }));
+        SGBDFunctions.insertRow("categorias", new DB.Row(table, { id: 4, nome: "Áudio" }));
         table.columns["id"].incrementCounter = 5;
     }
     // =========================
     // PRODUTOS
     // =========================
     if (!schema.tables["produtos"]) {
-        const table = new DB.Table("produtos", schemaName);
-        table.columns["id"] = new DB.Column("id", "produtos", types.INTEGER, true, false, true, true, true, false, false);
-        table.columns["categoria_id"] = new DB.Column("categoria_id", "produtos", types.INTEGER, false, true, true, false, false, false, false, {
+        const table = new DB.Table("produtos", schema);
+        table.columns["id"] = new DB.Column("id", table, types.INTEGER, true, false, true, true, true, false, false);
+        table.columns["categoria_id"] = new DB.Column("categoria_id", table, types.INTEGER, false, true, true, false, false, false, false, {
             schema: schemaName,
             table: "categorias",
             column: "id"
         });
-        table.columns["nome"] = new DB.Column("nome", "produtos", types.TEXT, false, false, true, false, false, false, false);
-        table.columns["preco"] = new DB.Column("preco", "produtos", types.FLOAT, false, false, true, false, false, false, false);
-        table.columns["estoque"] = new DB.Column("estoque", "produtos", types.INTEGER, false, false, true, false, false, false, false);
+        table.columns["nome"] = new DB.Column("nome", table, types.TEXT, false, false, true, false, false, false, false);
+        table.columns["preco"] = new DB.Column("preco", table, types.FLOAT, false, false, true, false, false, false, false);
+        table.columns["estoque"] = new DB.Column("estoque", table, types.INTEGER, false, false, true, false, false, false, false);
         SGBDFunctions.createTable(table);
-        SGBDFunctions.insertRow("public", "produtos", new DB.Row("produtos", {
+        SGBDFunctions.insertRow("produtos", new DB.Row(table, {
             id: 1,
             categoria_id: 1,
             nome: "Notebook",
             preco: 4500.00,
             estoque: 12
         }));
-        SGBDFunctions.insertRow("public", "produtos", new DB.Row("produtos", {
+        SGBDFunctions.insertRow("produtos", new DB.Row(table, {
             id: 2,
             categoria_id: 2,
             nome: "Mouse Gamer",
             preco: 149.90,
             estoque: 50
         }));
-        SGBDFunctions.insertRow("public", "produtos", new DB.Row("produtos", {
+        SGBDFunctions.insertRow("produtos", new DB.Row(table, {
             id: 3,
             categoria_id: 2,
             nome: "Teclado Mecânico",
             preco: 299.90,
             estoque: 22
         }));
-        SGBDFunctions.insertRow("public", "produtos", new DB.Row("produtos", {
+        SGBDFunctions.insertRow("produtos", new DB.Row(table, {
             id: 4,
             categoria_id: 4,
             nome: "Headset",
             preco: 399.90,
             estoque: 18
         }));
-        SGBDFunctions.insertRow("public", "produtos", new DB.Row("produtos", {
+        SGBDFunctions.insertRow("produtos", new DB.Row(table, {
             id: 5,
             categoria_id: 3,
             nome: "Cadeira Escritório",
@@ -268,26 +268,26 @@ function createExempleDatabase() {
     // PEDIDOS
     // =========================
     if (!schema.tables["pedidos"]) {
-        const table = new DB.Table("pedidos", schemaName);
-        table.columns["id"] = new DB.Column("id", "pedidos", types.INTEGER, true, false, true, true, true, false, false);
-        table.columns["cliente_id"] = new DB.Column("cliente_id", "pedidos", types.INTEGER, false, true, true, false, false, false, false, {
+        const table = new DB.Table("pedidos", schema);
+        table.columns["id"] = new DB.Column("id", table, types.INTEGER, true, false, true, true, true, false, false);
+        table.columns["cliente_id"] = new DB.Column("cliente_id", table, types.INTEGER, false, true, true, false, false, false, false, {
             schema: schemaName,
             table: "clientes",
             column: "id"
         });
-        table.columns["data"] = new DB.Column("data", "pedidos", types.DATE, false, false, true, false, false, false, false);
+        table.columns["data"] = new DB.Column("data", table, types.DATE, false, false, true, false, false, false, false);
         SGBDFunctions.createTable(table);
-        SGBDFunctions.insertRow("public", "pedidos", new DB.Row("pedidos", {
+        SGBDFunctions.insertRow("pedidos", new DB.Row(table, {
             id: 1,
             cliente_id: 1,
             data: new SQLDate(2026, 7, 15)
         }));
-        SGBDFunctions.insertRow("public", "pedidos", new DB.Row("pedidos", {
+        SGBDFunctions.insertRow("pedidos", new DB.Row(table, {
             id: 2,
             cliente_id: 2,
             data: new SQLDate(2026, 7, 17)
         }));
-        SGBDFunctions.insertRow("public", "pedidos", new DB.Row("pedidos", {
+        SGBDFunctions.insertRow("pedidos", new DB.Row(table, {
             id: 3,
             cliente_id: 1,
             data: new SQLDate(2026, 7, 19)
@@ -298,50 +298,50 @@ function createExempleDatabase() {
     // ITENS_PEDIDO
     // =========================
     if (!schema.tables["itens_pedido"]) {
-        const table = new DB.Table("itens_pedido", schemaName);
-        table.columns["id"] = new DB.Column("id", "itens_pedido", types.INTEGER, true, false, true, true, true, false, false);
-        table.columns["pedido_id"] = new DB.Column("pedido_id", "itens_pedido", types.INTEGER, false, true, true, false, false, false, false, {
+        const table = new DB.Table("itens_pedido", schema);
+        table.columns["id"] = new DB.Column("id", table, types.INTEGER, true, false, true, true, true, false, false);
+        table.columns["pedido_id"] = new DB.Column("pedido_id", table, types.INTEGER, false, true, true, false, false, false, false, {
             schema: schemaName,
             table: "pedidos",
             column: "id"
         });
-        table.columns["produto_id"] = new DB.Column("produto_id", "itens_pedido", types.INTEGER, false, true, true, false, false, false, false, {
+        table.columns["produto_id"] = new DB.Column("produto_id", table, types.INTEGER, false, true, true, false, false, false, false, {
             schema: schemaName,
             table: "produtos",
             column: "id"
         });
-        table.columns["quantidade"] = new DB.Column("quantidade", "itens_pedido", types.INTEGER, false, false, true, false, false, false, false);
-        table.columns["valor_unitario"] = new DB.Column("valor_unitario", "itens_pedido", types.FLOAT, false, false, true, false, false, false, false);
+        table.columns["quantidade"] = new DB.Column("quantidade", table, types.INTEGER, false, false, true, false, false, false, false);
+        table.columns["valor_unitario"] = new DB.Column("valor_unitario", table, types.FLOAT, false, false, true, false, false, false, false);
         SGBDFunctions.createTable(table);
-        SGBDFunctions.insertRow("public", "itens_pedido", new DB.Row("itens_pedido", {
+        SGBDFunctions.insertRow("itens_pedido", new DB.Row(table, {
             id: 1,
             pedido_id: 1,
             produto_id: 1,
             quantidade: 1,
             valor_unitario: 4500
         }));
-        SGBDFunctions.insertRow("public", "itens_pedido", new DB.Row("itens_pedido", {
+        SGBDFunctions.insertRow("itens_pedido", new DB.Row(table, {
             id: 2,
             pedido_id: 1,
             produto_id: 2,
             quantidade: 2,
             valor_unitario: 149.9
         }));
-        SGBDFunctions.insertRow("public", "itens_pedido", new DB.Row("itens_pedido", {
+        SGBDFunctions.insertRow("itens_pedido", new DB.Row(table, {
             id: 3,
             pedido_id: 2,
             produto_id: 3,
             quantidade: 1,
             valor_unitario: 299.9
         }));
-        SGBDFunctions.insertRow("public", "itens_pedido", new DB.Row("itens_pedido", {
+        SGBDFunctions.insertRow("itens_pedido", new DB.Row(table, {
             id: 4,
             pedido_id: 3,
             produto_id: 4,
             quantidade: 1,
             valor_unitario: 399.9
         }));
-        SGBDFunctions.insertRow("public", "itens_pedido", new DB.Row("itens_pedido", {
+        SGBDFunctions.insertRow("itens_pedido", new DB.Row(table, {
             id: 5,
             pedido_id: 3,
             produto_id: 5,
@@ -770,7 +770,7 @@ var DB;
             `;
         }
         clickBehavior() {
-            currentDatabase = this.parent;
+            currentDatabase = this.parent.name;
             currentSchema = this.name;
             currentTable = null;
             refreshUI();
@@ -792,7 +792,6 @@ var DB;
                 changeConfigurarTabelaMenu();
                 abrirFechar(false, "configurar-tabela");
             });
-            this.database = currentDatabase;
             this.columns = {};
             this.rows = [];
             this.indexes = {};
@@ -858,8 +857,8 @@ var DB;
             `;
         }
         clickBehavior() {
-            currentDatabase = this.database;
-            currentSchema = this.parent;
+            currentDatabase = this.parent.parent.name;
+            currentSchema = this.parent.name;
             currentTable = this.name;
             refreshUI();
         }
@@ -1095,8 +1094,59 @@ class SGBDFunctions {
      * @param column - Coluna a ser adicionada.
      */
     static addColumn(tableName, column, schema) {
-        getTable(tableName, schema).columns[column.name] = column;
-        getTable(tableName, schema).indexes[column.name] = new Map();
+        let table;
+        if (schema !== undefined) {
+            table = getTable(tableName, schema);
+        }
+        else {
+            table = getTable(tableName);
+        }
+        table.columns[column.name] = column;
+        table.indexes[column.name] = new Map();
+        const columnName = column.name;
+        if (column.isAutoIncrement) {
+            table.rows.forEach((row) => {
+                row.values[columnName] = column.increment();
+            });
+            table.indexes[columnName] = new Map();
+            table.rows.forEach((row, index) => {
+                const value = row.values[columnName];
+                table.indexes[columnName].set(value, [index]);
+            });
+        }
+        else if (column.hasDefault) {
+            table.rows.forEach((row) => {
+                row.values[columnName] = column.defaultValue;
+            });
+            table.indexes[columnName] = new Map();
+            table.rows.forEach((row, index) => {
+                const value = row.values[columnName];
+                table.indexes[columnName].set(value, (table.indexes[columnName].get(value) || []).concat(index));
+            });
+        }
+        else if (column.isCurrentTimestamp) {
+            table.rows.forEach((row) => {
+                if (compareTypes(column.type, types.DATE))
+                    row.values[columnName] = SQLDate.now();
+                else if (compareTypes(column.type, types.TIME))
+                    row.values[columnName] = SQLTime.now();
+            });
+            table.indexes[columnName] = new Map();
+            table.rows.forEach((row, index) => {
+                const value = row.values[columnName];
+                table.indexes[columnName].set(value, (table.indexes[columnName].get(value) || []).concat(index));
+            });
+        }
+        else {
+            table.rows.forEach((row) => {
+                row.values[columnName] = null;
+            });
+            table.indexes[columnName] = new Map();
+            table.rows.forEach((row, index) => {
+                const value = row.values[columnName];
+                table.indexes[columnName].set(value, (table.indexes[columnName].get(value) || []).concat(index));
+            });
+        }
         if (column.reference) {
             //getCurrentDatabase()!.addForeignKeyReference(currentSchema!, tableName, column.name, column.reference);
         }
@@ -1108,8 +1158,14 @@ class SGBDFunctions {
      * @param tableName - Nome da tabela alvo.
      * @param row - Dados da nova linha.
      */
-    static insertRow(schemaName, tableName, row) {
-        const table = getTable(tableName, schemaName);
+    static insertRow(tableName, row, schemaName) {
+        let table;
+        if (schemaName !== undefined) {
+            table = getTable(tableName, schemaName);
+        }
+        else {
+            table = getTable(tableName);
+        }
         const rowIndex = table.rows.length;
         table.rows.push(row);
         for (const col in table.indexes) {
@@ -1128,8 +1184,14 @@ class SGBDFunctions {
      * @param oldRowIndex - Índice da linha antiga.
      * @param newRow - Novo conteúdo da linha.
      */
-    static editRow(tableName, oldRowIndex, newRow) {
-        const table = getTable(tableName);
+    static editRow(tableName, oldRowIndex, newRow, schemaName) {
+        let table;
+        if (schemaName !== undefined) {
+            table = getTable(tableName, schemaName);
+        }
+        else {
+            table = getTable(tableName);
+        }
         const oldRow = table.rows[oldRowIndex];
         for (const col in table.indexes) {
             const oldValue = oldRow.values[col];
@@ -1184,9 +1246,14 @@ class SGBDFunctions {
      * Remove uma tabela e desfaz as chaves estrangeiras de saída.
      * @param tableName - Nome da tabela.
      */
-    static deleteTable(tableName) {
+    static deleteTable(tableName, schemaName) {
         const db = getCurrentDatabase();
-        delete db.schemas[currentSchema].tables[tableName];
+        if (schemaName !== undefined) {
+            delete db.schemas[schemaName].tables[tableName];
+        }
+        else {
+            delete db.schemas[currentSchema].tables[tableName];
+        }
         if (currentTable === tableName) {
             currentTable = null;
         }
@@ -1198,9 +1265,15 @@ class SGBDFunctions {
      * @param tableName - Nome da tabela.
      * @param columnName - Nome da coluna.
      */
-    static deleteColumn(tableName, columnName) {
+    static deleteColumn(tableName, columnName, schemaName) {
         const db = getCurrentDatabase();
-        const table = getTable(tableName);
+        let table;
+        if (schemaName !== undefined) {
+            table = getTable(tableName, schemaName);
+        }
+        else {
+            table = getTable(tableName);
+        }
         const column = table.columns[columnName];
         table.indexes[columnName]?.clear();
         delete table.indexes[columnName];
@@ -1216,8 +1289,14 @@ class SGBDFunctions {
      * @param tableName - Nome da tabela.
      * @param rowIndex - Índice da linha a remover.
      */
-    static deleteRow(tableName, rowIndex) {
-        const table = getTable(tableName);
+    static deleteRow(tableName, rowIndex, schemaName) {
+        let table;
+        if (schemaName !== undefined) {
+            table = getTable(tableName, schemaName);
+        }
+        else {
+            table = getTable(tableName);
+        }
         const row = table.rows[rowIndex];
         for (const col in table.indexes) {
             const value = row.values[col];
@@ -1269,9 +1348,17 @@ class SGBDFunctions {
         refreshUI();
         saveToLocalStorage();
     }
-    static renameTable(oldName, newName) {
-        const schema = getCurrentSchema();
-        const t = schema.tables[oldName];
+    static renameTable(oldName, newName, schemaName) {
+        let schema;
+        let t;
+        if (schemaName !== undefined) {
+            schema = getCurrentDatabase().schemas[schemaName];
+            t = getTable(oldName, schemaName);
+        }
+        else {
+            schema = getCurrentSchema();
+            t = getTable(oldName);
+        }
         if (!t)
             return;
         delete schema.tables[oldName];
@@ -1281,7 +1368,7 @@ class SGBDFunctions {
         refreshUI();
         saveToLocalStorage();
     }
-    static alterColumn(tableName, oldColumnName, newColumn) {
+    static alterColumn(tableName, oldColumnName, newColumn, schemaName) {
         /**
          * Converte um valor de célula para o tipo de coluna informado.
          * Usado ao alterar o tipo de uma coluna existente para adaptar os valores já presentes.
@@ -1294,8 +1381,13 @@ class SGBDFunctions {
                 return value;
             return newType.parse(value);
         }
-        const schema = getCurrentSchema();
-        const table = schema.tables[tableName];
+        let table;
+        if (schemaName !== undefined) {
+            table = getTable(tableName, schemaName);
+        }
+        else {
+            table = getTable(tableName);
+        }
         const oldColumn = table.columns[oldColumnName];
         if (JSON.stringify(oldColumn) === JSON.stringify(newColumn))
             return;
@@ -1571,9 +1663,7 @@ var DataTypes;
     DataTypes.VarcharType = VarcharType;
 })(DataTypes || (DataTypes = {}));
 let databases = {};
-const databaseGroup = new DB.NodeGroup("databases", [], () => {
-    abrirFechar(false, "criacao-database");
-});
+const databaseGroup = new DB.NodeGroup("databases", [], () => { abrirFechar(false, "criacao-database"); });
 const types = {
     INTEGER: new DataTypes.IntegerType(),
     FLOAT: new DataTypes.FloatType(),
@@ -1588,11 +1678,6 @@ const types = {
         return new DataTypes.VarcharType(length);
     },
 };
-let currentDatabase = null;
-let currentSchema = null;
-let currentTable = null;
-let terminalSessions = [];
-let currentTerminalSession = 0;
 /**
  * Palavras reservadas SQL.
  */
@@ -1601,6 +1686,11 @@ const keyWords = [
     "into", "values", "update", "set", "delete", "create", "table", "database", "use", "drop", "alter", "add", "column", "enum",
     "references", "on", "and", "or", "in", "is", "integer", "float", "text", "date", "time", "boolean", "varchar"
 ];
+let currentDatabase = null;
+let currentSchema = null;
+let currentTable = null;
+let terminalSessions = [];
+let currentTerminalSession = 0;
 function getCurrentDatabase() {
     return currentDatabase ? databases[currentDatabase] : null;
 }
@@ -1656,7 +1746,7 @@ function createSchemaInterface() {
         openNotifications("<p style='color: var(--red5)'>Já existe um schema com esse nome.</p>");
         return;
     }
-    SGBDFunctions.createSchema(new DB.Schema(schemaName, currentDatabase));
+    SGBDFunctions.createSchema(new DB.Schema(schemaName, getCurrentDatabase()));
     schemaNameInput.value = "";
     openNotifications(`<p style='color: var(--green4)'>Schema "${schemaName}" criada com sucesso!</p>`);
 }
@@ -1686,7 +1776,7 @@ function createTableInterface() {
         openNotifications("<p style='color: var(--red5)'>Já existe uma tabela com esse nome.</p>");
         return;
     }
-    const table = new DB.Table(tableName, currentSchema);
+    const table = new DB.Table(tableName, getCurrentSchema());
     const columnsUl = document.querySelector("#criacao-tabela ul");
     const parsedColumns = parseColumnsFromInputs(columnsUl.children, table.columns);
     if (parsedColumns === null)
@@ -1724,52 +1814,6 @@ function addColumnsInterface() {
         }
     }
     for (const column of columnsToAdd) {
-        const columnName = column.name;
-        if (column.isAutoIncrement) {
-            table.rows.forEach((row) => {
-                row.values[columnName] = column.increment();
-            });
-            table.indexes[columnName] = new Map();
-            table.rows.forEach((row, index) => {
-                const value = row.values[columnName];
-                table.indexes[columnName].set(value, [index]);
-            });
-        }
-        else if (column.hasDefault) {
-            table.rows.forEach((row) => {
-                row.values[columnName] = column.defaultValue;
-            });
-            table.indexes[columnName] = new Map();
-            table.rows.forEach((row, index) => {
-                const value = row.values[columnName];
-                table.indexes[columnName].set(value, (table.indexes[columnName].get(value) || []).concat(index));
-            });
-        }
-        else if (column.isCurrentTimestamp) {
-            table.rows.forEach((row) => {
-                if (compareTypes(column.type, types.DATE))
-                    row.values[columnName] = SQLDate.now();
-                else if (compareTypes(column.type, types.TIME))
-                    row.values[columnName] = SQLTime.now();
-            });
-            table.indexes[columnName] = new Map();
-            table.rows.forEach((row, index) => {
-                const value = row.values[columnName];
-                table.indexes[columnName].set(value, (table.indexes[columnName].get(value) || []).concat(index));
-            });
-        }
-        else {
-            table.rows.forEach((row) => {
-                row.values[columnName] = null;
-            });
-            table.indexes[columnName] = new Map();
-            table.rows.forEach((row, index) => {
-                const value = row.values[columnName];
-                table.indexes[columnName].set(value, (table.indexes[columnName].get(value) || []).concat(index));
-            });
-        }
-    }
-    for (const column of columnsToAdd) {
         SGBDFunctions.addColumn(table.name, column);
     }
     columnsUl.innerHTML = "";
@@ -1799,7 +1843,7 @@ function insertRowInterface() {
     let valuesBeforeIncrement = [];
     const table = getTable(currentTable);
     const rowUl = document.querySelector("#inserir-linha ul#colunas-inserir-linha");
-    const row = new DB.Row(currentTable, {});
+    const row = new DB.Row(getCurrentTable(), {});
     for (const columnElement of rowUl.children) {
         const columnName = columnElement.querySelector("h3").textContent;
         const column = table.columns[columnName];
@@ -1852,7 +1896,7 @@ function insertRowInterface() {
         }
         row.values[columnName] = value;
     }
-    SGBDFunctions.insertRow(currentSchema, currentTable, row);
+    SGBDFunctions.insertRow(currentTable, row, currentSchema);
     changeInsertRowMenu();
     openNotifications(`<p style='color: var(--green5)'>Linha inserida com sucesso!</p>`);
 }
@@ -1867,7 +1911,7 @@ function editRowInterface(rowIndex) {
     }
     const table = getTable(currentTable);
     const rowUl = document.querySelector("#editar-linha ul#colunas-editar-linha");
-    const row = new DB.Row(currentTable, {});
+    const row = new DB.Row(getCurrentTable(), {});
     for (const columnElement of rowUl.children) {
         const columnName = columnElement.querySelector("h3").textContent;
         const column = table.columns[columnName];
@@ -2246,7 +2290,7 @@ function buildColumnFromInputs(columnInputs, knownColumns) {
         openNotifications("<p style='color: var(--red5)'>Já existe uma coluna com esse nome.</p>");
         return null;
     }
-    const column = new DB.Column(columnInputs.columnName, currentTable, columnInputs.columnType, columnInputs.isPrimaryKey, columnInputs.isForeignKey, columnInputs.isNotNull, columnInputs.isUnique, columnInputs.isAutoIncrement, columnInputs.hasDefault, columnInputs.isCurrentTimestamp);
+    const column = new DB.Column(columnInputs.columnName, getCurrentTable(), columnInputs.columnType, columnInputs.isPrimaryKey, columnInputs.isForeignKey, columnInputs.isNotNull, columnInputs.isUnique, columnInputs.isAutoIncrement, columnInputs.hasDefault, columnInputs.isCurrentTimestamp);
     if (compareTypes(column.type, types.ENUM([]))) {
         column.type.setAllowedValues(columnInputs.typeValues.split(",").map((value) => value.trim()));
     }
@@ -3544,6 +3588,7 @@ var SQL;
             const command = tokens[0]?.toLowerCase();
             switch (command) {
                 case "alter":
+                    new SQLAlter(commandText, tokens).execute();
                     break;
                 case "create":
                     new SQLCreate(commandText, tokens).execute();
@@ -3643,23 +3688,20 @@ var SQL;
             getCurrentTerminalSession().createEntry(this.fullCommand, [`Schema "${this.tokens[2]}" renomeado para "${this.tokens[5]}" com sucesso!`], "success");
         }
         table() {
-            const tableName = this.tokens[2];
-            if (currentDatabase === null) {
-                getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhuma database selecionada"], "error");
-                return;
+            const name = this.tokens[2];
+            const { schemaName, tableName, error } = verifySchemaTableName(name);
+            if (error) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [error], "error");
             }
-            if (currentSchema === null) {
-                getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhum schema selecionado"], "error");
+            if (!schemaName || !tableName)
                 return;
-            }
-            if (getCurrentSchema().tables[tableName] === undefined) {
-                getCurrentTerminalSession().createEntry(this.fullCommand, [`Tabela "${tableName}" não existe na database "${currentDatabase}"`], "error");
-                return;
-            }
             const action = this.tokens[3]?.toLowerCase();
             switch (action) {
                 case "rename":
                     this.rename();
+                    break;
+                case "set":
+                    this.setSchema();
                     break;
                 case "add":
                     this.addColumn();
@@ -3676,6 +3718,13 @@ var SQL;
         }
         rename() {
             const word5 = this.tokens[4]?.toLowerCase();
+            const name = this.tokens[2];
+            const { schemaName, tableName, error } = verifySchemaTableName(name);
+            if (error) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [error], "error");
+            }
+            if (!schemaName || !tableName)
+                return;
             if (word5 === "to") {
                 if (this.tokens.length !== 6) {
                     getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
@@ -3690,7 +3739,8 @@ var SQL;
                     getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma tabela com o nome "${newName}" nesse schema`], "error");
                     return;
                 }
-                SGBDFunctions.renameTable(this.tokens[2], newName);
+                SGBDFunctions.renameTable(tableName, newName, schemaName);
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Tabela "${tableName}" renomeado para "${newName}" com sucesso!`], "success");
             }
             else if (word5 === "column") {
                 if (this.tokens.length !== 8) {
@@ -3698,7 +3748,7 @@ var SQL;
                     return;
                 }
                 const columnName = this.tokens[5];
-                if (getTable(this.tokens[2]).columns[columnName] === undefined) {
+                if (getTable(tableName, schemaName).columns[columnName] === undefined) {
                     getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${columnName}" não existe na tabela "${this.tokens[2]}"`], "error");
                     return;
                 }
@@ -3717,13 +3767,39 @@ var SQL;
                 }
                 const newColumn = getTable(this.tokens[2]).columns[columnName].clone();
                 newColumn.name = newName;
-                SGBDFunctions.alterColumn(this.tokens[2], columnName, newColumn);
+                SGBDFunctions.alterColumn(tableName, columnName, newColumn, schemaName);
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${columnName}" renomeado para "${newName}" com sucesso!`], "success");
             }
             else {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
             }
         }
+        setSchema() {
+        }
         addColumn() {
+            const name = this.tokens[2];
+            const { schemaName, tableName, error } = verifySchemaTableName(name);
+            if (error) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [error], "error");
+            }
+            if (!schemaName || !tableName)
+                return;
+            const word5 = this.tokens[4]?.toLowerCase();
+            if (word5 !== "column") {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "ADD deve ser seguido de COLUMN"], "error");
+            }
+            if (this.tokens.length < 7) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
+            }
+            const result = parseColumn(this.tokens.slice(5));
+            if (result.error) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando CREATE TABLE incorreto", result.error], "error");
+                return;
+            }
+            if (!result.column)
+                return;
+            SGBDFunctions.addColumn(tableName, result.column, schemaName);
+            getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${result.column.name}" adicionada com sucesso`], "success");
         }
         dropColumn() {
         }
@@ -3811,7 +3887,7 @@ var SQL;
                 return;
             }
             const schemaName = this.tokens[2];
-            SGBDFunctions.createSchema(new DB.Schema(schemaName, currentDatabase));
+            SGBDFunctions.createSchema(new DB.Schema(schemaName, getCurrentDatabase()));
             getCurrentTerminalSession().createEntry(this.fullCommand, [`Schema "${schemaName}" criado com sucesso!`], "success");
         }
         /**
@@ -3819,34 +3895,14 @@ var SQL;
          */
         table() {
             const name = this.tokens[2];
-            let schemaName;
-            let tableName;
-            if (name.includes(".")) {
-                schemaName = name.split(".")[0]?.toLowerCase();
-                tableName = name.split(".")[1]?.toLowerCase();
-                if (!getCurrentDatabase().schemas[schemaName]) {
-                    getCurrentTerminalSession().createEntry(this.fullCommand, [`Schema "${schemaName}" não existe na database "${currentDatabase}"`], "error");
-                    return;
-                }
+            const { schemaName, tableName, error } = verifySchemaTableName(name);
+            if (error) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [error], "error");
             }
-            else {
-                schemaName = currentSchema;
-                tableName = name?.toLowerCase();
-            }
-            if (currentDatabase === null) {
-                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando CREATE TABLE incorreto", "Nenhuma database selecionada"], "error");
+            if (!schemaName || !tableName)
                 return;
-            }
-            if (currentSchema === null) {
-                getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhum schema selecionado"], "error");
-                return;
-            }
             if (!isValidSQLName(tableName)) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da tabela inválido"], "error");
-                return;
-            }
-            if (getCurrentDatabase().schemas[schemaName].tables[tableName]) {
-                getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma tabela com o nome "${tableName}" nesse schema`], "error");
                 return;
             }
             if (this.tokens[3] !== "(" || this.tokens[this.tokens.length - 1] !== ")") {
@@ -3857,7 +3913,7 @@ var SQL;
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da tabela é uma palavra-chave reservada"], "error");
                 return;
             }
-            let table = new DB.Table(tableName, currentSchema);
+            let table = new DB.Table(tableName, getCurrentSchema());
             const columnDefs = splitColumnDefinitions(this.tokens.slice(4, -1));
             for (const columnDef of columnDefs) {
                 const { column, error } = parseColumn(columnDef);
@@ -3879,38 +3935,18 @@ var SQL;
         }
         insert() {
             const t = this.tokens;
-            if (currentDatabase === null) {
-                getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhuma database selecionada"], "error");
-                return;
-            }
             if (t.length < 7 || t[1]?.toLowerCase() !== "into") {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Sintaxe inválida"], "error");
                 return;
             }
-            const name = t[2];
-            let schemaName;
-            let tableName;
-            if (name.includes(".")) {
-                schemaName = name.split(".")[0]?.toLowerCase();
-                tableName = name.split(".")[1]?.toLowerCase();
+            const name = this.tokens[2];
+            const { schemaName, tableName, error } = verifySchemaTableName(name);
+            if (error) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [error], "error");
             }
-            else {
-                schemaName = currentSchema;
-                tableName = name?.toLowerCase();
-                if (schemaName === null) {
-                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhum schema selecionado"], "error");
-                    return;
-                }
-            }
-            if (!getCurrentDatabase().schemas[schemaName].tables[tableName]) {
-                getCurrentTerminalSession().createEntry(this.fullCommand, [`Tabela "${tableName}" não existe no schema "${currentSchema}"`], "error");
+            if (!schemaName || !tableName)
                 return;
-            }
             const table = getCurrentDatabase().schemas[schemaName].tables[tableName];
-            if (!table) {
-                getCurrentTerminalSession().createEntry(this.fullCommand, [`Tabela "${tableName}" não existe no schema "${schemaName}"`], "error");
-                return;
-            }
             let columnsToBeInserted = [];
             if (t[3] === "(") {
                 const endValuesIndex = t.findIndex(token => token === ")");
@@ -3980,7 +4016,7 @@ var SQL;
                 if (token === "(") {
                     depth++;
                     if (depth === 1) {
-                        row = new DB.Row(currentTable, {});
+                        row = new DB.Row(getCurrentTable(), {});
                         columnIndex = 0;
                         value = "";
                     }
@@ -4138,14 +4174,14 @@ var SQL;
                 }
             }
             for (const row of validatedRows) {
-                SGBDFunctions.insertRow(schemaName, tableName, row);
+                SGBDFunctions.insertRow(tableName, row, schemaName);
             }
             getCurrentTerminalSession().createEntry(this.fullCommand, [`${validatedRows.length} linha(s) inserida(s) na tabela "${tableName}"`], "success");
         }
         validateRowsTypes(rows, table) {
             const newRows = [];
             for (const row of rows) {
-                const newRow = new DB.Row(currentTable, {});
+                const newRow = new DB.Row(getCurrentTable(), {});
                 for (const columnName in row.values) {
                     if (typeof row.values[columnName] === "string" && row.values[columnName].toUpperCase() === "NULL") {
                         newRow.values[columnName] = null;
@@ -4236,6 +4272,32 @@ var SQL;
         }
     }
     SQL.SystemCommands = SystemCommands;
+    function verifySchemaTableName(name) {
+        let schemaName;
+        let tableName;
+        if (currentDatabase == null) {
+            return { schemaName: null, tableName: null, error: "Nenhuma database selecionada" };
+        }
+        if (name.includes(".")) {
+            schemaName = name.split(".")[0]?.toLowerCase();
+            tableName = name.split(".")[1]?.toLowerCase();
+            if (!getCurrentDatabase().schemas[schemaName]) {
+                return { schemaName: null, tableName: null, error: `Schema "${schemaName}" não existe na database "${currentDatabase}"` };
+            }
+        }
+        else {
+            if (currentSchema === null) {
+                return { schemaName: null, tableName: null, error: "Nenhum schema selecionado" };
+            }
+            schemaName = currentSchema;
+            tableName = name.toLowerCase();
+        }
+        if (!getCurrentDatabase().schemas[schemaName].tables[tableName]) {
+            return { schemaName: null, tableName: null, error: `Tabela "${tableName}" não existe no schema "${currentSchema}"` };
+        }
+        return { schemaName: schemaName, tableName: tableName, error: null };
+    }
+    SQL.verifySchemaTableName = verifySchemaTableName;
     /**
      * Analisa uma definição de coluna do SQL e cria a instância correspondente.
      * @param columnDef - Tokens que compõem a definição da coluna.
@@ -4263,7 +4325,7 @@ var SQL;
         if (!valueExists(columnType)) {
             return { column: null, error: `Tipo de coluna inválido: "${columnDef[1]}"` };
         }
-        const column = new DB.Column(columnName, currentTable, columnType, false, false, false, false, false, false, false);
+        const column = new DB.Column(columnName, getCurrentTable(), columnType, false, false, false, false, false, false, false);
         const primaryValidation = validateCompoundKeyword("primary", "key", "PRIMARY KEY", columnDef);
         if (typeof primaryValidation === "string") {
             return { column: null, error: primaryValidation };
@@ -4644,7 +4706,7 @@ function confirmSaveOrLoad() {
  * Persiste o estado atual de `databases` no `localStorage` do navegador.
  */
 function saveToLocalStorage() {
-    localStorage.setItem("databases", JSON.stringify(databases));
+    //localStorage.setItem("databases", JSON.stringify(databases));
 }
 /**
  * Restaura o estado de `databases` a partir do `localStorage`, reconstruindo objetos em memória.
