@@ -87,6 +87,8 @@ let timeout: number;
  * @returns `true` quando o nome é válido.
  */
 function isValidSQLName(name: string): boolean {
+    if (name.length === 0) return false;
+    if (keyWords.includes(name.toLowerCase())) return false;
     return /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name);
 }
 
@@ -133,156 +135,342 @@ function abrirFechar(estado: boolean, id: string) {
  * Cria ou seleciona a database de exemplo com tabelas e registros pré-carregados.
  */
 function createExempleDatabase() {
-    const databaseName = "thifre_db";
+    const databaseName = "Exemplo";
+    const schemaName = "public";
 
-    if (databases[databaseName]) {
+    let db = databases[databaseName];
+
+    if (!db) {
+        db = new DB.Database(databaseName);
+        SGBDFunctions.createDatabase(db);
+    } else {
         currentDatabase = databaseName;
-        currentTable = Object.keys(databases[databaseName].tables)[0] ?? null;
-        refreshUI();
-        openNotifications("<p style='color: var(--yellow5)'>A database de exemplo ja existe e foi selecionada.</p>");
-        return;
+        currentSchema = null;
+        currentTable = null;
     }
 
-    SGBDFunctions.createDatabase(new DB.Database(databaseName));
+    if (!db.schemas[schemaName]) {
+        const schema = new DB.Schema(schemaName, databaseName);
+        SGBDFunctions.createSchema(schema);
+    } else {
+        currentSchema = schemaName;
+        currentTable = null;
+    }
 
-    const usuarios = new DB.Table("usuarios");
-    usuarios.columns["id"] = new DB.Column("id", types.INTEGER, true, false, true, true, true, false);
-    usuarios.columns["nome"] = new DB.Column("nome", types.TEXT, false, false, true, false, false, false);
-    usuarios.columns["email"] = new DB.Column("email", types.TEXT, false, false, true, true, false, false);
-    usuarios.columns["ativo"] = new DB.Column("ativo", types.BOOLEAN, false, false, false, false, false, true);
-    usuarios.columns["ativo"].defaultValue = true;
-    usuarios.columns["nota"] = new DB.Column("nota", types.FLOAT, false, false, false, false, false, true);
-    usuarios.columns["nota"].defaultValue = 0;
-    usuarios.columns["criado_em"] = new DB.Column("criado_em", types.DATE, false, false, true, false, false, false, true);
-    usuarios.columns["hora_entrada"] = new DB.Column("hora_entrada", types.TIME, false, false, false, false, false, true, false);
-    usuarios.columns["hora_entrada"].defaultValue = new SQLTime(9);
-    usuarios.columns["perfil"] = new DB.Column("perfil", types.ENUM(["admin", "editor", "leitor"]), false, false, true, false, false, true, false);
-    usuarios.columns["perfil"].defaultValue = "leitor";
-    SGBDFunctions.createTable(usuarios);
+    const schema = getCurrentDatabase()!.schemas[schemaName];
 
-    const idColumn = usuarios.columns["id"];
-    SGBDFunctions.insertRow("usuarios", new DB.Row({
-        id: idColumn.increment(),
-        nome: "Alice",
-        email: "alice@email.com",
-        ativo: true,
-        nota: 9.5,
-        criado_em: new SQLDate(2026, 1, 10),
-        hora_entrada: new SQLTime(8, 30),
-        perfil: "admin"
-    }));
-    SGBDFunctions.insertRow("usuarios", new DB.Row({
-        id: idColumn.increment(),
-        nome: "Bruno",
-        email: "bruno@email.com",
-        ativo: false,
-        nota: 7.2,
-        criado_em: new SQLDate(2026),
-        hora_entrada: new SQLTime(9, 15),
-        perfil: "editor"
-    }));
-    SGBDFunctions.insertRow("usuarios", new DB.Row({
-        id: idColumn.increment(),
-        nome: "Carla",
-        email: "carla@email.com",
-        ativo: true,
-        nota: 8.8,
-        criado_em: new SQLDate(2),
-        hora_entrada: new SQLTime(10),
-        perfil: "leitor"
-    }));
+    // =========================
+    // CLIENTES
+    // =========================
 
-    const posts = new DB.Table("posts");
-    posts.columns["id"] = new DB.Column("id", types.INTEGER, true, false, true, true, true, false);
-    posts.columns["usuario_id"] = new DB.Column("usuario_id", types.INTEGER, false, true, true, false, false, false, false, { table: "usuarios", column: "id" });
-    posts.columns["titulo"] = new DB.Column("titulo", types.TEXT, false, false, true, false, false, false);
-    posts.columns["conteudo"] = new DB.Column("conteudo", types.TEXT, false, false, false, false, false, false);
-    posts.columns["publicado"] = new DB.Column("publicado", types.TEXT, false, false, false, false, false, true);
-    posts.columns["publicado"].defaultValue = false;
-    posts.columns["avaliacao"] = new DB.Column("avaliacao", types.FLOAT, false, false, false, false, false, true);
-    posts.columns["avaliacao"].defaultValue = 0;
-    posts.columns["status"] = new DB.Column("status", types.ENUM(["rascunho", "publicado", "arquivado"]), false, false, true, false, false, true, false);
-    posts.columns["status"].defaultValue = "rascunho";
-    posts.columns["publicado_em"] = new DB.Column("publicado_em", types.DATE, false, false, false, false, false, false, false);
-    SGBDFunctions.createTable(posts);
+    if (!schema.tables["clientes"]) {
 
-    const postIdColumn = posts.columns["id"];
-    SGBDFunctions.insertRow("posts", new DB.Row({
-        id: postIdColumn.increment(),
-        usuario_id: 1,
-        titulo: "Primeiro post",
-        conteudo: "Exemplo de conteudo com todos os tipos.",
-        publicado: true,
-        avaliacao: 8.9,
-        status: "publicado",
-        publicado_em: new SQLDate(2026, 4, 1)
-    }));
-    SGBDFunctions.insertRow("posts", new DB.Row({
-        id: postIdColumn.increment(),
-        usuario_id: 2,
-        titulo: "Rascunho do Bruno",
-        conteudo: "Ainda em andamento.",
-        publicado: false,
-        avaliacao: 0,
-        status: "rascunho",
-        publicado_em: null
-    }));
+        const table = new DB.Table("clientes", schemaName);
 
-    const auditoria = new DB.Table("auditoria");
-    auditoria.columns["id"] = new DB.Column("id", types.INTEGER, true, false, true, true, true, false);
-    auditoria.columns["entidade"] = new DB.Column("entidade", types.TEXT, false, false, true, false, false, false);
-    auditoria.columns["entidade_id"] = new DB.Column("entidade_id", types.INTEGER, false, false, true, false, false, false);
-    auditoria.columns["acao"] = new DB.Column("acao", types.ENUM(["INSERT", "UPDATE", "DELETE"]), false, false, true, false, false, false, false);
-    auditoria.columns["sucesso"] = new DB.Column("sucesso", types.BOOLEAN, false, false, true, false, false, true);
-    auditoria.columns["sucesso"].defaultValue = true;
-    auditoria.columns["feito_em"] = new DB.Column("feito_em", types.DATE, false, false, true, false, false, false, true);
-    SGBDFunctions.createTable(auditoria);
+        table.columns["id"] = new DB.Column("id", "clientes", types.INTEGER, true, false, true, true, true, false, false);
+        table.columns["nome"] = new DB.Column("nome", "clientes", types.TEXT, false, false, true, false, false, false, false);
+        table.columns["email"] = new DB.Column("email", "clientes", types.TEXT, false, false, true, false, false, false, false);
+        table.columns["telefone"] = new DB.Column("telefone", "clientes", types.TEXT, false, false, false, false, false, false, false);
+        table.columns["ativo"] = new DB.Column("ativo", "clientes", types.BOOLEAN, false, false, true, false, false, false, false);
+        table.columns["cadastro"] = new DB.Column("cadastro", "clientes", types.DATE, false, false, true, false, false, false, false);
 
-    const auditIdColumn = auditoria.columns["id"];
-    SGBDFunctions.insertRow("auditoria", new DB.Row({
-        id: auditIdColumn.increment(),
-        entidade: "usuarios",
-        entidade_id: 1,
-        acao: "INSERT",
-        sucesso: true,
-        feito_em: new SQLDate(2026, 4, 20)
-    }));
-    SGBDFunctions.insertRow("auditoria", new DB.Row({
-        id: auditIdColumn.increment(),
-        entidade: "posts",
-        entidade_id: 1,
-        acao: "UPDATE",
-        sucesso: true,
-        feito_em: new SQLDate(2026, 3, 24)
-    }));
+        SGBDFunctions.createTable(table);
 
-    const tarefas = new DB.Table("tarefas");
-    tarefas.columns["id"] = new DB.Column("id", types.INTEGER, true, false, true, true, true, false);
-    tarefas.columns["titulo"] = new DB.Column("titulo", types.TEXT, false, false, true, false, false, false);
-    tarefas.columns["concluida"] = new DB.Column("concluida", types.BOOLEAN, false, false, false, false, false, true);
-    tarefas.columns["concluida"].defaultValue = false;
-    SGBDFunctions.createTable(tarefas);
+        SGBDFunctions.insertRow("public", "clientes", new DB.Row("clientes", {
+            id: 1,
+            nome: "Ana Silva",
+            email: "ana@email.com",
+            telefone: "(11)99999-1001",
+            ativo: true,
+            cadastro: new SQLDate(2025, 1, 10)
+        }));
 
-    const tarefaIdColumn = tarefas.columns["id"];
-    SGBDFunctions.insertRow("tarefas", new DB.Row({ id: tarefaIdColumn.increment(), titulo: "Arrumar a mesa", concluida: true }));
-    SGBDFunctions.insertRow("tarefas", new DB.Row({ id: tarefaIdColumn.increment(), titulo: "Responder mensagens", concluida: false }));
-    SGBDFunctions.insertRow("tarefas", new DB.Row({ id: tarefaIdColumn.increment(), titulo: "Revisar o código", concluida: true }));
-    SGBDFunctions.insertRow("tarefas", new DB.Row({ id: tarefaIdColumn.increment(), titulo: "Fazer backup", concluida: false }));
-    SGBDFunctions.insertRow("tarefas", new DB.Row({ id: tarefaIdColumn.increment(), titulo: "Atualizar a documentação", concluida: true }));
-    SGBDFunctions.insertRow("tarefas", new DB.Row({ id: tarefaIdColumn.increment(), titulo: "Testar o build", concluida: true }));
-    SGBDFunctions.insertRow("tarefas", new DB.Row({ id: tarefaIdColumn.increment(), titulo: "Organizar imagens", concluida: false }));
-    SGBDFunctions.insertRow("tarefas", new DB.Row({ id: tarefaIdColumn.increment(), titulo: "Separar ideias novas", concluida: false }));
-    SGBDFunctions.insertRow("tarefas", new DB.Row({ id: tarefaIdColumn.increment(), titulo: "Revisar layout", concluida: true }));
-    SGBDFunctions.insertRow("tarefas", new DB.Row({ id: tarefaIdColumn.increment(), titulo: "Limpar rascunhos", concluida: false }));
-    SGBDFunctions.insertRow("tarefas", new DB.Row({ id: tarefaIdColumn.increment(), titulo: "Publicar atualização", concluida: false }));
-    SGBDFunctions.insertRow("tarefas", new DB.Row({ id: tarefaIdColumn.increment(), titulo: "Conferir links", concluida: true }));
-    SGBDFunctions.insertRow("tarefas", new DB.Row({ id: tarefaIdColumn.increment(), titulo: "Escrever resumo", concluida: false }));
-    SGBDFunctions.insertRow("tarefas", new DB.Row({ id: tarefaIdColumn.increment(), titulo: "Rever cores", concluida: true }));
-    SGBDFunctions.insertRow("tarefas", new DB.Row({ id: tarefaIdColumn.increment(), titulo: "Fechar pendências", concluida: false }));
+        SGBDFunctions.insertRow("public", "clientes", new DB.Row("clientes", {
+            id: 2,
+            nome: "Bruno Costa",
+            email: "bruno@email.com",
+            telefone: "(11)99999-1002",
+            ativo: true,
+            cadastro: new SQLDate(2025, 2, 5)
+        }));
 
+        SGBDFunctions.insertRow("public", "clientes", new DB.Row("clientes", {
+            id: 3,
+            nome: "Carla Mendes",
+            email: "carla@email.com",
+            telefone: "(11)99999-1003",
+            ativo: false,
+            cadastro: new SQLDate(2025, 3, 18)
+        }));
+
+        SGBDFunctions.insertRow("public", "clientes", new DB.Row("clientes", {
+            id: 4,
+            nome: "Daniel Souza",
+            email: "daniel@email.com",
+            telefone: "(11)99999-1004",
+            ativo: true,
+            cadastro: new SQLDate(2025, 4, 12)
+        }));
+
+        SGBDFunctions.insertRow("public", "clientes", new DB.Row("clientes", {
+            id: 5,
+            nome: "Eduarda Lima",
+            email: "eduarda@email.com",
+            telefone: "(11)99999-1005",
+            ativo: true,
+            cadastro: new SQLDate(2025, 5, 2)
+        }));
+        table.columns["id"].incrementCounter = 6;
+    }
+
+    // =========================
+    // CATEGORIAS
+    // =========================
+
+    if (!schema.tables["categorias"]) {
+
+        const table = new DB.Table("categorias", schemaName);
+
+        table.columns["id"] = new DB.Column("id", "categorias", types.INTEGER, true, false, true, true, true, false, false);
+        table.columns["nome"] = new DB.Column("nome", "categorias", types.TEXT, false, false, true, false, false, false, false);
+
+        SGBDFunctions.createTable(table);
+
+        SGBDFunctions.insertRow("public", "categorias", new DB.Row("categorias", { id: 1, nome: "Informática" }));
+        SGBDFunctions.insertRow("public", "categorias", new DB.Row("categorias", { id: 2, nome: "Periféricos" }));
+        SGBDFunctions.insertRow("public", "categorias", new DB.Row("categorias", { id: 3, nome: "Escritório" }));
+        SGBDFunctions.insertRow("public", "categorias", new DB.Row("categorias", { id: 4, nome: "Áudio" }));
+        table.columns["id"].incrementCounter = 5;
+    }
+
+    // =========================
+    // PRODUTOS
+    // =========================
+
+    if (!schema.tables["produtos"]) {
+
+        const table = new DB.Table("produtos", schemaName);
+
+        table.columns["id"] = new DB.Column("id", "produtos", types.INTEGER, true, false, true, true, true, false, false);
+
+        table.columns["categoria_id"] = new DB.Column(
+            "categoria_id",
+            "produtos",
+            types.INTEGER,
+            false,
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            {
+                schema: schemaName,
+                table: "categorias",
+                column: "id"
+            }
+        );
+
+        table.columns["nome"] = new DB.Column("nome", "produtos", types.TEXT, false, false, true, false, false, false, false);
+        table.columns["preco"] = new DB.Column("preco", "produtos", types.FLOAT, false, false, true, false, false, false, false);
+        table.columns["estoque"] = new DB.Column("estoque", "produtos", types.INTEGER, false, false, true, false, false, false, false);
+
+        SGBDFunctions.createTable(table);
+
+        SGBDFunctions.insertRow("public", "produtos", new DB.Row("produtos", {
+            id: 1,
+            categoria_id: 1,
+            nome: "Notebook",
+            preco: 4500.00,
+            estoque: 12
+        }));
+
+        SGBDFunctions.insertRow("public", "produtos", new DB.Row("produtos", {
+            id: 2,
+            categoria_id: 2,
+            nome: "Mouse Gamer",
+            preco: 149.90,
+            estoque: 50
+        }));
+
+        SGBDFunctions.insertRow("public", "produtos", new DB.Row("produtos", {
+            id: 3,
+            categoria_id: 2,
+            nome: "Teclado Mecânico",
+            preco: 299.90,
+            estoque: 22
+        }));
+
+        SGBDFunctions.insertRow("public", "produtos", new DB.Row("produtos", {
+            id: 4,
+            categoria_id: 4,
+            nome: "Headset",
+            preco: 399.90,
+            estoque: 18
+        }));
+
+        SGBDFunctions.insertRow("public", "produtos", new DB.Row("produtos", {
+            id: 5,
+            categoria_id: 3,
+            nome: "Cadeira Escritório",
+            preco: 899.90,
+            estoque: 6
+        }));
+        table.columns["id"].incrementCounter = 6;
+    }
+
+    // =========================
+    // PEDIDOS
+    // =========================
+
+    if (!schema.tables["pedidos"]) {
+
+        const table = new DB.Table("pedidos", schemaName);
+
+        table.columns["id"] = new DB.Column("id", "pedidos", types.INTEGER, true, false, true, true, true, false, false);
+
+        table.columns["cliente_id"] = new DB.Column(
+            "cliente_id",
+            "pedidos",
+            types.INTEGER,
+            false,
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            {
+                schema: schemaName,
+                table: "clientes",
+                column: "id"
+            }
+        );
+
+        table.columns["data"] = new DB.Column("data", "pedidos", types.DATE, false, false, true, false, false, false, false);
+
+        SGBDFunctions.createTable(table);
+
+        SGBDFunctions.insertRow("public", "pedidos", new DB.Row("pedidos", {
+            id: 1,
+            cliente_id: 1,
+            data: new SQLDate(2026, 7, 15)
+        }));
+
+        SGBDFunctions.insertRow("public", "pedidos", new DB.Row("pedidos", {
+            id: 2,
+            cliente_id: 2,
+            data: new SQLDate(2026, 7, 17)
+        }));
+
+        SGBDFunctions.insertRow("public", "pedidos", new DB.Row("pedidos", {
+            id: 3,
+            cliente_id: 1,
+            data: new SQLDate(2026, 7, 19)
+        }));
+
+        table.columns["id"].incrementCounter = 4;
+    }
+
+    // =========================
+    // ITENS_PEDIDO
+    // =========================
+
+    if (!schema.tables["itens_pedido"]) {
+
+        const table = new DB.Table("itens_pedido", schemaName);
+
+        table.columns["id"] = new DB.Column("id", "itens_pedido", types.INTEGER, true, false, true, true, true, false, false);
+
+        table.columns["pedido_id"] = new DB.Column(
+            "pedido_id",
+            "itens_pedido",
+            types.INTEGER,
+            false,
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            {
+                schema: schemaName,
+                table: "pedidos",
+                column: "id"
+            }
+        );
+
+        table.columns["produto_id"] = new DB.Column(
+            "produto_id",
+            "itens_pedido",
+            types.INTEGER,
+            false,
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            {
+                schema: schemaName,
+                table: "produtos",
+                column: "id"
+            }
+        );
+
+        table.columns["quantidade"] = new DB.Column("quantidade", "itens_pedido", types.INTEGER, false, false, true, false, false, false, false);
+        table.columns["valor_unitario"] = new DB.Column("valor_unitario", "itens_pedido", types.FLOAT, false, false, true, false, false, false, false);
+
+        SGBDFunctions.createTable(table);
+
+        SGBDFunctions.insertRow("public", "itens_pedido", new DB.Row("itens_pedido", {
+            id: 1,
+            pedido_id: 1,
+            produto_id: 1,
+            quantidade: 1,
+            valor_unitario: 4500
+        }));
+
+        SGBDFunctions.insertRow("public", "itens_pedido", new DB.Row("itens_pedido", {
+            id: 2,
+            pedido_id: 1,
+            produto_id: 2,
+            quantidade: 2,
+            valor_unitario: 149.9
+        }));
+
+        SGBDFunctions.insertRow("public", "itens_pedido", new DB.Row("itens_pedido", {
+            id: 3,
+            pedido_id: 2,
+            produto_id: 3,
+            quantidade: 1,
+            valor_unitario: 299.9
+        }));
+
+        SGBDFunctions.insertRow("public", "itens_pedido", new DB.Row("itens_pedido", {
+            id: 4,
+            pedido_id: 3,
+            produto_id: 4,
+            quantidade: 1,
+            valor_unitario: 399.9
+        }));
+
+        SGBDFunctions.insertRow("public", "itens_pedido", new DB.Row("itens_pedido", {
+            id: 5,
+            pedido_id: 3,
+            produto_id: 5,
+            quantidade: 1,
+            valor_unitario: 899.9
+        }));
+
+        table.columns["id"].incrementCounter = 6;
+    }
+
+    currentDatabase = databaseName;
+    currentSchema = schemaName;
     currentTable = null;
+
     refreshUI();
-    openNotifications("<p style='color: var(--green5)'>Database de exemplo criada com sucesso!</p>");
 }
 
 function compareTypes(type1: DataTypes.DataType, type2: DataTypes.DataType): boolean {
@@ -366,6 +554,12 @@ function onDropdownChange(dropdown: HTMLElement) {
         const container = dropdown.closest("div")!.parentElement!;
         updateCharacteristics(container);
         updateDefaultInput(container);
+        updateTypeInput(container);
+    }
+
+    if (dropdown.querySelector('input[name="reference-schema"]')) {
+        const container = dropdown.closest("div")!.parentElement!;
+        updateForeignKeyReferenceTableOptions(container);
     }
 
     if (dropdown.querySelector('input[name="reference-table"]')) {
@@ -391,23 +585,59 @@ updateCustomDropdowns();
 
 namespace DB {
     export abstract class TreeItem {
-        private static idCounter = 1;
-        readonly id: number;
         name: string;
 
-        constructor (name: string) {
+        constructor(name: string) {
             this.name = name;
-            this.id = TreeItem.idCounter;
-            TreeItem.idCounter++;
         }
 
         abstract get children(): TreeItem[];
 
+        abstract buildTree(): HTMLElement;
+
+        clickBehavior(): void { }
+    }
+
+    export abstract class Node extends TreeItem {
+        parent: string | null
+        onConfig: (() => void) | null;
+        constructor(name: string, parent: string | null, onConfig: (() => void) | null = null) {
+            super(name);
+            this.onConfig = onConfig;
+            this.parent = parent;
+        }
+        get children(): TreeItem[] {
+            return []
+        }
+
+        get icon(): string {
+            return "";
+        }
+
         buildTree(): HTMLElement {
             if (this.children.length === 0) {
+                const summary = document.createElement("summary");
+                const summaryDiv = document.createElement("div");
                 const p = document.createElement("p");
-                p.textContent = this.name;
-                return p
+                p.innerHTML = `${this.icon}${this.name}`;
+                summaryDiv.appendChild(p);
+
+                if (this.onConfig !== null) {
+                    const svgDiv = document.createElement("div");
+                    svgDiv.innerHTML = `
+                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                        <path
+                            d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z" />
+                    </svg>
+                    `;
+                    svgDiv.onclick = () => {
+                        this.onConfig?.();
+                    }
+                    summaryDiv.appendChild(svgDiv);
+                }
+
+                summary.appendChild(summaryDiv);
+                return summary;
             }
             const details = document.createElement("details");
             const summary = document.createElement("summary");
@@ -419,11 +649,26 @@ namespace DB {
             </svg>
             `;
             summary.appendChild(arrow);
-            
+
             const summaryDiv = document.createElement("div");
             const p = document.createElement("p");
-            p.textContent = this.name;
+            p.innerHTML = `${this.icon}${this.name}`;
             summaryDiv.appendChild(p);
+
+            if (this.onConfig !== null) {
+                const svgDiv = document.createElement("div");
+                svgDiv.innerHTML = `
+                <svg viewBox="0 -960 960 960" fill="currentColor">
+                    <path
+                        d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z" />
+                </svg>
+                `;
+                svgDiv.onclick = () => {
+                    this.onConfig?.();
+                }
+                summaryDiv.appendChild(svgDiv);
+            }
+
             summary.appendChild(summaryDiv);
 
             details.appendChild(summary);
@@ -432,23 +677,10 @@ namespace DB {
             }
             details.onclick = (event) => {
                 event.stopPropagation();
-                document.querySelector(".summary-active")?.classList.remove("summary-active")
-                summary.classList.add("summary-active")
-                this.clickBehavior();
+                setTimeout(() => this.clickBehavior(), 0);
             };
 
             return details;
-        }
-
-        clickBehavior(): void {}
-    }
-
-    export abstract class Node extends TreeItem {
-        constructor(name: string) {
-            super(name);
-        }
-        get children(): TreeItem[] {
-            return []
         }
     }
 
@@ -456,7 +688,7 @@ namespace DB {
         c: DB.Node[];
         onPlus: () => void;
 
-        constructor(name: string, children: DB.Node[], onPlus: () => void = () => {}) {
+        constructor(name: string, children: DB.Node[], onPlus: () => void = () => { }) {
             super(name);
             this.c = children;
             this.onPlus = onPlus;
@@ -468,9 +700,36 @@ namespace DB {
 
         buildTree(): HTMLElement {
             if (this.children.length === 0) {
+                const summary = document.createElement("summary");
+                const summaryDiv = document.createElement("div");
+
                 const p = document.createElement("p");
-                p.textContent = this.name;
-                return p
+                p.classList.add("node-group-summary");
+                p.innerHTML = `
+                <svg viewBox="0 -960 960 960">
+                    <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z"/>
+                </svg>
+                <svg viewBox="0 -960 960 960">
+                    <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640H447l-80-80H160v480l96-320h684L837-217q-8 26-29.5 41.5T760-160H160Zm84-80h516l72-240H316l-72 240Zm0 0 72-240-72 240Zm-84-400v-80 80Z"/>
+                </svg>
+                ${this.name}
+                `;
+                summaryDiv.appendChild(p);
+
+                const plusIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                plusIcon.setAttribute("viewBox", "0 0 24 24");
+                plusIcon.setAttribute("aria-hidden", "true");
+
+                const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+                use.setAttribute("href", "assets/images/icons-sprite.svg#icon-square-plus");
+                plusIcon.appendChild(use);
+
+                plusIcon.onclick = () => {
+                    this.onPlus();
+                }
+                summaryDiv.appendChild(plusIcon);
+                summary.appendChild(summaryDiv);
+                return summary;
             }
             const details = document.createElement("details");
             const summary = document.createElement("summary");
@@ -485,8 +744,18 @@ namespace DB {
 
             const summaryDiv = document.createElement("div");
             const p = document.createElement("p");
-            p.textContent = this.name;
+            p.classList.add("node-group-summary");
+            p.innerHTML = `
+            <svg viewBox="0 -960 960 960">
+                <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z"/>
+            </svg>
+            <svg viewBox="0 -960 960 960">
+                <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640H447l-80-80H160v480l96-320h684L837-217q-8 26-29.5 41.5T760-160H160Zm84-80h516l72-240H316l-72 240Zm0 0 72-240-72 240Zm-84-400v-80 80Z"/>
+            </svg>
+            ${this.name}
+            `;
             summaryDiv.appendChild(p);
+
             const plusIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
             plusIcon.setAttribute("viewBox", "0 0 24 24");
             plusIcon.setAttribute("aria-hidden", "true");
@@ -495,7 +764,10 @@ namespace DB {
             use.setAttribute("href", "assets/images/icons-sprite.svg#icon-square-plus");
             plusIcon.appendChild(use);
 
-            plusIcon.onclick = () => { this.onPlus(); details.open = !details.open }
+            plusIcon.onclick = () => {
+                this.onPlus();
+                details.open = !details.open;
+            }
             summaryDiv.appendChild(plusIcon);
 
             summary.appendChild(summaryDiv);
@@ -506,9 +778,7 @@ namespace DB {
             }
             details.onclick = (event) => {
                 event.stopPropagation();
-                document.querySelector(".summary-active")?.classList.remove("summary-active")
-                summary.classList.add("summary-active");
-                this.clickBehavior();
+                setTimeout(() => this.clickBehavior(), 0);
             };
 
             return details;
@@ -519,398 +789,186 @@ namespace DB {
      * Representa uma database em memória com tabelas e relacionamentos.
      */
     export class Database extends Node {
-        tables: Record<string, Table>;
+        schemas: Record<string, Schema>;
 
         /**
-         * Mapa reverso de chaves estrangeiras.
-         *
-         * Em vez de armazenar apenas "para onde cada coluna aponta",
-         * este mapa armazena "quem aponta para cada tabela/coluna".
-         *
-         * A informação normal da FK já existe dentro das colunas:
-         *
-         * usuarios.id
-         *
-         * pedidos.usuario_id -> usuarios.id
-         *
-         * Nesse exemplo, a coluna "usuario_id" da tabela "pedidos"
-         * possui uma propriedade:
-         *
+         * Mapa de chaves estrangeiras para cada tabela.
+         * 
+         * Exemplo de estrutura:
+         * 
          * {
-         *     table: "usuarios",
-         *     column: "id"
+         * 
+         *      public.usuario.id: [
+         *          {
+         *              schema: "public",
+         *              table: "pedido",
+         *              column: "usuario_id"
+         *          },
+         *          {
+         *              schema: "public",
+         *              table: "comentario",
+         *              column: "usuario_id"
+         *          }
+         *      ]
+         * 
          * }
-         *
-         * Isso permite descobrir facilmente:
-         *
-         * "Para onde esta coluna aponta?"
-         *
-         * Porém, responder a pergunta inversa:
-         *
-         * "Quem aponta para usuarios.id?"
-         *
-         * exigiria percorrer TODAS as tabelas e TODAS as colunas da
-         * database procurando referências.
-         *
-         * Para evitar isso existe o foreignKeyMap.
-         *
-         * ------------------------------------------------------------------
-         * ESTRUTURA
-         * ------------------------------------------------------------------
-         *
-         * foreignKeyMap[
-         *     tabelaReferenciada
-         * ][
-         *     colunaReferenciada
-         * ] = [
-         *     {
-         *         table: tabelaOrigem,
-         *         column: colunaOrigem
-         *     }
-         * ]
-         *
-         * Ou seja:
-         *
-         * foreignKeyMap["usuarios"]["id"]
-         *
-         * retorna todas as colunas que apontam para:
-         *
-         * usuarios.id
-         *
-         * ------------------------------------------------------------------
-         * EXEMPLO 1
-         * ------------------------------------------------------------------
-         *
-         * usuarios
-         * └─ id
-         *
-         * pedidos
-         * └─ usuario_id -> usuarios.id
-         *
-         * Resultado:
-         *
-         * {
-         *     usuarios: {
-         *         id: [
-         *             {
-         *                 table: "pedidos",
-         *                 column: "usuario_id"
-         *             }
-         *         ]
-         *     }
-         * }
-         *
-         * ------------------------------------------------------------------
-         * EXEMPLO 2
-         * ------------------------------------------------------------------
-         *
-         * usuarios
-         * └─ id
-         *
-         * pedidos
-         * └─ usuario_id -> usuarios.id
-         *
-         * comentarios
-         * └─ autor_id -> usuarios.id
-         *
-         * Resultado:
-         *
-         * {
-         *     usuarios: {
-         *         id: [
-         *             {
-         *                 table: "pedidos",
-         *                 column: "usuario_id"
-         *             },
-         *             {
-         *                 table: "comentarios",
-         *                 column: "autor_id"
-         *             }
-         *         ]
-         *     }
-         * }
-         *
-         * ------------------------------------------------------------------
-         * EXEMPLO 3
-         * ------------------------------------------------------------------
-         *
-         * usuarios
-         * ├─ id
-         * └─ cargo_id
-         *
-         * pedidos
-         * └─ usuario_id -> usuarios.id
-         *
-         * funcionarios
-         * └─ cargo_usuario -> usuarios.cargo_id
-         *
-         * Resultado:
-         *
-         * {
-         *     usuarios: {
-         *         id: [
-         *             {
-         *                 table: "pedidos",
-         *                 column: "usuario_id"
-         *             }
-         *         ],
-         *
-         *         cargo_id: [
-         *             {
-         *                 table: "funcionarios",
-         *                 column: "cargo_usuario"
-         *             }
-         *         ]
-         *     }
-         * }
-         *
-         * ------------------------------------------------------------------
-         * PARA QUE SERVE
-         * ------------------------------------------------------------------
-         *
-         * O foreignKeyMap permite descobrir instantaneamente quais
-         * colunas dependem de determinada tabela ou coluna.
-         *
-         * Isso é extremamente útil em operações como:
-         *
-         * - DELETE TABLE
-         * - DELETE COLUMN
-         * - RENAME TABLE
-         * - RENAME COLUMN
-         * - ALTER COLUMN
-         *
-         * Exemplo:
-         *
-         * Se o usuário renomear:
-         *
-         * usuarios.id
-         *
-         * para:
-         *
-         * usuarios.codigo
-         *
-         * basta consultar:
-         *
-         * foreignKeyMap["usuarios"]["id"]
-         *
-         * para obter todas as colunas que apontam para ela e atualizar
-         * suas referências automaticamente.
-         *
-         * Sem este mapa seria necessário percorrer todas as tabelas da
-         * database procurando FKs manualmente.
-         *
-         * ------------------------------------------------------------------
-         * RELAÇÃO COM registerForeignKey()
-         * ------------------------------------------------------------------
-         *
-         * Sempre que uma FK é criada:
-         *
-         * pedidos.usuario_id -> usuarios.id
-         *
-         * é executado:
-         *
-         * registerForeignKey(
-         *     "pedidos",
-         *     "usuario_id",
-         *     "usuarios",
-         *     "id"
-         * );
-         *
-         * que produz:
-         *
-         * foreignKeyMap["usuarios"]["id"].push({
-         *     table: "pedidos",
-         *     column: "usuario_id"
-         * });
-         *
-         * ------------------------------------------------------------------
-         * RELAÇÃO COM unregisterForeignKey()
-         * ------------------------------------------------------------------
-         *
-         * Quando a FK é removida:
-         *
-         * pedidos.usuario_id
-         *
-         * deixa de apontar para:
-         *
-         * usuarios.id
-         *
-         * o método unregisterForeignKey remove o registro correspondente
-         * do foreignKeyMap.
-         *
-         * Caso uma coluna não receba mais referências, ela é removida do
-         * mapa.
-         *
-         * Caso uma tabela não receba mais referências em nenhuma coluna,
-         * ela também é removida do mapa.
          */
-        foreignKeyMap: Record<
-            string,
-            Record<
-                string,
-                Array<{ table: string; column: string }>
-            >
-        >;
+        // foreignKeyMap: Record<string, TReference[]> = {};
 
         /**
          * Cria uma database vazia com o nome informado.
          * @param name - Nome da database.
          */
         constructor(name: string) {
-            super(name);
-            databaseGroup.c.push(this);
-            this.tables = {};
-            this.foreignKeyMap = {};
-        }
-
-        /**
-         * Lista as chaves estrangeiras que saem de uma tabela.
-         * @param tableName - Nome da tabela de origem.
-         * @returns Relações de saída da tabela.
-         */
-        getTableForeignKeys(tableName: string): {
-            column: string; referenceTable: string;
-            referenceColumn: string
-        }[] {
-            const table = this.tables[tableName];
-
-            const foreignKeys: {
-                column: string;
-                referenceTable: string;
-                referenceColumn: string;
-            }[] = [];
-
-            if (!table) return foreignKeys;
-
-            for (const columnName in table.columns) {
-                const column = table.columns[columnName];
-
-                if (!column.reference) continue;
-
-                foreignKeys.push({
-                    column: columnName,
-                    referenceTable: column.reference.table,
-                    referenceColumn: column.reference.column
-                });
-            }
-
-            return foreignKeys;
-        }
-
-        /**
-         * Retorna as referências recebidas por uma tabela.
-         *
-         * Estrutura do retorno:
-         *
-         * {
-         *     colunaReferenciada: [
-         *         {
-         *             table: tabelaOrigem,
-         *             column: colunaOrigem
-         *         }
-         *     ]
-         * }
-         *
-         * Cada chave representa uma coluna da tabela informada e seu valor
-         * contém todas as colunas de outras tabelas que possuem uma chave
-         * estrangeira apontando para ela.
-         *
-         * @param tableName - Nome da tabela alvo.
-         * @returns Mapa de referências agrupadas por coluna referenciada.
-         */
-        getReferencesToTable(tableName: string): Record<string, Array<{ table: string; column: string }>> {
-            return this.foreignKeyMap[tableName] || {};
-        }
-
-        /**
-         * Resume os relacionamentos de uma tabela em entrada e saída.
-         * @param tableName - Nome da tabela consultada.
-         */
-        getTableRelationships(tableName: string) {
-            return {
-                outgoing: this.getTableForeignKeys(tableName),
-                incoming: this.getReferencesToTable(tableName)
-            };
-        }
-
-        /**
-         * Registra uma chave estrangeira apontando para outra tabela.
-         * @param fromTable - Tabela de origem.
-         * @param fromColumn - Coluna de origem.
-         * @param toTable - Tabela referenciada.
-         * @param toColumn - Coluna referenciada.
-         */
-        registerForeignKey(fromTable: string, fromColumn: string, toTable: string, toColumn: string) {
-            if (!this.foreignKeyMap[toTable]) {
-                this.foreignKeyMap[toTable] = {};
-            }
-
-            if (!this.foreignKeyMap[toTable][toColumn]) {
-                this.foreignKeyMap[toTable][toColumn] = [];
-            }
-
-            this.foreignKeyMap[toTable][toColumn].push({
-                table: fromTable,
-                column: fromColumn
+            super(name, null, () => {
+                this.clickBehavior();
+                changeConfigurarDatabaseMenu();
+                abrirFechar(false, "configurar-database");
             });
+            databaseGroup.c.push(this);
+            this.schemas = {};
         }
 
-        /**
-         * Remove o vínculo de uma chave estrangeira registrada.
-         * @param fromTable - Tabela de origem.
-         * @param fromColumn - Coluna de origem.
-         * @param toTable - Tabela referenciada.
-         * @param toColumn - Coluna referenciada.
-         */
-        unregisterForeignKey(fromTable: string, fromColumn: string, toTable: string, toColumn: string) {
-            const refs = this.foreignKeyMap[toTable]?.[toColumn];
+        // createKey(schemaName: string, tableName: string, columnName: string): string {
+        //     return `${schemaName}.${tableName}.${columnName}`;
+        // }
 
-            if (!refs) return;
+        // addForeignKeyReference(schemaName: string, tableName: string, columnName: string, reference: TReference) {
+        //     const key = this.createKey(schemaName, tableName, columnName);
+        //     if (!this.foreignKeyMap[key]) {
+        //         this.foreignKeyMap[key] = [];
+        //     }
+        //     this.foreignKeyMap[key].push(reference);
+        // }
 
-            this.foreignKeyMap[toTable][toColumn] = refs.filter(ref =>
-                !(ref.table === fromTable && ref.column === fromColumn)
-            );
+        // /**
+        //  * Remove uma entrada do mapa de chaves estrangeiras.
+        //  * 
+        //  * Usado para remover referências quando uma tabela ou coluna é excluída.
+        //  * @param schema Schema da tabela que contém a chave estrangeira.
+        //  * @param table Tabela que contém a chave estrangeira.
+        //  * @param column Coluna que contém a chave estrangeira.
+        //  */
+        // removeForeignKeyEntry(schema: string, table: string, column: string) {
+        //     delete this.foreignKeyMap[
+        //         this.createKey(schema, table, column)
+        //     ];
+        // }
 
-            if (this.foreignKeyMap[toTable][toColumn].length === 0) {
-                delete this.foreignKeyMap[toTable][toColumn];
-            }
+        // /**
+        //  * Remove uma referência de chave estrangeira do mapa.
+        //  *
+        //  * @param schemaName - Schema da tabela referenciada.
+        //  * @param tableName - Tabela referenciada.
+        //  * @param columnName - Coluna referenciada.
+        //  * @param reference - Referência que deve ser removida.
+        //  */
+        // removeForeignKeyReference(schemaName: string, tableName: string, columnName: string, reference: TReference) {
+        //     const key = this.createKey(schemaName, tableName, columnName);
 
-            if (Object.keys(this.foreignKeyMap[toTable]).length === 0) {
-                delete this.foreignKeyMap[toTable];
-            }
+        //     const references = this.foreignKeyMap[key];
+
+        //     if (!references) return;
+
+        //     this.foreignKeyMap[key] = references.filter(ref =>
+        //         !(
+        //             ref.schema === reference.schema &&
+        //             ref.table === reference.table &&
+        //             ref.column === reference.column
+        //         )
+        //     );
+
+        //     if (this.foreignKeyMap[key].length === 0) {
+        //         delete this.foreignKeyMap[key];
+        //     }
+        // }
+
+        // getReferencesToTable(schemaName: string, tableName: string): TReference[] {
+        //     const prefix = `${schemaName}.${tableName}.`;
+
+        //     const references: TReference[] = [];
+
+        //     for (const key in this.foreignKeyMap) {
+        //         if (!key.startsWith(prefix))
+        //             continue;
+
+        //         references.push(...this.foreignKeyMap[key]);
+        //     }
+
+        //     return references;
+        // }
+
+        // getReferencesToColumn(schemaName: string, tableName: string, columnName: string): TReference[] {
+        //     return this.foreignKeyMap[
+        //         this.createKey(schemaName, tableName, columnName)
+        //     ] ?? [];
+        // }
+
+        get children(): DB.NodeGroup[] {
+            return [
+                new NodeGroup("Schemas", Object.values(this.schemas), () => {
+                    this.clickBehavior();
+                    abrirFechar(false, "criacao-schema");
+                })
+            ];
         }
 
+        get icon(): string {
+            return `
+            <svg viewBox="0 -960 960 960" fill="var(--blue5)">
+                <path d="M480-120q-151 0-255.5-46.5T120-280v-400q0-66 105.5-113T480-840q149 0 254.5 47T840-680v400q0 67-104.5 113.5T480-120Zm0-479q89 0 179-25.5T760-679q-11-29-100.5-55T480-760q-91 0-178.5 25.5T200-679q14 30 101.5 55T480-599Zm0 199q42 0 81-4t74.5-11.5q35.5-7.5 67-18.5t57.5-25v-120q-26 14-57.5 25t-67 18.5Q600-528 561-524t-81 4q-42 0-82-4t-75.5-11.5Q287-543 256-554t-56-25v120q25 14 56 25t66.5 18.5Q358-408 398-404t82 4Zm0 200q46 0 93.5-7t87.5-18.5q40-11.5 67-26t32-29.5v-98q-26 14-57.5 25t-67 18.5Q600-328 561-324t-81 4q-42 0-82-4t-75.5-11.5Q287-343 256-354t-56-25v99q5 15 31.5 29t66.5 25.5q40 11.5 88 18.5t94 7Z"/>
+            </svg>
+            `;
+        }
+
+        clickBehavior(): void {
+            currentDatabase = this.name;
+            currentSchema = null;
+            currentTable = null;
+            refreshUI();
+        }
+    }
+
+    /**
+     * Representa um esquema em memória com tabelas.
+     */
+    export class Schema extends Node {
+        tables: Record<string, Table>;
+
         /**
-         * Atualiza o nome de uma coluna referenciada dentro do foreignKeyMap
-         * e em todas as FKs que apontam para ela.
-         *
-         * @param tableName - Tabela que contém a coluna renomeada.
-         * @param oldColumnName - Nome antigo da coluna.
-         * @param newColumnName - Novo nome da coluna.
+         * Cria um esquema vazio com o nome informado.
+         * @param name - Nome do esquema.
+         * @param parent - Nome do parente do esquema.
          */
-        updateColumnForeignKeyMap(tableName: string, oldColumnName: string, newColumnName: string) {
-            const refs = this.foreignKeyMap[tableName]?.[oldColumnName] ?? [];
-
-            for (const ref of refs) {
-                this.tables[ref.table].columns[ref.column].reference!.column = newColumnName;
-            }
-
-            if (this.foreignKeyMap[tableName]?.[oldColumnName]) {
-                this.foreignKeyMap[tableName][newColumnName] = this.foreignKeyMap[tableName][oldColumnName];
-                delete this.foreignKeyMap[tableName][oldColumnName];
-            }
+        constructor(name: string, parent: string) {
+            super(name, parent, () => {
+                this.clickBehavior();
+                changeConfigurarSchemaMenu();
+                abrirFechar(false, "configurar-schema");
+            });
+            this.tables = {};
         }
 
         get children(): DB.NodeGroup[] {
             return [
                 new NodeGroup("Tabelas", Object.values(this.tables), () => {
+                    this.clickBehavior();
                     abrirFechar(false, "criacao-tabela");
                 })
             ];
         }
 
+        get icon(): string {
+            return `
+            <svg viewBox="0 -960 960 960">
+                <path d="M160-40v-240h100v-80H160v-240h100v-80H160v-240h280v240H340v80h100v80h120v-80h280v240H560v-80H440v80H340v80h100v240H160Zm80-80h120v-80H240v80Zm0-320h120v-80H240v80Zm400 0h120v-80H640v80ZM240-760h120v-80H240v80Zm60-40Zm0 320Zm400 0ZM300-160Z"/>
+            </svg>
+            `;
+        }
+
         clickBehavior(): void {
-            currentDatabase = this.name;
+            currentDatabase = this.parent!;
+            currentSchema = this.name;
             currentTable = null;
             refreshUI();
         }
@@ -920,21 +978,26 @@ namespace DB {
      * Representa uma tabela em memória com colunas, linhas e índices.
      */
     export class Table extends Node {
+        database: string;
         columns: Record<string, Column>;
         rows: Row[];
         indexes: Record<string, Map<any, number[]>>;
-        constraints: Constraint[];
 
         /**
          * Cria uma tabela vazia com o nome informado.
          * @param name - Nome da tabela.
+         * @param parent - Nome do parente da tabela.
          */
-        constructor(name: string) {
-            super(name);
+        constructor(name: string, parent: string) {
+            super(name, parent, () => {
+                this.clickBehavior();
+                changeConfigurarTabelaMenu();
+                abrirFechar(false, "configurar-tabela");
+            });
+            this.database = currentDatabase!;
             this.columns = {};
             this.rows = [];
             this.indexes = {};
-            this.constraints = [];
         }
 
         /**
@@ -988,14 +1051,32 @@ namespace DB {
             this.indexes[columnName] = indexMap;
         }
 
-        get children(): DB.Node[] {
+        get children(): DB.NodeGroup[] {
             return [
-                new NodeGroup("Colunas", Object.values(this.columns)),
-                new NodeGroup("Linhas", Object.values(this.rows))
+                new NodeGroup("Colunas", Object.values(this.columns), () => {
+                    this.clickBehavior();
+                    abrirFechar(false, "adicionar-colunas");
+                }),
+                new NodeGroup("Linhas", Object.values(this.rows), () => {
+                    this.clickBehavior();
+                    changeInsertRowMenu();
+                    abrirFechar(false, "inserir-linha");
+                })
             ]
         }
 
+        get icon(): string {
+            return `
+            <svg viewBox="0 -960 960 960" fill="var(--green5)">
+                <path
+                    d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm240-240H200v160h240v-160Zm80 0v160h240v-160H520Zm-80-80v-160H200v160h240Zm80 0h240v-160H520v160ZM200-680h560v-80H200v80Z" />
+            </svg>
+            `;
+        }
+
         clickBehavior(): void {
+            currentDatabase = this.database;
+            currentSchema = this.parent!;
             currentTable = this.name;
             refreshUI();
         }
@@ -1020,6 +1101,7 @@ namespace DB {
         /**
          * Cria uma coluna com metadados e restrições.
          * @param name - Nome da coluna.
+         * @param parent - Nome do parente da coluna.
          * @param type - Tipo lógico da coluna.
          * @param isPrimaryKey - Indica chave primária.
          * @param isForeignKey - Indica chave estrangeira.
@@ -1030,10 +1112,10 @@ namespace DB {
          * @param isCurrentTimestamp - Indica timestamp automático.
          * @param reference - Referência usada por FOREIGN KEY.
          */
-        constructor(name: string, type: DataTypes.DataType, isPrimaryKey: boolean = false, isForeignKey: boolean = false,
-        isNotNull: boolean = false, isUnique: boolean = false, isAutoIncrement: boolean = false, hasDefault: boolean = false, 
-        isCurrentTimestamp: boolean = false, reference?: TReference) {
-            super(name);
+        constructor(name: string, parent: string, type: DataTypes.DataType, isPrimaryKey: boolean = false, isForeignKey: boolean = false,
+            isNotNull: boolean = false, isUnique: boolean = false, isAutoIncrement: boolean = false, hasDefault: boolean = false,
+            isCurrentTimestamp: boolean = false, reference?: TReference) {
+            super(name, parent);
             this.type = type;
             this.isPrimaryKey = isPrimaryKey;
             this.isForeignKey = isForeignKey;
@@ -1056,8 +1138,12 @@ namespace DB {
             return this.incrementCounter++;
         }
 
+        /**
+         * Cria uma cópia da coluna.
+         * @returns Cópia da coluna.
+         */
         clone(): Column {
-            const copy = new Column(this.name, this.type, this.isPrimaryKey, this.isForeignKey, this.isNotNull,
+            const copy = new Column(this.name, (this.parent as string), this.type, this.isPrimaryKey, this.isForeignKey, this.isNotNull,
                 this.isUnique, this.isAutoIncrement, this.hasDefault, this.isCurrentTimestamp,
                 this.reference ? { ...this.reference } : undefined
             );
@@ -1065,21 +1151,92 @@ namespace DB {
             copy.defaultValue = this.defaultValue;
             return copy;
         }
+
+        get icon(): string {
+            if (this.isPrimaryKey) {
+                return `
+                <svg viewBox="0 -960 960 960" fill="var(--yellow6)">
+                    <path d="M223.5-423.5Q200-447 200-480t23.5-56.5Q247-560 280-560t56.5 23.5Q360-513 360-480t-23.5 56.5Q313-400 280-400t-56.5-23.5ZM280-240q-100 0-170-70T40-480q0-100 70-170t170-70q67 0 121.5 33t86.5 87h352l120 120-180 180-80-60-80 60-85-60h-47q-32 54-86.5 87T280-240Zm0-80q56 0 98.5-34t56.5-86h125l58 41 82-61 71 55 75-75-40-40H435q-14-52-56.5-86T280-640q-66 0-113 47t-47 113q0 66 47 113t113 47Z"/>
+                </svg>
+                `;
+            } else if (this.isForeignKey) {
+                return `
+                <svg viewBox="0 -960 960 960" fill="var(--gray5)">
+                    <path d="M318-120q-82 0-140-58t-58-140q0-40 15-76t43-64l134-133 56 56-134 134q-17 17-25.5 38.5T200-318q0 49 34.5 83.5T318-200q23 0 45-8.5t39-25.5l133-134 57 57-134 133q-28 28-64 43t-76 15Zm79-220-57-57 223-223 57 57-223 223Zm251-28-56-57 134-133q17-17 25-38t8-44q0-50-34-85t-84-35q-23 0-44.5 8.5T558-726L425-592l-57-56 134-134q28-28 64-43t76-15q82 0 139.5 58T839-641q0 39-14.5 75T782-502L648-368Z"/>
+                </svg>
+                `;
+            }
+            switch (this.type.name) {
+                case "TEXT":
+                    return `
+                    <svg viewBox="0 -960 960 960" fill="var(--green5)">
+                        <path d="M280-160v-520H80v-120h520v120H400v520H280Zm360 0v-320H520v-120h360v120H760v320H640Z"/>
+                    </svg>
+                    `;
+                case "INTEGER":
+                    return `
+                    <svg viewBox="0 -960 960 960" fill="var(--blue3)">
+                        <path d="m240-160 40-160H120l20-80h160l40-160H180l20-80h160l40-160h80l-40 160h160l40-160h80l-40 160h160l-20 80H660l-40 160h160l-20 80H600l-40 160h-80l40-160H360l-40 160h-80Zm140-240h160l40-160H420l-40 160Z"/>
+                    </svg>
+                    `;
+                case "FLOAT":
+                    return `
+                    <svg viewBox="0 -960 960 960" fill="var(--cyan6)">
+                        <path d="m720-80-56-56 63-64H480v-80h247l-63-64 56-56 160 160L720-80ZM80-440v-120h120v120H80Zm201-41q-41-41-41-99v-160q0-58 41-99t99-41q58 0 99 41t41 99v160q0 58-41 99t-99 41q-58 0-99-41Zm360 0q-41-41-41-99v-160q0-58 41-99t99-41q58 0 99 41t41 99v160q0 58-41 99t-99 41q-58 0-99-41Zm-218.5-56.5Q440-555 440-580v-160q0-25-17.5-42.5T380-800q-25 0-42.5 17.5T320-740v160q0 25 17.5 42.5T380-520q25 0 42.5-17.5Zm360 0Q800-555 800-580v-160q0-25-17.5-42.5T740-800q-25 0-42.5 17.5T680-740v160q0 25 17.5 42.5T740-520q25 0 42.5-17.5Z"/>
+                    </svg>
+                    `;
+                case "BOOLEAN":
+                    return `
+                    <svg viewBox="0 -960 960 960" fill="var(--purple5)">
+                        <path d="M280-240q-100 0-170-70T40-480q0-100 70-170t170-70h400q100 0 170 70t70 170q0 100-70 170t-170 70H280Zm0-80h400q66 0 113-47t47-113q0-66-47-113t-113-47H280q-66 0-113 47t-47 113q0 66 47 113t113 47Zm85-75q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35Zm115-85Z"/>
+                    </svg>
+                    `;
+                case "DATE":
+                    return `
+                    <svg viewBox="0 -960 960 960" fill="var(--orange5)">
+                        <path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z"/>
+                    </svg>
+                    `;
+                case "TIME":
+                    return `
+                    <svg viewBox="0 -960 960 960" fill="var(--yellow4)">
+                        <path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/>
+                    </svg>
+                    `;
+                case "ENUM":
+                    return `
+                    <svg viewBox="0 -960 960 960" fill="var(--pink5)">
+                        <path d="M348.5-291.5Q360-303 360-320t-11.5-28.5Q337-360 320-360t-28.5 11.5Q280-337 280-320t11.5 28.5Q303-280 320-280t28.5-11.5Zm0-160Q360-463 360-480t-11.5-28.5Q337-520 320-520t-28.5 11.5Q280-497 280-480t11.5 28.5Q303-440 320-440t28.5-11.5Zm0-160Q360-623 360-640t-11.5-28.5Q337-680 320-680t-28.5 11.5Q280-657 280-640t11.5 28.5Q303-600 320-600t28.5-11.5ZM440-280h240v-80H440v80Zm0-160h240v-80H440v80Zm0-160h240v-80H440v80ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/>
+                    </svg>
+                    `;
+                case "VARCHAR":
+                    return `
+                    <svg viewBox="0 -960 960 960" fill="var(--green2)">
+                        <path d="M120-120v-120h200q-84-45-132-125t-48-175q0-142 99-241t241-99q142 0 241 99t99 241q0 95-48 175T640-240h200v120H520v-204q78-14 129-75t51-141q0-92-64-156t-156-64q-92 0-156 64t-64 156q0 80 51 141t129 75v204H120Z"/>
+                    </svg>
+                    `;
+            }
+        }
     }
 
     export class Row extends Node {
         static counter = 1;
         values: Record<string, any>;
 
-        constructor(values: Record<string, any>) {
-            super(`Linha ${Row.counter}`);
+        constructor(parent: string, values: Record<string, any>) {
+            super(`Linha ${Row.counter}`, parent);
             this.values = values;
             Row.counter++;
         }
-    }
 
-    export class Constraint extends Node {
-        
+        get icon(): string {
+            return `
+            <svg viewBox="0 -960 960 960" fill="var(--yellow5)">
+                <path
+                    d="M760-200v-120H200v120h560Zm0-200v-160H200v160h560Zm0-240v-120H200v120h560ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Z" />
+            </svg>
+            `;
+        }
     }
 }
 
@@ -1147,6 +1304,15 @@ class SGBDFunctions {
     static createDatabase(database: DB.Database) {
         databases[database.name] = database;
         currentDatabase = database.name;
+        currentSchema = null;
+        currentTable = null;
+        refreshUI();
+        saveToLocalStorage();
+    }
+
+    static createSchema(schema: DB.Schema) {
+        databases[currentDatabase!]!.schemas[schema.name] = schema;
+        currentSchema = schema.name;
         currentTable = null;
         refreshUI();
         saveToLocalStorage();
@@ -1155,20 +1321,18 @@ class SGBDFunctions {
     /**
      * Adiciona uma tabela à database atual.
      * @param table - Tabela a ser criada.
+     * @param schema - Nome do schema onde a tabela será criada.
      */
-    static createTable(table: DB.Table) {
+    static createTable(table: DB.Table, schema?: string) {
         const db = getCurrentDatabase()!;
         for (const columnName in table.columns) {
             table.indexes[columnName] = new Map();
-        }
-        for (const columnName in table.columns) {
-            const column = table.columns[columnName];
 
-            if (!column.reference) continue;
+            if (!table.columns[columnName].reference) continue;
 
-            db.registerForeignKey(table.name, columnName, column.reference.table, column.reference.column);
+            //db.addForeignKeyReference(currentSchema!, table.name, columnName, table.columns[columnName].reference!);
         }
-        db.tables[table.name] = table;
+        db.schemas[schema || currentSchema!].tables[table.name] = table;
         currentTable = table.name;
         refreshUI();
         saveToLocalStorage();
@@ -1179,12 +1343,12 @@ class SGBDFunctions {
      * @param tableName - Nome da tabela alvo.
      * @param column - Coluna a ser adicionada.
      */
-    static addColumn(tableName: string, column: DB.Column) {
-        getTable(tableName)!.columns[column.name] = column;
-        getTable(tableName)!.indexes[column.name] = new Map();
+    static addColumn(tableName: string, column: DB.Column, schema?: string) {
+        getTable(tableName, schema)!.columns[column.name] = column;
+        getTable(tableName, schema)!.indexes[column.name] = new Map();
 
         if (column.reference) {
-            getCurrentDatabase()!.registerForeignKey(tableName, column.name, column.reference.table, column.reference.column);
+            //getCurrentDatabase()!.addForeignKeyReference(currentSchema!, tableName, column.name, column.reference);
         }
 
         refreshUI();
@@ -1196,8 +1360,8 @@ class SGBDFunctions {
      * @param tableName - Nome da tabela alvo.
      * @param row - Dados da nova linha.
      */
-    static insertRow(tableName: string, row: DB.Row) {
-        const table = getTable(tableName)!;
+    static insertRow(schemaName: string, tableName: string, row: DB.Row) {
+        const table = getTable(tableName, schemaName)!;
 
         const rowIndex = table.rows.length;
         table.rows.push(row);
@@ -1264,6 +1428,20 @@ class SGBDFunctions {
         delete databases[databaseName];
         if (currentDatabase === databaseName) {
             currentDatabase = null;
+            currentSchema = null;
+            currentTable = null;
+        }
+        refreshUI();
+        saveToLocalStorage();
+    }
+
+    static deleteSchema(schemaName: string) {
+        const db = getCurrentDatabase()!;
+        delete db.schemas[schemaName];
+
+        
+        if (currentSchema === schemaName) {
+            currentSchema = null;
             currentTable = null;
         }
         refreshUI();
@@ -1276,21 +1454,8 @@ class SGBDFunctions {
      */
     static deleteTable(tableName: string) {
         const db = getCurrentDatabase()!;
-        const table = getTable(tableName)!;
 
-        // 🧹 remove todas as FKs QUE SAEM dessa tabela
-        for (const column of Object.values(table.columns)) {
-            if (!column.reference) continue;
-
-            db.unregisterForeignKey(
-                tableName,
-                column.name,
-                column.reference.table,
-                column.reference.column
-            );
-        }
-
-        delete db.tables[tableName];
+        delete db.schemas[currentSchema!].tables[tableName];
 
         if (currentTable === tableName) {
             currentTable = null;
@@ -1310,15 +1475,6 @@ class SGBDFunctions {
         const table = getTable(tableName)!;
 
         const column = table.columns[columnName];
-
-        if (column.reference) {
-            db.unregisterForeignKey(
-                tableName,
-                columnName,
-                column.reference.table,
-                column.reference.column
-            );
-        }
 
         table.indexes[columnName]?.clear();
         delete table.indexes[columnName];
@@ -1388,27 +1544,27 @@ class SGBDFunctions {
         saveToLocalStorage();
     }
 
-    static renameTable(oldName: string, newName: string) {
+    static renameSchema(oldName: string, newName: string) {
         const db = getCurrentDatabase()!;
-        const t = db.tables[oldName];
+        const s = db.schemas[oldName];
+        if (!s) return;
+        delete db.schemas[oldName];
+        s.name = newName;
+        db.schemas[newName] = s;
+        currentSchema = newName;
+
+        refreshUI();
+        saveToLocalStorage();
+    }
+
+    static renameTable(oldName: string, newName: string) {
+        const schema = getCurrentSchema()!;
+        const t = schema.tables[oldName];
         if (!t) return;
-        delete db.tables[oldName];
+        delete schema.tables[oldName];
         t.name = newName;
-        db.tables[newName] = t;
+        schema.tables[newName] = t;
         currentTable = newName;
-
-        const incomingRefs = db.getReferencesToTable(oldName);
-
-        for (const columnRefs of Object.values(incomingRefs)) {
-            for (const ref of columnRefs) {
-                db.tables[ref.table].columns[ref.column].reference!.table = newName;
-            }
-        }
-
-        if (db.foreignKeyMap[oldName]) {
-            db.foreignKeyMap[newName] = db.foreignKeyMap[oldName];
-            delete db.foreignKeyMap[oldName];
-        }
 
         refreshUI();
         saveToLocalStorage();
@@ -1423,14 +1579,14 @@ class SGBDFunctions {
          * @returns Valor convertido apropriado para `newType` ou o valor original quando não aplicável.
          */
         function convertRowValue(value: any, newType: DataTypes.DataType): any {
-            if (valueExists(value))
+            if (!valueExists(value))
                 return value;
 
             return newType.parse(value);
         }
 
-        const db = getCurrentDatabase()!;
-        const table = db.tables[tableName];
+        const schema = getCurrentSchema()!;
+        const table = schema.tables[tableName];
         const oldColumn = table.columns[oldColumnName];
 
         if (JSON.stringify(oldColumn) === JSON.stringify(newColumn)) return;
@@ -1455,49 +1611,9 @@ class SGBDFunctions {
 
             delete table.indexes[oldColumnName];
             delete table.columns[oldColumnName];
-
-            db.updateColumnForeignKeyMap(tableName, oldColumnName, newColumn.name);
-
-            if (oldColumn.reference) {
-                db.unregisterForeignKey(
-                    tableName,
-                    oldColumnName,
-                    oldColumn.reference.table,
-                    oldColumn.reference.column
-                );
-            }
-
-            if (newColumn.reference) {
-                db.registerForeignKey(
-                    tableName,
-                    newColumn.name,
-                    newColumn.reference.table,
-                    newColumn.reference.column
-                );
-            }
         }
 
         table.columns[newColumn.name] = newColumn;
-
-        if (JSON.stringify(oldColumn.reference) !== JSON.stringify(newColumn.reference)) {
-            if (oldColumn.reference) {
-                db.unregisterForeignKey(
-                    tableName,
-                    oldColumnName,
-                    oldColumn.reference.table,
-                    oldColumn.reference.column
-                );
-            }
-
-            if (newColumn.reference) {
-                db.registerForeignKey(
-                    tableName,
-                    newColumn.name,
-                    newColumn.reference.table,
-                    newColumn.reference.column
-                );
-            }
-        }
 
         if (oldColumn.type !== newColumn.type) {
             for (const row of table.rows) {
@@ -1589,20 +1705,17 @@ class SQLDate {
     }
 
     static fromString(value: string): SQLDate | null {
-
         const match = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
 
-        if (!match)
-            return null;
+        if (!match) return null;
 
         const [, y, m, d] = match.map(Number);
 
-        if (
-            y < 0 ||
-            m < 1 || m > 12 ||
-            d < 1 || d > 31
-        )
-            return null;
+        if (y < 0 || m < 1 || m > 12) return null;
+
+        const date = new Date(y, m - 1, d);
+
+        if (date.getFullYear() !== y || date.getMonth() !== m - 1 || date.getDate() !== d) return null;
 
         return new SQLDate(y, m, d);
     }
@@ -1630,14 +1743,14 @@ class SQLDate {
 }
 
 namespace DataTypes {
-    export type TDataTypeAsString = "TEXT" | "INTEGER" | "FLOAT" | "BOOLEAN" | "DATE" | "TIME" | "ENUM";
+    export type TDataTypeAsString = "TEXT" | "INTEGER" | "FLOAT" | "BOOLEAN" | "DATE" | "TIME" | "ENUM" | "VARCHAR";
     export abstract class DataType {
         abstract readonly name: TDataTypeAsString;
         abstract validate(value: any): boolean;
         abstract parse(value: any): any;
     }
 
-    export function createDataTypeFromString(type: TDataTypeAsString, enumValues: string[] = []): DataType {
+    export function createDataTypeFromString(type: TDataTypeAsString, enumValues: string[] = [], varcharLength: number = 255): DataType {
         switch (type) {
             case "TEXT":
                 return types.TEXT;
@@ -1653,6 +1766,8 @@ namespace DataTypes {
                 return types.TIME;
             case "ENUM":
                 return types.ENUM(enumValues);
+            case "VARCHAR":
+                return new VarcharType(varcharLength);
         }
     }
 
@@ -1684,7 +1799,7 @@ namespace DataTypes {
         readonly name = "FLOAT";
 
         validate(value: any): boolean {
-            return typeof value === "number" && !Number.isFinite(value);
+            return typeof value === "number" && Number.isFinite(value);
         }
 
         parse(value: any): number {
@@ -1720,7 +1835,7 @@ namespace DataTypes {
         readonly name = "DATE";
 
         validate(value: any): boolean {
-            return value instanceof SQLDate;
+            return value instanceof SQLDate || (typeof value === "string" && SQLDate.fromString(value) !== null);
         }
 
         parse(value: any): SQLDate | null {
@@ -1739,7 +1854,8 @@ namespace DataTypes {
         readonly name = "TIME";
 
         validate(value: any): boolean {
-            return value instanceof SQLTime;
+            return value instanceof SQLTime || (typeof value === "string" && SQLTime.fromString(value) !== null) 
+            || (typeof value === "number" && SQLTime.fromNumber(value) !== null);
         }
 
         parse(value: any): SQLTime | null {
@@ -1783,6 +1899,34 @@ namespace DataTypes {
             this.allowedValues = newValues;
         }
     }
+
+    export class VarcharType extends DataType {
+        readonly name = "VARCHAR";
+        private maxLength: number;
+
+        constructor(maxLength: number) {
+            super();
+            this.maxLength = maxLength;
+        }
+
+        validate(value: any): boolean {
+            return typeof value === "string" && value.length <= this.maxLength;
+        }
+
+        parse(value: any): string {
+            return String(value);
+        }
+
+        getMaxLength(): number {
+            return this.maxLength;
+        }
+
+        setMaxLength(newLength: number): void {
+            this.maxLength = newLength;
+        }
+
+    }
+
 }
 
 /**
@@ -1808,15 +1952,16 @@ interface IColumnInputs {
     isCurrentTimestamp: boolean;
     defaultValue: string;
     defaultBooleanValue: boolean;
-    enumValues: string[];
+    typeValues: string;
+    referenceSchema: string;
     referenceTable: string;
     referenceColumn: string;
 }
 
-type TReference = { table: string; column: string; };
+type TReference = { schema: string; table: string; column: string; };
 
 let databases: Record<string, DB.Database> = {};
-const databaseGroup = new DB.NodeGroup("databases", []);
+const databaseGroup = new DB.NodeGroup("databases", [], () => { abrirFechar(false, "criacao-database"); });
 
 const types = {
     INTEGER: new DataTypes.IntegerType(),
@@ -1828,10 +1973,24 @@ const types = {
 
     ENUM(values: string[]) {
         return new DataTypes.EnumType(values);
-    }
+    },
+
+    VARCHAR(length: number) {
+        return new DataTypes.VarcharType(length);
+    },
 };
 
+/**
+ * Palavras reservadas SQL.
+ */
+const keyWords = [
+    "primary", "key", "foreign", "not", "null", "unique", "default", "auto_increment", "where", "select", "from", "insert", 
+    "into", "values", "update", "set", "delete", "create", "table", "database", "use", "drop", "alter", "add", "column", "enum", 
+    "references", "on", "and", "or", "in", "is", "integer", "float", "text", "date", "time", "boolean", "varchar"
+];
+
 let currentDatabase: string | null = null;
+let currentSchema: string | null = null;
 let currentTable: string | null = null;
 let terminalSessions: TerminalSession[] = [];
 let currentTerminalSession: number = 0;
@@ -1840,19 +1999,21 @@ function getCurrentDatabase(): DB.Database | null {
     return currentDatabase ? databases[currentDatabase] : null;
 }
 
-function getCurrentTable(): DB.Table | null {
-    return currentDatabase && currentTable ? getCurrentDatabase()!.tables[currentTable] : null;
+function getCurrentSchema(): DB.Schema | null {
+    return currentDatabase && currentSchema ? getCurrentDatabase()!.schemas[currentSchema!] : null;
 }
 
-function getTable(tableName: string): DB.Table | null {
-    return currentDatabase ? getCurrentDatabase()!.tables[tableName] || null : null;
+function getCurrentTable(): DB.Table | null {
+    return currentDatabase && currentSchema && currentTable ? getCurrentSchema()!.tables[currentTable] : null;
+}
+
+function getTable(tableName: string, schemaName?: string): DB.Table | null {
+    return currentDatabase && (schemaName || currentSchema) ? getCurrentSchema()!.tables[tableName] || null : null;
 }
 
 //#endregion
 
 // #region Interface functions
-
-
 
 /**
  * Cria uma nova database a partir do campo de entrada da interface.
@@ -1877,6 +2038,29 @@ function createDatabaseInterface() {
     openNotifications(`<p style='color: var(--green4)'>Database "${databaseName}" criada com sucesso!</p>`);
 }
 
+function createSchemaInterface() {
+    const schemaNameInput = document.getElementById("nome-schema-input") as HTMLInputElement;
+    const schemaName = schemaNameInput.value.trim();
+
+    if (schemaName === "") {
+        openNotifications("<p style='color: var(--red5)'>O nome da schema não pode ser vazio.</p>");
+        return;
+    } else if (currentDatabase === null) {
+        openNotifications("<p style='color: var(--red5)'>Nenhuma database selecionada.</p>");
+        return;
+    } else if (!isValidSQLName(schemaName)) {
+        openNotifications("<p style='color: var(--red5)'>O nome da schema não segue o padrão permitido.</p>");
+        return;
+    } else if (getCurrentDatabase()!.schemas[schemaName]) {
+        openNotifications("<p style='color: var(--red5)'>Já existe um schema com esse nome.</p>");
+        return;
+    }
+
+    SGBDFunctions.createSchema(new DB.Schema(schemaName, currentDatabase!));
+    schemaNameInput.value = "";
+    openNotifications(`<p style='color: var(--green4)'>Schema "${schemaName}" criada com sucesso!</p>`);
+}
+
 /**
  * Cria uma nova tabela com as colunas definidas na interface.
  */
@@ -1894,12 +2078,15 @@ function createTableInterface() {
     } else if (currentDatabase === null) {
         openNotifications("<p style='color: var(--red5)'>Nenhuma database selecionada.</p>");
         return;
+    }  else if (currentSchema === null) {
+        openNotifications("<p style='color: var(--red5)'>Nenhuma schema selecionada.</p>");
+        return;
     } else if (getTable(tableName)) {
         openNotifications("<p style='color: var(--red5)'>Já existe uma tabela com esse nome.</p>");
         return;
     }
 
-    const table = new DB.Table(tableName);
+    const table = new DB.Table(tableName, currentSchema!);
     const columnsUl = document.querySelector("#criacao-tabela ul")!;
     const parsedColumns = parseColumnsFromInputs(columnsUl.children, table.columns);
     if (parsedColumns === null) return;
@@ -2003,6 +2190,9 @@ function insertRowInterface() {
     if (currentDatabase === null) {
         openNotifications("<p style='color: var(--red5)'>Nenhuma database selecionada.</p>");
         return;
+    } else if (currentSchema === null) {
+        openNotifications("<p style='color: var(--red5)'>Nenhuma schema selecionada.</p>");
+        return;
     } else if (currentTable === null) {
         openNotifications("<p style='color: var(--red5)'>Nenhuma tabela selecionada.</p>");
         return;
@@ -2013,7 +2203,7 @@ function insertRowInterface() {
     let valuesBeforeIncrement: { column: string, value: number }[] = [];
     const table = getTable(currentTable!)!;
     const rowUl = document.querySelector("#inserir-linha ul#colunas-inserir-linha")!;
-    const row: DB.Row = new DB.Row({});
+    const row: DB.Row = new DB.Row(currentTable!, {});
     for (const columnElement of rowUl.children) {
         const columnName = columnElement.querySelector("h3")!.textContent!;
         const column = table.columns[columnName];
@@ -2034,7 +2224,7 @@ function insertRowInterface() {
         }
 
         let rawValue: string;
-        if (compareTypes(column.type, types.BOOLEAN)) {
+        if (compareTypes(column.type, types.BOOLEAN) || compareTypes(column.type, types.ENUM([]))) {
             rawValue = columnElement.querySelector(".custom-dropdown button")!.textContent!;
         } else {
             rawValue = (columnElement.querySelector("input") as HTMLInputElement).value.trim();
@@ -2065,9 +2255,15 @@ function insertRowInterface() {
             return;
         }
 
+        if (!column.type.validate(value)) {
+            openNotifications(`<p style='color: var(--red5)'>Valor inválido para a coluna "${columnName}".</p>`);
+            table.revertAutoIncrementValues(valuesBeforeIncrement);
+            return;
+        }
+
         row.values[columnName] = value;
     }
-    SGBDFunctions.insertRow(currentTable!, row);
+    SGBDFunctions.insertRow(currentSchema!, currentTable!, row);
     changeInsertRowMenu();
     openNotifications(`<p style='color: var(--green5)'>Linha inserida com sucesso!</p>`);
 }
@@ -2084,7 +2280,7 @@ function editRowInterface(rowIndex: number) {
 
     const table = getTable(currentTable!)!;
     const rowUl = document.querySelector("#editar-linha ul#colunas-editar-linha")!;
-    const row: DB.Row = new DB.Row({});
+    const row: DB.Row = new DB.Row(currentTable!, {});
     for (const columnElement of rowUl.children) {
         const columnName = columnElement.querySelector("h3")!.textContent!;
         const column = table.columns[columnName];
@@ -2103,7 +2299,7 @@ function editRowInterface(rowIndex: number) {
         }
 
         let rawValue: string;
-        if (compareTypes(column.type, types.BOOLEAN)) {
+        if (compareTypes(column.type, types.BOOLEAN) || compareTypes(column.type, types.ENUM([]))) {
             rawValue = columnElement.querySelector(".custom-dropdown button")!.textContent!;
         } else {
             rawValue = (columnElement.querySelector("input") as HTMLInputElement).value.trim();
@@ -2126,6 +2322,11 @@ function editRowInterface(rowIndex: number) {
         }
         if (table.columns[columnName].isUnique && table.indexes[columnName].has(value)) {
             openNotifications(`<p style='color: var(--red5)'>O valor "${value}" já existe para a coluna "${columnName}".</p>`);
+            return;
+        }
+
+        if (!column.type.validate(value)) {
+            openNotifications(`<p style='color: var(--red5)'>Valor inválido para a coluna "${columnName}".</p>`);
             return;
         }
 
@@ -2162,6 +2363,28 @@ function renameDatabaseInterface() {
     updateCustomDropdowns();
 }
 
+function renameSchemaInterface() {
+    if (currentDatabase === null) {
+        openNotifications("<p style='color: var(--red5)'>Nenhuma database selecionada.</p>");
+        return;
+    } else if (currentSchema === null) {
+        openNotifications("<p style='color: var(--red5)'>Nenhuma schema selecionada.</p>");
+        return;
+    }
+    const schemaNameInput = document.getElementById("renomear-schema-input") as HTMLInputElement;
+    const newName = schemaNameInput.value.trim().toLowerCase();
+    if (newName === "") {
+        openNotifications("<p style='color: var(--red5)'>O nome do schema não pode ser vazio.</p>");
+    } else if (getCurrentDatabase()!.schemas[newName]) {
+        openNotifications("<p style='color: var(--red5)'>Já existe um schema com esse nome.</p>");
+    } else {
+        SGBDFunctions.renameSchema(currentSchema!, newName);
+        openNotifications("<p style='color: var(--green5)'>Schema renomeado com sucesso!</p>");
+    }
+
+    refreshUI();
+}
+
 /**
  * Renomeia a tabela atualmente selecionada.
  */
@@ -2177,7 +2400,7 @@ function renameTableInterface() {
     const newName = tableNameInput.value.trim().toLowerCase();
     if (newName === "") {
         openNotifications("<p style='color: var(--red5)'>O nome da tabela não pode ser vazio.</p>");
-    } else if (getCurrentDatabase()!.tables[newName]) {
+    } else if (getCurrentSchema()!.tables[newName]) {
         openNotifications("<p style='color: var(--red5)'>Já existe uma tabela com esse nome.</p>");
     } else {
         SGBDFunctions.renameTable(currentTable!, newName);
@@ -2222,7 +2445,7 @@ function alterColumnsInterface() {
         }
 
         if (newColumn.reference) {
-            const refTable = getCurrentDatabase()!.tables[newColumn.reference.table];
+            const refTable = getCurrentSchema()!.tables[newColumn.reference.table];
 
             const refIndex = refTable.indexes[newColumn.reference.column];
 
@@ -2231,6 +2454,16 @@ function alterColumnsInterface() {
 
                 if (value !== null && value !== undefined && !refIndex.has(value)) {
                     openNotifications("<p style='color: var(--red5)'>Existem valores nessa coluna que não correspondem a nenhuma entrada na tabela referenciada.</p>");
+                    return;
+                }
+            }
+        }
+
+        if (compareTypes(newColumn.type, types.VARCHAR(0))) {
+            for (const row of table.rows) {
+                const value = row.values[oldColumnName];
+                if (!newColumn.type.validate(value)) {
+                    openNotifications("<p style='color: var(--red5)'>Existem valores inválidos nessa coluna. Tamanho máximo de caracteres: " + (newColumn.type as DataTypes.VarcharType).getMaxLength() + "</p>");
                     return;
                 }
             }
@@ -2248,11 +2481,63 @@ function alterColumnsInterface() {
 // Other interface 
 
 function changeLeftSide() {
+    function getDetailsLabel(details: HTMLDetailsElement): string {
+        const summary = details.querySelector("summary");
+        const label = summary?.querySelector("div > p")?.textContent?.trim();
+        return label || "";
+    }
+
+    function buildPath(parentPath: string, details: HTMLDetailsElement): string {
+        const label = getDetailsLabel(details);
+        return parentPath ? `${parentPath}/${label}` : label;
+    }
+
+    function saveExpanded(root: HTMLElement, parentPath: string, opened: Set<string>) {
+        for (const child of Array.from(root.children)) {
+            if (child.tagName !== "DETAILS") continue;
+
+            const details = child as HTMLDetailsElement;
+            const childPath = buildPath(parentPath, details);
+
+            if (details.open) {
+                opened.add(childPath);
+            }
+
+            saveExpanded(details, childPath, opened);
+        }
+    }
+
+    function restoreExpanded(root: HTMLElement, parentPath: string, opened: Set<string>) {
+        for (const child of Array.from(root.children)) {
+            if (child.tagName !== "DETAILS") continue;
+
+            const details = child as HTMLDetailsElement;
+            const childPath = buildPath(parentPath, details);
+
+            if (opened.has(childPath)) {
+                details.open = true;
+            }
+
+            restoreExpanded(details, childPath, opened);
+        }
+    }
+
+    databaseGroup.c = Object.values(databases);
+
     const leftSide = document.getElementById("esquerda")!;
+    const previousTree = leftSide.querySelector("div#tree") as HTMLElement | null;
+    const opened = new Set<string>();
+    if (previousTree) {
+        saveExpanded(previousTree, "", opened);
+    }
+
     leftSide.innerHTML = "";
     const div = document.createElement("div");
-    div.append(databaseGroup.buildTree());
+    div.id = "tree";
+    div.appendChild(databaseGroup.buildTree());
     leftSide.appendChild(div);
+
+    restoreExpanded(div, "", opened);
 }
 
 /**
@@ -2276,11 +2561,14 @@ function changeTabelaSelecionadaTabela() {
 
     let divLinha = document.createElement("div");
     divLinha.classList.add("linha-tabela");
+    if (Object.keys(table.columns).length === 0) {
+        divLinha.innerHTML = "<p style='color: var(--gray4)'>Nenhuma coluna</p>";
+    }
     Object.values(table.columns).forEach((column) => {
         const divColuna = document.createElement("div");
         divColuna.innerHTML = `
             <p>${column.name}</p>
-            <p>${column.type.name.toUpperCase()}${column.isPrimaryKey ? " • PK" : ""}${column.isForeignKey ? " • FK → " + column.reference?.table + ", " + column.reference?.column : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO INCREMENT" : ""}</p>
+            <p>${column.type.name.toUpperCase()}${column.isPrimaryKey ? " • PK" : ""}${column.isForeignKey ? " • FK → " + column.reference?.table + ", " + column.reference?.column : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO INCREMENT" : ""}${column.isCurrentTimestamp ? " • CURRENT_TIMESTAMP" : ""}</p>
         `;
 
         divColuna.onclick = function () {
@@ -2335,25 +2623,6 @@ function changeTabelaSelecionadaTabela() {
 }
 
 /**
- * Atualiza o resumo exibido no painel de ações da tabela.
- */
-function changeTabelaInfoVariosBotoes() {
-    if (currentDatabase === null) {
-        const tabelaInfo = document.getElementById("tabela-info-varios-botoes")!;
-        tabelaInfo.querySelector("#nome-tabela")!.textContent = "Nenhuma tabela selecionada";
-        tabelaInfo.querySelector("#linhas-colunas")!.textContent = "0 linhas • 0 colunas";
-    } else if (currentTable === null) {
-        const tabelaInfo = document.getElementById("tabela-info-varios-botoes")!;
-        tabelaInfo.querySelector("#nome-tabela")!.textContent = "Nenhuma tabela selecionada";
-        tabelaInfo.querySelector("#linhas-colunas")!.textContent = "0 linhas • 0 colunas";
-    } else {
-        const tabelaInfo = document.getElementById("tabela-info-varios-botoes")!;
-        tabelaInfo.querySelector("#nome-tabela")!.textContent = currentTable;
-        tabelaInfo.querySelector("#linhas-colunas")!.textContent = `${Object.keys(getTable(currentTable!)!.rows).length} linhas • ${Object.keys(getTable(currentTable!)!.columns).length} colunas`;
-    }
-}
-
-/**
  * Converte os blocos de criação de colunas em instâncias de `Column`.
  * @param columns - Conjunto de blocos da interface.
  * @param existingColumns - Colunas já existentes para validação de nomes duplicados.
@@ -2392,9 +2661,10 @@ function readColumnInputs(columnDiv: HTMLElement): IColumnInputs {
     const isCurrentTimestamp = columnDiv.querySelector(".auto-date") as HTMLInputElement;
     const defaultValueInput = columnDiv.querySelector(".default-input-text input") as HTMLInputElement | null;
     const defaultBooleanButton = columnDiv.querySelector(".default-input-text .custom-dropdown-trigger") as HTMLElement | null;
-    const enumValuesInput = columnDiv.querySelector(".enum-values input") as HTMLInputElement | null;
-    const referenceTableElement = columnDiv.querySelector(".referencia .custom-dropdown:nth-child(2) .custom-dropdown-trigger") as HTMLElement | null;
-    const referenceColumnElement = columnDiv.querySelector(".referencia .custom-dropdown:nth-child(3) .custom-dropdown-trigger") as HTMLElement | null;
+    const typeValuesInput = columnDiv.querySelector(".type-values input") as HTMLInputElement | null;
+    const referenceSchemaElement = columnDiv.querySelector(".referencia .custom-dropdown:nth-child(2) .custom-dropdown-trigger") as HTMLElement | null;
+    const referenceTableElement = columnDiv.querySelector(".referencia .custom-dropdown:nth-child(3) .custom-dropdown-trigger") as HTMLElement | null;
+    const referenceColumnElement = columnDiv.querySelector(".referencia .custom-dropdown:nth-child(4) .custom-dropdown-trigger") as HTMLElement | null;
 
     return {
         columnName: columnNameInput.value.trim().toLowerCase(),
@@ -2408,7 +2678,8 @@ function readColumnInputs(columnDiv: HTMLElement): IColumnInputs {
         isCurrentTimestamp: isCurrentTimestamp.checked,
         defaultValue: defaultValueInput?.value ?? "",
         defaultBooleanValue: defaultBooleanButton?.textContent.toLowerCase().trim() === "true",
-        enumValues: enumValuesInput ? [...new Set(enumValuesInput.value.split(",").map((value) => value.trim()))] : [],
+        typeValues: typeValuesInput ? typeValuesInput.value.trim() : "",
+        referenceSchema: referenceSchemaElement?.textContent ?? "",
         referenceTable: referenceTableElement?.textContent ?? "",
         referenceColumn: referenceColumnElement?.textContent ?? ""
     };
@@ -2429,10 +2700,42 @@ function buildColumnFromInputs(columnInputs: IColumnInputs, knownColumns: Set<st
         return null;
     }
 
-    const column = new DB.Column(columnInputs.columnName, columnInputs.columnType,
+    const column = new DB.Column(columnInputs.columnName, currentTable!, columnInputs.columnType,
         columnInputs.isPrimaryKey, columnInputs.isForeignKey, columnInputs.isNotNull,
         columnInputs.isUnique, columnInputs.isAutoIncrement, columnInputs.hasDefault,
         columnInputs.isCurrentTimestamp);
+
+    if (compareTypes(column.type, types.ENUM([]))) {
+        (column.type as DataTypes.EnumType).setAllowedValues(columnInputs.typeValues.split(",").map((value) => value.trim()));
+    }
+
+    if (compareTypes(column.type, types.VARCHAR(0))) {
+        const varcharLength = parseInt(columnInputs.typeValues);
+        if (isNaN(varcharLength) || varcharLength <= 0) {
+            openNotifications("<p style='color: var(--red5)'>O tamanho do VARCHAR deve ser um número positivo.</p>");
+            return null;
+        }
+        (column.type as DataTypes.VarcharType).setMaxLength(varcharLength);
+    }
+
+    if (column.isForeignKey) {
+        if (columnInputs.referenceSchema === "Selecione um schema" || columnInputs.referenceTable === "Selecione uma tabela" 
+            || columnInputs.referenceColumn === "Selecione uma coluna") {
+            openNotifications("<p style='color: var(--red5)'>Selecione o schema, a tabela e a coluna de referência para a chave estrangeira.</p>");
+            return null;
+        }
+
+        if (getCurrentDatabase()!.schemas[columnInputs.referenceSchema].tables[columnInputs.referenceTable].columns[columnInputs.referenceColumn].type !== column.type) {
+            openNotifications("<p style='color: var(--red5)'>O tipo da coluna de referência não corresponde ao tipo da coluna.</p>");
+            return null;
+        }
+
+        column.reference = {
+            schema: columnInputs.referenceSchema,
+            table: columnInputs.referenceTable,
+            column: columnInputs.referenceColumn
+        };
+    }
 
     if (columnInputs.hasDefault) {
         if (columnInputs.defaultValue.trim() === "" && !compareTypes(columnInputs.columnType, types.BOOLEAN)) {
@@ -2444,27 +2747,11 @@ function buildColumnFromInputs(columnInputs: IColumnInputs, knownColumns: Set<st
         if (valueExists(columnInputs.defaultBooleanValue) && compareTypes(columnInputs.columnType, types.BOOLEAN)) {
             column.defaultValue = columnInputs.defaultBooleanValue;
         }
-    }
 
-    if (compareTypes(column.type, types.ENUM([]))) {
-        (column.type as DataTypes.EnumType).setAllowedValues(columnInputs.enumValues);
-    }
-
-    if (column.isForeignKey) {
-        if (columnInputs.referenceTable === "Crie outra tabela" || columnInputs.referenceColumn === "Crie outra coluna") {
-            openNotifications("<p style='color: var(--red5)'>Selecione a tabela e coluna de referência para a chave estrangeira.</p>");
+        if (!column.type.validate(column.defaultValue)) {
+            openNotifications("<p style='color: var(--red5)'>O valor padrão não é válido para o tipo da coluna.</p>");
             return null;
         }
-
-        if (getCurrentDatabase()!.tables[columnInputs.referenceTable].columns[columnInputs.referenceColumn].type !== column.type) {
-            openNotifications("<p style='color: var(--red5)'>O tipo da coluna de referência não corresponde ao tipo da coluna.</p>");
-            return null;
-        }
-
-        column.reference = {
-            table: columnInputs.referenceTable,
-            column: columnInputs.referenceColumn
-        };
     }
 
     return column;
@@ -2539,8 +2826,8 @@ function changeTabelaSelecionadaLinhaColuna(type: "row" | "column", rowIndex?: n
  */
 function refreshUI() {
     changeTabelaSelecionadaTabela();
-    changeTabelaInfoVariosBotoes();
     showHideTabelaSelecionadaLinhaColuna(false);
+    changeLeftSide();
 }
 
 // central menus
@@ -2572,7 +2859,7 @@ function createColumnCreationDiv(parent: HTMLElement) {
     const dropdownMenu = document.createElement("ul");
     dropdownMenu.className = "custom-dropdown-menu";
 
-    const options = ["Text", "Integer", "Float", "Boolean", "Date", "Time", "Enum"];
+    const options = ["Text", "Integer", "Float", "Boolean", "Date", "Time", "Enum", "Varchar"];
     options.forEach((option, index) => {
         const li = document.createElement("li");
         li.className = "custom-dropdown-option";
@@ -2642,6 +2929,29 @@ function createColumnCreationDiv(parent: HTMLElement) {
     referenciaP.textContent = "Referência";
     referenciaDiv.appendChild(referenciaP);
 
+    // Schema de referência
+
+    const refSchemaCustomDropdown = document.createElement("div");
+    refSchemaCustomDropdown.className = "custom-dropdown";
+
+    const refSchemaButton = document.createElement("button");
+    refSchemaButton.className = "custom-dropdown-trigger";
+    refSchemaButton.textContent = "Selecione um schema";
+    refSchemaButton.onclick = function () { openCustomDropdown(refSchemaButton); };
+
+    const refSchemaMenu = document.createElement("ul");
+    refSchemaMenu.className = "custom-dropdown-menu";
+
+    const refSchemaHiddenInput = document.createElement("input");
+    refSchemaHiddenInput.type = "hidden";
+    refSchemaHiddenInput.name = "reference-schema";
+    refSchemaHiddenInput.value = "text";
+
+    refSchemaCustomDropdown.appendChild(refSchemaButton);
+    refSchemaCustomDropdown.appendChild(refSchemaMenu);
+    refSchemaCustomDropdown.appendChild(refSchemaHiddenInput);
+    referenciaDiv.appendChild(refSchemaCustomDropdown);
+
     // Tabela de referência
 
     const refTableCustomDropdown = document.createElement("div");
@@ -2649,7 +2959,7 @@ function createColumnCreationDiv(parent: HTMLElement) {
 
     const refTableButton = document.createElement("button");
     refTableButton.className = "custom-dropdown-trigger";
-    refTableButton.textContent = "Crie outra tabela";
+    refTableButton.textContent = "Selecione uma tabela";
     refTableButton.onclick = function () { openCustomDropdown(refTableButton); };
 
     const refTableMenu = document.createElement("ul");
@@ -2672,7 +2982,7 @@ function createColumnCreationDiv(parent: HTMLElement) {
 
     const refColumnButton = document.createElement("button");
     refColumnButton.className = "custom-dropdown-trigger";
-    refColumnButton.textContent = "Crie outra coluna";
+    refColumnButton.textContent = "Selecione uma coluna";
     refColumnButton.onclick = function () { openCustomDropdown(refColumnButton); };
 
     const refColumnMenu = document.createElement("ul");
@@ -2706,22 +3016,22 @@ function createColumnCreationDiv(parent: HTMLElement) {
 
     mainDiv.appendChild(defaultDiv);
 
-    // Enum values input
-    const enumDiv = document.createElement("div");
-    enumDiv.classList.add("enum-values", "post-characteristics");
-    enumDiv.style.display = "none";
+    // Type input
+    const typeDiv = document.createElement("div");
+    typeDiv.classList.add("type-values", "post-characteristics");
+    typeDiv.style.display = "none";
 
-    const enumP = document.createElement("p");
-    enumP.textContent = "Valores do enum (separados por vírgula)";
-    enumDiv.appendChild(enumP);
+    const typeP = document.createElement("p");
+    typeP.textContent = "Valores do enum (separados por vírgula)";
+    typeDiv.appendChild(typeP);
 
-    const enumInput = document.createElement("input");
-    enumInput.type = "text";
-    enumInput.placeholder = "Valores separados por vírgula";
-    enumInput.classList.add("menu-central-input");
-    enumDiv.appendChild(enumInput);
+    const typeInput = document.createElement("input");
+    typeInput.type = "text";
+    typeInput.placeholder = "Valores separados por vírgula";
+    typeInput.classList.add("menu-central-input");
+    typeDiv.appendChild(typeInput);
 
-    mainDiv.appendChild(enumDiv);
+    mainDiv.appendChild(typeDiv);
 
     parent.appendChild(mainDiv);
     updateCustomDropdowns();
@@ -2822,12 +3132,21 @@ function changeConfigurarDatabaseMenu() {
     menu.querySelector("input")!.value = currentDatabase;
 }
 
+function changeConfigurarSchemaMenu() {
+    const menu = document.getElementById("configurar-schema")!;
+    if (currentDatabase === null || currentSchema === null) {
+        menu.querySelector("input")!.value = "";
+        return;
+    }
+    menu.querySelector("input")!.value = currentSchema;
+}
+
 /**
  * Atualiza o campo do menu de configuração de tabela.
  */
 function changeConfigurarTabelaMenu() {
     const menu = document.getElementById("configurar-tabela")!;
-    if (currentDatabase === null || currentTable === null) {
+    if (currentDatabase === null || currentSchema === null || currentTable === null) {
         menu.querySelector("input")!.value = "";
         return;
     }
@@ -2875,13 +3194,14 @@ function changeEditColumnsMenu() {
         const dropdownMenu = document.createElement("ul");
         dropdownMenu.className = "custom-dropdown-menu";
         const allowedConversions: Record<DataTypes.TDataTypeAsString, string[]> = {
-            "TEXT": ["Text", "Integer", "Float", "Boolean", "Date", "Time"],
-            "INTEGER": ["Text", "Integer", "Float", "Boolean", "Date", "Time"],
-            "FLOAT": ["Text", "Integer", "Float", "Boolean", "Date", "Time"],
-            "BOOLEAN": ["Text", "Integer", "Float", "Boolean"],
-            "DATE": ["Text", "Date"],
-            "TIME": ["Text", "Integer", "Float", "Time"],
-            "ENUM": ["text", "Enum"]
+            "TEXT": ["Text", "Integer", "Float", "Boolean", "Date", "Time", "Varchar"],
+            "INTEGER": ["Text", "Integer", "Float", "Boolean", "Date", "Time", "Varchar"],
+            "FLOAT": ["Text", "Integer", "Float", "Boolean", "Date", "Time", "Varchar"],
+            "BOOLEAN": ["Text", "Integer", "Float", "Boolean", "Varchar"],
+            "DATE": ["Text", "Date", "Varchar"],
+            "TIME": ["Text", "Integer", "Float", "Time", "Varchar"],
+            "ENUM": ["text", "Enum", "Varchar"],
+            "VARCHAR": ["Text", "Integer", "Float", "Boolean", "Date", "Time", "Varchar"]
         };
 
         let options = allowedConversions[column.type.name];
@@ -2966,6 +3286,29 @@ function changeEditColumnsMenu() {
         referenciaP.textContent = "Referência";
         referenciaDiv.appendChild(referenciaP);
 
+        // Schema de referência
+
+        const refSchemaCustomDropdown = document.createElement("div");
+        refSchemaCustomDropdown.className = "custom-dropdown";
+
+        const refSchemaButton = document.createElement("button");
+        refSchemaButton.className = "custom-dropdown-trigger";
+        refSchemaButton.textContent = "Selecione um schema";
+        refSchemaButton.onclick = function () { openCustomDropdown(refSchemaButton); };
+
+        const refSchemaMenu = document.createElement("ul");
+        refSchemaMenu.className = "custom-dropdown-menu";
+
+        const refSchemaHiddenInput = document.createElement("input");
+        refSchemaHiddenInput.type = "hidden";
+        refSchemaHiddenInput.name = "reference-schema";
+        refSchemaHiddenInput.value = "text";
+
+        refSchemaCustomDropdown.appendChild(refSchemaButton);
+        refSchemaCustomDropdown.appendChild(refSchemaMenu);
+        refSchemaCustomDropdown.appendChild(refSchemaHiddenInput);
+        referenciaDiv.appendChild(refSchemaCustomDropdown);
+
         // Tabela de referência
 
         const refTableCustomDropdown = document.createElement("div");
@@ -2973,7 +3316,7 @@ function changeEditColumnsMenu() {
 
         const refTableButton = document.createElement("button");
         refTableButton.className = "custom-dropdown-trigger";
-        refTableButton.textContent = "Crie outra tabela";
+        refTableButton.textContent = "Selecione uma tabela";
         refTableButton.onclick = function () { openCustomDropdown(refTableButton); };
 
         const refTableMenu = document.createElement("ul");
@@ -2996,7 +3339,7 @@ function changeEditColumnsMenu() {
 
         const refColumnButton = document.createElement("button");
         refColumnButton.className = "custom-dropdown-trigger";
-        refColumnButton.textContent = "Crie outra coluna";
+        refColumnButton.textContent = "Selecione uma coluna";
         refColumnButton.onclick = function () { openCustomDropdown(refColumnButton); };
 
         const refColumnMenu = document.createElement("ul");
@@ -3026,27 +3369,30 @@ function changeEditColumnsMenu() {
 
         updateDefaultInput(mainDiv, column.defaultValue);
 
-        // Enum values input
-        const enumDiv = document.createElement("div");
-        enumDiv.classList.add("enum-values", "post-characteristics");
-        enumDiv.style.display = "none";
 
-        const enumP = document.createElement("p");
-        enumP.textContent = "Valores do enum (separados por vírgula)";
-        enumDiv.appendChild(enumP);
+        // Type values input
+        const typeDiv = document.createElement("div");
+        typeDiv.classList.add("type-values", "post-characteristics");
+        typeDiv.style.display = "none";
 
-        const enumInput = document.createElement("input");
-        enumInput.type = "text";
-        enumInput.placeholder = "Valores separados por vírgula";
-        enumInput.classList.add("menu-central-input");
-        enumInput.value = compareTypes(column.type, types.ENUM([])) ? (column.type as DataTypes.EnumType).getAllowedValues().join(", ") : "";
-        enumDiv.appendChild(enumInput);
+        const typeP = document.createElement("p");
+        typeP.textContent = "Valores do enum (separados por vírgula)";
+        typeDiv.appendChild(typeP);
 
-        mainDiv.appendChild(enumDiv);
+        const typeInput = document.createElement("input");
+        typeInput.type = "text";
+        typeInput.placeholder = "Valores separados por vírgula";
+        typeInput.classList.add("menu-central-input");
+        typeInput.value = compareTypes(column.type, types.ENUM([])) ? (column.type as DataTypes.EnumType).getAllowedValues().join(", ") 
+        : compareTypes(column.type, types.VARCHAR(0)) ? (column.type as DataTypes.VarcharType).getMaxLength().toString() : "";
+        typeDiv.appendChild(typeInput);
+
+        mainDiv.appendChild(typeDiv);
 
         menu.appendChild(mainDiv);
         updateCharacteristics(mainDiv);
         updateCustomDropdowns();
+        updateTypeInput(mainDiv);
     });
 
     const criacaoColunasEdit = document.getElementById("criacao-colunas-edit")!;
@@ -3080,7 +3426,7 @@ function changeInsertRowMenu() {
         div.appendChild(h3);
 
         const p = document.createElement("p");
-        p.textContent = `(${column.type.name.toUpperCase()}${column.isPrimaryKey ? " • PK" : ""}${column.isForeignKey ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""})`;
+        p.textContent = `(${column.type.name.toUpperCase()}${column.isPrimaryKey ? " • PK" : ""}${column.isForeignKey ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""}${column.isCurrentTimestamp ? " • CURRENT_TIMESTAMP" : ""})`;
         div.appendChild(p);
 
         if (column.isAutoIncrement) {
@@ -3161,6 +3507,12 @@ function changeInsertRowMenu() {
 
             div.appendChild(dropdown);
             updateCustomDropdowns();
+        } else if (compareTypes(column.type, types.VARCHAR(0))) {
+            const input = document.createElement("input");
+            input.classList.add("menu-central-input");
+            input.type = "text";
+            input.maxLength = (column.type as DataTypes.VarcharType).getMaxLength();
+            div.appendChild(input);
         } else {
             const input = document.createElement("input");
             input.classList.add("menu-central-input");
@@ -3195,7 +3547,7 @@ function changeEditRowMenu(rowIndex: number) {
         div.appendChild(h3);
 
         const p = document.createElement("p");
-        p.textContent = `(${column.type.name.toUpperCase()}${column.isPrimaryKey ? " • PK" : ""}${column.isForeignKey ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""})`;
+        p.textContent = `(${column.type.name.toUpperCase()}${column.isPrimaryKey ? " • PK" : ""}${column.isForeignKey ? " • FK" : ""}${column.isNotNull ? " • NOT NULL" : ""}${column.isUnique ? " • UNIQUE" : ""}${column.isAutoIncrement ? " • AUTO_INCREMENT" : ""}${column.isCurrentTimestamp ? " • CURRENT_TIMESTAMP" : ""})`;
         div.appendChild(p);
 
         if (column.isAutoIncrement) {
@@ -3331,63 +3683,6 @@ function changeSearchMenu() {
         `;
         searchColumnsDiv.appendChild(label);
     });
-
-    // Joins
-    const referencesDiv = document.querySelector("#references-search")!;
-    referencesDiv.innerHTML = "";
-
-    const isReferenceByDiv = document.querySelector("#is-referenced-by-search")! as HTMLDivElement;
-    isReferenceByDiv.innerHTML = "";
-
-    const relationships = getCurrentDatabase()!.getTableRelationships(currentTable!);
-    const currentTableReferences = relationships.outgoing;
-    const referencedBy = relationships.incoming;
-
-    // OUTGOING
-    if (currentTableReferences.length === 0) {
-        referencesDiv.innerHTML =
-            "<p>Não há chaves estrangeiras nessa tabela para realizar joins</p>";
-    } else {
-        currentTableReferences.forEach((ref) => {
-            const buttonRef = document.createElement("button");
-            buttonRef.classList.add("reference-button");
-            buttonRef.innerHTML = `
-                <p class="text2">
-                    ${ref.column}
-                    → ${ref.referenceTable}.${ref.referenceColumn}
-                </p>
-            `;
-            buttonRef.onclick = function () {
-                buttonRef.classList.toggle("reference-button-active");
-            };
-
-            referencesDiv.appendChild(buttonRef);
-        });
-    }
-
-    // INCOMING
-    if (Object.keys(referencedBy).length === 0) {
-        isReferenceByDiv.innerHTML = "<p>Essa tabela não é referenciada por nenhuma chave estrangeira para realizar joins</p>";
-    } else {
-        Object.entries(referencedBy).forEach(([columnName, refs]) => {
-            refs.forEach((ref) => {
-                const buttonRef = document.createElement("button");
-                buttonRef.classList.add("reference-button");
-                buttonRef.innerHTML = `
-                    <p class="text2">
-                        ${ref.table}.${ref.column}
-                        → ${columnName}
-                    </p>
-                `;
-                buttonRef.onclick = function () {
-                    buttonRef.classList.toggle("reference-button-active");
-                };
-
-                isReferenceByDiv.appendChild(buttonRef);
-            });
-        });
-    }
-
 }
 
 /**
@@ -3396,25 +3691,40 @@ function changeSearchMenu() {
  * @param rowIndex - Índice da linha, quando aplicável.
  * @param columnName - Nome da coluna, quando aplicável.
  */
-function changeConfirmDeleteMenu(type: "database" | "table" | "column" | "row", rowIndex?: number, columnName?: string) {
+function changeConfirmDeleteMenu(type: "database" | "schema" | "table" | "column" | "row", rowIndex?: number, columnName?: string) {
     const menuUl = document.getElementById("confirmar-deletar-lista")!;
     menuUl.innerHTML = "";
 
     if (currentDatabase === null) {
         menuUl.innerHTML = "<p>Nenhuma database selecionada.</p>";
         return;
+    } else if (currentSchema === null && (type === "schema" || type === "table" || type === "column" || type === "row")) {
+        menuUl.innerHTML = "<p>Nenhum schema selecionado.</p>";
+        return;
     } else if (currentTable === null && (type === "table" || type === "column" || type === "row")) {
         menuUl.innerHTML = "<p>Nenhuma tabela selecionada.</p>";
         return;
-    }
+    } 
 
-    if (type === "database" || type === "table" || type === "column" || type === "row") {
+    if (type === "database" || type === "schema" || type === "table" || type === "column" || type === "row") {
         menuUl.innerHTML += `
         <div class="outlined">
             <h4 class="text2">Database</h4>
             <div>
                 <p class="text3">${currentDatabase}</p>
-                <p class="text3">Tabelas: ${Object.keys(getCurrentDatabase()!.tables).length}</p>
+                <p class="text3">Schemas: ${Object.keys(getCurrentDatabase()!.schemas).length}</p>
+            </div>
+        </div>
+        `;
+    }
+
+    if (type === "schema" || type === "table" || type === "column" || type === "row") {
+        menuUl.innerHTML += `
+        <div class="outlined">
+            <h4 class="text2">Schema</h4>
+            <div>
+                <p class="text3">${currentSchema}</p>
+                <p class="text3">Tabelas: ${Object.keys(getCurrentSchema()!.tables).length}</p>
             </div>
         </div>
         `;
@@ -3478,38 +3788,13 @@ function changeConfirmDeleteMenu(type: "database" | "table" | "column" | "row", 
         if (type === "database") {
             SGBDFunctions.deleteDatabase(currentDatabase!);
             openNotifications("<p style='color: var(--green5)'>Database deletada com sucesso!</p>");
+        } else if (type === "schema") {
+            SGBDFunctions.deleteSchema(currentSchema!);
+            openNotifications("<p style='color: var(--green5)'>Schema deletado com sucesso!</p>");
         } else if (type === "table") {
-            const refs = getCurrentDatabase()!.foreignKeyMap[currentTable!];
-
-            if (refs && Object.keys(refs).length > 0) {
-                const mensagens: string[] = [];
-
-                for (const column in refs) {
-                    for (const ref of refs[column]) {
-                        mensagens.push(`${ref.table}.${ref.column}`);
-                    }
-                }
-
-                openNotifications(
-                    `<p style='color: var(--red5)'>Não é possível deletar a tabela. Referenciada por:<br>
-                    ${mensagens.join("<br>")}
-                    </p>`
-                );
-                return;
-            }
             SGBDFunctions.deleteTable(currentTable!);
             openNotifications("<p style='color: var(--green5)'>Tabela deletada com sucesso!</p>");
         } else if (type === "column") {
-            const refs = getCurrentDatabase()!.foreignKeyMap[currentTable!]?.[columnName!];
-
-            if (refs && refs.length > 0) {
-                openNotifications(
-                    `<p style='color: var(--red5)'>Não é possível deletar a coluna. Referenciada por:<br>
-                    ${refs.map(r => `${r.table}.${r.column}`).join("<br>")}
-                    </p>`
-                );
-                return;
-            }
             SGBDFunctions.deleteColumn(currentTable!, columnName!);
             openNotifications("<p style='color: var(--green5)'>Coluna deletada com sucesso!</p>");
         } else if (type === "row") {
@@ -3611,12 +3896,13 @@ function updateCharacteristics(parentDiv: Element) {
     // REFERÊNCIA (FK)
     const referenciaDiv = parentDiv.querySelector("div.referencia") as HTMLElement;
     referenciaDiv.style.display = fkInput.checked ? "block" : "none";
+    updateForeignKeyReferenceSchemaOptions(parentDiv);
     updateForeignKeyReferenceTableOptions(parentDiv);
     updateForeignKeyReferenceColumnOptions(parentDiv);
 
-    // ENUM
-    const enumDiv = parentDiv.querySelector("div.enum-values") as HTMLElement;
-    enumDiv.style.display = state.type === "ENUM" ? "block" : "none";
+    // TYPE
+    const typeDiv = parentDiv.querySelector("div.type-values") as HTMLElement;
+    typeDiv.style.display = state.type === "ENUM" || state.type === "VARCHAR" ? "block" : "none";
 }
 
 /**
@@ -3684,18 +3970,27 @@ function updateDefaultInput(parentDiv: Element, initialValue?: any) {
     }
 }
 
+function updateTypeInput(parentDiv: Element) {
+    const type = (parentDiv.querySelector(".custom-dropdown button") as HTMLElement).textContent!.toLowerCase();
+    const typeDiv = parentDiv.querySelector("div.type-values") as HTMLElement;
+    if (type === "enum") {
+        typeDiv.querySelector("p")!.textContent = "Valores do enum (separados por vírgula)";
+        typeDiv.querySelector("input")!.placeholder = "Valores separados por vírgula";
+    } else if (type === "varchar") {
+        typeDiv.querySelector("p")!.textContent = "Tamanho máximo do varchar";
+        typeDiv.querySelector("input")!.placeholder = "Tamanho máximo";
+        typeDiv.querySelector("input")!.type = "number";
+    }
+}
+
 /**
- * Atualiza as tabelas disponíveis para referência de chave estrangeira.
+ * Atualiza os schemas disponíveis para referência de chave estrangeira.
  * @param parentDiv - Container do bloco de criação/edição da coluna.
  */
-function updateForeignKeyReferenceTableOptions(parentDiv: Element) {
+function updateForeignKeyReferenceSchemaOptions(parentDiv: Element) {
     const database = getCurrentDatabase()!;
 
-    const shouldFilterCurrentTable = currentTable && database.tables[currentTable];
-
-    const availableTables = Object.keys(database.tables).filter(tableName =>
-        !shouldFilterCurrentTable || tableName !== currentTable
-    );
+    const availableTables = Object.keys(database.schemas);
 
     const tableSelect = parentDiv.querySelector(".referencia .custom-dropdown-menu") as HTMLElement;
     tableSelect.innerHTML = "";
@@ -3707,9 +4002,44 @@ function updateForeignKeyReferenceTableOptions(parentDiv: Element) {
 
     const refButton = parentDiv.querySelector(".referencia .custom-dropdown-trigger") as HTMLElement;
     if (availableTables.length === 0) {
-        refButton.textContent = "Crie outra tabela";
+        refButton.textContent = "Selecione uma tabela";
     } else {
         refButton.textContent = availableTables[0];
+    }
+    updateCustomDropdowns();
+}
+
+/**
+ * Atualiza as tabelas disponíveis para referência de chave estrangeira.
+ * @param parentDiv - Container do bloco de criação/edição da coluna.
+ */
+function updateForeignKeyReferenceTableOptions(parentDiv: Element) {
+    const database = getCurrentDatabase()!;
+    const tableSelect = parentDiv.querySelector(".referencia :nth-child(3) .custom-dropdown-menu") as HTMLElement;
+    const refSchemaButton = parentDiv.querySelector(".referencia :nth-child(2) .custom-dropdown-trigger") as HTMLElement;
+    const refButton = parentDiv.querySelector(".referencia :nth-child(3) .custom-dropdown-trigger") as HTMLElement;
+
+    tableSelect.innerHTML = "";
+
+    const referencedSchema = database.schemas[refSchemaButton.textContent!];
+    if (!referencedSchema) {
+        refButton.textContent = "Selecione um schema";
+        updateCustomDropdowns();
+        return;
+    }
+
+    let i = 0;
+    for (let tableName in referencedSchema.tables) {
+        tableSelect.innerHTML += `
+            <li class="custom-dropdown-option ${i === 0 ? "custom-dropdown-option-selected" : ""}">${tableName}</li>
+        `;
+        i++;
+    }
+
+    if (Object.keys(referencedSchema.tables).length === 0) {
+        refButton.textContent = "Selecione uma tabela";
+    } else {
+        refButton.textContent = Object.keys(referencedSchema.tables)[0];
     }
     updateCustomDropdowns();
 }
@@ -3719,16 +4049,16 @@ function updateForeignKeyReferenceTableOptions(parentDiv: Element) {
  * @param parentDiv - Container do bloco de criação/edição da coluna.
  */
 function updateForeignKeyReferenceColumnOptions(parentDiv: Element) {
-    const database = getCurrentDatabase()!;
-    const columnSelect = parentDiv.querySelector(".referencia :nth-child(3) .custom-dropdown-menu") as HTMLElement;
-    const refTableButton = parentDiv.querySelector(".referencia .custom-dropdown-trigger") as HTMLElement;
-    const refButton = parentDiv.querySelector(".referencia :nth-child(3) .custom-dropdown-trigger") as HTMLElement;
+    const schema = getCurrentSchema()!;
+    const columnSelect = parentDiv.querySelector(".referencia :nth-child(4) .custom-dropdown-menu") as HTMLElement;
+    const refTableButton = parentDiv.querySelector(".referencia :nth-child(3) .custom-dropdown-trigger") as HTMLElement;
+    const refButton = parentDiv.querySelector(".referencia :nth-child(4) .custom-dropdown-trigger") as HTMLElement;
 
     columnSelect.innerHTML = "";
 
-    const referencedTable = database.tables[refTableButton.textContent!];
+    const referencedTable = schema.tables[refTableButton.textContent!];
     if (!referencedTable) {
-        refButton.textContent = "Crie outra tabela";
+        refButton.textContent = "Selecione uma coluna";
         updateCustomDropdowns();
         return;
     }
@@ -3744,7 +4074,7 @@ function updateForeignKeyReferenceColumnOptions(parentDiv: Element) {
     }
 
     if (Object.keys(referencedTable.columns).length === 0) {
-        refButton.textContent = "Crie outra coluna";
+        refButton.textContent = "Selecione uma coluna";
     } else {
         refButton.textContent = Object.keys(referencedTable.columns)[0];
     }
@@ -3893,10 +4223,6 @@ namespace SQL {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER DATABASE incorreto", "Sintaxe incorreta"], "error");
                 return;
             }
-            if (databases[this.tokens[5]]) {
-                getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma database com o nome "${this.tokens[2]}"`], "error");
-                return;
-            }
             if (!isValidSQLName(this.tokens[5])) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da database inválido"], "error");
                 return;
@@ -3917,13 +4243,46 @@ namespace SQL {
             getCurrentTerminalSession().createEntry(this.fullCommand, [`Database "${this.tokens[2]}" renomeada para "${this.tokens[5]}" com sucesso!`], "success");
         }
 
+        schema() {
+            if (currentDatabase === null) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhuma database selecionada"], "error");
+                return;
+            }
+            if (this.tokens.length < 6 || this.tokens.length > 6) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER SCHEMA incorreto", "Sintaxe incorreta"], "error");
+                return;
+            }
+            if (!isValidSQLName(this.tokens[5])) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome do schema inválido"], "error");
+                return;
+            }
+            if (getCurrentDatabase()?.schemas[this.tokens[5]]) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe um schema com o nome "${this.tokens[5]}"`], "error");
+                return;
+            }
+            if (getCurrentDatabase()?.schemas[this.tokens[2]] === undefined) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Schema "${this.tokens[2]}" não existe`], "error");
+                return;
+            }
+            if (this.tokens[3]?.toLowerCase() !== "rename" || this.tokens[4]?.toLowerCase() !== "to") {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER SCHEMA incorreto", "Sintaxe incorreta"], "error");
+                return;
+            }
+            SGBDFunctions.renameSchema(this.tokens[2], this.tokens[5]);
+            getCurrentTerminalSession().createEntry(this.fullCommand, [`Schema "${this.tokens[2]}" renomeado para "${this.tokens[5]}" com sucesso!`], "success");
+        }
+
         table() {
             const tableName = this.tokens[2];
             if (currentDatabase === null) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhuma database selecionada"], "error");
                 return;
             }
-            if (getCurrentDatabase()!.tables[tableName] === undefined) {
+            if (currentSchema === null) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhum schema selecionado"], "error");
+                return;
+            }
+            if (getCurrentSchema()!.tables[tableName] === undefined) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, [`Tabela "${tableName}" não existe na database "${currentDatabase}"`], "error");
                 return;
             }
@@ -3932,6 +4291,9 @@ namespace SQL {
             switch (action) {
                 case "rename":
                     this.rename();
+                    break;
+                case "set":
+                    this.setSchema();
                     break;
                 case "add":
                     this.addColumn();
@@ -3959,8 +4321,8 @@ namespace SQL {
                     getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da tabela inválido"], "error");
                     return;
                 }
-                if (getCurrentDatabase()!.tables[newName]) {
-                    getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma tabela com o nome "${newName}" nessa database`], "error");
+                if (getCurrentSchema()!.tables[newName]) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma tabela com o nome "${newName}" nesse schema`], "error");
                     return;
                 }
                 SGBDFunctions.renameTable(this.tokens[2], newName);
@@ -3997,6 +4359,10 @@ namespace SQL {
             }
         }
 
+        setSchema() {
+
+        }
+
         addColumn() {
 
         }
@@ -4030,6 +4396,9 @@ namespace SQL {
             switch (target) {
                 case "database":
                     this.database();
+                    break;
+                case "schema":
+                    this.schema();
                     break;
 
                 case "table":
@@ -4072,32 +4441,80 @@ namespace SQL {
         }
 
         /**
+         * Executa CREATE SCHEMA.
+         */
+        schema() {
+            if (currentDatabase === null) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhuma database selecionada"], "error");
+                return;
+            }
+            if (this.tokens.length < 3) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando CREATE SCHEMA incorreto", "Nome do SCHEMA é obrigatório"], "error");
+                return;
+            }
+            if (this.tokens.length > 3) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando CREATE SCHEMA incorreto", "Nome do SCHEMA deve ser uma única palavra"], "error");
+                return;
+            }
+            if (databases[currentDatabase!].schemas[this.tokens[2]]) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe um schema com o nome "${this.tokens[2]}"`], "error");
+                return;
+            }
+            if (!isValidSQLName(this.tokens[2])) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome do SCHEMA inválido"], "error");
+                return;
+            }
+
+            const schemaName = this.tokens[2];
+            SGBDFunctions.createSchema(new DB.Schema(schemaName, currentDatabase!));
+            getCurrentTerminalSession().createEntry(this.fullCommand, [`Schema "${schemaName}" criado com sucesso!`], "success");
+        }
+
+        /**
          * Executa CREATE TABLE.
          */
         table() {
-            const tableName = this.tokens[2];
+            const name = this.tokens[2];
+            let schemaName: string;
+            let tableName: string;
+            if (name.includes(".")) {
+                schemaName = name.split(".")[0]?.toLowerCase();
+                tableName = name.split(".")[1]?.toLowerCase();
+
+                if (!getCurrentDatabase()!.schemas[schemaName]) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, [`Schema "${schemaName}" não existe na database "${currentDatabase}"`], "error");
+                    return;
+                }
+            } else {
+                schemaName = currentSchema!;
+                tableName = name?.toLowerCase();
+            }
             if (currentDatabase === null) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando CREATE TABLE incorreto", "Nenhuma database selecionada"], "error");
+                return;
+            }
+            if (currentSchema === null) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhum schema selecionado"], "error");
                 return;
             }
             if (!isValidSQLName(tableName)) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da tabela inválido"], "error");
                 return;
             }
-            if (getCurrentDatabase()!.tables[tableName]) {
-                getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma tabela com o nome "${tableName}" nessa database`], "error");
+            if (getCurrentDatabase()!.schemas[schemaName].tables[tableName]) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma tabela com o nome "${tableName}" nesse schema`], "error");
                 return;
             }
             if (this.tokens[3] !== "(" || this.tokens[this.tokens.length - 1] !== ")") {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando CREATE TABLE incorreto", "Sintaxe inválida para a definição da tabela"], "error");
                 return;
             }
-            if (keyWords.includes(this.tokens[2].toLowerCase())) {
+            if (keyWords.includes(tableName.toLowerCase())) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da tabela é uma palavra-chave reservada"], "error");
                 return;
             }
 
-            let table = new DB.Table(tableName);
+            let table = new DB.Table(tableName, currentSchema!);
             const columnDefs = splitColumnDefinitions(this.tokens.slice(4, -1));
 
             for (const columnDef of columnDefs) {
@@ -4112,7 +4529,6 @@ namespace SQL {
             SGBDFunctions.createTable(table);
             getCurrentTerminalSession().createEntry(this.fullCommand, [`Tabela "${tableName}" criada com sucesso!`], "success");
         }
-
     }
 
     export class SQLInsert {
@@ -4134,12 +4550,30 @@ namespace SQL {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Sintaxe inválida"], "error");
                 return;
             }
-            const tableName = t[2];
-            if (!getCurrentDatabase()!.tables[tableName]) {
-                getCurrentTerminalSession().createEntry(this.fullCommand, [`Tabela "${tableName}" não existe na database "${currentDatabase}"`], "error");
+            const name = t[2];
+            let schemaName: string;
+            let tableName: string;
+            if (name.includes(".")) {
+                schemaName = name.split(".")[0]?.toLowerCase();
+                tableName = name.split(".")[1]?.toLowerCase();
+            } else {
+                schemaName = currentSchema!;
+                tableName = name?.toLowerCase();
+
+                if (schemaName === null) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhum schema selecionado"], "error");
+                    return;
+                }
+            }
+            if (!getCurrentDatabase()!.schemas[schemaName].tables[tableName]) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Tabela "${tableName}" não existe no schema "${currentSchema}"`], "error");
                 return;
             }
-            const table = getTable(tableName)!;
+            const table = getCurrentDatabase()!.schemas[schemaName].tables[tableName];
+            if (!table) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Tabela "${tableName}" não existe no schema "${schemaName}"`], "error");
+                return;
+            }
 
             let columnsToBeInserted: string[] = [];
             if (t[3] === "(") {
@@ -4184,7 +4618,7 @@ namespace SQL {
                     return;
                 }
 
-                this.getRowValuesAndInsert(endValuesIndex + 2, tableName, columnsToBeInserted);
+                this.getRowValuesAndInsert(endValuesIndex + 2, schemaName, tableName, columnsToBeInserted);
                 return;
             }
 
@@ -4196,21 +4630,22 @@ namespace SQL {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Nenhuma coluna fornecida para inserção"], "error");
                 return;
             }
+            
             if (t[3]?.toLowerCase() !== "values") {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Sintaxe inválida: valores devem ser especificados após a lista de colunas"], "error");
                 return;
             }
 
-            this.getRowValuesAndInsert(4, tableName, columnsToBeInserted);
+            this.getRowValuesAndInsert(4, schemaName, tableName, columnsToBeInserted);
         }
 
-        getRowValuesAndInsert(startIndex: number, tableName: string, columnsToBeInserted: string[]) {
+        getRowValuesAndInsert(startIndex: number, schemaName: string, tableName: string, columnsToBeInserted: string[]) {
             const t = this.tokens;
-            const table = getTable(tableName)!;
+            const table = getCurrentDatabase()!.schemas[schemaName].tables[tableName]!;
             let depth = 0;
             let columnIndex = 0;
             const rowsToBeInserted: DB.Row[] = [];
-            let row: DB.Row = new DB.Row({});
+            let row: DB.Row | null = null;
             let value = "";
             for (let i = startIndex; i < t.length; i++) {
                 const token = t[i];
@@ -4218,7 +4653,7 @@ namespace SQL {
                 if (token === "(") {
                     depth++;
                     if (depth === 1) {
-                        row.values = {};
+                        row = new DB.Row(currentTable!, {});
                         columnIndex = 0;
                         value = "";
                     }
@@ -4230,22 +4665,22 @@ namespace SQL {
                         getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Sintaxe inválida"], "error");
                         return;
                     }
-                    row.values[columnsToBeInserted[columnIndex]] = value;
+                    row!.values[columnsToBeInserted[columnIndex]] = value;
                     depth--;
 
                     if (columnIndex + 1 !== columnsToBeInserted.length) {
                         getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Quantidade de valores diferente da quantidade de colunas"], "error");
                         return;
                     }
-                    rowsToBeInserted.push(row);
-                    row.values = {};
+                    rowsToBeInserted.push(row!);
+                    row = null;
                     columnIndex = 0;
                     value = "";
                     continue;
                 }
 
                 if (token === "," && depth === 1) {
-                    row.values[columnsToBeInserted[columnIndex]] = value;
+                    row!.values[columnsToBeInserted[columnIndex]] = value;
                     value = "";
                     columnIndex++;
                     if (columnIndex >= columnsToBeInserted.length) {
@@ -4263,6 +4698,10 @@ namespace SQL {
 
             if (depth !== 0) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Sintaxe inválida: parênteses desbalanceados"], "error");
+                return;
+            }
+            if (row !== null) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Sintaxe inválida"], "error");
                 return;
             }
             if (rowsToBeInserted.length === 0) {
@@ -4382,7 +4821,7 @@ namespace SQL {
             }
 
             for (const row of validatedRows) {
-                SGBDFunctions.insertRow(tableName, row);
+                SGBDFunctions.insertRow(schemaName, tableName, row);
             }
             getCurrentTerminalSession().createEntry(this.fullCommand, [`${validatedRows.length} linha(s) inserida(s) na tabela "${tableName}"`], "success");
         }
@@ -4390,22 +4829,30 @@ namespace SQL {
         validateRowsTypes(rows: DB.Row[], table: DB.Table): DB.Row[] | string {
             const newRows: DB.Row[] = [];
             for (const row of rows) {
-                const newRow: DB.Row = new DB.Row({})
-                for (const columnName in row) {
+                const newRow: DB.Row = new DB.Row(currentTable!, {})
+                for (const columnName in row.values) {
                     if (typeof row.values[columnName] === "string" && row.values[columnName].toUpperCase() === "NULL") {
                         newRow.values[columnName] = null;
                         continue;
                     }
                     const colType = table.columns[columnName].type;
                     let parsed = row.values[columnName];
-                    if (compareTypes(colType, types.TEXT) || compareTypes(colType, types.DATE) || compareTypes(colType, types.TIME)) {
+                    if (compareTypes(colType, types.TEXT) || compareTypes(colType, types.DATE) 
+                        || compareTypes(colType, types.TIME) || compareTypes(colType, types.VARCHAR(0))) {
                         if (!(parsed.startsWith("'") && parsed.endsWith("'") || parsed.startsWith('"') && parsed.endsWith('"'))) {
                             return "Tipo deve começar e acabar com \" ou \'"
                         }
                         parsed = (parsed as string).slice(1, parsed.length - 1);
                     }
+                    if (!table.columns[columnName].type.validate(parsed)) {
+                        return `Valor inválido para a coluna "${columnName}"`
+                    }
                     parsed = colType.parse(parsed);
                     if (!valueExists(parsed)) {
+                        return `Valor inválido para a coluna "${columnName}"`
+                    }
+
+                    if (!table.columns[columnName].type.validate(parsed)) {
                         return `Valor inválido para a coluna "${columnName}"`
                     }
                     newRow.values[columnName] = parsed;
@@ -4437,14 +4884,38 @@ namespace SQL {
          * Executa o comando USE para trocar a database ativa.
          */
         use() {
-            const target = this.tokens[1]?.toLowerCase();
+            const type = this.tokens[1]?.toLowerCase();
+            const target = this.tokens[2]?.toLowerCase();
 
-            if (!target) {
-                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando USE incorreto", "Nome da database é obrigatório"], "error");
+
+            if (type !== "database" && type !== "schema") {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando USE incorreto", "Tipo de objeto inválido. Use 'DATABASE' ou 'SCHEMA'."], "error");
                 return;
             }
-            if (this.tokens.length > 2) {
-                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando USE incorreto", "Nome da database deve ser uma única palavra"], "error");
+
+            if (!target) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando USE incorreto", "Nome é obrigatório"], "error");
+                return;
+            }
+
+            if (type === "schema") {
+                if (this.tokens.length > 3) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando USE incorreto", "Nome do SCHEMA deve ser uma única palavra"], "error");
+                    return;
+                }
+                if (!valueExists(getCurrentDatabase()?.schemas[target])) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, [`SCHEMA "${target}" não existe`], "error");
+                    return;
+                }
+                currentSchema = target;
+                currentTable = null;
+                refreshUI();
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`SCHEMA "${target}" selecionado`], "success");
+                return;
+            }
+
+            if (this.tokens.length > 3) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando USE incorreto", "Nome da DATABASE deve ser uma única palavra"], "error");
                 return;
             }
             if (!databases[target]) {
@@ -4452,9 +4923,11 @@ namespace SQL {
                 return;
             }
             currentDatabase = target;
+            currentSchema = null;
             currentTable = null;
             refreshUI();
             getCurrentTerminalSession().createEntry(this.fullCommand, [`Database "${target}" selecionada`], "success");
+            
         }
     }
 
@@ -4486,8 +4959,7 @@ namespace SQL {
             return { column: null, error: `Tipo de coluna inválido: "${columnDef[1]}"` };
         }
 
-
-        const column = new DB.Column(columnName, columnType, false, false, false, false, false, false, false);
+        const column = new DB.Column(columnName, currentTable!, columnType, false, false, false, false, false, false, false);
 
         const primaryValidation = validateCompoundKeyword("primary", "key", "PRIMARY KEY", columnDef);
         if (typeof primaryValidation === "string") {
@@ -4537,7 +5009,7 @@ namespace SQL {
                 return { column: null, error: "DEFAULT deve ser seguido de um valor" };
             }
             const defaultValue = columnDef[defaultIndex + 1];
-            
+
             if (compareTypes(columnType, types.TEXT) || compareTypes(columnType, types.DATE) || compareTypes(columnType, types.TIME)) {
                 if (!(defaultValue.startsWith("'") && defaultValue.endsWith("'") || defaultValue.startsWith('"') && defaultValue.endsWith('"'))) {
                     return { column: null, error: "Tipo deve começar e acabar com \" ou \'" }
@@ -4585,10 +5057,10 @@ namespace SQL {
                 return { column: null, error: `Coluna de referência "${columnDef[referencesIndex + 3]}" na tabela "${columnDef[referencesIndex + 1]}" não é UNIQUE` };
             }
 
-            column.reference = {
-                table: columnDef[referencesIndex + 1],
-                column: columnDef[referencesIndex + 3]
-            };
+            // column.reference = {
+            //     table: columnDef[referencesIndex + 1],
+            //     column: columnDef[referencesIndex + 3]
+            // };
         }
 
         if (compareTypes(columnType, types.ENUM([]))) {
@@ -4630,6 +5102,36 @@ namespace SQL {
                     return token;
                 })
             );
+        }
+
+        if (compareTypes(columnType, types.VARCHAR(0))) {
+            const varcharStartIndex = columnDef.findIndex(token => token === "(");
+            if (varcharStartIndex === -1) {
+                return { column: null, error: "VARCHAR inválido: falta parêntese de abertura" };
+            }
+
+            const varcharEndIndex = columnDef.findIndex(token => token === ")");
+            if (varcharEndIndex === -1) {
+                return { column: null, error: "VARCHAR inválido: falta parêntese de fechamento" };
+            }
+
+            const varcharValues = columnDef.slice(varcharStartIndex + 1, varcharEndIndex);
+            if (varcharValues.length === 0) {
+                return { column: null, error: "VARCHAR deve possuir um valor máximo" };
+            }
+
+            if (varcharValues.length !== 1) {
+                return { column: null, error: "VARCHAR deve possuir apenas um valor máximo" };
+            }
+            const varcharValue = varcharValues[0];
+            if (!/^\d+$/.test(varcharValue)) {
+                return { column: null, error: "Valor máximo de VARCHAR deve ser um número" };
+            }
+            const varcharMaxLength = parseInt(varcharValue);
+            if (isNaN(varcharMaxLength) || varcharMaxLength <= 0) {
+                return { column: null, error: "Valor máximo de VARCHAR inválido" };
+            }
+            (column.type as DataTypes.VarcharType).setMaxLength(varcharMaxLength);
         }
 
         // Verificação da integridade com outras características da coluna
@@ -4819,16 +5321,6 @@ namespace SQL {
 
         return tokens;
     }
-
-    /**
-     * Palavras reservadas reconhecidas pelo parser SQL.
-     */
-    export const keyWords = [
-        "primary", "key", "foreign", "not", "null", "unique", "default", "auto_increment", "where",
-        "select", "from", "insert", "into", "values", "update", "set", "delete", "create", "table",
-        "database", "use", "drop", "alter", "add", "column", "enum", "references", "on", "and", "or",
-        "in", "is", "integer", "float", "text", "date", "time", "boolean"
-    ];
 }
 
 // #endregion
@@ -4911,99 +5403,11 @@ function saveToLocalStorage() {
  * Restaura o estado de `databases` a partir do `localStorage`, reconstruindo objetos em memória.
  */
 function loadFromLocalStorage() {
-    const databasesJson = localStorage.getItem("databases");
 
-    if (!databasesJson) return;
-
-    const parsedDatabases = JSON.parse(databasesJson);
-
-    databases = {};
-
-    for (const dbName in parsedDatabases) {
-        const dbData = parsedDatabases[dbName];
-
-        const db = new DB.Database(dbData.name);
-        db.foreignKeyMap = dbData.foreignKeyMap || {};
-
-        for (const tableName in dbData.tables) {
-            const tableData = dbData.tables[tableName];
-
-            const table = new DB.Table(tableData.name);
-
-            // Colunas
-            for (const columnName in tableData.columns) {
-                const colData = tableData.columns[columnName];
-
-                const column = new DB.Column(
-                    colData.name,
-                    colData.type,
-                    colData.isPrimaryKey,
-                    colData.isForeignKey,
-                    colData.isNotNull,
-                    colData.isUnique,
-                    colData.isAutoIncrement,
-                    colData.hasDefault,
-                    colData.isCurrentTimestamp,
-                    colData.reference
-                );
-
-                column.incrementCounter = colData.incrementCounter;
-                column.defaultValue = colData.defaultValue;
-
-                table.columns[columnName] = column;
-            }
-
-            // Linhas
-            table.rows = tableData.rows || [];
-
-            // Reconstruir índices
-            for (const columnName in table.columns) {
-                table.indexes[columnName] = new Map();
-            }
-
-            table.rows.forEach((row, rowIndex) => {
-                for (const columnName in table.indexes) {
-                    const value = row.values[columnName];
-
-                    if (!table.indexes[columnName].has(value)) {
-                        table.indexes[columnName].set(value, []);
-                    }
-
-                    table.indexes[columnName].get(value)!.push(rowIndex);
-                }
-            });
-
-            db.tables[tableName] = table;
-        }
-
-        databases[dbName] = db;
-    }
-
-    if (currentDatabase === "") currentDatabase = null;
-    if (currentTable === "") currentTable = null;
-
-    refreshUI();
 }
 
-/**
- * Gera e inicia o download de um arquivo JSON contendo o estado atual de `databases`.
- */
 function saveToJson() {
-    const data = {
-        databases
-    };
-
-    const json = JSON.stringify(data, null, 4);
-
-    const blob = new Blob([json], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "thifreBD.json";
-    a.click();
-
-    URL.revokeObjectURL(url);
+    
 }
 
 /**
@@ -5011,109 +5415,7 @@ function saveToJson() {
  * e aplica os dados carregados ao estado em memória.
  */
 function loadFromJson() {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".json,application/json";
 
-    input.onchange = (event) => {
-        const file = (event.target as HTMLInputElement).files?.[0];
-
-        if (!file) return;
-
-        const reader = new FileReader();
-
-        reader.onload = () => {
-            try {
-                const data = JSON.parse(reader.result as string);
-
-                if (data.databases === undefined || typeof data.databases !== "object") {
-                    throw new Error("Formato de arquivo inválido: propriedade 'databases' ausente ou incorreta");
-                }
-
-                const previousDatabase = currentDatabase;
-                const previousTable = currentTable;
-                let databasesCopy: Record<string, DB.Database> = {};
-
-                for (const dbName in data.databases) {
-                    const dbData = data.databases[dbName];
-
-                    const db = new DB.Database(dbData.name);
-                    db.foreignKeyMap = dbData.foreignKeyMap || {};
-
-                    for (const tableName in dbData.tables) {
-                        const tableData = dbData.tables[tableName];
-
-                        const table = new DB.Table(tableData.name);
-
-                        // Colunas
-                        for (const columnName in tableData.columns) {
-                            const colData = tableData.columns[columnName];
-
-                            const column = new DB.Column(
-                                colData.name,
-                                colData.type,
-                                colData.isPrimaryKey,
-                                colData.isForeignKey,
-                                colData.isNotNull,
-                                colData.isUnique,
-                                colData.isAutoIncrement,
-                                colData.hasDefault,
-                                colData.isCurrentTimestamp,
-                                colData.reference
-                            );
-
-                            column.incrementCounter = colData.incrementCounter;
-                            column.defaultValue = colData.defaultValue;
-
-                            table.columns[columnName] = column;
-                        }
-
-                        // Linhas
-                        table.rows = tableData.rows || [];
-
-                        // Reconstruir índices
-                        for (const columnName in table.columns) {
-                            table.indexes[columnName] = new Map();
-                        }
-
-                        table.rows.forEach((row: Record<string, any>, rowIndex: number) => {
-                            for (const columnName in table.indexes) {
-                                const value = row[columnName];
-
-                                if (!table.indexes[columnName].has(value)) {
-                                    table.indexes[columnName].set(value, []);
-                                }
-
-                                table.indexes[columnName].get(value)!.push(rowIndex);
-                            }
-                        });
-
-                        db.tables[tableName] = table;
-                    }
-
-                    databasesCopy[dbName] = db;
-                }
-
-                databases = databasesCopy;
-                currentDatabase = previousDatabase && databases[previousDatabase] ? previousDatabase : Object.keys(databases)[0] ?? null;
-                if (currentDatabase !== null) {
-                    const currentDb = getCurrentDatabase();
-                    currentTable = currentDb && previousTable && currentDb.tables[previousTable] ? previousTable : Object.keys(currentDb?.tables ?? {})[0] ?? null;
-                } else {
-                    currentTable = null;
-                }
-                refreshUI();
-
-            } catch (error) {
-                console.error(error);
-                alert("Arquivo JSON inválido.");
-            }
-        };
-
-        reader.readAsText(file);
-    };
-
-    input.click();
 }
 
 /**
@@ -5224,17 +5526,40 @@ createColumnCreationDiv(document.getElementById("criacao-colunas-edit")!);
 
 createHelpButtons();
 
+
+const esquerda = document.getElementById("esquerda")!;
+const separador = document.querySelector(".separador-vertical")!;
+
+let redimensionando = false;
+
+separador.addEventListener("mousedown", () => {
+    redimensionando = true;
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
+});
+
+document.addEventListener("mouseup", () => {
+    redimensionando = false;
+    document.body.style.cursor = "";
+    document.body.style.userSelect = "";
+});
+
+document.addEventListener("mousemove", (e) => {
+    if (!redimensionando) return;
+
+    const novaLargura = e.clientX;
+
+    if (novaLargura >= 75 && novaLargura <= 600) {
+        esquerda.style.width = `${novaLargura}px`;
+    }
+});
+
 createExempleDatabase();
 
 changeLeftSide();
 
 // To Do
-// -Atualizar a arvore quando algo acontece
-// -Criar um sistema de arquivos
 // -Aba de ajuda
-// -Criar classes para cada tipo
-// -AST para comandos SQL
-// -Constraints de integridade
 // -ver () dentro de strings no insert
 // -Terminal
 // -Salvar e carregar em SQL
@@ -5242,5 +5567,4 @@ changeLeftSide();
 // -Modelo lógico (diagrama de entidade relacionamento)
 // -Pesquisar(Dashboard)
 // -Permitir sincronização com banco real
-// -Adicionar mais tipos de dados (JSON, BLOB, varchar, decimal, etc)
-// -Validações para SQLDate e Time na criação
+// -Adicionar mais tipos de dados (JSON, BLOB, decimal, etc)

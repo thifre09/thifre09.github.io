@@ -56,129 +56,14 @@
 
         <div id="interface-grafica" style="display: none;">
             <div id="esquerda">
-                <details>
-                    <summary>
-                        <p>Database 1</p>
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
-                        </svg>
-                    </summary>
-                    <details>
-                        <summary>Tabelas</summary>
-                        <details>
-                            <summary>Tabela 1</summary>
-                            <details>
-                                <summary>Colunas</summary>
-                                <p>Coluna 1</p>
-                                <p>Coluna 2</p>
-                                <p>Coluna 3</p>
-                            </details>
-                            <details>
-                                <summary>Linhas</summary>
-                                <p>Linha 1</p>
-                                <p>Linha 2</p>
-                                <p>Linha 3</p>
-                            </details>
-                            <details>
-                                <summary>Indexes</summary>
-                                <p>Index 1</p>
-                                <p>Index 2</p>
-                                <p>Index 3</p>
-                            </details>
-                        </details>
-                        <details>
-                            <summary>Tabela 2</summary>
-                            <details>
-                                <summary>Colunas</summary>
-                                <p>Coluna 1</p>
-                                <p>Coluna 2</p>
-                                <p>Coluna 3</p>
-                            </details>
-                            <details>
-                                <summary>Linhas</summary>
-                                <p>Linha 1</p>
-                                <p>Linha 2</p>
-                                <p>Linha 3</p>
-                            </details>
-                            <details>
-                                <summary>Indexes</summary>
-                                <p>Index 1</p>
-                                <p>Index 2</p>
-                                <p>Index 3</p>
-                            </details>
-                        </details>
-                        <details>
-                            <summary>Tabela 3</summary>
-                            <details>
-                                <summary>Colunas</summary>
-                                <p>Coluna 1</p>
-                                <p>Coluna 2</p>
-                                <p>Coluna 3</p>
-                            </details>
-                            <details>
-                                <summary>Linhas</summary>
-                                <p>Linha 1</p>
-                                <p>Linha 2</p>
-                                <p>Linha 3</p>
-                            </details>
-                            <details>
-                                <summary>Indexes</summary>
-                                <p>Index 1</p>
-                                <p>Index 2</p>
-                                <p>Index 3</p>
-                            </details>
-                        </details>
-                    </details>
-                    <details>
-                        <summary>Views</summary>
-                        <details>
-                            <summary>View 1</summary>
-                        </details>
-                        <details>
-                            <summary>View 2</summary>
-                        </details>
-                    </details>
-                </details>
+                <div id="tree">
+                    <p>Crie uma database para começar</p>
+                </div>
             </div>
 
             <div class="separador-vertical"></div>
 
             <div id="direita">
-                <div id="varios-botoes">
-                    <div id="tabela-info-varios-botoes">
-                        <p id="nome-tabela">Crie uma tabela</p>
-                        <p id="linhas-colunas">0 linhas • 0 colunas</p>
-                    </div>
-
-                    <div id="botoes-varios-botoes">
-                        <button id="insert-line" onclick="abrirFechar(false, 'inserir-linha'); changeInsertRowMenu()">
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
-                            </svg>
-                            Inserir linha
-                        </button>
-                        <button id="edit-table"
-                            onclick="abrirFechar(false, 'configurar-tabela'); changeConfigurarTabelaMenu()">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                                fill="currentColor">
-                                <path
-                                    d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z" />
-                            </svg>
-                            Editar tabela
-                        </button>
-                        <button id="search" onclick="abrirFechar(false, 'pesquisar'); changeSearchMenu()">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                                fill="currentColor">
-                                <path
-                                    d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
-                            </svg>
-                            Pesquisar
-                        </button>
-                    </div>
-                </div>
-
-                <div class="separador-horizontal"></div>
-
                 <div id="tabela-info">
                     <div id="nenhuma-tabela-selecionada">
                         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -293,6 +178,54 @@
                         <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
                     </svg>
                     Deletar database
+                </button>
+            </div>
+
+            <div id="criacao-schema" style="display: none;">
+                <div class="menu-central-justify-between">
+                    <h1 class="text1">Criar novo schema</h1>
+                    <button class="close-button" onclick="abrirFechar(true, 'criacao-schema')">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        </svg>
+                    </button>
+                </div>
+                <label for="nome-schema-input">Nome da schema</label>
+                <input class="menu-central-input" type="text" id="nome-schema-input" name="nome-schema-input" rows="1"
+                    placeholder="Ex: meu_schema">
+                <button class="large-button" id="criar-schema-button" onclick="createSchemaInterface()">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                    </svg>
+                    Criar schema
+                </button>
+            </div>
+
+            <div id="configurar-schema" style="display: none;">
+                <div class="menu-central-justify-between">
+                    <h1 class="text1">Configurar schema</h1>
+                    <button class="close-button" onclick="abrirFechar(true, 'configurar-schema')">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        </svg>
+                    </button>
+                </div>
+                <label for="renomear-schema-input">Nome do schema</label>
+                <input class="menu-central-input" type="text" id="renomear-schema-input" name="renomear-schema-input"
+                    rows="1" placeholder="Ex: meu_schema">
+                <button class="large-button" onclick="renameSchemaInterface()">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                        fill="currentColor">
+                        <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+                    </svg>
+                    Confirmar alterações
+                </button>
+                <button class="large-button" style="background-color: var(--red4)" id="configurar-schema-deletar"
+                    onclick="abrirFechar(false, 'confirmar-deletar'); abrirFechar(true, 'configurar-schema'); changeConfirmDeleteMenu('schema')">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
+                    </svg>
+                    Deletar schema
                 </button>
             </div>
 
@@ -793,7 +726,9 @@
                             </svg>
                             <h3>Importante</h3>
                         </div>
-                        <p>Nas 2 formas, os dados são os mesmos. Então alterar algo no dashboard também afetará os dados no terminal, e vice-versa. Por isso, é possível trabalhar com ambos os métodos simultaneamente.</p>
+                        <p>Nas 2 formas, os dados são os mesmos. Então alterar algo no dashboard também afetará os dados
+                            no terminal, e vice-versa. Por isso, é possível trabalhar com ambos os métodos
+                            simultaneamente.</p>
                     </div>
 
                     <hr>
@@ -914,7 +849,8 @@
                 <div style="display: none;">
                     <h1>Tipos de dados</h1>
 
-                    <p>Os tipos de dados são utilizados para definir o tipo de valor que pode ser armazenado em uma coluna de uma tabela. Cada tipo de dado tem suas características e limitações específicas.</p>
+                    <p>Os tipos de dados são utilizados para definir o tipo de valor que pode ser armazenado em uma
+                        coluna de uma tabela. Cada tipo de dado tem suas características e limitações específicas.</p>
 
                     <hr>
 
@@ -926,39 +862,108 @@
                             <th>Exemplo</th>
                         </tr>
                         <tr>
-                            <td>Text</td>
+                            <td>
+                                <p>
+                                    <svg viewBox="0 -960 960 960" fill="var(--green5)" style="--size: 16px">
+                                        <path
+                                            d="M280-160v-520H80v-120h520v120H400v520H280Zm360 0v-320H520v-120h360v120H760v320H640Z" />
+                                    </svg>
+                                    Text
+                                </p>
+                            </td>
                             <td>Armazena texto.</td>
                             <td>"Olá, mundo!", "batata"</td>
                         </tr>
                         <tr>
-                            <td>Integer</td>
+                            <td>
+                                <p>
+                                    <svg viewBox="0 -960 960 960" fill="var(--blue3)">
+                                        <path
+                                            d="m240-160 40-160H120l20-80h160l40-160H180l20-80h160l40-160h80l-40 160h160l40-160h80l-40 160h160l-20 80H660l-40 160h160l-20 80H600l-40 160h-80l40-160H360l-40 160h-80Zm140-240h160l40-160H420l-40 160Z" />
+                                    </svg>
+                                    Integer
+                                </p>
+                            </td>
                             <td>Armazena números inteiros.</td>
                             <td>42, -5</td>
                         </tr>
                         <tr>
-                            <td>Float</td>
+                            <td>
+                                <p>
+                                    <svg viewBox="0 -960 960 960" fill="var(--cyan6)">
+                                        <path
+                                            d="m720-80-56-56 63-64H480v-80h247l-63-64 56-56 160 160L720-80ZM80-440v-120h120v120H80Zm201-41q-41-41-41-99v-160q0-58 41-99t99-41q58 0 99 41t41 99v160q0 58-41 99t-99 41q-58 0-99-41Zm360 0q-41-41-41-99v-160q0-58 41-99t99-41q58 0 99 41t41 99v160q0 58-41 99t-99 41q-58 0-99-41Zm-218.5-56.5Q440-555 440-580v-160q0-25-17.5-42.5T380-800q-25 0-42.5 17.5T320-740v160q0 25 17.5 42.5T380-520q25 0 42.5-17.5Zm360 0Q800-555 800-580v-160q0-25-17.5-42.5T740-800q-25 0-42.5 17.5T680-740v160q0 25 17.5 42.5T740-520q25 0 42.5-17.5Z" />
+                                    </svg>
+                                    Float
+                                </p>
+                            </td>
                             <td>Armazena números decimais.</td>
                             <td>3.14, -2.5</td>
                         </tr>
                         <tr>
-                            <td>Boolean</td>
+                            <td>
+                                <p>
+                                    <svg viewBox="0 -960 960 960" fill="var(--purple5)">
+                                        <path
+                                            d="M280-240q-100 0-170-70T40-480q0-100 70-170t170-70h400q100 0 170 70t70 170q0 100-70 170t-170 70H280Zm0-80h400q66 0 113-47t47-113q0-66-47-113t-113-47H280q-66 0-113 47t-47 113q0 66 47 113t113 47Zm85-75q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35Zm115-85Z" />
+                                    </svg>
+                                    Boolean
+                                </p>
+                            </td>
                             <td>Armazena valores lógicos.</td>
                             <td>true, false</td>
                         </tr>
                         <tr>
-                            <td>Date</td>
+                            <td>
+                                <p>
+                                    <svg viewBox="0 -960 960 960" fill="var(--orange5)">
+                                        <path
+                                            d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z" />
+                                    </svg>
+                                    Date
+                                </p>
+                            </td>
                             <td>Armazena datas.</td>
                             <td>"2023-10-01", "1990-05-15"</td>
                         </tr>
                         <tr>
-                            <td>Time</td>
+                            <td>
+                                <p>
+                                    <svg viewBox="0 -960 960 960" fill="var(--yellow4)">
+                                        <path
+                                            d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z" />
+                                    </svg>
+                                    Time
+                                </p>
+                            </td>
                             <td>Armazena horas.</td>
                             <td>"14:30:00", "09:15:30"</td>
                         </tr>
                         <tr>
-                            <td>Enum</td>
+                            <td>
+                                <p>
+                                    <svg viewBox="0 -960 960 960" fill="var(--pink5)">
+                                        <path
+                                            d="M348.5-291.5Q360-303 360-320t-11.5-28.5Q337-360 320-360t-28.5 11.5Q280-337 280-320t11.5 28.5Q303-280 320-280t28.5-11.5Zm0-160Q360-463 360-480t-11.5-28.5Q337-520 320-520t-28.5 11.5Q280-497 280-480t11.5 28.5Q303-440 320-440t28.5-11.5Zm0-160Q360-623 360-640t-11.5-28.5Q337-680 320-680t-28.5 11.5Q280-657 280-640t11.5 28.5Q303-600 320-600t28.5-11.5ZM440-280h240v-80H440v80Zm0-160h240v-80H440v80Zm0-160h240v-80H440v80ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z" />
+                                    </svg>
+                                    Enum
+                                </p>
+                            </td>
                             <td>Armazena valores pré-definidos.</td>
                             <td>"vermelho", "azul"</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    <svg viewBox="0 -960 960 960" fill="var(--green2)">
+                                        <path
+                                            d="M120-120v-120h200q-84-45-132-125t-48-175q0-142 99-241t241-99q142 0 241 99t99 241q0 95-48 175T640-240h200v120H520v-204q78-14 129-75t51-141q0-92-64-156t-156-64q-92 0-156 64t-64 156q0 80 51 141t129 75v204H120Z" />
+                                    </svg>
+                                    Varchar
+                                </p>
+                            </td>
+                            <td>Armazena strings com um tamanho máximo definido pelo usuário.</td>
+                            <td>"Olá, mundo!", "batata"</td>
                         </tr>
                     </table>
                 </div>
@@ -968,7 +973,359 @@
                 </div>
 
                 <div style="display: none;">
-                    <h1>Comandos</h1>
+
+                    <h1>Comandos SQL</h1>
+
+                    <p>
+                        Esta seção apresenta os comandos SQL atualmente suportados pelo SGBD.
+                    </p>
+
+                    <h2>USE</h2>
+                    <p>Seleciona uma database ou schema.</p>
+
+                    <h3>USE DATABASE</h3>
+
+                    <div class="help-box">
+
+                        <h3>Sintaxe</h3>
+
+                        <table>
+                            <tr>
+                                <th>Comando</th>
+                                <th>Descrição</th>
+                            </tr>
+
+                            <tr>
+                                <td>USE database_name;</td>
+                                <td>Seleciona uma database como a database atual.</td>
+                            </tr>
+                        </table>
+
+                        <h3>Exemplo</h3>
+
+                        <table>
+                            <tr>
+                                <td>USE empresa;</td>
+                            </tr>
+                        </table>
+
+                        <p>Após executar o comando, todas as operações serão realizadas na database selecionada.</p>
+
+                    </div>
+
+                    <h3>USE SCHEMA</h3>
+
+                    <div class="help-box">
+
+                        <h3>Sintaxe</h3>
+
+                        <table>
+                            <tr>
+                                <th>Comando</th>
+                                <th>Descrição</th>
+                            </tr>
+
+                            <tr>
+                                <td>USE schema_name;</td>
+                                <td>Seleciona um schema como o schema atual.</td>
+                            </tr>
+                        </table>
+
+                        <h3>Exemplo</h3>
+
+                        <table>
+                            <tr>
+                                <td>USE empresa;</td>
+                            </tr>
+                        </table>
+
+                        <p>Após executar o comando, todas as operações serão realizadas no schema selecionado.</p>
+
+                    </div>
+
+                    <h2>CREATE</h2>
+
+                    <p>O comando CREATE é utilizado para criar novos objetos no banco de dados.</p>
+
+                    <h3>CREATE DATABASE</h3>
+
+                    <div class="help-box">
+
+                        <table>
+                            <tr>
+                                <th>Sintaxe</th>
+                                <th>Descrição</th>
+                            </tr>
+
+                            <tr>
+                                <td>CREATE DATABASE database_name;</td>
+                                <td>Cria uma nova database.</td>
+                            </tr>
+                        </table>
+
+                        <h3>Exemplo</h3>
+
+                        <table>
+                            <tr>
+                                <td>CREATE DATABASE empresa;</td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+                    <h3>CREATE SCHEMA</h3>
+
+                    <div class="help-box">
+
+                        <table>
+                            <tr>
+                                <th>Sintaxe</th>
+                                <th>Descrição</th>
+                            </tr>
+
+                            <tr>
+                                <td>CREATE SCHEMA schema_name;</td>
+                                <td>Cria um novo schema na database atual.</td>
+                            </tr>
+                        </table>
+
+                        <h3>Exemplo</h3>
+
+                        <table>
+                            <tr>
+                                <td>CREATE SCHEMA vendas;</td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+                    <h3>CREATE TABLE</h3>
+
+                    <div class="help-box">
+
+                        <table>
+                            <tr>
+                                <th>Sintaxe</th>
+                                <th>Descrição</th>
+                            </tr>
+
+                            <tr>
+                                <td>CREATE TABLE table_name (...);</td>
+                                <td>Cria uma tabela no schema atual.</td>
+                            </tr>
+
+                            <tr>
+                                <td>CREATE TABLE schema_name.table_name (...);</td>
+                                <td>Cria uma tabela em um schema específico.</td>
+                            </tr>
+                        </table>
+
+                        <h3>Exemplo</h3>
+
+                        <table>
+                            <tr>
+                                <td>
+                                    <pre>
+CREATE TABLE clientes (
+    id INTEGER PRIMARY KEY,
+    nome TEXT NOT NULL,
+    email TEXT,
+    ativo BOOLEAN
+);</pre>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <p>
+                            Cada coluna deve possuir um nome e um tipo de dado. Também é possível
+                            utilizar restrições como PRIMARY KEY,
+                            NOT NULL, UNIQUE,
+                            AUTO_INCREMENT e FOREIGN KEY.
+                        </p>
+
+                    </div>
+
+                    <h2>INSERT</h2>
+                    <p>O comando INSERT é utilizado para adicionar novos registros a uma tabela.</p>
+
+                    <div class="help-box">
+
+                        <table>
+                            <tr>
+                                <th>Sintaxe</th>
+                                <th>Descrição</th>
+                            </tr>
+
+                            <tr>
+                                <td>INSERT INTO table_name (column1, column2, ...) VALUES (value1, value2, ...);</td>
+                                <td>Insere um novo registro na tabela com as colunas especificadas.</td>
+                            </tr>
+                            <tr>
+                                <td>INSERT INTO schema_name.table_name VALUES (value1, value2, ...);</td>
+                                <td>Insere um novo registro na tabela no schema especificado e em todas as colunas.</td>
+                            </tr>
+                        </table>
+
+                        <h3>Exemplo</h3>
+
+                        <table>
+                            <tr>
+                                <td>INSERT INTO clientes (nome, email) VALUES ('João', 'joao@example.com');</td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+                    <h2>ALTER</h2>
+                    <p>O comnado ALTER é utilizado para modificar a estrutura de objetos existentes no banco de dados.
+                    </p>
+
+                    <h3>ALTER DATABASE</h3>
+
+                    <div class="help-box">
+
+                        <table>
+                            <tr>
+                                <th>Sintaxe</th>
+                                <th>Descrição</th>
+                            </tr>
+
+                            <tr>
+                                <td>ALTER DATABASE database_name RENAME TO new_database_name;</td>
+                                <td>Renomeia uma database.</td>
+                            </tr>
+                        </table>
+
+                        <h3>Exemplo</h3>
+
+                        <table>
+                            <tr>
+                                <td>ALTER DATABASE empresa RENAME TO nova_empresa;</td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+                    <h3>ALTER SCHEMA</h3>
+
+                    <div class="help-box">
+
+                        <table>
+                            <tr>
+                                <th>Sintaxe</th>
+                                <th>Descrição</th>
+                            </tr>
+
+                            <tr>
+                                <td>ALTER SCHEMA schema_name RENAME TO new_schema_name;</td>
+                                <td>Renomeia um schema.</td>
+                            </tr>
+                        </table>
+
+                        <h3>Exemplo</h3>
+
+                        <table>
+                            <tr>
+                                <td>ALTER SCHEMA public RENAME TO new_public;</td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+                    <h3>ALTER TABLE</h3>
+
+                    <div class="help-box">
+
+                        <table>
+                            <tr>
+                                <th>Sintaxe</th>
+                                <th>Descrição</th>
+                            </tr>
+
+                            <tr>
+                                <td>ALTER TABLE table_name RENAME TO new_table_name;</td>
+                                <td>Renomeia uma tabela.</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE table_name SET SCHEMA schema_name;</td>
+                                <td>Move uma tabela para um schema específico.</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE table_name ADD COLUMN column_name type;</td>
+                                <td>Adiciona uma nova coluna a uma tabela.</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE table_name DROP COLUMN column_name;</td>
+                                <td>Remove uma coluna de uma tabela.</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE table_name RENAME COLUMN column_name TO new_column_name;</td>
+                                <td>Renomeia uma coluna de uma tabela.</td>
+                            </tr>
+                        </table>
+
+                        <h3>Exemplo</h3>
+
+                        <table>
+                            <tr>
+                                <td>ALTER TABLE usuarios RENAME TO new_usuarios;</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE usuarios SET SCHEMA vendas;</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE usuarios ADD COLUMN data_criacao DATE;</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE usuarios DROP COLUMN ativo;</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE usuarios RENAME COLUMN data_criacao TO data_cadastro;</td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+                    <h3>ALTER TABLE ... ALTER COLUMN</h3>
+
+                    <div class="help-box">
+
+                        <table>
+                            <tr>
+                                <th>Sintaxe</th>
+                                <th>Descrição</th>
+                            </tr>
+
+                            <tr>
+                                <td>ALTER TABLE table_name ALTER COLUMN column_name TYPE tipo;</td>
+                                <td>Altera o tipo de dado de uma coluna.</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE table_name ALTER COLUMN column_name SET restricao;</td>
+                                <td>Adiciona uma restrição a uma coluna.</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE table_name ALTER COLUMN column_name DROP restricao;</td>
+                                <td>Remove uma restrição de uma coluna.</td>
+                            </tr>
+                        </table>
+
+                        <h3>Exemplo</h3>
+
+                        <table>
+                            <tr>
+                                <td>ALTER TABLE usuarios ALTER COLUMN idade TYPE integer;</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE usuarios ALTER COLUMN ativo SET NOT NULL;</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE usuarios ALTER COLUMN ativo DROP DEFAULT;</td>
+                            </tr>
+                        </table>
+
+                    </div>
+
                 </div>
 
                 <div style="display: none;">

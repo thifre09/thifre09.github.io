@@ -114,11 +114,12 @@ input[type="number"]::-webkit-inner-spin-button {
     }
 
     .separador-vertical {
-        width: 2px;
-        min-width: 2px;
-        flex: 0 0 2px;
+        width: 3px;
+        min-width: 3px;
+        flex: 0 0 3px;
         align-self: stretch;
         background-color: var(--gray3);
+        cursor: col-resize;
     }
 }
 
@@ -186,70 +187,94 @@ input[type="number"]::-webkit-inner-spin-button {
     justify-content: center;
 
     #esquerda {
-        width: 20%;
-        min-width: 200px;
+        width: 15%;
+        min-width: 100px;
         display: flex;
         flex-direction: column;
         min-height: 0;
         overflow: auto;
         font-size: var(--fs5);
 
-        details, p {
-            margin-left: calc(2*var(--p5));
+        div#tree {
+            summary {
+                display: flex;
+                margin-bottom: clamp(0px, var(--p3), 1px);
+
+                span {
+                    transition: var(--transition-time1);
+
+                    svg {
+                        width: 20px;
+                        height: 20px;
+                        display: block;
+                    }
+                }
+
+                div {
+                    display: inline-flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    flex: 1;
+
+                    >p {
+                        display: flex;
+                        margin: 0;
+
+                        svg:nth-child(1) {
+                            display: block;
+                        }
+
+                        svg:nth-child(2) {
+                            display: none;
+                        }
+                    }
+
+                    svg {
+                        width: 20px;
+                        height: 20px;
+                        display: none;
+                    }
+
+                    >div {
+                        justify-content: flex-end;
+                    }
+                }
+
+                div:nth-child(1) {
+                    margin-left: 20px;
+                }
+
+                &:hover {
+                    svg {
+                        display: block;
+                        cursor: pointer;
+                    }
+                }
+            }
         }
 
-        details > summary span {
-            transition: var(--transition-time1);
+        details {
+            margin-left: clamp(10px, calc(2*var(--p5)), 20px);
         }
 
-        details[open] > summary span {
-            transform: rotate(90deg);
-        }
-
-        summary {
-            display: flex;
-
+        details[open]>summary {
             span {
-                svg {
-                    width: 20px;
-                    height: 20px;
-                    display: block;
-                }
+                transform: rotate(90deg);
             }
 
-            div {
-                display: inline-flex;
-                justify-content: space-between;
-                align-items: center;
-                flex: 1;
-
-                >p {
-                    margin: 0;
-                }
-
-                svg {
-                    width: 20px;
-                    height: 20px;
-                    display: none;
-                }
+            div>p.node-group-summary svg:nth-child(1) {
+                display: none;
             }
 
-            &:hover {
-                svg {
-                    display: block;
-                    cursor: pointer;
-                }
+            div>p.node-group-summary svg:nth-child(2) {
+                display: block;
             }
-        }
-
-        .summary-active {
-            background-color: var(--blue3);
-            color: white;
         }
     }
 
     #direita {
-        width: min(80%, calc(100% - 200px));
+        flex: 1;
+        overflow: auto;
         display: flex;
         flex-direction: column;
 
@@ -459,7 +484,7 @@ input[type="number"]::-webkit-inner-spin-button {
                 }
 
                 #tabela-selecionada-linha-coluna {
-                    width: 100%;
+                    max-width: 25%;
                     border: solid 2px var(--gray10);
                     border-radius: 15px 15px 0 0;
                     padding: var(--p2);
@@ -512,6 +537,7 @@ input[type="number"]::-webkit-inner-spin-button {
                             border-radius: 5px;
                             padding: var(--p3);
                             margin: var(--p5) 0;
+                            overflow: auto;
 
                             h5 {
                                 margin-bottom: var(--p5);
@@ -1042,6 +1068,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
         >div {
             display: flex;
+            align-items: center;
             border: solid 2px var(--gray10);
             border-radius: 10px;
             padding: var(--p5);
@@ -1194,6 +1221,7 @@ input[type="number"]::-webkit-inner-spin-button {
         overflow-y: auto;
 
         >div>* {
+            font-size: var(--fs6);
             margin: var(--p3);
         }
 
@@ -1211,7 +1239,16 @@ input[type="number"]::-webkit-inner-spin-button {
             }
 
             p {
+                font-size: var(--fs6);
                 margin: var(--p3);
+                display: flex;
+                align-items: center;
+
+                svg {
+                    width: 20px;
+                    aspect-ratio: 1 / 1;
+                    margin-right: var(--p3);
+                }
             }
 
             ul {
@@ -1256,7 +1293,7 @@ input[type="number"]::-webkit-inner-spin-button {
                 }
 
                 th {
-                    padding: 14px 18px;
+                    padding: var(--p2);
                     text-align: left;
                     font-weight: 600;
                     border-bottom: 1px solid var(--border1, var(--black));
@@ -1267,6 +1304,7 @@ input[type="number"]::-webkit-inner-spin-button {
                     padding: var(--p2);
                     border-bottom: 1px solid var(--black);
                     font-size: var(--fs6);
+                    text-align: left;
                 }
             }
 
