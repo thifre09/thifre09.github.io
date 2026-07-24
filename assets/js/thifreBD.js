@@ -3798,6 +3798,10 @@ var SQL;
             }
             if (!result.column)
                 return;
+            if (getTable(tableName, schemaName).columns[result.column.name]) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma coluna com o nome "${result.column.name}" na tabela "${tableName}"`], "error");
+                return;
+            }
             SGBDFunctions.addColumn(tableName, result.column, schemaName);
             getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${result.column.name}" adicionada com sucesso`], "success");
         }
@@ -3894,13 +3898,19 @@ var SQL;
          * Executa CREATE TABLE.
          */
         table() {
-            const name = this.tokens[2];
-            const { schemaName, tableName, error } = verifySchemaTableName(name);
-            if (error) {
-                getCurrentTerminalSession().createEntry(this.fullCommand, [error], "error");
-            }
-            if (!schemaName || !tableName)
+            const tableName = this.tokens[2];
+            if (currentDatabase == null) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhuma database selecionada"], "error");
                 return;
+            }
+            if (currentSchema == null) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhum schema selecionado"], "error");
+                return;
+            }
+            if (tableName.includes(".")) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da tabela inválido"], "error");
+                return;
+            }
             if (!isValidSQLName(tableName)) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da tabela inválido"], "error");
                 return;

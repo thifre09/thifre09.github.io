@@ -178,53 +178,53 @@ function createExempleDatabase() {
 
         SGBDFunctions.insertRow(
             "clientes", new DB.Row(table, {
-            id: 1,
-            nome: "Ana Silva",
-            email: "ana@email.com",
-            telefone: "(11)99999-1001",
-            ativo: true,
-            cadastro: new SQLDate(2025, 1, 10)
-        }));
+                id: 1,
+                nome: "Ana Silva",
+                email: "ana@email.com",
+                telefone: "(11)99999-1001",
+                ativo: true,
+                cadastro: new SQLDate(2025, 1, 10)
+            }));
 
         SGBDFunctions.insertRow(
             "clientes", new DB.Row(table, {
-            id: 2,
-            nome: "Bruno Costa",
-            email: "bruno@email.com",
-            telefone: "(11)99999-1002",
-            ativo: true,
-            cadastro: new SQLDate(2025, 2, 5)
-        }));
+                id: 2,
+                nome: "Bruno Costa",
+                email: "bruno@email.com",
+                telefone: "(11)99999-1002",
+                ativo: true,
+                cadastro: new SQLDate(2025, 2, 5)
+            }));
 
         SGBDFunctions.insertRow(
             "clientes", new DB.Row(table, {
-            id: 3,
-            nome: "Carla Mendes",
-            email: "carla@email.com",
-            telefone: "(11)99999-1003",
-            ativo: false,
-            cadastro: new SQLDate(2025, 3, 18)
-        }));
+                id: 3,
+                nome: "Carla Mendes",
+                email: "carla@email.com",
+                telefone: "(11)99999-1003",
+                ativo: false,
+                cadastro: new SQLDate(2025, 3, 18)
+            }));
 
         SGBDFunctions.insertRow(
             "clientes", new DB.Row(table, {
-            id: 4,
-            nome: "Daniel Souza",
-            email: "daniel@email.com",
-            telefone: "(11)99999-1004",
-            ativo: true,
-            cadastro: new SQLDate(2025, 4, 12)
-        }));
+                id: 4,
+                nome: "Daniel Souza",
+                email: "daniel@email.com",
+                telefone: "(11)99999-1004",
+                ativo: true,
+                cadastro: new SQLDate(2025, 4, 12)
+            }));
 
         SGBDFunctions.insertRow(
             "clientes", new DB.Row(table, {
-            id: 5,
-            nome: "Eduarda Lima",
-            email: "eduarda@email.com",
-            telefone: "(11)99999-1005",
-            ativo: true,
-            cadastro: new SQLDate(2025, 5, 2)
-        }));
+                id: 5,
+                nome: "Eduarda Lima",
+                email: "eduarda@email.com",
+                telefone: "(11)99999-1005",
+                ativo: true,
+                cadastro: new SQLDate(2025, 5, 2)
+            }));
         table.columns["id"].incrementCounter = 6;
     }
 
@@ -288,48 +288,48 @@ function createExempleDatabase() {
 
         SGBDFunctions.insertRow(
             "produtos", new DB.Row(table, {
-            id: 1,
-            categoria_id: 1,
-            nome: "Notebook",
-            preco: 4500.00,
-            estoque: 12
-        }));
+                id: 1,
+                categoria_id: 1,
+                nome: "Notebook",
+                preco: 4500.00,
+                estoque: 12
+            }));
 
         SGBDFunctions.insertRow(
             "produtos", new DB.Row(table, {
-            id: 2,
-            categoria_id: 2,
-            nome: "Mouse Gamer",
-            preco: 149.90,
-            estoque: 50
-        }));
+                id: 2,
+                categoria_id: 2,
+                nome: "Mouse Gamer",
+                preco: 149.90,
+                estoque: 50
+            }));
 
         SGBDFunctions.insertRow(
             "produtos", new DB.Row(table, {
-            id: 3,
-            categoria_id: 2,
-            nome: "Teclado Mecânico",
-            preco: 299.90,
-            estoque: 22
-        }));
+                id: 3,
+                categoria_id: 2,
+                nome: "Teclado Mecânico",
+                preco: 299.90,
+                estoque: 22
+            }));
 
         SGBDFunctions.insertRow(
             "produtos", new DB.Row(table, {
-            id: 4,
-            categoria_id: 4,
-            nome: "Headset",
-            preco: 399.90,
-            estoque: 18
-        }));
+                id: 4,
+                categoria_id: 4,
+                nome: "Headset",
+                preco: 399.90,
+                estoque: 18
+            }));
 
         SGBDFunctions.insertRow(
             "produtos", new DB.Row(table, {
-            id: 5,
-            categoria_id: 3,
-            nome: "Cadeira Escritório",
-            preco: 899.90,
-            estoque: 6
-        }));
+                id: 5,
+                categoria_id: 3,
+                nome: "Cadeira Escritório",
+                preco: 899.90,
+                estoque: 6
+            }));
         table.columns["id"].incrementCounter = 6;
     }
 
@@ -367,24 +367,24 @@ function createExempleDatabase() {
 
         SGBDFunctions.insertRow(
             "pedidos", new DB.Row(table, {
-            id: 1,
-            cliente_id: 1,
-            data: new SQLDate(2026, 7, 15)
-        }));
+                id: 1,
+                cliente_id: 1,
+                data: new SQLDate(2026, 7, 15)
+            }));
 
         SGBDFunctions.insertRow(
             "pedidos", new DB.Row(table, {
-            id: 2,
-            cliente_id: 2,
-            data: new SQLDate(2026, 7, 17)
-        }));
+                id: 2,
+                cliente_id: 2,
+                data: new SQLDate(2026, 7, 17)
+            }));
 
         SGBDFunctions.insertRow(
             "pedidos", new DB.Row(table, {
-            id: 3,
-            cliente_id: 1,
-            data: new SQLDate(2026, 7, 19)
-        }));
+                id: 3,
+                cliente_id: 1,
+                data: new SQLDate(2026, 7, 19)
+            }));
 
         table.columns["id"].incrementCounter = 4;
     }
@@ -442,48 +442,48 @@ function createExempleDatabase() {
 
         SGBDFunctions.insertRow(
             "itens_pedido", new DB.Row(table, {
-            id: 1,
-            pedido_id: 1,
-            produto_id: 1,
-            quantidade: 1,
-            valor_unitario: 4500
-        }));
+                id: 1,
+                pedido_id: 1,
+                produto_id: 1,
+                quantidade: 1,
+                valor_unitario: 4500
+            }));
 
         SGBDFunctions.insertRow(
             "itens_pedido", new DB.Row(table, {
-            id: 2,
-            pedido_id: 1,
-            produto_id: 2,
-            quantidade: 2,
-            valor_unitario: 149.9
-        }));
+                id: 2,
+                pedido_id: 1,
+                produto_id: 2,
+                quantidade: 2,
+                valor_unitario: 149.9
+            }));
 
         SGBDFunctions.insertRow(
             "itens_pedido", new DB.Row(table, {
-            id: 3,
-            pedido_id: 2,
-            produto_id: 3,
-            quantidade: 1,
-            valor_unitario: 299.9
-        }));
+                id: 3,
+                pedido_id: 2,
+                produto_id: 3,
+                quantidade: 1,
+                valor_unitario: 299.9
+            }));
 
         SGBDFunctions.insertRow(
             "itens_pedido", new DB.Row(table, {
-            id: 4,
-            pedido_id: 3,
-            produto_id: 4,
-            quantidade: 1,
-            valor_unitario: 399.9
-        }));
+                id: 4,
+                pedido_id: 3,
+                produto_id: 4,
+                quantidade: 1,
+                valor_unitario: 399.9
+            }));
 
         SGBDFunctions.insertRow(
             "itens_pedido", new DB.Row(table, {
-            id: 5,
-            pedido_id: 3,
-            produto_id: 5,
-            quantidade: 1,
-            valor_unitario: 899.9
-        }));
+                id: 5,
+                pedido_id: 3,
+                produto_id: 5,
+                quantidade: 1,
+                valor_unitario: 899.9
+            }));
 
         table.columns["id"].incrementCounter = 6;
     }
@@ -1369,7 +1369,7 @@ class SGBDFunctions {
             table = getTable(tableName, schema)!
         } else {
             table = getTable(tableName)!
-            
+
         }
 
         table.columns[column.name] = column;
@@ -1420,7 +1420,7 @@ class SGBDFunctions {
                 table.indexes[columnName].set(value, (table.indexes[columnName].get(value) || []).concat(index));
             });
         }
-        
+
         if (column.reference) {
             //getCurrentDatabase()!.addForeignKeyReference(currentSchema!, tableName, column.name, column.reference);
         }
@@ -2233,7 +2233,7 @@ function addColumnsInterface() {
             return;
         }
     }
-    
+
     for (const column of columnsToAdd) {
         SGBDFunctions.addColumn(table.name, column);
     }
@@ -4386,7 +4386,7 @@ namespace SQL {
                     getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma tabela com o nome "${newName}" nesse schema`], "error");
                     return;
                 }
-                
+
                 SGBDFunctions.renameTable(tableName, newName, schemaName);
                 getCurrentTerminalSession().createEntry(this.fullCommand, [`Tabela "${tableName}" renomeado para "${newName}" com sucesso!`], "success");
             }
@@ -4451,9 +4451,13 @@ namespace SQL {
             }
             if (!result.column) return;
 
-            SGBDFunctions.addColumn(tableName, result.column, schemaName);
-                getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${result.column.name}" adicionada com sucesso`], "success");
+            if (getTable(tableName, schemaName)!.columns[result.column.name]) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma coluna com o nome "${result.column.name}" na tabela "${tableName}"`], "error");
+                return;
+            }
 
+            SGBDFunctions.addColumn(tableName, result.column, schemaName);
+            getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${result.column.name}" adicionada com sucesso`], "success");
         }
 
         dropColumn() {
@@ -4563,12 +4567,19 @@ namespace SQL {
          * Executa CREATE TABLE.
          */
         table() {
-            const name = this.tokens[2];
-            const { schemaName, tableName, error } = verifySchemaTableName(name);
-            if (error) {
-                getCurrentTerminalSession().createEntry(this.fullCommand, [error], "error");
+            const tableName = this.tokens[2];
+            if (currentDatabase == null) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhuma database selecionada"], "error");
+                return;
             }
-            if (!schemaName || !tableName) return;
+            if (currentSchema == null) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhum schema selecionado"], "error");
+                return;
+            }
+            if (tableName.includes(".")) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da tabela inválido"], "error");
+                return;
+            }
             if (!isValidSQLName(tableName)) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da tabela inválido"], "error");
                 return;
