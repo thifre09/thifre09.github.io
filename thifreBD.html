@@ -617,6 +617,11 @@
                 </button>
             </div>
 
+            <div id="auto-save-checkbox">
+                <label for="auto-save">Salvar automaticamente</label>
+                <input type="checkbox" id="auto-save" name="auto-save">
+            </div>
+
             <div id="save-notification" style="display: none;">
                 <p>Progresso salvo com sucesso!</p>
             </div>
@@ -735,7 +740,7 @@
 
                     <h2>Como funciona</h2>
 
-                    <div class="help-flex-divs" style="--size: 22%">
+                    <div class="help-flex-divs" style="--size: 17.1%">
                         <div class="help-box">
                             <div class="help-icon-text" style="--cor-icone: var(--blue4)">
                                 <svg viewBox="0 -960 960 960" fill="currentColor">
@@ -745,8 +750,19 @@
 
                                 <h3>Database</h3>
                             </div>
+                            <p>Contém um conjunto de schemas</p>
+                        </div>
+                        <div class="help-box">
+                            <div class="help-icon-text" style="--cor-icone: var(--blue4)">
+                                <svg style="border-radius: 0;" viewBox="0 -960 960 960">
+                                    <path d="M160-40v-240h100v-80H160v-240h100v-80H160v-240h280v240H340v80h100v80h120v-80h280v240H560v-80H440v80H340v80h100v240H160Zm80-80h120v-80H240v80Zm0-320h120v-80H240v80Zm400 0h120v-80H640v80ZM240-760h120v-80H240v80Zm60-40Zm0 320Zm400 0ZM300-160Z"/>
+                                </svg>
+
+                                <h3>Schema</h3>
+                            </div>
                             <p>Contém um conjunto de tabelas</p>
                         </div>
+
                         <div class="help-box">
                             <div class="help-icon-text" style="--cor-icone: var(--green4)">
                                 <svg viewBox="0 -960 960 960" fill="currentColor">
@@ -1336,6 +1352,5 @@ CREATE TABLE clientes (
     </div>
 
     <script src="assets/js/pages/thifreBD.js"></script>
-    <script src="assets/js/others/menu.js"></script>
-    <script type="module" src="assets/js/supabase/testeSupabase.js"></script>
+    <script type="module" src="assets/js/others/menu.js"></script>
 </body>

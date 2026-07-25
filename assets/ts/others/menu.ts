@@ -1,5 +1,8 @@
+import * as Auth from "../supabase/auth.js";
+import { supabase } from "../supabase/client.js";
+
 // carega o menu lateral e a barra de navegação
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     fetch('assets/global/menu.html')
         .then(response => response.text())
         .then(data => {
@@ -26,8 +29,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             criarNotasAtualizacao();
         })
-
         .catch(error => console.error('Erro ao carregar o menu:', error)); // Exibe um erro no console caso haja algum problema ao carregar o menu
+    
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (session) {
+        mostrarUsuario();
+    }
+
 
 });
 
@@ -787,8 +796,146 @@ function toggleBanner() {
 
 // #region autenticar e login
 
-function abrirCadastro() {
-
+function irParaTelaConta(id: string) {
+    const asideScroll = document.querySelector("div#conta .aside-scroll")!;
+    for (let i = 0; i < asideScroll.children.length; i++) {
+        const child = asideScroll.children[i] as HTMLElement;
+        if (child.id === id) {
+            child.style.display = "flex";
+        } else {
+            child.style.display = "none";
+        }
+    }
 }
+
+async function cadastrarConta() {
+    const nomeUsuario = (document.getElementById("nome-usuario-cadastro") as HTMLInputElement).value;
+    const email = (document.getElementById("email-cadastro") as HTMLInputElement).value;
+    const senha = (document.getElementById("senha-cadastro") as HTMLInputElement).value;
+
+    if (!nomeUsuario || !email || !senha) {
+        alert("Por favor, preencha todos os campos.");
+        return;
+    }
+
+    const { data, error } = await Auth.signUp(email, senha);
+
+    if (error) {
+        alert(error.message);
+        return;
+    }
+
+    const { error: updateError } = await supabase.from("profiles").update({ username: nomeUsuario })
+        .eq("id", data.user!.id);
+
+    if (updateError) {
+        alert(updateError.message);
+        return;
+    }
+
+    mostrarUsuario();
+}
+
+async function loginConta() {
+    try {
+        const email = (document.getElementById("email-login") as HTMLInputElement).value;
+        const senha = (document.getElementById("senha-login") as HTMLInputElement).value;
+        if (!email || !senha) {
+            alert("Por favor, preencha todos os campos.");
+            return;
+        }
+        const { data, error } = await Auth.signIn(email, senha);
+
+        if (error) {
+            alert(error.message);
+            return;
+        }
+
+        mostrarUsuario();
+    } catch (error) {
+        console.error("Erro ao fazer login:", error);
+    }
+    
+}
+
+async function mostrarUsuario() {
+    let user;
+    try {
+        user = await Auth.getUser();
+    } catch (error) {
+        console.error("Erro ao obter usuário:", error);
+        return;
+    }
+
+    if (!user) {
+        console.log("Usuário não está logado.");
+        return;
+    }
+    const { data, error } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    irParaTelaConta("usuario-logado");
+
+    const divUsuarioLogado = document.getElementById("nome-usuario-logado")!;
+    const divEmailLogado = document.getElementById("email-usuario-logado")!;
+
+    divUsuarioLogado.textContent = data.username;
+    divEmailLogado.textContent = user.email!;
+}
+
+//#endregion
+
+// #region window global functions
+
+//@ts-ignore
+window.abrirMenu = abrirMenu;
+//@ts-ignore
+window.abrir = abrir;
+//@ts-ignore
+window.criarNotasAtualizacao = criarNotasAtualizacao;
+//@ts-ignore
+window.novaNota = novaNota;
+//@ts-ignore
+window.voltarParaNotas = voltarParaNotas;
+//@ts-ignore
+window.criarNota = criarNota;
+//@ts-ignore
+window.editarNota = editarNota;
+//@ts-ignore
+window.salvarAlteracoesNota = salvarAlteracoesNota;
+//@ts-ignore
+window.excluirNota = excluirNota;
+//@ts-ignore
+window.updateDisplay = updateDisplay;
+//@ts-ignore
+window.appendNumber = appendNumber;
+//@ts-ignore
+window.appendOperator = appendOperator;
+//@ts-ignore
+window.clearDisplay = clearDisplay;
+//@ts-ignore
+window.deleteDigit = deleteDigit;
+//@ts-ignore
+window.calculateSqrt = calculateSqrt;
+//@ts-ignore
+window.compute = compute;
+//@ts-ignore
+window.toggleBanner = toggleBanner;
+//@ts-ignore
+window.irParaTelaConta = irParaTelaConta;
+//@ts-ignore
+window.cadastrarConta = cadastrarConta;
+//@ts-ignore
+window.loginConta = loginConta;
+//@ts-ignore
+window.mostrarUsuario = mostrarUsuario;
+
+(window as any).supabase = supabase;
+(window as any).getUser = Auth.getUser;
+(window as any).isUserLoggedIn = Auth.isUserLoggedIn;
 
 //#endregion

@@ -527,6 +527,14 @@ var DB;
             };
             return details;
         }
+        rebuildParent() {
+            for (let ch of this.children) {
+                if (ch instanceof Node) {
+                    ch.parent = this;
+                    ch.rebuildParent();
+                }
+            }
+        }
     }
     DB.Node = Node;
     class NodeGroup extends TreeItem {
@@ -735,6 +743,16 @@ var DB;
             currentTable = null;
             refreshUI();
         }
+        static fromJSON(json) {
+            if (!json.name || !json.schemas) {
+                return null;
+            }
+            const db = new Database(json.name);
+            for (const [name, schemaObj] of Object.entries(json.schemas)) {
+                db.schemas[name] = Schema.fromJSON(schemaObj, db);
+            }
+            return db;
+        }
     }
     DB.Database = Database;
     /**
@@ -774,6 +792,13 @@ var DB;
             currentSchema = this.name;
             currentTable = null;
             refreshUI();
+        }
+        static fromJSON(json, parent) {
+            const schema = new Schema(json.name, parent);
+            for (const [name, tableObj] of Object.entries(json.tables)) {
+                schema.tables[name] = Table.fromJSON(tableObj, schema);
+            }
+            return schema;
         }
     }
     DB.Schema = Schema;
@@ -861,6 +886,19 @@ var DB;
             currentSchema = this.parent.name;
             currentTable = this.name;
             refreshUI();
+        }
+        static fromJSON(obj, parent) {
+            const table = new Table(obj.name, parent);
+            table.columns = {};
+            for (const [name, columnObj] of Object.entries(obj.columns)) {
+                table.columns[name] = Column.fromJSON(columnObj, table);
+            }
+            table.rows = obj.rows.map((row) => Row.fromJSON(row, table));
+            table.indexes = {};
+            for (const [column, index] of Object.entries(obj.indexes)) {
+                table.indexes[column] = new Map(index);
+            }
+            return table;
         }
     }
     DB.Table = Table;
@@ -981,6 +1019,22 @@ var DB;
                     `;
             }
         }
+        static fromJSON(obj, parent) {
+            let type;
+            if (obj.type.name === "ENUM") {
+                type = types.ENUM(obj.type.allowedValues);
+            }
+            else if (obj.type.name === "VARCHAR") {
+                type = types.VARCHAR(obj.type.maxLength);
+            }
+            else {
+                type = DataTypes.createDataTypeFromString(obj.type.name);
+            }
+            const column = new Column(obj.name, parent, type, obj.isPrimaryKey, obj.isForeignKey, obj.isNotNull, obj.isUnique, obj.isAutoIncrement, obj.hasDefault, obj.isCurrentTimestamp, obj.reference);
+            column.incrementCounter = obj.incrementCounter;
+            column.defaultValue = obj.defaultValue;
+            return column;
+        }
     }
     DB.Column = Column;
     class Row extends Node {
@@ -996,6 +1050,11 @@ var DB;
                     d="M760-200v-120H200v120h560Zm0-200v-160H200v160h560Zm0-240v-120H200v120h560ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Z" />
             </svg>
             `;
+        }
+        static fromJSON(obj, parent) {
+            const row = new Row(parent, obj.values);
+            row.name = obj.name;
+            return row;
         }
     }
     Row.counter = 1;
@@ -1062,6 +1121,7 @@ class SGBDFunctions {
         currentTable = null;
         refreshUI();
         saveToLocalStorage();
+        saveToSupabase();
     }
     static createSchema(schema) {
         databases[currentDatabase].schemas[schema.name] = schema;
@@ -1069,6 +1129,7 @@ class SGBDFunctions {
         currentTable = null;
         refreshUI();
         saveToLocalStorage();
+        saveToSupabase();
     }
     /**
      * Adiciona uma tabela à database atual.
@@ -1087,6 +1148,7 @@ class SGBDFunctions {
         currentTable = table.name;
         refreshUI();
         saveToLocalStorage();
+        saveToSupabase();
     }
     /**
      * Adiciona uma coluna a uma tabela existente.
@@ -1152,6 +1214,7 @@ class SGBDFunctions {
         }
         refreshUI();
         saveToLocalStorage();
+        saveToSupabase();
     }
     /**
      * Insere uma linha e atualiza os índices da tabela.
@@ -1177,6 +1240,7 @@ class SGBDFunctions {
         }
         refreshUI();
         saveToLocalStorage();
+        saveToSupabase();
     }
     /**
      * Substitui uma linha existente e reconstrói os índices afetados.
@@ -1217,6 +1281,7 @@ class SGBDFunctions {
         }
         refreshUI();
         saveToLocalStorage();
+        saveToSupabase();
     }
     /**
      * Remove uma database do armazenamento em memória.
@@ -1231,6 +1296,7 @@ class SGBDFunctions {
         }
         refreshUI();
         saveToLocalStorage();
+        saveToSupabase();
     }
     static deleteSchema(schemaName) {
         const db = getCurrentDatabase();
@@ -1241,6 +1307,7 @@ class SGBDFunctions {
         }
         refreshUI();
         saveToLocalStorage();
+        saveToSupabase();
     }
     /**
      * Remove uma tabela e desfaz as chaves estrangeiras de saída.
@@ -1259,6 +1326,7 @@ class SGBDFunctions {
         }
         refreshUI();
         saveToLocalStorage();
+        saveToSupabase();
     }
     /**
      * Remove uma coluna e limpa seus índices e dados.
@@ -1283,6 +1351,7 @@ class SGBDFunctions {
         delete table.columns[columnName];
         refreshUI();
         saveToLocalStorage();
+        saveToSupabase();
     }
     /**
      * Remove uma linha e ajusta os índices remanescentes.
@@ -1324,6 +1393,7 @@ class SGBDFunctions {
         }
         refreshUI();
         saveToLocalStorage();
+        saveToSupabase();
     }
     static renameDatabase(oldName, newName) {
         const db = databases[oldName];
@@ -1335,6 +1405,7 @@ class SGBDFunctions {
         currentDatabase = newName;
         refreshUI();
         saveToLocalStorage();
+        saveToSupabase();
     }
     static renameSchema(oldName, newName) {
         const db = getCurrentDatabase();
@@ -1347,6 +1418,7 @@ class SGBDFunctions {
         currentSchema = newName;
         refreshUI();
         saveToLocalStorage();
+        saveToSupabase();
     }
     static renameTable(oldName, newName, schemaName) {
         let schema;
@@ -1367,6 +1439,7 @@ class SGBDFunctions {
         currentTable = newName;
         refreshUI();
         saveToLocalStorage();
+        saveToSupabase();
     }
     static alterColumn(tableName, oldColumnName, newColumn, schemaName) {
         /**
@@ -1418,6 +1491,7 @@ class SGBDFunctions {
         }
         refreshUI();
         saveToLocalStorage();
+        saveToSupabase();
     }
 }
 class SQLTime {
@@ -4648,6 +4722,10 @@ var SQL;
 })(SQL || (SQL = {}));
 // #endregion
 // #region save and load
+let autoSaveEnabled = false;
+document.getElementById("auto-save-checkbox")?.addEventListener("click", () => {
+    autoSaveEnabled = !autoSaveEnabled;
+});
 /**
  * Marca visualmente a ação de salvar/carregar selecionada pela UI.
  * @param div - Elemento que representa a ação clicada.
@@ -4712,16 +4790,49 @@ function confirmSaveOrLoad() {
         }, 3000);
     }
 }
+function transformToJson() {
+    return JSON.stringify(databases, (key, value) => {
+        if (key === "parent")
+            return undefined;
+        if (value instanceof Map) {
+            return [...value.entries()];
+        }
+        return value;
+    });
+}
+function transformFromJson(json) {
+    if (json == null) {
+        databases = {};
+        return;
+    }
+    try {
+        const data = JSON.parse(json);
+        databases = {};
+        for (const [name, db] of Object.entries(data)) {
+            const d = DB.Database.fromJSON(db);
+            if (!d)
+                return;
+            databases[name] = d;
+        }
+        refreshUI();
+    }
+    catch (err) {
+        console.error("Erro ao carregar databases:", err);
+        databases = {};
+    }
+}
 /**
  * Persiste o estado atual de `databases` no `localStorage` do navegador.
  */
 function saveToLocalStorage() {
-    //localStorage.setItem("databases", JSON.stringify(databases));
+    localStorage.setItem("databases", transformToJson());
 }
 /**
- * Restaura o estado de `databases` a partir do `localStorage`, reconstruindo objetos em memória.
+ * Restaura o estado de `databases` a partir do `localStorage`.
  */
 function loadFromLocalStorage() {
+    const json = localStorage.getItem("databases");
+    transformFromJson(json);
 }
 function saveToJson() {
 }
@@ -4742,6 +4853,23 @@ function saveToSql() {
  */
 function loadFromSql() {
     alert("Função de importação de SQL ainda não implementada.");
+}
+async function saveToSupabase() {
+    const user = await window.getUser();
+    const { error } = await window.supabase.from("profiles")
+        .update({
+        thifreBD_databases: JSON.parse(transformToJson())
+    }).eq("id", user.id);
+    console.log(error);
+}
+async function loadFromSupabase() {
+    const user = await window.getUser();
+    const { data, error } = await window.supabase.from("profiles")
+        .select("thifreBD_databases").eq("id", user.id);
+    if (error)
+        return;
+    const json = JSON.stringify(data[0]["thifreBD_databases"]);
+    transformFromJson(json);
 }
 // #endregion
 // #region help
@@ -4824,6 +4952,14 @@ document.getElementById("menus-centrais").addEventListener("click", (event) => {
     document.getElementById("menus-centrais").style.display = "none";
 });
 window.addEventListener('load', () => updateInterfaceTerminalIndicator(buttonChangeToGrafical));
+window.addEventListener("DOMContentLoaded", () => {
+    if (window.isUserLoggedIn()) {
+        loadFromSupabase();
+    }
+    else {
+        loadFromLocalStorage();
+    }
+});
 createColumnCreationDiv(document.querySelector("#criacao-tabela ul"));
 createColumnCreationDiv(document.getElementById("criacao-colunas-edit"));
 createHelpButtons();
@@ -4848,7 +4984,6 @@ document.addEventListener("mousemove", (e) => {
         esquerda.style.width = `${novaLargura}px`;
     }
 });
-createExempleDatabase();
 changeLeftSide();
 // To Do
 // -Aba de ajuda

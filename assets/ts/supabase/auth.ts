@@ -25,3 +25,8 @@ export async function getUser() {
 
     return user;
 }
+
+export async function isUserLoggedIn() {
+    const user = await getUser();
+    return !!user;
+}

@@ -278,79 +278,6 @@ input[type="number"]::-webkit-inner-spin-button {
         display: flex;
         flex-direction: column;
 
-        #varios-botoes {
-            display: flex;
-            justify-content: space-between;
-
-            #tabela-info-varios-botoes {
-                padding: var(--p3);
-                flex: 0 0 auto;
-                min-width: 0;
-
-                p {
-                    width: max-content;
-                    max-width: 100%;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
-
-                p:first-child {
-                    font-size: var(--fs4);
-                }
-            }
-
-            #botoes-varios-botoes {
-                display: flex;
-                flex: 1;
-                justify-content: flex-end;
-
-                button {
-                    border: none;
-                    border-radius: 10px;
-                    background-color: transparent;
-                    padding: 0 10px;
-                    transition: var(--transition-time1);
-                    cursor: pointer;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: medium;
-                    margin: var(--p3);
-
-                    &:hover {
-                        transform: scale(1.05);
-                    }
-
-                    svg {
-                        width: 20px;
-                        height: 20px;
-                        margin: 5px;
-                    }
-                }
-
-                #edit-table {
-                    background-color: var(--blue5);
-                    color: white;
-                }
-
-                #alter-column {
-                    background-color: var(--green4);
-                    color: white;
-                }
-
-                #insert-line {
-                    background-color: black;
-                    color: white;
-                }
-
-                #search {
-                    background-color: var(--gray10);
-                    color: var(--white);
-                }
-            }
-        }
-
         #tabela-info {
             display: flex;
             flex-direction: column;
@@ -413,7 +340,7 @@ input[type="number"]::-webkit-inner-spin-button {
                             flex: 0 0 200px;
                             width: 200px;
                             min-width: 200px;
-                            max-height: 50px;
+                            max-height: 51px;
                             overflow: auto;
                             padding: 0 1rem;
 
@@ -1150,6 +1077,25 @@ input[type="number"]::-webkit-inner-spin-button {
                 background-color: var(--blue4);
                 transform: scale(1.01);
             }
+        }
+    }
+
+    #auto-save-checkbox {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: var(--p2);
+        font-size: var(--fs5);
+
+        input {
+            margin-left: 5px;
+            width: 20px;
+            height: 20px;
+            aspect-ratio: 1 / 1;
+            box-sizing: border-box;
+            flex: 0 0 16px;
+            cursor: pointer;
+            background: var(--white);
         }
     }
 
