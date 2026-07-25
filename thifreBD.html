@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu site incrível</title>
     <link rel="stylesheet" href="assets/css/thifreBD.css">
+    <link rel="icon" type="image/png" href="./assets/images/links/batatas/batata1.jpg">
 </head>
 
 <body data-title="ThifreBD">
@@ -13,93 +14,56 @@
         <div id="troca-de-tela">
             <div id="interface-terminal">
                 <div class="interface-terminal-indicator"></div>
-                <button id="button-interface-terminal-interface"
-                    class="interface-terminal interface-terminal-ativo">Interface gráfica</button>
-                <button id="button-interface-terminal-terminal" class="interface-terminal">Terminal</button>
+                <button id="button-header-interface" class="interface-terminal interface-terminal-ativo">
+                    <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--blue4)">
+                        <path
+                            d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h240v-560H200v560Zm320 0h240v-280H520v280Zm0-360h240v-200H520v200Z" />
+                    </svg>
+                    Dashboard
+                </button>
+                <button id="button-header-terminal" class="interface-terminal">
+                    <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--green4)">
+                        <path
+                            d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H160v400Zm140-40-56-56 103-104-104-104 57-56 160 160-160 160Zm180 0v-80h240v80H480Z" />
+                    </svg>
+                    Terminal
+                </button>
+                <button id="button-header-logical" class="interface-terminal">
+                    <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--purple4)">
+                        <path
+                            d="M296-270q-42 35-87.5 32T129-269q-34-28-46.5-73.5T99-436l75-124q-25-22-39.5-53T120-680q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47q-9 0-18-1t-17-3l-77 130q-11 18-7 35.5t17 28.5q13 11 31 12.5t35-12.5l420-361q42-35 88-31.5t80 31.5q34 28 46 73.5T861-524l-75 124q25 22 39.5 53t14.5 67q0 66-47 113t-113 47q-66 0-113-47t-47-113q0-66 47-113t113-47q9 0 17.5 1t16.5 3l78-130q11-18 7-35.5T782-630q-13-11-31-12.5T716-630L296-270Zm40.5-353.5Q360-647 360-680t-23.5-56.5Q313-760 280-760t-56.5 23.5Q200-713 200-680t23.5 56.5Q247-600 280-600t56.5-23.5Zm400 400Q760-247 760-280t-23.5-56.5Q713-360 680-360t-56.5 23.5Q600-313 600-280t23.5 56.5Q647-200 680-200t56.5-23.5ZM280-680Zm400 400Z" />
+                    </svg>
+                    Lógico
+                </button>
+                <button id="button-header-save" class="interface-terminal">
+                    <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--orange4)">
+                        <path
+                            d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160Zm-80 34L646-760H200v560h560v-446ZM565-275q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35ZM240-560h360v-160H240v160Zm-40-86v446-560 114Z" />
+                    </svg>
+                    Salvar
+                </button>
+                <button id="button-header-help" class="interface-terminal">
+                    <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--cyan4)">
+                        <path
+                            d="M513.5-254.5Q528-269 528-290t-14.5-35.5Q499-340 478-340t-35.5 14.5Q428-311 428-290t14.5 35.5Q457-240 478-240t35.5-14.5ZM442-394h74q0-33 7.5-52t42.5-52q26-26 41-49.5t15-56.5q0-56-41-86t-97-30q-57 0-92.5 30T342-618l66 26q5-18 22.5-39t53.5-21q32 0 48 17.5t16 38.5q0 20-12 37.5T506-526q-44 39-54 59t-10 73Zm38 314q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                    </svg>
+                    Ajuda
+                </button>
             </div>
         </div>
 
         <div class="separador-horizontal"></div>
 
-        <div id="interface-grafica">
+        <div id="interface-grafica" style="display: none;">
             <div id="esquerda">
-                <div id="databases">
-                    <div id="database-button">
-                        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-database"></use>
-                        </svg>
-                        <p>Database</p>
-                        <button onclick="abrirFechar(false, 'criacao-database')">
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="custom-dropdown">
-                        <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
-                            <span class="custom-dropdown-value">Crie uma database</span>
-                        </button>
-                        <ul class="custom-dropdown-menu" tabindex="-1">
-                        </ul>
-                        <input type="hidden" name="column-type" value="text">
-                    </div>
-                </div>
-
-                <div class="separador-horizontal"></div>
-
-                <div id="button-nova-tabela">
-                    <button id="nova-tabela" onclick="abrirFechar(false, 'criacao-tabela')">
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
-                        </svg>
-                        <p>Nova tabela</p>
-                    </button>
-                </div>
-
-                <div class="separador-horizontal"></div>
-
-                <div id="tabelas">
-                    <p>Tabelas</p>
-                    <ul id="tabelas-lista">
-
-                    </ul>
+                <div id="tree">
+                    <p>Crie uma database para começar</p>
                 </div>
             </div>
 
             <div class="separador-vertical"></div>
 
             <div id="direita">
-                <div id="varios-botoes">
-                    <div id="tabela-info-varios-botoes">
-                        <p id="nome-tabela">Crie uma tabela</p>
-                        <p id="linhas-colunas">0 linhas • 0 colunas</p>
-                    </div>
-
-                    <div id="botoes-varios-botoes">
-                        <button id="alter-column"
-                            onclick="abrirFechar(false, 'editar-colunas'); changeAlterarColunasMenu()">
-                            <svg viewBox="0 0 512 512" aria-hidden="true">
-                                <use href="assets/images/icons-sprite.svg#icon-edit"></use>
-                            </svg>
-                            Alterar colunas</button>
-                        <button id="insert-line"
-                            onclick="abrirFechar(false, 'inserir-linha'); changeInserirLinhaMenu()">
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
-                            </svg>
-                            Inserir linha
-                        </button>
-                        <button id="delete-table">
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
-                            </svg>
-                            Deletar tabela
-                        </button>
-                    </div>
-                </div>
-
-                <div class="separador-horizontal"></div>
-
                 <div id="tabela-info">
                     <div id="nenhuma-tabela-selecionada">
                         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -117,7 +81,7 @@
                         <div id="tabela-selecionada-linha-coluna" style="display: none;">
                             <div id="tabela-selecionada-linha-coluna-header">
                                 <h3>Linha</h3>
-                                <button onclick="abrirFecharLinhaColuna(true)">
+                                <button onclick="showHideTabelaSelecionadaLinhaColuna(false)">
                                     <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
                                         <use href="assets/images/icons-sprite.svg#icon-close"></use>
                                     </svg>
@@ -170,17 +134,18 @@
 
         <div id="menus-centrais" style="display: none;">
             <div id="criacao-database" style="display: none;">
-                <div class="menu-criacao-top">
-                    <h1>Criar nova database</h1>
-                    <button onclick="abrirFechar(true, 'criacao-database')">
+                <div class="menu-central-justify-between">
+                    <h1 class="text1">Criar nova database</h1>
+                    <button class="close-button" onclick="abrirFechar(true, 'criacao-database')">
                         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
                             <use href="assets/images/icons-sprite.svg#icon-close"></use>
                         </svg>
                     </button>
                 </div>
-                <label for="nome-database">Nome da database</label>
-                <input type="text" id="nome-database" name="nome-database" rows="1" placeholder="Ex: meu_bd">
-                <button id="criar-database-button" onclick="createDatabase()">
+                <label for="nome-database-input">Nome da database</label>
+                <input class="menu-central-input" type="text" id="nome-database-input" name="nome-database-input"
+                    rows="1" placeholder="Ex: meu_bd">
+                <button class="large-button" id="criar-database-button" onclick="createDatabaseInterface()">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
                     </svg>
@@ -188,23 +153,100 @@
                 </button>
             </div>
 
-            <div id="criacao-tabela" style="display: none;">
-                <div class="menu-criacao-top">
-                    <h1>Criar nova tabela</h1>
-                    <button onclick="abrirFechar(true, 'criacao-tabela')">
+            <div id="configurar-database" style="display: none;">
+                <div class="menu-central-justify-between">
+                    <h1 class="text1">Configurar database</h1>
+                    <button class="close-button" onclick="abrirFechar(true, 'configurar-database')">
                         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        </svg>
+                    </button>
+                </div>
+                <label for="renomear-database-input">Nome da database</label>
+                <input class="menu-central-input" type="text" id="renomear-database-input"
+                    name="renomear-database-input" rows="1" placeholder="Ex: meu_bd">
+                <button class="large-button" onclick="renameDatabaseInterface()">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                        fill="currentColor">
+                        <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+                    </svg>
+                    Confirmar alterações
+                </button>
+                <button class="large-button" style="background-color: var(--red4)" id="configurar-database-deletar"
+                    onclick="abrirFechar(false, 'confirmar-deletar'); abrirFechar(true, 'configurar-database'); changeConfirmDeleteMenu('database')">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
+                    </svg>
+                    Deletar database
+                </button>
+            </div>
+
+            <div id="criacao-schema" style="display: none;">
+                <div class="menu-central-justify-between">
+                    <h1 class="text1">Criar novo schema</h1>
+                    <button class="close-button" onclick="abrirFechar(true, 'criacao-schema')">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        </svg>
+                    </button>
+                </div>
+                <label for="nome-schema-input">Nome da schema</label>
+                <input class="menu-central-input" type="text" id="nome-schema-input" name="nome-schema-input" rows="1"
+                    placeholder="Ex: meu_schema">
+                <button class="large-button" id="criar-schema-button" onclick="createSchemaInterface()">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                    </svg>
+                    Criar schema
+                </button>
+            </div>
+
+            <div id="configurar-schema" style="display: none;">
+                <div class="menu-central-justify-between">
+                    <h1 class="text1">Configurar schema</h1>
+                    <button class="close-button" onclick="abrirFechar(true, 'configurar-schema')">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        </svg>
+                    </button>
+                </div>
+                <label for="renomear-schema-input">Nome do schema</label>
+                <input class="menu-central-input" type="text" id="renomear-schema-input" name="renomear-schema-input"
+                    rows="1" placeholder="Ex: meu_schema">
+                <button class="large-button" onclick="renameSchemaInterface()">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                        fill="currentColor">
+                        <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+                    </svg>
+                    Confirmar alterações
+                </button>
+                <button class="large-button" style="background-color: var(--red4)" id="configurar-schema-deletar"
+                    onclick="abrirFechar(false, 'confirmar-deletar'); abrirFechar(true, 'configurar-schema'); changeConfirmDeleteMenu('schema')">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
+                    </svg>
+                    Deletar schema
+                </button>
+            </div>
+
+            <div id="criacao-tabela" style="display: none;">
+                <div class="menu-central-justify-between">
+                    <h1 class="text1">Criar nova tabela</h1>
+                    <button class="close-button" onclick="abrirFechar(true, 'criacao-tabela')">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
                             <use href="assets/images/icons-sprite.svg#icon-close"></use>
                         </svg>
                     </button>
                 </div>
 
                 <label for="nome-tabela-input">Nome da tabela</label>
-                <input type="text" id="nome-tabela-input" name="nome-tabela-input" rows="1"
-                    placeholder="Ex: minha_tabela"></textarea>
+                <input class="menu-central-input" type="text" id="nome-tabela-input" name="nome-tabela-input" rows="1"
+                    placeholder="Ex: minha_tabela">
 
-                <div>
-                    <h2>Colunas</h2>
-                    <button onclick="createColumnInterface(document.querySelector('#criacao-tabela ul'))">
+                <div class="menu-central-justify-between">
+                    <h2 class="text2">Colunas</h2>
+                    <button class="outlined-button"
+                        onclick="createColumnCreationDiv(document.querySelector('#criacao-tabela ul'))">
                         <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
                             <use href="assets/images/icons-sprite.svg#icon-plus"></use>
                         </svg>
@@ -213,81 +255,8 @@
                 </div>
 
                 <ul>
-                    <div>
-                        <input type="text" placeholder="Nome da coluna">
-
-                        <div class="custom-dropdown">
-                            <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
-                                <span class="custom-dropdown-value">Text</span>
-                            </button>
-                            <ul class="custom-dropdown-menu" tabindex="-1">
-                                <li class="custom-dropdown-option custom-dropdown-option-selected"
-                                    onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment'))">
-                                    Text</li>
-                                <li class="custom-dropdown-option"
-                                    onclick="toggleAutoIncrementButton(true, document.getElementById('auto-increment'))">
-                                    Integer</li>
-                                <li class="custom-dropdown-option"
-                                    onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment'))">
-                                    Float</li>
-                                <li class="custom-dropdown-option"
-                                    onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment'))">
-                                    Boolean</li>
-                            </ul>
-                            <input type="hidden" name="column-type" value="text">
-                        </div>
-
-                        <div class="caracteristics">
-                            <div class="primary-key">
-                                <input type="checkbox" id="primary-key" onclick="toggleOnPKButton(this)">
-                                <label for="primary-key">Primary key</label>
-                            </div>
-                            <div class="foreign-key">
-                                <input type="checkbox" id="foreign-key" onclick="toggleOnFKButton(this)">
-                                <label for="foreign-key">Foreign key</label>
-                            </div>
-                            <div class="not-null">
-                                <input type="checkbox" id="not-null">
-                                <label for="not-null">Not null</label>
-                            </div>
-                            <div class="unique">
-                                <input type="checkbox" id="unique">
-                                <label for="unique">Unique</label>
-                            </div>
-                            <div class="default-option">
-                                <input type="checkbox" id="default" onclick="toggleOnDefaultOptionButton(this)">
-                                <label for="default">Default</label>
-                            </div>
-                            <div class="auto-increment" style="display: none;">
-                                <input type="checkbox" id="auto-increment">
-                                <label for="auto-increment">Auto increment</label>
-                            </div>
-                            <div class="delete-column" onclick="deleteColumnCreationInterface(this)">
-                                <svg viewBox="0 0 24 24" aria-hidden="true">
-                                    <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
-                                </svg>
-                            </div>
-                        </div>
-
-                        <div class="referencia" style="display: none;">
-                            <p>Referência</p>
-                            <div class="custom-dropdown">
-                                <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
-                                    <span class="custom-dropdown-value">Crie outra tabela</span>
-                                </button>
-                                <ul class="custom-dropdown-menu" tabindex="-1">
-                                </ul>
-                                <input type="hidden" name="column-type" value="text">
-                            </div>
-                        </div>
-
-                        <div class="default" style="display: none;">
-                            <p>Default</p>
-                            <input type="text" placeholder="Valor padrão">
-                        </div>
-                    </div>
                 </ul>
-                <button id="criar-tabela-button" onclick="createTableInterface()">
+                <button class="large-button" id="criar-tabela-button" onclick="createTableInterface()">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
                     </svg>
@@ -295,27 +264,88 @@
                 </button>
             </div>
 
-            <div id="editar-colunas" style="display: none;">
-                <div class="menu-criacao-top">
-                    <h1>Editar colunas</h1>
-                    <button onclick="abrirFechar(true, 'editar-colunas')">
+            <div id="configurar-tabela" style="display: none;">
+                <div class="menu-central-justify-between">
+                    <h1 class="text1">Configurar tabela</h1>
+                    <button class="close-button" onclick="abrirFechar(true, 'configurar-tabela')">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        </svg>
+                    </button>
+                </div>
+                <label for="renomear-tabela-input">Nome da tabela</label>
+                <input class="menu-central-input" type="text" id="renomear-tabela-input" name="renomear-tabela-input"
+                    rows="1" placeholder="Ex: minha_tabela">
+                <button class="large-button" onclick="renameTableInterface()">
+                    <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+                        <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+                    </svg>
+                    Confirmar alterações
+                </button>
+                <button class="large-button" style="background-color: var(--green4)"
+                    onclick="abrirFechar(false, 'alterar-colunas'); abrirFechar(true, 'configurar-tabela'); changeEditColumnsMenu()">
+                    <svg viewBox="0 0 512 512" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-edit"></use>
+                    </svg>
+                    Alterar colunas
+                </button>
+                <button class="large-button" style="background-color: var(--blue4)"
+                    onclick="abrirFechar(false, 'adicionar-colunas'); abrirFechar(true, 'configurar-tabela'); changeEditColumnsMenu()">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                    </svg>
+                    Adicionar colunas
+                </button>
+                <button class="large-button" style="background-color: var(--red4)" id="deletar-tabela-button"
+                    onclick="abrirFechar(false, 'confirmar-deletar'); abrirFechar(true, 'configurar-tabela'); changeConfirmDeleteMenu('table')">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
+                    </svg>
+                    Deletar tabela
+                </button>
+            </div>
+
+            <div id="alterar-colunas" style="display: none;">
+                <div class="menu-central-justify-between">
+                    <h1 class="text1">Alterar colunas</h1>
+                    <button class="close-button" onclick="abrirFechar(true, 'alterar-colunas')">
                         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
                             <use href="assets/images/icons-sprite.svg#icon-close"></use>
                         </svg>
                     </button>
                 </div>
 
-                <div>
-                    <h2>Colunas existentes</h2>
+                <div class="menu-central-justify-between">
+                    <h2 class="text2">Colunas existentes</h2>
                 </div>
+
                 <ul id="lista-colunas-existentes">
                     <p>Crie uma tabela para mostrar as colunas existentes</p>
                 </ul>
 
-                <div>
-                    <h2>Colunas</h2>
-                    <button
-                        onclick="createColumnInterface(document.querySelector('#editar-colunas ul:not(#lista-colunas-existentes)'))">
+                <button class="large-button" id="alterar-colunas-button" onclick="alterColumnsInterface()">
+                    <svg viewBox="0 0 512 512" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-edit"></use>
+                    </svg>
+                    Alterar colunas
+                </button>
+
+            </div>
+
+            <div id="adicionar-colunas" style="display: none;">
+                <div class="menu-central-justify-between">
+                    <h1 class="text1">Adicionar colunas</h1>
+                    <button class="close-button" onclick="abrirFechar(true, 'adicionar-colunas')">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="menu-central-justify-between">
+                    <h2 class="text2">Colunas</h2>
+                    <button class="outlined-button"
+                        onclick="createColumnCreationDiv(document.querySelector('#adicionar-colunas ul#criacao-colunas-edit'))">
                         <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
                             <use href="assets/images/icons-sprite.svg#icon-plus"></use>
                         </svg>
@@ -323,82 +353,9 @@
                     </button>
                 </div>
                 <ul id="criacao-colunas-edit">
-                    <div>
-                        <input type="text" placeholder="Nome da coluna">
-
-                        <div class="custom-dropdown">
-                            <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
-                                <span class="custom-dropdown-value">Text</span>
-                            </button>
-                            <ul class="custom-dropdown-menu" tabindex="-1">
-                                <li class="custom-dropdown-option custom-dropdown-option-selected"
-                                    onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment-0'))">
-                                    Text</li>
-                                <li class="custom-dropdown-option"
-                                    onclick="toggleAutoIncrementButton(true, document.getElementById('auto-increment-0'))">
-                                    Integer</li>
-                                <li class="custom-dropdown-option"
-                                    onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment-0'))">
-                                    Float</li>
-                                <li class="custom-dropdown-option"
-                                    onclick="toggleAutoIncrementButton(false, document.getElementById('auto-increment-0'))">
-                                    Boolean</li>
-                            </ul>
-                            <input type="hidden" name="column-type" value="text">
-                        </div>
-
-                        <div class="caracteristics">
-                            <div class="primary-key">
-                                <input type="checkbox" id="primary-key-0" onclick="toggleOnPKButton(this)">
-                                <label for="primary-key-0">Primary key</label>
-                            </div>
-                            <div class="foreign-key">
-                                <input type="checkbox" id="foreign-key-0" onclick="toggleOnFKButton(this)">
-                                <label for="foreign-key-0">Foreign key</label>
-                            </div>
-                            <div class="not-null">
-                                <input type="checkbox" id="not-null-0">
-                                <label for="not-null-0">Not null</label>
-                            </div>
-                            <div class="unique">
-                                <input type="checkbox" id="unique-0">
-                                <label for="unique-0">Unique</label>
-                            </div>
-                            <div class="default-option">
-                                <input type="checkbox" id="default-0" onclick="toggleOnDefaultOptionButton(this)">
-                                <label for="default-0">Default</label>
-                            </div>
-                            <div class="auto-increment" style="display: none;">
-                                <input type="checkbox" id="auto-increment-0">
-                                <label for="auto-increment-0">Auto increment</label>
-                            </div>
-                            <div class="delete-column" onclick="deleteColumnCreationInterface(this)">
-                                <svg viewBox="0 0 24 24" aria-hidden="true">
-                                    <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
-                                </svg>
-                            </div>
-                        </div>
-
-                        <div class="referencia" style="display: none;">
-                            <p>Referência</p>
-                            <div class="custom-dropdown">
-                                <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
-                                    <span class="custom-dropdown-value">Crie outra tabela</span>
-                                </button>
-                                <ul class="custom-dropdown-menu" tabindex="-1">
-                                </ul>
-                                <input type="hidden" name="column-type" value="text">
-                            </div>
-                        </div>
-
-                        <div class="default" style="display: none;">
-                            <p>Default</p>
-                            <input type="text" placeholder="Valor padrão">
-                        </div>
-                    </div>
                 </ul>
 
-                <button id="Adicionar-coluna-button" onclick="alterColumnsInterface()">
+                <button class="large-button" id="Adicionar-coluna-button" onclick="addColumnsInterface()">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
                     </svg>
@@ -408,9 +365,9 @@
             </div>
 
             <div id="inserir-linha" style="display: none;">
-                <div class="menu-criacao-top">
-                    <h1>Inserir nova linha</h1>
-                    <button onclick="abrirFechar(true, 'inserir-linha')">
+                <div class="menu-central-justify-between">
+                    <h1 class="text1">Inserir nova linha</h1>
+                    <button class="close-button" onclick="abrirFechar(true, 'inserir-linha')">
                         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
                             <use href="assets/images/icons-sprite.svg#icon-close"></use>
                         </svg>
@@ -418,12 +375,10 @@
                 </div>
 
                 <ul id="colunas-inserir-linha">
-                    <div>
-                        <h3>Crie uma tabela para começar</h3>
-                    </div>
+                    <p>Crie uma tabela para começar</p>
                 </ul>
 
-                <button id="inserir-linha-button" onclick="insertRowInterface()">
+                <button class="large-button" id="inserir-linha-button" onclick="insertRowInterface()">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
                     </svg>
@@ -432,9 +387,9 @@
             </div>
 
             <div id="editar-linha" style="display: none;">
-                <div class="menu-criacao-top">
-                    <h1>Editar linha</h1>
-                    <button onclick="abrirFechar(true, 'editar-linha')">
+                <div class="menu-central-justify-between">
+                    <h1 class="text1">Editar linha</h1>
+                    <button class="close-button" onclick="abrirFechar(true, 'editar-linha')">
                         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
                             <use href="assets/images/icons-sprite.svg#icon-close"></use>
                         </svg>
@@ -442,37 +397,113 @@
                 </div>
 
                 <ul id="colunas-editar-linha">
-                    <div>
-                        <h3>id</h3>
-                        <p>(INTEGER • PK • NOT NULL)</p>
-                        <input type="text">
-                    </div>
-
-                    <div>
-                        <h3>id</h3>
-                        <p>(BOOLEAN • PK • NOT NULL)</p>
-                        <div class="custom-dropdown">
-                            <button type="button" class="custom-dropdown-trigger" aria-expanded="false">
-                                <span class="custom-dropdown-value">TRUE</span>
-                            </button>
-                            <ul class="custom-dropdown-menu" tabindex="-1">
-                                <li class="custom-dropdown-option custom-dropdown-option-selected">TRUE</li>
-                                <li class="custom-dropdown-option">FALSE</li>
-                            </ul>
-                            <input type="hidden" name="column-type" value="text">
-                        </div>
-                    </div>
-
-
-
                 </ul>
 
-                <button id="editar-linha-button" onclick="editRowInterface()">
+                <button class="large-button" id="editar-linha-button">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
                     </svg>
                     Editar linha
                 </button>
+            </div>
+
+            <div id="confirmar-deletar" style="display: none;">
+                <div class="menu-central-justify-between">
+                    <h1 class="text1">Confirmar exclusão</h1>
+                    <button class="close-button" onclick="abrirFechar(true, 'confirmar-deletar')">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        </svg>
+                    </button>
+                </div>
+                <ul id="confirmar-deletar-lista">
+                    <div>
+                        <h4>Database</h4>
+                        <div>
+                            <p>exemplo_bd</p>
+                            <p>Tabelas: 1</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4>Tabela</h4>
+                        <p>usuarios</p>
+                    </div>
+                    <div>
+                        <h4>Coluna</h4>
+                        <div>
+                            <p>criado_em</p>
+                        </div>
+
+                    </div>
+                </ul>
+                <p style="color: var(--red4)">Essa ação não pode ser desfeita!</p>
+                <br>
+                <button style="background-color: var(--red4);" class="large-button" id="confirmar-deletar-button">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
+                    </svg>
+                    Deletar
+                </button>
+            </div>
+
+            <div id="pesquisar" style="display: none;">
+                <div class="menu-central-justify-between">
+                    <h1 class="text1">Pesquisar</h1>
+                    <button class="close-button" onclick="abrirFechar(true, 'pesquisar')">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="menu-central-justify-between">
+                    <h2 class="text2">Colunas para exibir</h2>
+                </div>
+                <ul>
+                    <div class="outlined" id="colunas-pesquisa">
+                        <div>
+                            <label for="coluna1">
+                                <input type="checkbox" id="coluna1" name="coluna1" value="coluna1">
+                                Coluna 1
+                            </label>
+                        </div>
+                    </div>
+                </ul>
+
+                <div class="menu-central-justify-between">
+                    <h2 class="text2">Relacionamentos</h2>
+                </div>
+
+                <h4 class="text3">Referencia</h4>
+                <div id="references-search">
+                </div>
+
+                <h4 class="text3">Referenciada por</h4>
+                <div id="is-referenced-by-search">
+                </div>
+
+                <div class="menu-central-justify-between">
+                    <h2 class="text2">Condições de pesquisa</h2>
+                    <button class="outlined-button" onclick="createWhereConditionDiv()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+                            <use href="assets/images/icons-sprite.svg#icon-plus"></use>
+                        </svg>
+                        Nova condição
+                    </button>
+                </div>
+
+                <div id="where-conditions">
+
+                </div>
+
+                <button class="large-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                        fill="currentColor">
+                        <path
+                            d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
+                    </svg>Pesquisar
+                </button>
+
             </div>
 
             <div id="notificacoes" style="display: none;">
@@ -482,22 +513,844 @@
 
         <div id="terminal" style="display: none;">
             <header id="terminal-header">
-                <p>>_ SQL Terminal</p>
+                <div id="configure-terminal-sessions">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                        fill="currentColor">
+                        <path
+                            d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z" />
+                    </svg>
+                </div>
+                <div id="terminal-sessions">
+                </div>
+                <button id="create-new-terminal-session" onclick="createTerminalSession()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+                        <use href="assets/images/icons-sprite.svg#icon-plus"></use>
+                    </svg>
+                </button>
             </header>
 
-            <section id="terminal-content">
-                <p class="terminal-content-info">Bem-vindo ao Terminal SQL!</p>
+            <section id="terminal-history">
+                <p class="terminal-content-gray">Bem-vindo ao Terminal SQL!</p>
                 <br>
-                <p class="terminal-content-info">Digite seus comandos SQL abaixo:</p>
+                <p class="terminal-content-gray">Digite seus comandos SQL abaixo:</p>
             </section>
 
             <div id="terminal-input">
-                <label for="terminal-input-field">thifreBD></label>
-                <input type="text" id="terminal-input-field" placeholder="Digite um comando SQL">
+                <span for="terminal-input-field">thifreBD $</span>
+                <textarea rows="1" type="text" id="terminal-input-field" placeholder="Digite um comando SQL"></textarea>
             </div>
+        </div>
+
+        <div id="logical" style="display: none;">
+
+        </div>
+
+        <div id="save" style="display: none;">
+            <div id="acoes-salvar">
+                <div onclick="selectAction(this)" id="save-action" class="acao-escolhida">
+                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                        <path
+                            d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                    </svg>
+                    <div>
+                        <h2>Salvar</h2>
+                        <p>Salve seu progresso para continuar depois</p>
+                    </div>
+                </div>
+                <div onclick="selectAction(this)" id="load-action">
+                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                        <path
+                            d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                    </svg>
+                    <div>
+                        <h2>Carregar</h2>
+                        <p>Carregue um arquivo existente</p>
+                    </div>
+                </div>
+            </div>
+            <div id="opcoes-salvar">
+                <div onclick="selectOption(this)" id="salvar-local" class="opcao-escolhida">
+                    <div>
+                        <svg viewBox="0 -960 960 960" fill="currentColor">
+                            <path
+                                d="M160-280h640v-240H160v240Zm562.5-77.5Q740-375 740-400t-17.5-42.5Q705-460 680-460t-42.5 17.5Q620-425 620-400t17.5 42.5Q655-340 680-340t42.5-17.5ZM880-600H767l-80-80H273l-80 80H80l137-137q11-11 25.5-17t30.5-6h414q16 0 30.5 6t25.5 17l137 137ZM160-200q-33 0-56.5-23.5T80-280v-320h800v320q0 33-23.5 56.5T800-200H160Z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2>Local</h2>
+                        <p>Salve seu progresso no dispositivo</p>
+                    </div>
+                </div>
+                <div onclick="selectOption(this)" id="salvar-json">
+                    <div>
+                        <svg viewBox="0 -960 960 960" fill="currentColor">
+                            <path
+                                d="M560-160v-80h120q17 0 28.5-11.5T720-280v-80q0-38 22-69t58-44v-14q-36-13-58-44t-22-69v-80q0-17-11.5-28.5T680-720H560v-80h120q50 0 85 35t35 85v80q0 17 11.5 28.5T840-560h40v160h-40q-17 0-28.5 11.5T800-360v80q0 50-35 85t-85 35H560Zm-280 0q-50 0-85-35t-35-85v-80q0-17-11.5-28.5T120-400H80v-160h40q17 0 28.5-11.5T160-600v-80q0-50 35-85t85-35h120v80H280q-17 0-28.5 11.5T240-680v80q0 38-22 69t-58 44v14q36 13 58 44t22 69v80q0 17 11.5 28.5T280-240h120v80H280Z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2>Json</h2>
+                        <p>Salve seu progresso em formato JSON</p>
+                    </div>
+                </div>
+                <div onclick="selectOption(this)" id="salvar-sql">
+                    <div>
+                        <svg viewBox="0 -960 960 960" fill="currentColor">
+                            <path
+                                d="M480-120q-151 0-255.5-46.5T120-280v-400q0-66 105.5-113T480-840q149 0 254.5 47T840-680v400q0 67-104.5 113.5T480-120Zm0-479q89 0 179-25.5T760-679q-11-29-100.5-55T480-760q-91 0-178.5 25.5T200-679q14 30 101.5 55T480-599Zm0 199q42 0 81-4t74.5-11.5q35.5-7.5 67-18.5t57.5-25v-120q-26 14-57.5 25t-67 18.5Q600-528 561-524t-81 4q-42 0-82-4t-75.5-11.5Q287-543 256-554t-56-25v120q25 14 56 25t66.5 18.5Q358-408 398-404t82 4Zm0 200q46 0 93.5-7t87.5-18.5q40-11.5 67-26t32-29.5v-98q-26 14-57.5 25t-67 18.5Q600-328 561-324t-81 4q-42 0-82-4t-75.5-11.5Q287-343 256-354t-56-25v99q5 15 31.5 29t66.5 25.5q40 11.5 88 18.5t94 7Z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2>SQL</h2>
+                        <p>Salve seu progresso em formato SQL</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="save-button-div">
+                <button onclick="confirmSaveOrLoad()">
+                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                        <path
+                            d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                    </svg>
+                    Confirmar
+                </button>
+            </div>
+
+            <div id="auto-save-checkbox">
+                <label for="auto-save">Salvar automaticamente</label>
+                <input type="checkbox" id="auto-save" name="auto-save">
+            </div>
+
+            <div id="save-notification" style="display: none;">
+                <p>Progresso salvo com sucesso!</p>
+            </div>
+        </div>
+
+        <div id="help">
+            <section id="help-left">
+                <p>Como usar</p>
+                <div>Introdução</div>
+                <div>Dashboard</div>
+                <div>Terminal</div>
+                <div>Salvar</div>
+                <p>Especificações</p>
+                <div>Tipos de dados</div>
+                <div>Restrições</div>
+                <div>Comandos</div>
+                <div>Erros comuns</div>
+            </section>
+            <div class="separador-vertical"></div>
+            <section id="help-right">
+                <div style="display: none;">
+                    <h1>Introdução</h1>
+
+                    <p>Bem-vindo ao ThifreBD, um sistema de gerenciamento de banco de dados relacional (SGBD) que
+                        permite criar, gerenciar e consultar bancos de dados de forma intuitiva e eficiente. Com o
+                        ThifreBD, você pode criar tabelas, inserir dados, realizar consultas SQL.</p>
+                    <p>Há 2 formas de usar o ThifreBD: o dashboard e o terminal.</p>
+
+                    <div class="help-flex-divs" style="--size: 47%">
+                        <div class="help-box">
+                            <div class="help-icon-text">
+                                <svg viewBox="0 -960 960 960" fill="currentColor"
+                                    style="--cor-fundo: var(--blue9); --cor-borda: var(--blue4); --cor-icone: var(--blue4)">
+                                    <path
+                                        d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h240v-560H200v560Zm320 0h240v-280H520v280Zm0-360h240v-200H520v200Z" />
+                                </svg>
+                                <h2>Dashboard (Interface Gráfica)</h2>
+                            </div>
+                            <p>A interface gráfica permite que você crie e gerencie bancos de dados de forma visual e
+                                intuitiva.</p>
+                            <ul style="--cor-primaria: var(--blue4)">
+                                <li>
+                                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                                        <path
+                                            d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                                    </svg>
+                                    Ideal para quem prefere interação visual
+                                </li>
+                                <li>
+                                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                                        <path
+                                            d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                                    </svg>
+                                    Visualização intuitiva dos dados
+                                </li>
+                                <li>
+                                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                                        <path
+                                            d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                                    </svg>
+                                    Sem necessidade de escrever código SQL
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="help-box">
+                            <div class="help-icon-text">
+                                <svg viewBox="0 -960 960 960" fill="currentColor"
+                                    style="--cor-fundo: var(--green9); --cor-borda: var(--green4); --cor-icone: var(--green4)">
+                                    <path
+                                        d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H160v400Zm140-40-56-56 103-104-104-104 57-56 160 160-160 160Zm180 0v-80h240v80H480Z" />
+                                </svg>
+                                <h2>Terminal (SQL)</h2>
+                            </div>
+                            <p>O terminal permite que você execute comandos SQL diretamente para interagir com o banco
+                                de dados.</p>
+                            <ul style="--cor-primaria: var(--green4)">
+                                <li>
+                                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                                        <path
+                                            d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                                    </svg>
+                                    Ideal para quem prefere trabalhar com comandos SQL
+                                </li>
+                                <li>
+                                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                                        <path
+                                            d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                                    </svg>
+                                    Mais rápido para usuários experientes
+                                </li>
+                                <li>
+                                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                                        <path
+                                            d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                                    </svg>
+                                    Consultas e manipulação de dados mais avançadas
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="help-box">
+                        <div class="help-icon-text" style="--cor-icone: var(--yellow4)">
+                            <svg class="nom" viewBox="0 -960 960 960" fill="currentcolor">
+                                <path
+                                    d="m40-120 440-760 440 760H40Zm138-80h604L480-720 178-200Zm330.5-51.5Q520-263 520-280t-11.5-28.5Q497-320 480-320t-28.5 11.5Q440-297 440-280t11.5 28.5Q463-240 480-240t28.5-11.5ZM440-360h80v-200h-80v200Zm40-100Z" />
+                            </svg>
+                            <h3>Importante</h3>
+                        </div>
+                        <p>Nas 2 formas, os dados são os mesmos. Então alterar algo no dashboard também afetará os dados
+                            no terminal, e vice-versa. Por isso, é possível trabalhar com ambos os métodos
+                            simultaneamente.</p>
+                    </div>
+
+                    <hr>
+
+                    <h2>Como funciona</h2>
+
+                    <div class="help-flex-divs" style="--size: 17.1%">
+                        <div class="help-box">
+                            <div class="help-icon-text" style="--cor-icone: var(--blue4)">
+                                <svg viewBox="0 -960 960 960" fill="currentColor">
+                                    <path
+                                        d="M480-120q-151 0-255.5-46.5T120-280v-400q0-66 105.5-113T480-840q149 0 254.5 47T840-680v400q0 67-104.5 113.5T480-120Zm0-479q89 0 179-25.5T760-679q-11-29-100.5-55T480-760q-91 0-178.5 25.5T200-679q14 30 101.5 55T480-599Zm0 199q42 0 81-4t74.5-11.5q35.5-7.5 67-18.5t57.5-25v-120q-26 14-57.5 25t-67 18.5Q600-528 561-524t-81 4q-42 0-82-4t-75.5-11.5Q287-543 256-554t-56-25v120q25 14 56 25t66.5 18.5Q358-408 398-404t82 4Zm0 200q46 0 93.5-7t87.5-18.5q40-11.5 67-26t32-29.5v-98q-26 14-57.5 25t-67 18.5Q600-328 561-324t-81 4q-42 0-82-4t-75.5-11.5Q287-343 256-354t-56-25v99q5 15 31.5 29t66.5 25.5q40 11.5 88 18.5t94 7Z" />
+                                </svg>
+
+                                <h3>Database</h3>
+                            </div>
+                            <p>Contém um conjunto de schemas</p>
+                        </div>
+                        <div class="help-box">
+                            <div class="help-icon-text" style="--cor-icone: var(--blue4)">
+                                <svg style="border-radius: 0;" viewBox="0 -960 960 960">
+                                    <path d="M160-40v-240h100v-80H160v-240h100v-80H160v-240h280v240H340v80h100v80h120v-80h280v240H560v-80H440v80H340v80h100v240H160Zm80-80h120v-80H240v80Zm0-320h120v-80H240v80Zm400 0h120v-80H640v80ZM240-760h120v-80H240v80Zm60-40Zm0 320Zm400 0ZM300-160Z"/>
+                                </svg>
+
+                                <h3>Schema</h3>
+                            </div>
+                            <p>Contém um conjunto de tabelas</p>
+                        </div>
+
+                        <div class="help-box">
+                            <div class="help-icon-text" style="--cor-icone: var(--green4)">
+                                <svg viewBox="0 -960 960 960" fill="currentColor">
+                                    <path
+                                        d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm240-240H200v160h240v-160Zm80 0v160h240v-160H520Zm-80-80v-160H200v160h240Zm80 0h240v-160H520v160ZM200-680h560v-80H200v80Z" />
+                                </svg>
+                                <h3>Tabela</h3>
+                            </div>
+                            <p>Contém um conjunto de colunas e linhas</p>
+                        </div>
+                        <div class="help-box">
+                            <div class="help-icon-text" style="--cor-icone: var(--red4)">
+                                <svg viewBox="0 -960 960 960" fill="currentColor">
+                                    <path
+                                        d="M121-280v-400q0-33 23.5-56.5T201-760h559q33 0 56.5 23.5T840-680v400q0 33-23.5 56.5T760-200H201q-33 0-56.5-23.5T121-280Zm79 0h133v-400H200v400Zm213 0h133v-400H413v400Zm213 0h133v-400H626v400Z" />
+                                </svg>
+                                <h3>Coluna</h3>
+                            </div>
+                            <p>Representa uma característica ou atributo da tabela</p>
+                        </div>
+                        <div class="help-box">
+                            <div class="help-icon-text" style="--cor-icone: var(--yellow4)">
+                                <svg viewBox="0 -960 960 960" fill="currentColor">
+                                    <path
+                                        d="M760-200v-120H200v120h560Zm0-200v-160H200v160h560Zm0-240v-120H200v120h560ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Z" />
+                                </svg>
+                                <h3>Linha</h3>
+                            </div>
+                            <p>Representa um registro ou instância da tabela</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div style="display: none;">
+                    <h1>Dashboard</h1>
+
+                    <p>O dashboard permite usar o sistema através de uma interface gráfica intuitiva, sem que sejam
+                        necessários conhecimentos de SQL</p>
+
+                    <hr>
+
+                    <h2>Lado esquerdo</h2>
+                    <div class="help-flex-divs" style="--size: 70%;">
+                        <img src="assets/images/thifreBD/dashboard-left.png" alt="Visão da esquerda do dashboard"
+                            style="--width: 22%; --border-color: var(--gray4);">
+                        <div class="help-box">
+                            <p>Na esquerda, é possível criar uma nova database e uma tabela.</p>
+                            <p>Para criar uma nova database, basta clicar no botão de + do lado da palavra "Database".
+                            </p>
+                            <p>Para criar uma nova tabela, selecione uma database existente e clique no botão de + do
+                                lado da palavra "Tabela". Tentar criar tabela sem selecionar uma database não é
+                                permitido.</p>
+                            <p>Para editar uma database existente, clique no botão de edição ao lado da palavra
+                                "Database".</p>
+                            <p>Para mudar a database ativa, clique no dropdown de databases, que possui o nome da
+                                database selecionada. Caso nenhuma database esteja selecionada, o dropdown mostrará
+                                "Selecione uma database". Ao mudar a database, todas as suas tabelas serão exibidas na
+                                parte de tabelas.</p>
+                            <p>Clicar no nome de uma tabela irá selecioná-la e mostrar suas informações na direita.</p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <h2>Lado direito</h2>
+                    <img src="assets/images/thifreBD/dashboard-right1.png" alt="Visão da direita do dashboard"
+                        style="--border-color: var(--gray4); --width: 96%;">
+                    <p>Na topo esquerdo, é mostrado o nome da tabela atual, o número de linhas e o número de colunas.
+                    </p>
+                    <p>No topo direito, há 3 botões: um para adicionar uma nova linha, outro para editar a tabela e um
+                        terceiro para fazer uma pesquisa com base na tabela.</p>
+                    <p>Na parte inferior, é possível visualizar o conteúdo da tabela selecionada. A primeira linha
+                        mostra os nomes das colunas e suas características (tipo, chave primária, etc.).</p>
+                    <p>Ao clicar em "editar tabela", o seguinte menu será exibido:</p>
+
+                    <div class="help-flex-divs" style="--size: 46%">
+                        <img src="assets/images/thifreBD/edit-table-menu.png" alt="Menu de edição da tabela"
+                            style="--border-color: var(--gray4); --width: 47%">
+
+                        <div class="help-box">
+                            <p>O primeiro botão permite mudar o nome da tabela, basta alterar o nome, e clicar em
+                                "Confirmar alterações".</p>
+                            <p>O segundo botão permite modificar as colunas existentes da tabela. O terceiro botão
+                                permite adicionar novas colunas. E o quarto botão permite excluir a tabela.</p>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div style="display: none;">
+                    <h1>Terminal</h1>
+                </div>
+
+                <div style="display: none;">
+                    <h1>Salvar</h1>
+                </div>
+
+                <div style="display: none;">
+                    <h1>Tipos de dados</h1>
+
+                    <p>Os tipos de dados são utilizados para definir o tipo de valor que pode ser armazenado em uma
+                        coluna de uma tabela. Cada tipo de dado tem suas características e limitações específicas.</p>
+
+                    <hr>
+
+                    <h2>Tipos de dados suportados</h2>
+                    <table>
+                        <tr>
+                            <th>Tipo de dado</th>
+                            <th>Descrição</th>
+                            <th>Exemplo</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    <svg viewBox="0 -960 960 960" fill="var(--green5)" style="--size: 16px">
+                                        <path
+                                            d="M280-160v-520H80v-120h520v120H400v520H280Zm360 0v-320H520v-120h360v120H760v320H640Z" />
+                                    </svg>
+                                    Text
+                                </p>
+                            </td>
+                            <td>Armazena texto.</td>
+                            <td>"Olá, mundo!", "batata"</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    <svg viewBox="0 -960 960 960" fill="var(--blue3)">
+                                        <path
+                                            d="m240-160 40-160H120l20-80h160l40-160H180l20-80h160l40-160h80l-40 160h160l40-160h80l-40 160h160l-20 80H660l-40 160h160l-20 80H600l-40 160h-80l40-160H360l-40 160h-80Zm140-240h160l40-160H420l-40 160Z" />
+                                    </svg>
+                                    Integer
+                                </p>
+                            </td>
+                            <td>Armazena números inteiros.</td>
+                            <td>42, -5</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    <svg viewBox="0 -960 960 960" fill="var(--cyan6)">
+                                        <path
+                                            d="m720-80-56-56 63-64H480v-80h247l-63-64 56-56 160 160L720-80ZM80-440v-120h120v120H80Zm201-41q-41-41-41-99v-160q0-58 41-99t99-41q58 0 99 41t41 99v160q0 58-41 99t-99 41q-58 0-99-41Zm360 0q-41-41-41-99v-160q0-58 41-99t99-41q58 0 99 41t41 99v160q0 58-41 99t-99 41q-58 0-99-41Zm-218.5-56.5Q440-555 440-580v-160q0-25-17.5-42.5T380-800q-25 0-42.5 17.5T320-740v160q0 25 17.5 42.5T380-520q25 0 42.5-17.5Zm360 0Q800-555 800-580v-160q0-25-17.5-42.5T740-800q-25 0-42.5 17.5T680-740v160q0 25 17.5 42.5T740-520q25 0 42.5-17.5Z" />
+                                    </svg>
+                                    Float
+                                </p>
+                            </td>
+                            <td>Armazena números decimais.</td>
+                            <td>3.14, -2.5</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    <svg viewBox="0 -960 960 960" fill="var(--purple5)">
+                                        <path
+                                            d="M280-240q-100 0-170-70T40-480q0-100 70-170t170-70h400q100 0 170 70t70 170q0 100-70 170t-170 70H280Zm0-80h400q66 0 113-47t47-113q0-66-47-113t-113-47H280q-66 0-113 47t-47 113q0 66 47 113t113 47Zm85-75q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35Zm115-85Z" />
+                                    </svg>
+                                    Boolean
+                                </p>
+                            </td>
+                            <td>Armazena valores lógicos.</td>
+                            <td>true, false</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    <svg viewBox="0 -960 960 960" fill="var(--orange5)">
+                                        <path
+                                            d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z" />
+                                    </svg>
+                                    Date
+                                </p>
+                            </td>
+                            <td>Armazena datas.</td>
+                            <td>"2023-10-01", "1990-05-15"</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    <svg viewBox="0 -960 960 960" fill="var(--yellow4)">
+                                        <path
+                                            d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z" />
+                                    </svg>
+                                    Time
+                                </p>
+                            </td>
+                            <td>Armazena horas.</td>
+                            <td>"14:30:00", "09:15:30"</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    <svg viewBox="0 -960 960 960" fill="var(--pink5)">
+                                        <path
+                                            d="M348.5-291.5Q360-303 360-320t-11.5-28.5Q337-360 320-360t-28.5 11.5Q280-337 280-320t11.5 28.5Q303-280 320-280t28.5-11.5Zm0-160Q360-463 360-480t-11.5-28.5Q337-520 320-520t-28.5 11.5Q280-497 280-480t11.5 28.5Q303-440 320-440t28.5-11.5Zm0-160Q360-623 360-640t-11.5-28.5Q337-680 320-680t-28.5 11.5Q280-657 280-640t11.5 28.5Q303-600 320-600t28.5-11.5ZM440-280h240v-80H440v80Zm0-160h240v-80H440v80Zm0-160h240v-80H440v80ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z" />
+                                    </svg>
+                                    Enum
+                                </p>
+                            </td>
+                            <td>Armazena valores pré-definidos.</td>
+                            <td>"vermelho", "azul"</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    <svg viewBox="0 -960 960 960" fill="var(--green2)">
+                                        <path
+                                            d="M120-120v-120h200q-84-45-132-125t-48-175q0-142 99-241t241-99q142 0 241 99t99 241q0 95-48 175T640-240h200v120H520v-204q78-14 129-75t51-141q0-92-64-156t-156-64q-92 0-156 64t-64 156q0 80 51 141t129 75v204H120Z" />
+                                    </svg>
+                                    Varchar
+                                </p>
+                            </td>
+                            <td>Armazena strings com um tamanho máximo definido pelo usuário.</td>
+                            <td>"Olá, mundo!", "batata"</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div style="display: none;">
+                    <h1>Restrições</h1>
+                </div>
+
+                <div style="display: none;">
+
+                    <h1>Comandos SQL</h1>
+
+                    <p>
+                        Esta seção apresenta os comandos SQL atualmente suportados pelo SGBD.
+                    </p>
+
+                    <h2>USE</h2>
+                    <p>Seleciona uma database ou schema.</p>
+
+                    <h3>USE DATABASE</h3>
+
+                    <div class="help-box">
+
+                        <h3>Sintaxe</h3>
+
+                        <table>
+                            <tr>
+                                <th>Comando</th>
+                                <th>Descrição</th>
+                            </tr>
+
+                            <tr>
+                                <td>USE database_name;</td>
+                                <td>Seleciona uma database como a database atual.</td>
+                            </tr>
+                        </table>
+
+                        <h3>Exemplo</h3>
+
+                        <table>
+                            <tr>
+                                <td>USE empresa;</td>
+                            </tr>
+                        </table>
+
+                        <p>Após executar o comando, todas as operações serão realizadas na database selecionada.</p>
+
+                    </div>
+
+                    <h3>USE SCHEMA</h3>
+
+                    <div class="help-box">
+
+                        <h3>Sintaxe</h3>
+
+                        <table>
+                            <tr>
+                                <th>Comando</th>
+                                <th>Descrição</th>
+                            </tr>
+
+                            <tr>
+                                <td>USE schema_name;</td>
+                                <td>Seleciona um schema como o schema atual.</td>
+                            </tr>
+                        </table>
+
+                        <h3>Exemplo</h3>
+
+                        <table>
+                            <tr>
+                                <td>USE empresa;</td>
+                            </tr>
+                        </table>
+
+                        <p>Após executar o comando, todas as operações serão realizadas no schema selecionado.</p>
+
+                    </div>
+
+                    <h2>CREATE</h2>
+
+                    <p>O comando CREATE é utilizado para criar novos objetos no banco de dados.</p>
+
+                    <h3>CREATE DATABASE</h3>
+
+                    <div class="help-box">
+
+                        <table>
+                            <tr>
+                                <th>Sintaxe</th>
+                                <th>Descrição</th>
+                            </tr>
+
+                            <tr>
+                                <td>CREATE DATABASE database_name;</td>
+                                <td>Cria uma nova database.</td>
+                            </tr>
+                        </table>
+
+                        <h3>Exemplo</h3>
+
+                        <table>
+                            <tr>
+                                <td>CREATE DATABASE empresa;</td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+                    <h3>CREATE SCHEMA</h3>
+
+                    <div class="help-box">
+
+                        <table>
+                            <tr>
+                                <th>Sintaxe</th>
+                                <th>Descrição</th>
+                            </tr>
+
+                            <tr>
+                                <td>CREATE SCHEMA schema_name;</td>
+                                <td>Cria um novo schema na database atual.</td>
+                            </tr>
+                        </table>
+
+                        <h3>Exemplo</h3>
+
+                        <table>
+                            <tr>
+                                <td>CREATE SCHEMA vendas;</td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+                    <h3>CREATE TABLE</h3>
+
+                    <div class="help-box">
+
+                        <table>
+                            <tr>
+                                <th>Sintaxe</th>
+                                <th>Descrição</th>
+                            </tr>
+
+                            <tr>
+                                <td>CREATE TABLE table_name (...);</td>
+                                <td>Cria uma tabela no schema atual.</td>
+                            </tr>
+
+                            <tr>
+                                <td>CREATE TABLE schema_name.table_name (...);</td>
+                                <td>Cria uma tabela em um schema específico.</td>
+                            </tr>
+                        </table>
+
+                        <h3>Exemplo</h3>
+
+                        <table>
+                            <tr>
+                                <td>
+                                    <pre>
+CREATE TABLE clientes (
+    id INTEGER PRIMARY KEY,
+    nome TEXT NOT NULL,
+    email TEXT,
+    ativo BOOLEAN
+);</pre>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <p>
+                            Cada coluna deve possuir um nome e um tipo de dado. Também é possível
+                            utilizar restrições como PRIMARY KEY,
+                            NOT NULL, UNIQUE,
+                            AUTO_INCREMENT e FOREIGN KEY.
+                        </p>
+
+                    </div>
+
+                    <h2>INSERT</h2>
+                    <p>O comando INSERT é utilizado para adicionar novos registros a uma tabela.</p>
+
+                    <div class="help-box">
+
+                        <table>
+                            <tr>
+                                <th>Sintaxe</th>
+                                <th>Descrição</th>
+                            </tr>
+
+                            <tr>
+                                <td>INSERT INTO table_name (column1, column2, ...) VALUES (value1, value2, ...);</td>
+                                <td>Insere um novo registro na tabela com as colunas especificadas.</td>
+                            </tr>
+                            <tr>
+                                <td>INSERT INTO schema_name.table_name VALUES (value1, value2, ...);</td>
+                                <td>Insere um novo registro na tabela no schema especificado e em todas as colunas.</td>
+                            </tr>
+                        </table>
+
+                        <h3>Exemplo</h3>
+
+                        <table>
+                            <tr>
+                                <td>INSERT INTO clientes (nome, email) VALUES ('João', 'joao@example.com');</td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+                    <h2>ALTER</h2>
+                    <p>O comnado ALTER é utilizado para modificar a estrutura de objetos existentes no banco de dados.
+                    </p>
+
+                    <h3>ALTER DATABASE</h3>
+
+                    <div class="help-box">
+
+                        <table>
+                            <tr>
+                                <th>Sintaxe</th>
+                                <th>Descrição</th>
+                            </tr>
+
+                            <tr>
+                                <td>ALTER DATABASE database_name RENAME TO new_database_name;</td>
+                                <td>Renomeia uma database.</td>
+                            </tr>
+                        </table>
+
+                        <h3>Exemplo</h3>
+
+                        <table>
+                            <tr>
+                                <td>ALTER DATABASE empresa RENAME TO nova_empresa;</td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+                    <h3>ALTER SCHEMA</h3>
+
+                    <div class="help-box">
+
+                        <table>
+                            <tr>
+                                <th>Sintaxe</th>
+                                <th>Descrição</th>
+                            </tr>
+
+                            <tr>
+                                <td>ALTER SCHEMA schema_name RENAME TO new_schema_name;</td>
+                                <td>Renomeia um schema.</td>
+                            </tr>
+                        </table>
+
+                        <h3>Exemplo</h3>
+
+                        <table>
+                            <tr>
+                                <td>ALTER SCHEMA public RENAME TO new_public;</td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+                    <h3>ALTER TABLE</h3>
+
+                    <div class="help-box">
+
+                        <table>
+                            <tr>
+                                <th>Sintaxe</th>
+                                <th>Descrição</th>
+                            </tr>
+
+                            <tr>
+                                <td>ALTER TABLE table_name RENAME TO new_table_name;</td>
+                                <td>Renomeia uma tabela.</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE table_name SET SCHEMA schema_name;</td>
+                                <td>Move uma tabela para um schema específico.</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE table_name ADD COLUMN column_name type;</td>
+                                <td>Adiciona uma nova coluna a uma tabela.</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE table_name DROP COLUMN column_name;</td>
+                                <td>Remove uma coluna de uma tabela.</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE table_name RENAME COLUMN column_name TO new_column_name;</td>
+                                <td>Renomeia uma coluna de uma tabela.</td>
+                            </tr>
+                        </table>
+
+                        <h3>Exemplo</h3>
+
+                        <table>
+                            <tr>
+                                <td>ALTER TABLE usuarios RENAME TO new_usuarios;</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE usuarios SET SCHEMA vendas;</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE usuarios ADD COLUMN data_criacao DATE;</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE usuarios DROP COLUMN ativo;</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE usuarios RENAME COLUMN data_criacao TO data_cadastro;</td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+                    <h3>ALTER TABLE ... ALTER COLUMN</h3>
+
+                    <div class="help-box">
+
+                        <table>
+                            <tr>
+                                <th>Sintaxe</th>
+                                <th>Descrição</th>
+                            </tr>
+
+                            <tr>
+                                <td>ALTER TABLE table_name ALTER COLUMN column_name TYPE tipo;</td>
+                                <td>Altera o tipo de dado de uma coluna.</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE table_name ALTER COLUMN column_name SET restricao;</td>
+                                <td>Adiciona uma restrição a uma coluna.</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE table_name ALTER COLUMN column_name DROP restricao;</td>
+                                <td>Remove uma restrição de uma coluna.</td>
+                            </tr>
+                        </table>
+
+                        <h3>Exemplo</h3>
+
+                        <table>
+                            <tr>
+                                <td>ALTER TABLE usuarios ALTER COLUMN idade TYPE integer;</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE usuarios ALTER COLUMN ativo SET NOT NULL;</td>
+                            </tr>
+                            <tr>
+                                <td>ALTER TABLE usuarios ALTER COLUMN ativo DROP DEFAULT;</td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <div style="display: none;">
+                    <h1>Erros comuns</h1>
+                </div>
+            </section>
         </div>
     </div>
 
-    <script src="assets/js/thifreBD.js"></script>
-    <script src="assets/global/menu.js"></script>
+    <script src="assets/js/pages/thifreBD.js"></script>
+    <script type="module" src="assets/js/others/menu.js"></script>
 </body>

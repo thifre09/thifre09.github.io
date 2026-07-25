@@ -21,6 +21,10 @@
   },
   "homepage": "https://github.com/thifre09/thifre09.github.io#readme",
   "devDependencies": {
+    "prettier": "^3.8.3",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.110.8"
   }
 }

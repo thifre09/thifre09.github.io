@@ -1,99 +1,88 @@
+import * as Auth from "../supabase/auth.js";
+import { supabase } from "../supabase/client.js";
 // carega o menu lateral e a barra de navegação
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     fetch('assets/global/menu.html')
         .then(response => response.text())
         .then(data => {
-
-            // Insere o conteúdo de menu.html diretamente no início do body
-            document.body.insertAdjacentHTML('afterbegin', data);
-
-            let visor = document.getElementById("visor"); // Adiciona a variável visor para a calculadora
-
-            // Personaliza o título do menu
-            const pageTitle = document.body.getAttribute('data-title');
-            const titleElement = document.querySelector('nav h6 a');
-            if (titleElement && pageTitle) {
-                titleElement.textContent = pageTitle;
-            }
-            
-            // Aplicar a todos os elementos
-            mover(document.getElementById('notas-atualizacao'))         
-            mover(document.getElementById('bloco-notas'));
-            mover(document.getElementById('calculadora'));
-            //mover(document.getElementById('conquistas-geral'));
-            mover(document.getElementById('configuracoes'));
-
-            criarNotasAtualizacao();
-        })
-
+        // Insere o conteúdo de menu.html diretamente no início do body
+        document.body.insertAdjacentHTML('afterbegin', data);
+        let visor = document.getElementById("visor"); // Adiciona a variável visor para a calculadora
+        // Personaliza o título do menu
+        const pageTitle = document.body.getAttribute('data-title');
+        const titleElement = document.querySelector('nav h6 a');
+        if (titleElement && pageTitle) {
+            titleElement.textContent = pageTitle;
+        }
+        // Aplicar a todos os elementos
+        mover(document.getElementById('notas-atualizacao'));
+        mover(document.getElementById('bloco-notas'));
+        mover(document.getElementById('calculadora'));
+        //mover(document.getElementById('conquistas-geral'));
+        mover(document.getElementById('configuracoes'));
+        mover(document.getElementById('conta'));
+        criarNotasAtualizacao();
+    })
         .catch(error => console.error('Erro ao carregar o menu:', error)); // Exibe um erro no console caso haja algum problema ao carregar o menu
-
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+        mostrarUsuario();
+    }
 });
-
 function mover(objeto) {
     let draggedElement = null;
     let shiftX, shiftY;
     let isDragging = false;
     let animationFrameId = null;
     const MOVE_THRESHOLD = 5;
-
     // Valores de destino para a animação
     let targetX = 0;
     let targetY = 0;
-
     const updatePosition = () => {
-        if (!draggedElement) return;
-
+        if (!draggedElement)
+            return;
         // Aplica a posição apenas no momento em que a tela vai atualizar
         draggedElement.style.left = `${targetX}px`;
         draggedElement.style.top = `${targetY}px`;
-
         animationFrameId = requestAnimationFrame(updatePosition);
     };
-
     objeto.addEventListener('mousedown', (e) => {
-        if (e.target.tagName === 'IMG') return;
-
+        if (!e)
+            return;
         draggedElement = objeto;
         const rect = draggedElement.getBoundingClientRect();
-        
         shiftX = e.clientX - rect.left;
         shiftY = e.clientY - rect.top;
-        
         const startX = e.clientX;
         const startY = e.clientY;
         isDragging = false;
-
         const onMouseMove = (e) => {
-            if (!isDragging && 
-                (Math.abs(e.clientX - startX) > MOVE_THRESHOLD || 
-                Math.abs(e.clientY - startY) > MOVE_THRESHOLD)) {
+            if (!isDragging &&
+                (Math.abs(e.clientX - startX) > MOVE_THRESHOLD ||
+                    Math.abs(e.clientY - startY) > MOVE_THRESHOLD)) {
                 isDragging = true;
                 // Inicia o ciclo de animação
                 animationFrameId = requestAnimationFrame(updatePosition);
             }
-
             if (isDragging) {
                 // Em vez de mover o DOM aqui, apenas guardamos as coordenadas
                 targetX = e.pageX - shiftX - window.scrollX;
                 targetY = e.pageY - shiftY - window.scrollY;
             }
         };
-
         const onMouseUp = () => {
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
-            
-            // Para o ciclo de animação
-            cancelAnimationFrame(animationFrameId);
+            if (animationFrameId !== null) {
+                // Para o ciclo de animação
+                cancelAnimationFrame(animationFrameId);
+            }
             draggedElement = null;
         };
-
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
     });
 }
-
 function abrirMenu(estado) {
     let barra = document.getElementById("menu-lateral");
     let botao = document.getElementById("botao-menu-lateral-reserva");
@@ -105,7 +94,8 @@ function abrirMenu(estado) {
                 botao.style.display = "block";
             }
         }, 690);
-    } else if (estado === false) {
+    }
+    else if (estado === false) {
         barra.style.animation = "abrirMenu 0.7s normal";
         barra.style.display = "flex";
         if (!bannerAtivo) {
@@ -113,53 +103,52 @@ function abrirMenu(estado) {
         }
     }
 }
-
 function abrir(estado, id) {
     let element = document.getElementById(id);
     if (estado === true) {
         element.style.display = "none";
-    } else if (estado === false) {
+    }
+    else if (estado === false) {
         element.style.display = "block";
     }
 }
-
 // #region Notas da atualização
-
-const tipoNota = Object.freeze({
-    ATUALIZACAO: "atualizacao",
-    CORRECAO: "correcao",
-    NOVO_RECURSO: "novo_recurso",
-    RECURSO_REMOVIDO: "recurso_removido"
-});
-
-const relacionado = Object.freeze({
+var tipoNota;
+(function (tipoNota) {
+    tipoNota["ATUALIZACAO"] = "atualizacao";
+    tipoNota["CORRECAO"] = "correcao";
+    tipoNota["NOVO_RECURSO"] = "novo_recurso";
+    tipoNota["RECURSO_REMOVIDO"] = "recurso_removido";
+})(tipoNota || (tipoNota = {}));
+;
+var relacionado;
+(function (relacionado) {
     //Geral
-    PAGINA_INICIAL: "Página inicial",
-    GERAL: "Geral",
+    relacionado["PAGINA_INICIAL"] = "P\u00E1gina inicial";
+    relacionado["GERAL"] = "Geral";
     // Paginas
-    BATATAS: "Batatas",
-    CODIFICADOR: "Codificador",
-    CORES: "Cores",
-    CURIOSIDADES: "Curiosidades",
-    MAYOR_SIMULATOR: "Mayor Simulator",
-    MEMES: "Memes",
-    NUMEROS: "Números",
-    PODER_DO_CSS: "Poder do CSS",
-    PYTHON: "Python",
-    QUADRADO_CLICKER: "Quadrado Clicker",
-    REVIEW_DE_JOGOS: "Review de jogos",
-    THIFREBD: "ThifreBD"
-});
-
+    relacionado["BATATAS"] = "Batatas";
+    relacionado["CODIFICADOR"] = "Codificador";
+    relacionado["CORES"] = "Cores";
+    relacionado["CURIOSIDADES"] = "Curiosidades";
+    relacionado["MAYOR_SIMULATOR"] = "Mayor Simulator";
+    relacionado["MEMES"] = "Memes";
+    relacionado["NUMEROS"] = "N\u00FAmeros";
+    relacionado["PODER_DO_CSS"] = "Poder do CSS";
+    relacionado["PYTHON"] = "Python";
+    relacionado["QUADRADO_CLICKER"] = "Quadrado Clicker";
+    relacionado["REVIEW_DE_JOGOS"] = "Review de jogos";
+    relacionado["THIFREBD"] = "ThifreBD";
+})(relacionado || (relacionado = {}));
+;
 class NotaAtualizacao {
-    constructor(titulo, descricao, tipo, relacionado = []) {
+    constructor(titulo, descricao, tipo, relacionado) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.tipo = tipo;
         this.relacionado = relacionado;
     }
 }
-
 class Atualizacao {
     constructor(nome, data, notas) {
         this.nome = nome;
@@ -167,7 +156,6 @@ class Atualizacao {
         this.notas = notas;
     }
 }
-
 const atualizacoes = [
     new Atualizacao("Beta 3.0.1", "08/04/2026", [
         new NotaAtualizacao("Correção de pequenos bugs", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do site.", tipoNota.CORRECAO, relacionado.GERAL),
@@ -179,7 +167,7 @@ const atualizacoes = [
         new NotaAtualizacao("Criação da página Mayor Simulator", "Foi criado o jogo Mayor Simulator. Nele você administra uma cidade e precisa garantir que os cidadãos fiquem felizes.", tipoNota.NOVO_RECURSO, relacionado.MAYOR_SIMULATOR),
         new NotaAtualizacao("Criação da página ThifreBD", "Essa página serve como um SGBD simples e intuitivo para iniciantes. OBS: o terminal ainda não está funcional.", tipoNota.NOVO_RECURSO, relacionado.THIFREBD),
         new NotaAtualizacao("Atualização da barra lateral", "A barra lateral foi atualizada com um design completamente novo, mais moderno e responsivo.", tipoNota.ATUALIZACAO, relacionado.GERAL),
-        new NotaAtualizacao("Padronização das cores", "As cores do site foram padronizadas em quase todas as páginas",tipoNota.ATUALIZACAO, relacionado.GERAL),
+        new NotaAtualizacao("Padronização das cores", "As cores do site foram padronizadas em quase todas as páginas", tipoNota.ATUALIZACAO, relacionado.GERAL),
         new NotaAtualizacao("Atualização da página Review de jogos", "O layout da página foi melhorado, e mais jogos foram adicionados.", tipoNota.ATUALIZACAO, relacionado.REVIEW_DE_JOGOS),
         new NotaAtualizacao("Atualização da página Cores", "O layout da página foi completamente refeito. Também foi adicionada a opção de copiar as cores ao clicar no texto delas, e a opção de expandir a cor para a página toda.", tipoNota.ATUALIZACAO, relacionado.CORES),
         new NotaAtualizacao("Atualização da página Codificador", "O layout da página foi completamente refeito", tipoNota.ATUALIZACAO, relacionado.CODIFICADOR),
@@ -253,26 +241,20 @@ const atualizacoes = [
         new NotaAtualizacao("Criação do banner principal", "Essa banner é uma faixa que muda de cor e aparece no topo de todas as páginas, dando boas vindas ao usuário e dizendo em qual página do site ele está.", tipoNota.NOVO_RECURSO, relacionado.GERAL)
     ])
 ];
-
 function criarNotasAtualizacao() {
     const notasContainer = document.getElementById("notas-atualizacao-container");
-
     atualizacoes.forEach(atualizacao => {
         const divAtualizacao = document.createElement("div");
         divAtualizacao.classList.add("atualizacao");
         notasContainer.appendChild(divAtualizacao);
-
         const divVersaoData = document.createElement("div");
         divVersaoData.classList.add("versao-data");
         divAtualizacao.appendChild(divVersaoData);
-
         const h2titulo = document.createElement("h2");
         h2titulo.textContent = atualizacao.nome;
         divVersaoData.appendChild(h2titulo);
-
         const divData = document.createElement("div");
         divData.classList.add("data-container");
-        
         divData.innerHTML = `
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
@@ -281,44 +263,34 @@ function criarNotasAtualizacao() {
                 <line x1="3" x2="21" y1="10" y2="10" />
             </svg>`;
         divVersaoData.appendChild(divData);
-
         const data = document.createElement("p");
         data.classList.add("data");
         data.textContent = atualizacao.data;
         divData.appendChild(data);
-
         const ulNotas = document.createElement("ul");
         divAtualizacao.appendChild(ulNotas);
-
         atualizacao.notas.forEach(nota => {
             const liNota = document.createElement("li");
             liNota.classList.add("nota");
             liNota.classList.add(`nota-${nota.tipo.toLowerCase()}`);
-            
             const divTipo = document.createElement("div");
             divTipo.classList.add("tipo-nota");
             liNota.appendChild(divTipo);
-
             const tipo = document.createElement("h4");
             tipo.textContent = nota.tipo.replace("_", " ").toUpperCase();
             divTipo.appendChild(tipo);
-
             const h3tituloNota = document.createElement("h3");
             h3tituloNota.textContent = nota.titulo;
             liNota.appendChild(h3tituloNota);
-
             const pDescricao = document.createElement("p");
             pDescricao.classList.add("descricao");
             pDescricao.textContent = nota.descricao;
             liNota.appendChild(pDescricao);
-
             const pRelacionado = document.createElement("p");
             pRelacionado.classList.add("relacionado");
             pRelacionado.textContent = nota.relacionado;
             liNota.appendChild(pRelacionado);
-
             ulNotas.appendChild(liNota);
-
             switch (nota.tipo) {
                 case tipoNota.ATUALIZACAO:
                     divTipo.innerHTML += `
@@ -422,11 +394,8 @@ function criarNotasAtualizacao() {
         });
     });
 }
-
 //#endregion
-
 // #region Bloco de notas
-
 class Nota {
     constructor(titulo, conteudo) {
         this.titulo = titulo;
@@ -434,25 +403,20 @@ class Nota {
         this.data = new Date();
     }
 }
-
-let notas = []
+let notas = [];
 let indexEditarNota = 0;
-
 function novaNota() {
     const divTopoCriarNota = document.getElementById("topo-criar-nota");
     const divTopoNotasContainer = document.getElementById("topo-notas-container");
     divTopoCriarNota.style.display = "flex";
     divTopoNotasContainer.style.display = "none";
-
     const divNotasContainer = document.getElementById("notas-container");
     const divCriarNota = document.getElementById("criar-nota");
     divNotasContainer.style.display = "none";
     divCriarNota.style.display = "flex";
-
     document.getElementById("titulo-criar-nota").value = "";
     document.getElementById("conteudo-criar-nota").value = "";
 }
-
 function voltarParaNotas() {
     const divTopoCriarNota = document.getElementById("topo-criar-nota");
     const divTopoNotasContainer = document.getElementById("topo-notas-container");
@@ -460,7 +424,6 @@ function voltarParaNotas() {
     divTopoCriarNota.style.display = "none";
     divTopoNotasContainer.style.display = "flex";
     divTopoEditarNota.style.display = "none";
-
     const divNotasContainer = document.getElementById("notas-container");
     const divCriarNota = document.getElementById("criar-nota");
     const divEditarNota = document.getElementById("editar-nota");
@@ -468,44 +431,34 @@ function voltarParaNotas() {
     divCriarNota.style.display = "none";
     divEditarNota.style.display = "none";
 }
-
 function criarNota() {
     const divNenhumaNotaAinda = document.getElementById("nenhuma-nota-ainda");
     divNenhumaNotaAinda.style.display = "none";
-
     voltarParaNotas();
-
     const titulo = document.getElementById("titulo-criar-nota").value;
     const conteudo = document.getElementById("conteudo-criar-nota").value;
-    let nota = new Nota(titulo, conteudo)
-    notas.push(nota)
-
+    let nota = new Nota(titulo, conteudo);
+    notas.push(nota);
     const divNota = document.createElement("div");
     divNota.classList.add("nota");
-
     const h3Titulo = document.createElement("h3");
     h3Titulo.textContent = titulo;
     divNota.appendChild(h3Titulo);
-
     const pConteudo = document.createElement("p");
     pConteudo.classList.add("conteudo-nota");
     pConteudo.textContent = conteudo;
     divNota.appendChild(pConteudo);
-
     const pData = document.createElement("p");
     pData.classList.add("data-nota");
     let dataStr = String(nota.data.getDay()) + " de " + nota.data.toLocaleString("pt-BR", { month: "long" }) + " de " + String(nota.data.getFullYear()) + " às " + nota.data.getHours() + ":" + String(nota.data.getMinutes()).padStart(2, "0");
     pData.textContent = dataStr;
     divNota.appendChild(pData);
-
     const divEditarExcluir = document.createElement("div");
-
     const buttonEditar = document.createElement("button");
     buttonEditar.innerHTML = "<img src='assets/images/icones-uteis/pencil.png'> Editar";
-    indexEditarNota = notas.indexOf(nota)
-    buttonEditar.addEventListener("click", () => editarNota(notas.indexOf(nota)))
+    indexEditarNota = notas.indexOf(nota);
+    buttonEditar.addEventListener("click", () => editarNota(notas.indexOf(nota)));
     divEditarExcluir.appendChild(buttonEditar);
-
     const buttonExcluir = document.createElement("button");
     buttonExcluir.addEventListener("click", () => excluirNota(notas.indexOf(nota)));
     buttonExcluir.innerHTML = `
@@ -516,92 +469,82 @@ function criarNota() {
                 <line x1="14" y1="11" x2="14" y2="17"/>
             </svg>
             `;
-    divEditarExcluir.appendChild(buttonExcluir)
-
+    divEditarExcluir.appendChild(buttonExcluir);
     divNota.appendChild(divEditarExcluir);
     const divNotas = document.getElementById("notas");
     divNotas.appendChild(divNota);
 }
-
 function editarNota(index) {
     indexEditarNota = index;
     const divTopoEditarNota = document.getElementById("topo-editar-nota");
     const divTopoNotasContainer = document.getElementById("topo-notas-container");
     divTopoEditarNota.style.display = "flex";
     divTopoNotasContainer.style.display = "none";
-
     const divNotasContainer = document.getElementById("notas-container");
     const divEditarNota = document.getElementById("editar-nota");
     divNotasContainer.style.display = "none";
     divEditarNota.style.display = "flex";
-
     document.getElementById("titulo-editar-nota").value = notas[index].titulo;
     document.getElementById("conteudo-editar-nota").value = notas[index].conteudo;
 }
-
 function salvarAlteracoesNota() {
     notas[indexEditarNota].titulo = document.getElementById("titulo-editar-nota").value;
     notas[indexEditarNota].conteudo = document.getElementById("conteudo-editar-nota").value;
     document.querySelectorAll("div.nota h3")[indexEditarNota].textContent = notas[indexEditarNota].titulo;
     document.querySelectorAll("div.nota p.conteudo-nota")[indexEditarNota].textContent = notas[indexEditarNota].conteudo;
-
     voltarParaNotas();
 }
-
 function excluirNota(index) {
     notas.splice(index, 1);
-    document.querySelectorAll("div.nota")[index].remove()
+    document.querySelectorAll("div.nota")[index].remove();
 }
-
 //#endregion
-
 // #region Calculadora
-
 let currentInput = '0';
 let previousInput = '';
 let operator = null;
-
 function updateDisplay() {
     const currentDisplay = document.getElementById('current-operand');
     const previousDisplay = document.getElementById('previous-operand');
     currentDisplay.innerText = currentInput;
     previousDisplay.innerText = operator ? `${previousInput} ${operator}` : '';
 }
-
 function appendNumber(number) {
-    if (number === '.' && currentInput.includes('.')) return;
+    if (number === '.' && currentInput.includes('.'))
+        return;
     if (currentInput === '0' && number !== '.') {
         currentInput = number;
-    } else {
+    }
+    else {
         currentInput += number;
     }
     updateDisplay();
 }
-
 function appendOperator(op) {
-    if (currentInput === '') return;
-    if (previousInput !== '') compute();
+    if (currentInput === '')
+        return;
+    if (previousInput !== '')
+        compute();
     operator = op;
     previousInput = currentInput;
     currentInput = '';
     updateDisplay();
 }
-
 function clearDisplay() {
     currentInput = '0';
     previousInput = '';
     operator = null;
     updateDisplay();
 }
-
 function deleteDigit() {
     currentInput = currentInput.toString().slice(0, -1);
-    if (currentInput === '') currentInput = '0';
+    if (currentInput === '')
+        currentInput = '0';
     updateDisplay();
 }
-
 function calculateSqrt() {
-    if (currentInput === '') return;
+    if (currentInput === '')
+        return;
     const value = parseFloat(currentInput);
     if (value < 0) {
         alert("Não é possível calcular raiz de número negativo");
@@ -610,164 +553,279 @@ function calculateSqrt() {
     currentInput = Math.sqrt(value).toString();
     updateDisplay();
 }
-
 function compute() {
     let result;
     const prev = parseFloat(previousInput);
     const current = parseFloat(currentInput);
-    if (isNaN(prev) || isNaN(current)) return;
-
+    if (isNaN(prev) || isNaN(current))
+        return;
     switch (operator) {
-        case '+': result = prev + current; break;
-        case '-': result = prev - current; break;
-        case '*': result = prev * current; break;
-        case '/': result = prev / current; break;
-        case '**': result = Math.pow(prev, current); break; // Nova operação
+        case '+':
+            result = prev + current;
+            break;
+        case '-':
+            result = prev - current;
+            break;
+        case '*':
+            result = prev * current;
+            break;
+        case '/':
+            result = prev / current;
+            break;
+        case '**':
+            result = Math.pow(prev, current);
+            break; // Nova operação
         default: return;
     }
-
     currentInput = result.toString();
     operator = null;
     previousInput = '';
     updateDisplay();
 }
-
 //#endregion
-
 // #region Conquistas
-
-class ConquistaGeral {
-    constructor(img = "", descricao = "", possui = false) {
-        this.img = img;
-        this.descricao = descricao;
-        this.possui = possui;
-    }
-}
-
-const conquistasLista = [];
-const path = "assets/images/conquistas-geral/";
-
-const descricoes = [
-    "Responda o quiz de batatas",
-    "Use o codificador 1 vez",
-    "Clique na cor secreta",
-    "Clique no botão secreto do menu principal",
-    "Clique no jogo com a menor nota",
-    "Clique no número 63",
-    "Desative o css 1 vez",
-    "Veja todo o mini curso de python",
-    "Consiga todas as conquistas do Quadrado clicker"
-];
-
-// Inicializa com imagens e descrições
-function inicializarConquistas() {
-    for (let i = 1; i <= descricoes.length; i++) {
-        const img = new Image();
-        img.src = `${path}conquista${i}.png`;
-        conquistasLista.push(new ConquistaGeral(img, descricoes[i - 1], false));
-    }
-}
-
-// Salva no localStorage
-function salvarConquistasGeral() {
-    const dadosParaSalvar = conquistasLista.map(c => ({
-        descricao: c.descricao,
-        possui: c.possui
-    }));
-    localStorage.setItem("ECS", JSON.stringify(dadosParaSalvar));
-}
-
-// Carrega do localStorage e aplica no array
-function carregarConquistasGeral() {
-    const estadoConquistasSalvas = localStorage.getItem("ECS");
-    if (estadoConquistasSalvas) {
-        const estado = JSON.parse(estadoConquistasSalvas);
-        estado.forEach((element, index) => {
-            conquistasLista[index].possui = element.possui;
-        });
-    }
-}
-
-// Renderiza as conquistas no HTML
-function adicionarConquistasGeral() {
-    const conquistasContainer = document.getElementById("conquistas-container");
-    if (conquistasContainer === null) {
-        console.warn("adicionarConquistasGeral: 'conquistas-container' não encontrado. Chame adicionarConquistasGeral() após a injeção de 'menu.html'.");
-        return;
-    }
-    conquistasContainer.innerHTML = "";
-
-    conquistasLista.forEach((element) => {
-        const div = document.createElement("div");
-        div.classList.add("conquista");
-
-        const img = document.createElement("img");
-        img.src = element.img.src;
-        img.style.filter = element.possui ? "grayscale(0)" : "grayscale(100%)";
-
-        const divDescricao = document.createElement("div");
-        divDescricao.classList.add("descricao-conquista");
-        divDescricao.innerHTML = `<p>${element.descricao}</p>`;
-
-        div.appendChild(img);
-        div.appendChild(divDescricao);
-        conquistasContainer.appendChild(div);
-    });
-}
-
-// Verifica os eventos para liberar conquistas
-function verificarConquistasGeral() {
-    const eventos = [
-        { id: "botao", index: 0 },
-        { id: "criptografar", index: 1 },
-        { id: "descriptografar", index: 1 },
-        { id: "corBotaoSecreto", index: 2 },
-        { id: "footerBotaoSecreto", index: 3 },
-        { id: "jogoBotaoSecreto", index: 4 },
-        { id: "63", index: 5 },
-        { id: "botao-css", index: 6 },
-        { id: "pythonBotaoSecreto", index: 7 }
-        // A conquista 8 provavelmente será desbloqueada de outra forma
-    ];
-
-    eventos.forEach((evento) => {
-        const elemento = document.getElementById(evento.id);
-        if (elemento) {
-            elemento.addEventListener("click", () => {
-                if (!conquistasLista[evento.index].possui) {
-                    conquistasLista[evento.index].possui = true;
-                    salvarConquistasGeral();
-                    adicionarConquistasGeral();
-                }
-            });
-        }
-    });
-}
-
+// class ConquistaGeral {
+//     constructor(img = "", descricao = "", possui = false) {
+//         this.img = img;
+//         this.descricao = descricao;
+//         this.possui = possui;
+//     }
+// }
+// const conquistasLista = [];
+// const path = "assets/images/conquistas-geral/";
+// const descricoes = [
+//     "Responda o quiz de batatas",
+//     "Use o codificador 1 vez",
+//     "Clique na cor secreta",
+//     "Clique no botão secreto do menu principal",
+//     "Clique no jogo com a menor nota",
+//     "Clique no número 63",
+//     "Desative o css 1 vez",
+//     "Veja todo o mini curso de python",
+//     "Consiga todas as conquistas do Quadrado clicker"
+// ];
+// // Inicializa com imagens e descrições
+// function inicializarConquistas() {
+//     for (let i = 1; i <= descricoes.length; i++) {
+//         const img = new Image();
+//         img.src = `${path}conquista${i}.png`;
+//         conquistasLista.push(new ConquistaGeral(img, descricoes[i - 1], false));
+//     }
+// }
+// // Salva no localStorage
+// function salvarConquistasGeral() {
+//     const dadosParaSalvar = conquistasLista.map(c => ({
+//         descricao: c.descricao,
+//         possui: c.possui
+//     }));
+//     localStorage.setItem("ECS", JSON.stringify(dadosParaSalvar));
+// }
+// // Carrega do localStorage e aplica no array
+// function carregarConquistasGeral() {
+//     const estadoConquistasSalvas = localStorage.getItem("ECS");
+//     if (estadoConquistasSalvas) {
+//         const estado = JSON.parse(estadoConquistasSalvas);
+//         estado.forEach((element, index) => {
+//             conquistasLista[index].possui = element.possui;
+//         });
+//     }
+// }
+// // Renderiza as conquistas no HTML
+// function adicionarConquistasGeral() {
+//     const conquistasContainer = document.getElementById("conquistas-container");
+//     if (conquistasContainer === null) {
+//         console.warn("adicionarConquistasGeral: 'conquistas-container' não encontrado. Chame adicionarConquistasGeral() após a injeção de 'menu.html'.");
+//         return;
+//     }
+//     conquistasContainer.innerHTML = "";
+//     conquistasLista.forEach((element) => {
+//         const div = document.createElement("div");
+//         div.classList.add("conquista");
+//         const img = document.createElement("img");
+//         img.src = element.img.src;
+//         img.style.filter = element.possui ? "grayscale(0)" : "grayscale(100%)";
+//         const divDescricao = document.createElement("div");
+//         divDescricao.classList.add("descricao-conquista");
+//         divDescricao.innerHTML = `<p>${element.descricao}</p>`;
+//         div.appendChild(img);
+//         div.appendChild(divDescricao);
+//         conquistasContainer.appendChild(div);
+//     });
+// }
+// // Verifica os eventos para liberar conquistas
+// function verificarConquistasGeral() {
+//     const eventos = [
+//         { id: "botao", index: 0 },
+//         { id: "criptografar", index: 1 },
+//         { id: "descriptografar", index: 1 },
+//         { id: "corBotaoSecreto", index: 2 },
+//         { id: "footerBotaoSecreto", index: 3 },
+//         { id: "jogoBotaoSecreto", index: 4 },
+//         { id: "63", index: 5 },
+//         { id: "botao-css", index: 6 },
+//         { id: "pythonBotaoSecreto", index: 7 }
+//         // A conquista 8 provavelmente será desbloqueada de outra forma
+//     ];
+//     eventos.forEach((evento) => {
+//         const elemento = document.getElementById(evento.id);
+//         if (elemento) {
+//             elemento.addEventListener("click", () => {
+//                 if (!conquistasLista[evento.index].possui) {
+//                     conquistasLista[evento.index].possui = true;
+//                     salvarConquistasGeral();
+//                     adicionarConquistasGeral();
+//                 }
+//             });
+//         }
+//     });
+// }
 // Inicialização completa
-window.addEventListener("DOMContentLoaded", () => {
-    inicializarConquistas();
-    carregarConquistasGeral();
-    adicionarConquistasGeral();
-    verificarConquistasGeral();
-});
-
+// window.addEventListener("DOMContentLoaded", () => {
+//     inicializarConquistas();
+//     carregarConquistasGeral();
+//     adicionarConquistasGeral();
+//     verificarConquistasGeral();
+// });
 //#endregion
-
 // #region Configurações
 let bannerAtivo = true;
-
 function toggleBanner() {
     if (bannerAtivo) {
         document.getElementById("barra-main").style.display = "none";
         document.getElementById("title").style.display = "none";
         document.getElementById("botao-menu-lateral-reserva").style.display = "block";
         bannerAtivo = false;
-    } else {
+    }
+    else {
         document.getElementById("barra-main").style.display = "flex";
         document.getElementById("title").style.display = "block";
         document.getElementById("botao-menu-lateral-reserva").style.display = "none";
         bannerAtivo = true;
     }
 }
+//#endregion
+// #region autenticar e login
+function irParaTelaConta(id) {
+    const asideScroll = document.querySelector("div#conta .aside-scroll");
+    for (let i = 0; i < asideScroll.children.length; i++) {
+        const child = asideScroll.children[i];
+        if (child.id === id) {
+            child.style.display = "flex";
+        }
+        else {
+            child.style.display = "none";
+        }
+    }
+}
+async function cadastrarConta() {
+    const nomeUsuario = document.getElementById("nome-usuario-cadastro").value;
+    const email = document.getElementById("email-cadastro").value;
+    const senha = document.getElementById("senha-cadastro").value;
+    if (!nomeUsuario || !email || !senha) {
+        alert("Por favor, preencha todos os campos.");
+        return;
+    }
+    const { data, error } = await Auth.signUp(email, senha);
+    if (error) {
+        alert(error.message);
+        return;
+    }
+    const { error: updateError } = await supabase.from("profiles").update({ username: nomeUsuario })
+        .eq("id", data.user.id);
+    if (updateError) {
+        alert(updateError.message);
+        return;
+    }
+    mostrarUsuario();
+}
+async function loginConta() {
+    try {
+        const email = document.getElementById("email-login").value;
+        const senha = document.getElementById("senha-login").value;
+        if (!email || !senha) {
+            alert("Por favor, preencha todos os campos.");
+            return;
+        }
+        const { data, error } = await Auth.signIn(email, senha);
+        if (error) {
+            alert(error.message);
+            return;
+        }
+        mostrarUsuario();
+    }
+    catch (error) {
+        console.error("Erro ao fazer login:", error);
+    }
+}
+async function mostrarUsuario() {
+    let user;
+    try {
+        user = await Auth.getUser();
+    }
+    catch (error) {
+        console.error("Erro ao obter usuário:", error);
+        return;
+    }
+    if (!user) {
+        console.log("Usuário não está logado.");
+        return;
+    }
+    const { data, error } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+    if (error) {
+        console.error(error);
+        return;
+    }
+    irParaTelaConta("usuario-logado");
+    const divUsuarioLogado = document.getElementById("nome-usuario-logado");
+    const divEmailLogado = document.getElementById("email-usuario-logado");
+    divUsuarioLogado.textContent = data.username;
+    divEmailLogado.textContent = user.email;
+}
+//#endregion
+// #region window global functions
+//@ts-ignore
+window.abrirMenu = abrirMenu;
+//@ts-ignore
+window.abrir = abrir;
+//@ts-ignore
+window.criarNotasAtualizacao = criarNotasAtualizacao;
+//@ts-ignore
+window.novaNota = novaNota;
+//@ts-ignore
+window.voltarParaNotas = voltarParaNotas;
+//@ts-ignore
+window.criarNota = criarNota;
+//@ts-ignore
+window.editarNota = editarNota;
+//@ts-ignore
+window.salvarAlteracoesNota = salvarAlteracoesNota;
+//@ts-ignore
+window.excluirNota = excluirNota;
+//@ts-ignore
+window.updateDisplay = updateDisplay;
+//@ts-ignore
+window.appendNumber = appendNumber;
+//@ts-ignore
+window.appendOperator = appendOperator;
+//@ts-ignore
+window.clearDisplay = clearDisplay;
+//@ts-ignore
+window.deleteDigit = deleteDigit;
+//@ts-ignore
+window.calculateSqrt = calculateSqrt;
+//@ts-ignore
+window.compute = compute;
+//@ts-ignore
+window.toggleBanner = toggleBanner;
+//@ts-ignore
+window.irParaTelaConta = irParaTelaConta;
+//@ts-ignore
+window.cadastrarConta = cadastrarConta;
+//@ts-ignore
+window.loginConta = loginConta;
+//@ts-ignore
+window.mostrarUsuario = mostrarUsuario;
+window.supabase = supabase;
+window.getUser = Auth.getUser;
+window.isUserLoggedIn = Auth.isUserLoggedIn;
 //#endregion
