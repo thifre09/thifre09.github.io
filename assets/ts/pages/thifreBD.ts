@@ -1,3 +1,5 @@
+
+
 // #region Change interface terminal
 
 const buttonChangeToGrafical = document.getElementById("button-header-interface")!;
@@ -5641,6 +5643,7 @@ document.addEventListener("mousemove", (e) => {
 createExempleDatabase();
 
 changeLeftSide();
+
 
 // To Do
 // -Aba de ajuda

@@ -1,4 +1,4 @@
-import("../global/menu.js", conquistasLista) //importa a variavel conquistasLista de menu.js
+import("../../global/menu.js", conquistasLista) //importa a variavel conquistasLista de menu.js
 
 //variáveis
 

@@ -81,18 +81,20 @@ nav#barra-main {
     }
 }
 
-.botao-menu-lateral {
-    width: fit-content;
-    height: fit-content;
+.botao-menu-lateral{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    img {
-        width: 36px;
+    svg {
+        width: 40px;
         transition: var(--transition-time1);
         cursor: pointer;
+        color: black;
     }
 
-    img:hover {
-        transform: scale(1.25);
+    svg:hover {
+        transform: scale(1.15);
     }
 }
 
@@ -793,6 +795,10 @@ section#bloco-notas-container {
             }
         }
     }
+}
+
+#conta {
+    width: clamp(400px, 30%, 1000000px);
 }
 
 @keyframes abrirMenu {

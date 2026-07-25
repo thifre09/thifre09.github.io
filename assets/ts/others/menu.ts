@@ -17,11 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             // Aplicar a todos os elementos
-            mover(document.getElementById('notas-atualizacao'))         
-            mover(document.getElementById('bloco-notas'));
-            mover(document.getElementById('calculadora'));
+            mover(document.getElementById('notas-atualizacao')!)         
+            mover(document.getElementById('bloco-notas')!);
+            mover(document.getElementById('calculadora')!);
             //mover(document.getElementById('conquistas-geral'));
-            mover(document.getElementById('configuracoes'));
+            mover(document.getElementById('configuracoes')!);
+            mover(document.getElementById('conta')!);
 
             criarNotasAtualizacao();
         })
@@ -30,11 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-function mover(objeto) {
-    let draggedElement = null;
-    let shiftX, shiftY;
+function mover(objeto: HTMLElement) {
+    let draggedElement: HTMLElement | null = null;
+    let shiftX: number, shiftY: number;
     let isDragging = false;
-    let animationFrameId = null;
+    let animationFrameId: number | null = null;
     const MOVE_THRESHOLD = 5;
 
     // Valores de destino para a animação
@@ -51,8 +52,8 @@ function mover(objeto) {
         animationFrameId = requestAnimationFrame(updatePosition);
     };
 
-    objeto.addEventListener('mousedown', (e) => {
-        if (e.target.tagName === 'IMG') return;
+    objeto.addEventListener('mousedown', (e: MouseEvent) => {
+        if (!e) return;
 
         draggedElement = objeto;
         const rect = draggedElement.getBoundingClientRect();
@@ -64,7 +65,7 @@ function mover(objeto) {
         const startY = e.clientY;
         isDragging = false;
 
-        const onMouseMove = (e) => {
+        const onMouseMove = (e: MouseEvent) => {
             if (!isDragging && 
                 (Math.abs(e.clientX - startX) > MOVE_THRESHOLD || 
                 Math.abs(e.clientY - startY) > MOVE_THRESHOLD)) {
@@ -83,9 +84,11 @@ function mover(objeto) {
         const onMouseUp = () => {
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
-            
-            // Para o ciclo de animação
-            cancelAnimationFrame(animationFrameId);
+
+            if (animationFrameId !== null) {
+                // Para o ciclo de animação
+                cancelAnimationFrame(animationFrameId);
+            }
             draggedElement = null;
         };
 
@@ -94,9 +97,9 @@ function mover(objeto) {
     });
 }
 
-function abrirMenu(estado) {
-    let barra = document.getElementById("menu-lateral");
-    let botao = document.getElementById("botao-menu-lateral-reserva");
+function abrirMenu(estado: boolean) {
+    let barra = document.getElementById("menu-lateral")!;
+    let botao = document.getElementById("botao-menu-lateral-reserva")!;
     if (estado === true) {
         barra.style.animation = "fecharMenu 0.7s normal";
         setTimeout(() => {
@@ -114,8 +117,8 @@ function abrirMenu(estado) {
     }
 }
 
-function abrir(estado, id) {
-    let element = document.getElementById(id);
+function abrir(estado: boolean, id: string) {
+    let element = document.getElementById(id)!;
     if (estado === true) {
         element.style.display = "none";
     } else if (estado === false) {
@@ -125,34 +128,38 @@ function abrir(estado, id) {
 
 // #region Notas da atualização
 
-const tipoNota = Object.freeze({
-    ATUALIZACAO: "atualizacao",
-    CORRECAO: "correcao",
-    NOVO_RECURSO: "novo_recurso",
-    RECURSO_REMOVIDO: "recurso_removido"
-});
+enum tipoNota {
+    ATUALIZACAO = "atualizacao",
+    CORRECAO = "correcao",
+    NOVO_RECURSO = "novo_recurso",
+    RECURSO_REMOVIDO = "recurso_removido"
+};
 
-const relacionado = Object.freeze({
+enum relacionado {
     //Geral
-    PAGINA_INICIAL: "Página inicial",
-    GERAL: "Geral",
+    PAGINA_INICIAL = "Página inicial",
+    GERAL = "Geral",
     // Paginas
-    BATATAS: "Batatas",
-    CODIFICADOR: "Codificador",
-    CORES: "Cores",
-    CURIOSIDADES: "Curiosidades",
-    MAYOR_SIMULATOR: "Mayor Simulator",
-    MEMES: "Memes",
-    NUMEROS: "Números",
-    PODER_DO_CSS: "Poder do CSS",
-    PYTHON: "Python",
-    QUADRADO_CLICKER: "Quadrado Clicker",
-    REVIEW_DE_JOGOS: "Review de jogos",
-    THIFREBD: "ThifreBD"
-});
+    BATATAS = "Batatas",
+    CODIFICADOR = "Codificador",
+    CORES = "Cores",
+    CURIOSIDADES = "Curiosidades",
+    MAYOR_SIMULATOR = "Mayor Simulator",
+    MEMES = "Memes",
+    NUMEROS = "Números",
+    PODER_DO_CSS = "Poder do CSS",
+    PYTHON = "Python",
+    QUADRADO_CLICKER = "Quadrado Clicker",
+    REVIEW_DE_JOGOS = "Review de jogos",
+    THIFREBD = "ThifreBD"
+};
 
 class NotaAtualizacao {
-    constructor(titulo, descricao, tipo, relacionado = []) {
+    titulo: string;
+    descricao: string;
+    tipo: tipoNota;
+    relacionado: relacionado;
+    constructor(titulo: string, descricao: string, tipo: tipoNota, relacionado: relacionado) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.tipo = tipo;
@@ -161,7 +168,10 @@ class NotaAtualizacao {
 }
 
 class Atualizacao {
-    constructor(nome, data, notas) {
+    nome: string;
+    data: string;
+    notas: NotaAtualizacao[];
+    constructor(nome: string, data: string, notas: NotaAtualizacao[]) {
         this.nome = nome;
         this.data = data;
         this.notas = notas;
@@ -255,7 +265,7 @@ const atualizacoes = [
 ];
 
 function criarNotasAtualizacao() {
-    const notasContainer = document.getElementById("notas-atualizacao-container");
+    const notasContainer = document.getElementById("notas-atualizacao-container")!;
 
     atualizacoes.forEach(atualizacao => {
         const divAtualizacao = document.createElement("div");
@@ -428,55 +438,58 @@ function criarNotasAtualizacao() {
 // #region Bloco de notas
 
 class Nota {
-    constructor(titulo, conteudo) {
+    titulo: string;
+    conteudo: string;
+    data: Date;
+    constructor(titulo: string, conteudo: string) {
         this.titulo = titulo;
         this.conteudo = conteudo;
         this.data = new Date();
     }
 }
 
-let notas = []
+let notas: Nota[] = []
 let indexEditarNota = 0;
 
 function novaNota() {
-    const divTopoCriarNota = document.getElementById("topo-criar-nota");
-    const divTopoNotasContainer = document.getElementById("topo-notas-container");
+    const divTopoCriarNota = document.getElementById("topo-criar-nota")!;
+    const divTopoNotasContainer = document.getElementById("topo-notas-container")!;
     divTopoCriarNota.style.display = "flex";
     divTopoNotasContainer.style.display = "none";
 
-    const divNotasContainer = document.getElementById("notas-container");
-    const divCriarNota = document.getElementById("criar-nota");
+    const divNotasContainer = document.getElementById("notas-container")!;
+    const divCriarNota = document.getElementById("criar-nota")!;
     divNotasContainer.style.display = "none";
     divCriarNota.style.display = "flex";
 
-    document.getElementById("titulo-criar-nota").value = "";
-    document.getElementById("conteudo-criar-nota").value = "";
+    (document.getElementById("titulo-criar-nota")! as HTMLTextAreaElement).value = "";
+    (document.getElementById("conteudo-criar-nota")! as HTMLTextAreaElement).value = "";
 }
 
 function voltarParaNotas() {
-    const divTopoCriarNota = document.getElementById("topo-criar-nota");
-    const divTopoNotasContainer = document.getElementById("topo-notas-container");
-    const divTopoEditarNota = document.getElementById("topo-editar-nota");
+    const divTopoCriarNota = document.getElementById("topo-criar-nota")!;
+    const divTopoNotasContainer = document.getElementById("topo-notas-container")!;
+    const divTopoEditarNota = document.getElementById("topo-editar-nota")!;
     divTopoCriarNota.style.display = "none";
     divTopoNotasContainer.style.display = "flex";
     divTopoEditarNota.style.display = "none";
 
-    const divNotasContainer = document.getElementById("notas-container");
-    const divCriarNota = document.getElementById("criar-nota");
-    const divEditarNota = document.getElementById("editar-nota");
+    const divNotasContainer = document.getElementById("notas-container")!;
+    const divCriarNota = document.getElementById("criar-nota")!;
+    const divEditarNota = document.getElementById("editar-nota")!;
     divNotasContainer.style.display = "block";
     divCriarNota.style.display = "none";
     divEditarNota.style.display = "none";
 }
 
 function criarNota() {
-    const divNenhumaNotaAinda = document.getElementById("nenhuma-nota-ainda");
+    const divNenhumaNotaAinda = document.getElementById("nenhuma-nota-ainda")!;
     divNenhumaNotaAinda.style.display = "none";
 
     voltarParaNotas();
 
-    const titulo = document.getElementById("titulo-criar-nota").value;
-    const conteudo = document.getElementById("conteudo-criar-nota").value;
+    const titulo = (document.getElementById("titulo-criar-nota")! as HTMLTextAreaElement).value;
+    const conteudo = (document.getElementById("conteudo-criar-nota")! as HTMLTextAreaElement).value;
     let nota = new Nota(titulo, conteudo)
     notas.push(nota)
 
@@ -519,36 +532,36 @@ function criarNota() {
     divEditarExcluir.appendChild(buttonExcluir)
 
     divNota.appendChild(divEditarExcluir);
-    const divNotas = document.getElementById("notas");
+    const divNotas = document.getElementById("notas")!;
     divNotas.appendChild(divNota);
 }
 
-function editarNota(index) {
+function editarNota(index: number) {
     indexEditarNota = index;
-    const divTopoEditarNota = document.getElementById("topo-editar-nota");
-    const divTopoNotasContainer = document.getElementById("topo-notas-container");
+    const divTopoEditarNota = document.getElementById("topo-editar-nota")!;
+    const divTopoNotasContainer = document.getElementById("topo-notas-container")!;
     divTopoEditarNota.style.display = "flex";
     divTopoNotasContainer.style.display = "none";
 
-    const divNotasContainer = document.getElementById("notas-container");
-    const divEditarNota = document.getElementById("editar-nota");
+    const divNotasContainer = document.getElementById("notas-container")!;
+    const divEditarNota = document.getElementById("editar-nota")!;
     divNotasContainer.style.display = "none";
     divEditarNota.style.display = "flex";
 
-    document.getElementById("titulo-editar-nota").value = notas[index].titulo;
-    document.getElementById("conteudo-editar-nota").value = notas[index].conteudo;
+    (document.getElementById("titulo-editar-nota")! as HTMLTextAreaElement).value = notas[index].titulo;
+    (document.getElementById("conteudo-editar-nota")! as HTMLTextAreaElement).value = notas[index].conteudo;
 }
 
 function salvarAlteracoesNota() {
-    notas[indexEditarNota].titulo = document.getElementById("titulo-editar-nota").value;
-    notas[indexEditarNota].conteudo = document.getElementById("conteudo-editar-nota").value;
+    notas[indexEditarNota].titulo = (document.getElementById("titulo-editar-nota")! as HTMLTextAreaElement).value;
+    notas[indexEditarNota].conteudo = (document.getElementById("conteudo-editar-nota")! as HTMLTextAreaElement).value;
     document.querySelectorAll("div.nota h3")[indexEditarNota].textContent = notas[indexEditarNota].titulo;
     document.querySelectorAll("div.nota p.conteudo-nota")[indexEditarNota].textContent = notas[indexEditarNota].conteudo;
 
     voltarParaNotas();
 }
 
-function excluirNota(index) {
+function excluirNota(index: number) {
     notas.splice(index, 1);
     document.querySelectorAll("div.nota")[index].remove()
 }
@@ -559,16 +572,16 @@ function excluirNota(index) {
 
 let currentInput = '0';
 let previousInput = '';
-let operator = null;
+let operator: string | null = null;
 
 function updateDisplay() {
-    const currentDisplay = document.getElementById('current-operand');
-    const previousDisplay = document.getElementById('previous-operand');
+    const currentDisplay = document.getElementById('current-operand')!;
+    const previousDisplay = document.getElementById('previous-operand')!;
     currentDisplay.innerText = currentInput;
     previousDisplay.innerText = operator ? `${previousInput} ${operator}` : '';
 }
 
-function appendNumber(number) {
+function appendNumber(number: string) {
     if (number === '.' && currentInput.includes('.')) return;
     if (currentInput === '0' && number !== '.') {
         currentInput = number;
@@ -578,7 +591,7 @@ function appendNumber(number) {
     updateDisplay();
 }
 
-function appendOperator(op) {
+function appendOperator(op: string) {
     if (currentInput === '') return;
     if (previousInput !== '') compute();
     operator = op;
@@ -636,121 +649,121 @@ function compute() {
 
 // #region Conquistas
 
-class ConquistaGeral {
-    constructor(img = "", descricao = "", possui = false) {
-        this.img = img;
-        this.descricao = descricao;
-        this.possui = possui;
-    }
-}
+// class ConquistaGeral {
+//     constructor(img = "", descricao = "", possui = false) {
+//         this.img = img;
+//         this.descricao = descricao;
+//         this.possui = possui;
+//     }
+// }
 
-const conquistasLista = [];
-const path = "assets/images/conquistas-geral/";
+// const conquistasLista = [];
+// const path = "assets/images/conquistas-geral/";
 
-const descricoes = [
-    "Responda o quiz de batatas",
-    "Use o codificador 1 vez",
-    "Clique na cor secreta",
-    "Clique no botão secreto do menu principal",
-    "Clique no jogo com a menor nota",
-    "Clique no número 63",
-    "Desative o css 1 vez",
-    "Veja todo o mini curso de python",
-    "Consiga todas as conquistas do Quadrado clicker"
-];
+// const descricoes = [
+//     "Responda o quiz de batatas",
+//     "Use o codificador 1 vez",
+//     "Clique na cor secreta",
+//     "Clique no botão secreto do menu principal",
+//     "Clique no jogo com a menor nota",
+//     "Clique no número 63",
+//     "Desative o css 1 vez",
+//     "Veja todo o mini curso de python",
+//     "Consiga todas as conquistas do Quadrado clicker"
+// ];
 
-// Inicializa com imagens e descrições
-function inicializarConquistas() {
-    for (let i = 1; i <= descricoes.length; i++) {
-        const img = new Image();
-        img.src = `${path}conquista${i}.png`;
-        conquistasLista.push(new ConquistaGeral(img, descricoes[i - 1], false));
-    }
-}
+// // Inicializa com imagens e descrições
+// function inicializarConquistas() {
+//     for (let i = 1; i <= descricoes.length; i++) {
+//         const img = new Image();
+//         img.src = `${path}conquista${i}.png`;
+//         conquistasLista.push(new ConquistaGeral(img, descricoes[i - 1], false));
+//     }
+// }
 
-// Salva no localStorage
-function salvarConquistasGeral() {
-    const dadosParaSalvar = conquistasLista.map(c => ({
-        descricao: c.descricao,
-        possui: c.possui
-    }));
-    localStorage.setItem("ECS", JSON.stringify(dadosParaSalvar));
-}
+// // Salva no localStorage
+// function salvarConquistasGeral() {
+//     const dadosParaSalvar = conquistasLista.map(c => ({
+//         descricao: c.descricao,
+//         possui: c.possui
+//     }));
+//     localStorage.setItem("ECS", JSON.stringify(dadosParaSalvar));
+// }
 
-// Carrega do localStorage e aplica no array
-function carregarConquistasGeral() {
-    const estadoConquistasSalvas = localStorage.getItem("ECS");
-    if (estadoConquistasSalvas) {
-        const estado = JSON.parse(estadoConquistasSalvas);
-        estado.forEach((element, index) => {
-            conquistasLista[index].possui = element.possui;
-        });
-    }
-}
+// // Carrega do localStorage e aplica no array
+// function carregarConquistasGeral() {
+//     const estadoConquistasSalvas = localStorage.getItem("ECS");
+//     if (estadoConquistasSalvas) {
+//         const estado = JSON.parse(estadoConquistasSalvas);
+//         estado.forEach((element, index) => {
+//             conquistasLista[index].possui = element.possui;
+//         });
+//     }
+// }
 
-// Renderiza as conquistas no HTML
-function adicionarConquistasGeral() {
-    const conquistasContainer = document.getElementById("conquistas-container");
-    if (conquistasContainer === null) {
-        console.warn("adicionarConquistasGeral: 'conquistas-container' não encontrado. Chame adicionarConquistasGeral() após a injeção de 'menu.html'.");
-        return;
-    }
-    conquistasContainer.innerHTML = "";
+// // Renderiza as conquistas no HTML
+// function adicionarConquistasGeral() {
+//     const conquistasContainer = document.getElementById("conquistas-container");
+//     if (conquistasContainer === null) {
+//         console.warn("adicionarConquistasGeral: 'conquistas-container' não encontrado. Chame adicionarConquistasGeral() após a injeção de 'menu.html'.");
+//         return;
+//     }
+//     conquistasContainer.innerHTML = "";
 
-    conquistasLista.forEach((element) => {
-        const div = document.createElement("div");
-        div.classList.add("conquista");
+//     conquistasLista.forEach((element) => {
+//         const div = document.createElement("div");
+//         div.classList.add("conquista");
 
-        const img = document.createElement("img");
-        img.src = element.img.src;
-        img.style.filter = element.possui ? "grayscale(0)" : "grayscale(100%)";
+//         const img = document.createElement("img");
+//         img.src = element.img.src;
+//         img.style.filter = element.possui ? "grayscale(0)" : "grayscale(100%)";
 
-        const divDescricao = document.createElement("div");
-        divDescricao.classList.add("descricao-conquista");
-        divDescricao.innerHTML = `<p>${element.descricao}</p>`;
+//         const divDescricao = document.createElement("div");
+//         divDescricao.classList.add("descricao-conquista");
+//         divDescricao.innerHTML = `<p>${element.descricao}</p>`;
 
-        div.appendChild(img);
-        div.appendChild(divDescricao);
-        conquistasContainer.appendChild(div);
-    });
-}
+//         div.appendChild(img);
+//         div.appendChild(divDescricao);
+//         conquistasContainer.appendChild(div);
+//     });
+// }
 
-// Verifica os eventos para liberar conquistas
-function verificarConquistasGeral() {
-    const eventos = [
-        { id: "botao", index: 0 },
-        { id: "criptografar", index: 1 },
-        { id: "descriptografar", index: 1 },
-        { id: "corBotaoSecreto", index: 2 },
-        { id: "footerBotaoSecreto", index: 3 },
-        { id: "jogoBotaoSecreto", index: 4 },
-        { id: "63", index: 5 },
-        { id: "botao-css", index: 6 },
-        { id: "pythonBotaoSecreto", index: 7 }
-        // A conquista 8 provavelmente será desbloqueada de outra forma
-    ];
+// // Verifica os eventos para liberar conquistas
+// function verificarConquistasGeral() {
+//     const eventos = [
+//         { id: "botao", index: 0 },
+//         { id: "criptografar", index: 1 },
+//         { id: "descriptografar", index: 1 },
+//         { id: "corBotaoSecreto", index: 2 },
+//         { id: "footerBotaoSecreto", index: 3 },
+//         { id: "jogoBotaoSecreto", index: 4 },
+//         { id: "63", index: 5 },
+//         { id: "botao-css", index: 6 },
+//         { id: "pythonBotaoSecreto", index: 7 }
+//         // A conquista 8 provavelmente será desbloqueada de outra forma
+//     ];
 
-    eventos.forEach((evento) => {
-        const elemento = document.getElementById(evento.id);
-        if (elemento) {
-            elemento.addEventListener("click", () => {
-                if (!conquistasLista[evento.index].possui) {
-                    conquistasLista[evento.index].possui = true;
-                    salvarConquistasGeral();
-                    adicionarConquistasGeral();
-                }
-            });
-        }
-    });
-}
+//     eventos.forEach((evento) => {
+//         const elemento = document.getElementById(evento.id);
+//         if (elemento) {
+//             elemento.addEventListener("click", () => {
+//                 if (!conquistasLista[evento.index].possui) {
+//                     conquistasLista[evento.index].possui = true;
+//                     salvarConquistasGeral();
+//                     adicionarConquistasGeral();
+//                 }
+//             });
+//         }
+//     });
+// }
 
 // Inicialização completa
-window.addEventListener("DOMContentLoaded", () => {
-    inicializarConquistas();
-    carregarConquistasGeral();
-    adicionarConquistasGeral();
-    verificarConquistasGeral();
-});
+// window.addEventListener("DOMContentLoaded", () => {
+//     inicializarConquistas();
+//     carregarConquistasGeral();
+//     adicionarConquistasGeral();
+//     verificarConquistasGeral();
+// });
 
 //#endregion
 
@@ -759,15 +772,23 @@ let bannerAtivo = true;
 
 function toggleBanner() {
     if (bannerAtivo) {
-        document.getElementById("barra-main").style.display = "none";
-        document.getElementById("title").style.display = "none";
-        document.getElementById("botao-menu-lateral-reserva").style.display = "block";
+        document.getElementById("barra-main")!.style.display = "none";
+        document.getElementById("title")!.style.display = "none";
+        document.getElementById("botao-menu-lateral-reserva")!.style.display = "block";
         bannerAtivo = false;
     } else {
-        document.getElementById("barra-main").style.display = "flex";
-        document.getElementById("title").style.display = "block";
-        document.getElementById("botao-menu-lateral-reserva").style.display = "none";
+        document.getElementById("barra-main")!.style.display = "flex";
+        document.getElementById("title")!.style.display = "block";
+        document.getElementById("botao-menu-lateral-reserva")!.style.display = "none";
         bannerAtivo = true;
     }
 }
+//#endregion
+
+// #region autenticar e login
+
+function abrirCadastro() {
+
+}
+
 //#endregion
