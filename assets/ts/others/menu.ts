@@ -18,9 +18,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (titleElement && pageTitle) {
                 titleElement.textContent = pageTitle;
             }
-            
+
             // Aplicar a todos os elementos
-            mover(document.getElementById('notas-atualizacao')!)         
+            mover(document.getElementById('notas-atualizacao')!)
             mover(document.getElementById('bloco-notas')!);
             mover(document.getElementById('calculadora')!);
             //mover(document.getElementById('conquistas-geral'));
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             criarNotasAtualizacao();
         })
         .catch(error => console.error('Erro ao carregar o menu:', error)); // Exibe um erro no console caso haja algum problema ao carregar o menu
-    
+
     const { data: { session } } = await supabase.auth.getSession();
 
     if (session) {
@@ -66,18 +66,18 @@ function mover(objeto: HTMLElement) {
 
         draggedElement = objeto;
         const rect = draggedElement.getBoundingClientRect();
-        
+
         shiftX = e.clientX - rect.left;
         shiftY = e.clientY - rect.top;
-        
+
         const startX = e.clientX;
         const startY = e.clientY;
         isDragging = false;
 
         const onMouseMove = (e: MouseEvent) => {
-            if (!isDragging && 
-                (Math.abs(e.clientX - startX) > MOVE_THRESHOLD || 
-                Math.abs(e.clientY - startY) > MOVE_THRESHOLD)) {
+            if (!isDragging &&
+                (Math.abs(e.clientX - startX) > MOVE_THRESHOLD ||
+                    Math.abs(e.clientY - startY) > MOVE_THRESHOLD)) {
                 isDragging = true;
                 // Inicia o ciclo de animação
                 animationFrameId = requestAnimationFrame(updatePosition);
@@ -188,6 +188,11 @@ class Atualizacao {
 }
 
 const atualizacoes = [
+    new Atualizacao("Beta 3.1", "25/05/2026", [
+        new NotaAtualizacao("Adição de um sitema de login", "Foi adicionado um sistema de login, que permite que o usuário faça login com seu email. Também foi adicionado a opção de criar uma conta com email e senha. Ela pode ser usada para salvar automaticamente o progresso da página ThifreBD.", tipoNota.NOVO_RECURSO, relacionado.GERAL),
+        new NotaAtualizacao("Atualização da página ThifreBD", "A UI foi praticamente refeita, com um design mais moderno e responsivo. Foi criada uma aba de Ajuda, mas ela ainda não está completa. Também foi criada uma aba para salvar o progresso, mas o método SQL ainda não está implementado. Foram adicionados diversos comandos SQL no terminal. E foram adicionados schemas.", tipoNota.ATUALIZACAO, relacionado.THIFREBD),
+        new NotaAtualizacao("Correção de pequenos bugs", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do site.", tipoNota.CORRECAO, relacionado.GERAL),
+    ]),
     new Atualizacao("Beta 3.0.1", "08/04/2026", [
         new NotaAtualizacao("Correção de pequenos bugs", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do site.", tipoNota.CORRECAO, relacionado.GERAL),
         new NotaAtualizacao("Adicionado responsividade nas configurações", "A aba de configurações agora é totalmente responsiva.", tipoNota.CORRECAO, relacionado.GERAL),
@@ -198,7 +203,7 @@ const atualizacoes = [
         new NotaAtualizacao("Criação da página Mayor Simulator", "Foi criado o jogo Mayor Simulator. Nele você administra uma cidade e precisa garantir que os cidadãos fiquem felizes.", tipoNota.NOVO_RECURSO, relacionado.MAYOR_SIMULATOR),
         new NotaAtualizacao("Criação da página ThifreBD", "Essa página serve como um SGBD simples e intuitivo para iniciantes. OBS: o terminal ainda não está funcional.", tipoNota.NOVO_RECURSO, relacionado.THIFREBD),
         new NotaAtualizacao("Atualização da barra lateral", "A barra lateral foi atualizada com um design completamente novo, mais moderno e responsivo.", tipoNota.ATUALIZACAO, relacionado.GERAL),
-        new NotaAtualizacao("Padronização das cores", "As cores do site foram padronizadas em quase todas as páginas",tipoNota.ATUALIZACAO, relacionado.GERAL),
+        new NotaAtualizacao("Padronização das cores", "As cores do site foram padronizadas em quase todas as páginas", tipoNota.ATUALIZACAO, relacionado.GERAL),
         new NotaAtualizacao("Atualização da página Review de jogos", "O layout da página foi melhorado, e mais jogos foram adicionados.", tipoNota.ATUALIZACAO, relacionado.REVIEW_DE_JOGOS),
         new NotaAtualizacao("Atualização da página Cores", "O layout da página foi completamente refeito. Também foi adicionada a opção de copiar as cores ao clicar no texto delas, e a opção de expandir a cor para a página toda.", tipoNota.ATUALIZACAO, relacionado.CORES),
         new NotaAtualizacao("Atualização da página Codificador", "O layout da página foi completamente refeito", tipoNota.ATUALIZACAO, relacionado.CODIFICADOR),
@@ -291,7 +296,7 @@ function criarNotasAtualizacao() {
 
         const divData = document.createElement("div");
         divData.classList.add("data-container");
-        
+
         divData.innerHTML = `
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
@@ -313,7 +318,7 @@ function criarNotasAtualizacao() {
             const liNota = document.createElement("li");
             liNota.classList.add("nota");
             liNota.classList.add(`nota-${nota.tipo.toLowerCase()}`);
-            
+
             const divTipo = document.createElement("div");
             divTipo.classList.add("tipo-nota");
             liNota.appendChild(divTipo);
@@ -855,7 +860,7 @@ async function loginConta() {
     } catch (error) {
         console.error("Erro ao fazer login:", error);
     }
-    
+
 }
 
 async function mostrarUsuario() {
