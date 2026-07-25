@@ -1,5 +1,3 @@
-import("../../global/menu.js", conquistasLista) //importa a variavel conquistasLista de menu.js
-
 //variáveis
 
 let quadrados = 0;

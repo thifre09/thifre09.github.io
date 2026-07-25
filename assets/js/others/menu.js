@@ -157,6 +157,12 @@ class Atualizacao {
     }
 }
 const atualizacoes = [
+    new Atualizacao("Beta 3.1", "25/05/2026", [
+        new NotaAtualizacao("Adição de um ícone para o site", "Foi adicionado um ícone de batata para o site.", tipoNota.NOVO_RECURSO, relacionado.GERAL),
+        new NotaAtualizacao("Adição de um sistema de login", "Foi adicionado um sistema de login, que permite que o usuário faça login com seu email. Também foi adicionado a opção de criar uma conta com email e senha. Ela pode ser usada para salvar automaticamente o progresso da página ThifreBD.", tipoNota.NOVO_RECURSO, relacionado.GERAL),
+        new NotaAtualizacao("Atualização da página ThifreBD", "A UI foi praticamente refeita, com um design mais moderno e responsivo. Foi criada uma aba de Ajuda, mas ela ainda não está completa. Também foi criada uma aba para salvar o progresso, mas o método SQL ainda não está implementado. Foram adicionados diversos comandos SQL no terminal. E foram adicionados schemas.", tipoNota.ATUALIZACAO, relacionado.THIFREBD),
+        new NotaAtualizacao("Correção de pequenos bugs", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do site.", tipoNota.CORRECAO, relacionado.GERAL),
+    ]),
     new Atualizacao("Beta 3.0.1", "08/04/2026", [
         new NotaAtualizacao("Correção de pequenos bugs", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do site.", tipoNota.CORRECAO, relacionado.GERAL),
         new NotaAtualizacao("Adicionado responsividade nas configurações", "A aba de configurações agora é totalmente responsiva.", tipoNota.CORRECAO, relacionado.GERAL),

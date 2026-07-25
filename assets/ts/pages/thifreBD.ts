@@ -74,8 +74,6 @@ buttonChangeToHelp.addEventListener("click", () => {
     changeTo("help");
 });
 
-
-
 // #endregion
 
 // #region Others
@@ -5825,6 +5823,10 @@ document.addEventListener("mousemove", (e) => {
         esquerda.style.width = `${novaLargura}px`;
     }
 });
+
+setTimeout(() => {
+    changeTo("interface-grafica");
+}, 100);
 
 changeLeftSide();
 

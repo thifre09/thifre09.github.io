@@ -158,7 +158,7 @@ function criarReviews() {
         comentarios.classList.add("comentarios");
         divPrincipal.appendChild(comentarios);
         comentarios.innerHTML = `
-            <h5>Comentario</h5>
+            <h5>Comentário</h5>
             <div>
                 <p class="comentario-principal">${review.comentarioPrincipal}</p>         
             </div>
