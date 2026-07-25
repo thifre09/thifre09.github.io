@@ -1414,6 +1414,8 @@ class SGBDFunctions {
         currentSchema = null;
         currentTable = null;
         refreshUI();
+
+        if (!autoSaveEnabled) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1423,6 +1425,7 @@ class SGBDFunctions {
         currentSchema = schema.name;
         currentTable = null;
         refreshUI();
+        if (!autoSaveEnabled) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1444,6 +1447,7 @@ class SGBDFunctions {
         db.schemas[schema || currentSchema!].tables[table.name] = table;
         currentTable = table.name;
         refreshUI();
+        if (!autoSaveEnabled) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1516,6 +1520,7 @@ class SGBDFunctions {
         }
 
         refreshUI();
+        if (!autoSaveEnabled) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1544,6 +1549,7 @@ class SGBDFunctions {
             table.indexes[col].get(value)!.push(rowIndex);
         }
         refreshUI();
+        if (!autoSaveEnabled) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1593,6 +1599,7 @@ class SGBDFunctions {
         }
 
         refreshUI();
+        if (!autoSaveEnabled) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1609,6 +1616,7 @@ class SGBDFunctions {
             currentTable = null;
         }
         refreshUI();
+        if (!autoSaveEnabled) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1623,6 +1631,7 @@ class SGBDFunctions {
             currentTable = null;
         }
         refreshUI();
+        if (!autoSaveEnabled) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1645,6 +1654,7 @@ class SGBDFunctions {
         }
 
         refreshUI();
+        if (!autoSaveEnabled) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1675,6 +1685,7 @@ class SGBDFunctions {
         delete table.columns[columnName];
 
         refreshUI();
+        if (!autoSaveEnabled) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1724,6 +1735,7 @@ class SGBDFunctions {
         }
 
         refreshUI();
+        if (!autoSaveEnabled) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1737,6 +1749,7 @@ class SGBDFunctions {
         currentDatabase = newName;
 
         refreshUI();
+        if (!autoSaveEnabled) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1751,6 +1764,7 @@ class SGBDFunctions {
         currentSchema = newName;
 
         refreshUI();
+        if (!autoSaveEnabled) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1772,6 +1786,7 @@ class SGBDFunctions {
         currentTable = newName;
 
         refreshUI();
+        if (!autoSaveEnabled) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1835,6 +1850,7 @@ class SGBDFunctions {
         }
 
         refreshUI();
+        if (!autoSaveEnabled) return;
         saveToLocalStorage();
         saveToSupabase();
     }

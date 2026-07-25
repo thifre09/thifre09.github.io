@@ -1120,6 +1120,8 @@ class SGBDFunctions {
         currentSchema = null;
         currentTable = null;
         refreshUI();
+        if (!autoSaveEnabled)
+            return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1128,6 +1130,8 @@ class SGBDFunctions {
         currentSchema = schema.name;
         currentTable = null;
         refreshUI();
+        if (!autoSaveEnabled)
+            return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1147,6 +1151,8 @@ class SGBDFunctions {
         db.schemas[schema || currentSchema].tables[table.name] = table;
         currentTable = table.name;
         refreshUI();
+        if (!autoSaveEnabled)
+            return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1213,6 +1219,8 @@ class SGBDFunctions {
             //getCurrentDatabase()!.addForeignKeyReference(currentSchema!, tableName, column.name, column.reference);
         }
         refreshUI();
+        if (!autoSaveEnabled)
+            return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1239,6 +1247,8 @@ class SGBDFunctions {
             table.indexes[col].get(value).push(rowIndex);
         }
         refreshUI();
+        if (!autoSaveEnabled)
+            return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1280,6 +1290,8 @@ class SGBDFunctions {
             indexMap.get(newValue).push(oldRowIndex);
         }
         refreshUI();
+        if (!autoSaveEnabled)
+            return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1295,6 +1307,8 @@ class SGBDFunctions {
             currentTable = null;
         }
         refreshUI();
+        if (!autoSaveEnabled)
+            return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1306,6 +1320,8 @@ class SGBDFunctions {
             currentTable = null;
         }
         refreshUI();
+        if (!autoSaveEnabled)
+            return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1325,6 +1341,8 @@ class SGBDFunctions {
             currentTable = null;
         }
         refreshUI();
+        if (!autoSaveEnabled)
+            return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1350,6 +1368,8 @@ class SGBDFunctions {
         }
         delete table.columns[columnName];
         refreshUI();
+        if (!autoSaveEnabled)
+            return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1392,6 +1412,8 @@ class SGBDFunctions {
             }
         }
         refreshUI();
+        if (!autoSaveEnabled)
+            return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1404,6 +1426,8 @@ class SGBDFunctions {
         databases[newName] = db;
         currentDatabase = newName;
         refreshUI();
+        if (!autoSaveEnabled)
+            return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1417,6 +1441,8 @@ class SGBDFunctions {
         db.schemas[newName] = s;
         currentSchema = newName;
         refreshUI();
+        if (!autoSaveEnabled)
+            return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1438,6 +1464,8 @@ class SGBDFunctions {
         schema.tables[newName] = t;
         currentTable = newName;
         refreshUI();
+        if (!autoSaveEnabled)
+            return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1490,6 +1518,8 @@ class SGBDFunctions {
             table.remakeColumnIndex(newColumn.name);
         }
         refreshUI();
+        if (!autoSaveEnabled)
+            return;
         saveToLocalStorage();
         saveToSupabase();
     }
