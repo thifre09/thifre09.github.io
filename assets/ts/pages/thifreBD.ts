@@ -132,365 +132,12 @@ function abrirFechar(estado: boolean, id: string) {
 /**
  * Cria ou seleciona a database de exemplo com tabelas e registros pré-carregados.
  */
-function createExempleDatabase() {
-    const databaseName = "Exemplo";
-    const schemaName = "public";
+async function createExempleDatabase() {
+    const response = await fetch("assets/others/exemple_database.json");
+    const json = await response.text();
+    console.log(json);
 
-    let db: DB.Database = databases[databaseName];
-
-    if (!db) {
-        db = new DB.Database(databaseName);
-        SGBDFunctions.createDatabase(db);
-    } else {
-        currentDatabase = databaseName;
-        currentSchema = null;
-        currentTable = null;
-    }
-
-    if (!db.schemas[schemaName]) {
-        const schema = new DB.Schema(schemaName, db);
-        SGBDFunctions.createSchema(schema);
-    } else {
-        currentSchema = schemaName;
-        currentTable = null;
-    }
-
-    const schema: DB.Schema = getCurrentDatabase()!.schemas[schemaName];
-
-    // =========================
-    // CLIENTES
-    // =========================
-
-    if (!schema.tables["clientes"]) {
-
-        const table: DB.Table = new DB.Table("clientes", schema);
-
-        table.columns["id"] = new DB.Column("id", table, types.INTEGER, true, false, true, true, true, false, false);
-        table.columns["nome"] = new DB.Column("nome", table, types.TEXT, false, false, true, false, false, false, false);
-        table.columns["email"] = new DB.Column("email", table, types.TEXT, false, false, true, false, false, false, false);
-        table.columns["telefone"] = new DB.Column("telefone", table, types.TEXT, false, false, false, false, false, false, false);
-        table.columns["ativo"] = new DB.Column("ativo", table, types.BOOLEAN, false, false, true, false, false, false, false);
-        table.columns["cadastro"] = new DB.Column("cadastro", table, types.DATE, false, false, true, false, false, false, false);
-
-        SGBDFunctions.createTable(table);
-
-        SGBDFunctions.insertRow(
-            "clientes", new DB.Row(table, {
-                id: 1,
-                nome: "Ana Silva",
-                email: "ana@email.com",
-                telefone: "(11)99999-1001",
-                ativo: true,
-                cadastro: new SQLDate(2025, 1, 10)
-            }));
-
-        SGBDFunctions.insertRow(
-            "clientes", new DB.Row(table, {
-                id: 2,
-                nome: "Bruno Costa",
-                email: "bruno@email.com",
-                telefone: "(11)99999-1002",
-                ativo: true,
-                cadastro: new SQLDate(2025, 2, 5)
-            }));
-
-        SGBDFunctions.insertRow(
-            "clientes", new DB.Row(table, {
-                id: 3,
-                nome: "Carla Mendes",
-                email: "carla@email.com",
-                telefone: "(11)99999-1003",
-                ativo: false,
-                cadastro: new SQLDate(2025, 3, 18)
-            }));
-
-        SGBDFunctions.insertRow(
-            "clientes", new DB.Row(table, {
-                id: 4,
-                nome: "Daniel Souza",
-                email: "daniel@email.com",
-                telefone: "(11)99999-1004",
-                ativo: true,
-                cadastro: new SQLDate(2025, 4, 12)
-            }));
-
-        SGBDFunctions.insertRow(
-            "clientes", new DB.Row(table, {
-                id: 5,
-                nome: "Eduarda Lima",
-                email: "eduarda@email.com",
-                telefone: "(11)99999-1005",
-                ativo: true,
-                cadastro: new SQLDate(2025, 5, 2)
-            }));
-        table.columns["id"].incrementCounter = 6;
-    }
-
-    // =========================
-    // CATEGORIAS
-    // =========================
-
-    if (!schema.tables["categorias"]) {
-
-        const table: DB.Table = new DB.Table("categorias", schema);
-
-        table.columns["id"] = new DB.Column("id", table, types.INTEGER, true, false, true, true, true, false, false);
-        table.columns["nome"] = new DB.Column("nome", table, types.TEXT, false, false, true, false, false, false, false);
-
-        SGBDFunctions.createTable(table);
-
-        SGBDFunctions.insertRow(
-            "categorias", new DB.Row(table, { id: 1, nome: "Informática" }));
-        SGBDFunctions.insertRow(
-            "categorias", new DB.Row(table, { id: 2, nome: "Periféricos" }));
-        SGBDFunctions.insertRow(
-            "categorias", new DB.Row(table, { id: 3, nome: "Escritório" }));
-        SGBDFunctions.insertRow(
-            "categorias", new DB.Row(table, { id: 4, nome: "Áudio" }));
-        table.columns["id"].incrementCounter = 5;
-    }
-
-    // =========================
-    // PRODUTOS
-    // =========================
-
-    if (!schema.tables["produtos"]) {
-
-        const table: DB.Table = new DB.Table("produtos", schema);
-
-        table.columns["id"] = new DB.Column("id", table, types.INTEGER, true, false, true, true, true, false, false);
-
-        table.columns["categoria_id"] = new DB.Column(
-            "categoria_id",
-            table,
-            types.INTEGER,
-            false,
-            true,
-            true,
-            false,
-            false,
-            false,
-            false,
-            {
-                schema: schemaName,
-                table: "categorias",
-                column: "id"
-            }
-        );
-
-        table.columns["nome"] = new DB.Column("nome", table, types.TEXT, false, false, true, false, false, false, false);
-        table.columns["preco"] = new DB.Column("preco", table, types.FLOAT, false, false, true, false, false, false, false);
-        table.columns["estoque"] = new DB.Column("estoque", table, types.INTEGER, false, false, true, false, false, false, false);
-
-        SGBDFunctions.createTable(table);
-
-        SGBDFunctions.insertRow(
-            "produtos", new DB.Row(table, {
-                id: 1,
-                categoria_id: 1,
-                nome: "Notebook",
-                preco: 4500.00,
-                estoque: 12
-            }));
-
-        SGBDFunctions.insertRow(
-            "produtos", new DB.Row(table, {
-                id: 2,
-                categoria_id: 2,
-                nome: "Mouse Gamer",
-                preco: 149.90,
-                estoque: 50
-            }));
-
-        SGBDFunctions.insertRow(
-            "produtos", new DB.Row(table, {
-                id: 3,
-                categoria_id: 2,
-                nome: "Teclado Mecânico",
-                preco: 299.90,
-                estoque: 22
-            }));
-
-        SGBDFunctions.insertRow(
-            "produtos", new DB.Row(table, {
-                id: 4,
-                categoria_id: 4,
-                nome: "Headset",
-                preco: 399.90,
-                estoque: 18
-            }));
-
-        SGBDFunctions.insertRow(
-            "produtos", new DB.Row(table, {
-                id: 5,
-                categoria_id: 3,
-                nome: "Cadeira Escritório",
-                preco: 899.90,
-                estoque: 6
-            }));
-        table.columns["id"].incrementCounter = 6;
-    }
-
-    // =========================
-    // PEDIDOS
-    // =========================
-
-    if (!schema.tables["pedidos"]) {
-
-        const table: DB.Table = new DB.Table("pedidos", schema);
-
-        table.columns["id"] = new DB.Column("id", table, types.INTEGER, true, false, true, true, true, false, false);
-
-        table.columns["cliente_id"] = new DB.Column(
-            "cliente_id",
-            table,
-            types.INTEGER,
-            false,
-            true,
-            true,
-            false,
-            false,
-            false,
-            false,
-            {
-                schema: schemaName,
-                table: "clientes",
-                column: "id"
-            }
-        );
-
-        table.columns["data"] = new DB.Column("data", table, types.DATE, false, false, true, false, false, false, false);
-
-        SGBDFunctions.createTable(table);
-
-        SGBDFunctions.insertRow(
-            "pedidos", new DB.Row(table, {
-                id: 1,
-                cliente_id: 1,
-                data: new SQLDate(2026, 7, 15)
-            }));
-
-        SGBDFunctions.insertRow(
-            "pedidos", new DB.Row(table, {
-                id: 2,
-                cliente_id: 2,
-                data: new SQLDate(2026, 7, 17)
-            }));
-
-        SGBDFunctions.insertRow(
-            "pedidos", new DB.Row(table, {
-                id: 3,
-                cliente_id: 1,
-                data: new SQLDate(2026, 7, 19)
-            }));
-
-        table.columns["id"].incrementCounter = 4;
-    }
-
-    // =========================
-    // ITENS_PEDIDO
-    // =========================
-
-    if (!schema.tables["itens_pedido"]) {
-
-        const table: DB.Table = new DB.Table("itens_pedido", schema);
-
-        table.columns["id"] = new DB.Column("id", table, types.INTEGER, true, false, true, true, true, false, false);
-
-        table.columns["pedido_id"] = new DB.Column(
-            "pedido_id",
-            table,
-            types.INTEGER,
-            false,
-            true,
-            true,
-            false,
-            false,
-            false,
-            false,
-            {
-                schema: schemaName,
-                table: "pedidos",
-                column: "id"
-            }
-        );
-
-        table.columns["produto_id"] = new DB.Column(
-            "produto_id",
-            table,
-            types.INTEGER,
-            false,
-            true,
-            true,
-            false,
-            false,
-            false,
-            false,
-            {
-                schema: schemaName,
-                table: "produtos",
-                column: "id"
-            }
-        );
-
-        table.columns["quantidade"] = new DB.Column("quantidade", table, types.INTEGER, false, false, true, false, false, false, false);
-        table.columns["valor_unitario"] = new DB.Column("valor_unitario", table, types.FLOAT, false, false, true, false, false, false, false);
-
-        SGBDFunctions.createTable(table);
-
-        SGBDFunctions.insertRow(
-            "itens_pedido", new DB.Row(table, {
-                id: 1,
-                pedido_id: 1,
-                produto_id: 1,
-                quantidade: 1,
-                valor_unitario: 4500
-            }));
-
-        SGBDFunctions.insertRow(
-            "itens_pedido", new DB.Row(table, {
-                id: 2,
-                pedido_id: 1,
-                produto_id: 2,
-                quantidade: 2,
-                valor_unitario: 149.9
-            }));
-
-        SGBDFunctions.insertRow(
-            "itens_pedido", new DB.Row(table, {
-                id: 3,
-                pedido_id: 2,
-                produto_id: 3,
-                quantidade: 1,
-                valor_unitario: 299.9
-            }));
-
-        SGBDFunctions.insertRow(
-            "itens_pedido", new DB.Row(table, {
-                id: 4,
-                pedido_id: 3,
-                produto_id: 4,
-                quantidade: 1,
-                valor_unitario: 399.9
-            }));
-
-        SGBDFunctions.insertRow(
-            "itens_pedido", new DB.Row(table, {
-                id: 5,
-                pedido_id: 3,
-                produto_id: 5,
-                quantidade: 1,
-                valor_unitario: 899.9
-            }));
-
-        table.columns["id"].incrementCounter = 6;
-    }
-
-    currentDatabase = databaseName;
-    currentSchema = schemaName;
-    currentTable = null;
-
-    refreshUI();
+    transformFromJson(json);
 }
 
 function compareTypes(type1: DataTypes.DataType, type2: DataTypes.DataType): boolean {
@@ -1162,8 +809,8 @@ namespace DB {
         hasDefault: boolean;
         isCurrentTimestamp: boolean;
         reference?: TReference;
-        incrementCounter: number = 1;
         defaultValue: any;
+        incrementCounter: number = 1;
 
         /**
          * Cria uma coluna com metadados e restrições.
@@ -1181,7 +828,7 @@ namespace DB {
          */
         constructor(name: string, parent: Node, type: DataTypes.DataType, isPrimaryKey: boolean = false, isForeignKey: boolean = false,
             isNotNull: boolean = false, isUnique: boolean = false, isAutoIncrement: boolean = false, hasDefault: boolean = false,
-            isCurrentTimestamp: boolean = false, reference?: TReference) {
+            isCurrentTimestamp: boolean = false, reference?: TReference, defaultValue?: any) {
             super(name, parent);
             this.type = type;
             this.isPrimaryKey = isPrimaryKey;
@@ -1192,6 +839,7 @@ namespace DB {
             this.hasDefault = hasDefault;
             this.isCurrentTimestamp = isCurrentTimestamp;
             this.reference = reference;
+            this.defaultValue = defaultValue;
         }
 
         /**
@@ -2232,7 +1880,7 @@ function getCurrentTable(): DB.Table | null {
 }
 
 function getTable(tableName: string, schemaName?: string): DB.Table | null {
-    return currentDatabase && (schemaName || currentSchema) ? getCurrentSchema()!.tables[tableName] || null : null;
+    return currentDatabase && (schemaName || currentSchema) ? getCurrentDatabase()!.schemas[schemaName || currentSchema!].tables[tableName] || null : null;
 }
 
 //#endregion
@@ -3004,6 +2652,7 @@ function refreshUI() {
     changeTabelaSelecionadaTabela();
     showHideTabelaSelecionadaLinhaColuna(false);
     changeLeftSide();
+    refreshLogical();
 }
 
 // central menus
@@ -4485,6 +4134,7 @@ namespace SQL {
             const { schemaName, tableName, error } = verifySchemaTableName(name);
             if (error) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, [error], "error");
+                return;
             }
             if (!schemaName || !tableName) return;
 
@@ -4541,7 +4191,39 @@ namespace SQL {
         }
 
         setSchema() {
+            const name = this.tokens[2];
+            const { schemaName, tableName, error } = verifySchemaTableName(name);
+            if (error) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [error], "error");
+                return;
+            }
+            if (!schemaName || !tableName) return;
+            const word5 = this.tokens[4]?.toLowerCase();
+            if (word5 !== "schema") {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "SET deve ser seguido de SCHEMA"], "error");
+                return;
+            }
 
+            if (this.tokens.length !== 6) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
+                return;
+            }
+
+            const newSchemaName = this.tokens[5];
+            if (!getCurrentDatabase()!.schemas[newSchemaName]) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Schema "${newSchemaName}" não existe`], "error");
+                return;
+            }
+            if (getCurrentDatabase()!.schemas[newSchemaName].tables[tableName]) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma tabela com o nome "${tableName}" no schema "${newSchemaName}"`], "error");
+                return;
+            }
+            const table = getTable(tableName, schemaName)!;
+            table.parent = getCurrentDatabase()!.schemas[newSchemaName];
+            SGBDFunctions.deleteTable(tableName, schemaName);
+            SGBDFunctions.createTable(table, newSchemaName);
+            getCurrentTerminalSession().createEntry(this.fullCommand, [`Tabela "${tableName}" movida para o schema "${newSchemaName}" com sucesso!`], "success");
+            refreshUI();
         }
 
         addColumn() {
@@ -4549,15 +4231,18 @@ namespace SQL {
             const { schemaName, tableName, error } = verifySchemaTableName(name);
             if (error) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, [error], "error");
+                return;
             }
             if (!schemaName || !tableName) return;
             const word5 = this.tokens[4]?.toLowerCase();
             if (word5 !== "column") {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "ADD deve ser seguido de COLUMN"], "error");
+                return;
             }
 
             if (this.tokens.length < 7) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
+                return;
             }
 
             const result = parseColumn(this.tokens.slice(5));
@@ -5525,9 +5210,393 @@ namespace SQL {
 
 // #endregion
 
-// #region save and load
+// #region Logical
 
-let autoSaveEnabled = false;
+const logical = document.getElementById("logical")!;
+const camera = document.getElementById("camera")!;
+let connectionsSvg = document.getElementById("logical-connections")! as unknown as SVGSVGElement;
+
+let draggingCamera = false;
+let cameraX = 0;
+let cameraY = 0;
+let zoom = 1;
+let lastMouseX = 0;
+let lastMouseY = 0;
+
+let draggingTable: HTMLElement | null = null
+let tableX = 0;
+let tableY = 0;
+let moved = false;
+
+let tablesLogical: Record<string, {
+    table: DB.Table,
+    element: HTMLElement,
+    columns: Record<string, {
+        column: DB.Column,
+        element: HTMLElement
+        row: number
+    }>
+}> = {};
+
+const logicalConnections: {
+    from: {
+        table: string;
+        column: string;
+    };
+    to: {
+        table: string;
+        column: string;
+    };
+    path: SVGPathElement;
+}[] = [];
+
+function refreshLogical() {
+    camera.innerHTML = "";
+    connectionsSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    connectionsSvg.id = "logical-connections";
+    camera.appendChild(connectionsSvg);
+
+    const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+
+    const marker = document.createElementNS("http://www.w3.org/2000/svg", "marker");
+
+    marker.setAttribute("id", "arrow");
+    marker.setAttribute("viewBox", "0 0 10 10");
+    marker.setAttribute("refX", "9");
+    marker.setAttribute("refY", "5");
+    marker.setAttribute("markerWidth", "8");
+    marker.setAttribute("markerHeight", "8");
+    marker.setAttribute("orient", "auto");
+
+    const arrow = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    arrow.setAttribute("d", "M 0 0 L 10 5 L 0 10 z");
+    arrow.setAttribute("fill", "#4da3ff");
+
+    marker.appendChild(arrow);
+    defs.appendChild(marker);
+    connectionsSvg.appendChild(defs);
+
+    const GAP_X = 450;
+    const GAP_Y = 400;
+    let nCol = 0;
+    let nRow = 0;
+    let ultimoY = 0
+    for (const schema of Object.values(getCurrentDatabase()?.schemas ?? {})) {
+        for (const table of Object.values(schema.tables)) {
+            const divTabelaLogical = document.createElement("div");
+            divTabelaLogical.classList.add("tabela-logical");
+            divTabelaLogical.dataset.x = GAP_X * nCol + "";
+            divTabelaLogical.dataset.y = GAP_Y * nRow + "";
+            divTabelaLogical.addEventListener("mousedown", (event) => {
+                moved = false;
+                event.stopPropagation();
+                draggingTable = divTabelaLogical;
+                lastMouseX = event.clientX;
+                lastMouseY = event.clientY;
+            });
+            divTabelaLogical.style.transform = `translate(${GAP_X * nCol}px, ${GAP_Y * nRow}px)`;
+            ultimoY = divTabelaLogical.offsetHeight + 30;
+            nCol++;
+            if (nCol == 3) {
+                nCol = 0;
+                nRow++;
+            }
+            camera.appendChild(divTabelaLogical);
+
+            const details = document.createElement("details");
+            details.open = true;
+            details.addEventListener("toggle", () => {
+                requestAnimationFrame(drawConnectionLines);
+            });
+            divTabelaLogical.appendChild(details);
+
+            const summary = document.createElement("summary");
+            summary.textContent = table.name;
+            summary.addEventListener("click", (event) => {
+                if (moved) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            });
+            details.appendChild(summary);
+
+            const divColumns = document.createElement("div");
+            details.appendChild(divColumns);
+
+            const divHeader = document.createElement("div");
+            divHeader.innerHTML = `
+            <p>Coluna</p>
+            <p>Tipo</p>
+            <p>PK</p>
+            <p>FK</p>
+            <p>NN</p>
+            <p>UQ</p>
+            `;
+            divColumns.appendChild(divHeader);
+
+            tablesLogical[table.name] = {
+                table: table,
+                element: divTabelaLogical,
+                columns: {}
+            };
+
+            let r = 1;
+
+            for (let c of Object.values(table.columns)) {
+                const divColumn = document.createElement("div");
+                divColumn.innerHTML = `
+                <p>${c.name}</p>
+                <p>${c.type.name}</p>
+                `;
+                if (c.isPrimaryKey) {
+                    divColumn.innerHTML += `
+                    <p>
+                        <svg viewBox="0 -960 960 960" fill="currentColor">
+                            <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+                        </svg>
+                    </p>
+                    `;
+                } else {
+                    divColumn.innerHTML += "<p></p>";
+                }
+
+                if (c.isForeignKey) {
+                    divColumn.innerHTML += `
+                    <p>
+                        <svg viewBox="0 -960 960 960" fill="currentColor">
+                            <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+                        </svg>
+                    </p>
+                    `;
+                } else {
+                    divColumn.innerHTML += "<p></p>";
+                }
+
+                if (c.isNotNull) {
+                    divColumn.innerHTML += `
+                    <p>
+                        <svg viewBox="0 -960 960 960" fill="currentColor">
+                            <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+                        </svg>
+                    </p>
+                    `;
+                } else {
+                    divColumn.innerHTML += "<p></p>";
+                }
+
+                if (c.isUnique) {
+                    divColumn.innerHTML += `
+                    <p>
+                        <svg viewBox="0 -960 960 960" fill="currentColor">
+                            <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+                        </svg>
+                    </p>
+                    `;
+                } else {
+                    divColumn.innerHTML += "<p></p>";
+                }
+
+                divColumns.appendChild(divColumn);
+
+                tablesLogical[table.name].columns[c.name] = {
+                    column: c,
+                    element: divColumn,
+                    row: r
+                };
+
+                r++;
+            }
+        }
+    }
+
+    logicalConnections.length = 0;
+
+    for (const schema of Object.values(getCurrentDatabase()?.schemas ?? {})) {
+        for (const table of Object.values(schema.tables)) {
+            for (const column of Object.values(table.columns)) {
+
+                if (!column.reference) continue;
+
+                const path = document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "path"
+                );
+
+                path.setAttribute("fill", "none");
+                path.setAttribute("stroke", "#4da3ff");
+                path.setAttribute("stroke-width", "2");
+                path.setAttribute("stroke-linecap", "round");
+                path.setAttribute("marker-end", "url(#arrow)");
+
+                connectionsSvg.appendChild(path);
+
+                logicalConnections.push({
+                    from: {
+                        table: table.name,
+                        column: column.name
+                    },
+                    to: {
+                        table: column.reference.table,
+                        column: column.reference.column
+                    },
+                    path
+                });
+            }
+        }
+    }
+
+    requestAnimationFrame(() => {
+        console.log(logicalConnections);
+        drawConnectionLines();
+    });
+}
+
+function drawConnectionLines() {
+
+    for (const connection of logicalConnections) {
+        const fromTable = tablesLogical[connection.from.table];
+        const toTable = tablesLogical[connection.to.table];
+
+        if (!fromTable || !toTable) continue;
+
+        const fromColumn = fromTable.columns[connection.from.column];
+        const toColumn = toTable.columns[connection.to.column];
+
+        if (!fromColumn || !toColumn) continue;
+
+        const fromDetails = fromTable.element.querySelector("details")!;
+        const toDetails = toTable.element.querySelector("details")!;
+
+        const headerHeight = (fromTable.element.querySelector("details > div > div") as HTMLElement).offsetHeight;
+        const rowHeight = fromColumn.element.offsetHeight;
+
+        const fromX = Number(fromTable.element.dataset.x);
+        const fromY = Number(fromTable.element.dataset.y);
+
+        const toX = Number(toTable.element.dataset.x);
+        const toY = Number(toTable.element.dataset.y);
+
+        let y1: number;
+        let y2: number;
+
+        if (fromDetails.open) {
+            y1 = fromY + headerHeight + fromColumn.row * rowHeight + rowHeight / 2;
+        } else {
+            const summary = fromTable.element.querySelector("summary") as HTMLElement;
+            y1 = fromY + summary.offsetHeight / 2;
+        }
+
+        if (toDetails.open) {
+            y2 = toY + headerHeight + toColumn.row * rowHeight + rowHeight / 2;
+        } else {
+            const summary = toTable.element.querySelector("summary") as HTMLElement;
+            y2 = toY + summary.offsetHeight / 2;
+        }
+
+        const fromWidth = fromTable.element.offsetWidth;
+        const toWidth = toTable.element.offsetWidth;
+
+        let x1: number;
+        let x2: number;
+
+        if (toX > fromX) {
+            // destino está à direita
+            x1 = fromX + fromWidth;
+            x2 = toX;
+        } else {
+            // destino está à esquerda
+            x1 = fromX;
+            x2 = toX + toWidth;
+        }
+
+        const offset = Math.max(50, Math.abs(x2 - x1) * 0.35);
+
+        const c1x = x1 + (x2 > x1 ? offset : -offset);
+        const c2x = x2 + (x2 > x1 ? -offset : offset);
+
+        connection.path.setAttribute(
+            "d",
+            `M ${x1} ${y1}
+            C ${c1x} ${y1},
+            ${c2x} ${y2},
+            ${x2} ${y2}`
+        );
+    }
+}
+
+document.addEventListener("mousemove", (event) => {
+    if (!draggingTable) return;
+
+    moved = true;
+
+    let x = Number(draggingTable.dataset.x);
+    let y = Number(draggingTable.dataset.y);
+
+    x += (event.clientX - lastMouseX) / zoom;
+    y += (event.clientY - lastMouseY) / zoom;
+
+    draggingTable.dataset.x = String(x);
+    draggingTable.dataset.y = String(y);
+
+    lastMouseX = event.clientX;
+    lastMouseY = event.clientY;
+
+    draggingTable.style.transform = `translate(${x}px, ${y}px)`;
+    drawConnectionLines();
+});
+
+function renderCamera() {
+    camera.style.transformOrigin = "0 0";
+    camera.style.transform = `matrix(${zoom}, 0, 0, ${zoom}, ${cameraX}, ${cameraY})`;
+    drawConnectionLines();
+}
+
+logical.addEventListener("mousedown", (event) => {
+    if ((event.target as HTMLElement).closest(".tabela-logical")) {
+        return;
+    }
+
+    draggingCamera = true;
+    lastMouseX = event.clientX;
+    lastMouseY = event.clientY;
+});
+
+logical.addEventListener("wheel", (event) => {
+    event.preventDefault();
+    const rect = logical.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+    const worldX = (mouseX - cameraX) / zoom;
+    const worldY = (mouseY - cameraY) / zoom;
+    const factor = event.deltaY < 0 ? 1.1 : 1 / 1.1;
+    zoom *= factor;
+    zoom = Math.max(0.2, Math.min(zoom, 5));
+    cameraX = mouseX - worldX * zoom;
+    cameraY = mouseY - worldY * zoom;
+    renderCamera();
+});
+
+document.addEventListener("mousemove", (event) => {
+    if (!draggingCamera) return;
+    const dx = event.clientX - lastMouseX;
+    const dy = event.clientY - lastMouseY;
+    cameraX += dx;
+    cameraY += dy;
+    lastMouseX = event.clientX;
+    lastMouseY = event.clientY;
+    renderCamera();
+});
+
+document.addEventListener("mouseup", () => {
+    draggingCamera = false;
+    draggingTable = null;
+});
+
+// #endregion
+
+// #region Save
+
+let autoSaveEnabled = true;
 
 document.getElementById("auto-save-checkbox")?.addEventListener("click", () => {
     autoSaveEnabled = !autoSaveEnabled;
@@ -5652,7 +5721,16 @@ function loadFromLocalStorage() {
 }
 
 function saveToJson() {
+    const json = transformToJson();
+    const blob = new Blob([json], { type: "application/json" });
 
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "database.json";
+    a.click();
+
+    URL.revokeObjectURL(url);
 }
 
 /**
@@ -5698,7 +5776,7 @@ async function loadFromSupabase() {
 
 // #endregion
 
-// #region help
+// #region Help
 
 function createHelpButtons() {
     const helpButtons = document.querySelectorAll("#help-left > div");

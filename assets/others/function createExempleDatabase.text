@@ -1,0 +1,341 @@
+function createExempleDatabase() {
+    const database: DB.Database = new DB.Database("Escola");
+    SGBDFunctions.createDatabase(database);
+
+    const publicSchema = new DB.Schema("public", database);
+    SGBDFunctions.createSchema(publicSchema);
+
+    const pessoaTable = new DB.Table("tb_pessoa", publicSchema);
+    const alunoTable = new DB.Table("tb_aluno", publicSchema);
+    const professorTable = new DB.Table("tb_professor", publicSchema);
+    const servidorTable = new DB.Table("tb_servidor", publicSchema);
+    const cursoTable = new DB.Table("tb_curso", publicSchema);
+    const turmaTable = new DB.Table("tb_turma", publicSchema);
+    const disciplinaTable = new DB.Table("tb_disciplina", publicSchema);
+    const aulaTable = new DB.Table("tb_aula", publicSchema);
+    const alunoDisciplinaTable = new DB.Table("tb_aluno_disciplina", publicSchema);
+
+    let colunasPublic: Record<string, DB.Column[]> = {
+        pessoaTable: [
+            new DB.Column("id", pessoaTable, types.INTEGER, true, false, true, true, true),
+            new DB.Column("matricula", pessoaTable, types.VARCHAR(14), false, false, true, true),
+            new DB.Column("nome", pessoaTable, types.TEXT, false, false, true),
+            new DB.Column("idade", pessoaTable, types.INTEGER, false, false, true),
+            new DB.Column("ativo", pessoaTable, types.BOOLEAN, false, false, true),
+            new DB.Column("sexo", pessoaTable, types.ENUM(["Masculino", "Feminino", "Outro"]), false, false, true),
+            new DB.Column("cpf", pessoaTable, types.VARCHAR(11), false, false, true, true),
+            new DB.Column("email", pessoaTable, types.TEXT, false, false, true, true),
+            new DB.Column("cor", pessoaTable, types.ENUM(["Branco", "Pardo", "Preto", "Amarelo"]), false, false, true),
+            new DB.Column("nome_pai", pessoaTable, types.TEXT),
+            new DB.Column("nome_mae", pessoaTable, types.TEXT),
+            new DB.Column("telefone", pessoaTable, types.VARCHAR(13), false, false, true),
+            new DB.Column("data_criacao", pessoaTable, types.DATE, false, false, true, false, false, false, true),
+            new DB.Column("horario_criacao", pessoaTable, types.TIME, false, false, true, false, false, false, true)
+        ],
+        alunoTable: [
+            new DB.Column("pessoa_id", alunoTable, types.INTEGER, true, true, true, true, false, false, false, {schema: publicSchema.name, table: pessoaTable.name, column: "id"}),
+            new DB.Column("TCC", alunoTable, types.TEXT),
+            new DB.Column("turma_id", alunoTable, types.INTEGER, false, false, true, false, false, false, false, {schema: publicSchema.name, table: turmaTable.name, column: "id"})
+        ],
+        professorTable: [
+            new DB.Column("pessoa_id", alunoTable, types.INTEGER, true, true, true, true, false, false, false, {schema: publicSchema.name, table: pessoaTable.name, column: "id"}),
+            new DB.Column("formacao", professorTable, types.ENUM(["Graduação", "Mestrado", "Doutorado", "Pós-Doutorado"]), false, false, true),
+            new DB.Column("salario", professorTable, types.FLOAT, false, false, true)
+        ],
+        servidorTable: [
+            new DB.Column("pessoa_id", alunoTable, types.INTEGER, true, true, true, true, false, false, false, {schema: publicSchema.name, table: pessoaTable.name, column: "id"}),
+            new DB.Column("salario", servidorTable, types.FLOAT, false, false, true),
+        ],
+        cursoTable: [
+            new DB.Column("id", cursoTable, types.INTEGER, true, false, true, true, true),
+            new DB.Column("nome", cursoTable, types.TEXT, false, false, true),
+            new DB.Column("descricao", cursoTable, types.TEXT, false, false, true),
+            new DB.Column("carga_horaria", cursoTable, types.INTEGER, false, false, true),
+            new DB.Column("turno", cursoTable, types.ENUM(["Matutino", "Vespertino", "Noturno"]), false, false, true),
+            new DB.Column("tipo", cursoTable, types.ENUM(["Técnico", "Subsequente", "EJA"]), false, false, true)
+        ],
+        turmaTable: [
+            new DB.Column("id", turmaTable, types.INTEGER, true, false, true, true, true),
+            new DB.Column("Periodo", turmaTable, types.ENUM(["1", "2", "3", "4", "5", "6", "7", "8"]), false, false, true),
+            new DB.Column("curso_id", turmaTable, types.INTEGER, false, false, true, false, false, false, false, {schema: publicSchema.name, table: cursoTable.name, column: "id"})
+        ],
+        disciplinaTable: [
+            new DB.Column("id", disciplinaTable, types.INTEGER, true, false, true, true, true),
+            new DB.Column("nome", disciplinaTable, types.TEXT, false, false, true),
+            new DB.Column("descricao", disciplinaTable, types.TEXT, false, false, true),
+            new DB.Column("carga_horaria", disciplinaTable, types.INTEGER, false, false, true),
+            new DB.Column("periodo_oferecido", disciplinaTable, types.ENUM(["1", "2", "3", "4", "5", "6", "7", "8"]), false, false, true),
+            new DB.Column("duracao", disciplinaTable, types.ENUM(["semestral", "anual"]), false, false, true),
+        ],
+        aulaTable: [
+            new DB.Column("id", aulaTable, types.INTEGER, true, false, true, true, true),
+            new DB.Column("descricao", aulaTable, types.TEXT, false, false, true),
+            new DB.Column("data", aulaTable, types.DATE, false, false, true),
+            new DB.Column("horario", aulaTable, types.ENUM(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]), false, false, true),
+            new DB.Column("disciplina_id", aulaTable, types.INTEGER, false, false, true, false, false, false, false, {schema: publicSchema.name, table: disciplinaTable.name, column: "id"}),
+            new DB.Column("professor_id", aulaTable, types.INTEGER, false, false, true, false, false, false, false, {schema: publicSchema.name, table: professorTable.name, column: "pessoa_id"}),
+            new DB.Column("turma_id", aulaTable, types.INTEGER, false, false, true, false, false, false, false, {schema: publicSchema.name, table: turmaTable.name, column: "id"})
+        ],
+        alunoDisciplinaTable: [
+            new DB.Column("id", alunoDisciplinaTable, types.INTEGER, true, false, true, true, true),
+            new DB.Column("faltas", alunoDisciplinaTable, types.INTEGER, false, false, true),
+            new DB.Column("aluno_id", alunoDisciplinaTable, types.INTEGER, false, true, true, true, false, false, false, {schema: publicSchema.name, table: alunoTable.name, column: "pessoa_id"}),
+            new DB.Column("disciplina_id", alunoDisciplinaTable, types.INTEGER, false, true, true, true, false, false, false, {schema: publicSchema.name, table: disciplinaTable.name, column: "id"})
+        ]
+    }
+
+    for (const tabela in colunasPublic) {
+        for (const coluna of colunasPublic[tabela]) {
+            eval(tabela).columns[coluna.name] = coluna;
+        }
+    }
+
+    let linhasPublic: Record<string, DB.Row[]> = {
+        pessoaTable: [
+            new DB.Row(pessoaTable, { id: 1, matricula: "202500000001", nome: "Jurandy Egito Sahur", idade: 52, ativo: true, sexo: "Masculino", cpf: "12345678901", email: "jurandy.egito@escolar.com", cor: "Branco", nome_pai: "Carlos Silva", nome_mae: "Maria Silva", telefone: "5584999990001", data_criacao: new SQLDate(2026, 8, 1), horario_criacao: new SQLTime(10, 30, 0) }),
+            new DB.Row(pessoaTable, { id: 2, matricula: "202500000002", nome: "Breno Meira Moura de Amorim", idade: 45, ativo: true, sexo: "Masculino", cpf: "12345678902", email: "moura.amorim@escolar.com", cor: "Branco", nome_pai: "José Souza", nome_mae: "Juliana Souza", telefone: "5584999990002", data_criacao: new SQLDate(2026, 8, 2), horario_criacao: new SQLTime(11, 15, 0) }),
+            new DB.Row(pessoaTable, { id: 3, matricula: "202500000003", nome: "Caio de Souza Damasceno", idade: 18, ativo: true, sexo: "Masculino", cpf: "12345678903", email: "caio.damasceno@escolar.com", cor: "Pardo", nome_pai: "João Lima", nome_mae: "Rita Lima", telefone: "5584999990003", data_criacao: new SQLDate(2026, 8, 3), horario_criacao: new SQLTime(14, 45, 0) }),
+            new DB.Row(pessoaTable, { id: 4, matricula: "202500000004", nome: "Mayalle Karijane Lima", idade: 18, ativo: true, sexo: "Feminino", cpf: "12345678904", email: "karijane.mayalle@escolar.com", cor: "Branco", nome_pai: "Paulo Costa", nome_mae: "Helena Costa", telefone: "5584999990004", data_criacao: new SQLDate(2026, 8, 4), horario_criacao: new SQLTime(15, 30, 0) }),
+            new DB.Row(pessoaTable, { id: 5, matricula: "202500000005", nome: "Silas Car Sim", idade: 17, ativo: true, sexo: "Masculino", cpf: "12345678905", email: "silas.car@escolar.com", cor: "Branco", nome_pai: "Fernando Oliveira", nome_mae: "Lúcia Oliveira", telefone: "5584999990005", data_criacao: new SQLDate(2026, 8, 5), horario_criacao: new SQLTime(16, 0, 0) }),
+            new DB.Row(pessoaTable, { id: 6, matricula: "202500000006", nome: "Tralalelo Tralala Patapim", idade: 24, ativo: true, sexo: "Outro", cpf: "12345678906", email: "tralalelo.tralala@escolar.com", cor: "Amarelo", nome_pai: "Carlos Silva", nome_mae: "Maria Silva", telefone: "5584999990006", data_criacao: new SQLDate(2026, 8, 1), horario_criacao: new SQLTime(10, 30, 0) }),
+            new DB.Row(pessoaTable, { id: 7, matricula: "202500000007", nome: "Zé do Burro", idade: 17, ativo: true, sexo: "Masculino", cpf: "12345678907", email: "burro2@escolar.com", cor: "Pardo", nome_pai: "José Souza", nome_mae: "Juliana Souza", telefone: "5584999990007", data_criacao: new SQLDate(2026, 8, 2), horario_criacao: new SQLTime(11, 15, 0) }),
+            new DB.Row(pessoaTable, { id: 8, matricula: "202500000008", nome: "Giuseppe Camolli", idade: 83, ativo: true, sexo: "Masculino", cpf: "12345678908", email: "giuseppe.camolli@escolar.com", cor: "Preto", nome_pai: "Carlos Silva", nome_mae: "Maria Silva", telefone: "5584999990008", data_criacao: new SQLDate(2026, 8, 1), horario_criacao: new SQLTime(10, 30, 0) }),
+            new DB.Row(pessoaTable, { id: 9, matricula: "202500000009", nome: "Donald Inácio Trump", idade: 63, ativo: true, sexo: "Outro", cpf: "12345678909", email: "inacio.trump@escolar.com", cor: "Amarelo", nome_pai: "José Souza", nome_mae: "Juliana Souza", telefone: "5584999990009", data_criacao: new SQLDate(2026, 8, 2), horario_criacao: new SQLTime(11, 15, 0) }),
+            new DB.Row(pessoaTable, { id: 10, matricula: "202500000010", nome: "Hatsune Miku", idade: 15, ativo: true, sexo: "Feminino", cpf: "12345678910", email: "h.miku@escolar.com", cor: "Pardo", nome_pai: "Carlos Silva", nome_mae: "Maria Silva", telefone: "5584999990010", data_criacao: new SQLDate(2026, 8, 1), horario_criacao: new SQLTime(10, 30, 0) }),
+            new DB.Row(pessoaTable, { id: 11, matricula: "202500000011", nome: "Naruto Uzumaki", idade: 16, ativo: true, sexo: "Masculino", cpf: "12345678911", email: "naruto.uzumaki@escolar.com", cor: "Branco", nome_pai: "José Souza", nome_mae: "Juliana Souza", telefone: "5584999990011", data_criacao: new SQLDate(2026, 8, 2), horario_criacao: new SQLTime(11, 15, 0) }),
+            new DB.Row(pessoaTable, { id: 12, matricula: "202500000012", nome: "Rebeka Carozza", idade: 42, ativo: true, sexo: "Feminino", cpf: "12345678912", email: "carozza.rebeka@escolar.com", cor: "Branco", nome_pai: "Carlos Silva", nome_mae: "Maria Silva", telefone: "5584999990012", data_criacao: new SQLDate(2026, 8, 1), horario_criacao: new SQLTime(10, 30, 0) }),
+            new DB.Row(pessoaTable, { id: 13, matricula: "202500000013", nome: "Enzo Gabriel da Silva", idade: 14, ativo: true, sexo: "Masculino", cpf: "12345678913", email: "gabriel.silva@escolar.com", cor: "Branco", nome_pai: "José Souza", nome_mae: "Juliana Souza", telefone: "5584999990013", data_criacao: new SQLDate(2026, 8, 2), horario_criacao: new SQLTime(11, 15, 0) }),
+            new DB.Row(pessoaTable, { id: 14, matricula: "202500000014", nome: "Valmir Sumido", idade: 18, ativo: true, sexo: "Outro", cpf: "12345678914", email: "v.sumido1@escolar.com", cor: "Pardo", nome_pai: "Carlos Silva", nome_mae: "Maria Silva", telefone: "5584999990014", data_criacao: new SQLDate(2026, 8, 1), horario_criacao: new SQLTime(10, 30, 0) }),
+            new DB.Row(pessoaTable, { id: 15, matricula: "202500000015", nome: "Gustavo Eletricista", idade: 50, ativo: true, sexo: "Masculino", cpf: "12345678915", email: "gustavo.eletricista@escolar.com", cor: "Branco", nome_pai: "José Souza", nome_mae: "Juliana Souza", telefone: "5584999990015", data_criacao: new SQLDate(2026, 8, 2), horario_criacao: new SQLTime(11, 15, 0) }),
+        ],
+
+        alunoTable: [
+            new DB.Row(alunoTable, { pessoa_id: 3, TCC: null, turma_id: 4 }),
+            new DB.Row(alunoTable, { pessoa_id: 4, TCC: null, turma_id: 4 }),
+            new DB.Row(alunoTable, { pessoa_id: 5, TCC: null, turma_id: 3 }),
+            new DB.Row(alunoTable, { pessoa_id: 7, TCC: null, turma_id: 2 }),
+            new DB.Row(alunoTable, { pessoa_id: 10, TCC: null, turma_id: 2 }),
+            new DB.Row(alunoTable, { pessoa_id: 11, TCC: null, turma_id: 3 }),
+            new DB.Row(alunoTable, { pessoa_id: 13, TCC: null, turma_id: 1 }),
+            new DB.Row(alunoTable, { pessoa_id: 14, TCC: null, turma_id: 4 })
+        ],
+
+        professorTable: [
+            new DB.Row(professorTable, { pessoa_id: 1, formacao: "Doutorado", salario: 17000.01 }),
+            new DB.Row(professorTable, { pessoa_id: 2, formacao: "Mestrado", salario: 12345.67 }),
+            new DB.Row(professorTable, { pessoa_id: 8, formacao: "Mestrado", salario: 15350.34 }),
+            new DB.Row(professorTable, { pessoa_id: 12, formacao: "Pós-Doutorado", salario: 20000.00 })
+        ],
+
+        servidorTable: [
+            new DB.Row(servidorTable, { pessoa_id: 6, salario: 5400.50 }),
+            new DB.Row(servidorTable, { pessoa_id: 9, salario: 3800 }),
+            new DB.Row(servidorTable, { pessoa_id: 15, salario: 4500 })
+        ],
+
+        cursoTable: [
+            new DB.Row(cursoTable, { id: 1, nome: "Informática", descricao: "Curso Técnico Integrado em Informática", carga_horaria: 3600, turno: "Matutino", tipo: "Técnico" }),
+            new DB.Row(cursoTable, { id: 2, nome: "Eletrotécnica", descricao: "Curso Técnico Subsequente em Eletrotécnica", carga_horaria: 3600, turno: "Vespertino", tipo: "Subsequente" }),
+            new DB.Row(cursoTable, { id: 3, nome: "Mecatrônica", descricao: "Curso Técnico Integrado em Mecatrônica", carga_horaria: 3600, turno: "Matutino", tipo: "Técnico" }),
+            new DB.Row(cursoTable, { id: 4, nome: "Pescaria", descricao: "Curso Técnico Integrado em Pescaria", carga_horaria: 3600, turno: "Vespertino", tipo: "Técnico" })
+        ],
+
+        turmaTable: [
+            new DB.Row(turmaTable, { id: 1, Periodo: "1", curso_id: 2 }),
+            new DB.Row(turmaTable, { id: 2, Periodo: "3", curso_id: 1 }),
+            new DB.Row(turmaTable, { id: 3, Periodo: "3", curso_id: 4 }),
+            new DB.Row(turmaTable, { id: 4, Periodo: "7", curso_id: 1 })
+        ],
+
+        disciplinaTable: [
+            new DB.Row(disciplinaTable, { id: 1, nome: "Banco de Dados", descricao: "Modelagem e SQL", carga_horaria: 80, periodo_oferecido: "7", duracao: "anual" }),
+            new DB.Row(disciplinaTable, { id: 2, nome: "Programação Web", descricao: "HTML, CSS e JavaScript", carga_horaria: 80, periodo_oferecido: "3", duracao: "semestral" }),
+            new DB.Row(disciplinaTable, { id: 3, nome: "Circuitos Elétricos", descricao: "Conceitos básicos de eletricidade", carga_horaria: 120, periodo_oferecido: "3", duracao: "anual" }),
+            new DB.Row(disciplinaTable, { id: 4, nome: "Português I", descricao: "Introdução à língua portuguesa", carga_horaria: 80, periodo_oferecido: "1", duracao: "anual" }),
+            new DB.Row(disciplinaTable, { id: 5, nome: "Baiacus I", descricao: "Introdução aos peixes baiacus", carga_horaria: 160, periodo_oferecido: "1", duracao: "anual" }),
+            new DB.Row(disciplinaTable, { id: 6, nome: "Programação Orientada a Objetos", descricao: "Introdução à programação orientada a objetos", carga_horaria: 80, periodo_oferecido: "3", duracao: "semestral" }),
+            new DB.Row(disciplinaTable, { id: 7, nome: "Matemática I", descricao: "Conceitos básicos de matemática", carga_horaria: 160, periodo_oferecido: "1", duracao: "anual" }),
+            new DB.Row(disciplinaTable, { id: 8, nome: "Eletricidade e Eletrônica", descricao: "Conceitos básicos de eletricidade e eletrônica", carga_horaria: 120, periodo_oferecido: "3", duracao: "anual" })
+        ],
+
+        aulaTable: [
+            new DB.Row(aulaTable, { id: 1, descricao: "Introdução ao SQL", data: new SQLDate(2026, 8, 10), horario: "2", disciplina_id: 1, professor_id: 1, turma_id: 4 }),
+            new DB.Row(aulaTable, { id: 2, descricao: "Comandos SELECT", data: new SQLDate(2026, 8, 12), horario: "2", disciplina_id: 1, professor_id: 1, turma_id: 4 }),
+            new DB.Row(aulaTable, { id: 3, descricao: "Flexbox", data: new SQLDate(2026, 8, 11), horario: "4", disciplina_id: 2, professor_id: 2, turma_id: 2 }),
+            new DB.Row(aulaTable, { id: 4, descricao: "Barbatanas dos baiacus", data: new SQLDate(2026, 8, 11), horario: "4", disciplina_id: 5, professor_id: 8, turma_id: 3 }),
+            new DB.Row(aulaTable, { id: 5, descricao: "Função quadrática", data: new SQLDate(2026, 8, 11), horario: "4", disciplina_id: 8, professor_id: 12, turma_id: 1 })
+        ],
+
+        alunoDisciplinaTable: [
+            new DB.Row(alunoDisciplinaTable, { id: 1, faltas: 0, aluno_id: 3, disciplina_id: 1 }),
+            new DB.Row(alunoDisciplinaTable, { id: 2, faltas: 2, aluno_id: 4, disciplina_id: 1 }),
+            new DB.Row(alunoDisciplinaTable, { id: 3, faltas: 2, aluno_id: 13, disciplina_id: 7 }),
+            new DB.Row(alunoDisciplinaTable, { id: 4, faltas: 10, aluno_id: 5, disciplina_id: 5 })
+        ]
+    };
+
+    SGBDFunctions.createTable(pessoaTable);
+    SGBDFunctions.createTable(alunoTable);
+    SGBDFunctions.createTable(professorTable);
+    SGBDFunctions.createTable(servidorTable);
+    SGBDFunctions.createTable(cursoTable);
+    SGBDFunctions.createTable(turmaTable);
+    SGBDFunctions.createTable(disciplinaTable);
+    SGBDFunctions.createTable(aulaTable);
+    SGBDFunctions.createTable(alunoDisciplinaTable);
+
+    for (const tabela in linhasPublic) {
+        for (const linha of linhasPublic[tabela]) {
+            SGBDFunctions.insertRow(eval(tabela).name, linha);
+        }
+    }
+
+    pessoaTable.columns["id"].incrementCounter = pessoaTable.rows.length + 1;
+    cursoTable.columns["id"].incrementCounter = cursoTable.rows.length + 1;
+    turmaTable.columns["id"].incrementCounter = turmaTable.rows.length + 1;
+    disciplinaTable.columns["id"].incrementCounter = disciplinaTable.rows.length + 1;
+    aulaTable.columns["id"].incrementCounter = aulaTable.rows.length + 1;
+    alunoDisciplinaTable.columns["id"].incrementCounter = alunoDisciplinaTable.rows.length + 1;
+
+    const notasSchema = new DB.Schema("notas", database);
+    SGBDFunctions.createSchema(notasSchema);
+
+    const notaTable = new DB.Table("tb_nota", notasSchema);
+    const atividadeTable = new DB.Table("tb_atividade", notasSchema);
+    const boletimTable = new DB.Table("tb_boletim", notasSchema);
+
+    let colunasNotas: Record<string, DB.Column[]> = {
+        notaTable: [
+            new DB.Column("id", notaTable, types.INTEGER, true, false, true, true, true),
+            new DB.Column("disciplina_id", notaTable, types.INTEGER, false, true, true, true, false, false, false, {schema: publicSchema.name, table: disciplinaTable.name, column: "id"}),
+            new DB.Column("boletim_id", notaTable, types.INTEGER, false, true, true, true, false, false, false, {schema: notasSchema.name, table: boletimTable.name, column: "id"})
+        ],
+        atividadeTable: [
+            new DB.Column("id", atividadeTable, types.INTEGER, true, false, true, true, true),
+            new DB.Column("nome", atividadeTable, types.TEXT, false, false, true),
+            new DB.Column("descricao", atividadeTable, types.TEXT, false, false, true),
+            new DB.Column("data", atividadeTable, types.DATE, false, false, true),
+            new DB.Column("peso", atividadeTable, types.INTEGER, false, false, true),
+            new DB.Column("valor", atividadeTable, types.FLOAT, false, false, true),
+            new DB.Column("nota_id", atividadeTable, types.INTEGER, false, true, true, true, false, false, false, {schema: notasSchema.name, table: notaTable.name, column: "id"})
+        ],
+        boletimTable: [
+            new DB.Column("id", boletimTable, types.INTEGER, true, false, true, true, true),
+            new DB.Column("aluno_id", boletimTable, types.INTEGER, false, true, true, true, false, false, false, {schema: publicSchema.name, table: alunoTable.name, column: "pessoa_id"}),
+        ]
+    };
+
+    for (const tabela in colunasNotas) {
+        for (const coluna of colunasNotas[tabela]) {
+            eval(tabela).columns[coluna.name] = coluna;
+        }
+    }
+
+    let linhasNotas: Record<string, DB.Row[]> = {
+        notaTable: [
+            new DB.Row(notaTable, { id: 1, disciplina_id: 1, boletim_id: 1 }),
+            new DB.Row(notaTable, { id: 2, disciplina_id: 1, boletim_id: 2 }),
+            new DB.Row(notaTable, { id: 3, disciplina_id: 5, boletim_id: 3 }),
+            new DB.Row(notaTable, { id: 4, disciplina_id: 2, boletim_id: 4 }),
+            new DB.Row(notaTable, { id: 5, disciplina_id: 6, boletim_id: 4 }),
+            new DB.Row(notaTable, { id: 6, disciplina_id: 7, boletim_id: 7 }),
+        ],
+        atividadeTable: [
+            new DB.Row(atividadeTable, { id: 1, nome: "Prova", descricao: "Prova de SQL", data: new SQLDate(2026, 8, 15), peso: 5, valor: 8.5, nota_id: 1 }),
+            new DB.Row(atividadeTable, { id: 2, nome: "Trabalho", descricao: "Trabalho de Select", data: new SQLDate(2026, 8, 20), peso: 3, valor: 9.5, nota_id: 1 }),
+            new DB.Row(atividadeTable, { id: 3, nome: "Prova", descricao: "Prova sobre barbatanas de baiacus", data: new SQLDate(2026, 8, 25), peso: 5, valor: 10.0, nota_id: 3 }),
+            new DB.Row(atividadeTable, { id: 4, nome: "Prova 1", descricao: "Prova sobre função quadrática", data: new SQLDate(2026, 8, 30), peso: 5, valor: 2.5, nota_id: 6 }),
+        ],
+        boletimTable: [
+            new DB.Row(boletimTable, { id: 1, aluno_id: 3 }),
+            new DB.Row(boletimTable, { id: 2, aluno_id: 4 }),
+            new DB.Row(boletimTable, { id: 3, aluno_id: 5 }),
+            new DB.Row(boletimTable, { id: 4, aluno_id: 7 }),
+            new DB.Row(boletimTable, { id: 5, aluno_id: 10 }),
+            new DB.Row(boletimTable, { id: 6, aluno_id: 11 }),
+            new DB.Row(boletimTable, { id: 7, aluno_id: 13 }),
+            new DB.Row(boletimTable, { id: 8, aluno_id: 14 }),
+        ]
+    }
+
+    SGBDFunctions.createTable(notaTable);
+    SGBDFunctions.createTable(atividadeTable);
+    SGBDFunctions.createTable(boletimTable);
+
+    for (const tabela in linhasNotas) {
+        for (const linha of linhasNotas[tabela]) {
+            SGBDFunctions.insertRow(eval(tabela).name, linha);
+        }
+    }
+
+    const adminSchema = new DB.Schema("admin", database);
+    SGBDFunctions.createSchema(adminSchema);
+
+    const campusTable = new DB.Table("tb_campus", adminSchema);
+    const salaTable = new DB.Table("tb_sala", adminSchema);
+    const coordenacaoTable = new DB.Table("tb_coordenacao", adminSchema);
+    const eventoTable = new DB.Table("tb_evento", adminSchema);
+    const cursoCampusTable = new DB.Table("tb_curso_campus", adminSchema);
+
+    let colunasAdmin: Record<string, DB.Column[]> = {
+        campusTable: [
+            new DB.Column("id", campusTable, types.INTEGER, true, false, true, true, true),
+            new DB.Column("nome", campusTable, types.TEXT, false, false, true),
+            new DB.Column("endereco", campusTable, types.TEXT, false, false, true),
+            new DB.Column("telefone", campusTable, types.VARCHAR(15), false, false, true),
+        ],
+        salaTable: [
+            new DB.Column("id", salaTable, types.INTEGER, true, false, true, true, true),
+            new DB.Column("nome", salaTable, types.TEXT, false, false, true),
+            new DB.Column("campus_id", salaTable, types.INTEGER, false, true, true, true, false, false, false, {schema: adminSchema.name, table: campusTable.name, column: "id"})
+        ],
+        coordenacaoTable: [
+            new DB.Column("id", coordenacaoTable, types.INTEGER, true, false, true, true, true),
+            new DB.Column("nome", coordenacaoTable, types.TEXT, false, false, true),
+            new DB.Column("campus_id", coordenacaoTable, types.INTEGER, false, true, true, true, false, false, false, {schema: adminSchema.name, table: campusTable.name, column: "id"}),
+            new DB.Column("coordenador_id", coordenacaoTable, types.INTEGER, false, true, true, true, false, false, false, {schema: publicSchema.name, table: pessoaTable.name, column: "id"})
+        ],
+        eventoTable: [
+            new DB.Column("id", eventoTable, types.INTEGER, true, false, true, true, true),
+            new DB.Column("nome", eventoTable, types.TEXT, false, false, true),
+            new DB.Column("descricao", eventoTable, types.TEXT, false, false, true),
+            new DB.Column("data", eventoTable, types.DATE, false, false, true),
+            new DB.Column("horario", eventoTable, types.TIME, false, false, true),
+            new DB.Column("local", eventoTable, types.TEXT, false, false, true),
+            new DB.Column("campus_id", eventoTable, types.INTEGER, false, true, true, true, false, false, false, {schema: adminSchema.name, table: campusTable.name, column: "id"})
+        ],
+        cursoCampusTable: [
+            new DB.Column("id", cursoCampusTable, types.INTEGER, true, false, true, true, true),
+            new DB.Column("curso_id", cursoCampusTable, types.INTEGER, false, true, true, true, false, false, false, {schema: publicSchema.name, table: cursoTable.name, column: "id"}),
+            new DB.Column("campus_id", cursoCampusTable, types.INTEGER, false, true, true, true, false, false, false, {schema: adminSchema.name, table: campusTable.name, column: "id"})
+        ]
+    }
+
+    for (const tabela in colunasAdmin) {
+        for (const coluna of colunasAdmin[tabela]) {
+            eval(tabela).columns[coluna.name] = coluna;
+        }
+    }
+
+    let linhasAdmin: Record<string, DB.Row[]> = {
+        campusTable: [],
+        salaTable: [],
+        coordenacaoTable: [],
+        eventoTable: [],
+        cursoCampusTable: []
+    }
+
+    SGBDFunctions.createTable(campusTable);
+    SGBDFunctions.createTable(salaTable);
+    SGBDFunctions.createTable(coordenacaoTable);
+    SGBDFunctions.createTable(eventoTable);
+    SGBDFunctions.createTable(cursoCampusTable);
+
+    for (const tabela in linhasAdmin) {
+        for (const linha of linhasAdmin[tabela]) {
+            SGBDFunctions.insertRow(eval(tabela).name, linha);
+        }
+    }
+
+    refreshUI();
+}

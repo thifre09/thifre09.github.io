@@ -5,6 +5,7 @@
 
 p {
     font-size: var(--fs5);
+    color: black;
 }
 
 body {
