@@ -982,8 +982,39 @@ input[type="number"]::-webkit-inner-spin-button {
                 background: var(--blue4);
                 color: white;
                 font-weight: 600;
-                cursor: pointer;
                 list-style: none;
+                display: flex;
+                justify-content: space-between;
+
+                >div {
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+                    height: fit-content;
+
+                    p{
+                        color: white;
+                    }
+
+                    svg {
+                        width: 20px;
+                        height: 20px;
+                        margin-right: var(--p3);
+                        transition: var(--transition-time1);
+
+                        &:nth-child(1) {
+                            cursor: pointer;
+
+                            &:hover {
+                                color: var(--gray11)
+                            }
+                        }
+                    }
+
+                    &:nth-child(2) {
+                        justify-content: flex-end;
+                    }
+                }
 
                 &::-webkit-details-marker {
                     display: none;
@@ -1013,37 +1044,41 @@ input[type="number"]::-webkit-inner-spin-button {
                     &:not(:first-child):hover {
                         background: var(--gray14);
                     }
+
+                    p {
+                        padding: calc(2*var(--p5));
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+
+                        &:nth-child(1),
+                        &:nth-child(2) {
+                            text-align: left;
+                        }
+
+                        &:nth-child(n+3) {
+                            text-align: center;
+                        }
+
+                        &:empty::after {
+                            content: "—";
+                            color: var(--gray9);
+                        }
+                    }
+
+                    svg {
+                        width: 20px;
+                        height: 20px;
+                        background-color: var(--bg);
+                        color: var(--c);
+                        border-radius: 5px;
+                    }
                 }
             }
         }
 
-        p {
-            padding: calc(2*var(--p5));
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-
-            &:nth-child(1),
-            &:nth-child(2) {
-                text-align: left;
-            }
-
-            &:nth-child(n+3) {
-                text-align: center;
-            }
-
-            &:empty::after {
-                content: "—";
-                color: var(--gray9);
-            }
-        }
-
-        svg {
-            width: 20px;
-            height: 20px;
-            background-color: var(--green9);
-            color: var(--green4);
-            border-radius: 5px;
+        details[open] > summary > div svg {
+            transform: rotate(90deg);
         }
     }
 

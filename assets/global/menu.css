@@ -77,6 +77,9 @@ nav#barra-main {
         width: 100%;
         text-decoration: none;
         text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
         >a {
             text-decoration: none;

@@ -59,6 +59,7 @@ buttonChangeToTerminal.addEventListener("click", () => {
 });
 buttonChangeToLogical.addEventListener("click", () => {
     changeTo("logical");
+    drawConnectionLines();
 });
 buttonChangeToSave.addEventListener("click", () => {
     changeTo("save");
@@ -3108,7 +3109,7 @@ function changeConfirmDeleteMenu(type, rowIndex, columnName) {
     }
     if (type === "row") {
         const row = getTable(currentTable).rows[rowIndex];
-        const formattedEntries = Object.entries(row).map(([key, value]) => {
+        const formattedEntries = Object.entries(row.values).map(([key, value]) => {
             const column = getTable(currentTable).columns[key];
             let displayValue = value;
             if (column) {
@@ -4587,14 +4588,14 @@ function refreshLogical() {
     const marker = document.createElementNS("http://www.w3.org/2000/svg", "marker");
     marker.setAttribute("id", "arrow");
     marker.setAttribute("viewBox", "0 0 10 10");
-    marker.setAttribute("refX", "9");
+    marker.setAttribute("refX", "10");
     marker.setAttribute("refY", "5");
     marker.setAttribute("markerWidth", "8");
     marker.setAttribute("markerHeight", "8");
     marker.setAttribute("orient", "auto");
     const arrow = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    arrow.setAttribute("d", "M 0 0 L 10 5 L 0 10 z");
-    arrow.setAttribute("fill", "#4da3ff");
+    arrow.setAttribute("d", "M 0 0 L 10 5 L 0 10 Z");
+    arrow.setAttribute("fill", "var(--blue6)");
     marker.appendChild(arrow);
     defs.appendChild(marker);
     connectionsSvg.appendChild(defs);
@@ -4602,7 +4603,6 @@ function refreshLogical() {
     const GAP_Y = 400;
     let nCol = 0;
     let nRow = 0;
-    let ultimoY = 0;
     for (const schema of Object.values(getCurrentDatabase()?.schemas ?? {})) {
         for (const table of Object.values(schema.tables)) {
             const divTabelaLogical = document.createElement("div");
@@ -4617,7 +4617,6 @@ function refreshLogical() {
                 lastMouseY = event.clientY;
             });
             divTabelaLogical.style.transform = `translate(${GAP_X * nCol}px, ${GAP_Y * nRow}px)`;
-            ultimoY = divTabelaLogical.offsetHeight + 30;
             nCol++;
             if (nCol == 3) {
                 nCol = 0;
@@ -4631,7 +4630,14 @@ function refreshLogical() {
             });
             divTabelaLogical.appendChild(details);
             const summary = document.createElement("summary");
-            summary.textContent = table.name;
+            summary.innerHTML = `
+            <div>
+                <svg viewBox="0 -960 960 960" fill="currentColor">
+                    <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/>
+                </svg>
+                <p>${table.name}</p>
+            </div>
+            `;
             summary.addEventListener("click", (event) => {
                 if (moved) {
                     event.preventDefault();
@@ -4639,6 +4645,19 @@ function refreshLogical() {
                 }
             });
             details.appendChild(summary);
+            const configDiv = document.createElement("div");
+            summary.appendChild(configDiv);
+            const configSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            configSVG.setAttribute("viewBox", "0 -960 960 960");
+            configSVG.setAttribute("fill", "currentColor");
+            configSVG.addEventListener("click", (event) => {
+                event.stopPropagation();
+                table.onConfig?.();
+            });
+            configDiv.appendChild(configSVG);
+            const configPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            configPath.setAttribute("d", "m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z");
+            configSVG.appendChild(configPath);
             const divColumns = document.createElement("div");
             details.appendChild(divColumns);
             const divHeader = document.createElement("div");
@@ -4666,50 +4685,74 @@ function refreshLogical() {
                 if (c.isPrimaryKey) {
                     divColumn.innerHTML += `
                     <p>
-                        <svg viewBox="0 -960 960 960" fill="currentColor">
+                        <svg style="--bg: var(--green9); --c: var(--green4);" viewBox="0 -960 960 960" fill="currentColor">
                             <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
                         </svg>
                     </p>
                     `;
                 }
                 else {
-                    divColumn.innerHTML += "<p></p>";
+                    divColumn.innerHTML += `
+                    <p>
+                        <svg style="--bg: var(--red9); --c: var(--red4);" viewBox="0 -960 960 960" fill="currentcolor">
+                            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                        </svg>
+                    </p>
+                    `;
                 }
                 if (c.isForeignKey) {
                     divColumn.innerHTML += `
                     <p>
-                        <svg viewBox="0 -960 960 960" fill="currentColor">
+                        <svg style="--bg: var(--green9); --c: var(--green4);" viewBox="0 -960 960 960" fill="currentColor">
                             <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
                         </svg>
                     </p>
                     `;
                 }
                 else {
-                    divColumn.innerHTML += "<p></p>";
+                    divColumn.innerHTML += `
+                    <p>
+                        <svg style="--bg: var(--red9); --c: var(--red4);" viewBox="0 -960 960 960" fill="currentcolor">
+                            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                        </svg>
+                    </p>
+                    `;
                 }
                 if (c.isNotNull) {
                     divColumn.innerHTML += `
                     <p>
-                        <svg viewBox="0 -960 960 960" fill="currentColor">
+                        <svg style="--bg: var(--green9); --c: var(--green4);" viewBox="0 -960 960 960" fill="currentColor">
                             <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
                         </svg>
                     </p>
                     `;
                 }
                 else {
-                    divColumn.innerHTML += "<p></p>";
+                    divColumn.innerHTML += `
+                    <p>
+                        <svg style="--bg: var(--red9); --c: var(--red4);" viewBox="0 -960 960 960" fill="currentcolor">
+                            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                        </svg>
+                    </p>
+                    `;
                 }
                 if (c.isUnique) {
                     divColumn.innerHTML += `
                     <p>
-                        <svg viewBox="0 -960 960 960" fill="currentColor">
+                        <svg style="--bg: var(--green9); --c: var(--green4);" viewBox="0 -960 960 960" fill="currentColor">
                             <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
                         </svg>
                     </p>
                     `;
                 }
                 else {
-                    divColumn.innerHTML += "<p></p>";
+                    divColumn.innerHTML += `
+                    <p>
+                        <svg style="--bg: var(--red9); --c: var(--red4);" viewBox="0 -960 960 960" fill="currentcolor">
+                            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+                        </svg>
+                    </p>
+                    `;
                 }
                 divColumns.appendChild(divColumn);
                 tablesLogical[table.name].columns[c.name] = {
@@ -4729,7 +4772,7 @@ function refreshLogical() {
                     continue;
                 const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
                 path.setAttribute("fill", "none");
-                path.setAttribute("stroke", "#4da3ff");
+                path.setAttribute("stroke", "var(--blue6)");
                 path.setAttribute("stroke-width", "2");
                 path.setAttribute("stroke-linecap", "round");
                 path.setAttribute("marker-end", "url(#arrow)");
@@ -4743,7 +4786,9 @@ function refreshLogical() {
                         table: column.reference.table,
                         column: column.reference.column
                     },
-                    path
+                    path: path,
+                    fromSide: "right",
+                    toSide: "left",
                 });
             }
         }
@@ -4763,6 +4808,8 @@ function drawConnectionLines() {
         const toColumn = toTable.columns[connection.to.column];
         if (!fromColumn || !toColumn)
             continue;
+        const fromWidth = fromTable.element.offsetWidth;
+        const toWidth = toTable.element.offsetWidth;
         const fromDetails = fromTable.element.querySelector("details");
         const toDetails = toTable.element.querySelector("details");
         const headerHeight = fromTable.element.querySelector("details > div > div").offsetHeight;
@@ -4787,23 +4834,58 @@ function drawConnectionLines() {
             const summary = toTable.element.querySelector("summary");
             y2 = toY + summary.offsetHeight / 2;
         }
-        const fromWidth = fromTable.element.offsetWidth;
-        const toWidth = toTable.element.offsetWidth;
-        let x1;
-        let x2;
-        if (toX > fromX) {
-            // destino está à direita
-            x1 = fromX + fromWidth;
-            x2 = toX;
+        const candidates = [
+            {
+                fromSide: "right",
+                toSide: "left",
+                x1: fromX + fromWidth,
+                x2: toX,
+            },
+            {
+                fromSide: "right",
+                toSide: "right",
+                x1: fromX + fromWidth,
+                x2: toX + toWidth,
+            },
+            {
+                fromSide: "left",
+                toSide: "left",
+                x1: fromX,
+                x2: toX,
+            },
+            {
+                fromSide: "left",
+                toSide: "right",
+                x1: fromX,
+                x2: toX + toWidth,
+            }
+        ];
+        let best = candidates[0];
+        let bestCost = Infinity;
+        for (const c of candidates) {
+            const dx = c.x2 - c.x1;
+            const dy = y2 - y1;
+            let cost = dx * dx + dy * dy * 2;
+            if (c.fromSide !== connection.fromSide)
+                cost += 200;
+            if (c.toSide !== connection.toSide)
+                cost += 200;
+            if (c.fromSide === "right" && c.x2 < c.x1)
+                cost += 200;
+            if (c.fromSide === "left" && c.x2 > c.x1)
+                cost += 200;
+            if (cost < bestCost) {
+                best = c;
+                bestCost = cost;
+            }
         }
-        else {
-            // destino está à esquerda
-            x1 = fromX;
-            x2 = toX + toWidth;
-        }
-        const offset = Math.max(50, Math.abs(x2 - x1) * 0.35);
-        const c1x = x1 + (x2 > x1 ? offset : -offset);
-        const c2x = x2 + (x2 > x1 ? -offset : offset);
+        const x1 = best.x1;
+        const x2 = best.x2;
+        const fromSide = best.fromSide;
+        const toSide = best.toSide;
+        const offset = Math.min(150, Math.max(50, Math.abs(x2 - x1) * 0.35));
+        const c1x = fromSide === "right" ? x1 + offset : x1 - offset;
+        const c2x = toSide === "right" ? x2 + offset : x2 - offset;
         connection.path.setAttribute("d", `M ${x1} ${y1}
             C ${c1x} ${y1},
             ${c2x} ${y2},
