@@ -864,6 +864,21 @@ async function loginConta() {
 
 }
 
+async function logoutConta() {
+    try {
+        const { error } = await Auth.signOut();
+
+        if (error) {
+            alert(error.message);
+            return;
+        }
+
+        irParaTelaConta("usuario-nao-logado");
+    } catch (error) {
+        console.error("Erro ao fazer logout:", error);
+    }
+}
+
 async function mostrarUsuario() {
     let user;
     try {
@@ -937,6 +952,8 @@ window.irParaTelaConta = irParaTelaConta;
 window.cadastrarConta = cadastrarConta;
 //@ts-ignore
 window.loginConta = loginConta;
+//@ts-ignore
+window.logoutConta = logoutConta;
 //@ts-ignore
 window.mostrarUsuario = mostrarUsuario;
 

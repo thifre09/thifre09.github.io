@@ -746,49 +746,49 @@ var DB;
             switch (this.type.name) {
                 case "TEXT":
                     return `
-                    <svg viewBox="0 -960 960 960" fill="var(--green5)">
+                    <svg viewBox="0 -960 960 960" fill="var(--${this.type.color})">
                         <path d="M280-160v-520H80v-120h520v120H400v520H280Zm360 0v-320H520v-120h360v120H760v320H640Z"/>
                     </svg>
                     `;
                 case "INTEGER":
                     return `
-                    <svg viewBox="0 -960 960 960" fill="var(--blue3)">
+                    <svg viewBox="0 -960 960 960" fill="var(--${this.type.color})">
                         <path d="m240-160 40-160H120l20-80h160l40-160H180l20-80h160l40-160h80l-40 160h160l40-160h80l-40 160h160l-20 80H660l-40 160h160l-20 80H600l-40 160h-80l40-160H360l-40 160h-80Zm140-240h160l40-160H420l-40 160Z"/>
                     </svg>
                     `;
                 case "FLOAT":
                     return `
-                    <svg viewBox="0 -960 960 960" fill="var(--cyan6)">
+                    <svg viewBox="0 -960 960 960" fill="var(--${this.type.color})">
                         <path d="m720-80-56-56 63-64H480v-80h247l-63-64 56-56 160 160L720-80ZM80-440v-120h120v120H80Zm201-41q-41-41-41-99v-160q0-58 41-99t99-41q58 0 99 41t41 99v160q0 58-41 99t-99 41q-58 0-99-41Zm360 0q-41-41-41-99v-160q0-58 41-99t99-41q58 0 99 41t41 99v160q0 58-41 99t-99 41q-58 0-99-41Zm-218.5-56.5Q440-555 440-580v-160q0-25-17.5-42.5T380-800q-25 0-42.5 17.5T320-740v160q0 25 17.5 42.5T380-520q25 0 42.5-17.5Zm360 0Q800-555 800-580v-160q0-25-17.5-42.5T740-800q-25 0-42.5 17.5T680-740v160q0 25 17.5 42.5T740-520q25 0 42.5-17.5Z"/>
                     </svg>
                     `;
                 case "BOOLEAN":
                     return `
-                    <svg viewBox="0 -960 960 960" fill="var(--purple5)">
+                    <svg viewBox="0 -960 960 960" fill="var(--${this.type.color})">
                         <path d="M280-240q-100 0-170-70T40-480q0-100 70-170t170-70h400q100 0 170 70t70 170q0 100-70 170t-170 70H280Zm0-80h400q66 0 113-47t47-113q0-66-47-113t-113-47H280q-66 0-113 47t-47 113q0 66 47 113t113 47Zm85-75q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35Zm115-85Z"/>
                     </svg>
                     `;
                 case "DATE":
                     return `
-                    <svg viewBox="0 -960 960 960" fill="var(--orange5)">
+                    <svg viewBox="0 -960 960 960" fill="var(--${this.type.color})">
                         <path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z"/>
                     </svg>
                     `;
                 case "TIME":
                     return `
-                    <svg viewBox="0 -960 960 960" fill="var(--yellow4)">
+                    <svg viewBox="0 -960 960 960" fill="var(--${this.type.color})">
                         <path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/>
                     </svg>
                     `;
                 case "ENUM":
                     return `
-                    <svg viewBox="0 -960 960 960" fill="var(--pink5)">
+                    <svg viewBox="0 -960 960 960" fill="var(--${this.type.color})">
                         <path d="M348.5-291.5Q360-303 360-320t-11.5-28.5Q337-360 320-360t-28.5 11.5Q280-337 280-320t11.5 28.5Q303-280 320-280t28.5-11.5Zm0-160Q360-463 360-480t-11.5-28.5Q337-520 320-520t-28.5 11.5Q280-497 280-480t11.5 28.5Q303-440 320-440t28.5-11.5Zm0-160Q360-623 360-640t-11.5-28.5Q337-680 320-680t-28.5 11.5Q280-657 280-640t11.5 28.5Q303-600 320-600t28.5-11.5ZM440-280h240v-80H440v80Zm0-160h240v-80H440v80Zm0-160h240v-80H440v80ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/>
                     </svg>
                     `;
                 case "VARCHAR":
                     return `
-                    <svg viewBox="0 -960 960 960" fill="var(--green2)">
+                    <svg viewBox="0 -960 960 960" fill="var(--${this.type.color})">
                         <path d="M120-120v-120h200q-84-45-132-125t-48-175q0-142 99-241t241-99q142 0 241 99t99 241q0 95-48 175T640-240h200v120H520v-204q78-14 129-75t51-141q0-92-64-156t-156-64q-92 0-156 64t-64 156q0 80 51 141t129 75v204H120Z"/>
                     </svg>
                     `;
@@ -827,7 +827,14 @@ var DB;
             `;
         }
         static fromJSON(obj, parent) {
-            const row = new Row(parent, obj.values);
+            let v = {};
+            for (const [columnName, value] of Object.entries(obj.values)) {
+                const column = parent.columns[columnName];
+                if (column) {
+                    v[columnName] = column.type.parse(value);
+                }
+            }
+            const row = new Row(parent, v);
             row.name = obj.name;
             return row;
         }
@@ -1127,7 +1134,6 @@ class SGBDFunctions {
      * @param columnName - Nome da coluna.
      */
     static deleteColumn(tableName, columnName, schemaName) {
-        const db = getCurrentDatabase();
         let table;
         if (schemaName !== undefined) {
             table = getTable(tableName, schemaName);
@@ -1135,7 +1141,6 @@ class SGBDFunctions {
         else {
             table = getTable(tableName);
         }
-        const column = table.columns[columnName];
         table.indexes[columnName]?.clear();
         delete table.indexes[columnName];
         for (const row of table.rows) {
@@ -1257,6 +1262,13 @@ class SGBDFunctions {
                 return value;
             return newType.parse(value);
         }
+        function transformColumnToJson(column) {
+            return JSON.stringify(column, (key, value) => {
+                if (key === "parent")
+                    return undefined;
+                return value;
+            });
+        }
         let table;
         if (schemaName !== undefined) {
             table = getTable(tableName, schemaName);
@@ -1265,7 +1277,7 @@ class SGBDFunctions {
             table = getTable(tableName);
         }
         const oldColumn = table.columns[oldColumnName];
-        if (JSON.stringify(oldColumn) === JSON.stringify(newColumn))
+        if (transformColumnToJson(oldColumn) === transformColumnToJson(newColumn))
             return;
         newColumn.incrementCounter = oldColumn.incrementCounter;
         if (!oldColumn.isAutoIncrement && newColumn.isAutoIncrement) {
@@ -1406,6 +1418,7 @@ var DataTypes;
         constructor() {
             super(...arguments);
             this.name = "TEXT";
+            this.color = "green5";
         }
         validate(value) {
             return typeof value === "string";
@@ -1419,6 +1432,7 @@ var DataTypes;
         constructor() {
             super(...arguments);
             this.name = "INTEGER";
+            this.color = "blue3";
         }
         validate(value) {
             return typeof value === "number" && Number.isInteger(value);
@@ -1432,6 +1446,7 @@ var DataTypes;
         constructor() {
             super(...arguments);
             this.name = "FLOAT";
+            this.color = "cyan6";
         }
         validate(value) {
             return typeof value === "number" && Number.isFinite(value);
@@ -1445,6 +1460,7 @@ var DataTypes;
         constructor() {
             super(...arguments);
             this.name = "BOOLEAN";
+            this.color = "purple5";
         }
         validate(value) {
             value = typeof value === "string" ? value.trim().toLowerCase() : value;
@@ -1455,9 +1471,9 @@ var DataTypes;
         }
         parse(value) {
             value = typeof value === "string" ? value.trim() : value;
-            if (value === true || value.toLowerCase() === "true")
+            if (value === true || (typeof value === "string" && value.toLowerCase() === "true"))
                 return true;
-            if (value === false || value.toLowerCase() === "false")
+            if (value === false || (typeof value === "string" && value.toLowerCase() === "false"))
                 return false;
             return null;
         }
@@ -1467,13 +1483,16 @@ var DataTypes;
         constructor() {
             super(...arguments);
             this.name = "DATE";
+            this.color = "orange5";
         }
         validate(value) {
             return value instanceof SQLDate || (typeof value === "string" && SQLDate.fromString(value) !== null);
         }
         parse(value) {
-            if (value instanceof SQLDate)
-                return value;
+            if (value && typeof value === "object" && typeof value.year === "number" &&
+                typeof value.month === "number" && typeof value.day === "number") {
+                return new SQLDate(value.year, value.month, value.day);
+            }
             if (typeof value !== "string")
                 return null;
             return SQLDate.fromString(value);
@@ -1484,14 +1503,17 @@ var DataTypes;
         constructor() {
             super(...arguments);
             this.name = "TIME";
+            this.color = "yellow4";
         }
         validate(value) {
             return value instanceof SQLTime || (typeof value === "string" && SQLTime.fromString(value) !== null)
                 || (typeof value === "number" && SQLTime.fromNumber(value) !== null);
         }
         parse(value) {
-            if (value instanceof SQLTime)
-                return value;
+            if (value && typeof value === "object" && typeof value.hours === "number" &&
+                typeof value.minutes === "number" && typeof value.seconds === "number") {
+                return new SQLTime(value.hours, value.minutes, value.seconds);
+            }
             if (typeof value === "string")
                 return SQLTime.fromString(value);
             else if (typeof value === "number")
@@ -1504,6 +1526,7 @@ var DataTypes;
         constructor(allowedValues) {
             super();
             this.name = "ENUM";
+            this.color = "pink5";
             this.allowedValues = allowedValues;
         }
         validate(value) {
@@ -1524,6 +1547,7 @@ var DataTypes;
         constructor(maxLength) {
             super();
             this.name = "VARCHAR";
+            this.color = "green2";
             this.maxLength = maxLength;
         }
         validate(value) {
@@ -1855,18 +1879,20 @@ function renameDatabaseInterface() {
         return;
     }
     const databaseNameInput = document.getElementById("renomear-database-input");
-    const newName = databaseNameInput.value.trim().toLowerCase();
+    const newName = databaseNameInput.value.trim();
     if (newName === "") {
         openNotifications("<p style='color: var(--red5)'>O nome da database não pode ser vazio.</p>");
     }
     else if (databases[newName]) {
         openNotifications("<p style='color: var(--red5)'>Já existe uma database com esse nome.</p>");
     }
+    else if (!isValidSQLName(newName)) {
+        openNotifications("<p style='color: var(--red5)'>O nome da database não segue o padrão permitido.</p>");
+    }
     else {
         SGBDFunctions.renameDatabase(currentDatabase, newName);
         openNotifications("<p style='color: var(--green5)'>Database renomeada com sucesso!</p>");
     }
-    updateCustomDropdowns();
 }
 function renameSchemaInterface() {
     if (currentDatabase === null) {
@@ -1884,6 +1910,9 @@ function renameSchemaInterface() {
     }
     else if (getCurrentDatabase().schemas[newName]) {
         openNotifications("<p style='color: var(--red5)'>Já existe um schema com esse nome.</p>");
+    }
+    else if (!isValidSQLName(newName)) {
+        openNotifications("<p style='color: var(--red5)'>O nome do schema não segue o padrão permitido.</p>");
     }
     else {
         SGBDFunctions.renameSchema(currentSchema, newName);
@@ -1911,6 +1940,9 @@ function renameTableInterface() {
     else if (getCurrentSchema().tables[newName]) {
         openNotifications("<p style='color: var(--red5)'>Já existe uma tabela com esse nome.</p>");
     }
+    else if (!isValidSQLName(newName)) {
+        openNotifications("<p style='color: var(--red5)'>O nome da tabela não segue o padrão permitido.</p>");
+    }
     else {
         SGBDFunctions.renameTable(currentTable, newName);
         openNotifications("<p style='color: var(--green5)'>Tabela renomeada com sucesso!</p>");
@@ -1927,6 +1959,14 @@ function alterColumnsInterface() {
         const newColumn = columnsToAlter[i];
         const columnDiv = columnsUl.children[i];
         const oldColumnName = columnDiv.getAttribute("column-name");
+        if (oldColumnName !== newColumn.name && table.columns[newColumn.name]) {
+            openNotifications("<p style='color: var(--red5)'>Já existe uma coluna com o nome " + newColumn.name + ".</p>");
+            return;
+        }
+        else if (!isValidSQLName(newColumn.name)) {
+            openNotifications("<p style='color: var(--red5)'>O nome da coluna " + newColumn.name + " não segue o padrão permitido.</p>");
+            return;
+        }
         if (newColumn.isNotNull) {
             for (const row of table.rows) {
                 if (row.values[oldColumnName] === null || row.values[oldColumnName] === undefined) {
@@ -1960,8 +2000,17 @@ function alterColumnsInterface() {
         if (compareTypes(newColumn.type, types.VARCHAR(0))) {
             for (const row of table.rows) {
                 const value = row.values[oldColumnName];
-                if (!newColumn.type.validate(value)) {
-                    openNotifications("<p style='color: var(--red5)'>Existem valores inválidos nessa coluna. Tamanho máximo de caracteres: " + newColumn.type.getMaxLength() + "</p>");
+                if (!newColumn.type.validate(newColumn.type.parse(value))) {
+                    openNotifications("<p style='color: var(--red5)'>Existem valores inválidos na coluna \"" + newColumn.name + "\". Tamanho máximo de caracteres: " + newColumn.type.getMaxLength() + "</p>");
+                    return;
+                }
+            }
+        }
+        if (compareTypes(newColumn.type, table.columns[oldColumnName].type)) {
+            for (const row of table.rows) {
+                const value = row.values[oldColumnName];
+                if (!newColumn.type.validate(newColumn.type.parse(value))) {
+                    openNotifications("<p style='color: var(--red5)'>Existem valores inválidos na coluna \"" + newColumn.name + "\".</p>");
                     return;
                 }
             }
@@ -3187,7 +3236,7 @@ function updateCharacteristics(parentDiv) {
         type: typeDropdown.textContent.toUpperCase()
     };
     const forcedTrue = {
-        notNull: state.pk || state.autoIncrement,
+        notNull: state.pk || state.autoIncrement || state.currentTimestamp,
         unique: state.autoIncrement || state.pk,
     };
     const forcedFalse = {
@@ -3201,7 +3250,7 @@ function updateCharacteristics(parentDiv) {
         currentTimestamp: state.type !== "DATE" && state.type !== "TIME",
     };
     const disabled = {
-        notNull: state.pk || state.autoIncrement,
+        notNull: state.pk || state.autoIncrement || state.currentTimestamp,
         unique: state.autoIncrement || state.pk,
         autoIncrement: state.fk || state.default || state.type !== "INTEGER",
         currentTimestamp: state.fk || state.default || state.type !== "DATE" && state.type !== "TIME",
@@ -3722,8 +3771,305 @@ var SQL;
             getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${result.column.name}" adicionada com sucesso`], "success");
         }
         dropColumn() {
+            const name = this.tokens[2];
+            const { schemaName, tableName, error } = verifySchemaTableName(name);
+            if (error) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [error], "error");
+                return;
+            }
+            if (!schemaName || !tableName)
+                return;
+            const word5 = this.tokens[4]?.toLowerCase();
+            if (word5 !== "column") {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "ADD deve ser seguido de COLUMN"], "error");
+                return;
+            }
+            if (this.tokens.length < 6) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
+                return;
+            }
+            const columnName = this.tokens[5];
+            if (!getTable(tableName, schemaName).columns[columnName]) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${columnName}" não existe na tabela "${tableName}"`], "error");
+                return;
+            }
+            SGBDFunctions.deleteColumn(tableName, columnName, schemaName);
+            getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${columnName}" removida com sucesso`], "success");
         }
         alterColumn() {
+            const name = this.tokens[2];
+            const { schemaName, tableName, error } = verifySchemaTableName(name);
+            if (error) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [error], "error");
+                return;
+            }
+            if (!schemaName || !tableName)
+                return;
+            const word5 = this.tokens[4]?.toLowerCase();
+            if (word5 !== "column") {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "ADD deve ser seguido de COLUMN"], "error");
+                return;
+            }
+            if (this.tokens.length < 6) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
+                return;
+            }
+            const columnName = this.tokens[5];
+            if (!getTable(tableName, schemaName).columns[columnName]) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${columnName}" não existe na tabela "${tableName}"`], "error");
+                return;
+            }
+            const word7 = this.tokens[6]?.toLowerCase();
+            const column = getTable(tableName, schemaName).columns[columnName];
+            const newColumn = column.clone();
+            if (this.tokens.length < 8) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
+                return;
+            }
+            if (word7 === "type") {
+                const rawColumnType = this.tokens[7].toLowerCase();
+                let columnType;
+                if (rawColumnType === "int") {
+                    columnType = types.INTEGER;
+                }
+                else {
+                    columnType = DataTypes.createDataTypeFromString(rawColumnType.toUpperCase());
+                }
+                if (!valueExists(columnType)) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", `Tipo de coluna inválido: "${this.tokens[7]}"`], "error");
+                    return;
+                }
+                newColumn.type = columnType;
+                if (compareTypes(columnType, types.ENUM([]))) {
+                    const enumStartIndex = this.tokens.findIndex(token => token === "(");
+                    if (enumStartIndex === -1) {
+                        return { column: null, error: "ENUM inválido: falta parêntese de abertura" };
+                    }
+                    const enumEndIndex = this.tokens.findIndex(token => token === ")");
+                    if (enumEndIndex === -1) {
+                        return { column: null, error: "ENUM inválido: falta parêntese de fechamento" };
+                    }
+                    const enumValues = this.tokens.slice(enumStartIndex + 1, enumEndIndex);
+                    if (enumValues.length === 0) {
+                        return { column: null, error: "ENUM deve possuir pelo menos um valor" };
+                    }
+                    for (let i = 0; i < enumValues.length; i++) {
+                        const token = enumValues[i];
+                        if (i % 2 === 0) {
+                            if (token === ",") {
+                                return { column: null, error: "Valor ENUM inválido" };
+                            }
+                            if (!token.startsWith('"') || !token.endsWith('"')) {
+                                return { column: null, error: "Valores ENUM devem estar entre aspas" };
+                            }
+                        }
+                        else {
+                            if (token !== ",") {
+                                return { column: null, error: "Valores ENUM devem ser separados por vírgula" };
+                            }
+                        }
+                    }
+                    column.type.setAllowedValues(enumValues.filter(token => token !== ",").map(token => {
+                        if (token.startsWith('"') && token.endsWith('"')) {
+                            return token.slice(1, -1);
+                        }
+                        return token;
+                    }));
+                }
+                else if (compareTypes(columnType, types.VARCHAR(0))) {
+                    const varcharStartIndex = this.tokens.findIndex(token => token === "(");
+                    if (varcharStartIndex === -1) {
+                        return { column: null, error: "VARCHAR inválido: falta parêntese de abertura" };
+                    }
+                    const varcharEndIndex = this.tokens.findIndex(token => token === ")");
+                    if (varcharEndIndex === -1) {
+                        return { column: null, error: "VARCHAR inválido: falta parêntese de fechamento" };
+                    }
+                    const varcharValues = this.tokens.slice(varcharStartIndex + 1, varcharEndIndex);
+                    if (varcharValues.length === 0) {
+                        return { column: null, error: "VARCHAR deve possuir um valor máximo" };
+                    }
+                    if (varcharValues.length !== 1) {
+                        return { column: null, error: "VARCHAR deve possuir apenas um valor máximo" };
+                    }
+                    const varcharValue = varcharValues[0];
+                    if (!/^\d+$/.test(varcharValue)) {
+                        return { column: null, error: "Valor máximo de VARCHAR deve ser um número" };
+                    }
+                    const varcharMaxLength = parseInt(varcharValue);
+                    if (isNaN(varcharMaxLength) || varcharMaxLength <= 0) {
+                        return { column: null, error: "Valor máximo de VARCHAR inválido" };
+                    }
+                    column.type.setMaxLength(varcharMaxLength);
+                }
+                if (this.tokens.length > 8 && !compareTypes(columnType, types.ENUM([])) && !compareTypes(columnType, types.VARCHAR(0))) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
+                    return;
+                }
+                else if (this.tokens.length > 10 && (compareTypes(columnType, types.ENUM([])) || compareTypes(columnType, types.VARCHAR(0)))) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
+                    return;
+                }
+                for (let row of getCurrentSchema().tables[tableName].rows) {
+                    if (!columnType.validate(row.values[columnName])) {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, [`Não é possível alterar o tipo da coluna "${columnName}" para "${columnType.name}" porque existem valores incompatíveis na tabela`], "error");
+                        return;
+                    }
+                }
+                SGBDFunctions.alterColumn(tableName, columnName, newColumn, schemaName);
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${columnName}" alterada com sucesso`], "success");
+            }
+            else if (word7 === "set") {
+                let words = this.tokens.slice(7).map(token => token.toLowerCase());
+                if (words.length < 1) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
+                    return;
+                }
+                const primaryValidation = validateCompoundKeyword("primary", "key", "PRIMARY KEY", words);
+                if (typeof primaryValidation === "string") {
+                    return { column: null, error: primaryValidation };
+                }
+                newColumn.isPrimaryKey = primaryValidation === 1;
+                const foreignValidation = validateCompoundKeyword("foreign", "key", "FOREIGN KEY", words);
+                if (typeof foreignValidation === "string") {
+                    return { column: null, error: foreignValidation };
+                }
+                newColumn.isForeignKey = foreignValidation === 1;
+                const notNullValidation = validateCompoundKeyword("not", "null", "NOT NULL", words);
+                if (typeof notNullValidation === "string") {
+                    return { column: null, error: notNullValidation };
+                }
+                newColumn.isNotNull = notNullValidation === 1;
+                const uniqueValidation = validateSingleKeyword("unique", "UNIQUE", words);
+                if (typeof uniqueValidation === "string") {
+                    return { column: null, error: uniqueValidation };
+                }
+                newColumn.isUnique = uniqueValidation === 1;
+                const autoIncrementValidation = validateSingleKeyword("auto_increment", "AUTO_INCREMENT", words);
+                if (typeof autoIncrementValidation === "string") {
+                    return { column: null, error: autoIncrementValidation };
+                }
+                newColumn.isAutoIncrement = autoIncrementValidation === 1;
+                const defaultValidation = validateSingleKeyword("default", "DEFAULT", words);
+                if (typeof defaultValidation === "string") {
+                    return { column: null, error: defaultValidation };
+                }
+                newColumn.hasDefault = defaultValidation === 1;
+                const currentTimestampValidation = validateSingleKeyword("current_timestamp", "CURRENT_TIMESTAMP", words);
+                if (typeof currentTimestampValidation === "string") {
+                    return { column: null, error: currentTimestampValidation };
+                }
+                newColumn.isCurrentTimestamp = currentTimestampValidation === 1;
+                if (newColumn.hasDefault) {
+                    const defaultIndex = words.findIndex(token => token.toLowerCase() === "default");
+                    if (defaultIndex === -1 || defaultIndex === words.length - 1) {
+                        return { column: null, error: "DEFAULT deve ser seguido de um valor" };
+                    }
+                    const defaultValue = words[defaultIndex + 1];
+                    if (compareTypes(column.type, types.TEXT) || compareTypes(column.type, types.DATE) || compareTypes(column.type, types.TIME)) {
+                        if (!(defaultValue.startsWith("'") && defaultValue.endsWith("'") || defaultValue.startsWith('"') && defaultValue.endsWith('"'))) {
+                            return { column: null, error: "Tipo deve começar e acabar com \" ou \'" };
+                        }
+                    }
+                    const parsedDefaultValue = column.type.parse(defaultValue);
+                    if (!valueExists(parsedDefaultValue) || isNaN(parsedDefaultValue)) {
+                        return { column: null, error: `Valor DEFAULT inválido para ${column.type.name}` };
+                    }
+                    column.defaultValue = parsedDefaultValue;
+                }
+                const hasReferences = words.some(token => token.toLowerCase() === "references");
+                if (hasReferences && !column.isForeignKey) {
+                    return { column: null, error: "REFERENCES só pode ser usado com FOREIGN KEY" };
+                }
+                if (column.isForeignKey) {
+                    const referencesCount = words.filter(token => token.toLowerCase() === "references").length;
+                    if (referencesCount > 1) {
+                        return { column: null, error: "Apenas um REFERENCES é permitido" };
+                    }
+                    const referencesIndex = words.findIndex(token => token.toLowerCase() === "references");
+                    if (referencesIndex <= 0 || words[referencesIndex - 1].toLowerCase() !== "key") {
+                        return { column: null, error: "FOREIGN KEY deve ser seguido de REFERENCES" };
+                    }
+                    if (referencesIndex + 4 >= words.length || words[referencesIndex + 2] !== "(" ||
+                        words[referencesIndex + 4] !== ")") {
+                        return { column: null, error: "REFERENCES inválido" };
+                    }
+                    const name = words[referencesIndex + 1];
+                    const { schemaName, tableName, error } = verifySchemaTableName(name);
+                    if (error) {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, [error], "error");
+                    }
+                    if (!schemaName || !tableName)
+                        return;
+                    const refTable = getCurrentDatabase().schemas[schemaName].tables[tableName];
+                    if (refTable === null) {
+                        return { column: null, error: `Tabela de referência "${tableName}" não existe no schema "${schemaName}"` };
+                    }
+                    const refColumn = refTable.columns[words[referencesIndex + 3]];
+                    if (refColumn === undefined) {
+                        return { column: null, error: `Coluna de referência "${words[referencesIndex + 3]}" não existe na tabela "${words[referencesIndex + 1]}"` };
+                    }
+                    if (refColumn.type !== column.type) {
+                        return { column: null, error: `Tipo da coluna de referência "${words[referencesIndex + 3]}" na tabela "${words[referencesIndex + 1]}" não corresponde ao tipo da coluna atual` };
+                    }
+                    if (!refColumn.isUnique && !refColumn.isPrimaryKey) {
+                        return { column: null, error: `Coluna de referência "${words[referencesIndex + 3]}" na tabela "${words[referencesIndex + 1]}" não é UNIQUE` };
+                    }
+                    column.reference = {
+                        schema: schemaName,
+                        table: tableName,
+                        column: refColumn.name
+                    };
+                }
+                // Verificação da integridade com outras características da coluna
+                // PRIMARY KEY implica NOT NULL
+                if (column.isPrimaryKey) {
+                    column.isNotNull = true;
+                    column.isUnique = true;
+                }
+                // AUTO_INCREMENT
+                if (column.isAutoIncrement) {
+                    if (!compareTypes(column.type, types.INTEGER)) {
+                        return { column: null, error: "AUTO_INCREMENT só pode ser usado em colunas INTEGER" };
+                    }
+                    if (column.isForeignKey) {
+                        return { column: null, error: "AUTO_INCREMENT não pode ser usado com FOREIGN KEY" };
+                    }
+                    if (column.hasDefault) {
+                        return { column: null, error: "AUTO_INCREMENT não pode ser usado com DEFAULT" };
+                    }
+                    if (column.isCurrentTimestamp) {
+                        return { column: null, error: "AUTO_INCREMENT não pode ser usado com CURRENT_TIMESTAMP" };
+                    }
+                    column.isNotNull = true;
+                }
+                // CURRENT_TIMESTAMP
+                if (column.isCurrentTimestamp) {
+                    if (!compareTypes(column.type, types.DATE) && !compareTypes(column.type, types.TIME)) {
+                        return { column: null, error: "CURRENT_TIMESTAMP só pode ser usado em colunas DATE ou TIME" };
+                    }
+                    if (column.isForeignKey) {
+                        return { column: null, error: "CURRENT_TIMESTAMP não pode ser usado com FOREIGN KEY" };
+                    }
+                    if (column.hasDefault) {
+                        return { column: null, error: "CURRENT_TIMESTAMP não pode ser usado com DEFAULT" };
+                    }
+                }
+                // FOREIGN KEY
+                if (column.isForeignKey) {
+                    if (column.isAutoIncrement) {
+                        return { column: null, error: "FOREIGN KEY não pode ser usado com AUTO_INCREMENT" };
+                    }
+                    if (column.isCurrentTimestamp) {
+                        return { column: null, error: "FOREIGN KEY não pode ser usado com CURRENT_TIMESTAMP" };
+                    }
+                }
+            }
+            else if (word7 === "drop") {
+            }
+            else {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Ação não reconhecida"], "error");
+            }
         }
     }
     SQL.SQLAlter = SQLAlter;
@@ -4251,7 +4597,69 @@ var SQL;
         if (!valueExists(columnType)) {
             return { column: null, error: `Tipo de coluna inválido: "${columnDef[1]}"` };
         }
-        const column = new DB.Column(columnName, getCurrentTable(), columnType, false, false, false, false, false, false, false);
+        const column = new DB.Column(columnName, getCurrentTable(), columnType);
+        if (compareTypes(columnType, types.ENUM([]))) {
+            const enumStartIndex = columnDef.findIndex(token => token === "(");
+            if (enumStartIndex === -1) {
+                return { column: null, error: "ENUM inválido: falta parêntese de abertura" };
+            }
+            const enumEndIndex = columnDef.findIndex(token => token === ")");
+            if (enumEndIndex === -1) {
+                return { column: null, error: "ENUM inválido: falta parêntese de fechamento" };
+            }
+            const enumValues = columnDef.slice(enumStartIndex + 1, enumEndIndex);
+            if (enumValues.length === 0) {
+                return { column: null, error: "ENUM deve possuir pelo menos um valor" };
+            }
+            for (let i = 0; i < enumValues.length; i++) {
+                const token = enumValues[i];
+                if (i % 2 === 0) {
+                    if (token === ",") {
+                        return { column: null, error: "Valor ENUM inválido" };
+                    }
+                    if (!token.startsWith('"') || !token.endsWith('"')) {
+                        return { column: null, error: "Valores ENUM devem estar entre aspas" };
+                    }
+                }
+                else {
+                    if (token !== ",") {
+                        return { column: null, error: "Valores ENUM devem ser separados por vírgula" };
+                    }
+                }
+            }
+            column.type.setAllowedValues(enumValues.filter(token => token !== ",").map(token => {
+                if (token.startsWith('"') && token.endsWith('"')) {
+                    return token.slice(1, -1);
+                }
+                return token;
+            }));
+        }
+        if (compareTypes(columnType, types.VARCHAR(0))) {
+            const varcharStartIndex = columnDef.findIndex(token => token === "(");
+            if (varcharStartIndex === -1) {
+                return { column: null, error: "VARCHAR inválido: falta parêntese de abertura" };
+            }
+            const varcharEndIndex = columnDef.findIndex(token => token === ")");
+            if (varcharEndIndex === -1) {
+                return { column: null, error: "VARCHAR inválido: falta parêntese de fechamento" };
+            }
+            const varcharValues = columnDef.slice(varcharStartIndex + 1, varcharEndIndex);
+            if (varcharValues.length === 0) {
+                return { column: null, error: "VARCHAR deve possuir um valor máximo" };
+            }
+            if (varcharValues.length !== 1) {
+                return { column: null, error: "VARCHAR deve possuir apenas um valor máximo" };
+            }
+            const varcharValue = varcharValues[0];
+            if (!/^\d+$/.test(varcharValue)) {
+                return { column: null, error: "Valor máximo de VARCHAR deve ser um número" };
+            }
+            const varcharMaxLength = parseInt(varcharValue);
+            if (isNaN(varcharMaxLength) || varcharMaxLength <= 0) {
+                return { column: null, error: "Valor máximo de VARCHAR inválido" };
+            }
+            column.type.setMaxLength(varcharMaxLength);
+        }
         const primaryValidation = validateCompoundKeyword("primary", "key", "PRIMARY KEY", columnDef);
         if (typeof primaryValidation === "string") {
             return { column: null, error: primaryValidation };
@@ -4321,9 +4729,16 @@ var SQL;
                 columnDef[referencesIndex + 4] !== ")") {
                 return { column: null, error: "REFERENCES inválido" };
             }
-            const refTable = getTable(columnDef[referencesIndex + 1]);
+            const name = columnDef[referencesIndex + 1];
+            const { schemaName, tableName, error } = verifySchemaTableName(name);
+            if (error) {
+                return { column: null, error: error };
+            }
+            if (!schemaName || !tableName)
+                return { column: null, error: "Algo deu terrivelmente errado" };
+            const refTable = getCurrentDatabase().schemas[schemaName].tables[tableName];
             if (refTable === null) {
-                return { column: null, error: `Tabela de referência "${columnDef[referencesIndex + 1]}" não existe` };
+                return { column: null, error: `Tabela de referência "${tableName}" não existe no schema "${schemaName}"` };
             }
             const refColumn = refTable.columns[columnDef[referencesIndex + 3]];
             if (refColumn === undefined) {
@@ -4335,72 +4750,11 @@ var SQL;
             if (!refColumn.isUnique && !refColumn.isPrimaryKey) {
                 return { column: null, error: `Coluna de referência "${columnDef[referencesIndex + 3]}" na tabela "${columnDef[referencesIndex + 1]}" não é UNIQUE` };
             }
-            // column.reference = {
-            //     table: columnDef[referencesIndex + 1],
-            //     column: columnDef[referencesIndex + 3]
-            // };
-        }
-        if (compareTypes(columnType, types.ENUM([]))) {
-            const enumStartIndex = columnDef.findIndex(token => token === "(");
-            if (enumStartIndex === -1) {
-                return { column: null, error: "ENUM inválido: falta parêntese de abertura" };
-            }
-            const enumEndIndex = columnDef.findIndex(token => token === ")");
-            if (enumEndIndex === -1) {
-                return { column: null, error: "ENUM inválido: falta parêntese de fechamento" };
-            }
-            const enumValues = columnDef.slice(enumStartIndex + 1, enumEndIndex);
-            if (enumValues.length === 0) {
-                return { column: null, error: "ENUM deve possuir pelo menos um valor" };
-            }
-            for (let i = 0; i < enumValues.length; i++) {
-                const token = enumValues[i];
-                if (i % 2 === 0) {
-                    if (token === ",") {
-                        return { column: null, error: "Valor ENUM inválido" };
-                    }
-                    if (!token.startsWith('"') || !token.endsWith('"')) {
-                        return { column: null, error: "Valores ENUM devem estar entre aspas" };
-                    }
-                }
-                else {
-                    if (token !== ",") {
-                        return { column: null, error: "Valores ENUM devem ser separados por vírgula" };
-                    }
-                }
-            }
-            column.type.setAllowedValues(enumValues.filter(token => token !== ",").map(token => {
-                if (token.startsWith('"') && token.endsWith('"')) {
-                    return token.slice(1, -1);
-                }
-                return token;
-            }));
-        }
-        if (compareTypes(columnType, types.VARCHAR(0))) {
-            const varcharStartIndex = columnDef.findIndex(token => token === "(");
-            if (varcharStartIndex === -1) {
-                return { column: null, error: "VARCHAR inválido: falta parêntese de abertura" };
-            }
-            const varcharEndIndex = columnDef.findIndex(token => token === ")");
-            if (varcharEndIndex === -1) {
-                return { column: null, error: "VARCHAR inválido: falta parêntese de fechamento" };
-            }
-            const varcharValues = columnDef.slice(varcharStartIndex + 1, varcharEndIndex);
-            if (varcharValues.length === 0) {
-                return { column: null, error: "VARCHAR deve possuir um valor máximo" };
-            }
-            if (varcharValues.length !== 1) {
-                return { column: null, error: "VARCHAR deve possuir apenas um valor máximo" };
-            }
-            const varcharValue = varcharValues[0];
-            if (!/^\d+$/.test(varcharValue)) {
-                return { column: null, error: "Valor máximo de VARCHAR deve ser um número" };
-            }
-            const varcharMaxLength = parseInt(varcharValue);
-            if (isNaN(varcharMaxLength) || varcharMaxLength <= 0) {
-                return { column: null, error: "Valor máximo de VARCHAR inválido" };
-            }
-            column.type.setMaxLength(varcharMaxLength);
+            column.reference = {
+                schema: schemaName,
+                table: tableName,
+                column: refColumn.name
+            };
         }
         // Verificação da integridade com outras características da coluna
         // PRIMARY KEY implica NOT NULL
@@ -4635,7 +4989,7 @@ function refreshLogical() {
                 <svg viewBox="0 -960 960 960" fill="currentColor">
                     <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/>
                 </svg>
-                <p>${table.name}</p>
+                <p>${schema.name}.${table.name}</p>
             </div>
             `;
             summary.addEventListener("click", (event) => {
@@ -4679,8 +5033,8 @@ function refreshLogical() {
             for (let c of Object.values(table.columns)) {
                 const divColumn = document.createElement("div");
                 divColumn.innerHTML = `
-                <p>${c.name}</p>
-                <p>${c.type.name}</p>
+                <p>${c.icon}${c.name}</p>
+                <p style="color: var(--${c.type.color});">${c.type.name}</p>
                 `;
                 if (c.isPrimaryKey) {
                     divColumn.innerHTML += `
@@ -4794,7 +5148,6 @@ function refreshLogical() {
         }
     }
     requestAnimationFrame(() => {
-        console.log(logicalConnections);
         drawConnectionLines();
     });
 }
@@ -4930,6 +5283,7 @@ logical.addEventListener("wheel", (event) => {
     const factor = event.deltaY < 0 ? 1.1 : 1 / 1.1;
     zoom *= factor;
     zoom = Math.max(0.2, Math.min(zoom, 5));
+    zoom = Math.round(zoom * 1000) / 1000;
     cameraX = mouseX - worldX * zoom;
     cameraY = mouseY - worldY * zoom;
     renderCamera();
@@ -5223,15 +5577,13 @@ document.addEventListener("mousemove", (e) => {
 });
 setTimeout(() => {
     changeTo("interface-grafica");
-}, 100);
+}, 200);
 changeLeftSide();
 // To Do
 // -Aba de ajuda
 // -ver () dentro de strings no insert
 // -Terminal
 // -Salvar e carregar em SQL
-// -Salvar e carregar com Banco de dados
-// -Modelo lógico (diagrama de entidade relacionamento)
 // -Pesquisar(Dashboard)
 // -Permitir sincronização com banco real
 // -Adicionar mais tipos de dados (JSON, BLOB, decimal, etc)

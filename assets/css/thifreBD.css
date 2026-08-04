@@ -123,7 +123,7 @@ input[type="number"]::-webkit-inner-spin-button {
         flex: 0 0 3px;
         align-self: stretch;
         background-color: var(--gray3);
-        cursor: col-resize;
+        cursor: var(--cursor, default);
     }
 }
 
@@ -223,6 +223,7 @@ input[type="number"]::-webkit-inner-spin-button {
                     >p {
                         display: flex;
                         margin: 0;
+                        cursor: default;
 
                         svg:nth-child(1) {
                             display: block;
@@ -342,8 +343,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
                         div {
                             flex: 0 0 200px;
-                            width: 200px;
-                            min-width: 200px;
+                            width: fit-content;
                             max-height: 51px;
                             overflow: auto;
                             padding: 0 1rem;
@@ -965,6 +965,7 @@ input[type="number"]::-webkit-inner-spin-button {
     }
 
     .tabela-logical {
+        backface-visibility: hidden;
         position: absolute;
         width: 420px;
         background: var(--white);
@@ -989,16 +990,20 @@ input[type="number"]::-webkit-inner-spin-button {
                 >div {
                     display: flex;
                     align-items: center;
-                    width: 100%;
+                    max-width: 90%;
                     height: fit-content;
 
                     p{
                         color: white;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        padding: 2px;
                     }
 
                     svg {
                         width: 20px;
                         height: 20px;
+                        min-width: 20px;
                         margin-right: var(--p3);
                         transition: var(--transition-time1);
 
@@ -1050,10 +1055,14 @@ input[type="number"]::-webkit-inner-spin-button {
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
 
                         &:nth-child(1),
                         &:nth-child(2) {
                             text-align: left;
+                            justify-content: flex-start;
                         }
 
                         &:nth-child(n+3) {
@@ -1367,14 +1376,14 @@ input[type="number"]::-webkit-inner-spin-button {
             }
 
             table {
-                width: 97%;
+                width: calc(100% - 2*var(--p3));
                 border-collapse: separate;
                 border-spacing: 0;
                 border-radius: 12px;
                 overflow: hidden;
                 font-size: 14px;
-                border: 2px solid var(--black);
-                border-radius: 15px;
+                border: 2px solid var(--border1, var(--black));
+                border-radius: var(--border-radius1, 10px);
                 box-sizing: border-box;
 
                 tr:last-child td {
@@ -1386,25 +1395,39 @@ input[type="number"]::-webkit-inner-spin-button {
                     text-align: left;
                     font-weight: 600;
                     border-bottom: 1px solid var(--border1, var(--black));
-                    background-color: var(--background1, var(--gray13));
+                    background-color: var(--background1, var(--gray14));
                 }
 
                 td {
                     padding: var(--p2);
-                    border-bottom: 1px solid var(--black);
+                    border-bottom: 1px solid var(--border1, var(--black));
                     font-size: var(--fs6);
                     text-align: left;
+                    background-color: var(--white);
                 }
+            }
+
+            svg {
+                width: var(--size);
+                height: var(--size);
             }
 
             .help-flex-divs {
                 display: flex;
-                width: calc(100% - var(--p3));
+                justify-content: center;
+                width: calc(100% - 2*var(--p3));
                 gap: var(--p3);
 
-                >div {
-                    width: var(--size);
+                div {
+                    flex: 1;
                 }
+            }
+
+            .help-grid-divs {
+                display: grid;
+                width: calc(100% - 2*var(--p3));
+                gap: var(--p3);
+                grid-template-columns: repeat(auto-fit, minmax(var(--min-width, 300px), 1fr));
             }
 
             .help-icon-text {
@@ -1442,7 +1465,7 @@ input[type="number"]::-webkit-inner-spin-button {
                 border-radius: 10px;
 
                 >* {
-                    margin: var(--p1);
+                    margin: var(--margin1, var(--p1));
                     padding: 0;
                 }
             }

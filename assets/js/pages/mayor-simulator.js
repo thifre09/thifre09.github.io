@@ -2541,8 +2541,6 @@ function atualizarTempo() {
 
     document.getElementById('tempo').textContent = `Tempo passado: ${formatarTempo(decorrido)}`;
     verificarEventosMensais(mesesTotais);
-
-
 }
 
 function iniciarTempoJogo() {
