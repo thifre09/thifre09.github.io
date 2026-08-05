@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu site incrível</title>
+    <link rel="stylesheet" href="/assets/css/batatas.css">
+    <link rel="icon" type="image/png" href="/assets/images/links/batatas/batata1.jpg">
+</head>
+<body data-title="Batatas">
+    <h1 id="texto-inicial">Faça um quiz para saber curiosidades aleatórias sobre batatas, e no fim, veja quantas acertou</h1>
+    <div id="main">
+        <button id="comecar-quiz" onclick="comecarQuiz(this)">Começar</button>
+
+        <div id="quiz" style="display: none;">
+            <div id="pergunta">
+                <p id="pergunta-texto">O nome científico da batata é Solanum tuberosum</p>
+                <div id="buttons">
+                    <button id="verdadeiro" onclick="marcarRespostaVerdadeira()">Verdadeiro</button>
+                    <button id="falso" onclick="marcarRespostaFalse()">Falso</button>
+                </div>
+            </div>
+            <div id="perguntas-bottom">
+            </div>
+        </div>
+    </div>
+
+    <script src="/assets/js/pages/batatas.js"></script>
+    <script type="module" src="/assets/js/others/menu.js"></script>
+</body>
+</html>

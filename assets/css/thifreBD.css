@@ -103,83 +103,11 @@ input[type="number"]::-webkit-inner-spin-button {
     display: flex;
     flex: 1;
     flex-direction: column;
-    min-height: 0;
     overflow: hidden;
     position: relative;
 
     >* {
         z-index: 5;
-    }
-
-    .separador-horizontal {
-        width: 100%;
-        height: 2px;
-        background-color: var(--gray3);
-    }
-
-    .separador-vertical {
-        width: 3px;
-        min-width: 3px;
-        flex: 0 0 3px;
-        align-self: stretch;
-        background-color: var(--gray3);
-        cursor: var(--cursor, default);
-    }
-}
-
-#troca-de-tela {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    background-color: var(--gray13);
-
-    #interface-terminal {
-        --indicator-left: 0px;
-        --indicator-width: 0px;
-        display: flex;
-        width: fit-content;
-        border-radius: 10px;
-        position: relative;
-        padding: 3px;
-
-        .interface-terminal-indicator {
-            position: absolute;
-            top: 3px;
-            left: var(--indicator-left);
-            width: var(--indicator-width);
-            height: calc(100% - 6px);
-            background-color: white;
-            border-radius: 10px;
-            transition: left var(--transition-time1), width var(--transition-time1);
-        }
-
-        button {
-            position: relative;
-            z-index: 0;
-            width: fit-content;
-            font-size: var(--fs3);
-            padding: 7px;
-            margin: 3px;
-            border: none;
-            background-color: transparent;
-            cursor: pointer;
-            border-radius: 10px;
-            transition: color var(--transition-time1);
-            transition: background-color var(--transition-time1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            svg {
-                width: 30px;
-                height: 30px;
-                margin-right: var(--p4);
-            }
-        }
-
-        button:hover:not(.interface-terminal-ativo) {
-            background-color: var(--gray11);
-        }
     }
 }
 
@@ -195,7 +123,6 @@ input[type="number"]::-webkit-inner-spin-button {
         min-width: 100px;
         display: flex;
         flex-direction: column;
-        min-height: 0;
         overflow: auto;
         font-size: var(--fs5);
 
@@ -922,7 +849,7 @@ input[type="number"]::-webkit-inner-spin-button {
         padding: var(--p2);
         background-color: var(--gray2);
 
-        span {
+        label {
             color: var(--green6);
             margin-right: var(--p2);
             width: fit-content;
@@ -993,7 +920,7 @@ input[type="number"]::-webkit-inner-spin-button {
                     max-width: 90%;
                     height: fit-content;
 
-                    p{
+                    p {
                         color: white;
                         overflow: hidden;
                         white-space: nowrap;
@@ -1086,7 +1013,7 @@ input[type="number"]::-webkit-inner-spin-button {
             }
         }
 
-        details[open] > summary > div svg {
+        details[open]>summary>div svg {
             transform: rotate(90deg);
         }
     }
@@ -1423,11 +1350,31 @@ input[type="number"]::-webkit-inner-spin-button {
                 }
             }
 
+            .help-flex-wrap-divs {
+                display: flex;
+                width: calc(100% - 2*var(--p3));
+                column-gap: var(--p3);
+                row-gap: 10px; 
+                flex-wrap: wrap;
+
+                div {
+                    min-width: var(--min-width, default);
+                    flex: 1;
+                }
+            }
+
             .help-grid-divs {
                 display: grid;
-                width: calc(100% - 2*var(--p3));
+                width: calc(100% - (2*var(--p3)));
+                height: auto;
                 gap: var(--p3);
                 grid-template-columns: repeat(auto-fit, minmax(var(--min-width, 300px), 1fr));
+
+                >.help-box {
+                    min-width: 0;
+                    min-height: 0;
+                    align-self: start;
+                }
             }
 
             .help-icon-text {
@@ -1459,6 +1406,7 @@ input[type="number"]::-webkit-inner-spin-button {
             }
 
             .help-box {
+                width: var(--width, auto);
                 padding: var(--p1);
                 background-color: var(--gray14);
                 border: solid 2px var(--gray10);

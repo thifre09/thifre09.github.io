@@ -2,7 +2,7 @@ import * as Auth from "../supabase/auth.js";
 import { supabase } from "../supabase/client.js";
 // carega o menu lateral e a barra de navegação
 document.addEventListener('DOMContentLoaded', async () => {
-    fetch('assets/global/menu.html')
+    fetch('/assets/global/menu.html')
         .then(response => response.text())
         .then(data => {
         // Insere o conteúdo de menu.html diretamente no início do body
@@ -803,50 +803,28 @@ async function mostrarUsuario() {
 //#endregion
 // #region window global functions
 //@ts-ignore
-window.abrirMenu = abrirMenu;
-//@ts-ignore
-window.abrir = abrir;
-//@ts-ignore
-window.criarNotasAtualizacao = criarNotasAtualizacao;
-//@ts-ignore
-window.novaNota = novaNota;
-//@ts-ignore
-window.voltarParaNotas = voltarParaNotas;
-//@ts-ignore
-window.criarNota = criarNota;
-//@ts-ignore
-window.editarNota = editarNota;
-//@ts-ignore
-window.salvarAlteracoesNota = salvarAlteracoesNota;
-//@ts-ignore
-window.excluirNota = excluirNota;
-//@ts-ignore
-window.updateDisplay = updateDisplay;
-//@ts-ignore
-window.appendNumber = appendNumber;
-//@ts-ignore
-window.appendOperator = appendOperator;
-//@ts-ignore
-window.clearDisplay = clearDisplay;
-//@ts-ignore
-window.deleteDigit = deleteDigit;
-//@ts-ignore
-window.calculateSqrt = calculateSqrt;
-//@ts-ignore
-window.compute = compute;
-//@ts-ignore
-window.toggleBanner = toggleBanner;
-//@ts-ignore
-window.irParaTelaConta = irParaTelaConta;
-//@ts-ignore
-window.cadastrarConta = cadastrarConta;
-//@ts-ignore
-window.loginConta = loginConta;
-//@ts-ignore
-window.logoutConta = logoutConta;
-//@ts-ignore
-window.mostrarUsuario = mostrarUsuario;
-window.supabase = supabase;
-window.getUser = Auth.getUser;
-window.isUserLoggedIn = Auth.isUserLoggedIn;
+window.menu = {
+    abrirMenu,
+    abrir,
+    criarNotasAtualizacao,
+    novaNota,
+    voltarParaNotas,
+    criarNota,
+    editarNota,
+    salvarAlteracoesNota,
+    excluirNota,
+    updateDisplay,
+    appendNumber,
+    appendOperator,
+    clearDisplay,
+    deleteDigit,
+    calculateSqrt,
+    compute,
+    toggleBanner,
+    irParaTelaConta,
+    cadastrarConta,
+    loginConta,
+    logoutConta,
+    mostrarUsuario
+};
 //#endregion

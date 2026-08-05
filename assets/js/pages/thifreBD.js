@@ -1,11 +1,12 @@
-"use strict";
+import * as Auth from "../supabase/auth.js";
+import { supabase } from "../supabase/client.js";
 // #region Change interface terminal
 const buttonChangeToGrafical = document.getElementById("button-header-interface");
 const buttonChangeToTerminal = document.getElementById("button-header-terminal");
 const buttonChangeToLogical = document.getElementById("button-header-logical");
 const buttonChangeToSave = document.getElementById("button-header-save");
 const buttonChangeToHelp = document.getElementById("button-header-help");
-const interfaceTerminal = document.getElementById("interface-terminal");
+const interfaceTerminal = document.getElementById("nav-bar");
 /**
  * Atualiza a posição e a largura do indicador da interface ativa.
  * @param activeButton - Botão atualmente selecionado.
@@ -27,26 +28,26 @@ function changeTo(id) {
     document.getElementById("save").style.display = "none";
     document.getElementById("help").style.display = "none";
     document.getElementById(id).style.display = "flex";
-    document.querySelector(".interface-terminal-ativo")?.classList.remove("interface-terminal-ativo");
+    document.querySelector(".nav-bar-ativo")?.classList.remove("nav-bar-ativo");
     switch (id) {
         case "interface-grafica":
-            buttonChangeToGrafical.classList.add("interface-terminal-ativo");
+            buttonChangeToGrafical.classList.add("nav-bar-ativo");
             updateInterfaceTerminalIndicator(buttonChangeToGrafical);
             break;
         case "terminal":
-            buttonChangeToTerminal.classList.add("interface-terminal-ativo");
+            buttonChangeToTerminal.classList.add("nav-bar-ativo");
             updateInterfaceTerminalIndicator(buttonChangeToTerminal);
             break;
         case "logical":
-            buttonChangeToLogical.classList.add("interface-terminal-ativo");
+            buttonChangeToLogical.classList.add("nav-bar-ativo");
             updateInterfaceTerminalIndicator(buttonChangeToLogical);
             break;
         case "save":
-            buttonChangeToSave.classList.add("interface-terminal-ativo");
+            buttonChangeToSave.classList.add("nav-bar-ativo");
             updateInterfaceTerminalIndicator(buttonChangeToSave);
             break;
         case "help":
-            buttonChangeToHelp.classList.add("interface-terminal-ativo");
+            buttonChangeToHelp.classList.add("nav-bar-ativo");
             updateInterfaceTerminalIndicator(buttonChangeToHelp);
             break;
     }
@@ -5446,16 +5447,16 @@ function loadFromSql() {
     alert("Função de importação de SQL ainda não implementada.");
 }
 async function saveToSupabase() {
-    const user = await window.getUser();
-    const { error } = await window.supabase.from("profiles")
+    const user = await Auth.getUser();
+    const { error } = await supabase.from("profiles")
         .update({
         thifreBD_databases: JSON.parse(transformToJson())
     }).eq("id", user.id);
     console.log(error);
 }
 async function loadFromSupabase() {
-    const user = await window.getUser();
-    const { data, error } = await window.supabase.from("profiles")
+    const user = await Auth.getUser();
+    const { data, error } = await supabase.from("profiles")
         .select("thifreBD_databases").eq("id", user.id);
     if (error)
         return;
@@ -5543,8 +5544,8 @@ document.getElementById("menus-centrais").addEventListener("click", (event) => {
     document.getElementById("menus-centrais").style.display = "none";
 });
 window.addEventListener('load', () => updateInterfaceTerminalIndicator(buttonChangeToGrafical));
-window.addEventListener("DOMContentLoaded", () => {
-    if (window.isUserLoggedIn()) {
+window.addEventListener("DOMContentLoaded", async () => {
+    if (await Auth.isUserLoggedIn()) {
         loadFromSupabase();
     }
     else {
@@ -5579,6 +5580,28 @@ setTimeout(() => {
     changeTo("interface-grafica");
 }, 200);
 changeLeftSide();
+//@ts-ignore
+window.thifrebd = {
+    showHideTabelaSelecionadaLinhaColuna,
+    abrirFechar,
+    createDatabaseInterface,
+    renameDatabaseInterface,
+    changeConfirmDeleteMenu,
+    createSchemaInterface,
+    renameSchemaInterface,
+    createColumnCreationDiv,
+    createTableInterface,
+    renameTableInterface,
+    changeEditColumnsMenu,
+    alterColumnsInterface,
+    addColumnsInterface,
+    insertRowInterface,
+    createWhereConditionDiv,
+    createTerminalSession,
+    selectAction,
+    selectOption,
+    confirmSaveOrLoad
+};
 // To Do
 // -Aba de ajuda
 // -ver () dentro de strings no insert

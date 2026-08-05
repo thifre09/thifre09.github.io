@@ -1,6 +1,5 @@
-"use strict";
 let numPergunta = 1;
-let respostas = [];
+let respostas: (boolean | null)[] = [];
 let perguntas = [
     "Batatas tem 48 cromossomos",
     "O nome científico da batata é Solanum tuberosum",
@@ -33,46 +32,50 @@ let perguntas = [
     "Em As Viagens de Gulliver, de Jonathan Swift, há uma passagem onde o protagonista menciona a “batata voadora”, uma invenção fictícia que supostamente permite a levitação. Isso foi inspirado nas lendas da época sobre o poder místico das batatas, um alimento então relativamente novo na Europa",
     "Em tempos de necessidade, fatias de batatas podem ser embebidas em óleo e usadas como velas de emergência. O amido na batata absorve o óleo, e a umidade faz com que queimem lentamente"
 ];
-function comecarQuiz(button) {
-    button.style.display = 'none';
-    document.getElementById('quiz').style.display = 'flex';
+
+function comecarQuiz(button: HTMLButtonElement) {
+    button.style.display = 'none'; 
+    document.getElementById('quiz')!.style.display = 'flex';
     createPerguntasBottom();
     numPergunta = 0;
     proximaPergunta();
 }
+
 function createPerguntasBottom() {
     for (let i = 1; i <= perguntas.length; i++) {
         const perguntaDiv = document.createElement('div');
         perguntaDiv.textContent = i + "";
         perguntaDiv.addEventListener('click', () => {
-            numPergunta = i - 1;
+            numPergunta = i-1;
             proximaPergunta();
         });
-        document.getElementById('perguntas-bottom').appendChild(perguntaDiv);
+        document.getElementById('perguntas-bottom')!.appendChild(perguntaDiv);
         respostas.push(null);
     }
 }
+
 function marcarRespostaVerdadeira() {
     if (numPergunta > perguntas.length) {
-        document.getElementById("buttons").style.display = "none";
-        document.getElementById('pergunta-texto').textContent = `Parabens! você acertou ${respostas.filter(resposta => { return resposta === true; }).length}/30 curiosidades! Por incrivel que pareça, todas as curiosidades eram verdadeiras!`;
-    }
-    ;
+        document.getElementById("buttons")!.style.display = "none";
+        document.getElementById('pergunta-texto')!.textContent = `Parabens! você acertou ${respostas.filter(resposta => {return resposta === true}).length}/30 curiosidades! Por incrivel que pareça, todas as curiosidades eram verdadeiras!`;
+    };
     respostas[numPergunta - 1] = true;
-    document.getElementById('perguntas-bottom').children[numPergunta - 1].style.backgroundColor = 'var(--green5)';
+    (document.getElementById('perguntas-bottom')!.children[numPergunta - 1] as HTMLElement).style.backgroundColor = 'var(--green5)';
     proximaPergunta();
 }
+
 function marcarRespostaFalse() {
-    if (numPergunta > perguntas.length)
-        return;
+    if (numPergunta > perguntas.length) return;
     respostas[numPergunta - 1] = false;
-    document.getElementById('perguntas-bottom').children[numPergunta - 1].style.backgroundColor = 'var(--red5)';
+    (document.getElementById('perguntas-bottom')!.children[numPergunta - 1] as HTMLElement).style.backgroundColor = 'var(--red5)';
     proximaPergunta();
 }
+
 function proximaPergunta() {
     numPergunta++;
-    document.getElementById('pergunta-texto').textContent = perguntas[numPergunta - 1];
+    document.getElementById('pergunta-texto')!.textContent = perguntas[numPergunta - 1];
     if (numPergunta > perguntas.length) {
-        document.getElementById('pergunta-texto').textContent = "Deseja responder?";
+        document.getElementById('pergunta-texto')!.textContent = "Deseja responder?";
     }
 }
+

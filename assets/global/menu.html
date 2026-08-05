@@ -1,12 +1,13 @@
 <head>
-    <link rel="stylesheet" href="assets/global/menu.css">
-    <link rel="stylesheet" href="assets/global/variables.css">
+    <link rel="stylesheet" href="/assets/global/menu.css">
+    <link rel="stylesheet" href="/assets/global/variables.css">
+    <link rel="stylesheet" href="/assets/global/global.css">
 </head>
 
 <body>
     <div id="title-div">
         <h1 id="title">
-            <a href="index.html">
+            <a href="/index.html">
                 <svg viewBox="0 -960 960 960" fill="currentColor">
                     <path
                         d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z" />
@@ -17,7 +18,7 @@
     </div>
 
     <nav id="barra-main">
-        <div onclick="abrirMenu(false)" class="botao-menu-lateral">
+        <div onclick="menu.abrirMenu(false)" class="botao-menu-lateral">
             <svg viewBox="0 -960 960 960" fill="currentcolor">
                 <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
             </svg>
@@ -25,7 +26,7 @@
 
         <h6 id="titulo"><a href="#title">Bem vindo ao incrível site</a></h6>
 
-        <div onclick="abrir(false, 'conta')" class="botao-menu-lateral">
+        <div onclick="menu.abrir(false, 'conta')" class="botao-menu-lateral">
             <svg viewBox="0 -960 960 960" fill="currentcolor">
                 <path
                     d="M234-276q51-39 114-61.5T480-360q69 0 132 22.5T726-276q35-41 54.5-93T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 59 19.5 111t54.5 93Zm146.5-204.5Q340-521 340-580t40.5-99.5Q421-720 480-720t99.5 40.5Q620-639 620-580t-40.5 99.5Q539-440 480-440t-99.5-40.5ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm100-95.5q47-15.5 86-44.5-39-29-86-44.5T480-280q-53 0-100 15.5T294-220q39 29 86 44.5T480-160q53 0 100-15.5ZM523-537q17-17 17-43t-17-43q-17-17-43-17t-43 17q-17 17-17 43t17 43q17 17 43 17t43-17Zm-43-43Zm0 360Z" />
@@ -33,16 +34,16 @@
         </div>
     </nav>
 
-    <div onclick="abrirMenu(false)" class="botao-menu-lateral" id="botao-menu-lateral-reserva" style="display: none;">
+    <div onclick="menu.abrirMenu(false)" class="botao-menu-lateral" id="botao-menu-lateral-reserva" style="display: none;">
         <svg viewBox="0 -960 960 960" fill="currentcolor">
             <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
         </svg>
     </div>
 
     <aside id="menu-lateral" style="display: none;">
-        <button onclick="abrirMenu(true)" id="fechar-menu-lateral">Fechar</button>
+        <button onclick="menu.abrirMenu(true)" id="fechar-menu-lateral">Fechar</button>
 
-        <button onclick="abrir(false, 'notas-atualizacao')">
+        <button onclick="menu.abrir(false, 'notas-atualizacao')">
             <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
                 width="24px" fill="currentColor">
                 <path
@@ -50,7 +51,7 @@
             </svg>
             <div>Notas da atualização</div>
         </button>
-        <button onclick="abrir(false, 'bloco-notas')">
+        <button onclick="menu.abrir(false, 'bloco-notas')">
             <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
                 width="24px" fill="currentColor">
                 <path
@@ -58,7 +59,7 @@
             </svg>
             <div>Bloco de notas</div>
         </button>
-        <button onclick="abrir(false, 'calculadora')">
+        <button onclick="menu.abrir(false, 'calculadora')">
             <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
                 width="24px" fill="currentColor">
                 <path
@@ -67,7 +68,7 @@
             <div>Calculadora</div>
         </button>
         <!--<button onclick="abrir(false, 'conquistas-geral')">Conquistas</button>-->
-        <button onclick="abrir(false, 'configuracoes')">
+        <button onclick="menu.abrir(false, 'configuracoes')">
             <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
                 width="24px" fill="currentColor">
                 <path
@@ -91,7 +92,7 @@
                 </div>
             </div>
             <div class="button-div">
-                <button onclick="abrir(true, 'notas-atualizacao')">
+                <button onclick="menu.abrir(true, 'notas-atualizacao')">
                     <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 6 6 18" />
@@ -122,7 +123,7 @@
                 </div>
             </div>
             <div class="button-div">
-                <button onclick="abrir(true, 'bloco-notas')">
+                <button onclick="menu.abrir(true, 'bloco-notas')">
                     <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 6 6 18" />
@@ -134,25 +135,25 @@
         <div class="topo-notas">
             <div id="topo-notas-container">
                 <h2>Minhas notas</h2>
-                <button onclick="novaNota()">
+                <button onclick="menu.novaNota()">
                     <img src="assets/images/icones-uteis/edit.svg"> Nova nota
                 </button>
             </div>
 
             <div id="topo-criar-nota" style="display: none;">
-                <button onclick="voltarParaNotas()">
+                <button onclick="menu.voltarParaNotas()">
                     <img src="assets/images/icones-uteis/arrow.svg"> Voltar
                 </button>
-                <button onclick="criarNota()">
+                <button onclick="menu.criarNota()">
                     <img src="assets/images/icones-uteis/add.svg">Criar nota
                 </button>
             </div>
 
             <div id="topo-editar-nota" style="display: none;">
-                <button onclick="voltarParaNotas()">
+                <button onclick="menu.voltarParaNotas()">
                     <img src="assets/images/icones-uteis/arrow.svg"> Voltar
                 </button>
-                <button onclick="salvarAlteracoesNota()">
+                <button onclick="menu.salvarAlteracoesNota()">
                     <img src="assets/images/icones-uteis/pencil.png">Editar Nota
                 </button>
             </div>
@@ -211,7 +212,7 @@
                 </div>
             </div>
             <div class="button-div">
-                <button onclick="abrir(true, 'calculadora')">
+                <button onclick="menu.abrir(true, 'calculadora')">
                     <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 6 6 18" />
@@ -227,28 +228,28 @@
                     <div id="previous-operand"></div>
                     <div id="current-operand">0</div>
                 </div>
-                <button onclick="appendNumber('1')">1</button>
-                <button onclick="appendNumber('2')">2</button>
-                <button onclick="appendNumber('3')">3</button>
-                <button onclick="appendOperator('**')">xʸ</button>
-                <button onclick="calculateSqrt()">√</button>
-                <button onclick="clearDisplay()">AC</button>
-                <button onclick="deleteDigit()">DEL</button>
+                <button onclick="menu.appendNumber('1')">1</button>
+                <button onclick="menu.appendNumber('2')">2</button>
+                <button onclick="menu.appendNumber('3')">3</button>
+                <button onclick="menu.appendOperator('**')">xʸ</button>
+                <button onclick="menu.calculateSqrt()">√</button>
+                <button onclick="menu.clearDisplay()">AC</button>
+                <button onclick="menu.deleteDigit()">DEL</button>
 
-                <button onclick="appendNumber('4')">4</button>
-                <button onclick="appendNumber('5')">5</button>
-                <button onclick="appendNumber('6')">6</button>
-                <button onclick="appendOperator('+')">+</button>
-                <button onclick="appendOperator('-')">-</button>
-                <button onclick="appendOperator('*')">×</button>
-                <button onclick="appendOperator('/')">÷</button>
+                <button onclick="menu.appendNumber('4')">4</button>
+                <button onclick="menu.appendNumber('5')">5</button>
+                <button onclick="menu.appendNumber('6')">6</button>
+                <button onclick="menu.appendOperator('+')">+</button>
+                <button onclick="menu.appendOperator('-')">-</button>
+                <button onclick="menu.appendOperator('*')">×</button>
+                <button onclick="menu.appendOperator('/')">÷</button>
 
-                <button onclick="appendNumber('7')">7</button>
-                <button onclick="appendNumber('8')">8</button>
-                <button onclick="appendNumber('9')">9</button>
-                <button onclick="appendNumber('0')">0</button>
-                <button onclick="appendNumber('.')">.</button>
-                <button onclick="compute()" id="equal-button">=</button>
+                <button onclick="menu.appendNumber('7')">7</button>
+                <button onclick="menu.appendNumber('8')">8</button>
+                <button onclick="menu.appendNumber('9')">9</button>
+                <button onclick="menu.appendNumber('0')">0</button>
+                <button onclick="menu.appendNumber('.')">.</button>
+                <button onclick="menu.compute()" id="equal-button">=</button>
             </div>
         </div>
 
@@ -268,7 +269,7 @@
                 </div>
             </div>
             <div class="button-div">
-                <button onclick="abrir(true, 'configuracoes')">
+                <button onclick="menu.abrir(true, 'configuracoes')">
                     <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 6 6 18" />
@@ -281,7 +282,7 @@
         <div class="aside-scroll">
             <div>
                 <h2>Desativar menu superior</h2>
-                <input type="checkbox" id="toggle-banner" onchange="toggleBanner()">
+                <input type="checkbox" id="toggle-banner" onchange="menu.toggleBanner()">
             </div>
             <p style="margin-top: 50%;">Sim, só tem 1 configuração</p>
         </div>
@@ -301,7 +302,7 @@
                 </div>
             </div>
             <div class="button-div">
-                <button onclick="abrir(true, 'conta')">
+                <button onclick="menu.abrir(true, 'conta')">
                     <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 6 6 18" />
@@ -322,7 +323,7 @@
             <div id="usuario-logado" style="display: none;">
                 <h2>Bem vindo, <span id="nome-usuario-logado"></span></h2>
                 <p id="email-usuario-logado"></p>
-                <button onclick="logoutConta()">Sair</button>
+                <button onclick="menu.logoutConta()">Sair</button>
                 
             </div>
             <div id="signUp" style="display: none;">
@@ -348,8 +349,8 @@
                     </label>
                     <br>
                 </form>
-                <button onclick="cadastrarConta()">Cadastrar</button>
-                <button style="background-color: var(--gray12); color: black;" onclick="irParaTelaConta('usuario-nao-logado')">Voltar</button>
+                <button onclick="menu.cadastrarConta()">Cadastrar</button>
+                <button style="background-color: var(--gray12); color: black;" onclick="menu.irParaTelaConta('usuario-nao-logado')">Voltar</button>
             </div>
             <div id="signIn" style="display: none;">
                 <h2>Login</h2>
@@ -367,8 +368,8 @@
                         <input type="password" autocomplete="current-password" id="senha-login" placeholder="Senha" required>
                     </label>
                 </form>
-                <button onclick="loginConta()">Entrar</button>
-                <button style="background-color: var(--gray12); color: black;" onclick="irParaTelaConta('usuario-nao-logado')">Voltar</button>
+                <button onclick="menu.loginConta()">Entrar</button>
+                <button style="background-color: var(--gray12); color: black;" onclick="menu.irParaTelaConta('usuario-nao-logado')">Voltar</button>
             </div>
         </div>
 

@@ -1,0 +1,71 @@
+.separador-horizontal {
+    width: 100%;
+    height: 2px;
+    min-height: 2px;
+    background-color: var(--gray3);
+}
+
+.separador-vertical {
+    width: 3px;
+    min-width: 3px;
+    flex: 0 0 3px;
+    align-self: stretch;
+    background-color: var(--gray3);
+    cursor: var(--cursor, default);
+}
+
+nav#troca-de-tela {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: var(--gray13);
+
+    #nav-bar {
+        --indicator-left: 0px;
+        --indicator-width: 0px;
+        display: flex;
+        width: fit-content;
+        border-radius: 10px;
+        position: relative;
+        padding: 3px;
+
+        .nav-bar-indicator {
+            position: absolute;
+            top: 3px;
+            left: var(--indicator-left);
+            width: var(--indicator-width);
+            height: calc(100% - 6px);
+            background-color: white;
+            border-radius: 10px;
+            transition: left var(--transition-time1), width var(--transition-time1);
+        }
+
+        button {
+            position: relative;
+            z-index: 0;
+            width: fit-content;
+            font-size: var(--fs3);
+            padding: 7px;
+            margin: 3px;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: color var(--transition-time1);
+            transition: background-color var(--transition-time1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            svg {
+                width: 30px;
+                height: 30px;
+                margin-right: var(--p4);
+            }
+        }
+
+        button:hover:not(.nav-bar-ativo) {
+            background-color: var(--gray11);
+        }
+    }
+}
