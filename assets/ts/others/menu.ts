@@ -529,7 +529,11 @@ function criarNota() {
     const divEditarExcluir = document.createElement("div");
 
     const buttonEditar = document.createElement("button");
-    buttonEditar.innerHTML = "<img src='assets/images/icones-uteis/pencil.png'> Editar";
+    buttonEditar.innerHTML = `
+    <svg viewBox="0 -960 960 960" fill="currentcolor">
+        <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/>
+    </svg>Editar
+    `;
     indexEditarNota = notas.indexOf(nota)
     buttonEditar.addEventListener("click", () => editarNota(notas.indexOf(nota)))
     divEditarExcluir.appendChild(buttonEditar);
@@ -537,13 +541,10 @@ function criarNota() {
     const buttonExcluir = document.createElement("button");
     buttonExcluir.addEventListener("click", () => excluirNota(notas.indexOf(nota)));
     buttonExcluir.innerHTML = `
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="3 6 5 6 21 6"/>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                <line x1="10" y1="11" x2="10" y2="17"/>
-                <line x1="14" y1="11" x2="14" y2="17"/>
-            </svg>
-            `;
+    <svg class="delete-note" viewBox="0 -960 960 960" fill="currentcolor">
+        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+    </svg>
+    `;
     divEditarExcluir.appendChild(buttonExcluir)
 
     divNota.appendChild(divEditarExcluir);

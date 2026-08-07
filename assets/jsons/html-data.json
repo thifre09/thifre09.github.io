@@ -1,0 +1,1257 @@
+{
+    "html": {
+        "description": "The html element represents the root of an HTML document.",
+        "attributes": {
+            "manifest": {
+                "description": ""
+            }
+        }
+    },
+    "head": {
+        "description": "The head element represents a collection of metadata for the Document.",
+        "attributes": {}
+    },
+    "title": {
+        "description": "The title element represents the document's title or name. Authors should use titles that identify their documents even when they are used out of context, for example in a user's history or bookmarks, or in search results. The document's title is often different from its first heading, since the first heading does not have to stand alone when taken out of context.",
+        "attributes": {}
+    },
+    "base": {
+        "description": "The base element allows authors to specify the document base URL for the purposes of resolving relative URLs, and the name of the default browsing context for the purposes of following hyperlinks. The element does not represent any content beyond this information.",
+        "attributes": {
+            "href": {
+                "description": ""
+            },
+            "target": {
+                "description": ""
+            }
+        }
+    },
+    "link": {
+        "description": "The link element allows authors to link their document to other resources.",
+        "attributes": {
+            "href": {
+                "description": ""
+            },
+            "crossorigin": {
+                "description": ""
+            },
+            "rel": {
+                "description": ""
+            },
+            "media": {
+                "description": ""
+            },
+            "hreflang": {
+                "description": ""
+            },
+            "type": {
+                "description": ""
+            },
+            "sizes": {
+                "description": ""
+            }
+        }
+    },
+    "meta": {
+        "description": "The meta element represents various kinds of metadata that cannot be expressed using the title, base, link, style, and script elements.",
+        "attributes": {
+            "name": {
+                "description": ""
+            },
+            "http-equiv": {
+                "description": ""
+            },
+            "content": {
+                "description": ""
+            },
+            "charset": {
+                "description": ""
+            }
+        }
+    },
+    "style": {
+        "description": "The style element allows authors to embed style information in their documents. The style element is one of several inputs to the styling processing model. The element does not represent content for the user.",
+        "attributes": {
+            "media": {
+                "description": ""
+            },
+            "nonce": {
+                "description": ""
+            },
+            "type": {
+                "description": ""
+            },
+            "scoped": {
+                "description": ""
+            }
+        }
+    },
+    "body": {
+        "description": "The body element represents the content of the document.",
+        "attributes": {
+            "onafterprint": {
+                "description": ""
+            },
+            "onbeforeprint": {
+                "description": ""
+            },
+            "onbeforeunload": {
+                "description": ""
+            },
+            "onhashchange": {
+                "description": ""
+            },
+            "onlanguagechange": {
+                "description": ""
+            },
+            "onmessage": {
+                "description": ""
+            },
+            "onoffline": {
+                "description": ""
+            },
+            "ononline": {
+                "description": ""
+            },
+            "onpagehide": {
+                "description": ""
+            },
+            "onpageshow": {
+                "description": ""
+            },
+            "onpopstate": {
+                "description": ""
+            },
+            "onstorage": {
+                "description": ""
+            },
+            "onunload": {
+                "description": ""
+            }
+        }
+    },
+    "article": {
+        "description": "The article element represents a complete, or self-contained, composition in a document, page, application, or site and that is, in principle, independently distributable or reusable, e.g. in syndication. This could be a forum post, a magazine or newspaper article, a blog entry, a user-submitted comment, an interactive widget or gadget, or any other independent item of content. Each article should be identified, typically by including a heading (h1–h6 element) as a child of the article element.",
+        "attributes": {}
+    },
+    "section": {
+        "description": "The section element represents a generic section of a document or application. A section, in this context, is a thematic grouping of content. Each section should be identified, typically by including a heading ( h1- h6 element) as a child of the section element.",
+        "attributes": {}
+    },
+    "nav": {
+        "description": "The nav element represents a section of a page that links to other pages or to parts within the page: a section with navigation links.",
+        "attributes": {}
+    },
+    "aside": {
+        "description": "The aside element represents a section of a page that consists of content that is tangentially related to the content around the aside element, and which could be considered separate from that content. Such sections are often represented as sidebars in printed typography.",
+        "attributes": {}
+    },
+    "h1": {
+        "description": "The h1 element represents a section heading.",
+        "attributes": {}
+    },
+    "h2": {
+        "description": "The h2 element represents a section heading.",
+        "attributes": {}
+    },
+    "h3": {
+        "description": "The h3 element represents a section heading.",
+        "attributes": {}
+    },
+    "h4": {
+        "description": "The h4 element represents a section heading.",
+        "attributes": {}
+    },
+    "h5": {
+        "description": "The h5 element represents a section heading.",
+        "attributes": {}
+    },
+    "h6": {
+        "description": "The h6 element represents a section heading.",
+        "attributes": {}
+    },
+    "header": {
+        "description": "The header element represents introductory content for its nearest ancestor sectioning content or sectioning root element. A header typically contains a group of introductory or navigational aids. When the nearest ancestor sectioning content or sectioning root element is the body element, then it applies to the whole page.",
+        "attributes": {}
+    },
+    "footer": {
+        "description": "The footer element represents a footer for its nearest ancestor sectioning content or sectioning root element. A footer typically contains information about its section such as who wrote it, links to related documents, copyright data, and the like.",
+        "attributes": {}
+    },
+    "address": {
+        "description": "The address element represents the contact information for its nearest article or body element ancestor. If that is the body element, then the contact information applies to the document as a whole.",
+        "attributes": {}
+    },
+    "p": {
+        "description": "The p element represents a paragraph.",
+        "attributes": {}
+    },
+    "hr": {
+        "description": "The hr element represents a paragraph-level thematic break, e.g. a scene change in a story, or a transition to another topic within a section of a reference book.",
+        "attributes": {}
+    },
+    "pre": {
+        "description": "The pre element represents a block of preformatted text, in which structure is represented by typographic conventions rather than by elements.",
+        "attributes": {}
+    },
+    "blockquote": {
+        "description": "The blockquote element represents content that is quoted from another source, optionally with a citation which must be within a footer or cite element, and optionally with in-line changes such as annotations and abbreviations.",
+        "attributes": {
+            "cite": {
+                "description": ""
+            }
+        }
+    },
+    "ol": {
+        "description": "The ol element represents a list of items, where the items have been intentionally ordered, such that changing the order would change the meaning of the document.",
+        "attributes": {
+            "reversed": {
+                "description": ""
+            },
+            "start": {
+                "description": ""
+            },
+            "type": {
+                "description": ""
+            }
+        }
+    },
+    "ul": {
+        "description": "The ul element represents a list of items, where the order of the items is not important — that is, where changing the order would not materially change the meaning of the document.",
+        "attributes": {}
+    },
+    "li": {
+        "description": "The li element represents a list item. If its parent element is an ol, ul, or menu element, then the element is an item of the parent element's list, as defined for those elements. Otherwise, the list item has no defined list-related relationship to any other li element.",
+        "attributes": {
+            "value": {
+                "description": ""
+            }
+        }
+    },
+    "dl": {
+        "description": "The dl element represents an association list consisting of zero or more name-value groups (a description list). A name-value group consists of one or more names (dt elements) followed by one or more values (dd elements), ignoring any nodes other than dt and dd elements. Within a single dl element, there should not be more than one dt element for each name.",
+        "attributes": {}
+    },
+    "dt": {
+        "description": "The dt element represents the term, or name, part of a term-description group in a description list (dl element).",
+        "attributes": {}
+    },
+    "dd": {
+        "description": "The dd element represents the description, definition, or value, part of a term-description group in a description list (dl element).",
+        "attributes": {}
+    },
+    "figure": {
+        "description": "The figure element represents some flow content, optionally with a caption, that is self-contained (like a complete sentence) and is typically referenced as a single unit from the main flow of the document.",
+        "attributes": {}
+    },
+    "figcaption": {
+        "description": "The figcaption element represents a caption or legend for the rest of the contents of the figcaption element's parent figure element, if any.",
+        "attributes": {}
+    },
+    "main": {
+        "description": "The main element represents the main content of the body of a document or application. The main content area consists of content that is directly related to or expands upon the central topic of a document or central functionality of an application.",
+        "attributes": {}
+    },
+    "div": {
+        "description": "The div element has no special meaning at all. It represents its children. It can be used with the class, lang, and title attributes to mark up semantics common to a group of consecutive elements.",
+        "attributes": {}
+    },
+    "a": {
+        "description": "If the a element has an href attribute, then it represents a hyperlink (a hypertext anchor) labeled by its contents.",
+        "attributes": {
+            "href": {
+                "description": ""
+            },
+            "target": {
+                "description": ""
+            },
+            "download": {
+                "description": ""
+            },
+            "ping": {
+                "description": ""
+            },
+            "rel": {
+                "description": ""
+            },
+            "hreflang": {
+                "description": ""
+            },
+            "type": {
+                "description": ""
+            }
+        }
+    },
+    "em": {
+        "description": "The em element represents stress emphasis of its contents.",
+        "attributes": {}
+    },
+    "strong": {
+        "description": "The strong element represents strong importance, seriousness, or urgency for its contents.",
+        "attributes": {}
+    },
+    "small": {
+        "description": "The small element represents side comments such as small print.",
+        "attributes": {}
+    },
+    "s": {
+        "description": "The s element represents contents that are no longer accurate or no longer relevant.",
+        "attributes": {}
+    },
+    "cite": {
+        "description": "The cite element represents a reference to a creative work. It must include the title of the work or the name of the author(person, people or organization) or an URL reference, or a reference in abbreviated form as per the conventions used for the addition of citation metadata.",
+        "attributes": {}
+    },
+    "q": {
+        "description": "The q element represents some phrasing content quoted from another source.",
+        "attributes": {
+            "cite": {
+                "description": ""
+            }
+        }
+    },
+    "dfn": {
+        "description": "The dfn element represents the defining instance of a term. The paragraph, description list group, or section that is the nearest ancestor of the dfn element must also contain the definition(s) for the term given by the dfn element.",
+        "attributes": {}
+    },
+    "abbr": {
+        "description": "The abbr element represents an abbreviation or acronym, optionally with its expansion. The title attribute may be used to provide an expansion of the abbreviation. The attribute, if specified, must contain an expansion of the abbreviation, and nothing else.",
+        "attributes": {}
+    },
+    "ruby": {
+        "description": "The ruby element allows one or more spans of phrasing content to be marked with ruby annotations. Ruby annotations are short runs of text presented alongside base text, primarily used in East Asian typography as a guide for pronunciation or to include other annotations. In Japanese, this form of typography is also known as furigana. Ruby text can appear on either side, and sometimes both sides, of the base text, and it is possible to control its position using CSS. A more complete introduction to ruby can be found in the Use Cases & Exploratory Approaches for Ruby Markup document as well as in CSS Ruby Module Level 1. [RUBY-UC] [CSSRUBY]",
+        "attributes": {}
+    },
+    "rb": {
+        "description": "The rb element marks the base text component of a ruby annotation. When it is the child of a ruby element, it doesn't represent anything itself, but its parent ruby element uses it as part of determining what it represents.",
+        "attributes": {}
+    },
+    "rt": {
+        "description": "The rt element marks the ruby text component of a ruby annotation. When it is the child of a ruby element or of an rtc element that is itself the child of a ruby element, it doesn't represent anything itself, but its ancestor ruby element uses it as part of determining what it represents.",
+        "attributes": {}
+    },
+    "rp": {
+        "description": "The rp element is used to provide fallback text to be shown by user agents that don't support ruby annotations. One widespread convention is to provide parentheses around the ruby text component of a ruby annotation.",
+        "attributes": {}
+    },
+    "time": {
+        "description": "The time element represents its contents, along with a machine-readable form of those contents in the datetime attribute. The kind of content is limited to various kinds of dates, times, time-zone offsets, and durations, as described below.",
+        "attributes": {
+            "datetime": {
+                "description": ""
+            }
+        }
+    },
+    "code": {
+        "description": "The code element represents a fragment of computer code. This could be an XML element name, a file name, a computer program, or any other string that a computer would recognize.",
+        "attributes": {}
+    },
+    "var": {
+        "description": "The var element represents a variable. This could be an actual variable in a mathematical expression or programming context, an identifier representing a constant, a symbol identifying a physical quantity, a function parameter, or just be a term used as a placeholder in prose.",
+        "attributes": {}
+    },
+    "samp": {
+        "description": "The samp element represents sample or quoted output from another program or computing system.",
+        "attributes": {}
+    },
+    "kbd": {
+        "description": "The kbd element represents user input (typically keyboard input, although it may also be used to represent other input, such as voice commands).",
+        "attributes": {}
+    },
+    "sub": {
+        "description": "The sub element represents a subscript.",
+        "attributes": {}
+    },
+    "sup": {
+        "description": "The sup element represents a superscript.",
+        "attributes": {}
+    },
+    "i": {
+        "description": "The i element represents a span of text in an alternate voice or mood, or otherwise offset from the normal prose in a manner indicating a different quality of text, such as a taxonomic designation, a technical term, an idiomatic phrase from another language, transliteration, a thought, or a ship name in Western texts.",
+        "attributes": {}
+    },
+    "b": {
+        "description": "The b element represents a span of text to which attention is being drawn for utilitarian purposes without conveying any extra importance and with no implication of an alternate voice or mood, such as key words in a document abstract, product names in a review, actionable words in interactive text-driven software, or an article lede.",
+        "attributes": {}
+    },
+    "u": {
+        "description": "The u element represents a span of text with an unarticulated, though explicitly rendered, non-textual annotation, such as labeling the text as being a proper name in Chinese text (a Chinese proper name mark), or labeling the text as being misspelt.",
+        "attributes": {}
+    },
+    "mark": {
+        "description": "The mark element represents a run of text in one document marked or highlighted for reference purposes, due to its relevance in another context. When used in a quotation or other block of text referred to from the prose, it indicates a highlight that was not originally present but which has been added to bring the reader's attention to a part of the text that might not have been considered important by the original author when the block was originally written, but which is now under previously unexpected scrutiny. When used in the main prose of a document, it indicates a part of the document that has been highlighted due to its likely relevance to the user's current activity.",
+        "attributes": {}
+    },
+    "bdi": {
+        "description": "The bdi element represents a span of text that is to be isolated from its surroundings for the purposes of bidirectional text formatting. [BIDI]",
+        "attributes": {}
+    },
+    "bdo": {
+        "description": "The bdo element represents explicit text directionality formatting control for its children. It allows authors to override the Unicode bidirectional algorithm by explicitly specifying a direction override. [BIDI]",
+        "attributes": {}
+    },
+    "span": {
+        "description": "The span element doesn't mean anything on its own, but can be useful when used together with the global attributes, e.g. class, lang, or dir. It represents its children.",
+        "attributes": {}
+    },
+    "br": {
+        "description": "The br element represents a line break.",
+        "attributes": {}
+    },
+    "wbr": {
+        "description": "The wbr element represents a line break opportunity.",
+        "attributes": {}
+    },
+    "ins": {
+        "description": "The ins element represents an addition to the document.",
+        "attributes": {}
+    },
+    "del": {
+        "description": "The del element represents a removal from the document.",
+        "attributes": {
+            "cite": {
+                "description": ""
+            },
+            "datetime": {
+                "description": ""
+            }
+        }
+    },
+    "picture": {
+        "description": "The picture element is a container which provides multiple sources to its contained img element to allow authors to declaratively control or give hints to the user agent about which image resource to use, based on the screen pixel density, viewport size, image format, and other factors. It represents its children.",
+        "attributes": {}
+    },
+    "img": {
+        "description": "An img element represents an image.",
+        "attributes": {
+            "alt": {
+                "description": ""
+            },
+            "src": {
+                "description": ""
+            },
+            "srcset": {
+                "description": ""
+            },
+            "crossorigin": {
+                "description": ""
+            },
+            "usemap": {
+                "description": ""
+            },
+            "ismap": {
+                "description": ""
+            },
+            "width": {
+                "description": ""
+            },
+            "height": {
+                "description": ""
+            },
+            "decoding": {
+                "description": ""
+            },
+            "loading": {
+                "description": {
+                    "kind": "markdown",
+                    "value": "Indicates how the browser should load the image."
+                }
+            },
+            "fetchpriority": {
+                "description": ""
+            },
+            "referrerpolicy": {
+                "description": ""
+            },
+            "sizes": {
+                "description": ""
+            }
+        }
+    },
+    "iframe": {
+        "description": "The iframe element represents a nested browsing context.",
+        "attributes": {
+            "src": {
+                "description": ""
+            },
+            "srcdoc": {
+                "description": ""
+            },
+            "name": {
+                "description": ""
+            },
+            "sandbox": {
+                "description": ""
+            },
+            "seamless": {
+                "description": ""
+            },
+            "allowfullscreen": {
+                "description": ""
+            },
+            "width": {
+                "description": ""
+            },
+            "height": {
+                "description": ""
+            }
+        }
+    },
+    "embed": {
+        "description": "The embed element provides an integration point for an external (typically non-HTML) application or interactive content.",
+        "attributes": {
+            "src": {
+                "description": ""
+            },
+            "type": {
+                "description": ""
+            },
+            "width": {
+                "description": ""
+            },
+            "height": {
+                "description": ""
+            }
+        }
+    },
+    "object": {
+        "description": "The object element can represent an external resource, which, depending on the type of the resource, will either be treated as an image, as a nested browsing context, or as an external resource to be processed by a plugin.",
+        "attributes": {
+            "data": {
+                "description": ""
+            },
+            "type": {
+                "description": ""
+            },
+            "typemustmatch": {
+                "description": ""
+            },
+            "name": {
+                "description": ""
+            },
+            "usemap": {
+                "description": ""
+            },
+            "form": {
+                "description": ""
+            },
+            "width": {
+                "description": ""
+            },
+            "height": {
+                "description": ""
+            }
+        }
+    },
+    "param": {
+        "description": "The param element defines parameters for plugins invoked by object elements. It does not represent anything on its own.",
+        "attributes": {
+            "name": {
+                "description": ""
+            },
+            "value": {
+                "description": ""
+            }
+        }
+    },
+    "video": {
+        "description": "A video element is used for playing videos or movies, and audio files with captions.",
+        "attributes": {
+            "src": {
+                "description": ""
+            },
+            "crossorigin": {
+                "description": ""
+            },
+            "poster": {
+                "description": ""
+            },
+            "preload": {
+                "description": ""
+            },
+            "autoplay": {
+                "description": ""
+            },
+            "mediagroup": {
+                "description": ""
+            },
+            "loop": {
+                "description": ""
+            },
+            "muted": {
+                "description": ""
+            },
+            "controls": {
+                "description": ""
+            },
+            "width": {
+                "description": ""
+            },
+            "height": {
+                "description": ""
+            }
+        }
+    },
+    "audio": {
+        "description": "An audio element represents a sound or audio stream.",
+        "attributes": {
+            "src": {
+                "description": ""
+            },
+            "crossorigin": {
+                "description": ""
+            },
+            "preload": {
+                "description": ""
+            },
+            "autoplay": {
+                "description": ""
+            },
+            "mediagroup": {
+                "description": ""
+            },
+            "loop": {
+                "description": ""
+            },
+            "muted": {
+                "description": ""
+            },
+            "controls": {
+                "description": ""
+            }
+        }
+    },
+    "source": {
+        "description": "The source element allows authors to specify multiple alternative media resources for media elements. It does not represent anything on its own.",
+        "attributes": {
+            "src": {
+                "description": ""
+            },
+            "type": {
+                "description": ""
+            }
+        }
+    },
+    "track": {
+        "description": "The track element allows authors to specify explicit external timed text tracks for media elements. It does not represent anything on its own.",
+        "attributes": {
+            "default": {
+                "description": ""
+            },
+            "kind": {
+                "description": ""
+            },
+            "label": {
+                "description": ""
+            },
+            "src": {
+                "description": ""
+            },
+            "srclang": {
+                "description": ""
+            }
+        }
+    },
+    "map": {
+        "description": "The map element, in conjunction with an img element and any area element descendants, defines an image map. The element represents its children.",
+        "attributes": {
+            "name": {
+                "description": ""
+            }
+        }
+    },
+    "area": {
+        "description": "The area element represents either a hyperlink with some text and a corresponding area on an image map, or a dead area on an image map.",
+        "attributes": {
+            "alt": {
+                "description": ""
+            },
+            "coords": {
+                "description": ""
+            },
+            "shape": {
+                "description": ""
+            },
+            "href": {
+                "description": ""
+            },
+            "target": {
+                "description": ""
+            },
+            "download": {
+                "description": ""
+            },
+            "ping": {
+                "description": ""
+            },
+            "rel": {
+                "description": ""
+            },
+            "hreflang": {
+                "description": ""
+            },
+            "type": {
+                "description": ""
+            }
+        }
+    },
+    "table": {
+        "description": "The table element represents data with more than one dimension, in the form of a table.",
+        "attributes": {
+            "border": {
+                "description": ""
+            }
+        }
+    },
+    "caption": {
+        "description": "The caption element represents the title of the table that is its parent, if it has a parent and that is a table element.",
+        "attributes": {}
+    },
+    "colgroup": {
+        "description": "The colgroup element represents a group of one or more columns in the table that is its parent, if it has a parent and that is a table element.",
+        "attributes": {
+            "span": {
+                "description": ""
+            }
+        }
+    },
+    "col": {
+        "description": "If a col element has a parent and that is a colgroup element that itself has a parent that is a table element, then the col element represents one or more columns in the column group represented by that colgroup.",
+        "attributes": {
+            "span": {
+                "description": ""
+            }
+        }
+    },
+    "tbody": {
+        "description": "The tbody element represents a block of rows that consist of a body of data for the parent table element, if the tbody element has a parent and it is a table.",
+        "attributes": {}
+    },
+    "thead": {
+        "description": "The thead element represents the block of rows that consist of the column labels (headers) for the parent table element, if the thead element has a parent and it is a table.",
+        "attributes": {}
+    },
+    "tfoot": {
+        "description": "The tfoot element represents the block of rows that consist of the column summaries (footers) for the parent table element, if the tfoot element has a parent and it is a table.",
+        "attributes": {}
+    },
+    "tr": {
+        "description": "The tr element represents a row of cells in a table.",
+        "attributes": {}
+    },
+    "td": {
+        "description": "The td element represents a data cell in a table.",
+        "attributes": {
+            "colspan": {
+                "description": ""
+            },
+            "rowspan": {
+                "description": ""
+            },
+            "headers": {
+                "description": ""
+            }
+        }
+    },
+    "th": {
+        "description": "The th element represents a header cell in a table.",
+        "attributes": {
+            "colspan": {
+                "description": ""
+            },
+            "rowspan": {
+                "description": ""
+            },
+            "headers": {
+                "description": ""
+            },
+            "scope": {
+                "description": ""
+            },
+            "sorted": {
+                "description": ""
+            },
+            "abbr": {
+                "description": ""
+            }
+        }
+    },
+    "form": {
+        "description": "The form element represents a collection of form-associated elements, some of which can represent editable values that can be submitted to a server for processing.",
+        "attributes": {
+            "accept-charset": {
+                "description": ""
+            },
+            "action": {
+                "description": ""
+            },
+            "autocomplete": {
+                "description": ""
+            },
+            "enctype": {
+                "description": ""
+            },
+            "method": {
+                "description": ""
+            },
+            "name": {
+                "description": ""
+            },
+            "novalidate": {
+                "description": ""
+            },
+            "target": {
+                "description": ""
+            }
+        }
+    },
+    "label": {
+        "description": "The label element represents a caption in a user interface. The caption can be associated with a specific form control, known as the label element's labeled control, either using the for attribute, or by putting the form control inside the label element itself.",
+        "attributes": {
+            "form": {
+                "description": ""
+            },
+            "for": {
+                "description": ""
+            }
+        }
+    },
+    "input": {
+        "description": "The input element represents a typed data field, usually with a form control to allow the user to edit the data.",
+        "attributes": {
+            "accept": {
+                "description": ""
+            },
+            "alt": {
+                "description": ""
+            },
+            "autocomplete": {
+                "description": ""
+            },
+            "autofocus": {
+                "description": ""
+            },
+            "checked": {
+                "description": ""
+            },
+            "dirname": {
+                "description": ""
+            },
+            "disabled": {
+                "description": ""
+            },
+            "form": {
+                "description": ""
+            },
+            "formaction": {
+                "description": ""
+            },
+            "formenctype": {
+                "description": ""
+            },
+            "formmethod": {
+                "description": ""
+            },
+            "formnovalidate": {
+                "description": ""
+            },
+            "formtarget": {
+                "description": ""
+            },
+            "height": {
+                "description": ""
+            },
+            "inputmode": {
+                "description": ""
+            },
+            "list": {
+                "description": ""
+            },
+            "max": {
+                "description": ""
+            },
+            "maxlength": {
+                "description": ""
+            },
+            "min": {
+                "description": ""
+            },
+            "minlength": {
+                "description": ""
+            },
+            "multiple": {
+                "description": ""
+            },
+            "name": {
+                "description": ""
+            },
+            "pattern": {
+                "description": ""
+            },
+            "placeholder": {
+                "description": ""
+            },
+            "popovertarget": {
+                "description": ""
+            },
+            "popovertargetaction": {
+                "description": ""
+            },
+            "readonly": {
+                "description": ""
+            },
+            "required": {
+                "description": ""
+            },
+            "size": {
+                "description": ""
+            },
+            "src": {
+                "description": ""
+            },
+            "step": {
+                "description": ""
+            },
+            "type": {
+                "description": ""
+            },
+            "value": {
+                "description": ""
+            },
+            "width": {
+                "description": ""
+            }
+        }
+    },
+    "button": {
+        "description": "The button element represents a button labeled by its contents.",
+        "attributes": {
+            "autofocus": {
+                "description": ""
+            },
+            "disabled": {
+                "description": ""
+            },
+            "form": {
+                "description": ""
+            },
+            "formaction": {
+                "description": ""
+            },
+            "formenctype": {
+                "description": ""
+            },
+            "formmethod": {
+                "description": ""
+            },
+            "formnovalidate": {
+                "description": ""
+            },
+            "formtarget": {
+                "description": ""
+            },
+            "name": {
+                "description": ""
+            },
+            "popovertarget": {
+                "description": ""
+            },
+            "popovertargetaction": {
+                "description": ""
+            },
+            "type": {
+                "description": ""
+            },
+            "value": {
+                "description": ""
+            }
+        }
+    },
+    "select": {
+        "description": "The select element represents a control for selecting amongst a set of options.",
+        "attributes": {
+            "autocomplete": {
+                "description": ""
+            },
+            "autofocus": {
+                "description": ""
+            },
+            "disabled": {
+                "description": ""
+            },
+            "form": {
+                "description": ""
+            },
+            "multiple": {
+                "description": ""
+            },
+            "name": {
+                "description": ""
+            },
+            "required": {
+                "description": ""
+            },
+            "size": {
+                "description": ""
+            }
+        }
+    },
+    "datalist": {
+        "description": "The datalist element represents a set of option elements that represent predefined options for other controls. In the rendering, the datalist element represents nothing and it, along with its children, should be hidden.",
+        "attributes": {}
+    },
+    "optgroup": {
+        "description": "The optgroup element represents a group of option elements with a common label.",
+        "attributes": {
+            "disabled": {
+                "description": ""
+            },
+            "label": {
+                "description": ""
+            }
+        }
+    },
+    "option": {
+        "description": "The option element represents an option in a select element or as part of a list of suggestions in a datalist element.",
+        "attributes": {
+            "disabled": {
+                "description": ""
+            },
+            "label": {
+                "description": ""
+            },
+            "selected": {
+                "description": ""
+            },
+            "value": {
+                "description": ""
+            }
+        }
+    },
+    "textarea": {
+        "description": "The textarea element represents a multiline plain text edit control for the element's raw value. The contents of the control represent the control's default value.",
+        "attributes": {
+            "autocomplete": {
+                "description": ""
+            },
+            "autofocus": {
+                "description": ""
+            },
+            "cols": {
+                "description": ""
+            },
+            "dirname": {
+                "description": ""
+            },
+            "disabled": {
+                "description": ""
+            },
+            "form": {
+                "description": ""
+            },
+            "inputmode": {
+                "description": ""
+            },
+            "maxlength": {
+                "description": ""
+            },
+            "minlength": {
+                "description": ""
+            },
+            "name": {
+                "description": ""
+            },
+            "placeholder": {
+                "description": ""
+            },
+            "readonly": {
+                "description": ""
+            },
+            "required": {
+                "description": ""
+            },
+            "rows": {
+                "description": ""
+            },
+            "wrap": {
+                "description": ""
+            }
+        }
+    },
+    "output": {
+        "description": "The output element represents the result of a calculation performed by the application, or the result of a user action.",
+        "attributes": {
+            "for": {
+                "description": ""
+            },
+            "form": {
+                "description": ""
+            },
+            "name": {
+                "description": ""
+            }
+        }
+    },
+    "progress": {
+        "description": "The progress element represents the completion progress of a task. The progress is either indeterminate, indicating that progress is being made but that it is not clear how much more work remains to be done before the task is complete (e.g. because the task is waiting for a remote host to respond), or the progress is a number in the range zero to a maximum, giving the fraction of work that has so far been completed.",
+        "attributes": {
+            "value": {
+                "description": ""
+            },
+            "max": {
+                "description": ""
+            }
+        }
+    },
+    "meter": {
+        "description": "The meter element represents a scalar measurement within a known range, or a fractional value; for example disk usage, the relevance of a query result, or the fraction of a voting population to have selected a particular candidate.",
+        "attributes": {
+            "value": {
+                "description": ""
+            },
+            "min": {
+                "description": ""
+            },
+            "max": {
+                "description": ""
+            },
+            "low": {
+                "description": ""
+            },
+            "high": {
+                "description": ""
+            },
+            "optimum": {
+                "description": ""
+            }
+        }
+    },
+    "fieldset": {
+        "description": "The fieldset element represents a set of form controls optionally grouped under a common name.",
+        "attributes": {
+            "disabled": {
+                "description": ""
+            },
+            "form": {
+                "description": ""
+            },
+            "name": {
+                "description": ""
+            }
+        }
+    },
+    "legend": {
+        "description": "The legend element represents a caption for the rest of the contents of the legend element's parent fieldset element, if any.",
+        "attributes": {}
+    },
+    "details": {
+        "description": "The details element represents a disclosure widget from which the user can obtain additional information or controls.",
+        "attributes": {
+            "open": {
+                "description": ""
+            },
+            "name": {
+                "description": ""
+            }
+        }
+    },
+    "summary": {
+        "description": "The summary element represents a summary, caption, or legend for the rest of the contents of the summary element's parent details element, if any.",
+        "attributes": {}
+    },
+    "dialog": {
+        "description": "The dialog element represents a part of an application that a user interacts with to perform a task, for example a dialog box, inspector, or window.",
+        "attributes": {}
+    },
+    "script": {
+        "description": "The script element allows authors to include dynamic script and data blocks in their documents. The element does not represent content for the user.",
+        "attributes": {
+            "src": {
+                "description": ""
+            },
+            "type": {
+                "description": ""
+            },
+            "charset": {
+                "description": ""
+            },
+            "async": {
+                "description": ""
+            },
+            "defer": {
+                "description": ""
+            },
+            "crossorigin": {
+                "description": ""
+            },
+            "nonce": {
+                "description": ""
+            }
+        }
+    },
+    "noscript": {
+        "description": "The noscript element represents nothing if scripting is enabled, and represents its children if scripting is disabled. It is used to present different markup to user agents that support scripting and those that don't support scripting, by affecting how the document is parsed.",
+        "attributes": {}
+    },
+    "template": {
+        "description": "The template element is used to declare fragments of HTML that can be cloned and inserted in the document by script.",
+        "attributes": {}
+    },
+    "canvas": {
+        "description": "The canvas element provides scripts with a resolution-dependent bitmap canvas, which can be used for rendering graphs, game graphics, art, or other visual images on the fly.",
+        "attributes": {
+            "width": {
+                "description": ""
+            },
+            "height": {
+                "description": ""
+            }
+        }
+    },
+    "slot": {
+        "description": "The slot element is a placeholder inside a web component that you can fill with your own markup, which lets you create separate DOM trees and present them together.",
+        "attributes": {
+            "name": {
+                "description": ""
+            }
+        }
+    },
+    "data": {
+        "description": "The data element links a given piece of content with a machine-readable translation.",
+        "attributes": {
+            "value": {
+                "description": ""
+            }
+        }
+    },
+    "hgroup": {
+        "description": "The hgroup element represents a heading and related content. It groups a single h1–h6 element with one or more p.",
+        "attributes": {}
+    },
+    "menu": {
+        "description": "The menu element represents an unordered list of interactive items.",
+        "attributes": {}
+    },
+    "search": {
+        "description": "The search element represents the parts of the document or application with form controls or other content related to performing a search or filtering operation.",
+        "attributes": {}
+    },
+    "fencedframe": {
+        "description": "The fencedframe element represents a nested browsing context, embedding another HTML page into the current one.",
+        "attributes": {
+            "allow": {
+                "description": ""
+            },
+            "height": {
+                "description": ""
+            },
+            "width": {
+                "description": ""
+            }
+        }
+    },
+    "selectedcontent": {
+        "description": "The selectedcontent element can be used to display the content of the currently selected option element inside of a closed select element.",
+        "attributes": {}
+    }
+}

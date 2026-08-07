@@ -125,7 +125,7 @@ function abrirFechar(estado, id) {
  * Cria ou seleciona a database de exemplo com tabelas e registros pré-carregados.
  */
 async function createExempleDatabase() {
-    const response = await fetch("assets/others/exemple_database.json");
+    const response = await fetch("/assets/json/exemple_database.json");
     const json = await response.text();
     console.log(json);
     transformFromJson(json);
@@ -224,6 +224,7 @@ updateCustomDropdowns();
 var DB;
 (function (DB) {
     class TreeItem {
+        name;
         constructor(name) {
             this.name = name;
         }
@@ -231,6 +232,8 @@ var DB;
     }
     DB.TreeItem = TreeItem;
     class Node extends TreeItem {
+        parent;
+        onConfig;
         constructor(name, parent, onConfig = null) {
             super(name);
             this.onConfig = onConfig;
@@ -313,6 +316,8 @@ var DB;
     }
     DB.Node = Node;
     class NodeGroup extends TreeItem {
+        c;
+        onPlus;
         constructor(name, children, onPlus = () => { }) {
             super(name);
             this.c = children;
@@ -338,11 +343,11 @@ var DB;
                 `;
                 summaryDiv.appendChild(p);
                 const plusIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-                plusIcon.setAttribute("viewBox", "0 0 24 24");
+                plusIcon.setAttribute("viewBox", "0 -960 960 960");
                 plusIcon.setAttribute("aria-hidden", "true");
-                const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
-                use.setAttribute("href", "assets/images/icons-sprite.svg#icon-square-plus");
-                plusIcon.appendChild(use);
+                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                path.setAttribute("d", "M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z");
+                plusIcon.appendChild(path);
                 plusIcon.onclick = () => {
                     this.onPlus();
                 };
@@ -373,11 +378,11 @@ var DB;
             `;
             summaryDiv.appendChild(p);
             const plusIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-            plusIcon.setAttribute("viewBox", "0 0 24 24");
-            plusIcon.setAttribute("aria-hidden", "true");
-            const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
-            use.setAttribute("href", "assets/images/icons-sprite.svg#icon-square-plus");
-            plusIcon.appendChild(use);
+            plusIcon.setAttribute("viewBox", "0 -960 960 960");
+            plusIcon.setAttribute("fill", "currentColor");
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", "M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z");
+            plusIcon.appendChild(path);
             plusIcon.onclick = () => {
                 this.onPlus();
                 details.open = !details.open;
@@ -400,6 +405,7 @@ var DB;
      * Representa uma database em memória com tabelas e relacionamentos.
      */
     class Database extends Node {
+        schemas;
         /**
          * Mapa de chaves estrangeiras para cada tabela.
          *
@@ -534,6 +540,7 @@ var DB;
      * Representa um esquema em memória com tabelas.
      */
     class Schema extends Node {
+        tables;
         /**
          * Cria um esquema vazio com o nome informado.
          * @param name - Nome do esquema.
@@ -581,6 +588,9 @@ var DB;
      * Representa uma tabela em memória com colunas, linhas e índices.
      */
     class Table extends Node {
+        columns;
+        rows;
+        indexes;
         /**
          * Cria uma tabela vazia com o nome informado.
          * @param name - Nome da tabela.
@@ -681,6 +691,17 @@ var DB;
      * Descreve uma coluna e suas restrições na estrutura da tabela.
      */
     class Column extends Node {
+        type;
+        isPrimaryKey;
+        isForeignKey;
+        isNotNull;
+        isUnique;
+        isAutoIncrement;
+        hasDefault;
+        isCurrentTimestamp;
+        reference;
+        defaultValue;
+        incrementCounter = 1;
         /**
          * Cria uma coluna com metadados e restrições.
          * @param name - Nome da coluna.
@@ -697,7 +718,6 @@ var DB;
          */
         constructor(name, parent, type, isPrimaryKey = false, isForeignKey = false, isNotNull = false, isUnique = false, isAutoIncrement = false, hasDefault = false, isCurrentTimestamp = false, reference, defaultValue) {
             super(name, parent);
-            this.incrementCounter = 1;
             this.type = type;
             this.isPrimaryKey = isPrimaryKey;
             this.isForeignKey = isForeignKey;
@@ -814,6 +834,8 @@ var DB;
     }
     DB.Column = Column;
     class Row extends Node {
+        static counter = 1;
+        values;
         constructor(parent, values) {
             super(`Linha ${Row.counter}`, parent);
             this.values = values;
@@ -840,13 +862,17 @@ var DB;
             return row;
         }
     }
-    Row.counter = 1;
     DB.Row = Row;
 })(DB || (DB = {}));
 /**
  * Guarda o histórico e o estado de uma sessão do terminal SQL.
  */
 class TerminalSession {
+    static sessionCount = 1;
+    static historyIndex = 0;
+    name;
+    history;
+    active;
     /**
      * Cria uma nova sessão de terminal.
      * @param name - Nome visível da sessão.
@@ -887,8 +913,6 @@ class TerminalSession {
         });
     }
 }
-TerminalSession.sessionCount = 1;
-TerminalSession.historyIndex = 0;
 /**
  * Centraliza as operações de criação, edição e remoção das estruturas do banco.
  */
@@ -1313,6 +1337,9 @@ class SGBDFunctions {
     }
 }
 class SQLTime {
+    hours;
+    minutes;
+    seconds;
     constructor(hours, minutes = 0, seconds = 0) {
         this.hours = hours;
         this.minutes = minutes;
@@ -1354,6 +1381,9 @@ class SQLTime {
     }
 }
 class SQLDate {
+    year;
+    month;
+    day;
     constructor(year, month = 1, day = 1) {
         this.year = year;
         this.month = month;
@@ -1416,11 +1446,8 @@ var DataTypes;
     }
     DataTypes.createDataTypeFromString = createDataTypeFromString;
     class TextType extends DataType {
-        constructor() {
-            super(...arguments);
-            this.name = "TEXT";
-            this.color = "green5";
-        }
+        name = "TEXT";
+        color = "green5";
         validate(value) {
             return typeof value === "string";
         }
@@ -1430,11 +1457,8 @@ var DataTypes;
     }
     DataTypes.TextType = TextType;
     class IntegerType extends DataType {
-        constructor() {
-            super(...arguments);
-            this.name = "INTEGER";
-            this.color = "blue3";
-        }
+        name = "INTEGER";
+        color = "blue3";
         validate(value) {
             return typeof value === "number" && Number.isInteger(value);
         }
@@ -1444,11 +1468,8 @@ var DataTypes;
     }
     DataTypes.IntegerType = IntegerType;
     class FloatType extends DataType {
-        constructor() {
-            super(...arguments);
-            this.name = "FLOAT";
-            this.color = "cyan6";
-        }
+        name = "FLOAT";
+        color = "cyan6";
         validate(value) {
             return typeof value === "number" && Number.isFinite(value);
         }
@@ -1458,11 +1479,8 @@ var DataTypes;
     }
     DataTypes.FloatType = FloatType;
     class BooleanType extends DataType {
-        constructor() {
-            super(...arguments);
-            this.name = "BOOLEAN";
-            this.color = "purple5";
-        }
+        name = "BOOLEAN";
+        color = "purple5";
         validate(value) {
             value = typeof value === "string" ? value.trim().toLowerCase() : value;
             return value === true ||
@@ -1481,11 +1499,8 @@ var DataTypes;
     }
     DataTypes.BooleanType = BooleanType;
     class DateType extends DataType {
-        constructor() {
-            super(...arguments);
-            this.name = "DATE";
-            this.color = "orange5";
-        }
+        name = "DATE";
+        color = "orange5";
         validate(value) {
             return value instanceof SQLDate || (typeof value === "string" && SQLDate.fromString(value) !== null);
         }
@@ -1501,11 +1516,8 @@ var DataTypes;
     }
     DataTypes.DateType = DateType;
     class TimeType extends DataType {
-        constructor() {
-            super(...arguments);
-            this.name = "TIME";
-            this.color = "yellow4";
-        }
+        name = "TIME";
+        color = "yellow4";
         validate(value) {
             return value instanceof SQLTime || (typeof value === "string" && SQLTime.fromString(value) !== null)
                 || (typeof value === "number" && SQLTime.fromNumber(value) !== null);
@@ -1524,10 +1536,11 @@ var DataTypes;
     }
     DataTypes.TimeType = TimeType;
     class EnumType extends DataType {
+        name = "ENUM";
+        color = "pink5";
+        allowedValues;
         constructor(allowedValues) {
             super();
-            this.name = "ENUM";
-            this.color = "pink5";
             this.allowedValues = allowedValues;
         }
         validate(value) {
@@ -1545,10 +1558,11 @@ var DataTypes;
     }
     DataTypes.EnumType = EnumType;
     class VarcharType extends DataType {
+        name = "VARCHAR";
+        color = "green2";
+        maxLength;
         constructor(maxLength) {
             super();
-            this.name = "VARCHAR";
-            this.color = "green2";
             this.maxLength = maxLength;
         }
         validate(value) {
@@ -2131,11 +2145,15 @@ function changeTabelaSelecionadaTabela() {
         });
         const rowActions = document.createElement("div");
         rowActions.innerHTML = `
-            <button onclick="abrirFechar(false, 'editar-linha'); changeEditRowMenu(${index})">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-pencil"></use></svg>
+            <button onclick="thifrebd.abrirFechar(false, 'editar-linha'); thifrebd.changeEditRowMenu(${index})">
+                <svg viewBox="0 -960 960 960" fill="currentcolor">
+                    <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/>
+                </svg>
             </button>
-            <button onclick="abrirFechar(false, 'confirmar-deletar'); changeConfirmDeleteMenu('row', ${index}, undefined)">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>
+            <button onclick="thifrebd.abrirFechar(false, 'confirmar-deletar'); thifrebd.changeConfirmDeleteMenu('row', ${index}, undefined)">
+                <svg viewBox="0 -960 960 960" fill="currentcolor">
+                    <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+                </svg>
             </button>
         `;
         divLinha.onclick = function () {
@@ -2409,7 +2427,11 @@ function createColumnCreationDiv(parent) {
     // Delete column button
     const deleteDiv = document.createElement("div");
     deleteDiv.className = "last-item-flex-wrap-div trash-icon";
-    deleteDiv.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>';
+    deleteDiv.innerHTML = `
+    <svg viewBox="0 -960 960 960" fill="currentcolor">
+        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+    </svg>
+    `;
     deleteDiv.onclick = function () { deleteColumnCreationDiv(deleteDiv); };
     characteristics.appendChild(deleteDiv);
     mainDiv.appendChild(characteristics);
@@ -2569,7 +2591,11 @@ function createWhereConditionDiv() {
     bottomDiv.appendChild(valueInput);
     const deleteDiv = document.createElement("div");
     deleteDiv.className = "flex-wrap-div";
-    deleteDiv.innerHTML = '<svg class="trash-icon last-item-flex-wrap-div" height="24" width="24" viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>';
+    deleteDiv.innerHTML = `
+    <svg viewBox="0 -960 960 960" fill="currentcolor">
+        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+    </svg>
+    `;
     deleteDiv.onclick = function () { mainDiv.remove(); };
     bottomDiv.appendChild(deleteDiv);
     updateCustomDropdowns();
@@ -2708,7 +2734,11 @@ function changeEditColumnsMenu() {
         // Delete column button
         const deleteDiv = document.createElement("div");
         deleteDiv.className = "last-item-flex-wrap-div trash-icon";
-        deleteDiv.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/images/icons-sprite.svg#icon-trash-can"></use></svg>';
+        deleteDiv.innerHTML = `
+        <svg viewBox="0 -960 960 960"fill="currentcolor">
+            <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+        </svg>
+        `;
         deleteDiv.onclick = function () {
             abrirFechar(false, 'confirmar-deletar');
             changeConfirmDeleteMenu('column', undefined, column.name);
@@ -3487,8 +3517,8 @@ function createTerminalSession() {
     sessionDiv.appendChild(p);
     const closeButton = document.createElement("button");
     closeButton.innerHTML = `
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-        <use href="assets/images/icons-sprite.svg#icon-close"></use>
+    <svg viewBox="0 -960 960 960" fill="currentcolor">
+        <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
     </svg>`;
     closeButton.onclick = function () {
         if (terminalSessions.length === 1)
@@ -3544,6 +3574,8 @@ var SQL;
     }
     SQL.execute = execute;
     class SQLAlter {
+        fullCommand;
+        tokens;
         constructor(fullCommand, tokens) {
             this.fullCommand = fullCommand;
             this.tokens = tokens;
@@ -4078,6 +4110,8 @@ var SQL;
      * Implementa o comando SQL CREATE.
      */
     class SQLCreate {
+        fullCommand;
+        tokens;
         constructor(fullCommand, tokens) {
             this.fullCommand = fullCommand;
             this.tokens = tokens;
@@ -4202,6 +4236,8 @@ var SQL;
     }
     SQL.SQLCreate = SQLCreate;
     class SQLInsert {
+        fullCommand;
+        tokens;
         constructor(fullCommand, tokens) {
             this.fullCommand = fullCommand;
             this.tokens = tokens;
@@ -4491,6 +4527,8 @@ var SQL;
      * Agrupa comandos de sistema como USE.
      */
     class SystemCommands {
+        fullCommand;
+        tokens;
         /**
          * Cria um executor para comandos de sistema tokenizados.
          * @param fullCommand - Texto original do comando.
@@ -5600,7 +5638,8 @@ window.thifrebd = {
     createTerminalSession,
     selectAction,
     selectOption,
-    confirmSaveOrLoad
+    confirmSaveOrLoad,
+    changeEditRowMenu
 };
 // To Do
 // -Aba de ajuda

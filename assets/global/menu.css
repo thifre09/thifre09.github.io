@@ -89,7 +89,7 @@ nav#barra-main {
     }
 }
 
-.botao-menu-lateral{
+.botao-menu-lateral {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -465,20 +465,14 @@ section#notas-atualizacao-container {
 
             button {
                 background: var(--blue5);
+                white-space: nowrap;
 
-                img {
-                    width: 20px;
-                    filter: invert(100);
-                }
-
-                #img-topo-notas {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    font-size: var(--fs5);
+                svg {
+                    width: 30px;
+                    height: 30px;
                     width: fit-content;
-                    padding: 0;
-                    margin: 0 5px 0 0px;
+                    padding: 5px;
+                    margin: 0;
                     color: white;
                 }
             }
@@ -497,6 +491,13 @@ section#notas-atualizacao-container {
 
             * {
                 margin: 10px;
+
+                svg {
+                    width: 30px;
+                    height: 30px;
+                    margin: 0;
+                    padding: 5px;
+                }
             }
 
             button:nth-child(1) {
@@ -606,6 +607,12 @@ section#bloco-notas-container {
                     align-items: center;
                     cursor: pointer;
                     transition: var(--transition-time1);
+
+                    svg:not(.delete-note) {
+                        width: 20px;
+                        height: 20px;
+                        margin-right: 5px;
+                    }
                 }
 
                 button:nth-child(1) {
@@ -696,10 +703,8 @@ section#bloco-notas-container {
     width: 100%;
     height: fit-content;
     display: grid;
-    /* Define 7 colunas de larguras iguais */
     grid-template-columns: repeat(7, 1fr);
     gap: 10px;
-    /* Espaçamento entre os botões */
     padding: 20px;
     border-radius: 15px;
     box-shadow: 0 10px 25px var(--gray66);
@@ -758,32 +763,32 @@ section#bloco-notas-container {
         background-color: var(--blue4);
     }
 
-    button[onClick^="appendNumber"]:not([onClick="appendNumber('.')"]) {
+    button[onClick^="menu.appendNumber"]:not([onClick="menu.appendNumber('.')"]) {
         background-color: var(--orange6);
     }
 
-    button[onClick^="appendNumber"]:not([onClick="appendNumber('.')"]):hover {
+    button[onClick^="menu.appendNumber"]:not([onClick="menu.appendNumber('.')"]):hover {
         background-color: var(--orange5);
     }
 
-    button[onClick^="appendOperator"],
-    button[onClick^="calculateSqrt"] {
+    button[onClick^="menu.appendOperator"],
+    button[onClick^="menu.calculateSqrt"] {
         background-color: var(--green5);
         font-size: 1.5rem;
     }
 
-    button[onClick^="appendOperator"]:hover,
-    button[onClick^="calculateSqrt"]:hover {
+    button[onClick^="menu.appendOperator"]:hover,
+    button[onClick^="menu.calculateSqrt"]:hover {
         background-color: var(--green4);
     }
 
-    button[onClick="clearDisplay()"],
-    button[onClick="deleteDigit()"] {
+    button[onClick="menu.clearDisplay()"],
+    button[onClick="menu.deleteDigit()"] {
         background-color: var(--red6);
     }
 
-    button[onClick="clearDisplay()"]:hover,
-    button[onClick="deleteDigit()"]:hover {
+    button[onClick="menu.clearDisplay()"]:hover,
+    button[onClick="menu.deleteDigit()"]:hover {
         background-color: var(--red5);
     }
 }
@@ -847,7 +852,8 @@ section#bloco-notas-container {
         div#signIn {
             flex-direction: column;
 
-            h2, p {
+            h2,
+            p {
                 text-align: center;
             }
 

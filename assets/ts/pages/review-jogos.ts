@@ -49,7 +49,7 @@ function criarReviews() {
         jogoDiv.appendChild(divPrincipal);
 
         const img = document.createElement("img");
-        img.src = `assets/images/jogos reviews img/${review.imagem}`;
+        img.src = `/assets/images/jogos reviews img/${review.imagem}`;
         divPrincipal.appendChild(img);
 
         const tabela = document.createElement("div");

@@ -1,5 +1,9 @@
 "use strict";
 class Review {
+    nome;
+    imagem;
+    notas;
+    comentarioPrincipal;
     constructor(nome, imagem, notas, comentarioPrincipal = "") {
         this.nome = nome;
         this.imagem = imagem;
@@ -8,6 +12,14 @@ class Review {
     }
 }
 class Notas {
+    gameplay;
+    historia;
+    graficos;
+    trilhaSonora;
+    tempoJogado;
+    dificuldade;
+    diversao;
+    notaFinal;
     constructor(gameplay = 0, historia = 0, graficos = 0, trilhaSonora = 0, tempoJogado = "Não sei", dificuldade = 0, diversao = 0, notaFinal = 0) {
         this.gameplay = gameplay;
         this.historia = historia;
@@ -31,7 +43,7 @@ function criarReviews() {
         const divPrincipal = document.createElement("div");
         jogoDiv.appendChild(divPrincipal);
         const img = document.createElement("img");
-        img.src = `assets/images/jogos reviews img/${review.imagem}`;
+        img.src = `/assets/images/jogos reviews img/${review.imagem}`;
         divPrincipal.appendChild(img);
         const tabela = document.createElement("div");
         tabela.classList.add("tabela");

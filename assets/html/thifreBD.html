@@ -66,8 +66,9 @@
             <div id="direita">
                 <div id="tabela-info">
                     <div id="nenhuma-tabela-selecionada">
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-table"></use>
+                        <svg viewBox="0 -960 960 960" fill="currentcolor">
+                            <path
+                                d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm240-240H200v160h240v-160Zm80 0v160h240v-160H520Zm-80-80v-160H200v160h240Zm80 0h240v-160H520v160ZM200-680h560v-80H200v80Z" />
                         </svg>
                         <h5>Nenhuma tabela selecionada</h5>
                         <p>Crie uma tabela para começar</p>
@@ -82,8 +83,9 @@
                             <div id="tabela-selecionada-linha-coluna-header">
                                 <h3>Linha</h3>
                                 <button onclick="thifrebd.showHideTabelaSelecionadaLinhaColuna(false)">
-                                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                                        <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                                    <svg class="icon" viewBox="0 -960 960 960" fill="currentcolor">
+                                        <path
+                                            d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
                                     </svg>
                                 </button>
                             </div>
@@ -137,8 +139,9 @@
                 <div class="menu-central-justify-between">
                     <h1 class="text1">Criar nova database</h1>
                     <button class="close-button" onclick="thifrebd.abrirFechar(true, 'criacao-database')">
-                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        <svg class="icon" viewBox="0 -960 960 960" fill="currentcolor">
+                            <path
+                                d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
                         </svg>
                     </button>
                 </div>
@@ -146,8 +149,9 @@
                 <input class="menu-central-input" type="text" id="nome-database-input" name="nome-database-input"
                     placeholder="Ex: meu_bd">
                 <button class="large-button" id="criar-database-button" onclick="thifrebd.createDatabaseInterface()">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                    <svg viewBox="0 -960 960 960" fill="currentcolor">
+                        <path
+                            d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z" />
                     </svg>
                     Criar database
                 </button>
@@ -157,8 +161,8 @@
                 <div class="menu-central-justify-between">
                     <h1 class="text1">Configurar database</h1>
                     <button class="close-button" onclick="thifrebd.abrirFechar(true, 'configurar-database')">
-                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        <svg viewBox="0 -960 960 960" fill="currentcolor">
+                            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
                         </svg>
                     </button>
                 </div>
@@ -174,8 +178,8 @@
                 </button>
                 <button class="large-button" style="background-color: var(--red4)" id="configurar-database-deletar"
                     onclick="thifrebd.abrirFechar(false, 'confirmar-deletar'); thifrebd.abrirFechar(true, 'configurar-database'); thifrebd.changeConfirmDeleteMenu('database')">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
+                    <svg viewBox="0 -960 960 960" fill="currentcolor">
+                        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
                     </svg>
                     Deletar database
                 </button>
@@ -185,8 +189,8 @@
                 <div class="menu-central-justify-between">
                     <h1 class="text1">Criar novo schema</h1>
                     <button class="close-button" onclick="thifrebd.abrirFechar(true, 'criacao-schema')">
-                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        <svg viewBox="0 -960 960 960" fill="currentcolor">
+                            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
                         </svg>
                     </button>
                 </div>
@@ -194,8 +198,8 @@
                 <input class="menu-central-input" type="text" id="nome-schema-input" name="nome-schema-input"
                     placeholder="Ex: meu_schema">
                 <button class="large-button" id="criar-schema-button" onclick="thifrebd.createSchemaInterface()">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                    <svg viewBox="0 -960 960 960" fill="currentcolor">
+                        <path d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/>
                     </svg>
                     Criar schema
                 </button>
@@ -205,8 +209,8 @@
                 <div class="menu-central-justify-between">
                     <h1 class="text1">Configurar schema</h1>
                     <button class="close-button" onclick="thifrebd.abrirFechar(true, 'configurar-schema')">
-                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        <svg viewBox="0 -960 960 960" fill="currentcolor">
+                            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
                         </svg>
                     </button>
                 </div>
@@ -222,8 +226,8 @@
                 </button>
                 <button class="large-button" style="background-color: var(--red4)" id="configurar-schema-deletar"
                     onclick="thifrebd.abrirFechar(false, 'confirmar-deletar'); thifrebd.abrirFechar(true, 'configurar-schema'); thifrebd.changeConfirmDeleteMenu('schema')">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
+                    <svg viewBox="0 -960 960 960" fill="currentcolor">
+                        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
                     </svg>
                     Deletar schema
                 </button>
@@ -233,8 +237,8 @@
                 <div class="menu-central-justify-between">
                     <h1 class="text1">Criar nova tabela</h1>
                     <button class="close-button" onclick="thifrebd.abrirFechar(true, 'criacao-tabela')">
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        <svg viewBox="0 -960 960 960" fill="currentcolor">
+                            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
                         </svg>
                     </button>
                 </div>
@@ -247,8 +251,8 @@
                     <h2 class="text2">Colunas</h2>
                     <button class="outlined-button"
                         onclick="thifrebd.createColumnCreationDiv(document.querySelector('#criacao-tabela ul'))">
-                        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-plus"></use>
+                        <svg viewBox="0 -960 960 960" fill="currentcolor">
+                            <path d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/>
                         </svg>
                         Nova coluna
                     </button>
@@ -257,8 +261,8 @@
                 <ul>
                 </ul>
                 <button class="large-button" id="criar-tabela-button" onclick="thifrebd.createTableInterface()">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                    <svg viewBox="0 -960 960 960" fill="currentcolor">
+                        <path d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/>
                     </svg>
                     Criar tabela
                 </button>
@@ -268,8 +272,8 @@
                 <div class="menu-central-justify-between">
                     <h1 class="text1">Configurar tabela</h1>
                     <button class="close-button" onclick="thifrebd.abrirFechar(true, 'configurar-tabela')">
-                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        <svg viewBox="0 -960 960 960" fill="currentcolor">
+                            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
                         </svg>
                     </button>
                 </div>
@@ -284,22 +288,22 @@
                 </button>
                 <button class="large-button" style="background-color: var(--green4)"
                     onclick="thifrebd.abrirFechar(false, 'alterar-colunas'); thifrebd.abrirFechar(true, 'configurar-tabela'); thifrebd.changeEditColumnsMenu()">
-                    <svg viewBox="0 0 512 512" aria-hidden="true">
-                        <use href="assets/images/icons-sprite.svg#icon-edit"></use>
+                    <svg viewBox="0 -960 960 960" fill="currentcolor">
+                        <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/>
                     </svg>
                     Alterar colunas
                 </button>
                 <button class="large-button" style="background-color: var(--blue4)"
                     onclick="thifrebd.abrirFechar(false, 'adicionar-colunas'); thifrebd.abrirFechar(true, 'configurar-tabela'); thifrebd.changeEditColumnsMenu()">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                    <svg viewBox="0 -960 960 960" fill="currentcolor">
+                        <path d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/>
                     </svg>
                     Adicionar colunas
                 </button>
                 <button class="large-button" style="background-color: var(--red4)" id="deletar-tabela-button"
                     onclick="thifrebd.abrirFechar(false, 'confirmar-deletar'); thifrebd.abrirFechar(true, 'configurar-tabela'); thifrebd.changeConfirmDeleteMenu('table')">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
+                    <svg viewBox="0 -960 960 960" fill="currentcolor">
+                        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
                     </svg>
                     Deletar tabela
                 </button>
@@ -309,8 +313,8 @@
                 <div class="menu-central-justify-between">
                     <h1 class="text1">Alterar colunas</h1>
                     <button class="close-button" onclick="thifrebd.abrirFechar(true, 'alterar-colunas')">
-                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        <svg viewBox="0 -960 960 960" fill="currentcolor">
+                            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
                         </svg>
                     </button>
                 </div>
@@ -324,8 +328,8 @@
                 </ul>
 
                 <button class="large-button" id="alterar-colunas-button" onclick="thifrebd.alterColumnsInterface()">
-                    <svg viewBox="0 0 512 512" aria-hidden="true">
-                        <use href="assets/images/icons-sprite.svg#icon-edit"></use>
+                    <svg viewBox="0 -960 960 960" fill="currentcolor">
+                        <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/>
                     </svg>
                     Alterar colunas
                 </button>
@@ -336,8 +340,8 @@
                 <div class="menu-central-justify-between">
                     <h1 class="text1">Adicionar colunas</h1>
                     <button class="close-button" onclick="thifrebd.abrirFechar(true, 'adicionar-colunas')">
-                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        <svg viewBox="0 -960 960 960" fill="currentcolor">
+                            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
                         </svg>
                     </button>
                 </div>
@@ -346,8 +350,8 @@
                     <h2 class="text2">Colunas</h2>
                     <button class="outlined-button"
                         onclick="thifrebd.createColumnCreationDiv(document.querySelector('#adicionar-colunas ul#criacao-colunas-edit'))">
-                        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-plus"></use>
+                        <svg viewBox="0 -960 960 960" fill="currentcolor">
+                            <path d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/>
                         </svg>
                         Nova coluna
                     </button>
@@ -356,8 +360,8 @@
                 </ul>
 
                 <button class="large-button" id="Adicionar-coluna-button" onclick="thifrebd.addColumnsInterface()">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                    <svg viewBox="0 -960 960 960" fill="currentcolor">
+                        <path d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/>
                     </svg>
                     Adicionar coluna(s)
                 </button>
@@ -368,8 +372,8 @@
                 <div class="menu-central-justify-between">
                     <h1 class="text1">Inserir nova linha</h1>
                     <button class="close-button" onclick="thifrebd.abrirFechar(true, 'inserir-linha')">
-                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        <svg viewBox="0 -960 960 960" fill="currentcolor">
+                            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
                         </svg>
                     </button>
                 </div>
@@ -379,8 +383,8 @@
                 </ul>
 
                 <button class="large-button" id="inserir-linha-button" onclick="thifrebd.insertRowInterface()">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                    <svg viewBox="0 -960 960 960" fill="currentcolor">
+                        <path d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/>
                     </svg>
                     Inserir linha
                 </button>
@@ -390,8 +394,8 @@
                 <div class="menu-central-justify-between">
                     <h1 class="text1">Editar linha</h1>
                     <button class="close-button" onclick="thifrebd.abrirFechar(true, 'editar-linha')">
-                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        <svg viewBox="0 -960 960 960" fill="currentcolor">
+                            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
                         </svg>
                     </button>
                 </div>
@@ -400,8 +404,8 @@
                 </ul>
 
                 <button class="large-button" id="editar-linha-button">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <use href="assets/images/icons-sprite.svg#icon-square-plus"></use>
+                    <svg viewBox="0 -960 960 960" fill="currentcolor">
+                        <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/>
                     </svg>
                     Editar linha
                 </button>
@@ -411,8 +415,8 @@
                 <div class="menu-central-justify-between">
                     <h1 class="text1">Confirmar exclusão</h1>
                     <button class="close-button" onclick="thifrebd.abrirFechar(true, 'confirmar-deletar')">
-                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        <svg viewBox="0 -960 960 960" fill="currentcolor">
+                            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
                         </svg>
                     </button>
                 </div>
@@ -439,8 +443,8 @@
                 <p style="color: var(--red4)">Essa ação não pode ser desfeita!</p>
                 <br>
                 <button style="background-color: var(--red4);" class="large-button" id="confirmar-deletar-button">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <use href="assets/images/icons-sprite.svg#icon-trash-can"></use>
+                    <svg viewBox="0 -960 960 960" fill="currentcolor">
+                        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
                     </svg>
                     Deletar
                 </button>
@@ -450,8 +454,8 @@
                 <div class="menu-central-justify-between">
                     <h1 class="text1">Pesquisar</h1>
                     <button class="close-button" onclick="thifrebd.abrirFechar(true, 'pesquisar')">
-                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-close"></use>
+                        <svg viewBox="0 -960 960 960" fill="currentcolor">
+                            <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
                         </svg>
                     </button>
                 </div>
@@ -485,8 +489,8 @@
                 <div class="menu-central-justify-between">
                     <h2 class="text2">Condições de pesquisa</h2>
                     <button class="outlined-button" onclick="thifrebd.createWhereConditionDiv()">
-                        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
-                            <use href="assets/images/icons-sprite.svg#icon-plus"></use>
+                        <svg viewBox="0 -960 960 960" fill="currentcolor">
+                            <path d="M440-120v-320H120v-80h320v-320h80v320h320v80H520v320h-80Z"/>
                         </svg>
                         Nova condição
                     </button>
@@ -523,8 +527,8 @@
                 <div id="terminal-sessions">
                 </div>
                 <button id="create-new-terminal-session" onclick="thifrebd.createTerminalSession()">
-                    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
-                        <use href="assets/images/icons-sprite.svg#icon-plus"></use>
+                    <svg viewBox="0 -960 960 960" fill="currentcolor">
+                        <path d="M440-120v-320H120v-80h320v-320h80v320h320v80H520v320h-80Z"/>
                     </svg>
                 </button>
             </header>
@@ -810,7 +814,7 @@
 
                     <h2>Lado esquerdo</h2>
                     <div class="help-flex-divs">
-                        <img src="assets/images/thifreBD/dashboard-left.png" alt="Visão da esquerda do dashboard"
+                        <img alt="Visão da esquerda do dashboard"
                             style="--width: 22%; --border-color: var(--gray4);">
                         <div class="help-box">
                             <p>Na esquerda, é possível criar uma nova database e uma tabela.</p>
@@ -832,7 +836,7 @@
                     <hr>
 
                     <h2>Lado direito</h2>
-                    <img src="assets/images/thifreBD/dashboard-right1.png" alt="Visão da direita do dashboard"
+                    <img alt="Visão da direita do dashboard"
                         style="--border-color: var(--gray4); --width: 96%;">
                     <p>Na topo esquerdo, é mostrado o nome da tabela atual, o número de linhas e o número de colunas.
                     </p>
@@ -843,7 +847,7 @@
                     <p>Ao clicar em "editar tabela", o seguinte menu será exibido:</p>
 
                     <div class="help-flex-divs">
-                        <img src="assets/images/thifreBD/edit-table-menu.png" alt="Menu de edição da tabela"
+                        <img alt="Menu de edição da tabela"
                             style="--border-color: var(--gray4); --width: 47%">
 
                         <div class="help-box">
