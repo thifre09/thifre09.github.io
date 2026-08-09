@@ -415,6 +415,7 @@ input[type="number"]::-webkit-inner-spin-button {
     justify-content: center;
     align-items: center;
     background-color: #0000005d;
+    z-index: 11;
 
     button {
         cursor: pointer;

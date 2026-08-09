@@ -108,20 +108,39 @@ class HTMLElementNode {
         details.setAttribute("data-id", this.id);
         let summary = document.createElement("summary");
         summary.innerHTML = `
-        <svg viewBox="0 -960 960 960" fill="currentcolor">
-            <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/>
+        <div>
+            <svg viewBox="0 -960 960 960" fill="currentcolor">
+                <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/>
+            </svg>
+            ${this.tag}${this.attributes.get("id") ? `#${this.attributes.get("id")}` : ""}${this.attributes.get("class") ? `.${this.attributes.get("class")?.split(" ").join(".")}` : ""}
+        </div>
+
+        <svg class="add-tag-svg" viewBox="0 -960 960 960" fill="currentcolor">
+            <path d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/>
         </svg>
-        ${this.tag}${this.attributes.get("id") ? `#${this.attributes.get("id")}` : ""}${this.attributes.get("class") ? `.${this.attributes.get("class")?.split(" ").join(".")}` : ""}
         `;
         summary.addEventListener("click", (e) => {
             e.stopPropagation();
             selectedElement = this;
+            document.querySelector(".selected-element")?.classList.remove("selected-element");
+            summary.classList.add("selected-element");
         });
         summary.addEventListener("contextmenu", (e) => {
             e.preventDefault();
             this.createFloatingWindow();
         });
+        if (selectedElement === this) {
+            summary.classList.add("selected-element");
+        }
         details.appendChild(summary);
+        const addTagSvg = summary.querySelector(".add-tag-svg");
+        addTagSvg.addEventListener("click", (e) => {
+            e.stopPropagation();
+            selectedElement = this;
+            document.getElementById("create-tag").style.display = "block";
+            document.querySelector(".selected-element")?.classList.remove("selected-element");
+            summary.classList.add("selected-element");
+        });
         for (const child of this.children) {
             if (typeof child === "string") {
                 const textNode = document.createElement("div");
@@ -136,6 +155,21 @@ class HTMLElementNode {
     addChild(child) {
         this.children.push(child);
         child.parent = this;
+    }
+    moveChild(fromIndex, toIndex, moveToEnd = false) {
+        if (fromIndex === toIndex && !moveToEnd) {
+            return;
+        }
+        const [child] = this.children.splice(fromIndex, 1);
+        if (child === undefined) {
+            return;
+        }
+        const targetIndex = moveToEnd
+            ? this.children.length
+            : fromIndex < toIndex
+                ? toIndex - 1
+                : toIndex;
+        this.children.splice(Math.max(0, Math.min(targetIndex, this.children.length)), 0, child);
     }
     createFloatingWindow() {
         const removeFloatingWindow = (window) => { window.remove(); };
@@ -280,10 +314,8 @@ class HTMLElementNode {
             <div>
                 <svg viewBox="0 -960 960 960" fill="currentcolor">
                     <path
-                        d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"
-                    />
+                        d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/>
                 </svg>
-
                 Propriedades
             </div>
         </summary>
@@ -291,20 +323,26 @@ class HTMLElementNode {
         <div>
             <label>
                 Tag:
-                <input type="text" value="${this.tag}">
+                <input class="tag-input" type="text" value="${this.tag}">
             </label>
 
             <label>
                 Parent:
-                <input
-                    type="text"
-                    value="${this.parent?.tag || "null"}"
-                    disabled
-                >
+                <input class="parent-input" type="text" value="${this.parent?.tag || "null"}" disabled>
             </label>
         </div>
         `;
         contentDiv.appendChild(propriedadesDetails);
+        const tagInput = propriedadesDetails.querySelector(".tag-input");
+        tagInput.addEventListener("input", () => {
+            const newTag = tagInput.value.trim();
+            if (newTag) {
+                this.tag = newTag;
+                updateFloatingWindow(floatingWindow);
+                rederTrees();
+                renderProject(currentProject());
+            }
+        });
         const conteudoDetails = document.createElement("details");
         conteudoDetails.innerHTML = `
         <summary>
@@ -325,8 +363,7 @@ class HTMLElementNode {
             <button class="adicionar-texto">
                 <svg viewBox="0 -960 960 960" fill="currentcolor">
                     <path
-                        d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"
-                    />
+                        d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/>
                 </svg>
 
                 Adicionar texto
@@ -460,6 +497,7 @@ class HTMLElementNode {
         header.addEventListener("pointercancel", () => {
             isDragging = false;
         });
+        updateFloatingWindow(floatingWindow);
         floatingWindow.tabIndex = -1;
         floatingWindow.focus();
         floatingWindow.addEventListener("keydown", (event) => {
@@ -474,8 +512,10 @@ class HTMLElementNode {
         selectedElement?.addChild(node);
         node.parent = selectedElement;
         search.value = "";
+        document.getElementById("create-tag").style.display = "none";
         renderProject(currentProject());
         selectedElement = node;
+        document.querySelector(".selected-element")?.classList.remove("selected-element");
     }
 }
 class CSSClass {
@@ -511,6 +551,7 @@ const zoomInput = document.getElementById("zoom");
 const iframeArea = document.getElementById("iframe-area");
 const camera = document.getElementById("iframe-camera");
 const iframe = document.getElementById("visualizacao");
+const closeCreateTagButton = document.getElementById("close-create-tag");
 const windowsElementMap = new WeakMap();
 const doc = iframe.contentDocument;
 doc.body.innerHTML = ``;
@@ -627,18 +668,18 @@ function rederTrees() {
             restoreExpanded(details, childPath, opened);
         }
     }
-    const rightSide = document.getElementById("dashboard-direita");
-    const previousTree = rightSide.querySelector("div#tree");
+    const leftSide = document.getElementById("dashboard-esquerda");
+    const previousTree = leftSide.querySelector("div#tree");
     const opened = new Set();
     if (previousTree) {
         saveExpanded(previousTree, "", opened);
     }
-    rightSide.replaceChildren();
+    leftSide.replaceChildren();
     previousTree.appendChild(currentProject().root.buildTree());
     const div = document.createElement("div");
     div.id = "tree";
     div.appendChild(currentRoot().buildTree());
-    rightSide.appendChild(div);
+    leftSide.appendChild(div);
     restoreExpanded(div, "", opened);
     const janelas = document.getElementById("janelas-flutuantes");
     janelas.querySelectorAll(".janela-flutuante").forEach(updateFloatingWindow);
@@ -651,14 +692,71 @@ function updateFloatingWindow(janela) {
     if (!filhosContainer)
         return;
     filhosContainer.replaceChildren();
-    for (const child of element.children) {
+    let draggedChildIndex = null;
+    const refreshFloatingWindow = () => {
+        updateFloatingWindow(janela);
+        rederTrees();
+        renderProject(currentProject());
+    };
+    filhosContainer.ondragover = (event) => {
+        event.preventDefault();
+    };
+    filhosContainer.ondrop = (event) => {
+        event.preventDefault();
+        if (draggedChildIndex === null) {
+            return;
+        }
+        const target = event.target;
+        if (target.closest("[data-child-index]")) {
+            return;
+        }
+        element.moveChild(draggedChildIndex, element.children.length, true);
+        draggedChildIndex = null;
+        refreshFloatingWindow();
+    };
+    for (const [index, child] of element.children.entries()) {
         const div = document.createElement("div");
+        div.draggable = true;
+        div.dataset.childIndex = index.toString();
         div.innerHTML = `
         <svg viewBox="0 -960 960 960" fill="currentcolor">
             <path d="M360-160q-33 0-56.5-23.5T280-240q0-33 23.5-56.5T360-320q33 0 56.5 23.5T440-240q0 33-23.5 56.5T360-160Zm240 0q-33 0-56.5-23.5T520-240q0-33 23.5-56.5T600-320q33 0 56.5 23.5T680-240q0 33-23.5 56.5T600-160ZM360-400q-33 0-56.5-23.5T280-480q0-33 23.5-56.5T360-560q33 0 56.5 23.5T440-480q0 33-23.5 56.5T360-400Zm240 0q-33 0-56.5-23.5T520-480q0-33 23.5-56.5T600-560q33 0 56.5 23.5T680-480q0 33-23.5 56.5T600-400ZM360-640q-33 0-56.5-23.5T280-720q0-33 23.5-56.5T360-800q33 0 56.5 23.5T440-720q0 33-23.5 56.5T360-640Zm240 0q-33 0-56.5-23.5T520-720q0-33 23.5-56.5T600-800q33 0 56.5 23.5T680-720q0 33-23.5 56.5T600-640Z"/>
         </svg>
         ${child instanceof HTMLElementNode ? `&lt;${child.tag}&gt;` : child}
         `;
+        div.addEventListener("dragstart", (event) => {
+            draggedChildIndex = index;
+            div.classList.add("is-dragging");
+            event.dataTransfer?.setData("text/plain", index.toString());
+            if (event.dataTransfer) {
+                event.dataTransfer.effectAllowed = "move";
+            }
+        });
+        div.addEventListener("dragend", () => {
+            draggedChildIndex = null;
+            div.classList.remove("is-dragging");
+            filhosContainer.querySelectorAll(".is-drop-target").forEach((item) => item.classList.remove("is-drop-target"));
+        });
+        div.addEventListener("dragover", (event) => {
+            event.preventDefault();
+            if (draggedChildIndex === null || draggedChildIndex === index) {
+                return;
+            }
+            div.classList.add("is-drop-target");
+        });
+        div.addEventListener("dragleave", () => {
+            div.classList.remove("is-drop-target");
+        });
+        div.addEventListener("drop", (event) => {
+            event.preventDefault();
+            div.classList.remove("is-drop-target");
+            if (draggedChildIndex === null || draggedChildIndex === index) {
+                return;
+            }
+            element.moveChild(draggedChildIndex, index);
+            draggedChildIndex = null;
+            refreshFloatingWindow();
+        });
         filhosContainer.appendChild(div);
     }
 }
@@ -696,6 +794,8 @@ search.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
         e.preventDefault();
         if (search.value.trim() === "")
+            return;
+        if (selectedElement === null)
             return;
         const tag = search.value.trim().toLowerCase();
         search.value = "";
@@ -765,6 +865,9 @@ iframe.addEventListener("load", () => {
         const mouseY = iframeRect.top + event.clientY - areaRect.top;
         zoomCamera(event, mouseX, mouseY);
     }, { passive: false });
+});
+closeCreateTagButton.addEventListener("click", () => {
+    document.getElementById("create-tag").style.display = "none";
 });
 // #endregion
 setTimeout(() => {
