@@ -20,6 +20,8 @@ div#title-div {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: var(--white);
+    z-index: 100;
 
     h1#title {
         text-align: center;
@@ -27,8 +29,6 @@ div#title-div {
         transition: var(--transition-time1);
         text-decoration: none;
         text-align: center;
-        z-index: 100;
-        background-color: var(--white);
 
         a {
             text-decoration: none;

@@ -5631,8 +5631,6 @@ let lastMouseX = 0;
 let lastMouseY = 0;
 
 let draggingTable: HTMLElement | null = null
-let tableX = 0;
-let tableY = 0;
 let moved = false;
 
 let tablesLogical: Record<string, {

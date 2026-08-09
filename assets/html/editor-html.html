@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu site incrível</title>
     <link rel="stylesheet" href="/assets/css/editor-html.css">
-    <link rel="icon" type="image/png" href="./assets/images/links/batatas/batata1.jpg">
+    <link rel="icon" type="image/png" href="/assets/images/links/batatas/batata1.jpg">
 </head>
 
 <body data-title="Editor HTML">
@@ -49,118 +49,64 @@
 
         <div id="dashboard">
             <aside id="dashboard-esquerda">
-
                 <div class="sidebar-title">
                     <h2>Adicionar</h2>
                 </div>
 
                 <div class="sidebar-search">
-                    <input id="search" type="text" placeholder="Pesquisar tag, atributo ou CSS">
+                    <input id="search" type="text" placeholder="Pesquise uma tag HTML">
                 </div>
 
                 <div id="suggestions">
 
                 </div>
-
-                <div id="tooltip"></div>
-
             </aside>
 
-            <div class="separador-vertical"></div>
+            <div class="separador-vertical" style="cursor: col-resize;"></div>
 
             <section id="dashboard-centro">
 
                 <div id="ferramentas">
                     <svg viewBox="0 -960 960 960" fill="currentcolor">
-                        <path d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"/>
+                        <path
+                            d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z" />
                     </svg>
                     <div>
-                        <input type="number" id="width">
+                        <input type="number" id="width" value="1920">
                         x
-                        <input type="number" id="height">
+                        <input type="number" id="height" value="1080">
                     </div>
                     <div>
-                        <input type="number" id="zoom" min="1" max="200" value="100">
+                        <input type="number" id="zoom" min="1" max="200" value="30">
                         %
                     </div>
                 </div>
 
                 <div id="iframe-area">
-
-                    <div id="iframe-container">
-
+                    <div id="iframe-camera">
                         <iframe id="visualizacao"></iframe>
-
                     </div>
 
+                    <div id="camera-overlay"></div>
                 </div>
 
             </section>
 
-            <div class="separador-vertical"></div>
+            <div id="resizer2" class="separador-vertical"></div>
 
             <aside id="dashboard-direita">
-                
+                <div id="tree">
+
+                </div>
 
             </aside>
 
-            <div class="janela-flutuante">
-                <div class="janela-flutuante-header">
-                    <div>
-                        <svg viewBox="0 -960 960 960" fill="currentcolor">
-                            <path d="M240-280 40-480l200-200 56 56-143 144 143 144-56 56Zm178 132-76-24 200-640 76 24-200 640Zm302-132-56-56 143-144-143-144 56-56 200 200-200 200Z"/>
-                        </svg>
-                        &lt;button&gt;
-                    </div>
-
-                    <svg viewBox="0 -960 960 960" fill="currentcolor">
-                        <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
-                    </svg>
-                </div>
-                <hr style="border-bottom: 1px solid var(--gray10); margin: 0; height: 0;">
-
-                <div class="janela-flutuante-conteudo">
-                    <details>
-                        <summary>
-                            <svg viewBox="0 -960 960 960" fill="currentcolor">
-                                <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/>
-                            </svg>
-                            Conteúdo
-                        </summary>
-
-                        <textarea>ola</textarea>
-                    </details>
-
-                    <details>
-                        <summary>
-                            <svg viewBox="0 -960 960 960" fill="currentcolor">
-                                <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/>
-                            </svg>
-                            Atributos
-                        </summary>
-
-                        <textarea>ola</textarea>
-                        <textarea>ola</textarea>
-                        <textarea>ola</textarea>
-                        <textarea>ola</textarea>
-                        <textarea>ola</textarea>
-                        <textarea>ola</textarea>
-                        <textarea>ola</textarea>
-                    </details>
-
-                    <details>
-                        <summary>
-                            <svg viewBox="0 -960 960 960" fill="currentcolor">
-                                <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/>
-                            </svg>
-                            Estilos CSS
-                        </summary>
-
-                        <textarea>ola</textarea>
-                    </details>
-
-                </div>
+            <div id="janelas-flutuantes">
+                
             </div>
+
+            <div id="tooltip"></div>
+            <div id="autocomplete"></div>
         </div>
         <div id="codigo">
 

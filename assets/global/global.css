@@ -3,6 +3,7 @@
     height: 2px;
     min-height: 2px;
     background-color: var(--gray3);
+    z-index: 10;
 }
 
 .separador-vertical {
@@ -12,6 +13,7 @@
     align-self: stretch;
     background-color: var(--gray3);
     cursor: var(--cursor, default);
+    z-index: 10;
 }
 
 nav#troca-de-tela {
@@ -19,6 +21,7 @@ nav#troca-de-tela {
     display: flex;
     justify-content: center;
     background-color: var(--gray13);
+    z-index: 10;
 
     #nav-bar {
         --indicator-left: 0px;
