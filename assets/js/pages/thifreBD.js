@@ -3245,6 +3245,7 @@ function changeConfirmDeleteMenu(type, rowIndex, columnName) {
  * @param parentDiv - Container do bloco de criação/edição da coluna.
  */
 function updateCharacteristics(parentDiv) {
+    console.log("updateCharacteristics called");
     // pegar inputs
     const pkInput = parentDiv.querySelector("input.primary-key");
     const fkInput = parentDiv.querySelector("input.foreign-key");
@@ -3266,6 +3267,12 @@ function updateCharacteristics(parentDiv) {
         currentTimestamp: currentTimestampInput.checked,
         type: typeDropdown.textContent.toUpperCase()
     };
+    if (state.type !== "DATE" && state.type !== "TIME") {
+        state.currentTimestamp = false;
+    }
+    if (state.type !== "INTEGER") {
+        state.autoIncrement = false;
+    }
     const forcedTrue = {
         notNull: state.pk || state.autoIncrement || state.currentTimestamp,
         unique: state.autoIncrement || state.pk,
@@ -4097,8 +4104,107 @@ var SQL;
                         return { column: null, error: "FOREIGN KEY não pode ser usado com CURRENT_TIMESTAMP" };
                     }
                 }
+                SGBDFunctions.alterColumn(tableName, columnName, newColumn, schemaName);
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${columnName}" alterada com sucesso`], "success");
             }
             else if (word7 === "drop") {
+                let words = this.tokens.slice(7).map(token => token.toLowerCase());
+                if (words.length < 1) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
+                    return;
+                }
+                const primaryValidation = validateCompoundKeyword("primary", "key", "PRIMARY KEY", words);
+                if (typeof primaryValidation === "string") {
+                    return { column: null, error: primaryValidation };
+                }
+                if (primaryValidation === 1) {
+                    if (!column.isPrimaryKey) {
+                        return { column: null, error: `A coluna "${column.name}" não possui PRIMARY KEY` };
+                    }
+                    newColumn.isPrimaryKey = false;
+                }
+                const foreignValidation = validateCompoundKeyword("foreign", "key", "FOREIGN KEY", words);
+                if (typeof foreignValidation === "string") {
+                    return { column: null, error: foreignValidation };
+                }
+                if (foreignValidation === 1) {
+                    if (!column.isForeignKey) {
+                        return { column: null, error: `A coluna "${column.name}" não possui FOREIGN KEY` };
+                    }
+                    newColumn.isForeignKey = false;
+                    newColumn.reference = undefined;
+                }
+                const notNullValidation = validateCompoundKeyword("not", "null", "NOT NULL", words);
+                if (typeof notNullValidation === "string") {
+                    return { column: null, error: notNullValidation };
+                }
+                if (notNullValidation === 1) {
+                    if (!column.isNotNull) {
+                        return { column: null, error: `A coluna "${column.name}" não é NOT NULL` };
+                    }
+                    newColumn.isNotNull = false;
+                }
+                const uniqueValidation = validateSingleKeyword("unique", "UNIQUE", words);
+                if (typeof uniqueValidation === "string") {
+                    return { column: null, error: uniqueValidation };
+                }
+                if (uniqueValidation === 1) {
+                    if (!column.isUnique) {
+                        return { column: null, error: `A coluna "${column.name}" não é UNIQUE` };
+                    }
+                    newColumn.isUnique = false;
+                }
+                const autoIncrementValidation = validateSingleKeyword("auto_increment", "AUTO_INCREMENT", words);
+                if (typeof autoIncrementValidation === "string") {
+                    return { column: null, error: autoIncrementValidation };
+                }
+                if (autoIncrementValidation === 1) {
+                    if (!column.isAutoIncrement) {
+                        return { column: null, error: `A coluna "${column.name}" não é AUTO_INCREMENT` };
+                    }
+                    newColumn.isAutoIncrement = false;
+                }
+                const defaultValidation = validateSingleKeyword("default", "DEFAULT", words);
+                if (typeof defaultValidation === "string") {
+                    return { column: null, error: defaultValidation };
+                }
+                if (defaultValidation === 1) {
+                    if (!column.hasDefault) {
+                        return { column: null, error: `A coluna "${column.name}" não possui DEFAULT` };
+                    }
+                    newColumn.hasDefault = false;
+                }
+                const currentTimestampValidation = validateSingleKeyword("current_timestamp", "CURRENT_TIMESTAMP", words);
+                if (typeof currentTimestampValidation === "string") {
+                    return { column: null, error: currentTimestampValidation };
+                }
+                if (currentTimestampValidation === 1) {
+                    if (!column.isCurrentTimestamp) {
+                        return { column: null, error: `A coluna "${column.name}" não é CURRENT_TIMESTAMP` };
+                    }
+                    newColumn.isCurrentTimestamp = false;
+                }
+                if (notNullValidation === 1) {
+                    if (newColumn.isPrimaryKey) {
+                        return { column: null, error: `Não é possível remover NOT NULL de uma coluna PRIMARY KEY` };
+                    }
+                    else if (newColumn.isAutoIncrement) {
+                        return { column: null, error: `Não é possível remover NOT NULL de uma coluna AUTO_INCREMENT` };
+                    }
+                    else if (newColumn.isCurrentTimestamp) {
+                        return { column: null, error: `Não é possível remover NOT NULL de uma coluna CURRENT_TIMESTAMP` };
+                    }
+                }
+                if (uniqueValidation === 1) {
+                    if (newColumn.isPrimaryKey) {
+                        return { column: null, error: `Não é possível remover UNIQUE de uma coluna PRIMARY KEY` };
+                    }
+                    else if (newColumn.isAutoIncrement) {
+                        return { column: null, error: `Não é possível remover UNIQUE de uma coluna AUTO_INCREMENT` };
+                    }
+                }
+                SGBDFunctions.alterColumn(tableName, columnName, newColumn, schemaName);
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${columnName}" alterada com sucesso`], "success");
             }
             else {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Ação não reconhecida"], "error");

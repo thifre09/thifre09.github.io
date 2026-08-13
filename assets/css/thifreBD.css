@@ -1069,8 +1069,9 @@ input[type="number"]::-webkit-inner-spin-button {
         display: grid;
         margin: var(--p2);
         width: 98%;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: var(--p2);
+        row-gap: calc(2*var(--p5));
 
 
         >div {
@@ -1115,6 +1116,14 @@ input[type="number"]::-webkit-inner-spin-button {
 
                 svg {
                     color: var(--pink3);
+                }
+            }
+
+            &#salvar-online>div:nth-child(1) {
+                background-color: var(--blue9);
+
+                svg {
+                    color: var(--blue3);
                 }
             }
 

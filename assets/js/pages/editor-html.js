@@ -207,7 +207,7 @@ class HTMLElementNode {
                 event.preventDefault();
                 event.stopPropagation();
                 row.remove();
-                const updatedMap = updateMapFromTable(type === "attribute" ? row.parentElement : row.parentElement);
+                const updatedMap = updateMapFromTable(row.parentElement);
                 if (type === "attribute") {
                     console.log("Updated attributes:", updatedMap);
                     this.attributes = updatedMap;
