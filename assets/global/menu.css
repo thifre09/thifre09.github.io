@@ -899,6 +899,23 @@ section#bloco-notas-container {
             display: flex;
             flex-direction: column;
             text-align: center;
+
+            button {
+                font-size: var(--fs5);
+                margin: var(--p5) 0;
+                padding: var(--p5) 0;
+                border: none;
+                border-radius: 10px;
+                background-color: var(--blue5);
+                color: var(--white);
+                transition: var(--transition-time1);
+                cursor: pointer;
+
+                &:hover {
+                    background-color: var(--blue4);
+                    transform: scale(1.03);
+                }
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-// #region Change interface terminal
+// #region Change navbar
 
 const buttonChangeToDashboard = document.getElementById("button-header-dashboard")!;
 const buttonChangeToCodigo = document.getElementById("button-header-codigo")!;

@@ -99,18 +99,6 @@ input[type="number"]::-webkit-inner-spin-button {
     }
 }
 
-#conteudo {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    overflow: hidden;
-    position: relative;
-
-    >* {
-        z-index: 5;
-    }
-}
-
 #interface-grafica {
     width: 100%;
     display: flex;
@@ -127,6 +115,7 @@ input[type="number"]::-webkit-inner-spin-button {
         font-size: var(--fs5);
 
         div#tree {
+
             summary {
                 display: flex;
                 margin-bottom: clamp(0px, var(--p3), 1px);

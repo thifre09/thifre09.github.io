@@ -8,55 +8,115 @@
     <link rel="icon" type="image/png" href="/assets/images/links/batatas/batata1.jpg">
 </head>
 <body data-title="Quadrado clicker">
-    <div id="main">
-        <section id="principal">
-            <section id="esquerda">
-                <h1 id="quadradotext">Quadrados: 0</h1>
-    
-                <div id="quadrado" onclick="clique()"></div>
-            </section>
-    
-            <div class="separador"></div>
-    
-            <section id="centro">
-                <div id="botoes">
-                    <button onclick="mudarMenu('melhorias')">Melhorias</button>
-                    <button onclick="mudarMenu('outros')">Outros</button>
-                    <button onclick="mudarMenu('ajuda')" >Ajuda</button>
-                    <button onclick="mudarMenu('salvamento')">Salvar</button>
-                </div>
-    
-                <h1 id="quadradosporclickText">Quadrados por click: 1</h1>
-    
-                <h1 id="triangulotext">Triângulos: 0</h1>
-    
-            </section>
-    
-            <div class="separador"></div>
-    
-            <section id="direita">
-                
-            </section>
-        </section>
-        
-        <section id="melhorias" style="display: none;">
-            <h1 id="quadradotextMelhorias">Quadrados: 0</h1>
-
-            <div class="cores">
-                <div class="quadrado-pequeno" style="background-color: #fd6321;"></div>
-                <p>Não comprado</p>
-                <div class="quadrado-pequeno" style="background-color: #F88C5C;"></div>
-                <p>Comprado</p>
+    <div id="conteudo">
+        <nav id="troca-de-tela">
+            <div id="nav-bar">
+                <div class="nav-bar-indicator"></div>
+                <button id="button-header-game">
+                    <svg viewBox="0 -960 960 960" fill="var(--purple4)">
+                        <path d="M182-200q-51 0-79-35.5T82-322l42-300q9-60 53.5-99T282-760h396q60 0 104.5 39t53.5 99l42 300q7 51-21 86.5T778-200q-21 0-39-7.5T706-230l-90-90H344l-90 90q-15 15-33 22.5t-39 7.5Zm16-86 114-114h336l114 114q2 2 16 6 11 0 17.5-6.5T800-304l-44-308q-4-29-26-48.5T678-680H282q-30 0-52 19.5T204-612l-44 308q-2 11 4.5 17.5T182-280q2 0 16-6Zm510.5-165.5Q720-463 720-480t-11.5-28.5Q697-520 680-520t-28.5 11.5Q640-497 640-480t11.5 28.5Q663-440 680-440t28.5-11.5Zm-80-120Q640-583 640-600t-11.5-28.5Q617-640 600-640t-28.5 11.5Q560-617 560-600t11.5 28.5Q583-560 600-560t28.5-11.5ZM310-440h60v-70h70v-60h-70v-70h-60v70h-70v60h70v70Zm170-40Z"/>
+                    </svg>
+                    Jogo
+                </button>
+                <button id="button-header-others">
+                    <svg viewBox="0 -960 960 960" fill="var(--green4)">
+                        <path d="M240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400Z"/>
+                    </svg>
+                    Outros
+                </button>
+                <button id="button-header-save">
+                    <svg height="24px" viewBox="0 -960 960 960" fill="var(--orange4)">
+                        <path
+                            d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160Zm-80 34L646-760H200v560h560v-446ZM565-275q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35ZM240-560h360v-160H240v160Zm-40-86v446-560 114Z" />
+                    </svg>
+                    Salvar
+                </button>
+                <button id="button-header-help">
+                    <svg viewBox="0 -960 960 960" fill="var(--cyan4)">
+                        <path d="M513.5-254.5Q528-269 528-290t-14.5-35.5Q499-340 478-340t-35.5 14.5Q428-311 428-290t14.5 35.5Q457-240 478-240t35.5-14.5ZM442-394h74q0-33 7.5-52t42.5-52q26-26 41-49.5t15-56.5q0-56-41-86t-97-30q-57 0-92.5 30T342-618l66 26q5-18 22.5-39t53.5-21q32 0 48 17.5t16 38.5q0 20-12 37.5T506-526q-44 39-54 59t-10 73Zm38 314q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>´
+                    </svg>
+                    Ajuda
+                </button>
             </div>
+        </nav>
 
-            <table id="tabela-melhorias">
-                <tr>
-                    <td id="voltar" colspan="3"><button onclick="mudarMenu('main')">Voltar</button></td>
-                </tr>
-            </table>
+        <div class="separador-horizontal"></div>
+
+        <section id="game">
+            <section id="esquerda">
+                <div>
+                    <h1 id="quadrados">Quadrados: 1</h1>
+                    <div id="quadrado-div">
+                        <div id="quadrado"></div>
+                    </div>
+                </div>
+                <div>
+                    <h2>Quadrados por click: <span id="quadradosPorClick">1</span></h2>
+                    <h2>Quadrados por segundo: <span id="quadradosPorSegundo">1</span></h2>
+                    <h2>Triângulos: <span id="triangulos">0</span></h2>
+                </div>
+            </section>
+
+            <div class="separador-vertical"></div>
+
+            <section id="centro">
+                <h1>Melhorias</h1>
+                <div id="melhorias-div"></div>
+            </section>
+
+            <div class="separador-vertical"></div>
+
+            <section id="direita">
+                <h1>Geradores</h1>
+                <div id="geradores-div"></div>
+            </section>
         </section>
 
-        <section id="ajuda" style="display: none;">
+        <section id="others" style="display: none;">
+
+            <button onclick="mudarMenu('main')">Voltar</button>
+
+            <h2>Outros menus</h2>
+
+            <div id="botoesOutros">
+                
+                <button onclick="mudarMenu('triangulos')">Triângulos</button>
+
+                <button onclick="mudarMenu('renascer')">Renascer</button>
+
+                <button onclick="mudarMenu('conquistas')">Conquistas</button>
+
+                <button id="maquinadasorte" onclick="mudarMenu('maquinadasorte')" style="display: none;">Máquina da sorte</button>
+
+                <button id="livromagico" onclick="mudarMenu('livromagico')" style="display: none;">Livro mágico</button>
+
+                <button id="quizmatematico" onclick="mudarMenu('quizmatematico')" style="display: none;">Quiz matemático</button>
+
+                <button id="skinquadrado" onclick="mudarMenu('skinquadrado')" style="display: none;">Skin do quadrado</button>
+
+            </div>
+        </section>
+
+        <section id="save" style="display: none;">
+            <button onclick="mudarMenu('main')" style="width: fit-content; height: fit-content;">Voltar</button>
+
+            <h2>Salvar</h2>
+
+            <p>O salvamento é feito automaticamente a cada minuto, mas se ocorrer algum erro, é sempre bom ter um arquivo reserva</p>
+            <p>Clicar em salvar irá baixar um arquivo que pode ser usado para acessar seu save de qualquer dispositivo</p>
+
+            <div>
+                <button onclick="salvarDados()">Salvar</button>
+                <button onclick="carregarDados()">Carregar</button>
+            </div>
+            <h2>Salvar em arquivo</h2>
+            <div>
+                <button onclick="salvarJson()">Exportar</button>
+                <button onclick="carregarJson()">Importar</button>
+            </div>
+        </section>
+
+        <section id="help" style="display: none;">
             <button onclick="mudarMenu('main')">Voltar</button>
 
             <h1>Ajuda</h1>
@@ -107,49 +167,22 @@
             </ul>
             
         </section>
+        
+        <section id="melhorias" style="display: none;">
+            <h1 id="quadradotextMelhorias">Quadrados: 0</h1>
 
-        <section id="outros" style="display: none;">
-
-            <button onclick="mudarMenu('main')">Voltar</button>
-
-            <h2>Outros menus</h2>
-
-            <div id="botoesOutros">
-                
-                <button onclick="mudarMenu('triangulos')">Triângulos</button>
-
-                <button onclick="mudarMenu('renascer')">Renascer</button>
-
-                <button onclick="mudarMenu('conquistas')">Conquistas</button>
-
-                <button id="maquinadasorte" onclick="mudarMenu('maquinadasorte')" style="display: none;">Máquina da sorte</button>
-
-                <button id="livromagico" onclick="mudarMenu('livromagico')" style="display: none;">Livro mágico</button>
-
-                <button id="quizmatematico" onclick="mudarMenu('quizmatematico')" style="display: none;">Quiz matemático</button>
-
-                <button id="skinquadrado" onclick="mudarMenu('skinquadrado')" style="display: none;">Skin do quadrado</button>
-
+            <div class="cores">
+                <div class="quadrado-pequeno" style="background-color: #fd6321;"></div>
+                <p>Não comprado</p>
+                <div class="quadrado-pequeno" style="background-color: #F88C5C;"></div>
+                <p>Comprado</p>
             </div>
-        </section>
 
-        <section id="salvar" style="display: none;">
-            <button onclick="mudarMenu('main')" style="width: fit-content; height: fit-content;">Voltar</button>
-
-            <h2>Salvar</h2>
-
-            <p>O salvamento é feito automaticamente a cada minuto, mas se ocorrer algum erro, é sempre bom ter um arquivo reserva</p>
-            <p>Clicar em salvar irá baixar um arquivo que pode ser usado para acessar seu save de qualquer dispositivo</p>
-
-            <div>
-                <button onclick="salvarDados()">Salvar</button>
-                <button onclick="carregarDados()">Carregar</button>
-            </div>
-            <h2>Salvar em arquivo</h2>
-            <div>
-                <button onclick="salvarJson()">Exportar</button>
-                <button onclick="carregarJson()">Importar</button>
-            </div>
+            <table id="tabela-melhorias">
+                <tr>
+                    <td id="voltar" colspan="3"><button onclick="mudarMenu('main')">Voltar</button></td>
+                </tr>
+            </table>
         </section>
 
         <section id="triangulos" style="display: none;">
