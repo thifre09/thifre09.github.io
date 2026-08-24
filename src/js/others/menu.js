@@ -2,7 +2,7 @@ import * as Auth from "../supabase/auth.js";
 import { supabase } from "../supabase/client.js";
 // carega o menu lateral e a barra de navegação
 document.addEventListener('DOMContentLoaded', async () => {
-    fetch('/assets/global/menu.html')
+    fetch('/src/global/menu.html')
         .then(response => response.text())
         .then(data => {
         // Insere o conteúdo de menu.html diretamente no início do body

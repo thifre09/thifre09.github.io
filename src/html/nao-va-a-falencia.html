@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Não vá a falência</title>
+    <link rel="stylesheet" href="/assets/css/nao-va-a-falencia.css">
+    <link rel="stylesheet" href="/src/global/variables.css">
+</head>
+
+<body>
+    <section id="tela-inicial" style="display: none">
+        <header class="header-inicial">
+            <h1>Não vá a falência!</h1>
+        </header>
+        <div class="menu">
+            <div class="botao" id="botao-jogar">
+                <img src="/assets/images/mayor-simulator/tutorial.png" alt="Tutorial" class="botao">
+            </div>
+
+            <div class="botao" id="botao-tutorial">
+                <img src="/assets/images/mayor-simulator/play.png" alt="Jogar" class="botao">
+            </div>
+        </div>
+    </section>
+
+    <section id="jogo">
+        <div id="grid">
+            <div id="title" class="col-span-2">
+                <h1>Não vá a falência!</h1>
+            </div>
+            <div id="top-bar" class="col-span-10">
+                <div class="top-bar-info">
+                    <svg viewBox="0 -960 960 960" fill="currentcolor">
+                        <path
+                            d="M441-120v-86q-53-12-91.5-46T293-348l74-30q15 48 44.5 73t77.5 25q41 0 69.5-18.5T587-356q0-35-22-55.5T463-458q-86-27-118-64.5T313-614q0-65 42-101t86-41v-84h80v84q50 8 82.5 36.5T651-650l-74 32q-12-32-34-48t-60-16q-44 0-67 19.5T393-614q0 33 30 52t104 40q69 20 104.5 63.5T667-358q0 71-42 108t-104 46v84h-80Z" />
+                    </svg>
+                    <div>
+                        <h2>Dinheiro</h2>
+                        <p id="dinheiro" style="color: var(--green4);">100.000</p>
+                    </div>
+                </div>
+                <div class="top-bar-info">
+                    <svg viewBox="0 -960 960 960" fill="currentcolor">
+                        <path
+                            d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z" />
+                    </svg>
+                    <div>
+                        <h2>Prestígio</h2>
+                        <p id="prestigio" style="color: var(--purple2);">87</p>
+                    </div>
+                </div>
+                <div class="top-bar-info">
+                    <svg viewBox="0 -960 960 960" fill="currentcolor">
+                        <path
+                            d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z" />
+                    </svg>
+                    <div>
+                        <h2>Estabilidade familiar</h2>
+                        <p id="estabilidade-familiar" style="color: var(--red3);">90</p>
+                    </div>
+                </div>
+                <div class="top-bar-info">
+                    <div>
+                        <h2>Ano</h2>
+                        <p id="ano-atual">1891</p>
+                    </div>
+                </div>
+                <button id="botao-proximo-ano">Próximo ano</button>
+            </div>
+            <div id="div-acontecimento" class="col-span-8">
+                <div id="textos-acontecimento">
+                    <h2 id="titulo-acontecimento">Uma discussão</h2>
+                    <p id="descricao-acontecimento">Mário e uma de suas irmãs tiveram uma discussão.</p>
+                </div>
+                <div id="opcoes-acontecimento">
+                    <button>
+                        <p>Conversar com os dois</p>
+                        <p>1 ação</p>
+                    </button>
+                    <button>
+                        <p>Defender Mário</p>
+                        <p>1 ação</p>
+                    </button>
+                    <button>
+                        <p>Não se envolver</p>
+                        <p>0 ações</p>
+                    </button>
+                </div>
+            </div>
+            <div id="div-patrimonio" class="col-span-4">
+                <h2>Patrimônio</h2>
+            </div>
+            <div id="div-familia" class="col-span-3">
+                <h2>Família</h2>
+                <div id="familia">
+                </div>
+            </div>
+            <div id="div-conhecidos" class="col-span-3">
+                <h2>Conhecidos</h2>
+                <div id="familia">
+                </div>
+            </div>
+            <div class="col-span-3">
+                <p>a</p>
+            </div>
+            <div id="div-jornal" class="col-span-3">
+                <h2>Jornal</h2>
+            </div>
+        </div>
+    </section>
+
+    <section id="tutorial">
+
+    </section>
+
+
+    <script type="module" src="/src/js/pages/nao-va-a-falencia.js"></script>
+</body>
+
+</html>
