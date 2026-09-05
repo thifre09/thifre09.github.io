@@ -37,8 +37,8 @@
                             d="M441-120v-86q-53-12-91.5-46T293-348l74-30q15 48 44.5 73t77.5 25q41 0 69.5-18.5T587-356q0-35-22-55.5T463-458q-86-27-118-64.5T313-614q0-65 42-101t86-41v-84h80v84q50 8 82.5 36.5T651-650l-74 32q-12-32-34-48t-60-16q-44 0-67 19.5T393-614q0 33 30 52t104 40q69 20 104.5 63.5T667-358q0 71-42 108t-104 46v84h-80Z" />
                     </svg>
                     <div>
-                        <h2>Dinheiro</h2>
-                        <p id="dinheiro" style="color: var(--green4);">100.000</p>
+                        <h2>Patrimônio total</h2>
+                        <p style="color: var(--green4);">1.100.000</p>
                     </div>
                 </div>
                 <div class="top-bar-info">
@@ -67,7 +67,10 @@
                         <p id="ano-atual">1891</p>
                     </div>
                 </div>
-                <button id="botao-proximo-ano">Próximo ano</button>
+                <button id="botao-proximo-ano">
+                    <h4>Próximo ano</h4>
+                    <h6 id="acoes-restantes">Ações: 5</h6>
+                </button>
             </div>
             <div id="div-acontecimento" class="col-span-8">
                 <div id="textos-acontecimento">
@@ -91,6 +94,28 @@
             </div>
             <div id="div-patrimonio" class="col-span-4">
                 <h2>Patrimônio</h2>
+                <div id="patrimonio">
+                    <div>
+                        <div>
+                            <h3>Dinheiro</h3>
+                            <p id="dinheiro-display">100.000</p>
+                        </div>
+                        <div>
+                            <h3>Patrimônio</h3>
+                            <p id="patrimonio-display">1.000.000</p>
+                        </div>
+                        <div>
+                            <h3>Renda Anual</h3>
+                            <p id="renda-anual-display">75.000</p>
+                        </div>
+                    </div>
+                    <div>
+                        <button id="botao-investimentos">Investimentos</button>
+                        <button id="botao-propriedades">Propriedades</button>
+                        <button id="botao-bens">Bens</button>
+                        <button id="botao-emprestimos">Empréstimos</button>
+                    </div>
+                </div>
             </div>
             <div id="div-familia" class="col-span-3">
                 <h2>Família</h2>
@@ -99,14 +124,97 @@
             </div>
             <div id="div-conhecidos" class="col-span-3">
                 <h2>Conhecidos</h2>
-                <div id="familia">
+                <div id="conhecidos">
+                </div>
+            </div>
+            <div id="div-eventos" class="col-span-3">
+                <h2>Evento do ano</h2>
+                <div>
+                    <h3 id="nome-evento"></h3>
+                    <p id="descricao-evento"></p>
                 </div>
             </div>
             <div class="col-span-3">
-                <p>a</p>
+                
             </div>
-            <div id="div-jornal" class="col-span-3">
-                <h2>Jornal</h2>
+        </div>
+
+        <div id="janelas">
+            <div id="janela-investimentos" style="display: none;">
+                <div class="janela-header">
+                    <h2>Investimentos</h2>
+                    <svg id="close-investimentos" viewBox="0 -960 960 960" fill="currentecolor">
+                        <path
+                            d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+                    </svg>
+                </div>
+                <div>
+                    <div id="lista-investimentos" class="sidebar"></div>
+                    <div>
+                        <div id="centro-investimentos">
+                        </div>
+                        <div id="direita-investimentos">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="janela-propriedades" style="display: none;">
+                <div class="janela-header">
+                    <h2>Propriedades</h2>
+                    <svg id="close-propriedades" viewBox="0 -960 960 960" fill="currentecolor">
+                        <path
+                            d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+                    </svg>
+                </div>
+                <div>
+                    <div id="lista-propriedades" class="sidebar"></div>
+                    <div>
+                        <div id="centro-propriedades">
+                        </div>
+                        <div id="direita-propriedades">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="janela-bens" style="display: none;">
+                <div class="janela-header">
+                    <h2>Bens</h2>
+                    <svg id="close-bens" viewBox="0 -960 960 960" fill="currentecolor">
+                        <path
+                            d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+                    </svg>
+                </div>
+                <div>
+                    <div id="lista-bens"></div>
+                    <div id="bem-selecionado">
+                        <h3 id="nome-bem">Placeholder</h3>
+                        <img id="imagem-bem" src="/assets/images/memes img/cavalo.jpg" alt="Placeholder">
+                        <p id="descricao-bem">Descrição do bem selecionado.</p>
+                        <h4 id="valor-bem">Valor: R$ 1.000,00</h4>
+                        <h4 id="manutencao-bem">Manutenção: R$ 10,00</h4>
+                        <div id="buttons-bens">
+                            <button>Usar</button>
+                            <button>Vender</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="janela-emprestimos" style="display: none;">
+                <div class="janela-header">
+                    <h2>Empréstimos</h2>
+                    <svg id="close-emprestimos" viewBox="0 -960 960 960" fill="currentecolor">
+                        <path
+                            d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+                    </svg>
+                </div>
+                <div>
+                    <div id="lista-bancos" class="sidebar"></div>
+                    <div id="criar-emprestimo"></div>
+                    <div id="informacoes-emprestimos"></div>
+                </div>
             </div>
         </div>
     </section>
@@ -114,8 +222,6 @@
     <section id="tutorial">
 
     </section>
-
-
     <script type="module" src="/src/js/pages/nao-va-a-falencia.js"></script>
 </body>
 

@@ -56,15 +56,15 @@
         "tsushima",
         "versao"
     ],
-    "simpleCodingTimeTracker.inactivityTimeout": 2.5,
-    "simpleCodingTimeTracker.focusTimeout": 3,
-    "simpleCodingTimeTracker.statusBar.showSeconds": true,
-    "simpleCodingTimeTracker.statusBar.icon": "$(watch)",
-    "simpleCodingTimeTracker.statusBar.backgroundStyle": "default",
-    "simpleCodingTimeTracker.statusBar.color": "#ffffff",
-    "simpleCodingTimeTracker.health.enableNotifications": false,
-    "simpleCodingTimeTracker.health.modalNotifications": true,
-    "simpleCodingTimeTracker.health.eyeRestInterval": 20,
-    "simpleCodingTimeTracker.health.stretchInterval": 30,
-    "simpleCodingTimeTracker.health.breakThreshold": 90
+    "simpleCodingInsights.inactivityTimeout": 5,
+    "simpleCodingInsights.focusTimeout": 5,
+    "simpleCodingInsights.statusBar.showSeconds": true,
+    "simpleCodingInsights.statusBar.icon": "$(watch)",
+    "simpleCodingInsights.statusBar.backgroundStyle": "default",
+    "simpleCodingInsights.statusBar.color": "#ffffff",
+    "simpleCodingInsights.health.enableNotifications": false,
+    "simpleCodingInsights.health.modalNotifications": true,
+    "simpleCodingInsights.health.eyeRestInterval": 20,
+    "simpleCodingInsights.health.stretchInterval": 30,
+    "simpleCodingInsights.health.breakThreshold": 90
 }

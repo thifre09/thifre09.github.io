@@ -4,6 +4,7 @@
     "rootDir": "src/ts",
     "outDir": "src/js",
     "module": "es2022",
+    "moduleResolution": "bundler",
     "target": "es2022",
     "lib": [
       "ES2020",
