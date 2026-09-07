@@ -134,8 +134,10 @@
                     <p id="descricao-evento"></p>
                 </div>
             </div>
-            <div class="col-span-3">
-                
+            <div id="div-diario" class="col-span-3">
+                <h2>Diário</h2>
+                <div id="diario">
+                </div>
             </div>
         </div>
 
@@ -189,14 +191,29 @@
                 <div>
                     <div id="lista-bens"></div>
                     <div id="bem-selecionado">
-                        <h3 id="nome-bem">Placeholder</h3>
-                        <img id="imagem-bem" src="/assets/images/memes img/cavalo.jpg" alt="Placeholder">
-                        <p id="descricao-bem">Descrição do bem selecionado.</p>
-                        <h4 id="valor-bem">Valor: R$ 1.000,00</h4>
-                        <h4 id="manutencao-bem">Manutenção: R$ 10,00</h4>
+                        <div class="bem-cabecalho">
+                            <span>Bem selecionado</span>
+                            <h3 id="nome-bem">Placeholder</h3>
+                        </div>
+                        <div class="bem-imagem">
+                            <img id="imagem-bem" src="/assets/images/memes img/cavalo.jpg" alt="Placeholder">
+                        </div>
+                        <div class="bem-detalhes">
+                            <p id="descricao-bem">Descrição do bem selecionado.</p>
+                            <div class="bem-valores">
+                                <div>
+                                    <span>Valor</span>
+                                    <strong id="valor-bem">R$ 1.000,00</strong>
+                                </div>
+                                <div>
+                                    <span>Manutenção</span>
+                                    <strong id="manutencao-bem">R$ 10,00</strong>
+                                </div>
+                            </div>
+                        </div>
                         <div id="buttons-bens">
-                            <button>Usar</button>
-                            <button>Vender</button>
+                            <button type="button">Usar</button>
+                            <button type="button">Vender</button>
                         </div>
                     </div>
                 </div>
@@ -215,6 +232,11 @@
                     <div id="criar-emprestimo"></div>
                     <div id="informacoes-emprestimos"></div>
                 </div>
+            </div>
+
+            <div id="janela-final-jogo">
+                <h2>Fim de jogo</h2>
+                <h3 id="resultado">Você conquistou sua fortuna</h3>
             </div>
         </div>
     </section>
