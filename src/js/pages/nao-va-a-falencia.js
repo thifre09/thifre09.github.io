@@ -406,13 +406,11 @@ class Emprestimo {
 class Pessoa {
     nome;
     descricao;
-    idade;
     satisfacao;
     influencia;
-    constructor(nome, descricao, idade, satisfacao, influencia) {
+    constructor(nome, descricao, satisfacao, influencia) {
         this.nome = nome;
         this.descricao = descricao;
-        this.idade = idade;
         this.satisfacao = satisfacao;
         this.influencia = influencia;
     }
@@ -496,24 +494,24 @@ class Jogo {
         this.acoes = 15;
         //mudar os valores depois
         this.familia = [
-            new Pessoa("Camila", "Esposa", 44, 80, undefined),
-            new Pessoa("Mário", "Filho", 15, 90, undefined),
-            new Pessoa("Ruth", "Filha", 13, 85, undefined),
-            new Pessoa("Raquel", "Filha", 8, 90, undefined),
-            new Pessoa("Lia", "Filha", 8, 85, undefined),
-            new Pessoa("Nina", "Sobrinha", 10, 80, undefined),
+            new Pessoa("Camila", "Esposa", 80, undefined),
+            new Pessoa("Mário", "Filho", 90, undefined),
+            new Pessoa("Ruth", "Filha", 85, undefined),
+            new Pessoa("Raquel", "Filha", 90, undefined),
+            new Pessoa("Lia", "Filha", 85, undefined),
+            new Pessoa("Nina", "Sobrinha", 80, undefined),
         ];
         this.conhecidos = [
-            new Pessoa("Noca", "Criada", 45, 70, undefined),
-            new Pessoa("Dr. Gervásio", "Médico", 45, 70, undefined),
-            new Pessoa("Capitão Rino", "Capitão da Marinha", 45, 70, undefined),
-            new Pessoa("Paquita", "Rica", 45, 70, undefined),
-            new Pessoa("Gama Torres", "Investidor", 45, 70, undefined),
-            new Pessoa("Inocêncio Braga", "Homem de negócios", 45, 70, undefined),
-            new Pessoa("Baronesa da Lage", "Rica", 45, 70, undefined),
-            new Pessoa("Mota", "Ajudante", 45, 70, undefined),
-            new Pessoa("Joaquim", "Caxeiro", 45, 70, undefined),
-            new Pessoa("Lélio Braga", "Maestro", 45, 70, undefined),
+            new Pessoa("Noca", "Criada", 70, undefined),
+            new Pessoa("Dr. Gervásio", "Médico", 70, undefined),
+            new Pessoa("Capitão Rino", "Capitão da Marinha", 70, undefined),
+            new Pessoa("Paquita", "Rica", 70, undefined),
+            new Pessoa("Gama Torres", "Investidor", 70, undefined),
+            new Pessoa("Inocêncio Braga", "Homem de negócios", 70, undefined),
+            new Pessoa("Baronesa da Lage", "Rica", 70, undefined),
+            new Pessoa("Mota", "Ajudante", 70, undefined),
+            new Pessoa("Joaquim", "Caxeiro", 70, undefined),
+            new Pessoa("Lélio Braga", "Maestro", 70, undefined),
         ];
         this.patrimonio.investimentos = [
             new Investimento("Café", 100, 50, 50, 250),
@@ -1207,6 +1205,22 @@ function mover(objeto) {
         document.addEventListener('mouseup', onMouseUp);
     });
 }
+async function buildAcontecimentos() {
+    const jsonResponse = await fetch("/assets/jsons/nao-va-a-falencia.json").then(response => response.json());
+    const acontecimentosData = jsonResponse["acontecimentos"];
+    for (const acontecimento of acontecimentosData) {
+        const opcoes = acontecimento.opcoes.map((opcaoData) => {
+            const anotacao = new AnatocaoDiario(opcaoData.anotacaoDiario.titulo, opcaoData.anotacaoDiario.descricao, 0, opcaoData.anotacaoDiario.cor);
+            const efeito = eval(`(${opcaoData.efeito})`);
+            return new Opcao(opcaoData.descricao, opcaoData.custoAcoes, opcaoData.custoDinheiro, efeito, anotacao);
+        });
+        const condicoes = eval(`(${acontecimento.condicoes})`);
+        const novoAcontecimento = new Acontecimento(acontecimento.nome, acontecimento.descricao, opcoes, condicoes);
+        acontecimentos.push(novoAcontecimento);
+    }
+}
+function buildEventos() {
+}
 mover(document.getElementById("janela-investimentos"));
 mover(document.getElementById("janela-propriedades"));
 mover(document.getElementById("janela-bens"));
@@ -1248,5 +1262,9 @@ document.getElementById("close-emprestimos").addEventListener("click", () => {
     janelaEmprestimos.style.display = "none";
 });
 acontecimentoAtual = gerarAcontecimentoAleatorio();
-eventoAtual = gerarEventoAleatorio();
-atualizarUI();
+buildAcontecimentos().then(() => {
+    console.log("ola");
+    acontecimentoAtual = gerarAcontecimentoAleatorio();
+    console.log(acontecimentoAtual);
+    atualizarUI();
+});

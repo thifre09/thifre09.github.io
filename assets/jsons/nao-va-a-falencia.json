@@ -1,0 +1,85 @@
+{
+    "acontecimentos": [
+        {
+            "nome": "Impasse do Café e Especulação",
+            "descricao": "Gama Torres procura Francisco Teodoro no escritório do comércio trazendo notícias urgentes das flutuações do mercado cafeeiro no porto do Rio de Janeiro.\n\nCom a instabilidade nos preços globais e boatos sobre novas políticas cambiais, Gama Torres insiste que é hora de especular agressivamente na bolsa, comprando sacas estocadas e títulos do setor. No entanto, Camila nota o esgotamento físico de Francisco e pede que ele passe o final de semana com a família na praia de Botafogo, longe dos negócios. Para piorar, Mota avisa que o caxeiro Joaquim cometeu um erro contábil nas guias de exportação e precisa de supervisão imediata na loja para evitar prejuízos fiscais.",
+            "opcoes": [
+                {
+                    "descricao": "Confiar nas projeções de Gama Torres e investir fortemente no mercado cafeeiro",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 15000,
+                    "efeito": "() => { const cafe = jogo.patrimonio.investimentos.find(i => i.nome === 'Café'); if (cafe) { cafe.valorAtual += 50; cafe.tendencia += 2; } const gTorres = jogo.conhecidos.find(c => c.nome === 'Gama Torres'); if (gTorres) { gTorres.satisfacao += 15; if (gTorres.influencia) gTorres.influencia += 5; } const camila = jogo.familia.find(f => f.nome === 'Camila'); if (camila) camila.satisfacao -= 10; }",
+                    "anotacaoDiario": {
+                        "titulo": "Aposta no mercado de café",
+                        "descricao": "Francisco aceitou o conselho de Gama Torres e injetou recursos nas ações do café, agradando seu investidor mas desagradando sua esposa.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Atender ao pedido de Camila e passar o tempo cuidando dos assuntos familiares",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 1000,
+                    "efeito": "() => { jogo.familia.forEach(p => p.satisfacao += 10); const joaquim = jogo.conhecidos.find(c => c.nome === 'Joaquim'); if (joaquim) joaquim.satisfacao -= 5; const gTorres = jogo.conhecidos.find(c => c.nome === 'Gama Torres'); if (gTorres) gTorres.satisfacao -= 10; }",
+                    "anotacaoDiario": {
+                        "titulo": "Refúgio em família",
+                        "descricao": "Francisco decidiu afastar-se das incertezas da praça comercial para dedicar atenção a Camila e aos filhos em Botafogo.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Permanecer na loja para corrigir o erro contábil de Joaquim e reorganizar as contas",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const joaquim = jogo.conhecidos.find(c => c.nome === 'Joaquim'); if (joaquim) joaquim.satisfacao += 10; const mota = jogo.conhecidos.find(c => c.nome === 'Mota'); if (mota) mota.satisfacao += 5; jogo.patrimonio.dinheiro += 2000; }",
+                    "anotacaoDiario": {
+                        "titulo": "Disciplina no comércio",
+                        "descricao": "Francisco passou o dia debruçado sobre os livros de escrituração na loja ao lado de Joaquim e Mota, salvando o caixa da firma.",
+                        "cor": "blue"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1891 && jogo.patrimonio.dinheiro >= 15000 && jogo.acoes >= 2; }"
+        },
+        {
+            "nome": "O Sarau de Camila na Capital",
+            "descricao": "Camila expressa o desejo de organizar um grande sarau em sua residência, reunindo a alta sociedade carioca, intelectuais e figuras influentes como o maestro Lélio Braga e a Baronesa da Lage.\n\nEla argumenta que a recepção fortalecerá os laços sociais da família e aumentará o prestígio dos Teodoro perante a elite. No entanto, o evento exige preparativos caríssimos, incluindo ornamentação luxuosa, banquetes refinados e a contratação de criados adicionais sob supervisão de Mota.\n\nFrancisco deve decidir entre financiar o capricho da esposa para elevar sua posição social, limitar os gastos a uma reunião modesta ou recusar expressamente, poupando recursos financeiros para seus negócios de café.",
+            "opcoes": [
+                {
+                    "descricao": "Financiar um sarau grandioso e refinado para a elite",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 15000,
+                    "efeito": "() => { const esposa = jogo.familia.find(p => p.nome === 'Camila'); if (esposa) { esposa.satisfacao += 15; } const baronesa = jogo.conhecidos.find(p => p.nome === 'Baronesa da Lage'); if (baronesa) { baronesa.satisfacao += 10; baronesa.influencia = (baronesa.influencia || 0) + 5; } const maestro = jogo.conhecidos.find(p => p.nome === 'Lélio Braga'); if (maestro) { maestro.satisfacao += 10; } }",
+                    "anotacaoDiario": {
+                        "titulo": "Um Sarau Inesquecível",
+                        "descricao": "Francisco financiou uma recepção suntuosa organizada por Camila. A elite carioca elogiou a hospitalidade da família Teodoro, elevando o prestígio da casa.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Autorizar apenas um pequeno encontro íntimo e modesto",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 3000,
+                    "efeito": "() => { const esposa = jogo.familia.find(p => p.nome === 'Camila'); if (esposa) { esposa.satisfacao -= 5; } const maestro = jogo.conhecidos.find(p => p.nome === 'Lélio Braga'); if (maestro) { maestro.satisfacao += 5; } }",
+                    "anotacaoDiario": {
+                        "titulo": "Reunião Discreta",
+                        "descricao": "Francisco limitou os custos da recepção a uma pequena reunião. Camila ficou contrariada com a contenção, mas o orçamento da casa permaneceu seguro.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Recusar expressamente a realização do evento",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const esposa = jogo.familia.find(p => p.nome === 'Camila'); if (esposa) { esposa.satisfacao -= 20; } const baronesa = jogo.conhecidos.find(p => p.nome === 'Baronesa da Lage'); if (baronesa) { baronesa.satisfacao -= 5; } }",
+                    "anotacaoDiario": {
+                        "titulo": "Recusa ao Sarau",
+                        "descricao": "Francisco negou os fundos para o sarau de Camila, priorizando a reserva de capital. A decisão causou forte descontentamento em sua esposa e comentários sutis na sociedade.",
+                        "cor": "red"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.patrimonio.dinheiro >= 15000 && jogo.ano >= 1891 && jogo.ano <= 1920; }"
+        }
+    ],
+    "eventos": []
+}
