@@ -6,7 +6,7 @@ class Patrimonio {
     bens;
     emprestimos;
     constructor() {
-        this.dinheiro = 1_000_000;
+        this.dinheiro = 500_000;
         this.propriedades = [];
         this.investimentos = [];
         this.bens = [];
@@ -208,21 +208,21 @@ class Propriedade {
     condicao;
     comprada;
     melhorias;
-    constructor(nome, valorBase, rendaAnualBase, despestasAnuaisBase = 0, condicao = 100, luxoBase = 0) {
+    constructor(nome, valorBase, rendaAnualBase, despestasAnuaisBase = 0, condicao = 100, luxoBase = 0, melhorias = []) {
         this.nome = nome;
         this.valorBase = valorBase;
         this.rendaAnualBase = rendaAnualBase;
         this.despestasAnuaisBase = despestasAnuaisBase;
         this.luxoBase = luxoBase;
         this.condicao = condicao;
-        this.melhorias = [];
+        this.melhorias = melhorias;
         this.comprada = false;
     }
     get rendaAnual() {
         return this.rendaAnualBase * (this.condicao / 100);
     }
     get despestasAnuais() {
-        return this.despestasAnuaisBase * (this.condicao / 100);
+        return this.despestasAnuaisBase / ((this.condicao || 1) / 10);
     }
     get luxo() {
         return this.luxoBase * (this.condicao / 100);
@@ -231,7 +231,7 @@ class Propriedade {
         const x = (Propriedade.investimento.valorAtual - 50) / 50;
         const variacao = Math.sign(x) * Math.pow(Math.abs(x), 1.5) * 0.4;
         const influencia = Math.min(Math.max(0.6, 1 + variacao), 1.4);
-        return this.valorBase * influencia * (this.condicao / 100);
+        return Math.max(this.valorBase * influencia * (this.condicao / 100), this.valorBase * 0.1);
     }
     get valorReforma() {
         const falta = (100 - this.condicao) / 100;
@@ -339,8 +339,39 @@ class Propriedade {
             return false;
         }
         jogo.patrimonio.dinheiro -= melhoria.custo;
-        melhoria.efeito();
+        melhoria.efeito(this);
         melhoria.comprada = true;
+        const listaMensagens = [
+            `Você realizou uma melhoria em ${this.nome} por R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você investiu R$ ${melhoria.custo.toFixed(2)} em melhorias para ${this.nome}.`,
+            `${this.nome} recebeu uma nova melhoria, custando R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você decidiu melhorar ${this.nome} e pagou R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você gastou R$ ${melhoria.custo.toFixed(2)} para melhorar ${this.nome}.`,
+            `Você investiu na estrutura de ${this.nome}, gastando R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você aprimorou ${this.nome} com um investimento de R$ ${melhoria.custo.toFixed(2)}.`,
+            `A propriedade ${this.nome} foi aprimorada após um investimento de R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você aplicou R$ ${melhoria.custo.toFixed(2)} em melhorias na propriedade ${this.nome}.`,
+            `Você tornou ${this.nome} ainda melhor após investir R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você decidiu renovar ${this.nome} e realizou um investimento de R$ ${melhoria.custo.toFixed(2)}.`,
+            `Depois de investir R$ ${melhoria.custo.toFixed(2)}, ${this.nome} recebeu melhorias.`,
+            `Você fez melhorias em ${this.nome}, investindo R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você resolveu dar uma atenção especial a ${this.nome} e investiu R$ ${melhoria.custo.toFixed(2)}.`,
+            `A estrutura de ${this.nome} foi melhorada após um investimento de R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você decidiu valorizar ${this.nome} e investiu R$ ${melhoria.custo.toFixed(2)} em melhorias.`,
+            `Uma nova melhoria foi adicionada a ${this.nome} após um investimento de R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você realizou uma melhoria em ${this.nome}, pagando R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você decidiu investir no futuro de ${this.nome} e gastou R$ ${melhoria.custo.toFixed(2)}.`,
+            `Seu patrimônio recebeu um novo investimento: R$ ${melhoria.custo.toFixed(2)} em ${this.nome}.`,
+            `Você aprimorou sua propriedade ${this.nome} com um investimento de R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você investiu parte de sua fortuna na melhoria de ${this.nome}.`,
+            `Você fez um novo investimento em ${this.nome}, no valor de R$ ${melhoria.custo.toFixed(2)}.`,
+            `${this.nome} ficou ainda melhor após você investir R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você decidiu não economizar nas melhorias de ${this.nome} e investiu R$ ${melhoria.custo.toFixed(2)}.`,
+        ];
+        const mensagem = listaMensagens[Math.floor(Math.random() * listaMensagens.length)];
+        jogo.criarAnotacaoDiario(`Melhoria de propriedade: ${this.nome}`, mensagem, "blue");
+        atualizarPatrimonioUI();
+        atualizarDiarioUI();
         return true;
     }
 }
@@ -446,6 +477,7 @@ class Opcao {
         jogo.acoes -= this.custoAcoes;
         jogo.patrimonio.dinheiro -= this.custoDinheiro;
         this.efeito();
+        jogo.criarAnotacaoDiario(this.anotacaoDiario.titulo, this.anotacaoDiario.descricao, this.anotacaoDiario.cor);
     }
 }
 class Evento {
@@ -484,6 +516,7 @@ class Jogo {
     ano;
     patrimonio;
     acoes;
+    bonusPrestigio;
     familia;
     conhecidos;
     bancos;
@@ -492,6 +525,7 @@ class Jogo {
         this.ano = 1891;
         this.patrimonio = new Patrimonio();
         this.acoes = 15;
+        this.bonusPrestigio = 0;
         //mudar os valores depois
         this.familia = [
             new Pessoa("Camila", "Esposa", 80, undefined),
@@ -502,35 +536,148 @@ class Jogo {
             new Pessoa("Nina", "Sobrinha", 80, undefined),
         ];
         this.conhecidos = [
-            new Pessoa("Noca", "Criada", 70, undefined),
-            new Pessoa("Dr. Gervásio", "Médico", 70, undefined),
-            new Pessoa("Capitão Rino", "Capitão da Marinha", 70, undefined),
-            new Pessoa("Paquita", "Rica", 70, undefined),
-            new Pessoa("Gama Torres", "Investidor", 70, undefined),
-            new Pessoa("Inocêncio Braga", "Homem de negócios", 70, undefined),
-            new Pessoa("Baronesa da Lage", "Rica", 70, undefined),
-            new Pessoa("Mota", "Ajudante", 70, undefined),
-            new Pessoa("Joaquim", "Caxeiro", 70, undefined),
-            new Pessoa("Lélio Braga", "Maestro", 70, undefined),
+            new Pessoa("Noca", "Criada", 60, 25),
+            new Pessoa("Dr. Gervásio", "Médico", 50, 65),
+            new Pessoa("Capitão Rino", "Capitão da Marinha", 50, 70),
+            new Pessoa("Paquita", "Rica", 50, 75),
+            new Pessoa("Gama Torres", "Investidor", 50, 80),
+            new Pessoa("Inocêncio Braga", "Homem de negócios", 50, 80),
+            new Pessoa("Baronesa da Lage", "Rica", 50, 95),
+            new Pessoa("Mota", "Ajudante", 50, 30),
+            new Pessoa("Joaquim", "Caxeiro", 50, 35),
+            new Pessoa("Lélio Braga", "Maestro", 50, 60),
         ];
         this.patrimonio.investimentos = [
-            new Investimento("Café", 100, 50, 50, 250),
-            new Investimento("Petróleo", 250, 0, 100, 600),
-            new Investimento("Ouro", 500, 0, 300, 900),
-            new Investimento("Tecnologia", 150, 0, 30, 800),
-            new Investimento("Batata", 180, 0, 70, 500),
-            new Investimento("Farmacêutica", 300, 0, 100, 900),
+            new Investimento("Batata", 20, 5, 8, 45),
+            new Investimento("Milho", 25, 6, 10, 55),
+            new Investimento("Trigo", 30, 6, 12, 65),
+            new Investimento("Algodão", 45, 8, 18, 100),
+            new Investimento("Açúcar", 50, 9, 20, 120),
+            new Investimento("Café", 80, 12, 30, 200),
+            new Investimento("Madeira", 90, 10, 35, 220),
+            new Investimento("Pecuária", 120, 12, 50, 300),
+            new Investimento("Carvão", 140, 14, 55, 350),
+            new Investimento("Ferro", 170, 15, 60, 400),
+            new Investimento("Aço", 220, 18, 75, 550),
+            new Investimento("Têxteis", 190, 16, 70, 480),
+            new Investimento("Borracha", 260, 22, 70, 700),
+            new Investimento("Petróleo", 300, 25, 60, 850),
+            new Investimento("Navegação", 340, 20, 100, 800),
+            new Investimento("Construção", 380, 18, 120, 900),
+            new Investimento("Ferrovias", 450, 25, 100, 1100),
+            new Investimento("Farmacêutica", 500, 15, 200, 1000),
+            new Investimento("Química", 550, 18, 200, 1100),
+            new Investimento("Energia Elétrica", 600, 20, 180, 1300),
+            new Investimento("Comunicações", 650, 22, 180, 1400),
+            new Investimento("Tecnologia", 700, 30, 100, 1800),
+            new Investimento("Seguros", 750, 10, 400, 1100),
+            new Investimento("Bancos", 800, 12, 450, 1200),
+            new Investimento("Comércio", 250, 12, 100, 600),
+            new Investimento("Ouro", 1500, 5, 900, 2200)
         ];
         this.patrimonio.propriedades = [
-            new Propriedade("Apartamento Pequeno", 120000, 9000),
-            new Propriedade("Casa", 250000, 18000),
-            new Propriedade("Casa de Luxo", 800000, 48000),
-            new Propriedade("Sala Comercial", 180000, 15000),
-            new Propriedade("Prédio Comercial", 1200000, 90000),
-            new Propriedade("Loja", 300000, 24000),
-            new Propriedade("Terreno", 100000, 0),
-            new Propriedade("Fazenda", 1500000, 120000),
-            new Propriedade("Hotel", 2500000, 180000),
+            new Propriedade("Quarto de Cortiço", 40000, 3000, 1500, 100, 5, [
+                { nome: "Mobília", custo: 5000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 3000; propriedade.luxoBase += 3; } },
+                { nome: "Pequena reforma", custo: 8000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 6000; propriedade.rendaAnualBase += 500; } }
+            ]),
+            new Propriedade("Apartamento Pequeno", 120000, 9000, 3500, 100, 20, [
+                { nome: "Reforma", custo: 18000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 15000; propriedade.rendaAnualBase += 1000; } },
+                { nome: "Mobília", custo: 12000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 9000; propriedade.luxoBase += 6; } },
+                { nome: "Instalações melhores", custo: 25000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 20000; propriedade.despestasAnuaisBase -= 800; } }
+            ]),
+            new Propriedade("Casa Modesta", 180000, 12000, 4500, 100, 30, [
+                { nome: "Reforma", custo: 25000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 20000; propriedade.rendaAnualBase += 1500; } },
+                { nome: "Jardim", custo: 15000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 12000; propriedade.luxoBase += 8; } },
+                { nome: "Mobília", custo: 20000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 15000; propriedade.luxoBase += 7; } }
+            ]),
+            new Propriedade("Casa", 300000, 21000, 7500, 100, 45, [
+                { nome: "Reforma", custo: 40000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 35000; propriedade.rendaAnualBase += 2500; } },
+                { nome: "Jardim", custo: 25000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 20000; propriedade.luxoBase += 10; } },
+                { nome: "Móveis luxuosos", custo: 45000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 35000; propriedade.luxoBase += 15; } },
+                { nome: "Instalações modernas", custo: 60000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 45000; propriedade.despestasAnuaisBase -= 1800; } }
+            ]),
+            new Propriedade("Casa de Campo", 450000, 27000, 10000, 100, 55, [
+                { nome: "Grande jardim", custo: 50000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 40000; propriedade.luxoBase += 15; } },
+                { nome: "Casa de hóspedes", custo: 80000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 65000; propriedade.rendaAnualBase += 4000; propriedade.despestasAnuaisBase += 1000; } },
+                { nome: "Mobília de luxo", custo: 70000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 55000; propriedade.luxoBase += 18; } },
+                { nome: "Estábulo", custo: 60000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 50000; propriedade.luxoBase += 8; } }
+            ]),
+            new Propriedade("Casa de Luxo", 850000, 50000, 20000, 100, 85, [
+                { nome: "Jardins ornamentais", custo: 120000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 100000; propriedade.luxoBase += 20; } },
+                { nome: "Decoração luxuosa", custo: 160000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 130000; propriedade.luxoBase += 25; } },
+                { nome: "Ala de hóspedes", custo: 200000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 170000; propriedade.rendaAnualBase += 7000; propriedade.despestasAnuaisBase += 2000; } },
+                { nome: "Instalações modernas", custo: 180000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 150000; propriedade.despestasAnuaisBase -= 4000; } }
+            ]),
+            new Propriedade("Mansão", 1500000, 75000, 35000, 100, 100, [
+                { nome: "Jardins particulares", custo: 180000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 150000; propriedade.luxoBase += 20; } },
+                { nome: "Grande reforma", custo: 250000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 220000; propriedade.rendaAnualBase += 8000; } },
+                { nome: "Decoração de luxo", custo: 300000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 250000; propriedade.luxoBase += 25; } },
+                { nome: "Ala de hóspedes", custo: 280000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 230000; propriedade.rendaAnualBase += 10000; propriedade.despestasAnuaisBase += 2500; } },
+                { nome: "Serviço particular", custo: 150000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 100000; propriedade.luxoBase += 10; propriedade.despestasAnuaisBase += 5000; } }
+            ]),
+            new Propriedade("Sala Comercial", 180000, 15000, 5000, 100, 15, [
+                { nome: "Reforma", custo: 30000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 25000; propriedade.rendaAnualBase += 2000; } },
+                { nome: "Mobiliário profissional", custo: 20000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 15000; propriedade.luxoBase += 5; } },
+                { nome: "Divisórias", custo: 25000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 20000; propriedade.rendaAnualBase += 1500; } }
+            ]),
+            new Propriedade("Loja", 320000, 26000, 10000, 100, 30, [
+                { nome: "Reforma da fachada", custo: 50000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 40000; propriedade.rendaAnualBase += 3000; propriedade.luxoBase += 5; } },
+                { nome: "Ampliação", custo: 80000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 70000; propriedade.rendaAnualBase += 6000; propriedade.despestasAnuaisBase += 1500; } },
+                { nome: "Novo mobiliário", custo: 35000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 28000; propriedade.luxoBase += 8; } },
+                { nome: "Novo estoque", custo: 60000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 40000; propriedade.rendaAnualBase += 5000; propriedade.despestasAnuaisBase += 2000; } }
+            ]),
+            new Propriedade("Armazém", 500000, 42000, 16000, 100, 10, [
+                { nome: "Ampliação", custo: 120000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 100000; propriedade.rendaAnualBase += 9000; propriedade.despestasAnuaisBase += 2000; } },
+                { nome: "Equipamentos", custo: 80000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 65000; propriedade.rendaAnualBase += 4000; propriedade.despestasAnuaisBase -= 1500; } },
+                { nome: "Escritório", custo: 50000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 40000; propriedade.rendaAnualBase += 2500; propriedade.luxoBase += 3; } },
+                { nome: "Novo acesso", custo: 70000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 60000; propriedade.rendaAnualBase += 3500; } }
+            ]),
+            new Propriedade("Prédio Comercial", 1200000, 90000, 35000, 100, 20, [
+                { nome: "Reforma", custo: 180000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 150000; propriedade.rendaAnualBase += 12000; } },
+                { nome: "Novos escritórios", custo: 250000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 200000; propriedade.rendaAnualBase += 18000; propriedade.despestasAnuaisBase += 4000; } },
+                { nome: "Modernização", custo: 220000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 180000; propriedade.despestasAnuaisBase -= 5000; } },
+                { nome: "Ampliação", custo: 300000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 250000; propriedade.rendaAnualBase += 25000; propriedade.despestasAnuaisBase += 6000; } }
+            ]),
+            new Propriedade("Edifício Residencial", 1800000, 125000, 50000, 100, 35, [
+                { nome: "Novos apartamentos", custo: 350000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 300000; propriedade.rendaAnualBase += 30000; propriedade.despestasAnuaisBase += 7000; } },
+                { nome: "Elevador", custo: 180000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 150000; propriedade.luxoBase += 8; propriedade.despestasAnuaisBase += 1500; } },
+                { nome: "Portaria", custo: 120000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 100000; propriedade.luxoBase += 7; propriedade.despestasAnuaisBase += 2000; } },
+                { nome: "Instalações modernas", custo: 250000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 200000; propriedade.despestasAnuaisBase -= 7000; } }
+            ]),
+            new Propriedade("Terreno", 100000, 0, 1000, 100, 1, [
+                { nome: "Cercamento", custo: 15000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 12000; propriedade.luxoBase += 2; } },
+                { nome: "Preparação", custo: 30000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 25000; propriedade.despestasAnuaisBase -= 200; } },
+                { nome: "Estrada de acesso", custo: 40000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 35000; } }
+            ]),
+            new Propriedade("Terreno Rural", 250000, 8000, 3000, 100, 5, [
+                { nome: "Cercamento", custo: 30000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 25000; propriedade.luxoBase += 2; } },
+                { nome: "Preparação do solo", custo: 50000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 40000; propriedade.rendaAnualBase += 2000; } },
+                { nome: "Poço", custo: 40000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 35000; propriedade.rendaAnualBase += 1500; propriedade.despestasAnuaisBase -= 500; } }
+            ]),
+            new Propriedade("Fazenda", 1500000, 120000, 45000, 100, 50, [
+                { nome: "Novas plantações", custo: 180000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 150000; propriedade.rendaAnualBase += 20000; propriedade.despestasAnuaisBase += 5000; } },
+                { nome: "Criação de gado", custo: 250000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 210000; propriedade.rendaAnualBase += 25000; propriedade.despestasAnuaisBase += 7000; } },
+                { nome: "Celeiro", custo: 120000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 100000; propriedade.rendaAnualBase += 7000; } },
+                { nome: "Maquinário agrícola", custo: 300000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 250000; propriedade.rendaAnualBase += 18000; propriedade.despestasAnuaisBase -= 4000; } }
+            ]),
+            new Propriedade("Engenho", 2200000, 180000, 75000, 100, 45, [
+                { nome: "Ampliação da produção", custo: 300000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 250000; propriedade.rendaAnualBase += 30000; propriedade.despestasAnuaisBase += 8000; } },
+                { nome: "Novas máquinas", custo: 350000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 300000; propriedade.rendaAnualBase += 25000; propriedade.despestasAnuaisBase -= 5000; } },
+                { nome: "Novas plantações", custo: 250000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 200000; propriedade.rendaAnualBase += 28000; propriedade.despestasAnuaisBase += 6000; } },
+                { nome: "Armazém", custo: 180000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 150000; propriedade.rendaAnualBase += 10000; propriedade.despestasAnuaisBase -= 2000; } }
+            ]),
+            new Propriedade("Hotel", 2500000, 180000, 80000, 100, 70, [
+                { nome: "Reforma dos quartos", custo: 300000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 250000; propriedade.rendaAnualBase += 25000; propriedade.despestasAnuaisBase -= 5000; } },
+                { nome: "Restaurante", custo: 350000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 280000; propriedade.rendaAnualBase += 35000; propriedade.despestasAnuaisBase += 8000; propriedade.luxoBase += 8; } },
+                { nome: "Ampliação", custo: 450000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 380000; propriedade.rendaAnualBase += 45000; propriedade.despestasAnuaisBase += 12000; } },
+                { nome: "Salão de eventos", custo: 300000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 250000; propriedade.rendaAnualBase += 30000; propriedade.despestasAnuaisBase += 6000; } }
+            ]),
+            new Propriedade("Teatro", 3000000, 210000, 100000, 100, 75, [
+                { nome: "Reforma do salão", custo: 400000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 350000; propriedade.rendaAnualBase += 35000; propriedade.luxoBase += 10; } },
+                { nome: "Novos camarotes", custo: 350000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 300000; propriedade.rendaAnualBase += 30000; propriedade.luxoBase += 12; } },
+                { nome: "Novas instalações", custo: 300000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 250000; propriedade.despestasAnuaisBase -= 7000; } },
+                { nome: "Salão de eventos", custo: 450000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 380000; propriedade.rendaAnualBase += 40000; propriedade.despestasAnuaisBase += 10000; } }
+            ])
         ];
         this.patrimonio.bens = [
             new Bem("Carro", "Um carro confortável para a família.", 50000, 2000, () => { }),
@@ -551,9 +698,16 @@ class Jogo {
         if (this.conhecidos.length <= 0) {
             return 0;
         }
-        let influenciaTotal = this.conhecidos.reduce((acc, pessoa) => acc + (pessoa.influencia || 0), 0);
-        let satisfacaoTotal = this.conhecidos.reduce((acc, pessoa) => acc + pessoa.satisfacao * (pessoa.influencia || 0), 0);
-        return influenciaTotal > 0 ? satisfacaoTotal / influenciaTotal : 0;
+        let prestigioTotal = this.bonusPrestigio;
+        this.conhecidos.forEach(pessoa => {
+            prestigioTotal += pessoa.satisfacao * (pessoa.influencia || 0) / 500;
+        });
+        this.patrimonio.propriedades.forEach(propriedade => {
+            if (propriedade.comprada) {
+                prestigioTotal += propriedade.luxo / 5;
+            }
+        });
+        return prestigioTotal;
     }
     get estabilidadeFamiliar() {
         if (this.familia.length <= 0) {
@@ -650,7 +804,16 @@ function atualizarAcontecimentoUI(acontecimento) {
             if (jogo.acoes >= opcao.custoAcoes && jogo.patrimonio.dinheiro >= opcao.custoDinheiro) {
                 opcao.escolher();
                 acontecimentoAtual = gerarAcontecimentoAleatorio();
-                atualizarUI();
+                atualizarAcontecimentoUI(acontecimentoAtual);
+                atualizarDiarioUI();
+                atualizarTopBarUI();
+                atualizarPatrimonioUI();
+                atualizarFamiliaUI();
+                atualizarConhecidosUI();
+                atualizarInvestimentosUI();
+                atualizarPropriedadesUI();
+                atualizarBensUI();
+                atualizarEmprestimosUI();
             }
         });
         opcoesContainer.appendChild(button);
@@ -829,8 +992,8 @@ function atualizarPropriedadesUI(propriedadeIndex = 0) {
                 <div><span>Valor atual</span><strong>R$ ${propriadedeSelecionado.valor.toFixed(2)}</strong></div>
                 <div><span>Renda anual</span><strong>R$ ${propriadedeSelecionado.rendaAnual.toFixed(2)}</strong></div>
                 <div><span>Despesas anuais</span><strong>R$ ${propriadedeSelecionado.despestasAnuais.toFixed(2)}</strong></div>
-                <div><span>Condição</span><strong>${propriadedeSelecionado.condicao.toFixed(0)}%</strong></div>
-                <div><span>Luxo</span><strong>${propriadedeSelecionado.luxo.toFixed(0)}%</strong></div>
+                <div><span>Condição</span><strong>${propriadedeSelecionado.condicao.toFixed(2)}%</strong></div>
+                <div><span>Luxo</span><strong>${propriadedeSelecionado.luxo.toFixed(2)}</strong></div>
             </div>
         </div>
         <div class="propriedade-resumo">
@@ -1208,15 +1371,39 @@ function mover(objeto) {
 async function buildAcontecimentos() {
     const jsonResponse = await fetch("/assets/jsons/nao-va-a-falencia.json").then(response => response.json());
     const acontecimentosData = jsonResponse["acontecimentos"];
+    if (!Array.isArray(acontecimentosData)) {
+        console.warn("Não foi possível carregar os acontecimentos: o campo 'acontecimentos' é inválido.");
+        return;
+    }
     for (const acontecimento of acontecimentosData) {
-        const opcoes = acontecimento.opcoes.map((opcaoData) => {
-            const anotacao = new AnatocaoDiario(opcaoData.anotacaoDiario.titulo, opcaoData.anotacaoDiario.descricao, 0, opcaoData.anotacaoDiario.cor);
-            const efeito = eval(`(${opcaoData.efeito})`);
-            return new Opcao(opcaoData.descricao, opcaoData.custoAcoes, opcaoData.custoDinheiro, efeito, anotacao);
-        });
-        const condicoes = eval(`(${acontecimento.condicoes})`);
-        const novoAcontecimento = new Acontecimento(acontecimento.nome, acontecimento.descricao, opcoes, condicoes);
-        acontecimentos.push(novoAcontecimento);
+        try {
+            if (!acontecimento || typeof acontecimento.nome !== "string" ||
+                typeof acontecimento.descricao !== "string" || !Array.isArray(acontecimento.opcoes)) {
+                throw new Error("estrutura do acontecimento inválida");
+            }
+            const opcoes = acontecimento.opcoes.map((opcaoData) => {
+                if (!opcaoData || typeof opcaoData.efeito !== "string" ||
+                    !opcaoData.anotacaoDiario || typeof opcaoData.anotacaoDiario.titulo !== "string" ||
+                    typeof opcaoData.anotacaoDiario.descricao !== "string") {
+                    throw new Error("opção inválida");
+                }
+                const anotacao = new AnatocaoDiario(opcaoData.anotacaoDiario.titulo, opcaoData.anotacaoDiario.descricao, 0, opcaoData.anotacaoDiario.cor);
+                const efeito = eval(`(${opcaoData.efeito})`);
+                if (typeof efeito !== "function") {
+                    throw new Error("efeito inválido");
+                }
+                return new Opcao(opcaoData.descricao, opcaoData.custoAcoes, opcaoData.custoDinheiro, efeito, anotacao);
+            });
+            const condicoes = eval(`(${acontecimento.condicoes})`);
+            if (typeof condicoes !== "function") {
+                throw new Error("condições inválidas");
+            }
+            const novoAcontecimento = new Acontecimento(acontecimento.nome, acontecimento.descricao, opcoes, condicoes);
+            acontecimentos.push(novoAcontecimento);
+        }
+        catch (erro) {
+            console.warn("Acontecimento inválido ignorado:", acontecimento, erro);
+        }
     }
 }
 function buildEventos() {

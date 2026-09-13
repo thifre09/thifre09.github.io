@@ -1,84 +1,1233 @@
 {
     "acontecimentos": [
         {
-            "nome": "Impasse do Café e Especulação",
-            "descricao": "Gama Torres procura Francisco Teodoro no escritório do comércio trazendo notícias urgentes das flutuações do mercado cafeeiro no porto do Rio de Janeiro.\n\nCom a instabilidade nos preços globais e boatos sobre novas políticas cambiais, Gama Torres insiste que é hora de especular agressivamente na bolsa, comprando sacas estocadas e títulos do setor. No entanto, Camila nota o esgotamento físico de Francisco e pede que ele passe o final de semana com a família na praia de Botafogo, longe dos negócios. Para piorar, Mota avisa que o caxeiro Joaquim cometeu um erro contábil nas guias de exportação e precisa de supervisão imediata na loja para evitar prejuízos fiscais.",
+            "nome": "Convite para um jantar de gala",
+            "descricao": "Francisco recebe um convite para um jantar de gala no Palácio de São Pedro.",
             "opcoes": [
                 {
-                    "descricao": "Confiar nas projeções de Gama Torres e investir fortemente no mercado cafeeiro",
-                    "custoAcoes": 2,
-                    "custoDinheiro": 15000,
-                    "efeito": "() => { const cafe = jogo.patrimonio.investimentos.find(i => i.nome === 'Café'); if (cafe) { cafe.valorAtual += 50; cafe.tendencia += 2; } const gTorres = jogo.conhecidos.find(c => c.nome === 'Gama Torres'); if (gTorres) { gTorres.satisfacao += 15; if (gTorres.influencia) gTorres.influencia += 5; } const camila = jogo.familia.find(f => f.nome === 'Camila'); if (camila) camila.satisfacao -= 10; }",
+                    "descricao": "Aceitar o convite e participar do jantar.",
+                    "custoAcoes": 4,
+                    "custoDinheiro": 20000,
+                    "efeito": "() => { jogo.familia[0].satisfacao += 10; jogo.familia[1].satisfacao += 10; jogo.familia[2].satisfacao += 10; jogo.familia[3].satisfacao += 10; jogo.familia[4].satisfacao += 10; jogo.familia[5].satisfacao += 10; jogo.bonusPrestigio += 15; }",
                     "anotacaoDiario": {
-                        "titulo": "Aposta no mercado de café",
-                        "descricao": "Francisco aceitou o conselho de Gama Torres e injetou recursos nas ações do café, agradando seu investidor mas desagradando sua esposa.",
+                        "titulo": "Jantar de Gala",
+                        "descricao": "Francisco aceitou o convite para o jantar de gala e demonstrou sua elegância.",
                         "cor": "green"
                     }
                 },
                 {
-                    "descricao": "Atender ao pedido de Camila e passar o tempo cuidando dos assuntos familiares",
+                    "descricao": "Rejeitar o convite.",
                     "custoAcoes": 2,
-                    "custoDinheiro": 1000,
-                    "efeito": "() => { jogo.familia.forEach(p => p.satisfacao += 10); const joaquim = jogo.conhecidos.find(c => c.nome === 'Joaquim'); if (joaquim) joaquim.satisfacao -= 5; const gTorres = jogo.conhecidos.find(c => c.nome === 'Gama Torres'); if (gTorres) gTorres.satisfacao -= 10; }",
-                    "anotacaoDiario": {
-                        "titulo": "Refúgio em família",
-                        "descricao": "Francisco decidiu afastar-se das incertezas da praça comercial para dedicar atenção a Camila e aos filhos em Botafogo.",
-                        "cor": "yellow"
-                    }
-                },
-                {
-                    "descricao": "Permanecer na loja para corrigir o erro contábil de Joaquim e reorganizar as contas",
-                    "custoAcoes": 1,
                     "custoDinheiro": 0,
-                    "efeito": "() => { const joaquim = jogo.conhecidos.find(c => c.nome === 'Joaquim'); if (joaquim) joaquim.satisfacao += 10; const mota = jogo.conhecidos.find(c => c.nome === 'Mota'); if (mota) mota.satisfacao += 5; jogo.patrimonio.dinheiro += 2000; }",
+                    "efeito": "() => { jogo.familia[0].satisfacao -= 5; jogo.familia[1].satisfacao -= 5; jogo.familia[2].satisfacao -= 5; jogo.familia[3].satisfacao -= 5; jogo.familia[4].satisfacao -= 5; jogo.familia[5].satisfacao -= 5; }",
                     "anotacaoDiario": {
-                        "titulo": "Disciplina no comércio",
-                        "descricao": "Francisco passou o dia debruçado sobre os livros de escrituração na loja ao lado de Joaquim e Mota, salvando o caixa da firma.",
-                        "cor": "blue"
-                    }
-                }
-            ],
-            "condicoes": "() => { return jogo.ano >= 1891 && jogo.patrimonio.dinheiro >= 15000 && jogo.acoes >= 2; }"
-        },
-        {
-            "nome": "O Sarau de Camila na Capital",
-            "descricao": "Camila expressa o desejo de organizar um grande sarau em sua residência, reunindo a alta sociedade carioca, intelectuais e figuras influentes como o maestro Lélio Braga e a Baronesa da Lage.\n\nEla argumenta que a recepção fortalecerá os laços sociais da família e aumentará o prestígio dos Teodoro perante a elite. No entanto, o evento exige preparativos caríssimos, incluindo ornamentação luxuosa, banquetes refinados e a contratação de criados adicionais sob supervisão de Mota.\n\nFrancisco deve decidir entre financiar o capricho da esposa para elevar sua posição social, limitar os gastos a uma reunião modesta ou recusar expressamente, poupando recursos financeiros para seus negócios de café.",
-            "opcoes": [
-                {
-                    "descricao": "Financiar um sarau grandioso e refinado para a elite",
-                    "custoAcoes": 2,
-                    "custoDinheiro": 15000,
-                    "efeito": "() => { const esposa = jogo.familia.find(p => p.nome === 'Camila'); if (esposa) { esposa.satisfacao += 15; } const baronesa = jogo.conhecidos.find(p => p.nome === 'Baronesa da Lage'); if (baronesa) { baronesa.satisfacao += 10; baronesa.influencia = (baronesa.influencia || 0) + 5; } const maestro = jogo.conhecidos.find(p => p.nome === 'Lélio Braga'); if (maestro) { maestro.satisfacao += 10; } }",
-                    "anotacaoDiario": {
-                        "titulo": "Um Sarau Inesquecível",
-                        "descricao": "Francisco financiou uma recepção suntuosa organizada por Camila. A elite carioca elogiou a hospitalidade da família Teodoro, elevando o prestígio da casa.",
-                        "cor": "green"
-                    }
-                },
-                {
-                    "descricao": "Autorizar apenas um pequeno encontro íntimo e modesto",
-                    "custoAcoes": 1,
-                    "custoDinheiro": 3000,
-                    "efeito": "() => { const esposa = jogo.familia.find(p => p.nome === 'Camila'); if (esposa) { esposa.satisfacao -= 5; } const maestro = jogo.conhecidos.find(p => p.nome === 'Lélio Braga'); if (maestro) { maestro.satisfacao += 5; } }",
-                    "anotacaoDiario": {
-                        "titulo": "Reunião Discreta",
-                        "descricao": "Francisco limitou os custos da recepção a uma pequena reunião. Camila ficou contrariada com a contenção, mas o orçamento da casa permaneceu seguro.",
-                        "cor": "yellow"
-                    }
-                },
-                {
-                    "descricao": "Recusar expressamente a realização do evento",
-                    "custoAcoes": 1,
-                    "custoDinheiro": 0,
-                    "efeito": "() => { const esposa = jogo.familia.find(p => p.nome === 'Camila'); if (esposa) { esposa.satisfacao -= 20; } const baronesa = jogo.conhecidos.find(p => p.nome === 'Baronesa da Lage'); if (baronesa) { baronesa.satisfacao -= 5; } }",
-                    "anotacaoDiario": {
-                        "titulo": "Recusa ao Sarau",
-                        "descricao": "Francisco negou os fundos para o sarau de Camila, priorizando a reserva de capital. A decisão causou forte descontentamento em sua esposa e comentários sutis na sociedade.",
+                        "titulo": "Jantar de Gala",
+                        "descricao": "Francisco rejeitou o convite para o jantar de gala.",
                         "cor": "red"
                     }
                 }
             ],
-            "condicoes": "() => { return jogo.patrimonio.dinheiro >= 15000 && jogo.ano >= 1891 && jogo.ano <= 1920; }"
+            "condicoes": "() => { return jogo.ano >= 1905; }"
+        },
+        {
+            "nome": "Surto de Febre Amarela na Capital",
+            "descricao": "Um surto grave de febre amarela afeta o Rio de Janeiro, gerando pânico nos bairros centrais e prejudicando a circulação no comércio. Dr. Gervásio procura Francisco Teodoro sugerindo medidas preventivas rigorosas para a família e apoio financeiro às brigadas sanitárias organizadas na região.",
+            "opcoes": [
+                {
+                    "descricao": "Financiar a compra de insumos sanitários para as brigadas de saúde e isolar a família na Casa de Campo.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 15000,
+                    "efeito": "() => { const dr = jogo.conhecidos.find(c => c.nome === 'Dr. Gervásio'); if (dr) { dr.satisfacao = Math.min(100, dr.satisfacao + 15); dr.influencia = Math.min(100, (dr.influencia || 0) + 5); } jogo.familia.forEach(p => p.satisfacao = Math.min(100, p.satisfacao + 10)); }",
+                    "anotacaoDiario": {
+                        "titulo": "Prevenção Contra a Febre",
+                        "descricao": "Francisco financiou ações de apoio sanitário e transferiu sua família temporariamente para o interior, garantindo a proteção de todos.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Consultar Dr. Gervásio apenas para obter cuidados médicos privados para a residência principal.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 4000,
+                    "efeito": "() => { const dr = jogo.conhecidos.find(c => c.nome === 'Dr. Gervásio'); if (dr) dr.satisfacao = Math.min(100, dr.satisfacao + 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Cuidados Médicos Particulares",
+                        "descricao": "Francisco garantiu acompanhamento médico exclusivo para a residência urbana durante o surto da doença.",
+                        "cor": "blue"
+                    }
+                },
+                {
+                    "descricao": "Manter a rotina habitual dos negócios e da casa sem gastos adicionais.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const dr = jogo.conhecidos.find(c => c.nome === 'Dr. Gervásio'); if (dr) dr.satisfacao = Math.max(0, dr.satisfacao - 10); const nina = jogo.familia.find(p => p.nome === 'Nina'); if (nina) nina.satisfacao = Math.max(0, nina.satisfacao - 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Indiferença ao Surto",
+                        "descricao": "Francisco decidiu não alterar os hábitos da família nem realizar gastos preventivos, gerando apreensão na casa.",
+                        "cor": "yellow"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1893 && jogo.ano <= 1904; }"
+        },
+        {
+            "nome": "Modernização do Porto do Rio de Janeiro",
+            "descricao": "As obras governamentais de ampliação dos cais e modernização do porto alteram o fluxo de carga e descarga. Capitão Rino traz informações privilegiadas sobre novas áreas de atracação e sugere que investimentos no setor de navegação e armazenagem renderão excelentes frutos.",
+            "opcoes": [
+                {
+                    "descricao": "Expandir fortemente as operações no porto e investir nas companhias de navegação.",
+                    "custoAcoes": 4,
+                    "custoDinheiro": 35000,
+                    "efeito": "() => { const nav = jogo.patrimonio.investimentos.find(i => i.nome === 'Navegação'); if (nav) nav.valorAtual *= 1.12; const cap = jogo.conhecidos.find(c => c.nome === 'Capitão Rino'); if (cap) { cap.satisfacao = Math.min(100, cap.satisfacao + 15); cap.influencia = Math.min(100, (cap.influencia || 0) + 5); } }",
+                    "anotacaoDiario": {
+                        "titulo": "Aposta na Modernização Portuária",
+                        "descricao": "Aproveitando o conselho do Capitão Rino, Francisco reforçou suas posições no setor marítimo em plena expansão do porto.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Reformar o Armazém para adequá-lo às novas exigências do transporte de carga.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 12000,
+                    "efeito": "() => { const arm = jogo.patrimonio.propriedades.find(p => p.nome === 'Armazém'); if (arm && arm.comprada) { arm.condicao = Math.min(100, arm.condicao + 20); arm.rendaAnualBase *= 1.08; } }",
+                    "anotacaoDiario": {
+                        "titulo": "Adequação Logística",
+                        "descricao": "Francisco realizou benfeitorias estruturais em suas instalações de estocagem para atender às novas demandas do porto.",
+                        "cor": "blue"
+                    }
+                },
+                {
+                    "descricao": "Não realizar novos aportes até que as obras do governo estejam concluídas.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const cap = jogo.conhecidos.find(c => c.nome === 'Capitão Rino'); if (cap) cap.satisfacao = Math.max(0, cap.satisfacao - 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Cautela nos Negócios Portuários",
+                        "descricao": "Francisco preferiu aguardar a consolidação das obras antes de arriscar capital no setor de transporte marítimo.",
+                        "cor": "yellow"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1903 && jogo.ano <= 1914; }"
+        },
+        {
+            "nome": "Aparato Musical na Cidade",
+            "descricao": "Lélio Braga planeja organizar uma grande temporada de concertos para apresentar composições clássicas nos teatros da capital. O maestro procura Francisco buscando patrocínio para a orquestra e suporte na divulgação entre as famílias de prestígio.",
+            "opcoes": [
+                {
+                    "descricao": "Patrocinar integralmente a temporada orquestral e reservar um camarote de gala.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 10000,
+                    "efeito": "() => { const lelio = jogo.conhecidos.find(c => c.nome === 'Lélio Braga'); if (lelio) { lelio.satisfacao = Math.min(100, lelio.satisfacao + 20); lelio.influencia = Math.min(100, (lelio.influencia || 0) + 5); } const Ruth = jogo.familia.find(p => p.nome === 'Ruth'); if (Ruth) Ruth.satisfacao = Math.min(100, Ruth.satisfacao + 15); jogo.bonusPrestigio += 4; }",
+                    "anotacaoDiario": {
+                        "titulo": "Mecenato Musical",
+                        "descricao": "Francisco tornou-se o principal mecenas da temporada lírica do maestro Lélio Braga, elevando a posição cultural de sua família.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Adquirir bilhetes de apoio para a família sem assumir o patrocínio principal.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 2500,
+                    "efeito": "() => { const lelio = jogo.conhecidos.find(c => c.nome === 'Lélio Braga'); if (lelio) lelio.satisfacao = Math.min(100, lelio.satisfacao + 8); const Ruth = jogo.familia.find(p => p.nome === 'Ruth'); if (Ruth) Ruth.satisfacao = Math.min(100, Ruth.satisfacao + 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Apoio à Cultura",
+                        "descricao": "Francisco adquiriu ingressos para as apresentações de Lélio Braga, prestigiando a arte local moderadamente.",
+                        "cor": "blue"
+                    }
+                },
+                {
+                    "descricao": "Recusar a proposta alegando que tais despesas não trazem retorno comercial.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const lelio = jogo.conhecidos.find(c => c.nome === 'Lélio Braga'); if (lelio) lelio.satisfacao = Math.max(0, lelio.satisfacao - 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Recusa ao Maestro",
+                        "descricao": "Francisco preferiu não alocar recursos no financiamento das apresentações orquestrais de Lélio Braga.",
+                        "cor": "yellow"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.patrimonio.dinheiro >= 12000; }"
+        },
+        {
+            "nome": "Crise da Encilhamento e o Câmbio",
+            "descricao": "A especulação financeira provocada pelas reformas monetárias atinge o mercado comercial da capital. Inocêncio Braga procura Francisco Teodoro propondo uma associação para comprar ações de companhias emergentes com valor desvalorizado, enquanto a Baronesa da Lage adverte contra os riscos da alta volatilidade.",
+            "opcoes": [
+                {
+                    "descricao": "Associar-se a Inocêncio Braga e investir pesadamente no setor de Bancos e Comércio.",
+                    "custoAcoes": 4,
+                    "custoDinheiro": 25000,
+                    "efeito": "() => { const b = jogo.patrimonio.investimentos.find(i => i.nome === 'Bancos'); if (b) b.valorAtual *= 1.15; const ib = jogo.conhecidos.find(c => c.nome === 'Inocêncio Braga'); if (ib) { ib.satisfacao = Math.min(100, ib.satisfacao + 15); ib.influencia = Math.min(100, (ib.influencia || 0) + 5); } const bar = jogo.conhecidos.find(c => c.nome === 'Baronesa da Lage'); if (bar) bar.satisfacao = Math.max(0, bar.satisfacao - 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Aposta na Encilhamento",
+                        "descricao": "Francisco aceitou a proposta de Inocêncio Braga e investiu no mercado especulativo, desagradando a Baronesa da Lage.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Seguir o conselho da Baronesa da Lage e manter o capital protegido em reservas seguras.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const bar = jogo.conhecidos.find(c => c.nome === 'Baronesa da Lage'); if (bar) { bar.satisfacao = Math.min(100, bar.satisfacao + 10); bar.influencia = Math.min(100, (bar.influencia || 0) + 5); } const ib = jogo.conhecidos.find(c => c.nome === 'Inocêncio Braga'); if (ib) ib.satisfacao = Math.max(0, ib.satisfacao - 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Prudência Financeira",
+                        "descricao": "Francisco preferiu ouvir a Baronesa da Lage e absteve-se de arriscar seu dinheiro na turbulência do mercado.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Diversificar com moderação adquirindo papéis do setor de Ferrovias.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 10000,
+                    "efeito": "() => { const f = jogo.patrimonio.investimentos.find(i => i.nome === 'Ferrovias'); if (f) f.valorAtual *= 1.05; }",
+                    "anotacaoDiario": {
+                        "titulo": "Diversificação Moderada",
+                        "descricao": "Francisco alocou recursos no setor ferroviário buscando um equilíbrio entre risco e segurança.",
+                        "cor": "green"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1891 && jogo.ano <= 1895; }"
+        },
+        {
+            "nome": "O Baile na Mansão da Baronesa",
+            "descricao": "A Baronesa da Lage organiza uma suntuosa recepção para a alta sociedade carioca. Camila insiste que a família deve comparecer impecavelmente vestida e realizar uma doação expressiva para a caridade patrocinada pela Baronesa, afirmando que a reputação das filhas depende disso.",
+            "opcoes": [
+                {
+                    "descricao": "Financiar trajes de luxo para a família e realizar a doação generosa solicitada.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 12000,
+                    "efeito": "() => { jogo.familia.forEach(p => p.satisfacao = Math.min(100, p.satisfacao + 10)); const bar = jogo.conhecidos.find(c => c.nome === 'Baronesa da Lage'); if (bar) { bar.satisfacao = Math.min(100, bar.satisfacao + 15); bar.influencia = Math.min(100, (bar.influencia || 0) + 5); } jogo.bonusPrestigio += 5; }",
+                    "anotacaoDiario": {
+                        "titulo": "Destaque na Sociedade",
+                        "descricao": "Francisco levou a família ao baile da Baronesa e fez contribuições expressivas, elevando a estima social da casa.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Comparecer ao evento com vestimentas adequadas, mas sem fazer doações ostensivas.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 3000,
+                    "efeito": "() => { const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.min(100, camila.satisfacao + 5); const bar = jogo.conhecidos.find(c => c.nome === 'Baronesa da Lage'); if (bar) bar.satisfacao = Math.min(100, bar.satisfacao + 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Presença Discreta",
+                        "descricao": "Francisco e a família marcaram presença no baile da Baronesa de forma sóbria e sem grandes excessos.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Recusar o convite alegando acúmulo de compromissos comerciais.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { jogo.familia.forEach(p => p.satisfacao = Math.max(0, p.satisfacao - 10)); const bar = jogo.conhecidos.find(c => c.nome === 'Baronesa da Lage'); if (bar) bar.satisfacao = Math.max(0, bar.satisfacao - 15); jogo.bonusPrestigio = Math.max(0, jogo.bonusPrestigio - 3); }",
+                    "anotacaoDiario": {
+                        "titulo": "Ausência Notada",
+                        "descricao": "A decisão de não comparecer à recepção frustrou a família e causou certo descontentamento na Baronesa.",
+                        "cor": "red"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.patrimonio.dinheiro >= 15000; }"
+        },
+        {
+            "nome": "Revolta da Armada e o Tráfego Baiano",
+            "descricao": "O conflito naval da Revolta da Armada paralisa a Baía de Guanabara e ameaça as mercadorias estocadas nos depósitos do porto. Joaquim, o caxeiro, avisa que o transporte de cargas está interrompido e que a manutenção das instalações comerciais exigirá vigilância constante.",
+            "opcoes": [
+                {
+                    "descricao": "Contratar guardas particulares para proteger o Armazém e as cargas retidas.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 6000,
+                    "efeito": "() => { const arm = jogo.patrimonio.propriedades.find(p => p.nome === 'Armazém'); if (arm && arm.comprada) arm.condicao = Math.min(100, arm.condicao + 10); const joq = jogo.conhecidos.find(c => c.nome === 'Joaquim'); if (joq) joq.satisfacao = Math.min(100, joq.satisfacao + 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Proteção do Patrimônio Porto",
+                        "descricao": "Francisco reforçou a segurança dos seus depósitos comerciais durante os distúrbios navais na baía.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Interromper as operações temporariamente e enviar os caxeiros para auxiliar no escritório principal.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 1000,
+                    "efeito": "() => { const joq = jogo.conhecidos.find(c => c.nome === 'Joaquim'); if (joq) joq.satisfacao = Math.max(0, joq.satisfacao - 5); const com = jogo.patrimonio.investimentos.find(i => i.nome === 'Comércio'); if (com) com.valorAtual *= 0.96; }",
+                    "anotacaoDiario": {
+                        "titulo": "Paralisação Temporária",
+                        "descricao": "Para reduzir riscos, Francisco suspendeu os trabalhos no armazém até que o conflito naval se abrandasse.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Exigir que Joaquim mantenha as entregas funcionando normalmente apesar dos riscos.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const joq = jogo.conhecidos.find(c => c.nome === 'Joaquim'); if (joq) joq.satisfacao = Math.max(0, joq.satisfacao - 20); const arm = jogo.patrimonio.propriedades.find(p => p.nome === 'Armazém'); if (arm && arm.comprada) arm.condicao = Math.max(0, arm.condicao - 15); }",
+                    "anotacaoDiario": {
+                        "titulo": "Ordens Rigorosas",
+                        "descricao": "Francisco ordenou a continuidade das tarefas comerciais no porto, gerando forte insatisfação entre os caxeiros.",
+                        "cor": "red"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1893 && jogo.ano <= 1894; }"
+        },
+        {
+            "nome": "Epidemia de Febre Amarela no Rio de Janeiro",
+            "descricao": "O verão rigoroso traz um forte surto de febre amarela à capital republicana. O pânico espalha-se pela cidade, afetando a rotina do comércio e ameaçando a saúde da população. Dr. Gervásio recomenda o isolamento imediato da família em uma região serrana, enquanto Noca tenta manter a rotina doméstica com remédios caseiros e cuidados redobrados.",
+            "opcoes": [
+                {
+                    "descricao": "Financiar a transferência temporária da família e empregados para uma casa de campo na serra.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 15000,
+                    "efeito": "() => { jogo.familia.forEach(p => p.satisfacao = Math.min(100, p.satisfacao + 10)); const gervasio = jogo.conhecidos.find(c => c.nome === 'Dr. Gervásio'); if (gervasio) gervasio.satisfacao = Math.min(100, gervasio.satisfacao + 10); const com = jogo.patrimonio.investimentos.find(i => i.nome === 'Comércio'); if (com) com.valorAtual *= 0.95; }",
+                    "anotacaoDiario": {
+                        "titulo": "Refúgio na Serra",
+                        "descricao": "Francisco decidiu transferir toda a sua família para o interior durante o surto epidêmico, garantindo a proteção de todos a custo de afastar-se temporariamente dos negócios.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Permanecer na capital mantendo os negócios abertos e contratando Dr. Gervásio para acompanhamento constante.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 5000,
+                    "efeito": "() => { const gervasio = jogo.conhecidos.find(c => c.nome === 'Dr. Gervásio'); if (gervasio) { gervasio.satisfacao = Math.min(100, gervasio.satisfacao + 15); gervasio.influencia = Math.min(100, (gervasio.influencia || 0) + 5); } const noca = jogo.conhecidos.find(c => c.nome === 'Noca'); if (noca) noca.satisfacao = Math.max(0, noca.satisfacao - 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Assistência Médica na Capital",
+                        "descricao": "Francisco preferiu manter-se no centro das atividades comerciais, garantindo atendimento médico contínuo para a residência.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Confiar nos métodos preventivos de Noca e continuar o trabalho diário sem gastos adicionais.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const noca = jogo.conhecidos.find(c => c.nome === 'Noca'); if (noca) noca.satisfacao = Math.min(100, noca.satisfacao + 10); jogo.familia.forEach(p => p.satisfacao = Math.max(0, p.satisfacao - 10)); }",
+                    "anotacaoDiario": {
+                        "titulo": "Cuidados Domésticos",
+                        "descricao": "Francisco optou por não alterar a rotina da casa, apoiando-se nas precauções da criada Noca, o que gerou receio entre seus familiares.",
+                        "cor": "red"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1894 && jogo.ano <= 1904; }"
+        },
+        {
+            "nome": "Modernização e Eletrificação dos Bondes",
+            "descricao": "A transição do transporte de tração animal para os bondes elétricos promete transformar a circulação de passageiros e mercadorias pela capital. Capitão Rino e Gama Torres comentam sobre o forte crescimento das empresas de serviços públicos e as oportunidades de expansão imobiliária em novos bairros.",
+            "opcoes": [
+                {
+                    "descricao": "Adquirir posições expressivas em ações do setor de Energia Elétrica.",
+                    "custoAcoes": 4,
+                    "custoDinheiro": 20000,
+                    "efeito": "() => { const ee = jogo.patrimonio.investimentos.find(i => i.nome === 'Energia Elétrica'); if (ee) ee.valorAtual *= 1.12; const gt = jogo.conhecidos.find(c => c.nome === 'Gama Torres'); if (gt) { gt.satisfacao = Math.min(100, gt.satisfacao + 10); gt.influencia = Math.min(100, (gt.influencia || 0) + 5); } }",
+                    "anotacaoDiario": {
+                        "titulo": "Aposta na Eletrificação",
+                        "descricao": "Francisco alocou capital no setor de energia elétrica, aproveitando o momento de expansão infraestrutural da cidade.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Investir no setor de Construção para aproveitar o desenvolvimento urbano.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 12000,
+                    "efeito": "() => { const constr = jogo.patrimonio.investimentos.find(i => i.nome === 'Construção'); if (constr) constr.valorAtual *= 1.08; const rino = jogo.conhecidos.find(c => c.nome === 'Capitão Rino'); if (rino) rino.satisfacao = Math.min(100, rino.satisfacao + 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Expansão da Construção Urbana",
+                        "descricao": "Francisco direcionou investimentos para a construção civil visando acompanhar o crescimento dos novos trechos urbanos.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Observar a evolução das concessões sem realizar novos aportes de capital.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const gt = jogo.conhecidos.find(c => c.nome === 'Gama Torres'); if (gt) gt.satisfacao = Math.max(0, gt.satisfacao - 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Cautela Diante da Modernização",
+                        "descricao": "Francisco preferiu não comprometer fundos nas novas concessões de transporte e iluminação.",
+                        "cor": "yellow"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1899 && jogo.ano <= 1910; }"
+        },
+        {
+            "nome": "O Primeiro Carro da Família",
+            "descricao": "Com a gradual chegada dos automóveis importados à capital, Mário demonstra enorme fascínio pelos veículos a motor e tenta convencer o pai a adquirir um modelo moderno. Camila ressalta que o automóvel traria grande distinção social perante a Baronesa da Lage, embora exija despesas constantes de manutenção.",
+            "opcoes": [
+                {
+                    "descricao": "Comprar um automóvel importado e integrar um novo bem ao patrimônio familiar.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 25000,
+                    "efeito": "() => { jogo.patrimonio.bens.push({ nome: 'Carro', descricao: 'Automóvel importado para uso da família.', valorBase: 25000, valorManutencao: 1200, efeito: () => {} }); const mario = jogo.familia.find(p => p.nome === 'Mário'); if (mario) mario.satisfacao = Math.min(100, mario.satisfacao + 20); const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.min(100, camila.satisfacao + 15); const bar = jogo.conhecidos.find(c => c.nome === 'Baronesa da Lage'); if (bar) bar.satisfacao = Math.min(100, bar.satisfacao + 10); jogo.bonusPrestigio += 5; }",
+                    "anotacaoDiario": {
+                        "titulo": "Aquisição do Automóvel",
+                        "descricao": "Francisco adquiriu um automóvel importado, despertando grande entusiasmo na família e impressionando a sociedade.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Recusar a compra do veículo e investir o valor correspondente no setor de Tecnologia.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 15000,
+                    "efeito": "() => { const tec = jogo.patrimonio.investimentos.find(i => i.nome === 'Tecnologia'); if (tec) tec.valorAtual *= 1.10; const mario = jogo.familia.find(p => p.nome === 'Mário'); if (mario) mario.satisfacao = Math.max(0, mario.satisfacao - 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Investimento Tecnológico",
+                        "descricao": "Francisco optou por investir o capital em ações do setor de tecnologia da época, preterindo a compra do veículo de luxo.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Manter o uso exclusivo das carruagens da casa, evitando novas obrigações financeiras.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const mario = jogo.familia.find(p => p.nome === 'Mário'); if (mario) mario.satisfacao = Math.max(0, mario.satisfacao - 15); const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.max(0, camila.satisfacao - 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Preferencia pelas Carruagens",
+                        "descricao": "Francisco decidiu continuar utilizando as conduções tradicionais da casa, contrariando os desejos de Mário.",
+                        "cor": "red"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1905 && !jogo.patrimonio.bens.some(b => b.nome === 'Carro'); }"
+        },
+        {
+            "nome": "O Baile na Residência da Baronesa da Lage",
+            "descricao": "A Baronesa da Lage organiza uma suntuosa recepção para a alta sociedade e convida a família Teodoro. Camila enxerga o evento como uma oportunidade crucial para consolidar alianças sociais e garantir o prestígio da família, enquanto Mário demonstra desinteresse e prefere dedicar a noite aos negócios e reuniões com conhecidos do mercado.",
+            "opcoes": [
+                {
+                    "descricao": "Acompanhar Camila e toda a família no baile, oferecendo um presente de grande valor à Baronesa.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 12000,
+                    "efeito": "() => { const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.min(100, camila.satisfacao + 15); const baronesa = jogo.conhecidos.find(c => c.nome === 'Baronesa da Lage'); if (baronesa) { baronesa.satisfacao = Math.min(100, baronesa.satisfacao + 15); baronesa.influencia = Math.min(100, (baronesa.influencia || 0) + 5); } jogo.bonusPrestigio += 5; }",
+                    "anotacaoDiario": {
+                        "titulo": "Noite de Prestígio na Serra",
+                        "descricao": "Francisco compareceu com Camila à recepção da Baronesa da Lage, reforçando a posição social da família entre os nomes mais influentes da capital.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Permitir que Camila vá com as filhas e permanecer no escritório negociando investimentos com Inocêncio Braga.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.max(0, camila.satisfacao - 10); const ib = jogo.conhecidos.find(c => c.nome === 'Inocêncio Braga'); if (ib) { ib.satisfacao = Math.min(100, ib.satisfacao + 10); ib.influencia = Math.min(100, (ib.influencia || 0) + 5); } const cafe = jogo.patrimonio.investimentos.find(i => i.nome === 'Café'); if (cafe) cafe.valorAtual *= 1.05; }",
+                    "anotacaoDiario": {
+                        "titulo": "Negócios Acima da Vida Social",
+                        "descricao": "Francisco optou por não comparecer ao baile, preferindo tratar de transações comerciais com Inocêncio Braga durante a noite.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Declinar educadamente o convite da Baronesa alegando indisposição e manter a família reunida em casa.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const baronesa = jogo.conhecidos.find(c => c.nome === 'Baronesa da Lage'); if (baronesa) baronesa.satisfacao = Math.max(0, baronesa.satisfacao - 15); const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.max(0, camila.satisfacao - 10); jogo.bonusPrestigio = Math.max(0, jogo.bonusPrestigio - 3); }",
+                    "anotacaoDiario": {
+                        "titulo": "Desfeita Social",
+                        "descricao": "A recusa de Francisco ao convite da Baronesa causou desconforto em Camila e um esfriamento nas relações com a alta sociedade.",
+                        "cor": "red"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1892 && jogo.ano <= 1915; }"
+        },
+        {
+            "nome": "Rumores sobre o Banco do Brasileiro",
+            "descricao": "Boatos de forte instabilidade bancária correm pela Praça do Comércio. Gama Torres alerta que o Banco do Brasileiro enfrenta sérios problemas de liquidez, enquanto Inocêncio Braga insiste que a instituição é sólida e que resgatar aplicações de forma apressada gerará perdas desnecessárias.",
+            "opcoes": [
+                {
+                    "descricao": "Retirar fundos e liquidar ações vinculadas ao setor financeiro para cobrir eventuais sobressaltos.",
+                    "custoAcoes": 4,
+                    "custoDinheiro": 10000,
+                    "efeito": "() => { const bco = jogo.patrimonio.investimentos.find(i => i.nome === 'Bancos'); if (bco) bco.valorAtual *= 0.85; const gt = jogo.conhecidos.find(c => c.nome === 'Gama Torres'); if (gt) gt.satisfacao = Math.min(100, gt.satisfacao + 15); const ib = jogo.conhecidos.find(c => c.nome === 'Inocêncio Braga'); if (ib) ib.satisfacao = Math.max(0, ib.satisfacao - 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Proteção de Capital",
+                        "descricao": "Francisco agiu rapidamente para proteger parte do patrimônio das oscilações bancárias, contrariando o conselho de Inocêncio Braga.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Manter os depósitos e investir ainda mais no setor de Bancos aproveitando a desvalorização papéis.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 30000,
+                    "efeito": "() => { const bco = jogo.patrimonio.investimentos.find(i => i.nome === 'Bancos'); if (bco) bco.valorAtual *= 1.15; const ib = jogo.conhecidos.find(c => c.nome === 'Inocêncio Braga'); if (ib) ib.satisfacao = Math.min(100, ib.satisfacao + 15); const gt = jogo.conhecidos.find(c => c.nome === 'Gama Torres'); if (gt) gt.satisfacao = Math.max(0, gt.satisfacao - 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Confiança no Sistema Financeiro",
+                        "descricao": "Francisco decidiu ampliar sua exposição ao setor bancário durante o clima de pânico, apostando na rápida recuperação dos ativos.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Buscar um empréstimo preventivo de garantia no Santoandré para reforçar o caixa imediato da empresa.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const bco = jogo.bancos.find(b => b.nome === 'Santoandré'); if (bco) { jogo.patrimonio.emprestimos.push({ valorInicial: 40000, banco: bco, numeroParcerlas: 12, parcelasRestantes: 12 }); jogo.patrimonio.dinheiro += 40000; } }",
+                    "anotacaoDiario": {
+                        "titulo": "Reforço de Liquidez via Crédito",
+                        "descricao": "Francisco contratou uma linha de crédito emergencial para garantir liquidez em caixa diante da incerteza do mercado.",
+                        "cor": "yellow"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1895 && jogo.ano <= 1930; }"
+        },
+        {
+            "nome": "Educação das Filhas e da Sobrinha Nina",
+            "descricao": "Camila deseja contratar preceptoras francesas e aulas particulares de música para Ruth, Raquel, Lia e a sobrinha Nina, visando a aprimorar a educação das jovens. No entanto, Mota avisa que o orçamento mensal da casa já está sob forte pressão devido aos custos de manutenção dos imóveis.",
+            "opcoes": [
+                {
+                    "descricao": "Financiar integralmente o programa de instrução refinada para todas as jovens da casa.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 15000,
+                    "efeito": "() => { const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.min(100, camila.satisfacao + 15); const nina = jogo.familia.find(p => p.nome === 'Nina'); if (nina) nina.satisfacao = Math.min(100, nina.satisfacao + 15); const ruth = jogo.familia.find(p => p.nome === 'Ruth'); if (ruth) ruth.satisfacao = Math.min(100, ruth.satisfacao + 10); const lelio = jogo.conhecidos.find(c => c.nome === 'Lélio Braga'); if (lelio) lelio.satisfacao = Math.min(100, lelio.satisfacao + 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Investimento na Instrução Familiar",
+                        "descricao": "Francisco não poupou despesas para garantir uma educação refinada para as filhas e para a sobrinha Nina.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Oferecer aulas de música apenas com a orientação do Maestro Lélio Braga, reduzindo os gastos operacionais.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 5000,
+                    "efeito": "() => { const lelio = jogo.conhecidos.find(c => c.nome === 'Lélio Braga'); if (lelio) { lelio.satisfacao = Math.min(100, lelio.satisfacao + 15); lelio.influencia = Math.min(100, (lelio.influencia || 0) + 5); } const nina = jogo.familia.find(p => p.nome === 'Nina'); if (nina) nina.satisfacao = Math.min(100, nina.satisfacao + 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Aulas de Música na Residência",
+                        "descricao": "Francisco contratou o Maestro Lélio Braga para orientar os estudos musicais da família, mantendo os custos sob relativo controle.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Recusar a contratação de novos professores até que as finanças domésticas estejam equilibradas.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.max(0, camila.satisfacao - 10); const nina = jogo.familia.find(p => p.nome === 'Nina'); if (nina) nina.satisfacao = Math.max(0, nina.satisfacao - 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Contenção de Gastos Domésticos",
+                        "descricao": "Francisco optou por adiar a contratação de preceptores, priorizando a estabilidade financeira da casa.",
+                        "cor": "red"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1891 && jogo.ano <= 1910; }"
+        },
+        {
+            "nome": "Impasse Operário na Estrada de Ferro",
+            "descricao": "Uma greve de trabalhadores paralisa as obras de expansão ferroviária na qual Francisco possui fortes interesses comerciais. O intermediário Inocêncio Braga sugere negociar um ajuste salarial moderado para retomar o transporte de mercadorias, enquanto o investidor Gama Torres defende o uso da força policial para reprimir o movimento e evitar precedentes perigosos no mercado.",
+            "opcoes": [
+                {
+                    "descricao": "Apoiar a proposta de conciliação de Inocêncio Braga, financiando um fundo de mediação patronal.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 18000,
+                    "efeito": "() => { const ferrovias = jogo.patrimonio.investimentos.find(i => i.nome === 'Ferrovias'); if (ferrovias) ferrovias.valorAtual *= 1.08; const ib = jogo.conhecidos.find(c => c.nome === 'Inocêncio Braga'); if (ib) ib.satisfacao = Math.min(100, ib.satisfacao + 10); const gt = jogo.conhecidos.find(c => c.nome === 'Gama Torres'); if (gt) gt.satisfacao = Math.max(0, gt.satisfacao - 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Acordo nas Ferrovias",
+                        "descricao": "Francisco preferiu colaborar financeira e diplomaticamente para reabrir os trilhos, garantindo o fluxo das cargas sem prolongar a paralisação.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Unir-se à linha dura de Gama Torres, cobrando ação rigorosa das autoridades locais.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 5000,
+                    "efeito": "() => { const ferrovias = jogo.patrimonio.investimentos.find(i => i.nome === 'Ferrovias'); if (ferrovias) ferrovias.valorAtual *= 0.92; const gt = jogo.conhecidos.find(c => c.nome === 'Gama Torres'); if (gt) { gt.satisfacao = Math.min(100, gt.satisfacao + 15); gt.influencia = Math.min(100, (gt.influencia || 0) + 5); } const ib = jogo.conhecidos.find(c => c.nome === 'Inocêncio Braga'); if (ib) ib.satisfacao = Math.max(0, ib.satisfacao - 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Firmeza Patronal",
+                        "descricao": "Francisco apoiou a repressão firme às paralisações na via férrea, estreitando laços com investidores conservadores da capital.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Aguardar a resolução espontânea do conflito sem intervir diretamente nas disputas.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const ferrovias = jogo.patrimonio.investimentos.find(i => i.nome === 'Ferrovias'); if (ferrovias) ferrovias.valorAtual *= 0.95; jogo.bonusPrestigio = Math.max(0, jogo.bonusPrestigio - 2); }",
+                    "anotacaoDiario": {
+                        "titulo": "Neutralidade Diante da Paralisação",
+                        "descricao": "Francisco optou por não tomar partido no conflito ferroviário, arcando apenas com o atraso pontual no escoamento de mercadorias.",
+                        "cor": "yellow"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1903 && jogo.ano <= 1935; }"
+        },
+        {
+            "nome": "Modernização da Iluminação a Gás para Elétrica",
+            "descricao": "A transição do sistema de iluminação urbana e residencial da iluminação a gás para a energia elétrica chega à região central do Rio de Janeiro. Camila insiste em instalar lustres elétricos na mansão para acompanhar o luxo das famílias mais influentes, enquanto o ajudante Mota pondera que a infraestrutura ainda é incipiente e sujeita a falhas dispendiosas.",
+            "opcoes": [
+                {
+                    "descricao": "Contratar o serviço completo de fiação e comprar equipamentos elétricos modernos para a residência.",
+                    "custoAcoes": 4,
+                    "custoDinheiro": 25000,
+                    "efeito": "() => { const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.min(100, camila.satisfacao + 15); const ee = jogo.patrimonio.investimentos.find(i => i.nome === 'Energia Elétrica'); if (ee) ee.valorAtual *= 1.1; jogo.bonusPrestigio += 4; }",
+                    "anotacaoDiario": {
+                        "titulo": "Luz Elétrica na Residência",
+                        "descricao": "Francisco realizou a instalação da moderna rede de energia elétrica em sua casa, encantando Camila e reafirmando o luxo de sua posição social.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Manter a iluminação a gás por enquanto e adquirir apenas ações da nova concessionária de energia.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 15000,
+                    "efeito": "() => { const ee = jogo.patrimonio.investimentos.find(i => i.nome === 'Energia Elétrica'); if (ee) ee.valorAtual *= 1.15; const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.max(0, camila.satisfacao - 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Aposta Financeira no Progresso",
+                        "descricao": "Francisco preferiu investir no setor elétrico sem realizar reformas dispendiosas em sua própria moradia no momento.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Adiar qualquer investimento no setor até que a nova tecnologia se mostre plenamente estável.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.max(0, camila.satisfacao - 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Cautela Ante a Modernização",
+                        "descricao": "Francisco considerou prematuro despender recursos na eletrificação, mantendo a casa sob o tradicional sistema a gás.",
+                        "cor": "red"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1904 && jogo.ano <= 1925; }"
+        },
+        {
+            "nome": "A Doença da Criada Noca",
+            "descricao": "Noca, a dedicada e antiga criada da família Teodoro, adoece gravemente com uma febre persistente. O Dr. Gervásio sugere uma internação particular e tratamentos com medicamentos importados. Camila pede compaixão e assistência total à serva, enquanto Mário sugere substituí-la temporariamente por uma nova contratada para não sobrecarregar as despesas da casa.",
+            "opcoes": [
+                {
+                    "descricao": "Pagar integralmente o tratamento prescrito pelo Dr. Gervásio e garantir o repouso de Noca.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 4000,
+                    "efeito": "() => { const noca = jogo.conhecidos.find(c => c.nome === 'Noca'); if (noca) noca.satisfacao = Math.min(100, noca.satisfacao + 25); const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.min(100, camila.satisfacao + 10); const dg = jogo.conhecidos.find(c => c.nome === 'Dr. Gervásio'); if (dg) dg.satisfacao = Math.min(100, dg.satisfacao + 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Cuidado e Humanidade Doméstica",
+                        "descricao": "Francisco custeou os cuidados médicos completos para a criada Noca, recebendo o reconhecimento de sua esposa e do médico da família.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Oferecer auxílio financeiro modesto e autorizar o Dr. Gervásio a tratá-la apenas com remédios essenciais.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 1200,
+                    "efeito": "() => { const noca = jogo.conhecidos.find(c => c.nome === 'Noca'); if (noca) noca.satisfacao = Math.min(100, noca.satisfacao + 5); const dg = jogo.conhecidos.find(c => c.nome === 'Dr. Gervásio'); if (dg) dg.satisfacao = Math.min(100, dg.satisfacao + 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Assistência Médica BÁSICA",
+                        "descricao": "Francisco forneceu socorro financeiro moderado para o restabelecimento de Noca, contendo os gastos com a farmácia.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Seguir a sugestão de Mário, afastando Noca das funções sem assumir as despesas hospitalares.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const noca = jogo.conhecidos.find(c => c.nome === 'Noca'); if (noca) noca.satisfacao = Math.max(0, noca.satisfacao - 20); const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.max(0, camila.satisfacao - 15); const mario = jogo.familia.find(p => p.nome === 'Mário'); if (mario) mario.satisfacao = Math.min(100, mario.satisfacao + 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Rigidez na Administração Doméstica",
+                        "descricao": "Francisco negou cobrir os custos do tratamento de Noca, provocando tristeza em Camila e desapontamento na criagem.",
+                        "cor": "red"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1893 && jogo.ano <= 1940; }"
+        },
+        {
+            "nome": "O Recital no Teatro Municipal",
+            "descricao": "Lélio Braga propõe organizar um recital lírico exclusivo para apresentar o talento de Ruth e Nina à sociedade carioca. Camila apoia entusiasmada, visando à consolidação da reputação da família. Contudo, o ajudante Mota adverte que reservar o Teatro e cobrir as despesas de produção exigirão um aporte expressivo do caixa imediato.",
+            "opcoes": [
+                {
+                    "descricao": "Financiar a realização do recital no Teatro com recepção refinada para os convidados.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 16000,
+                    "efeito": "() => { const ruth = jogo.familia.find(p => p.nome === 'Ruth'); if (ruth) ruth.satisfacao = Math.min(100, ruth.satisfacao + 15); const nina = jogo.familia.find(p => p.nome === 'Nina'); if (nina) nina.satisfacao = Math.min(100, nina.satisfacao + 15); const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.min(100, camila.satisfacao + 10); const lb = jogo.conhecidos.find(c => c.nome === 'Lélio Braga'); if (lb) { lb.satisfacao = Math.min(100, lb.satisfacao + 15); lb.influencia = Math.min(100, (lb.influencia || 0) + 5); } jogo.bonusPrestigio += 4; }",
+                    "anotacaoDiario": {
+                        "titulo": "Noite Artística no Teatro",
+                        "descricao": "Francisco financiou um suntuoso recital no Teatro Municipal, projetando o nome de sua família nos círculos culturais mais seletos da capital.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Transferir o recital para o sarau da própria residência, reduzindo os custos de produção.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 4000,
+                    "efeito": "() => { const ruth = jogo.familia.find(p => p.nome === 'Ruth'); if (ruth) ruth.satisfacao = Math.min(100, ruth.satisfacao + 5); const nina = jogo.familia.find(p => p.nome === 'Nina'); if (nina) nina.satisfacao = Math.min(100, nina.satisfacao + 5); const lb = jogo.conhecidos.find(c => c.nome === 'Lélio Braga'); if (lb) lb.satisfacao = Math.min(100, lb.satisfacao + 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Sarau na Residência",
+                        "descricao": "Francisco optou por realizar a apresentação musical em sua própria casa, contendo despesas sem deixar de prestigiar as jovens.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Declinar da proposta de Lélio Braga alegando ser inconveniente expor as jovens publicamente.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.max(0, camila.satisfacao - 10); const lb = jogo.conhecidos.find(c => c.nome === 'Lélio Braga'); if (lb) lb.satisfacao = Math.max(0, lb.satisfacao - 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Cancelamento da Apresentação",
+                        "descricao": "Francisco julgou desnecessária a realização do espetáculo, gerando descontentamento em Camila e no Maestro Lélio Braga.",
+                        "cor": "red"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1905 && jogo.ano <= 1930; }"
+        },
+        {
+            "nome": "Modernização do Armazém no Cais do Porto",
+            "descricao": "Com o aumento da movimentação de mercadorias no porto, o caixeiro Joaquim relata que o armazém comercial da empresa necessita urgentemente de reparos estruturais e expansão na capacidade de estocagem. O Capitão Rino sugere importar novos guindastes a vapor para agilizar a descarga dos vapores marítimos.",
+            "opcoes": [
+                {
+                    "descricao": "Realizar obras de infraestrutura e adquirir equipamentos modernos de elevação para o armazém.",
+                    "custoAcoes": 4,
+                    "custoDinheiro": 22000,
+                    "efeito": "() => { const prop = jogo.patrimonio.propriedades.find(p => p.nome === 'Armazém'); if (prop) { prop.condicao = Math.min(100, prop.condicao + 25); prop.rendaAnualBase *= 1.12; } const joaquim = jogo.conhecidos.find(c => c.nome === 'Joaquim'); if (joaquim) joaquim.satisfacao = Math.min(100, joaquim.satisfacao + 15); const rino = jogo.conhecidos.find(c => c.nome === 'Capitão Rino'); if (rino) rino.satisfacao = Math.min(100, rino.satisfacao + 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Expansão da Logística Portuária",
+                        "descricao": "Francisco investiu pesado na modernização das instalações do armazém, elevando a eficiência e o valor operacional de sua propriedade.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Executar apenas reparos pontuais de manutenção básica sem adquirir os novos guindastes.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 6000,
+                    "efeito": "() => { const prop = jogo.patrimonio.propriedades.find(p => p.nome === 'Armazém'); if (prop) prop.condicao = Math.min(100, prop.condicao + 10); const joaquim = jogo.conhecidos.find(c => c.nome === 'Joaquim'); if (joaquim) joaquim.satisfacao = Math.min(100, joaquim.satisfacao + 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Manutenção Preventiva do Armazém",
+                        "descricao": "Francisco autorizou apenas os consertos imediatos no armazém, garantindo o funcionamento contínuo sem grandes compromissos financeiros.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Adiar os investimentos no armazém e redirecionar os recursos para a compra de ações do setor de Navegação.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 15000,
+                    "efeito": "() => { const nav = jogo.patrimonio.investimentos.find(i => i.nome === 'Navegação'); if (nav) nav.valorAtual *= 1.1; const joaquim = jogo.conhecidos.find(c => c.nome === 'Joaquim'); if (joaquim) joaquim.satisfacao = Math.max(0, joaquim.satisfacao - 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Prioridade ao Setor Marítimo",
+                        "descricao": "Francisco preferiu aplicar recursos no mercado de navegação a reformar as instalações físicas de seu armazém.",
+                        "cor": "yellow"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1898 && jogo.ano <= 1935 && jogo.patrimonio.propriedades.some(p => p.nome === 'Armazém' && p.comprada); }"
+        },
+        {
+            "nome": "O Casamento de Raquel",
+            "descricao": "Raquel aproxima-se da idade de noivado e Camila insiste em organizar uma recepção faustosa, convidando figuras influentes como a Baronesa da Lage e Paquita para formalizar o anúncio. Mário pondera que um evento de tal magnitude drenará recursos que poderiam ser aplicados na compra de café ou títulos bancários.",
+            "opcoes": [
+                {
+                    "descricao": "Financiar um grande banquete de noivado para toda a alta sociedade carioca.",
+                    "custoAcoes": 4,
+                    "custoDinheiro": 28000,
+                    "efeito": "() => { const raquel = jogo.familia.find(p => p.nome === 'Raquel'); if (raquel) raquel.satisfacao = Math.min(100, raquel.satisfacao + 20); const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.min(100, camila.satisfacao + 15); const paquita = jogo.conhecidos.find(c => c.nome === 'Paquita'); if (paquita) paquita.satisfacao = Math.min(100, paquita.satisfacao + 10); const baronesa = jogo.conhecidos.find(c => c.nome === 'Baronesa da Lage'); if (baronesa) baronesa.satisfacao = Math.min(100, baronesa.satisfacao + 10); jogo.bonusPrestigio += 6; }",
+                    "anotacaoDiario": {
+                        "titulo": "Noivado de Grande Suntuosidade",
+                        "descricao": "Francisco ofereceu uma festa grandiosa para celebrar o compromisso de Raquel, reunindo a elite da capital e consolidando o prestígio da família.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Organizar uma celebração discreta restrita à família e conhecidos mais próximos.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 8000,
+                    "efeito": "() => { const raquel = jogo.familia.find(p => p.nome === 'Raquel'); if (raquel) raquel.satisfacao = Math.min(100, raquel.satisfacao + 5); const mario = jogo.familia.find(p => p.nome === 'Mário'); if (mario) mario.satisfacao = Math.min(100, mario.satisfacao + 10); const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.max(0, camila.satisfacao - 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Celebração Familiar Discreta",
+                        "descricao": "Francisco optou por uma cerimônia íntima para o noivado de Raquel, agradando Mário ao conter os gastos exagerados.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Adiar as festividades de noivado alegando momento financeiro inadequado.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const raquel = jogo.familia.find(p => p.nome === 'Raquel'); if (raquel) raquel.satisfacao = Math.max(0, raquel.satisfacao - 20); const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.max(0, camila.satisfacao - 15); jogo.bonusPrestigio = Math.max(0, jogo.bonusPrestigio - 3); }",
+                    "anotacaoDiario": {
+                        "titulo": "Aditamento das Festividades",
+                        "descricao": "Francisco decidiu adiar os festejos da família, provocando forte contrariedade em Raquel e descontentamento na casa.",
+                        "cor": "red"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1897 && jogo.ano <= 1918; }"
+        },
+        {
+            "nome": "A Doença Intestinal de Lia",
+            "descricao": "Lia apresenta sintomas graves de febre alta e fortes dores abdominais. Dr. Gervásio examina a jovem e adverte que a situação exige tratamento imediato com medicamentos importados e acompanhamento diário. Noca sugere complementar a medicina tradicional com infusões de ervas e repouso absoluto, reduzindo o sobressalto no lar.",
+            "opcoes": [
+                {
+                    "descricao": "Autorizar o tratamento intensivo conduzido pelo Dr. Gervásio com remédios importados.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 8500,
+                    "efeito": "() => { const lia = jogo.familia.find(p => p.nome === 'Lia'); if (lia) lia.satisfacao = Math.min(100, lia.satisfacao + 15); const gervasio = jogo.conhecidos.find(c => c.nome === 'Dr. Gervásio'); if (gervasio) gervasio.satisfacao = Math.min(100, gervasio.satisfacao + 15); }",
+                    "anotacaoDiario": {
+                        "titulo": "Tratamento Médico de Lia",
+                        "descricao": "Francisco garantiu os cuidados mais avançados do Dr. Gervásio para restabelecer a saúde de sua filha Lia.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Seguir as orientações caseiras de Noca e aplicar um tratamento moderado.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 1500,
+                    "efeito": "() => { const lia = jogo.familia.find(p => p.nome === 'Lia'); if (lia) lia.satisfacao = Math.max(0, lia.satisfacao - 5); const noca = jogo.conhecidos.find(c => c.nome === 'Noca'); if (noca) noca.satisfacao = Math.min(100, noca.satisfacao + 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Cuidados Domésticos",
+                        "descricao": "Francisco confiou nos remédios caseiros de Noca para tratar a indisposição de Lia, contendo os gastos com médicos.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Adiar a contratação de novos médicos e aguardar a evolução natural do quadro.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const lia = jogo.familia.find(p => p.nome === 'Lia'); if (lia) lia.satisfacao = Math.max(0, lia.satisfacao - 25); const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.max(0, camila.satisfacao - 15); }",
+                    "anotacaoDiario": {
+                        "titulo": "Hesitação no Tratamento",
+                        "descricao": "A relutância de Francisco em contratar ajuda especializada gerou profunda apreensão na família quanto à saúde de Lia.",
+                        "cor": "red"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1892 && jogo.ano <= 1940; }"
+        },
+        {
+            "nome": "Especulação no Mercado de Café",
+            "descricao": "O investidor Gama Torres procura Francisco com informações confidenciais sobre a próxima safra e propõe uma alocação volumosa de capital nas ações de Café. Por outro lado, Inocêncio Braga recomenda cautela, alertando que a oscilação das cotações internacionais pode surpreender os investidores mais afoitos.",
+            "opcoes": [
+                {
+                    "descricao": "Seguir o conselho de Gama Torres e investir fortemente no mercado de café.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 30000,
+                    "efeito": "() => { const cafe = jogo.patrimonio.investimentos.find(i => i.nome === 'Café'); if (cafe) cafe.valorAtual *= 1.15; const gt = jogo.conhecidos.find(c => c.nome === 'Gama Torres'); if (gt) gt.satisfacao = Math.min(100, gt.satisfacao + 15); const ib = jogo.conhecidos.find(c => c.nome === 'Inocêncio Braga'); if (ib) ib.satisfacao = Math.max(0, ib.satisfacao - 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Aposta na Cotação do Café",
+                        "descricao": "Francisco atendeu às recomendações de Gama Torres e expandiu sua participação nas negociações de café.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Ouvir Inocêncio Braga e manter os recursos salvaguardados em caixa.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const ib = jogo.conhecidos.find(c => c.nome === 'Inocêncio Braga'); if (ib) ib.satisfacao = Math.min(100, ib.satisfacao + 10); const gt = jogo.conhecidos.find(c => c.nome === 'Gama Torres'); if (gt) gt.satisfacao = Math.max(0, gt.satisfacao - 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Prudência Financeira",
+                        "descricao": "Francisco preferiu conter os riscos apontados por Inocêncio Braga, recusando a oferta especulativa no setor cafeeiro.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Retirar fundos da Bolsa para adquirir um imóvel comercial de menor risco.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 25000,
+                    "efeito": "() => { const prop = jogo.patrimonio.propriedades.find(p => p.nome === 'Sala Comercial'); if (prop) { prop.comprada = true; prop.condicao = 100; } const cafe = jogo.patrimonio.investimentos.find(i => i.nome === 'Café'); if (cafe) cafe.valorAtual *= 0.95; }",
+                    "anotacaoDiario": {
+                        "titulo": "Diversificação em Imóveis",
+                        "descricao": "Francisco optou por retirar capital do mercado financeiro e assegurar a aquisição de um imóvel para negócios.",
+                        "cor": "green"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1895 && jogo.ano <= 1929 && jogo.patrimonio.dinheiro >= 30000; }"
+        },
+        {
+            "nome": "O Futuro Acadêmico de Mário",
+            "descricao": "Mário expressa o desejo de aperfeiçoar seus estudos e pede apoio financeiro para sua formação profissional. Camila argumenta que financiar a educação do filho trará imenso prestígio e segurança para os negócios da família, enquanto Mota adverte que a despesa sobrecarregará o orçamento da empresa neste período.",
+            "opcoes": [
+                {
+                    "descricao": "Financiar integralmente os estudos e materiais acadêmicos de Mário.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 12000,
+                    "efeito": "() => { const mario = jogo.familia.find(p => p.nome === 'Mário'); if (mario) mario.satisfacao = Math.min(100, mario.satisfacao + 25); const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.min(100, camila.satisfacao + 10); jogo.bonusPrestigio += 3; }",
+                    "anotacaoDiario": {
+                        "titulo": "Investimento na Formação de Mário",
+                        "descricao": "Francisco custeou a instrução acadêmica de Mário, garantindo a satisfação do jovem e a consideração dos círculos sociais.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Exigir que Mário trabalhe como aprendiz no negócio comercial antes de prosseguir com os estudos.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 2000,
+                    "efeito": "() => { const mario = jogo.familia.find(p => p.nome === 'Mário'); if (mario) mario.satisfacao = Math.max(0, mario.satisfacao - 10); const mota = jogo.conhecidos.find(c => c.nome === 'Mota'); if (mota) mota.satisfacao = Math.min(100, mota.satisfacao + 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Aprendizado Prático",
+                        "descricao": "Francisco determinou que Mário conheça a rotina prática do comércio familiar antes de se dedicar às letras.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Negar o financiamento dos estudos por considerar uma despesa não essencial.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const mario = jogo.familia.find(p => p.nome === 'Mário'); if (mario) mario.satisfacao = Math.max(0, mario.satisfacao - 20); const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.max(0, camila.satisfacao - 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Recusa da Pretensão Acadêmica",
+                        "descricao": "Francisco negou o auxílio aos estudos de Mário, gerando insatisfação no ambiente doméstico.",
+                        "cor": "red"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1893 && jogo.ano <= 1920; }"
+        },
+        {
+            "nome": "A Renovação dos Salões da Residência",
+            "descricao": "Camila expressa o desejo de renovar o mobiliário dos salões de recepção e adquirir novos espelhos importados para manter o prestígio da casa perante a alta sociedade. Ela argumenta que frequentadores ilustres como a Baronesa da Lage notam o desgaste das instalações. Contudo, Mota adverte que a quantia despendida fará falta no giro imediato do comércio.",
+            "opcoes": [
+                {
+                    "descricao": "Atender ao pedido de Camila e financiar a reforma completa dos salões.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 18000,
+                    "efeito": "() => { const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.min(100, camila.satisfacao + 15); const baronesa = jogo.conhecidos.find(c => c.nome === 'Baronesa da Lage'); if (baronesa) baronesa.satisfacao = Math.min(100, baronesa.satisfacao + 10); const casa = jogo.patrimonio.propriedades.find(p => p.nome === 'Casa' || p.nome === 'Mansão' || p.nome === 'Casa de Luxo'); if (casa) casa.condicao = Math.min(100, casa.condicao + 15); jogo.bonusPrestigio += 3; }",
+                    "anotacaoDiario": {
+                        "titulo": "Remodelação dos Salões",
+                        "descricao": "Francisco aprovou a renovação da decoração da residência, agradando Camila e impressionando as visitas de distinção.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Realizar apenas reparos discretos e a substituição de poucas peças danificadas.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 5000,
+                    "efeito": "() => { const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.min(100, camila.satisfacao + 5); const mota = jogo.conhecidos.find(c => c.nome === 'Mota'); if (mota) mota.satisfacao = Math.min(100, mota.satisfacao + 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Reformas de Contenção",
+                        "descricao": "Francisco autorizou pequenas melhorias na mobília, mantendo a sobriedade sem comprometer expressivamente o orçamento.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Recusar os gastos decorativos alegando a necessidade de preservar o capital de giro.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.max(0, camila.satisfacao - 15); const baronesa = jogo.conhecidos.find(c => c.nome === 'Baronesa da Lage'); if (baronesa) baronesa.satisfacao = Math.max(0, baronesa.satisfacao - 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Recusa das Reformas",
+                        "descricao": "Francisco negou os recursos para a remodelação dos salões, gerando insatisfação em Camila e comentários na sociedade.",
+                        "cor": "red"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1894 && jogo.ano <= 1925; }"
+        },
+        {
+            "nome": "Impasse nos Créditos Bancários",
+            "descricao": "Diante de oscilações no comércio, o gerente do Banco do Brasileiro propõe a concessão de uma linha de crédito especial para fortalecer o fluxo operacional das empresas da capital. Inocêncio Braga sugere prudência ao assumir novos compromissos com juros bancários, ao passo que Joaquim recorda que a aquisição adiantada de mercadorias exige fundos imediatos.",
+            "opcoes": [
+                {
+                    "descricao": "Contratar o empréstimo bancário para reforçar o caixa comercial.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const banco = jogo.bancos.find(b => b.nome === 'Banco do Brasileiro'); if (banco) { jogo.patrimonio.emprestimos.push(new Emprestimo(40000, banco, 12)); jogo.patrimonio.dinheiro += 40000; } const joaquim = jogo.conhecidos.find(c => c.nome === 'Joaquim'); if (joaquim) joaquim.satisfacao = Math.min(100, joaquim.satisfacao + 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Assinatura de Financiamento",
+                        "descricao": "Francisco recorreu ao Banco do Brasileiro para injetar liquidez nos negócios, aceitando o encargo das parcelas futuras.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Recusar o financiamento e cobrir as necessidades negociando diretamente com Inocêncio Braga.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 15000,
+                    "efeito": "() => { const ib = jogo.conhecidos.find(c => c.nome === 'Inocêncio Braga'); if (ib) { ib.satisfacao = Math.min(100, ib.satisfacao + 15); ib.influencia = Math.min(100, (ib.influencia || 0) + 5); } const com = jogo.patrimonio.investimentos.find(i => i.nome === 'Comércio'); if (com) com.valorAtual *= 1.05; }",
+                    "anotacaoDiario": {
+                        "titulo": "Acordo Comercial Privado",
+                        "descricao": "Francisco declinou do empréstimo bancário e utilizou capital próprio em colaboração com Inocêncio Braga.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Evitar o endividamento e restringir drasticamente o volume de compras do comércio.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const com = jogo.patrimonio.investimentos.find(i => i.nome === 'Comércio'); if (com) com.valorAtual *= 0.92; const joaquim = jogo.conhecidos.find(c => c.nome === 'Joaquim'); if (joaquim) joaquim.satisfacao = Math.max(0, joaquim.satisfacao - 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Retração das Compras",
+                        "descricao": "Francisco optou por conter despesas e não assumir dívidas, reduzindo a escala das operações comerciais.",
+                        "cor": "red"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1898 && jogo.ano <= 1930 && jogo.bancos.some(b => b.nome === 'Banco do Brasileiro'); }"
+        },
+        {
+            "nome": "A Instalação da Linha Telefônica",
+            "descricao": "Com o avanço dos serviços urbanos no Rio de Janeiro, a companhia de comunicações oferece a instalação de uma linha telefônica direta na firma de Francisco. O Capitão Rino enfatiza que a inovação agilizará os contatos com o porto e com as casas de navegação, enquanto Mota adverte quanto às taxas de assinatura e aparelhos.",
+            "opcoes": [
+                {
+                    "descricao": "Contratar a instalação do telefone para a firma e para a residência.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 10000,
+                    "efeito": "() => { const com = jogo.patrimonio.investimentos.find(i => i.nome === 'Comunicações'); if (com) com.valorAtual *= 1.1; const rino = jogo.conhecidos.find(c => c.nome === 'Capitão Rino'); if (rino) rino.satisfacao = Math.min(100, rino.satisfacao + 10); jogo.bonusPrestigio += 3; }",
+                    "anotacaoDiario": {
+                        "titulo": "Adoção do Telefone",
+                        "descricao": "Francisco mandou instalar aparelhos telefônicos, modernizando a comunicação de seus negócios e da residência.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Instalar o aparelho apenas na dependência comercial, mantendo o uso de mensageiros na residência.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 4500,
+                    "efeito": "() => { const mota = jogo.conhecidos.find(c => c.nome === 'Mota'); if (mota) mota.satisfacao = Math.min(100, mota.satisfacao + 5); const joaquim = jogo.conhecidos.find(c => c.nome === 'Joaquim'); if (joaquim) joaquim.satisfacao = Math.min(100, joaquim.satisfacao + 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Telefone no Escritório",
+                        "descricao": "Francisco priorizou a eficiência comercial ao instalar a linha telefônica exclusivamente na firma.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Manter os métodos tradicionais de telégrafo e portadores, dispensando a nova linha.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const rino = jogo.conhecidos.find(c => c.nome === 'Capitão Rino'); if (rino) rino.satisfacao = Math.max(0, rino.satisfacao - 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Recusa da Rede Telefônica",
+                        "descricao": "Francisco considerou dispendiosa a tecnologia telefônica e optou por continuar utilizando portadores e telegramas.",
+                        "cor": "yellow"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1906 && jogo.ano <= 1935; }"
+        },
+        {
+            "nome": "O Recital da Juventude",
+            "descricao": "Lélio Braga propõe organizar um recital de música clássica no salão nobre para apresentar os talentos artísticos da jovem elite carioca, incluindo as filhas de Francisco Teodoro. Camila entusiasma-se com a ideia de colocar as meninas em evidência perante a alta sociedade. No entanto, o Maestro exige um arranjo cuidadoso e uma contribuição expressiva para cobrir o cachê dos músicos de apoio e a aquisição de novas partituras importadas.",
+            "opcoes": [
+                {
+                    "descricao": "Financiar integralmente o recital e oferecer uma recepção suntuosa aos convidados.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 12000,
+                    "efeito": "() => { const ruth = jogo.familia.find(p => p.nome === 'Ruth'); if (ruth) ruth.satisfacao = Math.min(100, ruth.satisfacao + 15); const raquel = jogo.familia.find(p => p.nome === 'Raquel'); if (raquel) raquel.satisfacao = Math.min(100, raquel.satisfacao + 15); const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.min(100, camila.satisfacao + 10); const lelio = jogo.conhecidos.find(c => c.nome === 'Lélio Braga'); if (lelio) lelio.satisfacao = Math.min(100, lelio.satisfacao + 15); jogo.bonusPrestigio += 4; }",
+                    "anotacaoDiario": {
+                        "titulo": "Noite de Gala e Música",
+                        "descricao": "Francisco patrocinou um elegante recital em sua residência, promovendo o talento das filhas e recebendo efusivos elogios da sociedade.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Autorizar uma apresentação modesta apenas para familiares e amigos mais íntimos.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 3000,
+                    "efeito": "() => { const ruth = jogo.familia.find(p => p.nome === 'Ruth'); if (ruth) ruth.satisfacao = Math.min(100, ruth.satisfacao + 5); const lelio = jogo.conhecidos.find(c => c.nome === 'Lélio Braga'); if (lelio) lelio.satisfacao = Math.min(100, lelio.satisfacao + 5); const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.min(100, camila.satisfacao + 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Recital Íntimo",
+                        "descricao": "Francisco optou por uma reunião musical contida, agradando a família sem incorrer em despesas excessivas.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Declinar da proposta, alegando que o momento exige foco na gestão dos negócios e austeridade.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const ruth = jogo.familia.find(p => p.nome === 'Ruth'); if (ruth) ruth.satisfacao = Math.max(0, ruth.satisfacao - 10); const raquel = jogo.familia.find(p => p.nome === 'Raquel'); if (raquel) raquel.satisfacao = Math.max(0, raquel.satisfacao - 10); const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.max(0, camila.satisfacao - 10); const lelio = jogo.conhecidos.find(c => c.nome === 'Lélio Braga'); if (lelio) lelio.satisfacao = Math.max(0, lelio.satisfacao - 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Cancelamento do Recital",
+                        "descricao": "Francisco recusou-se a custear o evento musical, frustrando as expectativas de Camila, das filhas e do Maestro.",
+                        "cor": "red"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1895 && jogo.ano <= 1920; }"
+        },
+        {
+            "nome": "Especulação no Mercado de Algodão",
+            "descricao": "Gama Torres procura Francisco no armazém comercial com informações privilegiadas sobre a demanda têxtil nos mercados europeus. Ele propõe uma alocação conjunta de capital para comprar estoques de algodão antes da publicação dos dados oficiais de safra. Joaquim adverte que o valor das commodities agrícolas está oscilando fortemente devido ao clima no Nordeste.",
+            "opcoes": [
+                {
+                    "descricao": "Aceitar a proposta de Gama Torres e alocar forte volume no setor têxtil e de algodão.",
+                    "custoAcoes": 4,
+                    "custoDinheiro": 25000,
+                    "efeito": "() => { const algodao = jogo.patrimonio.investimentos.find(i => i.nome === 'Algodão'); if (algodao) algodao.valorAtual *= 1.25; const texteis = jogo.patrimonio.investimentos.find(i => i.nome === 'Têxteis'); if (texteis) texteis.valorAtual *= 1.15; const gt = jogo.conhecidos.find(c => c.nome === 'Gama Torres'); if (gt) { gt.satisfacao = Math.min(100, gt.satisfacao + 15); gt.influencia = Math.min(100, (gt.influencia || 0) + 5); } }",
+                    "anotacaoDiario": {
+                        "titulo": "Especulação Têxtil",
+                        "descricao": "Francisco associou-se a Gama Torres para adquirir algodão, alcançando excelente valorização nos ativos têxteis.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Realizar um aporte prudente apenas nas ações da indústria têxtil, evitando a compra direta da matéria-prima.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 8000,
+                    "efeito": "() => { const texteis = jogo.patrimonio.investimentos.find(i => i.nome === 'Têxteis'); if (texteis) texteis.valorAtual *= 1.08; const gt = jogo.conhecidos.find(c => c.nome === 'Gama Torres'); if (gt) gt.satisfacao = Math.min(100, gt.satisfacao + 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Aporte Cauteloso em Têxteis",
+                        "descricao": "Francisco preferiu uma posição modesta na indústria têxtil, mitigando os riscos das safras agrícolas.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Rejeitar a especulação e manter a reserva de capital intacta.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const gt = jogo.conhecidos.find(c => c.nome === 'Gama Torres'); if (gt) gt.satisfacao = Math.max(0, gt.satisfacao - 10); const joaquim = jogo.conhecidos.find(c => c.nome === 'Joaquim'); if (joaquim) joaquim.satisfacao = Math.min(100, joaquim.satisfacao + 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Recusa da Cartelização do Algodão",
+                        "descricao": "Francisco declinou da oferta de Gama Torres, optando por defender a liquidez da firma e a estabilidade habitual.",
+                        "cor": "yellow"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1900 && jogo.ano <= 1930; }"
+        },
+        {
+            "nome": "Epidemia de Gripe e Cuidados de Saúde",
+            "descricao": "Uma onda de gripe severa atinge os bairros centrais da cidade, afetando a criadagem da casa e alguns empregados do comércio. Dr. Gervásio recomenda o isolamento preventivo, repouso e o fornecimento de medicamentos importados da farmácia central para evitar complicações graves. Noca relata dificuldades para manter as tarefas domésticas sem ajuda adicional.",
+            "opcoes": [
+                {
+                    "descricao": "Custear todo o tratamento médico dos funcionários e contratar auxiliares temporários para a casa.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 6000,
+                    "efeito": "() => { const gervasio = jogo.conhecidos.find(c => c.nome === 'Dr. Gervásio'); if (gervasio) gervasio.satisfacao = Math.min(100, gervasio.satisfacao + 15); const noca = jogo.conhecidos.find(c => c.nome === 'Noca'); if (noca) noca.satisfacao = Math.min(100, noca.satisfacao + 15); const far = jogo.patrimonio.investimentos.find(i => i.nome === 'Farmacêutica'); if (far) far.valorAtual *= 1.08; }",
+                    "anotacaoDiario": {
+                        "titulo": "Assistência Médica e Apoio",
+                        "descricao": "Francisco cobriu as despesas médicas de sua criadagem e trabalhadores, conquistando a gratidão dos subordinados e o respeito do doutor.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Seguir as orientações do Dr. Gervásio apenas para a família e conceder licença simples aos empregados doentes.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 2000,
+                    "efeito": "() => { const gervasio = jogo.conhecidos.find(c => c.nome === 'Dr. Gervásio'); if (gervasio) gervasio.satisfacao = Math.min(100, gervasio.satisfacao + 5); const noca = jogo.conhecidos.find(c => c.nome === 'Noca'); if (noca) noca.satisfacao = Math.max(0, noca.satisfacao - 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Medidas Sanitárias de Rotina",
+                        "descricao": "Francisco adotou as precauções mínimas recomendadas pelo Dr. Gervásio para resguardar a saúde familiar.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Ignorar os alertas e exigir que o trabalho nas empresas e na residência continue sem interrupções.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const gervasio = jogo.conhecidos.find(c => c.nome === 'Dr. Gervásio'); if (gervasio) gervasio.satisfacao = Math.max(0, gervasio.satisfacao - 15); const noca = jogo.conhecidos.find(c => c.nome === 'Noca'); if (noca) noca.satisfacao = Math.max(0, noca.satisfacao - 15); const mota = jogo.conhecidos.find(c => c.nome === 'Mota'); if (mota) mota.satisfacao = Math.max(0, mota.satisfacao - 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Negligência com a Saúde",
+                        "descricao": "Francisco recusou-se a alterar a rotina da casa ou prestar auxílio aos doentes, gerando descontentamento generalizado entre empregados e médicos.",
+                        "cor": "red"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1892 && jogo.ano <= 1940; }"
+        },
+        {
+            "nome": " Modernização da Iluminação Pública",
+            "descricao": "A prefeitura e a Companhia de Luz iniciaram a expansão dos cabos de energia elétrica e a substituição dos antigos lampiões a gás nas ruas centrais. Inocêncio Braga sugere que Francisco invista na compra de ações do setor ou financiar a adequação da iluminação de suas próprias lojas e escritórios para atrair a elite carioca, embora o custo de instalação seja elevado e haja forte oposição dos prestadores de serviço tradicionais.",
+            "opcoes": [
+                {
+                    "descricao": "Financiar a instalação imediata de iluminação elétrica nas propriedades comerciais da firma e adquirir papéis da distribuidora.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 15000,
+                    "efeito": "() => { const ee = jogo.patrimonio.investimentos.find(i => i.nome === 'Energia Elétrica'); if (ee) ee.valorAtual *= 1.20; const ib = jogo.conhecidos.find(c => c.nome === 'Inocêncio Braga'); if (ib) { ib.satisfacao = Math.min(100, ib.satisfacao + 15); ib.influencia = Math.min(100, (ib.influencia || 0) + 5); } jogo.bonusPrestigio += 3; }",
+                    "anotacaoDiario": {
+                        "titulo": "Chegada da Eletricidade aos Negócios",
+                        "descricao": "Francisco financiou a instalação de luz elétrica em seus imóveis comerciais e investiu na expansão energética do Rio de Janeiro.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Adquirir apenas uma cota modesta de ações da empresa de energia, sem alterar a iluminação dos prédios comerciais.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 5000,
+                    "efeito": "() => { const ee = jogo.patrimonio.investimentos.find(i => i.nome === 'Energia Elétrica'); if (ee) ee.valorAtual *= 1.08; const ib = jogo.conhecidos.find(c => c.nome === 'Inocêncio Braga'); if (ib) ib.satisfacao = Math.min(100, ib.satisfacao + 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Investimento em Eletricidade",
+                        "descricao": "Francisco realizou um aporte comedido na Companhia de Luz, aguardando a consolidação do serviço na capital.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Manter a iluminação a gás e recusar novos aportes, alegando instabilidade no fornecimento da nova tecnologia.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const ib = jogo.conhecidos.find(c => c.nome === 'Inocêncio Braga'); if (ib) ib.satisfacao = Math.max(0, ib.satisfacao - 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Conservadorismo Tecnológico",
+                        "descricao": "Francisco optou por manter a iluminação tradicional a gás em suas instalações, desconfiando dos altos custos da eletricidade.",
+                        "cor": "yellow"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1903 && jogo.ano <= 1925; }"
+        },
+        {
+            "nome": "O Baile das Filhas na Sociedade",
+            "descricao": "Camila exige a organização de uma suntuosa festa de apresentação para Raquel e Lia na residência da família, visando reforçar a posição social das jovens perante a aristocracia do café e os investidores de prestígio. A Baronesa da Lage ofereceu-se para padrinhar a ocasião, mas sugere a contratação de buffets franceses e vestuário importado de alto custo.",
+            "opcoes": [
+                {
+                    "descricao": "Atender integralmente aos pedidos de Camila e da Baronesa, organizando uma celebração grandiosa.",
+                    "custoAcoes": 4,
+                    "custoDinheiro": 18000,
+                    "efeito": "() => { const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.min(100, camila.satisfacao + 20); const raquel = jogo.familia.find(p => p.nome === 'Raquel'); if (raquel) raquel.satisfacao = Math.min(100, raquel.satisfacao + 15); const lia = jogo.familia.find(p => p.nome === 'Lia'); if (lia) lia.satisfacao = Math.min(100, lia.satisfacao + 15); const baronesa = jogo.conhecidos.find(c => c.nome === 'Baronesa da Lage'); if (baronesa) baronesa.satisfacao = Math.min(100, baronesa.satisfacao + 15); jogo.bonusPrestigio += 5; }",
+                    "anotacaoDiario": {
+                        "titulo": "O Baile Elegante da Família Teodoro",
+                        "descricao": "Francisco abriu os cofres para oferecer uma recepção inesquecível à alta sociedade, destacando suas filhas perante a elite.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Custejar uma recepção discreta no salão principal da casa, limitando a lista de convidados aos conhecidos mais próximos.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 5000,
+                    "efeito": "() => { const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.max(0, camila.satisfacao - 5); const raquel = jogo.familia.find(p => p.nome === 'Raquel'); if (raquel) raquel.satisfacao = Math.min(100, raquel.satisfacao + 5); const lia = jogo.familia.find(p => p.nome === 'Lia'); if (lia) lia.satisfacao = Math.min(100, lia.satisfacao + 5); const baronesa = jogo.conhecidos.find(c => c.nome === 'Baronesa da Lage'); if (baronesa) baronesa.satisfacao = Math.min(100, baronesa.satisfacao + 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Recepção Modesta em Família",
+                        "descricao": "Francisco autorizou uma celebração contida, evitando gastos fabulosos apesar da insatisfação de Camila.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Recusar a realização da festa, argumentando a necessidade de preservar o capital da empresa.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const camila = jogo.familia.find(p => p.nome === 'Camila'); if (camila) camila.satisfacao = Math.max(0, camila.satisfacao - 20); const raquel = jogo.familia.find(p => p.nome === 'Raquel'); if (raquel) raquel.satisfacao = Math.max(0, raquel.satisfacao - 15); const lia = jogo.familia.find(p => p.nome === 'Lia'); if (lia) lia.satisfacao = Math.max(0, lia.satisfacao - 15); const baronesa = jogo.conhecidos.find(c => c.nome === 'Baronesa da Lage'); if (baronesa) baronesa.satisfacao = Math.max(0, baronesa.satisfacao - 15); }",
+                    "anotacaoDiario": {
+                        "titulo": "Cancelamento do Baile Social",
+                        "descricao": "Francisco negou a realização da festa de apresentação das filhas, provocando forte contrariedade no ambiente familiar e social.",
+                        "cor": "red"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1894 && jogo.ano <= 1915; }"
+        },
+        {
+            "nome": "Modernização das Linhas de Navegação",
+            "descricao": "O Capitão Rino procura Francisco no armazém comercial para relatar a necessidade de modernização das embarcações costeiras que transportam as mercadorias da firma. Ele sugere o financiamento para reparos de caldeiras e substituição das velhas estruturas de madeira por cascos de ferro. Mota adverte que atrasos na manutenção podem colocar a carga em risco durante a travessia.",
+            "opcoes": [
+                {
+                    "descricao": "Financiar a reforma completa das embarcações e investir nas companhias de navegação marítima.",
+                    "custoAcoes": 3,
+                    "custoDinheiro": 20000,
+                    "efeito": "() => { const nav = jogo.patrimonio.investimentos.find(i => i.nome === 'Navegação'); if (nav) nav.valorAtual *= 1.22; const rino = jogo.conhecidos.find(c => c.nome === 'Capitão Rino'); if (rino) { rino.satisfacao = Math.min(100, rino.satisfacao + 15); rino.influencia = Math.min(100, (rino.influencia || 0) + 5); } const mota = jogo.conhecidos.find(c => c.nome === 'Mota'); if (mota) mota.satisfacao = Math.min(100, mota.satisfacao + 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Aporte na Frota Marítima",
+                        "descricao": "Francisco cobriu as despesas de manutenção e modernização naval, garantindo o transporte seguro de suas mercadorias.",
+                        "cor": "green"
+                    }
+                },
+                {
+                    "descricao": "Autorizar apenas os reparos essenciais de urgência nas caldeiras dos navios mais antigos.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 6000,
+                    "efeito": "() => { const rino = jogo.conhecidos.find(c => c.nome === 'Capitão Rino'); if (rino) rino.satisfacao = Math.min(100, rino.satisfacao + 5); const mota = jogo.conhecidos.find(c => c.nome === 'Mota'); if (mota) mota.satisfacao = Math.min(100, mota.satisfacao + 5); }",
+                    "anotacaoDiario": {
+                        "titulo": "Reparos de Emergência na Frota",
+                        "descricao": "Francisco aprovou uma verba contida para consertos imediatos nos vapores, mantendo a operação sem grandes investimentos.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Postergar as manutenções e exigir que o Capitão Rino continue operando com a frota atual.",
+                    "custoAcoes": 1,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const nav = jogo.patrimonio.investimentos.find(i => i.nome === 'Navegação'); if (nav) nav.valorAtual *= 0.92; const rino = jogo.conhecidos.find(c => c.nome === 'Capitão Rino'); if (rino) rino.satisfacao = Math.max(0, rino.satisfacao - 15); const mota = jogo.conhecidos.find(c => c.nome === 'Mota'); if (mota) mota.satisfacao = Math.max(0, mota.satisfacao - 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Recusa de Manutenção Naval",
+                        "descricao": "Francisco optou por não gastar na reforma dos vapores, assumindo o risco de avarias e gerando descontentamento nos marinheiros.",
+                        "cor": "red"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1895 && jogo.ano <= 1935; }"
         }
     ],
     "eventos": []
