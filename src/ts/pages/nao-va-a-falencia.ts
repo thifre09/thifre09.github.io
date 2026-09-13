@@ -1,4 +1,5 @@
-import Chart from "chart.js/auto";
+// @ts-expect-error TypeScript does not resolve remote browser modules.
+import Chart from "https://cdn.jsdelivr.net/npm/chart.js@4.5.1/auto/+esm";
 
 class Patrimonio {
     dinheiro: number;
