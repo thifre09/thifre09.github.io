@@ -1,0 +1,1644 @@
+import Chart from "chart.js/auto";
+
+class Patrimonio {
+    dinheiro: number;
+    propriedades: Propriedade[];
+    investimentos: Investimento[];
+    bens: Bem[];
+    emprestimos: Emprestimo[];
+
+    constructor() {
+        this.dinheiro = 500_000;
+        this.propriedades = [];
+        this.investimentos = [];
+        this.bens = [];
+        this.emprestimos = [];
+    }
+
+    get total(): number {
+        const valorInvestimentos = this.investimentos.reduce((acc, inv) => acc + inv.valorAtual * inv.acoesPossuidas, 0);
+        const valorPropriedades = this.propriedades.reduce((acc, prop) => acc + (prop.comprada ? prop.valor : 0), 0);
+        return this.dinheiro + valorInvestimentos + valorPropriedades;
+    }
+
+    get rendaAnualTotal(): number {
+        return this.propriedades.reduce((acc, prop) => acc + (prop.comprada ? prop.rendaAnual : 0), 0);
+    }
+}
+
+class Investimento {
+    nome: string;
+    valorAtual: number;
+    variacao: number;
+    tendencia: number;
+    precoBase: number;
+    min: number;
+    max: number;
+    acoesPossuidas: number;
+    valorInvestido: number;
+    historico: { ano: number; valor: number }[];
+
+    constructor(nome: string, valorAtual: number, variacao: number, min: number, max: number) {
+        this.nome = nome;
+        this.valorAtual = valorAtual;
+        this.variacao = variacao;
+        this.tendencia = 0;
+        this.historico = [{ ano: 1891, valor: valorAtual }];
+        this.precoBase = valorAtual;
+        this.min = min;
+        this.max = max;
+        this.acoesPossuidas = 0;
+        this.valorInvestido = 0;
+    }
+
+    variarValor() {
+        this.tendencia += (Math.random() - 0.5) * 0.08;
+        this.tendencia *= 0.90;
+        this.tendencia = Math.max(-0.2, Math.min(0.2, this.tendencia));
+
+        const distancia = (this.precoBase - this.valorAtual) / this.precoBase;
+        const retornoAoCentro = distancia * 0.05;
+        const ruido = (Math.random() - 0.5) * 0.04;
+
+        this.variacao = this.tendencia + retornoAoCentro + ruido;
+        this.valorAtual *= 1 + this.variacao;
+        this.valorAtual = Math.max(this.min, Math.min(this.max, this.valorAtual));
+
+        this.historico.push({ ano: jogo.ano, valor: this.valorAtual });
+        if (this.valorAtual === this.min || this.valorAtual === this.max) {
+            this.tendencia *= -1;
+        }
+
+        return this.valorAtual;
+    }
+
+    gerarGrafico(canvasId: string) {
+        const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
+
+        new Chart(canvas, {
+            type: "line",
+
+            data: {
+                labels: this.historico.map(h => h.ano),
+
+                datasets: [
+                    {
+                        label: this.nome,
+                        data: this.historico.map(h => h.valor),
+                        borderWidth: 2,
+                        tension: 0.3,
+                        pointRadius: 3
+                    }
+                ]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: "Ano"
+                        }
+                    },
+
+                    y: {
+                        title: {
+                            display: true,
+                            text: "Valor"
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    gerarTabela(): HTMLTableElement {
+        const table = document.createElement("table");
+        table.innerHTML = `
+            <caption>Histórico de ${this.nome}</caption>
+            <tr>
+                <th>Ano</th>
+                <th>Preço</th>
+                <th>Variação</th>
+            </tr>
+        `;
+
+        for (let i = this.historico.length - 1; i >= 0; i--) {
+            const row = document.createElement("tr");
+            const anoCell = document.createElement("td");
+            const precoCell = document.createElement("td");
+            const variacaoCell = document.createElement("td");
+
+            anoCell.textContent = this.historico[i].ano.toString();
+            precoCell.textContent = `R$ ${this.historico[i].valor.toFixed(2)}`;
+            if (i > 0) {
+                const precoAnterior = this.historico[i - 1].valor;
+                const variacao = ((this.historico[i].valor - precoAnterior) / precoAnterior) * 100;
+                variacaoCell.textContent = `${variacao >= 0 ? "+" : ""}${variacao.toFixed(2)}%`;
+                variacaoCell.classList.add(variacao >= 0 ? "variacao-positiva" : "variacao-negativa");
+            } else {
+                variacaoCell.textContent = "";
+            }
+            row.appendChild(anoCell);
+            row.appendChild(precoCell);
+            row.appendChild(variacaoCell);
+            table.appendChild(row);
+        }
+
+        return table;
+    }
+
+    comprarAcoes(qtd: number): boolean {
+        if (qtd < 1) {
+            return false;
+        }
+        const custoTotal = qtd * this.valorAtual;
+        if (jogo.patrimonio.dinheiro >= custoTotal) {
+            jogo.patrimonio.dinheiro -= custoTotal;
+            this.acoesPossuidas += qtd;
+            this.valorInvestido += custoTotal;
+            const listaMensagens: string[] = [
+                `Você comprou ${qtd} ações de ${this.nome} por R$ ${custoTotal.toFixed(2)}.`,
+                `Foram adquiridas ${qtd} ações de ${this.nome}, totalizando R$ ${custoTotal.toFixed(2)}.`,
+                `Você investiu R$ ${custoTotal.toFixed(2)} na compra de ${qtd} ações de ${this.nome}.`,
+                `Você decidiu investir em ${this.nome} e comprou ${qtd} ações por R$ ${custoTotal.toFixed(2)}.`,
+                `Uma nova posição foi aberta: ${qtd} ações de ${this.nome}, ao custo de R$ ${custoTotal.toFixed(2)}.`,
+                `Você aplicou R$ ${custoTotal.toFixed(2)} em ${qtd} ações de ${this.nome}.`,
+                `A compra foi concluída: ${qtd} ações de ${this.nome} por R$ ${custoTotal.toFixed(2)}.`,
+                `Você aumentou seus investimentos com ${qtd} ações de ${this.nome}, gastando R$ ${custoTotal.toFixed(2)}.`,
+                `Seu portfólio recebeu ${qtd} novas ações de ${this.nome}, adquiridas por R$ ${custoTotal.toFixed(2)}.`,
+                `Você apostou no crescimento de ${this.nome} e comprou ${qtd} ações por R$ ${custoTotal.toFixed(2)}.`,
+                `Você colocou R$ ${custoTotal.toFixed(2)} em ${this.nome}, adquirindo ${qtd} ações.`,
+                `A transação foi realizada. ${qtd} ações de ${this.nome} agora fazem parte dos seus investimentos.`,
+                `Você decidiu apostar em ${this.nome} e adquiriu ${qtd} ações.`,
+                `Seu portfólio cresceu: +${qtd} ações de ${this.nome}.`,
+                `Você investiu R$ ${custoTotal.toFixed(2)} em ${this.nome}.`,
+                `Uma nova oportunidade surgiu, e você comprou ${qtd} ações de ${this.nome}.`,
+                `Você aumentou sua participação em ${this.nome}, comprando ${qtd} ações.`,
+            ];
+            const mensagem = listaMensagens[Math.floor(Math.random() * listaMensagens.length)];
+            jogo.criarAnotacaoDiario(`Compra de Ações: ${this.nome}`, mensagem, "blue");
+            atualizarDiarioUI();
+            return true;
+        }
+        return false;
+    }
+
+    venderAcoes(qtd: number): boolean {
+        if (this.acoesPossuidas < qtd) {
+            return false;
+        }
+
+        const valorTotal = qtd * this.valorAtual;
+        const custoMedio = this.acoesPossuidas > 0 ? this.valorInvestido / this.acoesPossuidas : 0;
+        jogo.patrimonio.dinheiro += valorTotal;
+        this.acoesPossuidas -= qtd;
+        this.valorInvestido = Math.max(0, this.valorInvestido - (qtd * custoMedio));
+        const listaMensagens: string[] = [
+            `Você vendeu ${qtd} ações de ${this.nome} por R$ ${valorTotal.toFixed(2)}.`,
+            `Você se desfez de ${qtd} ações de ${this.nome}, recebendo R$ ${valorTotal.toFixed(2)}.`,
+            `Foram vendidas ${qtd} ações de ${this.nome}, totalizando R$ ${valorTotal.toFixed(2)}.`,
+            `Você decidiu vender ${qtd} ações de ${this.nome} e recebeu R$ ${valorTotal.toFixed(2)}.`,
+            `Você vendeu sua posição de ${qtd} ações de ${this.nome} por R$ ${valorTotal.toFixed(2)}.`,
+            `A venda foi concluída: ${qtd} ações de ${this.nome} por R$ ${valorTotal.toFixed(2)}.`,
+            `Você retirou R$ ${valorTotal.toFixed(2)} de seu investimento em ${this.nome}.`,
+            `Você reduziu sua participação em ${this.nome}, vendendo ${qtd} ações por R$ ${valorTotal.toFixed(2)}.`,
+            `Seu portfólio perdeu ${qtd} ações de ${this.nome}, vendidas por R$ ${valorTotal.toFixed(2)}.`,
+            `Você decidiu realizar o lucro e vendeu ${qtd} ações de ${this.nome} por R$ ${valorTotal.toFixed(2)}.`,
+            `Você encerrou parte do investimento em ${this.nome} e recebeu R$ ${valorTotal.toFixed(2)}.`,
+            `A negociação foi realizada. ${qtd} ações de ${this.nome} deixaram seu portfólio.`,
+        ];
+        const mensagem = listaMensagens[Math.floor(Math.random() * listaMensagens.length)];
+        jogo.criarAnotacaoDiario(`Venda de Ações: ${this.nome}`, mensagem, "purple");
+        atualizarDiarioUI();
+        return true;
+    }
+}
+
+class Propriedade {
+    static investimento: Investimento = new Investimento("Propriedade", 50, 0, 1, 100);
+
+    nome: string;
+    valorBase: number;
+    rendaAnualBase: number;
+    despestasAnuaisBase: number;
+    luxoBase: number;
+    condicao: number;
+    comprada: boolean;
+    melhorias: IMelhoria[];
+
+    constructor(nome: string, valorBase: number, rendaAnualBase: number, despestasAnuaisBase: number = 0,
+        condicao: number = 100, luxoBase: number = 0, melhorias: IMelhoria[] = []) {
+        this.nome = nome;
+        this.valorBase = valorBase;
+        this.rendaAnualBase = rendaAnualBase;
+        this.despestasAnuaisBase = despestasAnuaisBase;
+        this.luxoBase = luxoBase;
+        this.condicao = condicao;
+        this.melhorias = melhorias;
+        this.comprada = false;
+    }
+
+    get rendaAnual(): number {
+        return this.rendaAnualBase * (this.condicao / 100);
+    }
+
+    get despestasAnuais(): number {
+        return this.despestasAnuaisBase / ((this.condicao || 1) / 10);
+    }
+
+    get luxo(): number {
+        return this.luxoBase * (this.condicao / 100);
+    }
+
+    get valor(): number {
+        const x = (Propriedade.investimento.valorAtual - 50) / 50;
+        const variacao = Math.sign(x) * Math.pow(Math.abs(x), 1.5) * 0.4;
+        const influencia = Math.min(Math.max(0.6, 1 + variacao), 1.4);
+        return Math.max(this.valorBase * influencia * (this.condicao / 100), this.valorBase * 0.1);
+    }
+
+    get valorReforma(): number {
+        const falta = (100 - this.condicao) / 100;
+        return this.valorBase * Math.pow(falta, 1.3) * 0.35;
+    }
+
+    get melhoriaDisponivel(): IMelhoria | undefined {
+        return this.melhorias.find(melhoria => !melhoria.comprada);
+    }
+
+    comprarPropriedade(): boolean {
+        if (jogo.patrimonio.dinheiro >= this.valor && !this.comprada) {
+            jogo.patrimonio.dinheiro -= this.valor;
+            this.comprada = true;
+            const listaMensagens: string[] = [
+                `Você comprou a propriedade ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
+                `Você adquiriu a propriedade ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
+                `A propriedade ${this.nome} agora pertence a você.`,
+                `Você decidiu investir em ${this.nome} e pagou R$ ${this.valor.toFixed(2)} pela propriedade.`,
+                `Você fechou negócio e comprou ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
+                `Uma nova propriedade entrou para o seu patrimônio: ${this.nome}.`,
+                `Você aumentou seu patrimônio ao adquirir ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
+                `Você aproveitou a oportunidade e comprou ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
+                `Você realizou a compra de ${this.nome} e agora é o novo proprietário.`,
+                `Você investiu R$ ${this.valor.toFixed(2)} na aquisição de ${this.nome}.`,
+                `Seu patrimônio cresceu. Você adquiriu a propriedade ${this.nome}.`,
+                `Você colocou as mãos em uma nova propriedade: ${this.nome}.`,
+                `Depois de uma negociação, ${this.nome} passou a fazer parte do seu patrimônio.`,
+                `Você decidiu expandir seus negócios e comprou ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
+                `Mais um imóvel para a coleção! Você comprou ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
+                `Você fez uma nova aquisição: ${this.nome}, no valor de R$ ${this.valor.toFixed(2)}.`,
+                `O negócio foi fechado. ${this.nome} agora faz parte dos seus bens.`,
+                `Você encontrou uma boa oportunidade e adquiriu ${this.nome}.`,
+                `Você aplicou parte de sua fortuna na compra de ${this.nome}.`,
+                `Uma nova fonte de renda pode estar surgindo: você comprou ${this.nome}.`,
+                `Você decidiu apostar no futuro e investiu em ${this.nome}.`,
+                `Você ampliou seu patrimônio com a aquisição de ${this.nome}.`,
+                `Você negociou a compra de ${this.nome} e pagou R$ ${this.valor.toFixed(2)}.`,
+                `Seu patrimônio acaba de ganhar uma nova propriedade: ${this.nome}.`,
+                `Você finalmente fechou o negócio e ${this.nome} agora é seu.`,
+            ];
+            const mensagem = listaMensagens[Math.floor(Math.random() * listaMensagens.length)];
+            jogo.criarAnotacaoDiario(`Compra de propriedade: ${this.nome}`, mensagem, "blue");
+            atualizarPatrimonioUI();
+            atualizarDiarioUI();
+            return true;
+        }
+        return false;
+    }
+
+    venderPropriedade(): boolean {
+        if (this.comprada) {
+            jogo.patrimonio.dinheiro += this.valor;
+            this.comprada = false;
+            const listaMensagens: string[] = [
+                `Você vendeu a propriedade ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
+                `Você se desfez da propriedade ${this.nome} e recebeu R$ ${this.valor.toFixed(2)}.`,
+                `A propriedade ${this.nome} foi vendida por R$ ${this.valor.toFixed(2)}.`,
+                `Você decidiu vender ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
+                `Você fechou negócio e vendeu ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
+                `A propriedade ${this.nome} deixou de fazer parte do seu patrimônio.`,
+                `Você transformou ${this.nome} em dinheiro, recebendo R$ ${this.valor.toFixed(2)}.`,
+                `Você vendeu ${this.nome} e aumentou seu dinheiro disponível em R$ ${this.valor.toFixed(2)}.`,
+                `Você realizou a venda de ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
+                `Você decidiu se desfazer de ${this.nome} e recebeu R$ ${this.valor.toFixed(2)}.`,
+                `Um negócio foi encerrado: ${this.nome} foi vendido por R$ ${this.valor.toFixed(2)}.`,
+                `Você negociou a venda de ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
+                `Você encontrou um comprador para ${this.nome} e recebeu R$ ${this.valor.toFixed(2)}.`,
+                `Depois de uma negociação, ${this.nome} deixou de ser sua propriedade.`,
+                `Você colocou ${this.nome} à venda e finalmente fechou o negócio.`,
+                `Você decidiu abrir mão de ${this.nome} em troca de R$ ${this.valor.toFixed(2)}.`,
+                `Seu patrimônio mudou: ${this.nome} foi vendido por R$ ${this.valor.toFixed(2)}.`,
+                `Você liquidou sua propriedade ${this.nome} e recebeu R$ ${this.valor.toFixed(2)}.`,
+                `Você reduziu seu patrimônio imobiliário ao vender ${this.nome}.`,
+                `Mais uma negociação concluída: você vendeu ${this.nome}.`,
+                `Você aproveitou a oportunidade e vendeu ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
+                `Você decidiu transformar seu investimento em dinheiro e vendeu ${this.nome}.`,
+                `A negociação foi concluída. ${this.nome} agora pertence a outra pessoa.`,
+                `Você encerrou sua posse sobre ${this.nome} após vendê-la por R$ ${this.valor.toFixed(2)}.`,
+            ];
+            const mensagem = listaMensagens[Math.floor(Math.random() * listaMensagens.length)];
+            jogo.criarAnotacaoDiario(`Venda de propriedade: ${this.nome}`, mensagem, "purple");
+            atualizarPatrimonioUI();
+            atualizarDiarioUI();
+            return true;
+        }
+        return false;
+    }
+
+    proximoAno() {
+        if (!this.comprada) return;
+        jogo.patrimonio.dinheiro += this.rendaAnual - this.despestasAnuais;
+        const diminuicaoCondicao = Math.random() * 5 + 2;
+        this.condicao = Math.max(0, this.condicao - diminuicaoCondicao);
+    }
+
+    reformar(): boolean {
+        const custo = this.valorReforma;
+        if (!this.comprada || this.condicao >= 100 || jogo.patrimonio.dinheiro < custo) {
+            return false;
+        }
+        jogo.patrimonio.dinheiro -= custo;
+        this.condicao = 100;
+        return true;
+    }
+
+    melhorar(): boolean {
+        const melhoria = this.melhoriaDisponivel;
+        if (!this.comprada || !melhoria || jogo.patrimonio.dinheiro < melhoria.custo) {
+            return false;
+        }
+        jogo.patrimonio.dinheiro -= melhoria.custo;
+        melhoria.efeito(this);
+        melhoria.comprada = true;
+        const listaMensagens: string[] = [
+            `Você realizou uma melhoria em ${this.nome} por R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você investiu R$ ${melhoria.custo.toFixed(2)} em melhorias para ${this.nome}.`,
+            `${this.nome} recebeu uma nova melhoria, custando R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você decidiu melhorar ${this.nome} e pagou R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você gastou R$ ${melhoria.custo.toFixed(2)} para melhorar ${this.nome}.`,
+            `Você investiu na estrutura de ${this.nome}, gastando R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você aprimorou ${this.nome} com um investimento de R$ ${melhoria.custo.toFixed(2)}.`,
+            `A propriedade ${this.nome} foi aprimorada após um investimento de R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você aplicou R$ ${melhoria.custo.toFixed(2)} em melhorias na propriedade ${this.nome}.`,
+            `Você tornou ${this.nome} ainda melhor após investir R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você decidiu renovar ${this.nome} e realizou um investimento de R$ ${melhoria.custo.toFixed(2)}.`,
+            `Depois de investir R$ ${melhoria.custo.toFixed(2)}, ${this.nome} recebeu melhorias.`,
+            `Você fez melhorias em ${this.nome}, investindo R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você resolveu dar uma atenção especial a ${this.nome} e investiu R$ ${melhoria.custo.toFixed(2)}.`,
+            `A estrutura de ${this.nome} foi melhorada após um investimento de R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você decidiu valorizar ${this.nome} e investiu R$ ${melhoria.custo.toFixed(2)} em melhorias.`,
+            `Uma nova melhoria foi adicionada a ${this.nome} após um investimento de R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você realizou uma melhoria em ${this.nome}, pagando R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você decidiu investir no futuro de ${this.nome} e gastou R$ ${melhoria.custo.toFixed(2)}.`,
+            `Seu patrimônio recebeu um novo investimento: R$ ${melhoria.custo.toFixed(2)} em ${this.nome}.`,
+            `Você aprimorou sua propriedade ${this.nome} com um investimento de R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você investiu parte de sua fortuna na melhoria de ${this.nome}.`,
+            `Você fez um novo investimento em ${this.nome}, no valor de R$ ${melhoria.custo.toFixed(2)}.`,
+            `${this.nome} ficou ainda melhor após você investir R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você decidiu não economizar nas melhorias de ${this.nome} e investiu R$ ${melhoria.custo.toFixed(2)}.`,
+        ];
+        const mensagem = listaMensagens[Math.floor(Math.random() * listaMensagens.length)];
+        jogo.criarAnotacaoDiario(`Melhoria de propriedade: ${this.nome}`, mensagem, "blue");
+        atualizarPatrimonioUI();
+        atualizarDiarioUI();
+        return true;
+    }
+}
+
+class Bem {
+    nome: string;
+    descricao: string;
+    valorBase: number;
+    valorManutencao: number;
+    efeito: () => void;
+
+    constructor(nome: string, descricao: string, valorBase: number, valorManutencao: number = 0, efeito: () => void) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.valorBase = valorBase;
+        this.valorManutencao = valorManutencao;
+        this.efeito = efeito;
+    }
+}
+
+class Banco {
+    nome: string;
+    descricao: string;
+    taxaJuros: number;
+    maximoEmprestimo: number;
+    maximoParcelas: number;
+
+    constructor(nome: string, descricao: string, taxaJuros: number, maximoEmprestimo: number, maximoParcelas: number) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.taxaJuros = taxaJuros;
+        this.maximoEmprestimo = maximoEmprestimo;
+        this.maximoParcelas = maximoParcelas;
+    }
+}
+
+class Emprestimo {
+    valorInicial: number;
+    banco: Banco;
+    numeroParcerlas: number;
+    parcelasRestantes: number;
+
+    constructor(valorInicial: number, banco: Banco, numeroParcerlas: number) {
+        this.valorInicial = valorInicial;
+        this.banco = banco;
+        this.numeroParcerlas = numeroParcerlas;
+        this.parcelasRestantes = numeroParcerlas;
+    }
+
+    get valorTotal(): number {
+        return this.valorInicial * (1 + this.banco.taxaJuros);
+    }
+
+    get valorParcela(): number {
+        return this.valorTotal / this.numeroParcerlas;
+    }
+
+    get saldoDevedor(): number {
+        return this.parcelasRestantes * this.valorParcela;
+    }
+
+    pagarParcela() {
+        jogo.patrimonio.dinheiro -= this.valorParcela;
+        this.parcelasRestantes--;
+        if (this.parcelasRestantes <= 0) {
+            const index = jogo.patrimonio.emprestimos.indexOf(this);
+            if (index > -1) {
+                jogo.patrimonio.emprestimos.splice(index, 1);
+            }
+        }
+    }
+}
+
+class Pessoa {
+    nome: string;
+    descricao: string;
+    satisfacao: number;
+    influencia?: number;
+
+    constructor(nome: string, descricao: string, satisfacao: number, influencia?: number) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.satisfacao = satisfacao;
+        this.influencia = influencia;
+    }
+}
+
+class Acontecimento {
+    nome: string;
+    descricao: string;
+    opcoes: Opcao[];
+    condicoes: () => boolean;
+
+    constructor(nome: string, descricao: string, opcoes: Opcao[] = [], condicoes: () => boolean = () => true) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.opcoes = opcoes;
+        this.condicoes = condicoes;
+    }
+}
+
+class Opcao {
+    descricao: string;
+    custoAcoes: number;
+    custoDinheiro: number;
+    efeito: () => void;
+    anotacaoDiario: AnatocaoDiario;
+
+    constructor(descricao: string, custoAcoes: number = 3, custoDinheiro: number = 0, efeito: () => void,
+        anotacaoDiario: AnatocaoDiario) {
+        this.descricao = descricao;
+        this.custoAcoes = custoAcoes;
+        this.custoDinheiro = custoDinheiro;
+        this.efeito = efeito;
+        this.anotacaoDiario = anotacaoDiario;
+    }
+
+    escolher() {
+        if (!(jogo.acoes >= this.custoAcoes && jogo.patrimonio.dinheiro >= this.custoDinheiro)) return;
+        jogo.acoes -= this.custoAcoes;
+        jogo.patrimonio.dinheiro -= this.custoDinheiro;
+        this.efeito();
+        jogo.criarAnotacaoDiario(this.anotacaoDiario.titulo, this.anotacaoDiario.descricao, this.anotacaoDiario.cor);
+    }
+}
+
+class Evento {
+    nome: string;
+    descricao: string;
+    efeito: () => void;
+    condicoes: () => boolean;
+    anotacaoDiario: AnatocaoDiario;
+
+    constructor(nome: string, descricao: string, efeito: () => void, condicoes: () => boolean = () => true,
+        anotacaoDiario: AnatocaoDiario) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.efeito = efeito;
+        this.condicoes = condicoes;
+        this.anotacaoDiario = anotacaoDiario;
+    }
+
+    acao() {
+        if (this.condicoes()) {
+            this.efeito();
+            jogo.criarAnotacaoDiario(this.anotacaoDiario.titulo, this.anotacaoDiario.descricao, this.anotacaoDiario.cor);
+        }
+    }
+}
+
+class AnatocaoDiario {
+    titulo: string;
+    descricao: string;
+    ano: number;
+    cor: TCor;
+
+    constructor(titulo: string, descricao: string, ano: number, cor: TCor = "yellow") {
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.ano = ano;
+        this.cor = cor;
+    }
+}
+
+class Jogo {
+    ano: number;
+    patrimonio: Patrimonio;
+    acoes: number;
+    bonusPrestigio: number;
+
+    familia: Pessoa[];
+    conhecidos: Pessoa[];
+
+    bancos: Banco[];
+
+    diario: AnatocaoDiario[];
+
+    constructor() {
+        this.ano = 1891;
+        this.patrimonio = new Patrimonio();
+        this.acoes = 15;
+        this.bonusPrestigio = 0;
+
+        //mudar os valores depois
+        this.familia = [
+            new Pessoa("Camila", "Esposa", 80, undefined),
+            new Pessoa("Mário", "Filho", 90, undefined),
+            new Pessoa("Ruth", "Filha", 85, undefined),
+            new Pessoa("Raquel", "Filha", 90, undefined),
+            new Pessoa("Lia", "Filha", 85, undefined),
+            new Pessoa("Nina", "Sobrinha", 80, undefined),
+        ]
+
+        this.conhecidos = [
+            new Pessoa("Noca", "Criada", 60, 25),
+            new Pessoa("Dr. Gervásio", "Médico", 50, 65),
+            new Pessoa("Capitão Rino", "Capitão da Marinha", 50, 70),
+            new Pessoa("Paquita", "Rica", 50, 75),
+            new Pessoa("Gama Torres", "Investidor", 50, 80),
+            new Pessoa("Inocêncio Braga", "Homem de negócios", 50, 80),
+            new Pessoa("Baronesa da Lage", "Rica", 50, 95),
+            new Pessoa("Mota", "Ajudante", 50, 30),
+            new Pessoa("Joaquim", "Caxeiro", 50, 35),
+            new Pessoa("Lélio Braga", "Maestro", 50, 60),
+        ];
+
+        this.patrimonio.investimentos = [
+            new Investimento("Batata", 20, 5, 8, 45),
+            new Investimento("Milho", 25, 6, 10, 55),
+            new Investimento("Trigo", 30, 6, 12, 65),
+            new Investimento("Algodão", 45, 8, 18, 100),
+            new Investimento("Açúcar", 50, 9, 20, 120),
+            new Investimento("Café", 80, 12, 30, 200),
+            new Investimento("Madeira", 90, 10, 35, 220),
+            new Investimento("Pecuária", 120, 12, 50, 300),
+
+            new Investimento("Carvão", 140, 14, 55, 350),
+            new Investimento("Ferro", 170, 15, 60, 400),
+            new Investimento("Aço", 220, 18, 75, 550),
+            new Investimento("Têxteis", 190, 16, 70, 480),
+
+            new Investimento("Borracha", 260, 22, 70, 700),
+            new Investimento("Petróleo", 300, 25, 60, 850),
+            new Investimento("Navegação", 340, 20, 100, 800),
+            new Investimento("Construção", 380, 18, 120, 900),
+            new Investimento("Ferrovias", 450, 25, 100, 1100),
+
+            new Investimento("Farmacêutica", 500, 15, 200, 1000),
+            new Investimento("Química", 550, 18, 200, 1100),
+            new Investimento("Energia Elétrica", 600, 20, 180, 1300),
+            new Investimento("Comunicações", 650, 22, 180, 1400),
+            new Investimento("Tecnologia", 700, 30, 100, 1800),
+
+            new Investimento("Seguros", 750, 10, 400, 1100),
+            new Investimento("Bancos", 800, 12, 450, 1200),
+            new Investimento("Comércio", 250, 12, 100, 600),
+
+            new Investimento("Ouro", 1500, 5, 900, 2200)
+        ];
+
+        this.patrimonio.propriedades = [
+            new Propriedade("Quarto de Cortiço", 40000, 3000, 1500, 100, 5, [
+                { nome: "Mobília", custo: 5000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 3000; propriedade.luxoBase += 3; } },
+                { nome: "Pequena reforma", custo: 8000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 6000; propriedade.rendaAnualBase += 500; } }
+            ]),
+
+            new Propriedade("Apartamento Pequeno", 120000, 9000, 3500, 100, 20, [
+                { nome: "Reforma", custo: 18000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 15000; propriedade.rendaAnualBase += 1000; } },
+                { nome: "Mobília", custo: 12000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 9000; propriedade.luxoBase += 6; } },
+                { nome: "Instalações melhores", custo: 25000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 20000; propriedade.despestasAnuaisBase -= 800; } }
+            ]),
+
+            new Propriedade("Casa Modesta", 180000, 12000, 4500, 100, 30, [
+                { nome: "Reforma", custo: 25000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 20000; propriedade.rendaAnualBase += 1500; } },
+                { nome: "Jardim", custo: 15000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 12000; propriedade.luxoBase += 8; } },
+                { nome: "Mobília", custo: 20000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 15000; propriedade.luxoBase += 7; } }
+            ]),
+
+            new Propriedade("Casa", 300000, 21000, 7500, 100, 45, [
+                { nome: "Reforma", custo: 40000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 35000; propriedade.rendaAnualBase += 2500; } },
+                { nome: "Jardim", custo: 25000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 20000; propriedade.luxoBase += 10; } },
+                { nome: "Móveis luxuosos", custo: 45000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 35000; propriedade.luxoBase += 15; } },
+                { nome: "Instalações modernas", custo: 60000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 45000; propriedade.despestasAnuaisBase -= 1800; } }
+            ]),
+
+            new Propriedade("Casa de Campo", 450000, 27000, 10000, 100, 55, [
+                { nome: "Grande jardim", custo: 50000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 40000; propriedade.luxoBase += 15; } },
+                { nome: "Casa de hóspedes", custo: 80000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 65000; propriedade.rendaAnualBase += 4000; propriedade.despestasAnuaisBase += 1000; } },
+                { nome: "Mobília de luxo", custo: 70000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 55000; propriedade.luxoBase += 18; } },
+                { nome: "Estábulo", custo: 60000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 50000; propriedade.luxoBase += 8; } }
+            ]),
+
+            new Propriedade("Casa de Luxo", 850000, 50000, 20000, 100, 85, [
+                { nome: "Jardins ornamentais", custo: 120000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 100000; propriedade.luxoBase += 20; } },
+                { nome: "Decoração luxuosa", custo: 160000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 130000; propriedade.luxoBase += 25; } },
+                { nome: "Ala de hóspedes", custo: 200000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 170000; propriedade.rendaAnualBase += 7000; propriedade.despestasAnuaisBase += 2000; } },
+                { nome: "Instalações modernas", custo: 180000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 150000; propriedade.despestasAnuaisBase -= 4000; } }
+            ]),
+
+            new Propriedade("Mansão", 1500000, 75000, 35000, 100, 100, [
+                { nome: "Jardins particulares", custo: 180000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 150000; propriedade.luxoBase += 20; } },
+                { nome: "Grande reforma", custo: 250000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 220000; propriedade.rendaAnualBase += 8000; } },
+                { nome: "Decoração de luxo", custo: 300000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 250000; propriedade.luxoBase += 25; } },
+                { nome: "Ala de hóspedes", custo: 280000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 230000; propriedade.rendaAnualBase += 10000; propriedade.despestasAnuaisBase += 2500; } },
+                { nome: "Serviço particular", custo: 150000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 100000; propriedade.luxoBase += 10; propriedade.despestasAnuaisBase += 5000; } }
+            ]),
+
+            new Propriedade("Sala Comercial", 180000, 15000, 5000, 100, 15, [
+                { nome: "Reforma", custo: 30000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 25000; propriedade.rendaAnualBase += 2000; } },
+                { nome: "Mobiliário profissional", custo: 20000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 15000; propriedade.luxoBase += 5; } },
+                { nome: "Divisórias", custo: 25000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 20000; propriedade.rendaAnualBase += 1500; } }
+            ]),
+
+            new Propriedade("Loja", 320000, 26000, 10000, 100, 30, [
+                { nome: "Reforma da fachada", custo: 50000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 40000; propriedade.rendaAnualBase += 3000; propriedade.luxoBase += 5; } },
+                { nome: "Ampliação", custo: 80000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 70000; propriedade.rendaAnualBase += 6000; propriedade.despestasAnuaisBase += 1500; } },
+                { nome: "Novo mobiliário", custo: 35000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 28000; propriedade.luxoBase += 8; } },
+                { nome: "Novo estoque", custo: 60000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 40000; propriedade.rendaAnualBase += 5000; propriedade.despestasAnuaisBase += 2000; } }
+            ]),
+
+            new Propriedade("Armazém", 500000, 42000, 16000, 100, 10, [
+                { nome: "Ampliação", custo: 120000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 100000; propriedade.rendaAnualBase += 9000; propriedade.despestasAnuaisBase += 2000; } },
+                { nome: "Equipamentos", custo: 80000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 65000; propriedade.rendaAnualBase += 4000; propriedade.despestasAnuaisBase -= 1500; } },
+                { nome: "Escritório", custo: 50000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 40000; propriedade.rendaAnualBase += 2500; propriedade.luxoBase += 3; } },
+                { nome: "Novo acesso", custo: 70000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 60000; propriedade.rendaAnualBase += 3500; } }
+            ]),
+
+            new Propriedade("Prédio Comercial", 1200000, 90000, 35000, 100, 20, [
+                { nome: "Reforma", custo: 180000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 150000; propriedade.rendaAnualBase += 12000; } },
+                { nome: "Novos escritórios", custo: 250000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 200000; propriedade.rendaAnualBase += 18000; propriedade.despestasAnuaisBase += 4000; } },
+                { nome: "Modernização", custo: 220000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 180000; propriedade.despestasAnuaisBase -= 5000; } },
+                { nome: "Ampliação", custo: 300000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 250000; propriedade.rendaAnualBase += 25000; propriedade.despestasAnuaisBase += 6000; } }
+            ]),
+
+            new Propriedade("Edifício Residencial", 1800000, 125000, 50000, 100, 35, [
+                { nome: "Novos apartamentos", custo: 350000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 300000; propriedade.rendaAnualBase += 30000; propriedade.despestasAnuaisBase += 7000; } },
+                { nome: "Elevador", custo: 180000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 150000; propriedade.luxoBase += 8; propriedade.despestasAnuaisBase += 1500; } },
+                { nome: "Portaria", custo: 120000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 100000; propriedade.luxoBase += 7; propriedade.despestasAnuaisBase += 2000; } },
+                { nome: "Instalações modernas", custo: 250000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 200000; propriedade.despestasAnuaisBase -= 7000; } }
+            ]),
+
+            new Propriedade("Terreno", 100000, 0, 1000, 100, 1, [
+                { nome: "Cercamento", custo: 15000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 12000; propriedade.luxoBase += 2; } },
+                { nome: "Preparação", custo: 30000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 25000; propriedade.despestasAnuaisBase -= 200; } },
+                { nome: "Estrada de acesso", custo: 40000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 35000; } }
+            ]),
+
+            new Propriedade("Terreno Rural", 250000, 8000, 3000, 100, 5, [
+                { nome: "Cercamento", custo: 30000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 25000; propriedade.luxoBase += 2; } },
+                { nome: "Preparação do solo", custo: 50000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 40000; propriedade.rendaAnualBase += 2000; } },
+                { nome: "Poço", custo: 40000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 35000; propriedade.rendaAnualBase += 1500; propriedade.despestasAnuaisBase -= 500; } }
+            ]),
+
+            new Propriedade("Fazenda", 1500000, 120000, 45000, 100, 50, [
+                { nome: "Novas plantações", custo: 180000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 150000; propriedade.rendaAnualBase += 20000; propriedade.despestasAnuaisBase += 5000; } },
+                { nome: "Criação de gado", custo: 250000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 210000; propriedade.rendaAnualBase += 25000; propriedade.despestasAnuaisBase += 7000; } },
+                { nome: "Celeiro", custo: 120000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 100000; propriedade.rendaAnualBase += 7000; } },
+                { nome: "Maquinário agrícola", custo: 300000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 250000; propriedade.rendaAnualBase += 18000; propriedade.despestasAnuaisBase -= 4000; } }
+            ]),
+
+            new Propriedade("Engenho", 2200000, 180000, 75000, 100, 45, [
+                { nome: "Ampliação da produção", custo: 300000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 250000; propriedade.rendaAnualBase += 30000; propriedade.despestasAnuaisBase += 8000; } },
+                { nome: "Novas máquinas", custo: 350000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 300000; propriedade.rendaAnualBase += 25000; propriedade.despestasAnuaisBase -= 5000; } },
+                { nome: "Novas plantações", custo: 250000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 200000; propriedade.rendaAnualBase += 28000; propriedade.despestasAnuaisBase += 6000; } },
+                { nome: "Armazém", custo: 180000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 150000; propriedade.rendaAnualBase += 10000; propriedade.despestasAnuaisBase -= 2000; } }
+            ]),
+
+            new Propriedade("Hotel", 2500000, 180000, 80000, 100, 70, [
+                { nome: "Reforma dos quartos", custo: 300000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 250000; propriedade.rendaAnualBase += 25000; propriedade.despestasAnuaisBase -= 5000; } },
+                { nome: "Restaurante", custo: 350000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 280000; propriedade.rendaAnualBase += 35000; propriedade.despestasAnuaisBase += 8000; propriedade.luxoBase += 8; } },
+                { nome: "Ampliação", custo: 450000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 380000; propriedade.rendaAnualBase += 45000; propriedade.despestasAnuaisBase += 12000; } },
+                { nome: "Salão de eventos", custo: 300000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 250000; propriedade.rendaAnualBase += 30000; propriedade.despestasAnuaisBase += 6000; } }
+            ]),
+
+            new Propriedade("Teatro", 3000000, 210000, 100000, 100, 75, [
+                { nome: "Reforma do salão", custo: 400000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 350000; propriedade.rendaAnualBase += 35000; propriedade.luxoBase += 10; } },
+                { nome: "Novos camarotes", custo: 350000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 300000; propriedade.rendaAnualBase += 30000; propriedade.luxoBase += 12; } },
+                { nome: "Novas instalações", custo: 300000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 250000; propriedade.despestasAnuaisBase -= 7000; } },
+                { nome: "Salão de eventos", custo: 450000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 380000; propriedade.rendaAnualBase += 40000; propriedade.despestasAnuaisBase += 10000; } }
+            ])
+        ];
+
+        this.patrimonio.bens = [
+            new Bem("Carro", "Um carro confortável para a família.", 50000, 2000, () => { }),
+            new Bem("Iate", "Um iate luxuoso para passeios no mar.", 200000, 10000, () => { }),
+            new Bem("Avião", "Um avião particular para viagens rápidas.", 1000000, 50000, () => { }),
+            new Bem("Casa de praia", "Uma casa de praia para férias.", 500000, 25000, () => { }),
+        ];
+
+        this.bancos = [
+            new Banco("Banco do Brasileiro", "Um dos maiores bancos do país.", 0.05, 50_000, 5),
+            new Banco("Santoandré", "Um banco confiável e tradicional.", 0.07, 150_000, 10),
+            new Banco("BOX", "Um banco moderno e inovador.", 0.08, 500_000, 10),
+            new Banco("Itaipú", "Um banco com boa reputação.", 0.09, 1_500_000, 12),
+            new Banco("ComRoupaBank", "Um banco com serviços diversificados.", 0.1, 3_000_000, 20),
+        ]
+
+        this.diario = [];
+    }
+
+    get prestigio(): number {
+        if (this.conhecidos.length <= 0) {
+            return 0;
+        }
+        let prestigioTotal = this.bonusPrestigio;
+        this.conhecidos.forEach(pessoa => {
+            prestigioTotal += pessoa.satisfacao * (pessoa.influencia || 0) / 500;
+        });
+        this.patrimonio.propriedades.forEach(propriedade => {
+            if (propriedade.comprada) {
+                prestigioTotal += propriedade.luxo / 5;
+            }
+        });
+        return prestigioTotal;
+    }
+
+    get estabilidadeFamiliar(): number {
+        if (this.familia.length <= 0) {
+            return 0;
+        }
+        return this.familia.reduce((acc, pessoa) => acc + pessoa.satisfacao, 0) / this.familia.length;
+    }
+
+    proximoAno() {
+        if (this.patrimonio.dinheiro < 0) {
+            this.falir();
+        }
+        this.ano++;
+        this.acoes = 15;
+        this.patrimonio.investimentos.forEach(investimento => investimento.variarValor());
+        this.patrimonio.propriedades.forEach(propriedade => propriedade.proximoAno());
+        Propriedade.investimento.variarValor();
+        this.patrimonio.emprestimos.forEach(emprestimo => {
+            emprestimo.pagarParcela();
+        });
+        acontecimentoAtual = gerarAcontecimentoAleatorio();
+        eventoAtual = gerarEventoAleatorio();
+        atualizarUI();
+        if (this.ano === 1950) {
+            this.ganhar();
+        }
+    }
+
+    falir() {
+        alert("Você faliu! O jogo será reiniciado.");
+    }
+
+    ganhar() {
+        alert("Parabéns! Você conseguiu manter sua família e patrimônio. O jogo será reiniciado.");
+    }
+
+    criarAnotacaoDiario(titulo: string, descricao: string, cor?: TCor) {
+        const anotacao = new AnatocaoDiario(titulo, descricao, this.ano, cor || "yellow");
+        this.diario.push(anotacao);
+    }
+}
+
+type TCor = "yellow" | "red" | "green" | "blue" | "purple" | "orange" | "pink" | "cyan";
+
+interface IMelhoria {
+    nome: string;
+    custo: number;
+    comprada: boolean;
+    efeito: (propriedade: Propriedade) => void
+};
+
+let jogo = new Jogo();
+
+const acontecimentos: Acontecimento[] = [
+
+];
+
+let acontecimentoAtual: Acontecimento | null = null;
+
+const eventos: Evento[] = [
+];
+
+let eventoAtual: Evento | null = null;
+
+function gerarAcontecimentoAleatorio(): Acontecimento {
+    const acontecimentosDisponiveis = acontecimentos.filter(a => a.condicoes());
+    if (acontecimentosDisponiveis.length === 0) {
+        return new Acontecimento("Nenhum acontecimento disponível", "Não há acontecimentos disponíveis no momento.", [], () => true);
+    }
+    const indiceAleatorio = Math.floor(Math.random() * acontecimentosDisponiveis.length);
+    return acontecimentosDisponiveis[indiceAleatorio];
+}
+
+function gerarEventoAleatorio(): Evento {
+    const eventosDisponiveis = eventos.filter(e => e.condicoes());
+    if (jogo.ano == 1891) {
+        return new Evento("Início do jogo", "O jogo começou. Você tem R$ 1.000.000,00 para administrar.", () => { }, () => true, new AnatocaoDiario("Início do jogo", "O jogo começou. Você tem R$ 1.000.000,00 para administrar.", jogo.ano));
+    }
+    if (eventosDisponiveis.length === 0) {
+        return new Evento("Nenhum evento disponível", "Não há eventos disponíveis no momento.", () => { }, () => true, new AnatocaoDiario("Nenhum evento disponível", "Não há eventos disponíveis no momento.", jogo.ano));
+    }
+    const indiceAleatorio = Math.floor(Math.random() * eventosDisponiveis.length);
+    return eventosDisponiveis[indiceAleatorio];
+}
+
+function atualizarUI() {
+    atualizarTopBarUI();
+    atualizarAcontecimentoUI(acontecimentoAtual || gerarAcontecimentoAleatorio());
+    atualizarPatrimonioUI();
+    atualizarInvestimentosUI();
+    atualizarPropriedadesUI();
+    atualizarBensUI();
+    atualizarEmprestimosUI();
+    atualizarFamiliaUI();
+    atualizarConhecidosUI();
+    atualizarEventosUI(eventoAtual || gerarEventoAleatorio());
+    atualizarDiarioUI();
+}
+
+function atualizarTopBarUI() {
+    document.getElementById("ano-atual")!.textContent = jogo.ano.toString();
+    document.getElementById("prestigio")!.textContent = jogo.prestigio.toFixed(2);
+    document.getElementById("estabilidade-familiar")!.textContent = jogo.estabilidadeFamiliar.toFixed(2);
+    document.getElementById("acoes-restantes")!.textContent = `Ações: ${jogo.acoes}`;
+}
+
+function atualizarAcontecimentoUI(acontecimento: Acontecimento) {
+    document.getElementById("titulo-acontecimento")!.textContent = acontecimento.nome;
+    document.getElementById("descricao-acontecimento")!.textContent = acontecimento.descricao;
+    const opcoesContainer = document.getElementById("opcoes-acontecimento")!;
+    opcoesContainer.innerHTML = "";
+    for (const opcao of acontecimento.opcoes) {
+        const button = document.createElement("button");
+        button.innerHTML = `
+        <p>${opcao.descricao}</p>
+        <p>${opcao.custoAcoes}</p>
+        `;
+        button.addEventListener("click", () => {
+            if (jogo.acoes >= opcao.custoAcoes && jogo.patrimonio.dinheiro >= opcao.custoDinheiro) {
+                opcao.escolher();
+                acontecimentoAtual = gerarAcontecimentoAleatorio();
+                atualizarAcontecimentoUI(acontecimentoAtual);
+                atualizarDiarioUI();
+                atualizarTopBarUI();
+                atualizarPatrimonioUI();
+                atualizarFamiliaUI();
+                atualizarConhecidosUI();
+                atualizarInvestimentosUI();
+                atualizarPropriedadesUI();
+                atualizarBensUI();
+                atualizarEmprestimosUI();
+            }
+        });
+        opcoesContainer.appendChild(button);
+    }
+}
+
+function atualizarPatrimonioUI() {
+    document.getElementById("dinheiro-display")!.textContent = `R$ ${jogo.patrimonio.dinheiro.toFixed(2)}`;
+    document.getElementById("patrimonio-display")!.textContent = `R$ ${jogo.patrimonio.total.toFixed(2)}`;
+    document.getElementById("renda-anual-display")!.textContent = `R$ ${jogo.patrimonio.rendaAnualTotal.toFixed(2)}`;
+}
+
+function atualizarInvestimentosUI(investimentoIndex: number = 0) {
+    const investimentoSelecionado = jogo.patrimonio.investimentos[investimentoIndex];
+    const listaInvestimentos = document.getElementById("lista-investimentos")!;
+    listaInvestimentos.innerHTML = "";
+    for (const investimento of jogo.patrimonio.investimentos) {
+        const div = document.createElement("div");
+        div.classList.add("sidebar-item");
+        if (investimento === investimentoSelecionado) {
+            div.classList.add("selected-item");
+        }
+        const atual = investimento.valorAtual;
+        let variacao = 0;
+        if (investimento.historico.length > 1) {
+            variacao = ((investimento.historico[investimento.historico.length - 2].valor - atual) / investimento.historico[investimento.historico.length - 2].valor) * 100;
+        }
+        div.innerHTML = `
+            <div>
+                <img src="/assets/images/memes img/cavalo.jpg" alt="${investimento.nome}" />
+            </div>
+            <div>
+                <h3>${investimento.nome}</h3>
+                <h2>R$ ${atual.toFixed(2)}</h2>
+                <h4>
+                    ${variacao <= 0 ? `
+                        <svg viewBox="0 -960 960 960" fill="var(--green4)">
+                            <path d="m280-400 200-200 200 200H280Z"/>
+                        </svg>` : `
+                        <svg viewBox="0 -960 960 960" fill="var(--red4)">
+                            <path d="M480-360 280-560h400L480-360Z"/>
+                        </svg>`}
+                    ${Math.abs(variacao).toFixed(2)}%
+                </h4>
+            </div>
+        `;
+        div.addEventListener("click", () => {
+            atualizarInvestimentosUI(jogo.patrimonio.investimentos.indexOf(investimento));
+        });
+        listaInvestimentos.appendChild(div);
+    }
+
+    const centro = document.getElementById("centro-investimentos")!;
+    const atual = investimentoSelecionado.valorAtual;
+    let variacao = 0;
+    if (investimentoSelecionado.historico.length > 1) {
+        variacao = ((investimentoSelecionado.historico[investimentoSelecionado.historico.length - 2].valor - atual) / atual) * 100;
+    }
+    centro.innerHTML = `
+        <div>
+            <div>
+                <img src="/assets/images/memes img/cavalo.jpg" alt="Investimentos" />
+            </div>
+
+            <div>
+                <h2>${investimentoSelecionado.nome}</h2>
+                <div>
+                    <div>
+                        Preço atual
+                        <h3>R$ ${investimentoSelecionado.valorAtual.toFixed(2)}</h3>
+                    </div>
+                    <div>
+                        Variação
+                        <h3>
+                            ${variacao <= 0 ? `
+                                <svg viewBox="0 -960 960 960" fill="var(--green4)">
+                                    <path d="m280-400 200-200 200 200H280Z"/>
+                                </svg>` : `
+                                <svg viewBox="0 -960 960 960" fill="var(--red4)">
+                                    <path d="M480-360 280-560h400L480-360Z"/>
+                                </svg>`}
+                            ${Math.abs(variacao).toFixed(2)}%
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <canvas id="grafico-investimento"></canvas>
+        </div>
+        <div id="tabela-investimento">
+
+        </div>
+    `;
+
+    investimentoSelecionado.gerarGrafico("grafico-investimento");
+    const tabelaInvestimento = document.getElementById("tabela-investimento")!;
+    tabelaInvestimento.appendChild(investimentoSelecionado.gerarTabela());
+
+    const direita = document.getElementById("direita-investimentos")!;
+    direita.innerHTML = `
+        <div>
+            <h3>Ações possuídas <span>${investimentoSelecionado.acoesPossuidas}</span></h3>
+            <h3>Valor investido <span>R$ ${investimentoSelecionado.valorInvestido.toFixed(2)}</span></h3>
+            <h3>Valor das ações <span>R$ ${(investimentoSelecionado.acoesPossuidas * investimentoSelecionado.valorAtual).toFixed(2)}</span></h3>
+            <h3>Lucro/Prejuízo <span>R$ ${(investimentoSelecionado.acoesPossuidas * investimentoSelecionado.valorAtual - investimentoSelecionado.valorInvestido).toFixed(2)}</span></h3>
+            <h3>Rentabilidade <span>${investimentoSelecionado.valorInvestido > 0 ? (((investimentoSelecionado.acoesPossuidas * investimentoSelecionado.valorAtual - investimentoSelecionado.valorInvestido) / investimentoSelecionado.valorInvestido) * 100).toFixed(2) : "0"}%</span></h3>
+        </div>
+        <div>
+            <h2>Negociar ações</h2>
+            <label for="quantidade-acoes">Quantidade</label>
+            <input id="quantidade-acoes" type="number" min="1" step="1" value="1">
+            <p id="total-negociacao">Total: R$ ${investimentoSelecionado.valorAtual.toFixed(2)}</p>
+            <p class="caixa-disponivel">Dinheiro disponível: R$ ${jogo.patrimonio.dinheiro.toFixed(2)}</p>
+            <div class="acoes-negociacao">
+                <button id="botao-comprar-acoes" type="button">Comprar</button>
+                <button id="botao-vender-acoes" type="button">Vender</button>
+            </div>
+            <p id="mensagem-negociacao" role="status"></p>
+        </div>
+    `;
+
+    const quantidadeAcoes = document.getElementById("quantidade-acoes") as HTMLInputElement;
+    const totalNegociacao = document.getElementById("total-negociacao")!;
+    const mensagemNegociacao = document.getElementById("mensagem-negociacao")!;
+
+    quantidadeAcoes.addEventListener("input", () => {
+        const quantidade = Math.max(0, Number.parseInt(quantidadeAcoes.value) || 0);
+        totalNegociacao.textContent = `Total: R$ ${(quantidade * investimentoSelecionado.valorAtual).toFixed(2)}`;
+    });
+
+    const negociar = (tipo: "compra" | "venda") => {
+        const quantidade = Number.parseInt(quantidadeAcoes.value);
+        if (!Number.isInteger(quantidade) || quantidade < 1) {
+            mensagemNegociacao.textContent = "Informe uma quantidade válida.";
+            return;
+        }
+
+        const negociacaoConcluida = tipo === "compra"
+            ? investimentoSelecionado.comprarAcoes(quantidade)
+            : investimentoSelecionado.venderAcoes(quantidade);
+
+        if (!negociacaoConcluida) {
+            mensagemNegociacao.textContent = tipo === "compra"
+                ? "Dinheiro insuficiente para essa compra."
+                : "Você não possui ações suficientes para essa venda.";
+            return;
+        }
+
+        atualizarInvestimentosUI(investimentoIndex);
+        atualizarPatrimonioUI();
+    };
+
+    document.getElementById("botao-comprar-acoes")!.addEventListener("click", () => negociar("compra"));
+    document.getElementById("botao-vender-acoes")!.addEventListener("click", () => negociar("venda"));
+}
+
+function atualizarPropriedadesUI(propriedadeIndex: number = 0) {
+    const propriadedeSelecionado = jogo.patrimonio.propriedades[propriedadeIndex];
+    const listaPropriedades = document.getElementById("lista-propriedades")!;
+    listaPropriedades.innerHTML = "";
+    for (const propriedade of jogo.patrimonio.propriedades) {
+        const div = document.createElement("div");
+        div.classList.add("sidebar-item");
+        if (propriedade === propriadedeSelecionado) {
+            div.classList.add("selected-item");
+        }
+        div.innerHTML = `
+            <div>
+                <img src="/assets/images/memes img/cavalo.jpg" alt="${propriedade.nome}" />
+            </div>
+            <div>
+                <h3>${propriedade.nome}</h3>
+                <h2>R$ ${propriedade.valor.toFixed(2)}</h2>
+            </div>
+        `;
+        div.addEventListener("click", () => {
+            atualizarPropriedadesUI(jogo.patrimonio.propriedades.indexOf(propriedade));
+        });
+        listaPropriedades.appendChild(div);
+    }
+
+    const centro = document.getElementById("centro-propriedades")!;
+    centro.innerHTML = `
+        <div>
+            <div id="imagem-propriedade">
+                <img src="/assets/images/memes img/cavalo.jpg" alt="${propriadedeSelecionado.nome}" />
+            </div>
+            <div id="informacoes-propriedade">
+                <div><span>Valor atual</span><strong>R$ ${propriadedeSelecionado.valor.toFixed(2)}</strong></div>
+                <div><span>Renda anual</span><strong>R$ ${propriadedeSelecionado.rendaAnual.toFixed(2)}</strong></div>
+                <div><span>Despesas anuais</span><strong>R$ ${propriadedeSelecionado.despestasAnuais.toFixed(2)}</strong></div>
+                <div><span>Condição</span><strong>${propriadedeSelecionado.condicao.toFixed(2)}%</strong></div>
+                <div><span>Luxo</span><strong>${propriadedeSelecionado.luxo.toFixed(2)}</strong></div>
+            </div>
+        </div>
+        <div class="propriedade-resumo">
+            <span class="propriedade-status ${propriadedeSelecionado.comprada ? "status-comprada" : "status-disponivel"}">
+                ${propriadedeSelecionado.comprada ? "Em sua carteira" : "Disponível para compra"}
+            </span>
+            <p>${propriadedeSelecionado.comprada
+            ? "Esta propriedade gera renda, mas perde condição a cada ano."
+            : "Compre esta propriedade para começar a receber sua renda anual."}</p>
+        </div>
+    `;
+
+    const direita = document.getElementById("direita-propriedades")!;
+    const melhoriaDisponivel = propriadedeSelecionado.melhoriaDisponivel;
+    direita.innerHTML = `
+        <div class="propriedade-acoes">
+            <h3>Gerenciar propriedade</h3>
+            <p id="mensagem-propriedade" role="status"></p>
+            <button id="botao-comprar-vender-propriedade" class="${propriadedeSelecionado.comprada ? "acao-venda" : "acao-principal"}" type="button">
+                <span>${propriadedeSelecionado.comprada ? "Vender propriedade" : "Comprar propriedade"}</span>
+                <strong>R$ ${propriadedeSelecionado.valor.toFixed(2)}</strong>
+            </button>
+            <button id="botao-melhorar-propriedade" type="button" ${!propriadedeSelecionado.comprada || !melhoriaDisponivel ? "disabled" : ""}>
+                <span>Melhorar <small>${melhoriaDisponivel ? melhoriaDisponivel.nome : "Nenhuma melhoria disponível"}</small></span>
+                <strong>${melhoriaDisponivel ? `R$ ${melhoriaDisponivel.custo.toFixed(2)}` : "Sem melhorias"}</strong>
+            </button>
+            <button id="botao-reformar-propriedade" type="button" ${!propriadedeSelecionado.comprada || propriadedeSelecionado.condicao >= 100 ? "disabled" : ""}>
+                <span>Reformar</span>
+                <strong>${propriadedeSelecionado.condicao >= 100 ? "Condição máxima" : `R$ ${propriadedeSelecionado.valorReforma.toFixed(2)}`}</strong>
+            </button>
+        </div>
+    `;
+
+    const botaoComprarVender = direita.querySelector("button#botao-comprar-vender-propriedade")!;
+    botaoComprarVender.addEventListener("click", () => {
+        let concluiu = false;
+        if (!propriadedeSelecionado.comprada) {
+            concluiu = propriadedeSelecionado.comprarPropriedade();
+        } else {
+            concluiu = propriadedeSelecionado.venderPropriedade();
+        }
+        if (concluiu) {
+            atualizarPropriedadesUI(propriedadeIndex);
+            atualizarPatrimonioUI();
+        } else {
+            direita.querySelector("#mensagem-propriedade")!.textContent = "Dinheiro insuficiente para esta operação.";
+        }
+    });
+
+    const botaoMelhorar = direita.querySelector("button#botao-melhorar-propriedade")!;
+    botaoMelhorar.addEventListener("click", () => {
+        if (propriadedeSelecionado.melhorar()) {
+            atualizarPropriedadesUI(propriedadeIndex);
+            atualizarPatrimonioUI();
+        } else {
+            direita.querySelector("#mensagem-propriedade")!.textContent = "Não há dinheiro suficiente para melhorar.";
+        }
+    });
+
+    const botaoReformar = direita.querySelector("button#botao-reformar-propriedade")!;
+    botaoReformar.addEventListener("click", () => {
+        if (propriadedeSelecionado.reformar()) {
+            atualizarPropriedadesUI(propriedadeIndex);
+            atualizarPatrimonioUI();
+        } else {
+            direita.querySelector("#mensagem-propriedade")!.textContent = "Não há dinheiro suficiente para reformar.";
+        }
+    });
+}
+
+function atualizarBensUI(bemIndex: number = 0) {
+    const bemSelecionado = jogo.patrimonio.bens[bemIndex];
+    const listaBens = document.getElementById("lista-bens")!;
+    listaBens.innerHTML = "";
+    for (const bem of jogo.patrimonio.bens) {
+        const div = document.createElement("div");
+        if (bem === bemSelecionado) {
+            div.classList.add("selected-item");
+        }
+        div.innerHTML = `
+            <div>
+                <img src="/assets/images/memes img/cavalo.jpg" alt="${bem.nome}" />
+            </div>
+            <div>
+                <h3>${bem.nome}</h3>
+            </div>
+        `;
+        div.addEventListener("click", () => {
+            atualizarBensUI(jogo.patrimonio.bens.indexOf(bem));
+        });
+        listaBens.appendChild(div);
+    }
+
+    const nomeBem = document.getElementById("nome-bem")!;
+    const imagemBem = document.getElementById("imagem-bem")! as HTMLImageElement;
+    const descricaoBem = document.getElementById("descricao-bem")!;
+    const valorBem = document.getElementById("valor-bem")!;
+    const emanutencaoBem = document.getElementById("manutencao-bem")!;
+    nomeBem.textContent = bemSelecionado.nome;
+    imagemBem.src = "/assets/images/memes img/cavalo.jpg";
+    descricaoBem.textContent = bemSelecionado.descricao;
+    valorBem.textContent = `Valor: R$ ${bemSelecionado.valorBase.toFixed(2)}`;
+    emanutencaoBem.textContent = `Manutenção: R$ ${bemSelecionado.valorManutencao.toFixed(2)}`;
+}
+
+function atualizarEmprestimosUI(bancoIndex: number = 0) {
+    const bancoSelecionado = jogo.bancos[bancoIndex];
+    const emprestimoExistente = jogo.patrimonio.emprestimos.some(emprestimo => emprestimo.banco === bancoSelecionado);
+    const listaBancos = document.getElementById("lista-bancos")!;
+    listaBancos.innerHTML = "";
+    for (const banco of jogo.bancos) {
+        const div = document.createElement("div");
+        div.classList.add("sidebar-item");
+        if (banco === bancoSelecionado) {
+            div.classList.add("selected-item");
+        }
+        div.innerHTML = `
+            <div>
+                <img src="/assets/images/memes img/cavalo.jpg" alt="${banco.nome}" />
+            </div>
+            <div>
+                <h3>${banco.nome}</h3>
+                <h2>Juros: ${parseInt(String(banco.taxaJuros * 100))}%</h2>
+            </div>
+        `;
+        div.addEventListener("click", () => {
+            atualizarEmprestimosUI(jogo.bancos.indexOf(banco));
+        });
+        listaBancos.appendChild(div);
+    }
+
+    const criarEmprestimo = document.getElementById("criar-emprestimo")!;
+    criarEmprestimo.innerHTML = `
+        <div class="emprestimo-introducao">
+            <div>
+                <span class="eyebrow">Proposta escolhida</span>
+                <h2>${bancoSelecionado.nome}</h2>
+                <p>${bancoSelecionado.descricao}</p>
+            </div>
+            <div class="taxa-destaque">
+                <strong>${(bancoSelecionado.taxaJuros * 100).toFixed(0)}%</strong>
+                <span>juros</span>
+            </div>
+        </div>
+        <div class="limites-emprestimo">
+            <div><span>Limite</span><strong>R$ ${bancoSelecionado.maximoEmprestimo.toFixed(2)}</strong></div>
+            <div><span>Prazo máximo</span><strong>${bancoSelecionado.maximoParcelas} anos</strong></div>
+            <div><span>Caixa atual</span><strong>R$ ${jogo.patrimonio.dinheiro.toFixed(2)}</strong></div>
+        </div>
+        <h3 class="titulo-simulador">Simule seu crédito</h3>
+        <label for="valor-emprestimo">Valor</label>
+        <input id="valor-emprestimo" type="number" min="1" max="${bancoSelecionado.maximoEmprestimo}" step="1000" value="${Math.min(10000, bancoSelecionado.maximoEmprestimo)}">
+        <label for="parcelas-emprestimo">Parcelas</label>
+        <input id="parcelas-emprestimo" type="number" min="1" max="${bancoSelecionado.maximoParcelas}" step="1" value="1">
+        <div id="resumo-emprestimo">
+            <div><span>Você recebe</span><strong id="valor-recebido"></strong></div>
+            <div><span>Custo dos juros</span><strong id="custo-juros"></strong></div>
+            <div><span>Total a devolver</span><strong id="total-a-pagar"></strong></div>
+            <div class="parcela-destaque"><span>Valor de cada parcela</span><strong id="valor-parcela"></strong></div>
+        </div>
+        <button id="botao-criar-emprestimo" type="button" ${emprestimoExistente ? "disabled" : ""}>
+            ${emprestimoExistente ? "Empréstimo já contratado" : "Criar empréstimo"}
+        </button>
+        <p id="mensagem-emprestimo" role="status">${emprestimoExistente ? "Este banco já possui um empréstimo ativo." : ""}</p>
+    `;
+
+    const valorInput = document.getElementById("valor-emprestimo") as HTMLInputElement;
+    const parcelasInput = document.getElementById("parcelas-emprestimo") as HTMLInputElement;
+    const mensagem = document.getElementById("mensagem-emprestimo")!;
+
+    const atualizarResumo = () => {
+        const valor = Number(valorInput.value) || 0;
+        const parcelas = Number(parcelasInput.value) || 1;
+        const juros = valor * bancoSelecionado.taxaJuros;
+        const valorTotal = valor * (1 + bancoSelecionado.taxaJuros);
+        document.getElementById("valor-recebido")!.textContent = `R$ ${valor.toFixed(2)}`;
+        document.getElementById("custo-juros")!.textContent = `R$ ${juros.toFixed(2)}`;
+        document.getElementById("total-a-pagar")!.textContent = `R$ ${valorTotal.toFixed(2)}`;
+        document.getElementById("valor-parcela")!.textContent = `R$ ${(valorTotal / parcelas).toFixed(2)}`;
+    };
+
+    valorInput.addEventListener("input", atualizarResumo);
+    parcelasInput.addEventListener("input", atualizarResumo);
+    atualizarResumo();
+
+    document.getElementById("botao-criar-emprestimo")!.addEventListener("click", () => {
+        if (jogo.patrimonio.emprestimos.some(emprestimo => emprestimo.banco === bancoSelecionado)) {
+            mensagem.textContent = "Você já possui um empréstimo ativo neste banco.";
+            return;
+        }
+
+        const valor = Number(valorInput.value);
+        const parcelas = Number(parcelasInput.value);
+        if (!Number.isFinite(valor) || valor <= 0 || valor > bancoSelecionado.maximoEmprestimo) {
+            mensagem.textContent = `Informe um valor entre R$ 1,00 e R$ ${bancoSelecionado.maximoEmprestimo.toFixed(2)}.`;
+            return;
+        }
+        if (!Number.isInteger(parcelas) || parcelas < 1 || parcelas > bancoSelecionado.maximoParcelas) {
+            mensagem.textContent = `Escolha entre 1 e ${bancoSelecionado.maximoParcelas} parcelas.`;
+            return;
+        }
+
+        jogo.patrimonio.dinheiro += valor;
+        jogo.patrimonio.emprestimos.push(new Emprestimo(valor, bancoSelecionado, parcelas));
+        const listaMensagens: string[] = [
+            `Você contratou um empréstimo de R$ ${valor.toFixed(2)} no ${bancoSelecionado.nome}, dividido em ${parcelas} parcelas.`,
+            `Você conseguiu um empréstimo de R$ ${valor.toFixed(2)} com o ${bancoSelecionado.nome}.`,
+            `O ${bancoSelecionado.nome} aprovou seu empréstimo de R$ ${valor.toFixed(2)}.`,
+            `Você assinou um novo empréstimo com o ${bancoSelecionado.nome}, no valor de R$ ${valor.toFixed(2)}.`,
+            `Você decidiu pegar R$ ${valor.toFixed(2)} emprestados com o ${bancoSelecionado.nome}.`,
+            `Uma nova dívida foi adicionada ao seu patrimônio: R$ ${valor.toFixed(2)} com o ${bancoSelecionado.nome}.`,
+            `Você recebeu R$ ${valor.toFixed(2)} do ${bancoSelecionado.nome} através de um novo empréstimo.`,
+            `O banco colocou R$ ${valor.toFixed(2)} à sua disposição. Agora você possui um novo empréstimo.`,
+            `Você recorreu ao ${bancoSelecionado.nome} e contratou um empréstimo de R$ ${valor.toFixed(2)}.`,
+            `Seu pedido foi aprovado! O ${bancoSelecionado.nome} concedeu R$ ${valor.toFixed(2)} em crédito.`,
+            `Você assumiu uma nova dívida de R$ ${valor.toFixed(2)} com o ${bancoSelecionado.nome}.`,
+            `O ${bancoSelecionado.nome} confiou em você e liberou um empréstimo de R$ ${valor.toFixed(2)}.`,
+            `Você aumentou seu dinheiro disponível em R$ ${valor.toFixed(2)}, mas também sua dívida com o banco.`,
+            `Um novo acordo financeiro foi fechado com o ${bancoSelecionado.nome}: R$ ${valor.toFixed(2)} emprestados.`,
+            `Você obteve crédito de R$ ${valor.toFixed(2)} junto ao ${bancoSelecionado.nome}.`,
+            `O dinheiro entrou na sua conta. O ${bancoSelecionado.nome} concedeu seu empréstimo de R$ ${valor.toFixed(2)}.`,
+            `Você decidiu assumir uma dívida de R$ ${valor.toFixed(2)} para financiar seus planos.`,
+            `Você contratou crédito no ${bancoSelecionado.nome}, recebendo R$ ${valor.toFixed(2)}.`,
+            `Mais dinheiro disponível, mais uma dívida: você pegou R$ ${valor.toFixed(2)} emprestados.`,
+            `Você fechou um acordo com o ${bancoSelecionado.nome} e recebeu R$ ${valor.toFixed(2)}.`,
+        ];
+        const m = listaMensagens[Math.floor(Math.random() * listaMensagens.length)];
+        jogo.criarAnotacaoDiario(`Empréstimo: ${bancoSelecionado.nome}`, m, "cyan");
+        atualizarEmprestimosUI(bancoIndex);
+        atualizarPatrimonioUI();
+        atualizarDiarioUI();
+    });
+
+    const informacoes = document.getElementById("informacoes-emprestimos")!;
+    const totalEmDivida = jogo.patrimonio.emprestimos.reduce((total, emprestimo) => total + emprestimo.saldoDevedor, 0);
+    informacoes.innerHTML = `
+        <div class="resumo-dividas">
+            <div><span>Contratos ativos</span><strong>${jogo.patrimonio.emprestimos.length}</strong></div>
+            <div><span>Total em dívida</span><strong>R$ ${totalEmDivida.toFixed(2)}</strong></div>
+        </div>
+        <h2>Empréstimos ativos</h2>
+        ${jogo.patrimonio.emprestimos.length === 0
+            ? "<p class=\"sem-emprestimos\">Nenhum empréstimo ativo. Suas finanças estão livres de parcelas.</p>"
+            : jogo.patrimonio.emprestimos.map(emprestimo => `
+            <div class="emprestimo-ativo">
+                <div class="emprestimo-ativo-cabecalho">
+                    <h3>${emprestimo.banco.nome}</h3>
+                    <span>${(emprestimo.banco.taxaJuros * 100).toFixed(0)}% juros</span>
+                </div>
+                <div class="emprestimo-ativo-dados">
+                    <p><span>Saldo devedor</span><strong>R$ ${emprestimo.saldoDevedor.toFixed(2)}</strong></p>
+                    <p><span>Parcela anual</span><strong>R$ ${emprestimo.valorParcela.toFixed(2)}</strong></p>
+                    <p><span>Anos restantes</span><strong>${emprestimo.parcelasRestantes}</strong></p>
+                </div>
+            </div>
+        `).join("")}`;
+}
+
+function obterDadosFiltroSatisfacao(satisfacao: number) {
+    const satisfacaoNormalizada = Math.max(0, Math.min(100, satisfacao));
+    const hue = Math.round((satisfacaoNormalizada / 100) * 120);
+    const cor = `hsla(${hue}, 90%, 45%, 0.45)`;
+    return { satisfacaoNormalizada, cor };
+}
+
+function atualizarFamiliaUI() {
+    const familiaContainer = document.getElementById("familia")!;
+    familiaContainer.innerHTML = "";
+    for (const pessoa of jogo.familia) {
+        const { satisfacaoNormalizada, cor } = obterDadosFiltroSatisfacao(pessoa.satisfacao);
+        const div = document.createElement("div");
+        div.innerHTML = `
+            <div>
+                <div class="imagem-com-filtro" style="--satisfacao: ${satisfacaoNormalizada}%; --cor-satisfacao: ${cor};">
+                    <img src="/assets/images/memes img/cavalo.jpg" alt="${pessoa.nome}" />
+                    <span class="filtro-satisfacao"></span>
+                </div>
+            </div>
+            <div>
+                <h3>${pessoa.nome}</h3>
+                <h4>${pessoa.descricao}</h4>
+            </div>
+        `;
+        familiaContainer.appendChild(div);
+    }
+}
+
+function atualizarConhecidosUI() {
+    const conhecidosContainer = document.getElementById("conhecidos")!;
+    conhecidosContainer.innerHTML = "";
+    for (const pessoa of jogo.conhecidos) {
+        const { satisfacaoNormalizada, cor } = obterDadosFiltroSatisfacao(pessoa.satisfacao);
+        const div = document.createElement("div");
+        div.innerHTML = `
+            <div>
+                <div class="imagem-com-filtro" style="--satisfacao: ${satisfacaoNormalizada}%; --cor-satisfacao: ${cor};">
+                    <img src="/assets/images/memes img/cavalo.jpg" alt="${pessoa.nome}" />
+                    <span class="filtro-satisfacao"></span>
+                </div>
+            </div>
+            <div>
+                <h3>${pessoa.nome}</h3>
+                <h4>${pessoa.descricao}</h4>
+            </div>
+        `;
+        conhecidosContainer.appendChild(div);
+    }
+}
+
+function atualizarEventosUI(evento: Evento) {
+    const h3 = document.getElementById("nome-evento")!;
+    const p = document.getElementById("descricao-evento")!;
+    h3.textContent = evento.nome;
+    p.textContent = evento.descricao;
+    evento.acao();
+}
+
+function atualizarDiarioUI() {
+    const diarioContainer = document.getElementById("diario")!;
+    diarioContainer.innerHTML = "";
+    let anoAtual = 0;
+    for (const anotacao of jogo.diario) {
+        if (anotacao.ano !== anoAtual) {
+            anoAtual = anotacao.ano;
+            const anoDiv = document.createElement("div");
+            anoDiv.classList.add("diario-ano");
+            anoDiv.innerHTML = `<h3>Ano ${anoAtual}</h3>`;
+            diarioContainer.appendChild(anoDiv);
+        }
+        const anotacaoDiv = document.createElement("div");
+        anotacaoDiv.classList.add("diario-anotacao");
+        anotacaoDiv.style.borderLeft = `4px solid var(--${anotacao.cor}4)`;
+        anotacaoDiv.innerHTML = `<h4 style="color: var(--${anotacao.cor}2);">${anotacao.titulo}</h4><p>${anotacao.descricao}</p>`;
+        diarioContainer.appendChild(anotacaoDiv);
+    }
+}
+
+function mover(objeto: HTMLElement) {
+    let draggedElement: HTMLElement | null = null;
+    let shiftX: number, shiftY: number;
+    let isDragging = false;
+    let animationFrameId: number | null = null;
+    const MOVE_THRESHOLD = 5;
+
+    // Valores de destino para a animação
+    let targetX = 0;
+    let targetY = 0;
+
+    const updatePosition = () => {
+        if (!draggedElement) return;
+
+        // Aplica a posição apenas no momento em que a tela vai atualizar
+        draggedElement.style.left = `${targetX}px`;
+        draggedElement.style.top = `${targetY}px`;
+
+        animationFrameId = requestAnimationFrame(updatePosition);
+    };
+
+    objeto.addEventListener('mousedown', (e: MouseEvent) => {
+        if (!e) return;
+
+        draggedElement = objeto;
+        const rect = draggedElement.getBoundingClientRect();
+
+        shiftX = e.clientX - rect.left;
+        shiftY = e.clientY - rect.top;
+
+        const startX = e.clientX;
+        const startY = e.clientY;
+        isDragging = false;
+
+        const onMouseMove = (e: MouseEvent) => {
+            if (!isDragging &&
+                (Math.abs(e.clientX - startX) > MOVE_THRESHOLD ||
+                    Math.abs(e.clientY - startY) > MOVE_THRESHOLD)) {
+                isDragging = true;
+                // Inicia o ciclo de animação
+                animationFrameId = requestAnimationFrame(updatePosition);
+            }
+
+            if (isDragging) {
+                // Em vez de mover o DOM aqui, apenas guardamos as coordenadas
+                targetX = e.pageX - shiftX - window.scrollX;
+                targetY = e.pageY - shiftY - window.scrollY;
+            }
+        };
+
+        const onMouseUp = () => {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+
+            if (animationFrameId !== null) {
+                // Para o ciclo de animação
+                cancelAnimationFrame(animationFrameId);
+            }
+            draggedElement = null;
+        };
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    });
+}
+
+async function buildAcontecimentos() {
+    const jsonResponse = await fetch("/assets/jsons/nao-va-a-falencia.json").then(response => response.json());
+    const acontecimentosData = jsonResponse["acontecimentos"];
+
+    if (!Array.isArray(acontecimentosData)) {
+        console.warn("Não foi possível carregar os acontecimentos: o campo 'acontecimentos' é inválido.");
+        return;
+    }
+
+    for (const acontecimento of acontecimentosData) {
+        try {
+            if (!acontecimento || typeof acontecimento.nome !== "string" ||
+                typeof acontecimento.descricao !== "string" || !Array.isArray(acontecimento.opcoes)) {
+                throw new Error("estrutura do acontecimento inválida");
+            }
+
+            const opcoes: Opcao[] = acontecimento.opcoes.map((opcaoData: any) => {
+                if (!opcaoData || typeof opcaoData.efeito !== "string" ||
+                    !opcaoData.anotacaoDiario || typeof opcaoData.anotacaoDiario.titulo !== "string" ||
+                    typeof opcaoData.anotacaoDiario.descricao !== "string") {
+                    throw new Error("opção inválida");
+                }
+
+                const anotacao = new AnatocaoDiario(opcaoData.anotacaoDiario.titulo, opcaoData.anotacaoDiario.descricao, 0, opcaoData.anotacaoDiario.cor);
+
+                const efeito = eval(`(${opcaoData.efeito})`);
+                if (typeof efeito !== "function") {
+                    throw new Error("efeito inválido");
+                }
+
+                return new Opcao(opcaoData.descricao, opcaoData.custoAcoes, opcaoData.custoDinheiro, efeito, anotacao);
+            });
+
+            const condicoes = eval(`(${acontecimento.condicoes})`);
+            if (typeof condicoes !== "function") {
+                throw new Error("condições inválidas");
+            }
+
+            const novoAcontecimento = new Acontecimento(acontecimento.nome, acontecimento.descricao, opcoes, condicoes);
+
+            acontecimentos.push(novoAcontecimento);
+        } catch (erro) {
+            console.warn("Acontecimento inválido ignorado:", acontecimento, erro);
+        }
+    }
+}
+
+function buildEventos() {
+
+}
+
+mover(document.getElementById("janela-investimentos")!);
+mover(document.getElementById("janela-propriedades")!);
+mover(document.getElementById("janela-bens")!);
+mover(document.getElementById("janela-emprestimos")!);
+mover(document.getElementById("janela-final-jogo")!);
+
+document.getElementById("botao-proximo-ano")!.addEventListener("click", () => {
+    jogo.proximoAno();
+});
+
+document.getElementById("botao-investimentos")!.addEventListener("click", () => {
+    const janelaInvestimentos = document.getElementById("janela-investimentos")!;
+    janelaInvestimentos.style.display = janelaInvestimentos.style.display === "none" ? "flex" : "none";
+});
+
+document.getElementById("close-investimentos")!.addEventListener("click", () => {
+    const janelaInvestimentos = document.getElementById("janela-investimentos")!;
+    janelaInvestimentos.style.display = "none";
+});
+
+document.getElementById("botao-propriedades")!.addEventListener("click", () => {
+    const janelaPropriedades = document.getElementById("janela-propriedades")!;
+    janelaPropriedades.style.display = janelaPropriedades.style.display === "none" ? "flex" : "none";
+});
+
+document.getElementById("close-propriedades")!.addEventListener("click", () => {
+    const janelaPropriedades = document.getElementById("janela-propriedades")!;
+    janelaPropriedades.style.display = "none";
+});
+
+document.getElementById("botao-bens")!.addEventListener("click", () => {
+    const janelaBens = document.getElementById("janela-bens")!;
+    janelaBens.style.display = janelaBens.style.display === "none" ? "flex" : "none";
+});
+
+document.getElementById("close-bens")!.addEventListener("click", () => {
+    const janelaBens = document.getElementById("janela-bens")!;
+    janelaBens.style.display = "none";
+});
+
+document.getElementById("botao-emprestimos")!.addEventListener("click", () => {
+    const janelaEmprestimos = document.getElementById("janela-emprestimos")!;
+    janelaEmprestimos.style.display = janelaEmprestimos.style.display === "none" ? "flex" : "none";
+});
+
+document.getElementById("close-emprestimos")!.addEventListener("click", () => {
+    const janelaEmprestimos = document.getElementById("janela-emprestimos")!;
+    janelaEmprestimos.style.display = "none";
+});
+
+acontecimentoAtual = gerarAcontecimentoAleatorio();
+buildAcontecimentos().then(() => {
+    console.log("ola")
+    acontecimentoAtual = gerarAcontecimentoAleatorio();
+    console.log(acontecimentoAtual)
+    atualizarUI();
+});
