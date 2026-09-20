@@ -454,17 +454,6 @@
                         "descricao": "Francisco decidiu ampliar sua exposição ao setor bancário durante o clima de pânico, apostando na rápida recuperação dos ativos.",
                         "cor": "green"
                     }
-                },
-                {
-                    "descricao": "Buscar um empréstimo preventivo de garantia no Santoandré para reforçar o caixa imediato da empresa.",
-                    "custoAcoes": 2,
-                    "custoDinheiro": 0,
-                    "efeito": "() => { const bco = jogo.bancos.find(b => b.nome === 'Santoandré'); if (bco) { jogo.patrimonio.emprestimos.push({ valorInicial: 40000, banco: bco, numeroParcerlas: 12, parcelasRestantes: 12 }); jogo.patrimonio.dinheiro += 40000; } }",
-                    "anotacaoDiario": {
-                        "titulo": "Reforço de Liquidez via Crédito",
-                        "descricao": "Francisco contratou uma linha de crédito emergencial para garantir liquidez em caixa diante da incerteza do mercado.",
-                        "cor": "yellow"
-                    }
                 }
             ],
             "condicoes": "() => { return jogo.ano >= 1895 && jogo.ano <= 1930; }"

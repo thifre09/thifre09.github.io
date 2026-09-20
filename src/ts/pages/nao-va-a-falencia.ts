@@ -619,35 +619,25 @@ class Jogo {
         ];
 
         this.patrimonio.investimentos = [
+            new Investimento("Café", 80, 12, 30, 200),
             new Investimento("Batata", 20, 5, 8, 45),
             new Investimento("Milho", 25, 6, 10, 55),
             new Investimento("Trigo", 30, 6, 12, 65),
             new Investimento("Algodão", 45, 8, 18, 100),
             new Investimento("Açúcar", 50, 9, 20, 120),
-            new Investimento("Café", 80, 12, 30, 200),
             new Investimento("Madeira", 90, 10, 35, 220),
-            new Investimento("Pecuária", 120, 12, 50, 300),
 
             new Investimento("Carvão", 140, 14, 55, 350),
             new Investimento("Ferro", 170, 15, 60, 400),
             new Investimento("Aço", 220, 18, 75, 550),
-            new Investimento("Têxteis", 190, 16, 70, 480),
 
             new Investimento("Borracha", 260, 22, 70, 700),
             new Investimento("Petróleo", 300, 25, 60, 850),
-            new Investimento("Navegação", 340, 20, 100, 800),
-            new Investimento("Construção", 380, 18, 120, 900),
-            new Investimento("Ferrovias", 450, 25, 100, 1100),
 
             new Investimento("Farmacêutica", 500, 15, 200, 1000),
             new Investimento("Química", 550, 18, 200, 1100),
-            new Investimento("Energia Elétrica", 600, 20, 180, 1300),
-            new Investimento("Comunicações", 650, 22, 180, 1400),
             new Investimento("Tecnologia", 700, 30, 100, 1800),
-
-            new Investimento("Seguros", 750, 10, 400, 1100),
             new Investimento("Bancos", 800, 12, 450, 1200),
-            new Investimento("Comércio", 250, 12, 100, 600),
 
             new Investimento("Ouro", 1500, 5, 900, 2200)
         ];
@@ -950,6 +940,25 @@ function atualizarPatrimonioUI() {
     document.getElementById("renda-anual-display")!.textContent = `R$ ${jogo.patrimonio.rendaAnualTotal.toFixed(2)}`;
 }
 
+function configurarImagemInvestimento(imagem: HTMLImageElement, nome: string) {
+    const extensoes = ["png", "jpg", "jpeg", "webp", "gif"];
+    const nomeArquivo = encodeURIComponent(nome.toLowerCase().replace(/\s+/g, "-"));
+    let indiceExtensao = 0;
+
+    const tentarProximaImagem = () => {
+        if (indiceExtensao >= extensoes.length) {
+            imagem.src = "/assets/images/memes%20img/cavalo.jpg";
+            return;
+        }
+
+        imagem.src = `/assets/images/nao-va-a-falencia/${nomeArquivo}.${extensoes[indiceExtensao]}`;
+        indiceExtensao++;
+    };
+
+    imagem.addEventListener("error", tentarProximaImagem);
+    tentarProximaImagem();
+}
+
 function atualizarInvestimentosUI(investimentoIndex: number = 0) {
     const investimentoSelecionado = jogo.patrimonio.investimentos[investimentoIndex];
     const listaInvestimentos = document.getElementById("lista-investimentos")!;
@@ -967,7 +976,7 @@ function atualizarInvestimentosUI(investimentoIndex: number = 0) {
         }
         div.innerHTML = `
             <div>
-                <img src="/assets/images/memes img/cavalo.jpg" alt="${investimento.nome}" />
+                <img alt="${investimento.nome}" />
             </div>
             <div>
                 <h3>${investimento.nome}</h3>
@@ -984,6 +993,7 @@ function atualizarInvestimentosUI(investimentoIndex: number = 0) {
                 </h4>
             </div>
         `;
+        configurarImagemInvestimento(div.querySelector("img")!, investimento.nome);
         div.addEventListener("click", () => {
             atualizarInvestimentosUI(jogo.patrimonio.investimentos.indexOf(investimento));
         });
