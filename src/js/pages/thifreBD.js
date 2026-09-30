@@ -5493,6 +5493,13 @@ function confirmSaveOrLoad() {
         else if (option === "salvar-sql") {
             saveToSql();
         }
+        else if (option === "salvar-online") {
+            if (!Auth.isUserLoggedIn()) {
+                alert("Você precisa estar logado para salvar online.");
+                return;
+            }
+            saveToSupabase();
+        }
         notification.querySelector("p").innerText = "Dados salvos com sucesso!";
         notification.style.display = "block";
         timeoutSaveOrLoad = setTimeout(() => {
@@ -5509,11 +5516,13 @@ function confirmSaveOrLoad() {
         else if (option === "salvar-sql") {
             loadFromSql();
         }
-        notification.querySelector("p").innerText = "Dados carregados com sucesso!";
-        notification.style.display = "block";
-        timeoutSaveOrLoad = setTimeout(() => {
-            notification.style.display = "none";
-        }, 3000);
+        else if (option === "salvar-online") {
+            if (!Auth.isUserLoggedIn()) {
+                alert("Você precisa estar logado para carregar online.");
+                return;
+            }
+            loadFromSupabase();
+        }
     }
 }
 function transformToJson() {
@@ -5541,6 +5550,12 @@ function transformFromJson(json) {
             databases[name] = d;
         }
         refreshUI();
+        const notification = document.querySelector("#save-notification");
+        notification.querySelector("p").innerText = "Dados carregados com sucesso!";
+        notification.style.display = "block";
+        timeoutSaveOrLoad = setTimeout(() => {
+            notification.style.display = "none";
+        }, 3000);
     }
     catch (err) {
         console.error("Erro ao carregar databases:", err);
@@ -5575,6 +5590,21 @@ function saveToJson() {
  * e aplica os dados carregados ao estado em memória.
  */
 function loadFromJson() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json,application/json";
+    input.onchange = (e) => {
+        const file = e.target.files?.[0];
+        if (!file)
+            return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const json = e.target.result;
+            transformFromJson(json);
+        };
+        reader.readAsText(file);
+    };
+    input.click();
 }
 /**
  * Exporta os dados atuais para SQL (não implementado atualmente).

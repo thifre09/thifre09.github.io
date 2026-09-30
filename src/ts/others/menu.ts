@@ -36,8 +36,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (session) {
         mostrarUsuario();
     }
-
-
 });
 
 function mover(objeto: HTMLElement) {
@@ -188,6 +186,13 @@ class Atualizacao {
 }
 
 const atualizacoes = [
+    new Atualizacao("Beta 3.1.1", "30/09/2026", [
+        new NotaAtualizacao("Atualização do Quadrado Clicker", "Foi feita uma atualização no Quadrado Clicker, o layout da página foi refeito com um design mais moderno.", tipoNota.ATUALIZACAO, relacionado.QUADRADO_CLICKER),
+        new NotaAtualizacao("Remoção de recursos do Quadrado Clicker", "Devido à falta de tempo para atualizar o Quadrado Clicker, alguns recursos foram removidos, entre eles as melhorias de triângulos, minijogos, conquistas, e opção de salvar progresso. Eles devem voltar em uma atualização futura, com um sistema melhorado.", tipoNota.RECURSO_REMOVIDO, relacionado.QUADRADO_CLICKER),
+        new NotaAtualizacao("Atualização da página ThifreBD", "Foram adicionados mais comandos SQL, leves melhorias na interface e a aba lógica", tipoNota.ATUALIZACAO, relacionado.THIFREBD),
+        new NotaAtualizacao("Correção do botão de habilitar CSS", "O botão de habilitar CSS agora funciona corretamente, e não causa mais problemas na página O Poder do CSS.", tipoNota.CORRECAO, relacionado.PODER_DO_CSS),
+        new NotaAtualizacao("Correção de pequenos bugs", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do site.", tipoNota.CORRECAO, relacionado.GERAL)
+    ]),
     new Atualizacao("Beta 3.1", "25/05/2026", [
         new NotaAtualizacao("Adição de um ícone para o site", "Foi adicionado um ícone de batata para o site.", tipoNota.NOVO_RECURSO, relacionado.GERAL),
         new NotaAtualizacao("Adição de um sistema de login", "Foi adicionado um sistema de login, que permite que o usuário faça login com seu email. Também foi adicionado a opção de criar uma conta com email e senha. Ela pode ser usada para salvar automaticamente o progresso da página ThifreBD.", tipoNota.NOVO_RECURSO, relacionado.GERAL),

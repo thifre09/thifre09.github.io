@@ -80,7 +80,7 @@
 
         <section id="others" style="display: none;">
             <h2>
-                <button id="botao-voltar-others" onclick="mudarMenu('main')">
+                <button style="display: none;" id="botao-voltar-others" onclick="mudarMenu('main')">
                     <svg viewBox="0 -960 960 960" fill="currentcolor">
                         <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
                     </svg>
@@ -89,14 +89,14 @@
                 Outros menus
             </h2>
 
-            <div id="botoesOutros" style="display: none;">
-                <button onclick="mudarMenu('triangulos-menu')">Triângulos</button>
+            <div id="botoesOutros">
+                <button onclick="mudarMenu('triangulos-menu')" style="display: none;">Triângulos</button>
                 <button onclick="mudarMenu('renascer')">Renascer</button>
-                <button onclick="mudarMenu('conquistas')">Conquistas</button>
-                <button id="maquinadasorte" onclick="mudarMenu('maquinadasorte')">Máquina da sorte</button>
-                <button id="livromagico" onclick="mudarMenu('livromagico')">Livro mágico</button>
-                <button id="quizmatematico" onclick="mudarMenu('quizmatematico')">Quiz matemático</button>
-                <button id="skinquadrado" onclick="mudarMenu('skinquadrado')">Skin do quadrado</button>
+                <button onclick="mudarMenu('conquistas')" style="display: none;">Conquistas</button>
+                <button id="maquinadasorte" onclick="mudarMenu('maquinadasorte')" style="display: none;">Máquina da sorte</button>
+                <button id="livromagico" onclick="mudarMenu('livromagico')" style="display: none;">Livro mágico</button>
+                <button id="quizmatematico" onclick="mudarMenu('quizmatematico')" style="display: none;">Quiz matemático</button>
+                <button id="skinquadrado" onclick="mudarMenu('skinquadrado')" style="display: none;">Skin do quadrado</button>
             </div>
 
             <div id="menus">
@@ -105,7 +105,7 @@
                     <div class="melhorias-div" id="melhorias-triangulos-div"></div>
                 </section>
 
-                <section id="renascer">
+                <section id="renascer" style="display: none;">
                     <div class="renascer-cabecalho">
 
                         <h2>Renascer</h2>
