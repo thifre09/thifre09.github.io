@@ -8,6 +8,8 @@
     >* {
         z-index: 5;
     }
+
+    scrollbar-color: var(--gray8) transparent;
 }
 
 .separador-horizontal {

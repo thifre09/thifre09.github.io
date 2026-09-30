@@ -1,7 +1,7 @@
-"use strict";
-let btn = document.getElementById("botao-css");
+let btn = document.getElementById("botao-css")!;
 let estado = true;
-let estilo = document.getElementById("linkcss");
+let estilo = document.getElementById("linkcss")! as HTMLLinkElement;
+
 btn.style.border = "none";
 btn.style.borderRadius = "15px";
 btn.style.fontSize = "xx-large";
@@ -14,15 +14,15 @@ btn.style.backgroundColor = "red";
 btn.style.cursor = "pointer";
 btn.style.padding = "10px";
 btn.style.color = "white";
-btn.style.zIndex = "2";
+btn.style.zIndex = "2"
+
 function clique() {
     if (estado) {
         estado = false;
         btn.style.backgroundColor = "green";
         btn.innerText = "Ativar CSS";
         estilo.href = "";
-    }
-    else {
+    } else {
         estado = true;
         btn.style.backgroundColor = "red";
         btn.innerText = "Desativar CSS";

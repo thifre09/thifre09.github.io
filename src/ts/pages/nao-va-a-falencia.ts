@@ -5,14 +5,14 @@ class Patrimonio {
     dinheiro: number;
     propriedades: Propriedade[];
     investimentos: Investimento[];
-    bens: Bem[];
+    // bens: Bem[];
     emprestimos: Emprestimo[];
 
     constructor() {
         this.dinheiro = 500_000;
         this.propriedades = [];
         this.investimentos = [];
-        this.bens = [];
+        // this.bens = [];
         this.emprestimos = [];
     }
 
@@ -20,6 +20,13 @@ class Patrimonio {
         const valorInvestimentos = this.investimentos.reduce((acc, inv) => acc + inv.valorAtual * inv.acoesPossuidas, 0);
         const valorPropriedades = this.propriedades.reduce((acc, prop) => acc + (prop.comprada ? prop.valor : 0), 0);
         return this.dinheiro + valorInvestimentos + valorPropriedades;
+    }
+
+    get totalFormatado(): string {
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+        }).format(this.total);
     }
 
     get rendaAnualTotal(): number {
@@ -416,21 +423,21 @@ class Propriedade {
     }
 }
 
-class Bem {
-    nome: string;
-    descricao: string;
-    valorBase: number;
-    valorManutencao: number;
-    efeito: () => void;
+// class Bem {
+//     nome: string;
+//     descricao: string;
+//     valorBase: number;
+//     valorManutencao: number;
+//     efeito: () => void;
 
-    constructor(nome: string, descricao: string, valorBase: number, valorManutencao: number = 0, efeito: () => void) {
-        this.nome = nome;
-        this.descricao = descricao;
-        this.valorBase = valorBase;
-        this.valorManutencao = valorManutencao;
-        this.efeito = efeito;
-    }
-}
+//     constructor(nome: string, descricao: string, valorBase: number, valorManutencao: number = 0, efeito: () => void) {
+//         this.nome = nome;
+//         this.descricao = descricao;
+//         this.valorBase = valorBase;
+//         this.valorManutencao = valorManutencao;
+//         this.efeito = efeito;
+//     }
+// }
 
 class Banco {
     nome: string;
@@ -538,29 +545,29 @@ class Opcao {
     }
 }
 
-class Evento {
-    nome: string;
-    descricao: string;
-    efeito: () => void;
-    condicoes: () => boolean;
-    anotacaoDiario: AnatocaoDiario;
+// class Evento {
+//     nome: string;
+//     descricao: string;
+//     efeito: () => void;
+//     condicoes: () => boolean;
+//     anotacaoDiario: AnatocaoDiario;
 
-    constructor(nome: string, descricao: string, efeito: () => void, condicoes: () => boolean = () => true,
-        anotacaoDiario: AnatocaoDiario) {
-        this.nome = nome;
-        this.descricao = descricao;
-        this.efeito = efeito;
-        this.condicoes = condicoes;
-        this.anotacaoDiario = anotacaoDiario;
-    }
+//     constructor(nome: string, descricao: string, efeito: () => void, condicoes: () => boolean = () => true,
+//         anotacaoDiario: AnatocaoDiario) {
+//         this.nome = nome;
+//         this.descricao = descricao;
+//         this.efeito = efeito;
+//         this.condicoes = condicoes;
+//         this.anotacaoDiario = anotacaoDiario;
+//     }
 
-    acao() {
-        if (this.condicoes()) {
-            this.efeito();
-            jogo.criarAnotacaoDiario(this.anotacaoDiario.titulo, this.anotacaoDiario.descricao, this.anotacaoDiario.cor);
-        }
-    }
-}
+//     acao() {
+//         if (this.condicoes()) {
+//             this.efeito();
+//             jogo.criarAnotacaoDiario(this.anotacaoDiario.titulo, this.anotacaoDiario.descricao, this.anotacaoDiario.cor);
+//         }
+//     }
+// }
 
 class AnatocaoDiario {
     titulo: string;
@@ -609,45 +616,33 @@ class Jogo {
             new Pessoa("Noca", "Criada", 60, 25),
             new Pessoa("Dr. Gervásio", "Médico", 50, 65),
             new Pessoa("Capitão Rino", "Capitão da Marinha", 50, 70),
-            new Pessoa("Paquita", "Rica", 50, 75),
             new Pessoa("Gama Torres", "Investidor", 50, 80),
             new Pessoa("Inocêncio Braga", "Homem de negócios", 50, 80),
             new Pessoa("Baronesa da Lage", "Rica", 50, 95),
-            new Pessoa("Mota", "Ajudante", 50, 30),
+            new Pessoa("Lemos", "Comendador", 50, 30),
             new Pessoa("Joaquim", "Caxeiro", 50, 35),
-            new Pessoa("Lélio Braga", "Maestro", 50, 60),
         ];
 
         this.patrimonio.investimentos = [
+            new Investimento("Café", 80, 12, 30, 200),
             new Investimento("Batata", 20, 5, 8, 45),
             new Investimento("Milho", 25, 6, 10, 55),
             new Investimento("Trigo", 30, 6, 12, 65),
             new Investimento("Algodão", 45, 8, 18, 100),
             new Investimento("Açúcar", 50, 9, 20, 120),
-            new Investimento("Café", 80, 12, 30, 200),
             new Investimento("Madeira", 90, 10, 35, 220),
-            new Investimento("Pecuária", 120, 12, 50, 300),
 
             new Investimento("Carvão", 140, 14, 55, 350),
             new Investimento("Ferro", 170, 15, 60, 400),
             new Investimento("Aço", 220, 18, 75, 550),
-            new Investimento("Têxteis", 190, 16, 70, 480),
 
             new Investimento("Borracha", 260, 22, 70, 700),
             new Investimento("Petróleo", 300, 25, 60, 850),
-            new Investimento("Navegação", 340, 20, 100, 800),
-            new Investimento("Construção", 380, 18, 120, 900),
-            new Investimento("Ferrovias", 450, 25, 100, 1100),
 
             new Investimento("Farmacêutica", 500, 15, 200, 1000),
             new Investimento("Química", 550, 18, 200, 1100),
-            new Investimento("Energia Elétrica", 600, 20, 180, 1300),
-            new Investimento("Comunicações", 650, 22, 180, 1400),
             new Investimento("Tecnologia", 700, 30, 100, 1800),
-
-            new Investimento("Seguros", 750, 10, 400, 1100),
             new Investimento("Bancos", 800, 12, 450, 1200),
-            new Investimento("Comércio", 250, 12, 100, 600),
 
             new Investimento("Ouro", 1500, 5, 900, 2200)
         ];
@@ -699,12 +694,6 @@ class Jogo {
                 { nome: "Serviço particular", custo: 150000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 100000; propriedade.luxoBase += 10; propriedade.despestasAnuaisBase += 5000; } }
             ]),
 
-            new Propriedade("Sala Comercial", 180000, 15000, 5000, 100, 15, [
-                { nome: "Reforma", custo: 30000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 25000; propriedade.rendaAnualBase += 2000; } },
-                { nome: "Mobiliário profissional", custo: 20000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 15000; propriedade.luxoBase += 5; } },
-                { nome: "Divisórias", custo: 25000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 20000; propriedade.rendaAnualBase += 1500; } }
-            ]),
-
             new Propriedade("Loja", 320000, 26000, 10000, 100, 30, [
                 { nome: "Reforma da fachada", custo: 50000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 40000; propriedade.rendaAnualBase += 3000; propriedade.luxoBase += 5; } },
                 { nome: "Ampliação", custo: 80000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 70000; propriedade.rendaAnualBase += 6000; propriedade.despestasAnuaisBase += 1500; } },
@@ -739,12 +728,6 @@ class Jogo {
                 { nome: "Estrada de acesso", custo: 40000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 35000; } }
             ]),
 
-            new Propriedade("Terreno Rural", 250000, 8000, 3000, 100, 5, [
-                { nome: "Cercamento", custo: 30000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 25000; propriedade.luxoBase += 2; } },
-                { nome: "Preparação do solo", custo: 50000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 40000; propriedade.rendaAnualBase += 2000; } },
-                { nome: "Poço", custo: 40000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 35000; propriedade.rendaAnualBase += 1500; propriedade.despestasAnuaisBase -= 500; } }
-            ]),
-
             new Propriedade("Fazenda", 1500000, 120000, 45000, 100, 50, [
                 { nome: "Novas plantações", custo: 180000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 150000; propriedade.rendaAnualBase += 20000; propriedade.despestasAnuaisBase += 5000; } },
                 { nome: "Criação de gado", custo: 250000, comprada: false, efeito: (propriedade) => { propriedade.valorBase += 210000; propriedade.rendaAnualBase += 25000; propriedade.despestasAnuaisBase += 7000; } },
@@ -774,12 +757,12 @@ class Jogo {
             ])
         ];
 
-        this.patrimonio.bens = [
-            new Bem("Carro", "Um carro confortável para a família.", 50000, 2000, () => { }),
-            new Bem("Iate", "Um iate luxuoso para passeios no mar.", 200000, 10000, () => { }),
-            new Bem("Avião", "Um avião particular para viagens rápidas.", 1000000, 50000, () => { }),
-            new Bem("Casa de praia", "Uma casa de praia para férias.", 500000, 25000, () => { }),
-        ];
+        // this.patrimonio.bens = [
+        //     new Bem("Carro", "Um carro confortável para a família.", 50000, 2000, () => { }),
+        //     new Bem("Iate", "Um iate luxuoso para passeios no mar.", 200000, 10000, () => { }),
+        //     new Bem("Avião", "Um avião particular para viagens rápidas.", 1000000, 50000, () => { }),
+        //     new Bem("Casa de praia", "Uma casa de praia para férias.", 500000, 25000, () => { }),
+        // ];
 
         this.bancos = [
             new Banco("Banco do Brasileiro", "Um dos maiores bancos do país.", 0.05, 50_000, 5),
@@ -828,7 +811,7 @@ class Jogo {
             emprestimo.pagarParcela();
         });
         acontecimentoAtual = gerarAcontecimentoAleatorio();
-        eventoAtual = gerarEventoAleatorio();
+        // eventoAtual = gerarEventoAleatorio();
         atualizarUI();
         if (this.ano === 1950) {
             this.ganhar();
@@ -866,10 +849,10 @@ const acontecimentos: Acontecimento[] = [
 
 let acontecimentoAtual: Acontecimento | null = null;
 
-const eventos: Evento[] = [
-];
+// const eventos: Evento[] = [
+// ];
 
-let eventoAtual: Evento | null = null;
+// let eventoAtual: Evento | null = null;
 
 function gerarAcontecimentoAleatorio(): Acontecimento {
     const acontecimentosDisponiveis = acontecimentos.filter(a => a.condicoes());
@@ -880,17 +863,17 @@ function gerarAcontecimentoAleatorio(): Acontecimento {
     return acontecimentosDisponiveis[indiceAleatorio];
 }
 
-function gerarEventoAleatorio(): Evento {
-    const eventosDisponiveis = eventos.filter(e => e.condicoes());
-    if (jogo.ano == 1891) {
-        return new Evento("Início do jogo", "O jogo começou. Você tem R$ 1.000.000,00 para administrar.", () => { }, () => true, new AnatocaoDiario("Início do jogo", "O jogo começou. Você tem R$ 1.000.000,00 para administrar.", jogo.ano));
-    }
-    if (eventosDisponiveis.length === 0) {
-        return new Evento("Nenhum evento disponível", "Não há eventos disponíveis no momento.", () => { }, () => true, new AnatocaoDiario("Nenhum evento disponível", "Não há eventos disponíveis no momento.", jogo.ano));
-    }
-    const indiceAleatorio = Math.floor(Math.random() * eventosDisponiveis.length);
-    return eventosDisponiveis[indiceAleatorio];
-}
+// function gerarEventoAleatorio(): Evento {
+//     const eventosDisponiveis = eventos.filter(e => e.condicoes());
+//     if (jogo.ano == 1891) {
+//         return new Evento("Início do jogo", "O jogo começou. Você tem R$ 1.000.000,00 para administrar.", () => { }, () => true, new AnatocaoDiario("Início do jogo", "O jogo começou. Você tem R$ 1.000.000,00 para administrar.", jogo.ano));
+//     }
+//     if (eventosDisponiveis.length === 0) {
+//         return new Evento("Nenhum evento disponível", "Não há eventos disponíveis no momento.", () => { }, () => true, new AnatocaoDiario("Nenhum evento disponível", "Não há eventos disponíveis no momento.", jogo.ano));
+//     }
+//     const indiceAleatorio = Math.floor(Math.random() * eventosDisponiveis.length);
+//     return eventosDisponiveis[indiceAleatorio];
+// }
 
 function atualizarUI() {
     atualizarTopBarUI();
@@ -898,15 +881,16 @@ function atualizarUI() {
     atualizarPatrimonioUI();
     atualizarInvestimentosUI();
     atualizarPropriedadesUI();
-    atualizarBensUI();
+    // atualizarBensUI();
     atualizarEmprestimosUI();
     atualizarFamiliaUI();
     atualizarConhecidosUI();
-    atualizarEventosUI(eventoAtual || gerarEventoAleatorio());
+    // atualizarEventosUI(eventoAtual || gerarEventoAleatorio());
     atualizarDiarioUI();
 }
 
 function atualizarTopBarUI() {
+    document.getElementById("patrimonio-total")!.textContent = `${jogo.patrimonio.totalFormatado}`;
     document.getElementById("ano-atual")!.textContent = jogo.ano.toString();
     document.getElementById("prestigio")!.textContent = jogo.prestigio.toFixed(2);
     document.getElementById("estabilidade-familiar")!.textContent = jogo.estabilidadeFamiliar.toFixed(2);
@@ -936,7 +920,7 @@ function atualizarAcontecimentoUI(acontecimento: Acontecimento) {
                 atualizarConhecidosUI();
                 atualizarInvestimentosUI();
                 atualizarPropriedadesUI();
-                atualizarBensUI();
+                // atualizarBensUI();
                 atualizarEmprestimosUI();
             }
         });
@@ -945,9 +929,70 @@ function atualizarAcontecimentoUI(acontecimento: Acontecimento) {
 }
 
 function atualizarPatrimonioUI() {
-    document.getElementById("dinheiro-display")!.textContent = `R$ ${jogo.patrimonio.dinheiro.toFixed(2)}`;
-    document.getElementById("patrimonio-display")!.textContent = `R$ ${jogo.patrimonio.total.toFixed(2)}`;
-    document.getElementById("renda-anual-display")!.textContent = `R$ ${jogo.patrimonio.rendaAnualTotal.toFixed(2)}`;
+    document.getElementById("dinheiro-display")!.textContent = `${new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+    }).format(jogo.patrimonio.dinheiro)}`;
+    document.getElementById("patrimonio-display")!.textContent = `${jogo.patrimonio.totalFormatado}`;
+    document.getElementById("renda-anual-display")!.textContent = `${new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+    }).format(jogo.patrimonio.rendaAnualTotal)}`;
+}
+
+function configurarImagem(imagem: HTMLImageElement, nome: string) {
+    const nomeArquivo = encodeURIComponent(nome.toLowerCase().replace(/\s+/g, "-"));
+    const arquivos: Record<string, string> = {
+        "aço": "aço.png",
+        "açúcar": "açúcar.png",
+        "algodão": "algodão.png",
+        "apartamento-pequeno": "apartamento-pequeno.jpg",
+        "armazém": "armazém.jpg",
+        "banco-do-brasileiro": "banco-do-brasileiro.jpg",
+        "bancos": "bancos.png",
+        "batata": "batata.png",
+        "borracha": "borracha.png",
+        "box": "BOX.png",
+        "café": "café.png",
+        "camila": "Camila.png",
+        "carvão": "carvão.png",
+        "casa": "casa.jpg",
+        "casa-de-campo": "casa-de-campo.jpg",
+        "casa-de-luxo": "casa-de-luxo.jpg",
+        "casa-modesta": "casa-modesta.jpg",
+        "comroupabank": "ComRoupaBank.jpg",
+        "edifício-residencial": "edifício-residencial.jpg",
+        "engenho": "engenho.jpg",
+        "farmacêutica": "farmacêutica.png",
+        "fazenda": "fazenda.jpg",
+        "ferro": "ferro.png",
+        "hotel": "hotel.jpg",
+        "itaipú": "itaipú.jpg",
+        "lia": "lia.png",
+        "loja": "loja.jpg",
+        "madeira": "madeira.png",
+        "mansão": "mansão.jpg",
+        "milho": "milho.png",
+        "mário": "mário.png",
+        "nina": "nina.png",
+        "ouro": "ouro.png",
+        "petróleo": "petróleo.png",
+        "prédio-comercial": "prédio-comercial.jpg",
+        "quarto-de-cortiço": "quarto-de-cortiço.jpg",
+        "química": "química.png",
+        "raquel": "raquel.png",
+        "ruth": "ruth.png",
+        "santoandré": "santoandré.png",
+        "teatro": "teatro.jpg",
+        "tecnologia": "tecnologia.png",
+        "terreno": "terreno.jpg",
+        "trigo": "trigo.png"
+    };
+    const arquivo = arquivos[decodeURIComponent(nomeArquivo)];
+
+    imagem.src = arquivo
+        ? `/assets/images/nao-va-a-falencia/${encodeURIComponent(arquivo)}`
+        : "/assets/images/memes%20img/cavalo.jpg";
 }
 
 function atualizarInvestimentosUI(investimentoIndex: number = 0) {
@@ -967,7 +1012,7 @@ function atualizarInvestimentosUI(investimentoIndex: number = 0) {
         }
         div.innerHTML = `
             <div>
-                <img src="/assets/images/memes img/cavalo.jpg" alt="${investimento.nome}" />
+                <img alt="${investimento.nome}" />
             </div>
             <div>
                 <h3>${investimento.nome}</h3>
@@ -984,6 +1029,7 @@ function atualizarInvestimentosUI(investimentoIndex: number = 0) {
                 </h4>
             </div>
         `;
+        configurarImagem(div.querySelector("img")!, investimento.nome);
         div.addEventListener("click", () => {
             atualizarInvestimentosUI(jogo.patrimonio.investimentos.indexOf(investimento));
         });
@@ -1032,6 +1078,7 @@ function atualizarInvestimentosUI(investimentoIndex: number = 0) {
 
         </div>
     `;
+    configurarImagem(centro.querySelector("img")!, investimentoSelecionado.nome);
 
     investimentoSelecionado.gerarGrafico("grafico-investimento");
     const tabelaInvestimento = document.getElementById("tabela-investimento")!;
@@ -1114,6 +1161,7 @@ function atualizarPropriedadesUI(propriedadeIndex: number = 0) {
                 <h2>R$ ${propriedade.valor.toFixed(2)}</h2>
             </div>
         `;
+        configurarImagem(div.querySelector("img")!, propriedade.nome);
         div.addEventListener("click", () => {
             atualizarPropriedadesUI(jogo.patrimonio.propriedades.indexOf(propriedade));
         });
@@ -1143,6 +1191,7 @@ function atualizarPropriedadesUI(propriedadeIndex: number = 0) {
             : "Compre esta propriedade para começar a receber sua renda anual."}</p>
         </div>
     `;
+    configurarImagem(centro.querySelector("img")!, propriadedeSelecionado.nome);
 
     const direita = document.getElementById("direita-propriedades")!;
     const melhoriaDisponivel = propriadedeSelecionado.melhoriaDisponivel;
@@ -1202,40 +1251,40 @@ function atualizarPropriedadesUI(propriedadeIndex: number = 0) {
     });
 }
 
-function atualizarBensUI(bemIndex: number = 0) {
-    const bemSelecionado = jogo.patrimonio.bens[bemIndex];
-    const listaBens = document.getElementById("lista-bens")!;
-    listaBens.innerHTML = "";
-    for (const bem of jogo.patrimonio.bens) {
-        const div = document.createElement("div");
-        if (bem === bemSelecionado) {
-            div.classList.add("selected-item");
-        }
-        div.innerHTML = `
-            <div>
-                <img src="/assets/images/memes img/cavalo.jpg" alt="${bem.nome}" />
-            </div>
-            <div>
-                <h3>${bem.nome}</h3>
-            </div>
-        `;
-        div.addEventListener("click", () => {
-            atualizarBensUI(jogo.patrimonio.bens.indexOf(bem));
-        });
-        listaBens.appendChild(div);
-    }
+// function atualizarBensUI(bemIndex: number = 0) {
+//     const bemSelecionado = jogo.patrimonio.bens[bemIndex];
+//     const listaBens = document.getElementById("lista-bens")!;
+//     listaBens.innerHTML = "";
+//     for (const bem of jogo.patrimonio.bens) {
+//         const div = document.createElement("div");
+//         if (bem === bemSelecionado) {
+//             div.classList.add("selected-item");
+//         }
+//         div.innerHTML = `
+//             <div>
+//                 <img src="/assets/images/memes img/cavalo.jpg" alt="${bem.nome}" />
+//             </div>
+//             <div>
+//                 <h3>${bem.nome}</h3>
+//             </div>
+//         `;
+//         div.addEventListener("click", () => {
+//             atualizarBensUI(jogo.patrimonio.bens.indexOf(bem));
+//         });
+//         listaBens.appendChild(div);
+//     }
 
-    const nomeBem = document.getElementById("nome-bem")!;
-    const imagemBem = document.getElementById("imagem-bem")! as HTMLImageElement;
-    const descricaoBem = document.getElementById("descricao-bem")!;
-    const valorBem = document.getElementById("valor-bem")!;
-    const emanutencaoBem = document.getElementById("manutencao-bem")!;
-    nomeBem.textContent = bemSelecionado.nome;
-    imagemBem.src = "/assets/images/memes img/cavalo.jpg";
-    descricaoBem.textContent = bemSelecionado.descricao;
-    valorBem.textContent = `Valor: R$ ${bemSelecionado.valorBase.toFixed(2)}`;
-    emanutencaoBem.textContent = `Manutenção: R$ ${bemSelecionado.valorManutencao.toFixed(2)}`;
-}
+//     const nomeBem = document.getElementById("nome-bem")!;
+//     const imagemBem = document.getElementById("imagem-bem")! as HTMLImageElement;
+//     const descricaoBem = document.getElementById("descricao-bem")!;
+//     const valorBem = document.getElementById("valor-bem")!;
+//     const emanutencaoBem = document.getElementById("manutencao-bem")!;
+//     nomeBem.textContent = bemSelecionado.nome;
+//     imagemBem.src = "/assets/images/memes img/cavalo.jpg";
+//     descricaoBem.textContent = bemSelecionado.descricao;
+//     valorBem.textContent = `Valor: R$ ${bemSelecionado.valorBase.toFixed(2)}`;
+//     emanutencaoBem.textContent = `Manutenção: R$ ${bemSelecionado.valorManutencao.toFixed(2)}`;
+// }
 
 function atualizarEmprestimosUI(bancoIndex: number = 0) {
     const bancoSelecionado = jogo.bancos[bancoIndex];
@@ -1257,6 +1306,7 @@ function atualizarEmprestimosUI(bancoIndex: number = 0) {
                 <h2>Juros: ${parseInt(String(banco.taxaJuros * 100))}%</h2>
             </div>
         `;
+        configurarImagem(div.querySelector("img")!, banco.nome);
         div.addEventListener("click", () => {
             atualizarEmprestimosUI(jogo.bancos.indexOf(banco));
         });
@@ -1415,6 +1465,7 @@ function atualizarFamiliaUI() {
                 <h4>${pessoa.descricao}</h4>
             </div>
         `;
+        configurarImagem(div.querySelector("img")!, pessoa.nome);
         familiaContainer.appendChild(div);
     }
 }
@@ -1441,19 +1492,19 @@ function atualizarConhecidosUI() {
     }
 }
 
-function atualizarEventosUI(evento: Evento) {
-    const h3 = document.getElementById("nome-evento")!;
-    const p = document.getElementById("descricao-evento")!;
-    h3.textContent = evento.nome;
-    p.textContent = evento.descricao;
-    evento.acao();
-}
+// function atualizarEventosUI(evento: Evento) {
+//     const h3 = document.getElementById("nome-evento")!;
+//     const p = document.getElementById("descricao-evento")!;
+//     h3.textContent = evento.nome;
+//     p.textContent = evento.descricao;
+//     evento.acao();
+// }
 
 function atualizarDiarioUI() {
     const diarioContainer = document.getElementById("diario")!;
     diarioContainer.innerHTML = "";
     let anoAtual = 0;
-    for (const anotacao of jogo.diario) {
+    for (const anotacao of jogo.diario.slice().reverse()) {
         if (anotacao.ano !== anoAtual) {
             anoAtual = anotacao.ano;
             const anoDiv = document.createElement("div");
@@ -1582,13 +1633,34 @@ async function buildAcontecimentos() {
     }
 }
 
-function buildEventos() {
+function usarTodasAsOpcoes() {
+    for (const acontecimento of acontecimentos) {
+        for (const opcao of acontecimento.opcoes) {
+            try {
+                opcao.efeito();
+                jogo.criarAnotacaoDiario(opcao.anotacaoDiario.titulo, opcao.anotacaoDiario.descricao, opcao.anotacaoDiario.cor);
+            } catch (erro) {
+                console.error("Erro ao aplicar efeito da opção:", opcao, erro);
+                console.error("Acontecimento relacionado:", acontecimento);
+            }
+        }
+    }
 
+    atualizarUI();
 }
+
+function começarJogo() {
+    document.getElementById("tela-inicial")!.style.display = "none";
+    document.getElementById("jogo")!.style.display = "flex";
+}
+
+document.getElementById("botao-jogar")!.addEventListener("click", () => {
+    começarJogo();
+});
 
 mover(document.getElementById("janela-investimentos")!);
 mover(document.getElementById("janela-propriedades")!);
-mover(document.getElementById("janela-bens")!);
+// mover(document.getElementById("janela-bens")!);
 mover(document.getElementById("janela-emprestimos")!);
 mover(document.getElementById("janela-final-jogo")!);
 
@@ -1616,15 +1688,15 @@ document.getElementById("close-propriedades")!.addEventListener("click", () => {
     janelaPropriedades.style.display = "none";
 });
 
-document.getElementById("botao-bens")!.addEventListener("click", () => {
-    const janelaBens = document.getElementById("janela-bens")!;
-    janelaBens.style.display = janelaBens.style.display === "none" ? "flex" : "none";
-});
+// document.getElementById("botao-bens")!.addEventListener("click", () => {
+//     const janelaBens = document.getElementById("janela-bens")!;
+//     janelaBens.style.display = janelaBens.style.display === "none" ? "flex" : "none";
+// });
 
-document.getElementById("close-bens")!.addEventListener("click", () => {
-    const janelaBens = document.getElementById("janela-bens")!;
-    janelaBens.style.display = "none";
-});
+// document.getElementById("close-bens")!.addEventListener("click", () => {
+//     const janelaBens = document.getElementById("janela-bens")!;
+//     janelaBens.style.display = "none";
+// });
 
 document.getElementById("botao-emprestimos")!.addEventListener("click", () => {
     const janelaEmprestimos = document.getElementById("janela-emprestimos")!;
@@ -1638,8 +1710,9 @@ document.getElementById("close-emprestimos")!.addEventListener("click", () => {
 
 acontecimentoAtual = gerarAcontecimentoAleatorio();
 buildAcontecimentos().then(() => {
-    console.log("ola")
     acontecimentoAtual = gerarAcontecimentoAleatorio();
-    console.log(acontecimentoAtual)
     atualizarUI();
 });
+
+//@ts-ignore
+window.teste = usarTodasAsOpcoes;

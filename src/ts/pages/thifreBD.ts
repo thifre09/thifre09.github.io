@@ -6252,6 +6252,12 @@ function confirmSaveOrLoad() {
             saveToJson();
         } else if (option === "salvar-sql") {
             saveToSql();
+        } else if (option === "salvar-online") {
+            if (!Auth.isUserLoggedIn()) {
+                alert("Você precisa estar logado para salvar online.");
+                return;
+            }
+            saveToSupabase();
         }
 
         notification.querySelector("p")!.innerText = "Dados salvos com sucesso!";
@@ -6266,13 +6272,13 @@ function confirmSaveOrLoad() {
             loadFromJson();
         } else if (option === "salvar-sql") {
             loadFromSql();
+        } else if (option === "salvar-online") {
+            if (!Auth.isUserLoggedIn()) {
+                alert("Você precisa estar logado para carregar online.");
+                return;
+            }
+            loadFromSupabase();
         }
-
-        notification.querySelector("p")!.innerText = "Dados carregados com sucesso!";
-        notification.style.display = "block";
-        timeoutSaveOrLoad = setTimeout(() => {
-            notification.style.display = "none";
-        }, 3000);
     }
 }
 
@@ -6306,6 +6312,12 @@ function transformFromJson(json: string | null) {
         }
 
         refreshUI();
+        const notification = document.querySelector("#save-notification") as HTMLDivElement;
+        notification.querySelector("p")!.innerText = "Dados carregados com sucesso!";
+        notification.style.display = "block";
+        timeoutSaveOrLoad = setTimeout(() => {
+            notification.style.display = "none";
+        }, 3000);
     }
     catch (err) {
         console.error("Erro ao carregar databases:", err);
@@ -6347,7 +6359,21 @@ function saveToJson() {
  * e aplica os dados carregados ao estado em memória.
  */
 function loadFromJson() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json,application/json";
+    input.onchange = (e) => {
+        const file = (e.target as HTMLInputElement).files?.[0];
+        if (!file) return;
 
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const json = (e.target as FileReader).result as string;
+            transformFromJson(json);
+        };
+        reader.readAsText(file);
+    };
+    input.click();
 }
 
 /**

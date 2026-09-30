@@ -10,22 +10,18 @@
 </head>
 
 <body>
-    <section id="tela-inicial" style="display: none">
+    <section id="tela-inicial">
         <header class="header-inicial">
             <h1>Não vá a falência!</h1>
         </header>
         <div class="menu">
             <div class="botao" id="botao-jogar">
-                <img src="/assets/images/mayor-simulator/tutorial.png" alt="Tutorial" class="botao">
-            </div>
-
-            <div class="botao" id="botao-tutorial">
                 <img src="/assets/images/mayor-simulator/play.png" alt="Jogar" class="botao">
             </div>
         </div>
     </section>
 
-    <section id="jogo">
+    <section id="jogo" style="display: none">
         <div id="grid">
             <div id="title" class="col-span-2">
                 <h1>Não vá a falência!</h1>
@@ -38,7 +34,7 @@
                     </svg>
                     <div>
                         <h2>Patrimônio total</h2>
-                        <p style="color: var(--green4);">1.100.000</p>
+                        <p id="patrimonio-total" style="color: var(--green4);">1.100.000</p>
                     </div>
                 </div>
                 <div class="top-bar-info">
@@ -112,7 +108,7 @@
                     <div>
                         <button id="botao-investimentos">Investimentos</button>
                         <button id="botao-propriedades">Propriedades</button>
-                        <button id="botao-bens">Bens</button>
+                        <!-- <button id="botao-bens">Bens</button> -->
                         <button id="botao-emprestimos">Empréstimos</button>
                     </div>
                 </div>
@@ -127,14 +123,14 @@
                 <div id="conhecidos">
                 </div>
             </div>
-            <div id="div-eventos" class="col-span-3">
+            <!-- <div id="div-eventos" class="col-span-3">
                 <h2>Evento do ano</h2>
                 <div>
                     <h3 id="nome-evento"></h3>
                     <p id="descricao-evento"></p>
                 </div>
-            </div>
-            <div id="div-diario" class="col-span-3">
+            </div> -->
+            <div id="div-diario" class="col-span-6">
                 <h2>Diário</h2>
                 <div id="diario">
                 </div>
@@ -180,7 +176,7 @@
                 </div>
             </div>
 
-            <div id="janela-bens" style="display: none;">
+            <!-- <div id="janela-bens" style="display: none;">
                 <div class="janela-header">
                     <h2>Bens</h2>
                     <svg id="close-bens" viewBox="0 -960 960 960" fill="currentecolor">
@@ -217,7 +213,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <div id="janela-emprestimos" style="display: none;">
                 <div class="janela-header">
