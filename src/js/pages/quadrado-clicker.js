@@ -101,6 +101,7 @@ class Gerador {
             return;
         quadrados -= this.price;
         this.quantity++;
+        updateQuadradosPorSegundoValue();
         updateUI();
     }
     get price() {
@@ -125,7 +126,10 @@ class Melhoria {
     createHTML() {
         const container = document.createElement("div");
         container.classList.add("melhoria");
-        container.addEventListener("click", () => this.buy());
+        container.addEventListener("click", () => {
+            this.buy();
+            updateUI();
+        });
         const h2Name = document.createElement("h2");
         h2Name.textContent = this.name;
         container.appendChild(h2Name);
@@ -148,11 +152,53 @@ class Melhoria {
         updateUI();
     }
 }
+class MelhoriaTriangulo {
+    name;
+    description;
+    price;
+    bought;
+    effect;
+    constructor(name, description, price, effect) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.effect = effect;
+        this.bought = false;
+    }
+    createHTML() {
+        const container = document.createElement("div");
+        container.classList.add("melhoria");
+        container.addEventListener("click", () => {
+            this.buy();
+            updateUI();
+        });
+        const h2Name = document.createElement("h2");
+        h2Name.textContent = this.name;
+        container.appendChild(h2Name);
+        const pDescription = document.createElement("p");
+        pDescription.textContent = this.description;
+        container.appendChild(pDescription);
+        const pPrice = document.createElement("p");
+        pPrice.textContent = "Preço: " + formatNumber(this.price);
+        container.appendChild(pPrice);
+        return container;
+    }
+    buy() {
+        if (this.bought)
+            return;
+        if (triangulos < this.price)
+            return;
+        triangulos -= this.price;
+        this.bought = true;
+        this.effect();
+        updateUI();
+    }
+}
 const geradores = [
-    new Gerador("Gerador 1", 10, 1),
-    new Gerador("Gerador 2", 100, 5),
-    new Gerador("Gerador 1", 10, 1),
-    new Gerador("Gerador 2", 100, 5),
+    new Gerador("Cursores", 10, 1),
+    new Gerador("Professores", 100, 5),
+    new Gerador("Matemáticos", 10, 1),
+    new Gerador("Quadros", 100, 5),
     new Gerador("Gerador 1", 10, 1),
     new Gerador("Gerador 2", 100, 5),
     new Gerador("Gerador 1", 10, 1),
@@ -167,15 +213,43 @@ const melhorias = [
     new Melhoria("Melhoria 2", "Descrição da melhoria 2", 100, geradores[1], 2),
     new Melhoria("Melhoria 3", "Descrição da melhoria 3", 1000, geradores[2], 3),
 ];
+const melhoriasTriangulo = [
+    new MelhoriaTriangulo("Melhoria Triângulo 1", "Descrição da melhoria triângulo 1", 10, () => { triangulos += 1; }),
+    new MelhoriaTriangulo("Melhoria Triângulo 2", "Descrição da melhoria triângulo 2", 100, () => { triangulos += 5; }),
+    new MelhoriaTriangulo("Melhoria Triângulo 3", "Descrição da melhoria triângulo 3", 1000, () => { triangulos += 10; }),
+];
 // #endregion
 // #region main
 let quadrados = 0;
 let quadradosPorClique = 1;
-let quadradosPorSegundo = 1;
+let quadradosPorSegundo = 0;
 let triangulos = 0;
+let triangulosExpoenteIndex = 1;
+let quadradosAscendentes = 0;
+let quadradosAscendentesDesseRenascimento = 0;
+let totalQuadrados = 0;
 let clickAnimationTimeout = null;
+function updateQuadradosValue(newValue) {
+    if (newValue > quadrados) {
+        totalQuadrados += newValue - quadrados;
+    }
+    quadrados = newValue;
+    if (quadrados > 1000 ** triangulosExpoenteIndex) {
+        triangulosExpoenteIndex++;
+        triangulos++;
+    }
+    if (totalQuadrados >= getNextQuadradosAscendentesCost()) {
+        quadradosAscendentes++;
+    }
+    updateUI();
+}
+function updateQuadradosPorSegundoValue() {
+    quadradosPorSegundo = geradores.reduce((acc, gerador) => acc + (gerador.production * gerador.quantity), 0);
+    quadradosPorSegundo *= (1 + (0.1 * quadradosAscendentesDesseRenascimento));
+    updateUI();
+}
 function click() {
-    quadrados += quadradosPorClique;
+    updateQuadradosValue(quadrados + quadradosPorClique);
     quadrado.classList.add("click-animation");
     clearTimeout(clickAnimationTimeout ? clickAnimationTimeout : undefined);
     clickAnimationTimeout = setTimeout(() => {
@@ -185,11 +259,14 @@ function click() {
 }
 function updateUI() {
     document.getElementById("quadrados").textContent = "Quadrados: " + formatNumber(quadrados);
-    updateGeradoresUI();
-    updateMelhoriasUI();
     document.getElementById("quadradosPorClick").textContent = formatNumber(quadradosPorClique);
     document.getElementById("quadradosPorSegundo").textContent = formatNumber(quadradosPorSegundo);
     document.getElementById("triangulos").textContent = formatNumber(triangulos);
+    document.getElementById("quadrados-ascendentes").textContent = formatNumber(quadradosAscendentes);
+    document.getElementById("quadrados-ascendentes-faltantes").textContent = formatNumber(getNextQuadradosAscendentesCost() - totalQuadrados);
+    updateGeradoresUI();
+    updateMelhoriasUI();
+    updateMelhoriasTrianguloUI();
 }
 function formatNumber(num) {
     if (num == 0) {
@@ -206,6 +283,8 @@ function updateMelhoriasUI() {
     const melhoriasContainer = document.getElementById("melhorias-div");
     melhoriasContainer.innerHTML = "";
     for (const melhoria of melhorias) {
+        if (melhoria.bought)
+            continue; // Skip bought upgrades
         melhoriasContainer.appendChild(melhoria.createHTML());
     }
 }
@@ -216,14 +295,58 @@ function updateGeradoresUI() {
         generatorsContainer.appendChild(gerador.createHTML());
     }
 }
+function updateMelhoriasTrianguloUI() {
+    const melhoriasContainer = document.getElementById("melhorias-triangulos-div");
+    melhoriasContainer.innerHTML = "";
+    for (const melhoria of melhoriasTriangulo) {
+        if (melhoria.bought)
+            continue; // Skip bought upgrades
+        melhoriasContainer.appendChild(melhoria.createHTML());
+    }
+}
+function mudarMenu(id) {
+    const menu = document.getElementById(id);
+    for (const child of document.getElementById("menus").children) {
+        child.style.display = "none";
+    }
+    if (!menu) {
+        document.getElementById("botoesOutros").style.display = "flex";
+        document.getElementById("botao-voltar-others").style.display = "none";
+    }
+    if (menu) {
+        document.getElementById("botoesOutros").style.display = "none";
+        document.getElementById("botao-voltar-others").style.display = "flex";
+        menu.style.display = "flex";
+    }
+    updateUI();
+}
+function renascer() {
+    quadrados = 0;
+    quadradosPorClique = 1 * (1 + (0.1 * quadradosAscendentes));
+    quadradosAscendentesDesseRenascimento = quadradosAscendentes;
+    geradores.forEach(gerador => gerador.quantity = 0);
+    melhorias.forEach(melhoria => melhoria.bought = false);
+    document.getElementById("confirmarRenascer").style.display = "none";
+    updateQuadradosPorSegundoValue();
+    updateUI();
+}
+function getNextQuadradosAscendentesCost() {
+    let valor = 100000;
+    for (let i = 1; i <= quadradosAscendentes; i++) {
+        valor += 100000 * (1.10 ** i);
+    }
+    return Math.round(valor);
+}
 const quadrado = document.getElementById("quadrado");
 quadrado.addEventListener("click", click);
 updateUI();
 setInterval(() => {
-    quadrados += quadradosPorSegundo;
-    updateUI();
+    updateQuadradosValue(quadrados + quadradosPorSegundo);
+    document.getElementById("quadrados").textContent = "Quadrados: " + formatNumber(quadrados);
 }, 1000);
 setTimeout(() => {
     changeTo("game");
-}, 200);
+}, 1000);
+window.mudarMenu = mudarMenu;
+window.renascer = renascer;
 // #endregion
