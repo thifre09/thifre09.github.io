@@ -90,19 +90,20 @@
             </h2>
 
             <div id="botoesOutros">
-                <button onclick="mudarMenu('triangulos-menu')" style="display: none;">Triângulos</button>
+                <button onclick="mudarMenu('triangulos-menu')">Triângulos</button>
                 <button onclick="mudarMenu('renascer')">Renascer</button>
                 <button onclick="mudarMenu('conquistas')" style="display: none;">Conquistas</button>
-                <button id="maquinadasorte" onclick="mudarMenu('maquinadasorte')" style="display: none;">Máquina da sorte</button>
+                <button id="maquinadasorte" onclick="mudarMenu('maquina-da-sorte')" style="display: none;">Máquina da sorte</button>
                 <button id="livromagico" onclick="mudarMenu('livromagico')" style="display: none;">Livro mágico</button>
-                <button id="quizmatematico" onclick="mudarMenu('quizmatematico')" style="display: none;">Quiz matemático</button>
-                <button id="skinquadrado" onclick="mudarMenu('skinquadrado')" style="display: none;">Skin do quadrado</button>
+                <button id="quizmatematico" onclick="mudarMenu('quiz-matematico')" style="display: none;">Quiz matemático</button>
+                <button id="skinquadrado" onclick="mudarMenu('skinquadrado')" style="display: none;">Skin do
+                    quadrado</button>
             </div>
 
-            <div id="menus">
+            <div id="menus" style="display: none;">
                 <section id="triangulos-menu" style="display: none;">
                     <h1>Melhorias de triângulos</h1>
-                    <div class="melhorias-div" id="melhorias-triangulos-div"></div>
+                    <div class="melhorias-div" id="melhorias-triangulos-div" style="grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));"></div>
                 </section>
 
                 <section id="renascer" style="display: none;">
@@ -125,7 +126,8 @@
 
                     <div class="renascer-alerta">
                         <strong>Antes de continuar</strong>
-                        <p>Ao renascer, você perderá todos os seus quadrados, melhorias e construções. Você manterá somente triângulos e melhorias de triângulos</p>
+                        <p>Ao renascer, você perderá todos os seus quadrados, melhorias e construções. Você manterá
+                            somente triângulos e melhorias de triângulos</p>
                     </div>
 
                     <button class="botao-renascer"
@@ -163,7 +165,7 @@
                             </div>
 
                             <div id="botao-maquina">
-                                <button id="botao-apostar" onclick="apostar()">APOSTAR</button>
+                                <button id="botao-apostar">APOSTAR</button>
                             </div>
                         </div>
 
@@ -223,29 +225,25 @@
                 </section>
 
                 <section id="quiz-matematico" style="display: none;">
-                    <button onclick="mudarMenu('main')" style="width: fit-content; height: fit-content;">Voltar</button>
-
                     <div id="quiz">
+                        <div class="explicacao">
+                            <h2>Quiz matemático</h2>
+                            <p>Responda perguntas sobre matemática, se acertar a pergunta, ganha 15% dos seus quadrados
+                                atuais, se errar, perde 15%. OBS: Será dada apenas 1 pergunta por vez</p>
+                        </div>
                         <h2 id="pergunta">Comece o quiz para receber a pergunta</h2>
 
                         <div id="opçoes">
-                            <button class="opção" id="opção1" onclick="verificarQuiz(1)"></button>
-                            <button class="opção" id="opção2" onclick="verificarQuiz(2)"></button>
-                            <button class="opção" id="opção3" onclick="verificarQuiz(3)"></button>
-                            <button class="opção" id="opção4" onclick="verificarQuiz(4)"></button>
+                            <button class="opção" id="opcao1"></button>
+                            <button class="opção" id="opcao2"></button>
+                            <button class="opção" id="opcao3"></button>
+                            <button class="opção" id="opcao4"></button>
                         </div>
+
+                        <p id="resultado-quiz" style="display: none;">ola</p>
                     </div>
 
-                    <div class="explicacao">
-                        <h2>Quiz matemático</h2>
-                        <p>Responda perguntas sobre matemática, se acertar a pergunta, ganha 15% dos seus quadrados
-                            atuais, se errar, perde 15%. OBS: Será dada apenas 1 pergunta por vez</p>
 
-                        <div id="divcomecarquiz">
-                            <button id="comecarquiz" onclick="comecarquiz()">Começar</button>
-                        </div>
-                        <p id="textoEmergenciaQuiz"></p>
-                    </div>
                 </section>
 
                 <section id="skin-quadrado" style="display: none;">
@@ -309,23 +307,84 @@
         </section>
 
         <section id="save" style="display: none;">
-            <button onclick="mudarMenu('main')" style="width: fit-content; height: fit-content;">Voltar</button>
-
-            <h2>Salvar</h2>
-
-            <p>O salvamento é feito automaticamente a cada minuto, mas se ocorrer algum erro, é sempre bom ter um
-                arquivo reserva</p>
-            <p>Clicar em salvar irá baixar um arquivo que pode ser usado para acessar seu save de qualquer dispositivo
-            </p>
-
-            <div>
-                <button onclick="salvarDados()">Salvar</button>
-                <button onclick="carregarDados()">Carregar</button>
+            <div id="acoes-salvar">
+                <div id="save-action" class="acao-escolhida">
+                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                        <path
+                            d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                    </svg>
+                    <div>
+                        <h2>Salvar</h2>
+                        <p>Salve seu progresso para continuar depois</p>
+                    </div>
+                </div>
+                <div id="load-action">
+                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                        <path
+                            d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                    </svg>
+                    <div>
+                        <h2>Carregar</h2>
+                        <p>Carregue um arquivo existente</p>
+                    </div>
+                </div>
             </div>
-            <h2>Salvar em arquivo</h2>
-            <div>
-                <button onclick="salvarJson()">Exportar</button>
-                <button onclick="carregarJson()">Importar</button>
+            <div id="opcoes-salvar" style="--num-opcoes: 3;">
+                <div id="salvar-local" class="opcao-escolhida">
+                    <div>
+                        <svg viewBox="0 -960 960 960" fill="currentColor">
+                            <path
+                                d="M160-280h640v-240H160v240Zm562.5-77.5Q740-375 740-400t-17.5-42.5Q705-460 680-460t-42.5 17.5Q620-425 620-400t17.5 42.5Q655-340 680-340t42.5-17.5ZM880-600H767l-80-80H273l-80 80H80l137-137q11-11 25.5-17t30.5-6h414q16 0 30.5 6t25.5 17l137 137ZM160-200q-33 0-56.5-23.5T80-280v-320h800v320q0 33-23.5 56.5T800-200H160Z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2>Local</h2>
+                        <p>Salve seu progresso no dispositivo</p>
+                    </div>
+                </div>
+                <div id="salvar-json">
+                    <div>
+                        <svg viewBox="0 -960 960 960" fill="currentColor">
+                            <path
+                                d="M560-160v-80h120q17 0 28.5-11.5T720-280v-80q0-38 22-69t58-44v-14q-36-13-58-44t-22-69v-80q0-17-11.5-28.5T680-720H560v-80h120q50 0 85 35t35 85v80q0 17 11.5 28.5T840-560h40v160h-40q-17 0-28.5 11.5T800-360v80q0 50-35 85t-85 35H560Zm-280 0q-50 0-85-35t-35-85v-80q0-17-11.5-28.5T120-400H80v-160h40q17 0 28.5-11.5T160-600v-80q0-50 35-85t85-35h120v80H280q-17 0-28.5 11.5T240-680v80q0 38-22 69t-58 44v14q36 13 58 44t22 69v80q0 17 11.5 28.5T280-240h120v80H280Z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2>Json</h2>
+                        <p>Salve seu progresso em formato JSON</p>
+                    </div>
+                </div>
+                <div id="salvar-online">
+                    <div>
+                        <svg viewBox="0 -960 960 960" fill="currentcolor">
+                            <path
+                                d="M325-111.5q-73-31.5-127.5-86t-86-127.5Q80-398 80-480.5t31.5-155q31.5-72.5 86-127t127.5-86Q398-880 480.5-880t155 31.5q72.5 31.5 127 86t86 127Q880-563 880-480.5T848.5-325q-31.5 73-86 127.5t-127 86Q563-80 480.5-80T325-111.5ZM480-162q26-36 45-75t31-83H404q12 44 31 83t45 75Zm-104-16q-18-33-31.5-68.5T322-320H204q29 50 72.5 87t99.5 55Zm208 0q56-18 99.5-55t72.5-87H638q-9 38-22.5 73.5T584-178ZM170-400h136q-3-20-4.5-39.5T300-480q0-21 1.5-40.5T306-560H170q-5 20-7.5 39.5T160-480q0 21 2.5 40.5T170-400Zm216 0h188q3-20 4.5-39.5T580-480q0-21-1.5-40.5T574-560H386q-3 20-4.5 39.5T380-480q0 21 1.5 40.5T386-400Zm268 0h136q5-20 7.5-39.5T800-480q0-21-2.5-40.5T790-560H654q3 20 4.5 39.5T660-480q0 21-1.5 40.5T654-400Zm-16-240h118q-29-50-72.5-87T584-782q18 33 31.5 68.5T638-640Zm-234 0h152q-12-44-31-83t-45-75q-26 36-45 75t-31 83Zm-200 0h118q9-38 22.5-73.5T376-782q-56 18-99.5 55T204-640Z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2>Online</h2>
+                        <p>Salve seu progresso de forma online. OBS: é necessário ter uma conta cadastrada</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="save-button-div">
+                <button id="confirm-save-load-button">
+                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                        <path
+                            d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                    </svg>
+                    Confirmar
+                </button>
+            </div>
+
+            <div id="auto-save-checkbox">
+                <label for="auto-save">Salvar automaticamente</label>
+                <input type="checkbox" id="auto-save" name="auto-save" checked>
+            </div>
+
+            <div id="save-notification" style="display: none;">
+                <p>Progresso salvo com sucesso!</p>
             </div>
         </section>
 
@@ -392,7 +451,7 @@
         </section>
     </div>
 
-    <script src="/src/js/pages/quadrado-clicker.js"></script>
+    <script type="module" src="/src/js/pages/quadrado-clicker.js"></script>
     <script type="module" src="/src/js/others/menu.js"></script>
 </body>
 

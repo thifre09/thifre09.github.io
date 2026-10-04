@@ -690,7 +690,9 @@ svg {
             background-image: url("/assets/images/nao-va-a-falencia/Blank-Patina-Paper-3-GraphicsFairy.jpg");
             background-size: cover;
             background-position: right;
-            top: 0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             border: solid 2px black;
             border-radius: 10px;
             overflow: hidden;
@@ -1589,9 +1591,78 @@ svg {
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            width: 50%;
+            height: auto;
+            padding: var(--p5);
+            box-sizing: border-box;
+            text-align: center;
+            border: 2px solid var(--yellow1);
 
             h2 {
+                position: relative;
+                margin: 0;
+                color: var(--orange1);
                 font-size: var(--fs1);
+                line-height: 1;
+            }
+
+            h3 {
+                color: var(--black);
+                font-size: var(--fs3);
+                margin: var(--p1);
+            }
+
+            #descricao-final {
+                max-width: 80%;
+                margin: 0;
+                color: var(--gray3);
+                font-size: var(--fs5);
+            }
+
+            .final-resumo {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(130px, 1fr));
+                width: min(100%, 430px);
+                margin-top: var(--p3);
+                border: 1px solid var(--yellow4);
+                border-radius: 10px;
+                overflow: hidden;
+                background: rgba(255, 255, 255, 0.3);
+
+                div {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                    padding: var(--p5);
+
+                    &:nth-child(odd) {
+                        border-right: 1px solid var(--yellow4);
+                    }
+
+                    &:nth-child(n + 3) {
+                        border-top: 1px solid var(--yellow4);
+                    }
+                }
+
+                span {
+                    color: var(--gray5);
+                    font-size: var(--fs8);
+                    font-weight: 800;
+                    letter-spacing: 0.08em;
+                    text-transform: uppercase;
+                }
+
+                strong {
+                    color: var(--yellow1);
+                    font-size: var(--fs4);
+                }
+            }
+
+            .final-rodape {
+                margin: var(--p1);
+                color: var(--gray3);
+                font-size: var(--fs7);
             }
         }
 

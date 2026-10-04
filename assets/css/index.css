@@ -30,7 +30,7 @@ div#central {
             animation-timing-function: linear, linear;
             text-decoration: none;
             transition: var(--transition-time1);
-            font-size: 2.5rem;
+            font-size: var(--fs1);
             text-align: center;
             padding: 4rem 0;
             margin-bottom: 10px;
@@ -38,8 +38,6 @@ div#central {
         }
     }
 }
-
-
 
 @keyframes texto {
     0% {
@@ -136,7 +134,5 @@ div#central {
 
 .links:hover {
     background: #81C784;
-    /* Cor ao passar o mouse */
     transform: scale(1.05);
-    /* Aumenta ligeiramente o tamanho */
 }
