@@ -229,7 +229,7 @@ class Propriedade {
         return this.rendaAnualBase * (this.condicao / 100);
     }
     get despestasAnuais() {
-        return this.despestasAnuaisBase / ((this.condicao || 1) / 10);
+        return Math.min(this.valorBase * 1.5, this.despestasAnuaisBase / ((this.condicao || 1) / 10));
     }
     get luxo() {
         return this.luxoBase * (this.condicao / 100);
@@ -704,7 +704,8 @@ class Jogo {
     }
     proximoAno() {
         if (this.patrimonio.dinheiro < 0) {
-            this.falir();
+            new Final("Falência", "Você faliu e perdeu todo o seu patrimônio. O jogo acabou.").acontecer();
+            return;
         }
         this.ano++;
         this.acoes = 15;
@@ -717,20 +718,52 @@ class Jogo {
         acontecimentoAtual = gerarAcontecimentoAleatorio();
         // eventoAtual = gerarEventoAleatorio();
         atualizarUI();
-        if (this.ano === 1950) {
-            this.ganhar();
+        if (this.ano === 1930) {
+            if (this.patrimonio.dinheiro <= 500_000) {
+                new Final("Final normal", "Você não conseguiu acumular riqueza suficiente para se tornar um grande empresário.").acontecer();
+            }
+            else if (this.patrimonio.dinheiro <= 1_000_000) {
+                new Final("Final bom", "Você conseguiu acumular uma boa quantidade de riqueza, mas não se tornou um grande empresário.").acontecer();
+            }
+            else if (this.patrimonio.dinheiro <= 2_000_000) {
+                new Final("Final ótimo", "Você conseguiu acumular uma grande quantidade de riqueza e se tornou um empresário de sucesso.").acontecer();
+            }
+            else {
+                new Final("Final excelente", "Você conseguiu acumular uma enorme quantidade de riqueza e se tornou um empresário extremamente bem-sucedido.").acontecer();
+            }
         }
-    }
-    falir() {
-        alert("Você faliu! O jogo será reiniciado.");
-    }
-    ganhar() {
-        alert("Parabéns! Você conseguiu manter sua família e patrimônio. O jogo será reiniciado.");
     }
     criarAnotacaoDiario(titulo, descricao, cor) {
         const anotacao = new AnatocaoDiario(titulo, descricao, this.ano, cor || "yellow");
         this.diario.push(anotacao);
     }
+}
+class Final {
+    nome;
+    descricao;
+    constructor(nome, descricao) {
+        this.nome = nome;
+        this.descricao = descricao;
+    }
+    acontecer() {
+        document.getElementById("janela-final-jogo").style.display = "flex";
+        document.getElementById("nome-final").textContent = this.nome;
+        document.getElementById("descricao-final").textContent = this.descricao;
+        document.getElementById("ano-final").textContent = jogo.ano.toString();
+        document.getElementById("patrimonio-final").textContent = jogo.patrimonio.totalFormatado;
+        document.getElementById("dinheiro-final").textContent = formatarMoeda(jogo.patrimonio.dinheiro);
+        document.getElementById("renda-final").textContent = formatarMoeda(jogo.patrimonio.rendaAnualTotal);
+        document.getElementById("prestigio-final").textContent = jogo.prestigio.toFixed(2);
+        document.getElementById("estabilidade-final").textContent = jogo.estabilidadeFamiliar.toFixed(2);
+        document.getElementById("propriedades-final").textContent = jogo.patrimonio.propriedades.filter(propriedade => propriedade.comprada).length.toString();
+        document.getElementById("investimentos-final").textContent = jogo.patrimonio.investimentos.filter(investimento => investimento.acoesPossuidas > 0).length.toString();
+    }
+}
+function formatarMoeda(valor) {
+    return new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+    }).format(valor);
 }
 ;
 let jogo = new Jogo();
@@ -1369,57 +1402,51 @@ function atualizarDiarioUI() {
     }
 }
 function mover(objeto) {
-    let draggedElement = null;
-    let shiftX, shiftY;
+    let shiftX = 0;
+    let shiftY = 0;
+    let startX = 0;
+    let startY = 0;
     let isDragging = false;
-    let animationFrameId = null;
     const MOVE_THRESHOLD = 5;
-    // Valores de destino para a animação
-    let targetX = 0;
-    let targetY = 0;
-    const updatePosition = () => {
-        if (!draggedElement)
+    const limitarPosicao = (x, y, largura, altura) => ({
+        x: Math.max(0, Math.min(x, window.innerWidth - largura)),
+        y: Math.max(0, Math.min(y, window.innerHeight - altura)),
+    });
+    const onMouseMove = (e) => {
+        if (!isDragging &&
+            (Math.abs(e.clientX - startX) > MOVE_THRESHOLD ||
+                Math.abs(e.clientY - startY) > MOVE_THRESHOLD)) {
+            isDragging = true;
+            const rect = objeto.getBoundingClientRect();
+            // Converte a posição visual, incluindo o translate(-50%, -50%), em coordenadas reais.
+            objeto.style.transform = "none";
+            objeto.style.left = `${rect.left}px`;
+            objeto.style.top = `${rect.top}px`;
+        }
+        if (!isDragging)
             return;
-        // Aplica a posição apenas no momento em que a tela vai atualizar
-        draggedElement.style.left = `${targetX}px`;
-        draggedElement.style.top = `${targetY}px`;
-        animationFrameId = requestAnimationFrame(updatePosition);
+        const rect = objeto.getBoundingClientRect();
+        const posicao = limitarPosicao(e.clientX - shiftX, e.clientY - shiftY, rect.width, rect.height);
+        objeto.style.left = `${posicao.x}px`;
+        objeto.style.top = `${posicao.y}px`;
     };
-    objeto.addEventListener('mousedown', (e) => {
-        if (!e)
+    const onMouseUp = () => {
+        document.removeEventListener("mousemove", onMouseMove);
+        document.removeEventListener("mouseup", onMouseUp);
+        objeto.style.cursor = "";
+    };
+    objeto.addEventListener("mousedown", (e) => {
+        if (e.button !== 0)
             return;
-        draggedElement = objeto;
-        const rect = draggedElement.getBoundingClientRect();
+        const rect = objeto.getBoundingClientRect();
         shiftX = e.clientX - rect.left;
         shiftY = e.clientY - rect.top;
-        const startX = e.clientX;
-        const startY = e.clientY;
+        startX = e.clientX;
+        startY = e.clientY;
         isDragging = false;
-        const onMouseMove = (e) => {
-            if (!isDragging &&
-                (Math.abs(e.clientX - startX) > MOVE_THRESHOLD ||
-                    Math.abs(e.clientY - startY) > MOVE_THRESHOLD)) {
-                isDragging = true;
-                // Inicia o ciclo de animação
-                animationFrameId = requestAnimationFrame(updatePosition);
-            }
-            if (isDragging) {
-                // Em vez de mover o DOM aqui, apenas guardamos as coordenadas
-                targetX = e.pageX - shiftX - window.scrollX;
-                targetY = e.pageY - shiftY - window.scrollY;
-            }
-        };
-        const onMouseUp = () => {
-            document.removeEventListener('mousemove', onMouseMove);
-            document.removeEventListener('mouseup', onMouseUp);
-            if (animationFrameId !== null) {
-                // Para o ciclo de animação
-                cancelAnimationFrame(animationFrameId);
-            }
-            draggedElement = null;
-        };
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
+        objeto.style.cursor = "grabbing";
+        document.addEventListener("mousemove", onMouseMove);
+        document.addEventListener("mouseup", onMouseUp);
     });
 }
 async function buildAcontecimentos() {
