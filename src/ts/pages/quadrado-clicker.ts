@@ -39,6 +39,11 @@ function changeTo(id: "game" | "others" | "save" | "help") {
         case "others":
             buttonChangeToOthers.classList.add("nav-bar-ativo");
             updateNavBarIndicator(buttonChangeToOthers);
+            conquistas.forEach(conquista => {
+                if (!conquista.conquistada) {
+                    conquista.check();
+                }
+            });
             break;
         case "save":
             buttonChangeToSave.classList.add("nav-bar-ativo");
@@ -49,9 +54,8 @@ function changeTo(id: "game" | "others" | "save" | "help") {
             updateNavBarIndicator(buttonChangeToHelp);
             break;
     }
+    updateUI();
 }
-
-
 
 buttonChangeToGame.addEventListener("click", () => {
     changeTo("game");
@@ -122,14 +126,14 @@ class Gerador {
 
     buy() {
         if (quadrados < this.price) return;
-        quadrados -= this.price;
+        quadrados = Math.max(0, quadrados - this.price);
         this.quantity++;
         updateQuadradosPorSegundoValue();
         updateUI();
     }
 
     get price(): number {
-        return Math.floor(this.basePrice * Math.pow(Gerador.PRICE_MULTIPLIER, this.quantity));
+        return boundedMultiply(this.basePrice, Math.pow(Gerador.PRICE_MULTIPLIER, this.quantity));
     }
 }
 
@@ -179,10 +183,10 @@ class Melhoria {
         if (this.bought) return;
         if (quadrados < this.price) return;
 
-        quadrados -= this.price;
+        quadrados = Math.max(0, quadrados - this.price);
         this.bought = true;
         this.otherEffects();
-        this.affectedGenerator.production *= this.productionIncrease;
+        this.affectedGenerator.production = boundedMultiply(this.affectedGenerator.production, this.productionIncrease);
         updateUI();
         updateQuadradosPorSegundoValue();
     }
@@ -255,6 +259,47 @@ class Pergunta {
     }
 };
 
+class Conquista {
+    nome: string;
+    descricao: string;
+    conquistada: boolean;
+    secreta: boolean;
+    requisito: () => boolean;
+
+    constructor(nome: string, descricao: string, requisito: () => boolean, secreta: boolean = false) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.requisito = requisito;
+        this.conquistada = false;
+        this.secreta = secreta;
+    }
+
+    createHTML(): HTMLElement {
+        const container = document.createElement("div");
+        container.classList.add("conquista");
+        if (this.conquistada) {
+            container.classList.add("conquistada");
+        }
+
+        const h2Name = document.createElement("h2");
+        h2Name.textContent = this.secreta && !this.conquistada ? "???" : this.nome;
+        container.appendChild(h2Name);
+
+        const pDescription = document.createElement("p");
+        pDescription.textContent = this.secreta && !this.conquistada ? "?????????????" : this.descricao;
+        container.appendChild(pDescription);
+
+        return container;
+    }
+
+    check() {
+        if (this.conquistada) return;
+        if (this.requisito()) {
+            this.conquistada = true;
+        }
+    }
+}
+
 const geradores: Gerador[] = [
     new Gerador("Cursores", 10e1, 1),
     new Gerador("Professores", 3e3, 10),
@@ -304,15 +349,24 @@ const melhorias: Melhoria[] = [
 ]
 
 const melhoriasTriangulo: MelhoriaTriangulo[] = [
-    new MelhoriaTriangulo("Quiz Matemático", "Desbloqueia o quiz matemático", 1, () => {
+    new MelhoriaTriangulo("Renascimento", "Reseta o jogo, mas aumenta a produção de quadrados por segundo em 10% para cada quadrado ascendente", 2, () => {
+        document.getElementById("botao-outros-renascer")!.style.display = "block";
+    }),
+    new MelhoriaTriangulo("Quiz Matemático", "Desbloqueia o quiz matemático", 3, () => {
         document.getElementById("quizmatematico")!.style.display = "block";
     }),
-    new MelhoriaTriangulo("Maquina da sorte", "Desbloqueia a maquina da sorte", 2, () => {
+    new MelhoriaTriangulo("Maquina da sorte", "Desbloqueia a maquina da sorte", 3, () => {
         document.getElementById("maquinadasorte")!.style.display = "block";
     }),
+    new MelhoriaTriangulo("Skin do quadrado", "Desbloqueia a skin do quadrado", 3, () => {
+        document.getElementById("botao-outros-skin-quadrado")!.style.display = "block";
+    }),
+    new MelhoriaTriangulo("Livro mágico", "Desbloqueia feitiços que gastam mana para melhorar seu jogo", 3, () => {
+        document.getElementById("livromagico")!.style.display = "block";
+    })
 ]
 
-let perguntas: Pergunta[] = [
+const perguntas: Pergunta[] = [
     new Pergunta("Quanto é 1+1?", ["2", "3", "4", "1"], "2"),
     new Pergunta("Quanto é 5-3?", ["2", "3", "5", "1"], "2"),
     new Pergunta("Quanto é 5x5?", ["25", "20", "15", "30"], "25"),
@@ -389,6 +443,256 @@ let perguntas: Pergunta[] = [
     new Pergunta("Qual é o seno de 90 graus?", ["1", "0", "0.5", "√2/2"], "1"),
     new Pergunta("Quanto é a integral de 2x dx?", ["x² + C", "2x + C", "x³ + C", "x + C"], "x² + C")
 ];
+
+const conquistas: Conquista[] = [
+    // Quadrados
+    new Conquista("Primeiro click", "Clique pela primeira vez", () => totalQuadrados >= 1),
+    new Conquista("10 quadrados", "Consiga 10 quadrados", () => totalQuadrados >= 10),
+    new Conquista("100 quadrados", "Consiga 100 quadrados", () => totalQuadrados >= 100),
+    new Conquista("Milhar", "Consiga 1k quadrados", () => totalQuadrados >= 1000),
+    new Conquista("10000 quadrados", "Consiga 10k quadrados", () => totalQuadrados >= 10000),
+    new Conquista("10^5", "Consiga 100k quadrados", () => totalQuadrados >= 100000),
+    new Conquista("Milhão", "Consiga 1mi de quadrados", () => totalQuadrados >= 1000000),
+    new Conquista("Um numero um pouco maior", "Consiga 1bi de quadrados", () => totalQuadrados >= 100000000),
+    new Conquista("O grande t", "Consiga 1t de quadrados", () => totalQuadrados >= 100000000),
+    new Conquista("Qa-drados", "Consiga 1Qa de quadrados", () => totalQuadrados >= 1e15),
+    new Conquista("Ainda pode ficar maior", "Consiga 1Qi de quadrados", () => totalQuadrados >= 1e18),
+    new Conquista("É sextilhão, não sexta", "Consiga 1Sx de quadrados", () => totalQuadrados >= 1e21),
+    new Conquista("Não consegui pensar num nome legal", "Consiga 1Sp de quadrados", () => totalQuadrados >= 1e24),
+    new Conquista("Você acha esse número grande?", "Consiga 1Oc de quadrados", () => totalQuadrados >= 1e27),
+    new Conquista("Império de quadrados", "Consiga 1No de quadrados", () => totalQuadrados >= 1e30),
+    new Conquista("Você chegou ao 10-lhão", "Consiga 1De de quadrados", () => totalQuadrados >= 1e33),
+
+    // Construções
+    new Conquista("Cursor", "Compre 1 cursor", () => geradores[0].quantity >= 1),
+    new Conquista("Muitos cursores", "Compre 100 cursores", () => geradores[0].quantity >= 100),
+    new Conquista("Professor", "Compre 1 professor", () => geradores[1].quantity >= 1),
+    new Conquista("Vários professores", "Compre 100 professores", () => geradores[1].quantity >= 100),
+    new Conquista("Matemático", "Compre 1 matemático", () => geradores[2].quantity >= 1),
+    new Conquista("Comissão de matemáticos", "Compre 100 matemáticos", () => geradores[2].quantity >= 100),
+    new Conquista("Quadro", "Compre 1 quadro", () => geradores[3].quantity >= 1),
+    new Conquista("Para que tantos quadros", "Compre 100 quadros", () => geradores[3].quantity >= 100),
+    new Conquista("Impressora", "Compre 1 impressora", () => geradores[4].quantity >= 1),
+    new Conquista("Impressionante", "Compre 100 impressoras", () => geradores[4].quantity >= 100),
+    new Conquista("Fábrica", "Compre 1 fábrica", () => geradores[5].quantity >= 1),
+    new Conquista("Conglomerado", "Compre 100 fábricas", () => geradores[5].quantity >= 100),
+    new Conquista("Engenheiro", "Compre 1 engenheiro", () => geradores[6].quantity >= 1),
+    new Conquista("Construtora", "Compre 100 engenheiros", () => geradores[6].quantity >= 100),
+    new Conquista("Programador", "Compre 1 programador", () => geradores[7].quantity >= 1),
+    new Conquista("Programação quadratica", "Compre 100 programadores", () => geradores[7].quantity >= 100),
+
+    // Triângulos
+    new Conquista("Triangulo 1", "Consiga o primeiro triângulo", () => triangulos >= 1),
+    new Conquista("10 triângulos", "Tenha 10 triângulos ao mesmo tempo", () => triangulos >= 10),
+    new Conquista("Força triangular", "Compre todas as melhorias de triângulos", () => {
+        let result = true;
+        melhoriasTriangulo.forEach(melhoria => {
+            if (!melhoria.bought) {
+                result = false;
+                return;
+            }
+        });
+        return result;
+    }),
+
+    // Melhorias
+    new Conquista("Cursores melhorados", "Compre 1 melhoria de cursores", () => {
+        let result = false;
+        melhorias.forEach(melhoria => {
+            if (melhoria.affectedGenerator === geradores[0] && melhoria.bought) {
+                result = true;
+                return;
+            }
+        });
+        return result;
+    }),
+    new Conquista("Cursores no total", "Compre todas as melhorias de cursores", () => {
+        let result = true;
+        melhorias.forEach(melhoria => {
+            if (melhoria.affectedGenerator === geradores[0] && !melhoria.bought) {
+                result = false;
+                return;
+            }
+        });
+        return result;
+    }),
+    new Conquista("Bom professor", "Compre 1 melhoria de professores", () => {
+        let result = false;
+        melhorias.forEach(melhoria => {
+            if (melhoria.affectedGenerator === geradores[1] && melhoria.bought) {
+                result = true;
+                return;
+            }
+        });
+        return result;
+    }),
+    new Conquista("Professores top", "Compre todas as melhorias de professores", () => {
+        let result = true;
+        melhorias.forEach(melhoria => {
+            if (melhoria.affectedGenerator === geradores[1] && !melhoria.bought) {
+                result = false;
+                return;
+            }
+        });
+        return result;
+    }),
+    new Conquista("Matemática básica", "Compre 1 melhoria de matemáticos", () => {
+        let result = false;
+        melhorias.forEach(melhoria => {
+            if (melhoria.affectedGenerator === geradores[2] && melhoria.bought) {
+                result = true;
+                return;
+            }
+        });
+        return result;
+    }),
+    new Conquista("Matemática avançada", "Compre todas as melhorias de matemáticos", () => {
+        let result = true;
+        melhorias.forEach(melhoria => {
+            if (melhoria.affectedGenerator === geradores[2] && !melhoria.bought) {
+                result = false;
+                return;
+            }
+        });
+        return result;
+    }),
+    new Conquista("Quadros melhores", "Compre 1 melhoria de quadros", () => {
+        let result = false;
+        melhorias.forEach(melhoria => {
+            if (melhoria.affectedGenerator === geradores[3] && melhoria.bought) {
+                result = true;
+                return;
+            }
+        });
+        return result;
+    }),
+    new Conquista("Lousa", "Compre todas as melhorias de quadros", () => {
+        let result = true;
+        melhorias.forEach(melhoria => {
+            if (melhoria.affectedGenerator === geradores[3] && !melhoria.bought) {
+                result = false;
+                return;
+            }
+        });
+        return result;
+    }),
+    new Conquista("Tinta de qualidade", "Compre 1 melhoria de impressoras", () => {
+        let result = false;
+        melhorias.forEach(melhoria => {
+            if (melhoria.affectedGenerator === geradores[4] && melhoria.bought) {
+                result = true;
+                return;
+            }
+        });
+        return result;
+    }),
+    new Conquista("Melhor que impressora 3D", "Compre todas as melhorias de impressoras", () => {
+        let result = true;
+        melhorias.forEach(melhoria => {
+            if (melhoria.affectedGenerator === geradores[4] && !melhoria.bought) {
+                result = false;
+                return;
+            }
+        });
+        return result;
+    }),
+    new Conquista("Fabricação intensa", "Compre 1 melhoria de fábricas", () => {
+        let result = false;
+        melhorias.forEach(melhoria => {
+            if (melhoria.affectedGenerator === geradores[5] && melhoria.bought) {
+                result = true;
+                return;
+            }
+        });
+        return result;
+    }),
+    new Conquista("Fábricas no topo", "Compre todas as melhorias de fábricas", () => {
+        let result = true;
+        melhorias.forEach(melhoria => {
+            if (melhoria.affectedGenerator === geradores[5] && !melhoria.bought) {
+                result = false;
+                return;
+            }
+        });
+        return result;
+    }),
+    new Conquista("Lápis e papel", "Compre 1 melhoria de engenheiro", () => {
+        let result = false;
+        melhorias.forEach(melhoria => {
+            if (melhoria.affectedGenerator === geradores[6] && melhoria.bought) {
+                result = true;
+                return;
+            }
+        });
+        return result;
+    }),
+    new Conquista("Melhores engenheiros existentes", "Compre todas as melhorias de engenheiros", () => {
+        let result = true;
+        melhorias.forEach(melhoria => {
+            if (melhoria.affectedGenerator === geradores[6] && !melhoria.bought) {
+                result = false;
+                return;
+            }
+        });
+        return result;
+    }),
+    new Conquista("PC melhor", "Compre 1 melhoria de programador", () => {
+        let result = false;
+        melhorias.forEach(melhoria => {
+            if (melhoria.affectedGenerator === geradores[7] && melhoria.bought) {
+                result = true;
+                return;
+            }
+        });
+        return result;
+    }),
+    new Conquista("Hacker de quadrados", "Compre todas as melhorias de programadores", () => {
+        let result = true;
+        melhorias.forEach(melhoria => {
+            if (melhoria.affectedGenerator === geradores[7] && !melhoria.bought) {
+                result = false;
+                return;
+            }
+        });
+        return result;
+    }),
+    new Conquista("Tudo feito", "Compre todas as melhorias", () => {
+        let result = true;
+        melhorias.forEach(melhoria => {
+            if (!melhoria.bought) {
+                result = false;
+                return;
+            }
+        });
+        return result;
+    }),
+
+    // Outros
+    new Conquista("Apostador", "Aposte 1 vez na máquina da sorte", () => apostasRealizadas >= 1),
+    new Conquista("Grande apostador", "Aposte 10 vezes na máquina da sorte", () => apostasRealizadas >= 10),
+    new Conquista("Viciado em apostas", "Aposte 100 vezes na máquina da sorte", () => apostasRealizadas >= 100),
+    new Conquista("Rei do cassino", "Aposte 777 vezes na máquina da sorte", () => apostasRealizadas >= 777),
+    new Conquista("Mágico aprendiz", "Use uma magia", () => magiasUsadas >= 1),
+    new Conquista("Mestre da magia", "Use 30 magias", () => magiasUsadas >= 30),
+    new Conquista("O mago supremo", "Use 250 magias", () => magiasUsadas >= 250),
+    new Conquista("Estilista", "Mude a skin do quadrado 1 vez", () => { return false }),
+    new Conquista("Aluno", "Responda 1 pergunta do quiz de matemática", () => Pergunta.respondidas >= 1),
+    new Conquista("Bom aluno", "Responda 10 perguntas do quiz de matemática", () => Pergunta.respondidas >= 10),
+    new Conquista("Gênio da matemática", "Responda 100 perguntas do quiz de matemática corretamente", () => Pergunta.respondidas >= 100),
+    new Conquista("Fracasso total", "Erre 200 perguntas no quiz de matemática", () => Pergunta.erros >= 200),
+
+    new Conquista("Obrigado por jogar o Quadrado Clicker", "Consiga todas as conquistas e zere o jogo", () => {
+        let result = true;
+        conquistas.forEach(conquista => {
+            if (!conquista.conquistada) {
+                result = false;
+                return;
+            }
+        });
+        return result;
+    }, true),
+];
+
 // #endregion
 
 // #region main
@@ -396,7 +700,7 @@ let perguntas: Pergunta[] = [
 let quadrados = 0;
 let quadradosPorClique = 1;
 let quadradosPorSegundo = 0;
-let triangulos = 10;
+let triangulos = 0;
 let triangulosExpoenteIndex = 1;
 let quadradosAscendentes = 0;
 let quadradosAscendentesDesseRenascimento = 0;
@@ -406,32 +710,44 @@ let clickAnimationTimeout: number | null = null;
 let perguntaAtual: Pergunta | null = null;
 
 function updateQuadradosValue(newValue: number) {
-    if (newValue > quadrados) {
-        totalQuadrados += newValue - quadrados;
+    const value = normalizeNumber(newValue);
+    if (value > quadrados) {
+        totalQuadrados = boundedAdd(totalQuadrados, value - quadrados);
     }
 
-    quadrados = parseInt(newValue.toString());
+    quadrados = value;
 
-    if (quadrados > 1000 ** triangulosExpoenteIndex) {
+    while (triangulosExpoenteIndex < 102 && Math.log10(Math.max(quadrados, 1)) >= 3 * triangulosExpoenteIndex) {
         triangulosExpoenteIndex++;
-        triangulos++;
+        triangulos = boundedAdd(triangulos, 1);
     }
 
     if (totalQuadrados >= getNextQuadradosAscendentesCost()) {
         quadradosAscendentes++;
     }
-
-    updateUI();
 }
 
 function updateQuadradosPorSegundoValue() {
-    quadradosPorSegundo = geradores.reduce((acc, gerador) => acc + (gerador.production * gerador.quantity), 0);
-    quadradosPorSegundo *= (1 + (0.1 * quadradosAscendentesDesseRenascimento));
+    quadradosPorSegundo = geradores.reduce((acc, gerador) => {
+        return boundedAdd(acc, boundedMultiply(gerador.production, gerador.quantity));
+    }, 0);
+    quadradosPorSegundo = boundedMultiply(quadradosPorSegundo, 1 + (0.1 * quadradosAscendentesDesseRenascimento));
     updateUI();
 }
 
 function click() {
-    updateQuadradosValue(quadrados + quadradosPorClique);
+    if (clicks10x > 0) {
+        clicks10x--;
+        updateUI();
+        updateQuadradosValue(quadrados + quadradosPorClique * 10);
+    } else {
+        updateQuadradosValue(quadrados + quadradosPorClique);
+    }
+    cliquesParaMana++;
+    if (cliquesParaMana >= 1000) {
+        mana += Math.floor(cliquesParaMana / 1000);
+        cliquesParaMana %= 1000;
+    }
     quadrado.classList.add("click-animation");
     clearTimeout(clickAnimationTimeout ? clickAnimationTimeout : undefined);
 
@@ -449,13 +765,19 @@ function updateUI() {
     document.getElementById("triangulos")!.textContent = formatNumber(triangulos);
     document.getElementById("quadrados-ascendentes")!.textContent = formatNumber(quadradosAscendentes);
     document.getElementById("quadrados-ascendentes-faltantes")!.textContent = formatNumber(getNextQuadradosAscendentesCost() - totalQuadrados);
+    document.getElementById("mana")!.textContent = `Mana: ${formatNumber(mana)}`;
+    if (feiticoSelecionado) mostrarFeitico(feiticoSelecionado.nome);
     updateGeradoresUI();
     updateMelhoriasUI();
     updateMelhoriasTrianguloUI();
+    updateConquistasUI();
 }
 
 function formatNumber(num: number): string {
-    if (num == 0) {
+    if (!Number.isFinite(num)) {
+        return num === Infinity ? "∞" : "0";
+    }
+    if (num === 0) {
         return "0";
     }
     const suffixes = [
@@ -466,11 +788,32 @@ function formatNumber(num: number): string {
     ];
     const suffixIndex = Math.floor(Math.log10(num) / 3);
 
-    if (suffixIndex < 0 || suffixIndex >= suffixes.length) {
-        return Math.round(num / Math.pow(10, suffixIndex * 3) * 100) / 100 + suffixes[suffixes.length - 1]; // Use the last suffix if the number is too large
+    if (suffixIndex >= suffixes.length) {
+        return num.toExponential(2).replace("+", "");
     }
+    if (suffixIndex < 0) return num.toString();
 
     return Math.round(num / Math.pow(10, suffixIndex * 3) * 100) / 100 + suffixes[suffixIndex];
+}
+
+function normalizeNumber(value: number): number {
+    if (Number.isNaN(value) || value < 0) return 0;
+    return value > Number.MAX_VALUE ? Number.MAX_VALUE : value;
+}
+
+function boundedAdd(left: number, right: number): number {
+    if (!Number.isFinite(left) || !Number.isFinite(right) || left + right > Number.MAX_VALUE) {
+        return Number.MAX_VALUE;
+    }
+    return left + right;
+}
+
+function boundedMultiply(left: number, right: number): number {
+    if (left === 0 || right === 0) return 0;
+    if (!Number.isFinite(left) || !Number.isFinite(right) || left > Number.MAX_VALUE / right) {
+        return Number.MAX_VALUE;
+    }
+    return left * right;
 }
 
 function updateMelhoriasUI() {
@@ -500,6 +843,14 @@ function updateMelhoriasTrianguloUI() {
     }
 }
 
+function updateConquistasUI() {
+    const conquistasContainer = document.getElementById("container-conquistas")!;
+    conquistasContainer.innerHTML = "";
+    for (const conquista of conquistas) {
+        conquistasContainer.appendChild(conquista.createHTML());
+    }
+}
+
 function mudarMenu(id: string) {
     const menu = document.getElementById(id);
     for (const child of document.getElementById("menus")!.children) {
@@ -516,7 +867,144 @@ function mudarMenu(id: string) {
         document.getElementById("botao-voltar-others")!.style.display = "flex";
         menu.style.display = "flex";
     }
+
+    if (id === "conquistas") {
+        conquistas.forEach(conquista => {
+            if (!conquista.conquistada) {
+                conquista.check();
+            }
+        });
+    }
     updateUI();
+}
+
+let textoLivroTimeout: number | null = null;
+let mana = 10;
+let cliquesParaMana = 0;
+let clicks10x = 0;
+let multiplicarQuadradosPorCliqueUsado = false;
+let magiasUsadas = 0;
+
+type Feitico = {
+    nome: string;
+    descricao: string;
+    custo: number;
+    efeito: () => string;
+};
+
+const feiticos: Feitico[] = [
+    {
+        nome: "Aresto clicum",
+        descricao: "Seus proximo 20 cliques dão 10x mais clicks.",
+        custo: 1,
+        efeito: () => {
+            clicks10x += 20;
+            return "Seus cliques ficaram duas vezes mais fortes.";
+        }
+    },
+    {
+        nome: "Geradorum",
+        descricao: "Cria um gerador aleatório.",
+        custo: 3,
+        efeito: () => {
+            const geradorAleatorio = geradores[Math.floor(Math.random() * geradores.length)];
+            geradorAleatorio.quantity++;
+            return `Um ${geradorAleatorio.name} foi criado.`;
+        }
+    },
+    {
+        nome: "Quadraméntio",
+        descricao: "Te da 25% dos seus quadrados atuais.",
+        custo: 3,
+        efeito: () => {
+            const quadradosAdicionados = Math.floor(quadrados * 0.25);
+            updateQuadradosValue(quadrados + quadradosAdicionados);
+            return `Você recebeu ${formatNumber(quadradosAdicionados)} quadrados.`;
+        }
+    },
+    {
+        nome: "Trianglúsio",
+        descricao: "Essa magia tem uma chance de 20% de gerar um triangulo",
+        custo: 2,
+        efeito: () => {
+            if (Math.random() < 0.2) {
+                triangulos++;
+                return "Um triângulo mágico foi criado.";
+            }
+            return "A magia não funcionou como esperado.";
+        }
+    },
+    {
+        nome: "Multiplicos quadrados",
+        descricao: "Essa magia multiplica seu numero de quadrados por 20, mas ela é tão poderosa, que so pode ser usada uma vez por renascimento",
+        custo: 20,
+        efeito: () => {
+            if (multiplicarQuadradosPorCliqueUsado) {
+                mana += 20;
+                return "Esta magia já foi usada neste renascimento.";
+            }
+            multiplicarQuadradosPorCliqueUsado = true;
+            quadrados = boundedMultiply(quadrados, 20);
+            return "A magia multiplicou a força dos seus cliques por cinco.";
+        }
+    }
+];
+
+let feiticoSelecionado: Feitico | null = null;
+
+function mostrarFeitico(nome: string): void {
+    feiticoSelecionado = feiticos.find(feitico => feitico.nome === nome) || null;
+    const titulo = document.getElementById("titulo-feitico")!;
+    const descricao = document.getElementById("descricao-feitico")!;
+    const custo = document.getElementById("custo-mana")!;
+    const botao = document.getElementById("usar-feitiço") as HTMLButtonElement;
+
+    if (!feiticoSelecionado) {
+        titulo.textContent = "Feitiço desconhecido";
+        descricao.textContent = "Este feitiço não está nas páginas conhecidas.";
+        custo.textContent = "Custo de mana indisponível";
+        botao.disabled = true;
+        return;
+    }
+
+    titulo.textContent = feiticoSelecionado.nome;
+    descricao.textContent = feiticoSelecionado.descricao;
+    custo.textContent = `Custo de mana: ${feiticoSelecionado.custo}`;
+    botao.textContent = "Usar feitiço";
+    botao.disabled = mana < feiticoSelecionado.custo;
+}
+
+function usarmagias(): void {
+    const mensagem = document.getElementById("textoEmergencialivro")!;
+    if (!feiticoSelecionado) {
+        clearTimeout(textoLivroTimeout ? textoLivroTimeout : undefined);
+        mensagem.style.display = "block";
+        mensagem.textContent = "Escolha um feitiço antes de usá-lo.";
+        textoLivroTimeout = setTimeout(() => {
+            mensagem.style.display = "none";
+        }, 3000);
+        return;
+    }
+    if (mana < feiticoSelecionado.custo) {
+        clearTimeout(textoLivroTimeout ? textoLivroTimeout : undefined);
+        mensagem.style.display = "block";
+        mensagem.textContent = "Você não tem mana suficiente.";
+        textoLivroTimeout = setTimeout(() => {
+            mensagem.style.display = "none";
+        }, 3000);
+        return;
+    }
+
+    mana -= feiticoSelecionado.custo;
+    clearTimeout(textoLivroTimeout ? textoLivroTimeout : undefined);
+    mensagem.style.display = "block";
+    mensagem.textContent = feiticoSelecionado.efeito();
+    textoLivroTimeout = setTimeout(() => {
+        mensagem.style.display = "none";
+    }, 3000);
+    mostrarFeitico(feiticoSelecionado.nome);
+    updateUI();
+    magiasUsadas++;
 }
 
 let resultadoQuizTimeout: number | null = null;
@@ -558,6 +1046,7 @@ function verificarQuiz(numeroOpcao: number) {
     }
     Pergunta.respondidas++;
     proximaPergunta();
+    updateUI();
 }
 
 for (let i = 1; i <= 4; i++) {
@@ -566,6 +1055,8 @@ for (let i = 1; i <= 4; i++) {
 }
 
 proximaPergunta();
+
+let apostasRealizadas = 0;
 
 function apostar() {
     const input = document.getElementById("valor-aposta") as HTMLInputElement;
@@ -591,6 +1082,8 @@ function apostar() {
     }
 
     input.value = "";
+    updateUI();
+    apostasRealizadas++;
 }
 
 document.getElementById("botao-apostar")!.addEventListener("click", apostar);
@@ -601,19 +1094,116 @@ function renascer() {
     quadradosAscendentesDesseRenascimento = quadradosAscendentes;
     geradores.forEach(gerador => gerador.quantity = 0);
     melhorias.forEach(melhoria => melhoria.bought = false);
+    multiplicarQuadradosPorCliqueUsado = false;
     document.getElementById("confirmarRenascer")!.style.display = "none";
     updateQuadradosPorSegundoValue();
     updateUI();
+    changeTo("game");
 }
 
 function getNextQuadradosAscendentesCost(): number {
-    let valor = 100000000;
+    const ascensoes = quadradosAscendentes;
+    const valor = 100000000 + 100000 * 1.1 * ((Math.pow(1.1, ascensoes) - 1) / 0.1);
+    return normalizeNumber(valor);
+}
 
-    for (let i = 1; i <= quadradosAscendentes; i++) {
-        valor += 100000 * (1.10 ** i);
+type SkinQuadradoAction = "texto" | "fundo" | "corborda" | "tipoborda" | "imagem" | "original";
+
+function skinquadrado(action: SkinQuadradoAction): void {
+    const quadradoElement = document.getElementById("quadrado") as HTMLDivElement;
+    const status = document.getElementById("skin-quadrado-status") as HTMLParagraphElement;
+    const texto = document.getElementById("textoQuadrado") as HTMLInputElement;
+    const fundo = document.getElementById("fundoQuadrado") as HTMLInputElement;
+    const borda = document.getElementById("bordaQuadrado") as HTMLInputElement;
+
+    if (action === "texto") {
+        quadradoElement.textContent = texto.value;
+        status.textContent = "Texto aplicado.";
+    } else if (action === "fundo") {
+        quadradoElement.style.backgroundColor = fundo.value;
+        quadradoElement.style.backgroundImage = "none";
+        status.textContent = "Cor de fundo aplicada.";
+    } else if (action === "corborda") {
+        quadradoElement.style.borderColor = borda.value;
+        status.textContent = "Cor da borda aplicada.";
+    } else if (action === "tipoborda") {
+        const tipo = document.querySelector('input[name="bordatipo"]:checked') as HTMLInputElement | null;
+        if (!tipo) {
+            status.textContent = "Escolha um tipo de borda.";
+            return;
+        }
+        quadradoElement.style.borderStyle = tipo.value;
+        status.textContent = "Tipo de borda aplicado.";
+    } else if (action === "imagem") {
+        const arquivo = (document.getElementById("imagem") as HTMLInputElement).files?.[0];
+        if (!arquivo) {
+            status.textContent = "Escolha uma imagem antes de aplicar.";
+            return;
+        }
+        const leitor = new FileReader();
+        leitor.addEventListener("load", () => {
+            quadradoElement.style.backgroundImage = `url("${leitor.result}")`;
+            quadradoElement.style.backgroundSize = "cover";
+            quadradoElement.style.backgroundPosition = "center";
+            status.textContent = "Imagem aplicada.";
+        });
+        leitor.readAsDataURL(arquivo);
+    } else {
+        quadradoElement.textContent = "";
+        quadradoElement.style.backgroundColor = "transparent";
+        quadradoElement.style.backgroundImage = "none";
+        quadradoElement.style.backgroundSize = "";
+        quadradoElement.style.backgroundPosition = "";
+        quadradoElement.style.borderColor = "black";
+        quadradoElement.style.borderStyle = "solid";
+        texto.value = "";
+        fundo.value = "#ffffff";
+        borda.value = "#000000";
+        document.querySelectorAll<HTMLInputElement>('input[name="bordatipo"]').forEach(input => {
+            input.checked = input.value === "solid";
+        });
+        status.textContent = "Skin original restaurada.";
     }
 
-    return Math.round(valor);
+    conquistas.forEach(conquista => {
+        if (conquista.nome === "Estilista" && !conquista.conquistada) {
+            conquista.conquistada = true;
+        }
+    });
+}
+
+function a() { }
+
+async function resetarTudo() {
+    if (confirm("Tem certeza que deseja resetar tudo? Esta ação não pode ser desfeita.")) {
+        quadrados = 0;
+        quadradosPorClique = 1;
+        quadradosPorSegundo = 0;
+        triangulos = 0;
+        triangulosExpoenteIndex = 1;
+        quadradosAscendentes = 0;
+        quadradosAscendentesDesseRenascimento = 0;
+        totalQuadrados = 0;
+        geradores.forEach(gerador => gerador.quantity = 0);
+        melhorias.forEach(melhoria => melhoria.bought = false);
+        melhoriasTriangulo.forEach(melhoria => melhoria.bought = false);
+        conquistas.forEach(conquista => conquista.conquistada = false);
+        document.getElementById("confirmarRenascer")!.style.display = "none";
+        updateQuadradosPorSegundoValue();
+        updateUI();
+        saveToLocalStorage();
+        if (await Auth.isUserLoggedIn()) {
+            saveToSupabase();
+        }
+    }
+}
+
+function cheat() {
+    console.log("Cheat ativado");
+    conquistas.forEach(conquista => {
+        conquista.conquistada = true;
+    });
+    updateUI();
 }
 
 const quadrado = document.getElementById("quadrado")!;
@@ -622,6 +1212,7 @@ quadrado.addEventListener("click", click);
 // #region save
 
 let timeoutSaveOrLoad: number;
+let autoSave = true;
 
 function confirmSaveOrLoad() {
     const selectedAction = document.querySelector(".acao-escolhida");
@@ -687,9 +1278,21 @@ function transformToJson(): string {
         quadradosAscendentes: quadradosAscendentes,
         quadradosAscendentesDesseRenascimento: quadradosAscendentesDesseRenascimento,
         totalQuadrados: totalQuadrados,
+        mana: mana,
+        cliquesParaMana: cliquesParaMana,
         geradores: geradores,
-        melhorias: melhorias,
-        melhoriasTriangulo: melhoriasTriangulo,
+        melhorias: melhorias.map(melhoria => ({
+            name: melhoria.name,
+            bought: melhoria.bought
+        })),
+        melhoriasTriangulo: melhoriasTriangulo.map(melhoria => ({
+            name: melhoria.name,
+            bought: melhoria.bought
+        })),
+        conquistas: conquistas.map(conquista => ({
+            name: conquista.nome,
+            conquistada: conquista.conquistada
+        }))
     });
 }
 
@@ -697,14 +1300,16 @@ function transformFromJson(json: string | null): void {
     if (!json) return;
     try {
         const data = JSON.parse(json);
-        quadrados = data.quadrados;
-        quadradosPorClique = data.quadradosPorClique;
-        quadradosPorSegundo = data.quadradosPorSegundo;
-        triangulos = data.triangulos;
-        triangulosExpoenteIndex = data.triangulosExpoenteIndex;
-        quadradosAscendentes = data.quadradosAscendentes;
-        quadradosAscendentesDesseRenascimento = data.quadradosAscendentesDesseRenascimento;
-        totalQuadrados = data.totalQuadrados;
+        quadrados = normalizeNumber(Number(data.quadrados));
+        quadradosPorClique = normalizeNumber(Number(data.quadradosPorClique));
+        quadradosPorSegundo = normalizeNumber(Number(data.quadradosPorSegundo));
+        triangulos = normalizeNumber(Number(data.triangulos));
+        triangulosExpoenteIndex = Math.max(1, Math.trunc(Number(data.triangulosExpoenteIndex)) || 1);
+        quadradosAscendentes = normalizeNumber(Number(data.quadradosAscendentes));
+        quadradosAscendentesDesseRenascimento = normalizeNumber(Number(data.quadradosAscendentesDesseRenascimento));
+        totalQuadrados = normalizeNumber(Number(data.totalQuadrados));
+        mana = Number.isFinite(data.mana) ? data.mana : 10;
+        cliquesParaMana = Number.isFinite(data.cliquesParaMana) ? data.cliquesParaMana : 0;
 
         for (let g of data.geradores) {
             const gerador = geradores.find(gen => gen.name === g.name);
@@ -732,6 +1337,13 @@ function transformFromJson(json: string | null): void {
                 }
             }
         }
+
+        for (let c of data.conquistas) {
+            const conquista = conquistas.find(conq => conq.nome === c.name);
+            if (conquista) {
+                conquista.conquistada = c.conquistada;
+            }
+        }
         const notification = document.querySelector("#save-notification") as HTMLDivElement;
         notification.querySelector("p")!.innerText = "Dados carregados com sucesso!";
         notification.style.display = "block";
@@ -746,7 +1358,7 @@ function transformFromJson(json: string | null): void {
             notification.style.display = "none";
         }, 3000);
     }
-    
+
 }
 
 function saveToLocalStorage() {
@@ -756,6 +1368,7 @@ function saveToLocalStorage() {
 function loadFromLocalStorage() {
     const json = localStorage.getItem("quadradoClicker");
     transformFromJson(json);
+    updateUI();
 }
 
 function saveToJson() {
@@ -787,6 +1400,7 @@ function loadFromJson() {
         reader.readAsText(file);
     };
     input.click();
+    updateUI();
 }
 
 async function saveToSupabase() {
@@ -806,15 +1420,19 @@ async function loadFromSupabase() {
     const json = JSON.stringify(data[0]["quadrado_clicker_save"]);
 
     transformFromJson(json);
+    updateUI();
 }
-
 
 document.getElementById("save-action")!.addEventListener("click", () => selectAction(document.getElementById("save-action") as HTMLDivElement));
 document.getElementById("load-action")!.addEventListener("click", () => selectAction(document.getElementById("load-action") as HTMLDivElement));
 document.getElementById("salvar-local")!.addEventListener("click", () => selectOption(document.getElementById("salvar-local") as HTMLDivElement));
 document.getElementById("salvar-json")!.addEventListener("click", () => selectOption(document.getElementById("salvar-json") as HTMLDivElement));
 document.getElementById("salvar-online")!.addEventListener("click", () => selectOption(document.getElementById("salvar-online") as HTMLDivElement));
+document.getElementById("auto-save")!.addEventListener("click", () => {
+    autoSave = !autoSave;
+});
 document.getElementById("confirm-save-load-button")!.addEventListener("click", confirmSaveOrLoad);
+
 
 // #endregion
 
@@ -824,6 +1442,15 @@ setInterval(() => {
     updateQuadradosValue(quadrados + quadradosPorSegundo);
     document.getElementById("quadrados")!.textContent = "Quadrados: " + formatNumber(quadrados);
 }, 1000);
+
+setInterval(async () => {
+    if (autoSave) {
+        saveToLocalStorage();
+        if (await Auth.isUserLoggedIn()) {
+            saveToSupabase();
+        }
+    }
+}, 60000);
 
 setTimeout(() => {
     changeTo("game");
@@ -841,6 +1468,14 @@ window.addEventListener("DOMContentLoaded", async () => {
 window.mudarMenu = mudarMenu;
 //@ts-ignore
 window.renascer = renascer;
+//@ts-ignore
+window.skinquadrado = skinquadrado;
+//@ts-ignore
+window.mostrarFeitico = mostrarFeitico;
+//@ts-ignore
+window.usarmagias = usarmagias;
+//@ts-ignore
+window.teste = cheat;
 // #endregion
 
 export { }

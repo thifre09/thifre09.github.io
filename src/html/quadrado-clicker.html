@@ -91,13 +91,12 @@
 
             <div id="botoesOutros">
                 <button onclick="mudarMenu('triangulos-menu')">Triângulos</button>
-                <button onclick="mudarMenu('renascer')">Renascer</button>
-                <button onclick="mudarMenu('conquistas')" style="display: none;">Conquistas</button>
+                <button id="botao-outros-renascer" onclick="mudarMenu('renascer')" style="display: none;">Renascer</button>
+                <button onclick="mudarMenu('conquistas')">Conquistas</button>
                 <button id="maquinadasorte" onclick="mudarMenu('maquina-da-sorte')" style="display: none;">Máquina da sorte</button>
-                <button id="livromagico" onclick="mudarMenu('livromagico')" style="display: none;">Livro mágico</button>
+                <button id="livromagico" onclick="mudarMenu('livro-magico')" style="display: none;">Livro mágico</button>
                 <button id="quizmatematico" onclick="mudarMenu('quiz-matematico')" style="display: none;">Quiz matemático</button>
-                <button id="skinquadrado" onclick="mudarMenu('skinquadrado')" style="display: none;">Skin do
-                    quadrado</button>
+                <button id="botao-outros-skin-quadrado" onclick="mudarMenu('skin-quadrado')">Skin do quadrado</button>
             </div>
 
             <div id="menus" style="display: none;">
@@ -150,11 +149,8 @@
                 </section>
 
                 <section id="conquistas" style="display: none;">
-                    <h2>Conquistas</h2>
-                    <div id="container-conquistas">
-                        <div id="lista-conquistas">
-                        </div>
-                    </div>
+                    <h1>Conquistas</h1>
+                    <div id="container-conquistas"></div>
                 </section>
 
                 <section id="maquina-da-sorte" style="display: none;">
@@ -185,23 +181,29 @@
                 </section>
 
                 <section id="livro-magico" style="display: none;">
-                    <button onclick="mudarMenu('main')" style="width: fit-content; height: fit-content;">Voltar</button>
+                    <div class="explicacao">
+                        <h2>Livro mágico</h2>
+                        <p>Use feitiços que te dão vantagens no jogo. Cada feitiço custa uma quantidade de mana, você
+                            consegue 1 de mana a cada 1000 cliques</p>
 
+                        <p id="mana">Mana: 10</p>
+
+                    </div>
                     <div id="livro">
                         <div id="feiticos">
-                            <div class="feitico" onclick="mostrarFeitico('Aresto clicum')">
+                            <div class="feitico" role="button" tabindex="0" onclick="mostrarFeitico('Aresto clicum')">
                                 <h2>Aresto clicum</h2>
                             </div>
-                            <div class="feitico" onclick="mostrarFeitico('Constructo')">
+                            <div class="feitico" role="button" tabindex="0" onclick="mostrarFeitico('Constructo')">
                                 <h2>Constructo</h2>
                             </div>
-                            <div class="feitico" onclick="mostrarFeitico('Quadramentio')">
+                            <div class="feitico" role="button" tabindex="0" onclick="mostrarFeitico('Quadraméntio')">
                                 <h2>Quadraméntio</h2>
                             </div>
-                            <div class="feitico" onclick="mostrarFeitico('Trianglusio')">
+                            <div class="feitico" role="button" tabindex="0" onclick="mostrarFeitico('Trianglúsio')">
                                 <h2>Trianglúsio</h2>
                             </div>
-                            <div class="feitico" onclick="mostrarFeitico('Multiplicos quadrados')">
+                            <div class="feitico" role="button" tabindex="0" onclick="mostrarFeitico('Multiplicos quadrados')">
                                 <h2>Multiplicos quadrados</h2>
                             </div>
                         </div>
@@ -210,18 +212,9 @@
                             <p id="descricao-feitico">Veja a descrição de cada feitiço clicando nele.</p>
                             <p id="custo-mana" style="font-size: larger;">Custo de mana</p>
                         </div>
-                        <button id="usar-feitiço" onclick="usarmagias()">Usar feitiço</button>
+                        <button id="usar-feitiço" onclick="usarmagias()" disabled>Escolha um feitiço</button>
                     </div>
-
-                    <div class="explicacao">
-                        <h2>Livro mágico</h2>
-                        <p>Use feitiços que te dão vantagens no jogo. Cada feitiço custa uma quantidade de mana, você
-                            consegue 1 de mana a cada 1000 cliques</p>
-
-                        <p id="mana">Mana: 10</p>
-
-                        <p id="textoEmergencialivro" style="font-size: x-large; text-align: center;"></p>
-                    </div>
+                    <p id="textoEmergencialivro" style="display: none;"></p>
                 </section>
 
                 <section id="quiz-matematico" style="display: none;">
@@ -247,58 +240,81 @@
                 </section>
 
                 <section id="skin-quadrado" style="display: none;">
-                    <button onclick="mudarMenu('main')" style="width: fit-content; height: fit-content;">Voltar</button>
+                    <div class="skin-cabecalho">
+                        <div>
+                            <span class="skin-etiqueta">PERSONALIZAÇÃO</span>
+                            <h2>Escolha a skin do quadrado</h2>
+                        </div>
+                        <div class="skin-amostra" aria-hidden="true">
+                            <div class="skin-amostra-quadrado"></div>
+                        </div>
+                    </div>
 
-                    <h2>Escolha a Skin</h2>
-
-                    <div id="form">
+                    <div id="form-skin-quadrado">
 
                         <div class="tipocustom">
-                            <h2>Texto</h2>
-                            <h3>ATENÇÃO: Mudar o texto pode causar resultados inesperados, tenha cuidadao</h3>
-                            <input type="text" id="textoQuadrado" placeholder="Digite o texto do quadrado">
-                            <button onclick="skinquadrado('texto')">Mudar texto</button>
+                            <div class="skin-card-titulo">
+                                <span class="skin-numero">01</span>
+                                <h2>Texto</h2>
+                            </div>
+                            <p>Adicione uma mensagem para aparecer dentro do quadrado.</p>
+                            <label for="textoQuadrado">Texto personalizado</label>
+                            <input type="text" id="textoQuadrado" placeholder="Ex.: clique aqui" maxlength="24">
+                            <button type="button" onclick="skinquadrado('texto')">Mudar texto</button>
                         </div>
 
                         <div class="tipocustom">
-                            <h2>Fundo</h2>
-                            <input type="color" id="fundoQuadrado" placeholder="Digite a cor para o fundo">
-                            <button onclick="skinquadrado('fundo')">Mudar fundo</button>
+                            <div class="skin-card-titulo">
+                                <span class="skin-numero">02</span>
+                                <h2>Fundo</h2>
+                            </div>
+                            <p>Escolha a cor principal do quadrado.</p>
+                            <label for="fundoQuadrado">Cor do fundo</label>
+                            <input type="color" id="fundoQuadrado" value="#ffffff">
+                            <button type="button" onclick="skinquadrado('fundo')">Mudar fundo</button>
                         </div>
 
                         <div class="tipocustom">
-                            <h2>Cor da Borda</h2>
-                            <input type="color" id="bordaQuadrado" placeholder="Digite a cor para a borda">
-                            <button onclick="skinquadrado('corborda')">Mudar cor da borda</button>
+                            <div class="skin-card-titulo">
+                                <span class="skin-numero">03</span>
+                                <h2>Cor da borda</h2>
+                            </div>
+                            <p>Defina o destaque ao redor do quadrado.</p>
+                            <label for="bordaQuadrado">Cor da borda</label>
+                            <input type="color" id="bordaQuadrado" value="#000000">
+                            <button type="button" onclick="skinquadrado('corborda')">Mudar cor da borda</button>
                         </div>
 
                         <div class="tipocustom">
-                            <h2>Tipo da borda</h2>
-                            <input id="solid" type="radio" name="bordatipo" value="solid">
-                            <label for="solid">Solid</label>
+                            <div class="skin-card-titulo">
+                                <span class="skin-numero">04</span>
+                                <h2>Tipo da borda</h2>
+                            </div>
+                            <p>Escolha o estilo que combina com sua skin.</p>
+                            <div class="tipos-borda">
+                                <label><input id="solid" type="radio" name="bordatipo" value="solid" checked> Sólida</label>
+                                <label><input id="dotted" type="radio" name="bordatipo" value="dotted"> Pontilhada</label>
+                                <label><input id="dashed" type="radio" name="bordatipo" value="dashed"> Tracejada</label>
+                                <label><input id="double" type="radio" name="bordatipo" value="double"> Dupla</label>
+                                <label><input id="groove" type="radio" name="bordatipo" value="groove"> Rebaixada</label>
+                            </div>
 
-                            <input id="dotted" type="radio" name="bordatipo" value="dotted">
-                            <label for="dotted">Dotted</label>
-
-                            <input id="dashed" type="radio" name="bordatipo" value="dashed">
-                            <label for="dashed">Dashed</label>
-
-                            <input id="double" type="radio" name="bordatipo" value="double">
-                            <label for="double">Double</label>
-
-                            <input id="groove" type="radio" name="bordatipo" value="groove">
-                            <label for="groove">Groove</label>
-
-                            <button onclick="skinquadrado('tipoborda')">Mudar tipo da borda</button>
+                            <button type="button" onclick="skinquadrado('tipoborda')">Mudar tipo da borda</button>
                         </div>
 
                         <div class="tipocustom">
-                            <h2>Imagem</h2>
+                            <div class="skin-card-titulo">
+                                <span class="skin-numero">05</span>
+                                <h2>Imagem</h2>
+                            </div>
+                            <p>Use uma imagem do seu dispositivo como fundo.</p>
+                            <label for="imagem">Imagem do quadrado</label>
                             <input type="file" id="imagem" accept="image/*">
-                            <button onclick="skinquadrado('imagem')">Mudar imagem</button>
+                            <button type="button" onclick="skinquadrado('imagem')">Mudar imagem</button>
                         </div>
 
-                        <button id="voltaroriginal" onclick="skinquadrado('original')">Voltar ao original</button>
+                        <button id="voltaroriginal" type="button" onclick="skinquadrado('original')">Voltar ao original</button>
+                        <p id="skin-quadrado-status" role="status" aria-live="polite"></p>
 
                     </div>
                 </section>
@@ -377,11 +393,11 @@
                     Confirmar
                 </button>
             </div>
-<!-- 
+
             <div id="auto-save-checkbox">
                 <label for="auto-save">Salvar automaticamente</label>
                 <input type="checkbox" id="auto-save" name="auto-save" checked>
-            </div> -->
+            </div>
 
             <div id="save-notification" style="display: none;">
                 <p>Progresso salvo com sucesso!</p>

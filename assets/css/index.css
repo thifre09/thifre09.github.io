@@ -10,7 +10,7 @@ div#principal {
 
 div#central {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(390px, 100%), 1fr));
     gap: 0.5%;
     width: 100%;
     padding: 10px;

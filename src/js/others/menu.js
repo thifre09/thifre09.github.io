@@ -164,8 +164,12 @@ class Atualizacao {
     }
 }
 const atualizacoes = [
+    new Atualizacao("Beta 3.1.3", "11/10/2026", [
+        new NotaAtualizacao("Conquistas e Livro Mágico no Quadrado Clicker", "Agora é possível desbloquear conquistas no Quadrado Clicker novamente. Além disso, o Livro Mágico está disponível para uso, contendo 5 magias.", tipoNota.ATUALIZACAO, relacionado.QUADRADO_CLICKER),
+        new NotaAtualizacao("Correção de pequenos bugs", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do site.", tipoNota.CORRECAO, relacionado.GERAL)
+    ]),
     new Atualizacao("Beta 3.1.2", "04/10/2026", [
-        new NotaAtualizacao("Agora é possível salvar o progresso do Quadrado Clicker", "Agora é possível salvar o progresso do Quadrado Clicker, existem 3 opções: local, JSON e online.", tipoNota.NOVO_RECURSO, relacionado.QUADRADO_CLICKER),
+        new NotaAtualizacao("Agora é possível salvar o progresso do Quadrado Clicker", "Agora é possível salvar o progresso do Quadrado Clicker, existem 3 opções: local, JSON e online.", tipoNota.ATUALIZACAO, relacionado.QUADRADO_CLICKER),
         new NotaAtualizacao("Correção de pequenos bugs", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do site.", tipoNota.CORRECAO, relacionado.GERAL)
     ]),
     new Atualizacao("Beta 3.1.1", "30/09/2026", [

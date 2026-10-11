@@ -335,11 +335,63 @@ svg {
             display: flex;
 
             >div {
-                flex: 1;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-around;
                 align-items: center;
+            }
+
+            >div:nth-child(1) {
+                flex: 1;
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                grid-template-rows: repeat(2, minmax(0, 1fr));
+                gap: var(--p3);
+                padding: var(--p4);
+                box-sizing: border-box;
+
+                >div {
+                    height: 100%;
+                    padding: var(--p4);
+                    border: 1px solid var(--gray12);
+                    border-left: 3px solid var(--green4);
+                    border-radius: 10px;
+                    background-color: #ffffff99;
+                    box-sizing: border-box;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    text-align: center;
+                    overflow-x: auto;
+
+                    h3 {
+                        color: var(--gray6);
+                        font-size: var(--fs7);
+                        font-weight: bold;
+                        margin: 0;
+                        text-transform: uppercase;
+                    }
+
+                    p {
+                        color: var(--gray2);
+                        font-size: var(--fs7);
+                        font-weight: bold;
+                        margin: 0;
+                    }
+                }
+
+                >div:nth-child(2) {
+                    border-left-color: var(--blue4);
+                }
+
+                >div:nth-child(3) {
+                    border-left-color: var(--yellow5);
+                }
+
+                >div:nth-child(4) {
+                    border-left-color: var(--red4);
+                }
             }
 
             >div:nth-child(2) {
@@ -372,24 +424,6 @@ svg {
                         box-shadow: 0 1px 0 var(--gray6);
                     }
                 }
-            }
-
-            >div:nth-child(1) {
-                >div {
-                    padding: var(--p5);
-                    border: solid 1px #000;
-
-                    h3 {
-                        font-size: var(--fs5);
-                        margin: 0;
-                    }
-
-                    p {
-                        font-size: var(--fs6);
-                        margin: 0;
-                    }
-                }
-
             }
         }
     }
@@ -696,6 +730,7 @@ svg {
             border: solid 2px black;
             border-radius: 10px;
             overflow: hidden;
+            user-select: none;
 
             >div:nth-child(2) {
                 flex: 1;
@@ -711,7 +746,6 @@ svg {
                     display: flex;
                     min-height: 0;
                     width: 70%;
-                    border: solid 2px var(--gray7);
 
                     #centro-investimentos {
                         width: 56%;
@@ -1748,5 +1782,26 @@ svg {
                 }
             }
         }
+    }
+}
+
+@media (min-width: 1200px) {
+    #jogo #grid #div-patrimonio #patrimonio > div:nth-child(1) > div h3 {
+        font-size: var(--fs5);
+    }
+
+    #jogo #grid #div-patrimonio #patrimonio > div:nth-child(1) > div p {
+        font-size: var(--fs5);
+    }
+}
+
+@media (max-width: 900px) {
+    #jogo #grid #div-patrimonio #patrimonio > div:nth-child(1) > div h3 {
+        font-size: var(--fs8);
+        font-weight: 100;
+    }
+
+    #jogo #grid #div-patrimonio #patrimonio > div:nth-child(1) {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
     }
 }
