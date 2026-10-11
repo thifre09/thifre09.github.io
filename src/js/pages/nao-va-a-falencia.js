@@ -280,6 +280,7 @@ class Propriedade {
             ];
             const mensagem = listaMensagens[Math.floor(Math.random() * listaMensagens.length)];
             jogo.criarAnotacaoDiario(`Compra de propriedade: ${this.nome}`, mensagem, "blue");
+            atualizarTopBarUI();
             atualizarPatrimonioUI();
             atualizarDiarioUI();
             return true;
@@ -318,6 +319,7 @@ class Propriedade {
             ];
             const mensagem = listaMensagens[Math.floor(Math.random() * listaMensagens.length)];
             jogo.criarAnotacaoDiario(`Venda de propriedade: ${this.nome}`, mensagem, "purple");
+            atualizarTopBarUI();
             atualizarPatrimonioUI();
             atualizarDiarioUI();
             return true;
@@ -377,6 +379,7 @@ class Propriedade {
         ];
         const mensagem = listaMensagens[Math.floor(Math.random() * listaMensagens.length)];
         jogo.criarAnotacaoDiario(`Melhoria de propriedade: ${this.nome}`, mensagem, "blue");
+        atualizarTopBarUI();
         atualizarPatrimonioUI();
         atualizarDiarioUI();
         return true;
@@ -1068,6 +1071,7 @@ function atualizarInvestimentosUI(investimentoIndex) {
         }
         atualizarInvestimentosUI(investimentoIndex);
         atualizarPatrimonioUI();
+        atualizarTopBarUI();
     };
     document.getElementById("botao-comprar-acoes").addEventListener("click", () => negociar("compra"));
     document.getElementById("botao-vender-acoes").addEventListener("click", () => negociar("venda"));
@@ -1161,6 +1165,7 @@ function atualizarPropriedadesUI(propriedadeIndex) {
         if (concluiu) {
             atualizarPropriedadesUI(propriedadeIndex);
             atualizarPatrimonioUI();
+            atualizarTopBarUI();
         }
         else {
             direita.querySelector("#mensagem-propriedade").textContent = "Dinheiro insuficiente para esta operação.";
@@ -1171,6 +1176,7 @@ function atualizarPropriedadesUI(propriedadeIndex) {
         if (propriadedeSelecionado.melhorar()) {
             atualizarPropriedadesUI(propriedadeIndex);
             atualizarPatrimonioUI();
+            atualizarTopBarUI();
         }
         else {
             direita.querySelector("#mensagem-propriedade").textContent = "Não há dinheiro suficiente para melhorar.";
@@ -1181,6 +1187,7 @@ function atualizarPropriedadesUI(propriedadeIndex) {
         if (propriadedeSelecionado.reformar()) {
             atualizarPropriedadesUI(propriedadeIndex);
             atualizarPatrimonioUI();
+            atualizarTopBarUI();
         }
         else {
             direita.querySelector("#mensagem-propriedade").textContent = "Não há dinheiro suficiente para reformar.";
@@ -1202,6 +1209,7 @@ function atualizarPropriedadesUI(propriedadeIndex) {
         propriedadesParaReformar.forEach(propriedade => propriedade.condicao = 100);
         atualizarPropriedadesUI(propriedadeIndex);
         atualizarPatrimonioUI();
+        atualizarTopBarUI();
     });
 }
 // function atualizarBensUI(bemIndex: number = 0) {
@@ -1358,6 +1366,7 @@ function atualizarEmprestimosUI(bancoIndex) {
         jogo.criarAnotacaoDiario(`Empréstimo: ${bancoSelecionado.nome}`, m, "cyan");
         atualizarEmprestimosUI(bancoIndex);
         atualizarPatrimonioUI();
+        atualizarTopBarUI();
         atualizarDiarioUI();
     });
     const informacoes = document.getElementById("informacoes-emprestimos");
@@ -1600,4 +1609,4 @@ buildAcontecimentos().then(() => {
     atualizarUI();
 });
 //@ts-ignore
-window.teste = usarTodasAsOpcoes;
+window.teste = atualizarTopBarUI();
