@@ -604,16 +604,16 @@ class Jogo {
 
         //mudar os valores depois
         this.familia = [
-            new Pessoa("Camila", "Esposa", 80, undefined),
-            new Pessoa("Mário", "Filho", 90, undefined),
-            new Pessoa("Ruth", "Filha", 85, undefined),
-            new Pessoa("Raquel", "Filha", 90, undefined),
-            new Pessoa("Lia", "Filha", 85, undefined),
-            new Pessoa("Nina", "Sobrinha", 80, undefined),
+            new Pessoa("Camila", "Esposa", 50, undefined),
+            new Pessoa("Mário", "Filho", 50, undefined),
+            new Pessoa("Ruth", "Filha", 50, undefined),
+            new Pessoa("Raquel", "Filha", 50, undefined),
+            new Pessoa("Lia", "Filha", 50, undefined),
+            new Pessoa("Nina", "Sobrinha", 50, undefined),
         ]
 
         this.conhecidos = [
-            new Pessoa("Noca", "Criada", 60, 25),
+            new Pessoa("Noca", "Criada", 50, 25),
             new Pessoa("Dr. Gervásio", "Médico", 50, 65),
             new Pessoa("Capitão Rino", "Capitão da Marinha", 50, 70),
             new Pessoa("Gama Torres", "Investidor", 50, 80),
@@ -898,12 +898,12 @@ let bancoSelecionadoIndex = 0;
 // let eventoAtual: Evento | null = null;
 
 function gerarAcontecimentoAleatorio(): Acontecimento {
-    const acontecimentosDisponiveis = acontecimentos.filter(a => a.condicoes());
-    if (acontecimentosDisponiveis.length === 0) {
+    const candidatos = acontecimentos.filter(a => a.condicoes() && a !== acontecimentoAtual);
+    if (candidatos.length === 0) {
         return new Acontecimento("Nenhum acontecimento disponível", "Não há acontecimentos disponíveis no momento.", [], () => true);
     }
-    const indiceAleatorio = Math.floor(Math.random() * acontecimentosDisponiveis.length);
-    return acontecimentosDisponiveis[indiceAleatorio];
+    const indiceAleatorio = Math.floor(Math.random() * candidatos.length);
+    return candidatos[indiceAleatorio];
 }
 
 // function gerarEventoAleatorio(): Evento {
@@ -979,11 +979,15 @@ function atualizarPatrimonioUI() {
         style: 'currency',
         currency: 'BRL',
     }).format(jogo.patrimonio.dinheiro)}`;
-    document.getElementById("patrimonio-display")!.textContent = `${jogo.patrimonio.totalFormatado}`;
+    document.getElementById("patrimonio-display")!.textContent = `
+    ${new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+    }).format(jogo.patrimonio.total - jogo.patrimonio.dinheiro)}`;
     document.getElementById("renda-anual-display")!.textContent = `${new Intl.NumberFormat('pt-BR', {
         style: 'currency',
         currency: 'BRL',
-    }).format(jogo.patrimonio.rendaAnualTotal)}`;
+    }).format(jogo.patrimonio.propriedades.reduce((acc, propriedade) => acc + (propriedade.comprada ? propriedade.rendaAnual : 0), 0))}`;
     document.getElementById("despesas-anuais-display")!.textContent = `${new Intl.NumberFormat('pt-BR', {
         style: 'currency',
         currency: 'BRL',
@@ -1614,60 +1618,39 @@ function atualizarDiarioUI() {
 }
 
 function mover(objeto: HTMLElement) {
-    let shiftX = 0;
-    let shiftY = 0;
-    let startX = 0;
-    let startY = 0;
-    let isDragging = false;
     const MOVE_THRESHOLD = 5;
 
-    const limitarPosicao = (x: number, y: number, largura: number, altura: number) => ({
-        x: Math.max(0, Math.min(x, window.innerWidth - largura)),
-        y: Math.max(0, Math.min(y, window.innerHeight - altura)),
-    });
-
-    const onMouseMove = (e: MouseEvent) => {
-        if (!isDragging &&
-            (Math.abs(e.clientX - startX) > MOVE_THRESHOLD ||
-                Math.abs(e.clientY - startY) > MOVE_THRESHOLD)) {
-            isDragging = true;
-            const rect = objeto.getBoundingClientRect();
-
-            // Converte a posição visual, incluindo o translate(-50%, -50%), em coordenadas reais.
-            objeto.style.transform = "none";
-            objeto.style.left = `${rect.left}px`;
-            objeto.style.top = `${rect.top}px`;
-        }
-
-        if (!isDragging) return;
+    objeto.addEventListener("mousedown", (event: MouseEvent) => {
+        if (event.button !== 0) return;
 
         const rect = objeto.getBoundingClientRect();
-        const posicao = limitarPosicao(
-            e.clientX - shiftX,
-            e.clientY - shiftY,
-            rect.width,
-            rect.height,
-        );
-        objeto.style.left = `${posicao.x}px`;
-        objeto.style.top = `${posicao.y}px`;
-    };
+        const shiftX = event.clientX - rect.left;
+        const shiftY = event.clientY - rect.top;
+        const startX = event.clientX;
+        const startY = event.clientY;
+        let isDragging = false;
 
-    const onMouseUp = () => {
-        document.removeEventListener("mousemove", onMouseMove);
-        document.removeEventListener("mouseup", onMouseUp);
-        objeto.style.cursor = "";
-    };
+        const onMouseMove = (moveEvent: MouseEvent) => {
+            if (!isDragging &&
+                (Math.abs(moveEvent.clientX - startX) > MOVE_THRESHOLD ||
+                    Math.abs(moveEvent.clientY - startY) > MOVE_THRESHOLD)) {
+                isDragging = true;
+                objeto.style.transform = "none";
+                objeto.style.left = `${rect.left}px`;
+                objeto.style.top = `${rect.top}px`;
+            }
 
-    objeto.addEventListener("mousedown", (e: MouseEvent) => {
-        if (e.button !== 0) return;
+            if (isDragging) {
+                objeto.style.left = `${moveEvent.clientX - shiftX}px`;
+                objeto.style.top = `${moveEvent.clientY - shiftY}px`;
+                moveEvent.preventDefault();
+            }
+        };
 
-        const rect = objeto.getBoundingClientRect();
-        shiftX = e.clientX - rect.left;
-        shiftY = e.clientY - rect.top;
-        startX = e.clientX;
-        startY = e.clientY;
-        isDragging = false;
-        objeto.style.cursor = "grabbing";
+        const onMouseUp = () => {
+            document.removeEventListener("mousemove", onMouseMove);
+            document.removeEventListener("mouseup", onMouseUp);
+        };
 
         document.addEventListener("mousemove", onMouseMove);
         document.addEventListener("mouseup", onMouseUp);
