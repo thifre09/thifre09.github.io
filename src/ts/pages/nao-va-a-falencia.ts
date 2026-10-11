@@ -9,7 +9,7 @@ class Patrimonio {
     emprestimos: Emprestimo[];
 
     constructor() {
-        this.dinheiro = 500_000;
+        this.dinheiro = 100_000;
         this.propriedades = [];
         this.investimentos = [];
         // this.bens = [];
@@ -46,7 +46,7 @@ class Investimento {
     valorInvestido: number;
     historico: { ano: number; valor: number }[];
 
-    constructor(nome: string, valorAtual: number, variacao: number, min: number, max: number) {
+    constructor(nome: string, valorAtual: number, variacao: number, min: number, max: number, acoesPossuidas: number = 0) {
         this.nome = nome;
         this.valorAtual = valorAtual;
         this.variacao = variacao;
@@ -55,8 +55,8 @@ class Investimento {
         this.precoBase = valorAtual;
         this.min = min;
         this.max = max;
-        this.acoesPossuidas = 0;
-        this.valorInvestido = 0;
+        this.acoesPossuidas = acoesPossuidas;
+        this.valorInvestido = acoesPossuidas * valorAtual;
     }
 
     variarValor() {
@@ -624,7 +624,7 @@ class Jogo {
         ];
 
         this.patrimonio.investimentos = [
-            new Investimento("Café", 80, 12, 30, 200),
+            new Investimento("Café", 80, 12, 15, 400, 2500),
             new Investimento("Batata", 20, 5, 8, 45),
             new Investimento("Milho", 25, 6, 10, 55),
             new Investimento("Trigo", 30, 6, 12, 65),
@@ -799,7 +799,7 @@ class Jogo {
     }
 
     proximoAno() {
-        if (this.patrimonio.dinheiro < 0) {
+        if (this.patrimonio.total < 0) {
             new Final("Falência", "Você faliu e perdeu todo o seu patrimônio. O jogo acabou.").acontecer();
             return;
         }
@@ -814,13 +814,17 @@ class Jogo {
         acontecimentoAtual = gerarAcontecimentoAleatorio();
         // eventoAtual = gerarEventoAleatorio();
         atualizarUI();
+        if (this.ano === 1914) {
+            jogo.patrimonio.investimentos.filter(investimento => investimento.nome === "Café")[0].tendencia = -0.5;
+        }
+        let pontos = this.patrimonio.total * this.prestigio * this.estabilidadeFamiliar / 100000;
         if (this.ano === 1930) {
-            if (this.patrimonio.dinheiro <= 500_000) {
-                new Final("Final normal", "Você não conseguiu acumular riqueza suficiente para se tornar um grande empresário.").acontecer();
-            } else if (this.patrimonio.dinheiro <= 1_000_000) {
-                new Final("Final bom", "Você conseguiu acumular uma boa quantidade de riqueza, mas não se tornou um grande empresário.").acontecer();
-            } else if (this.patrimonio.dinheiro <= 2_000_000) {
-                new Final("Final ótimo", "Você conseguiu acumular uma grande quantidade de riqueza e se tornou um empresário de sucesso.").acontecer();
+            if (pontos <= 300_000) {
+                new Final("Final ruim", "Você não conseguiu acumular riqueza suficiente para se tornar um grande empresário.").acontecer();
+            } else if (pontos <= 600_000) {
+                new Final("Final normal", "Você conseguiu acumular uma boa quantidade de riqueza, mas não se tornou um grande empresário.").acontecer();
+            } else if (pontos <= 1_000_000) {
+                new Final("Final bom", "Você conseguiu acumular uma grande quantidade de riqueza e se tornou um empresário de sucesso.").acontecer();
             } else {
                 new Final("Final excelente", "Você conseguiu acumular uma enorme quantidade de riqueza e se tornou um empresário extremamente bem-sucedido.").acontecer();
             }
@@ -876,11 +880,17 @@ interface IMelhoria {
 
 let jogo = new Jogo();
 
+jogo.patrimonio.investimentos.filter(investimento => investimento.nome === "Café")[0].tendencia = 0.5;
+jogo.patrimonio.propriedades.filter(propriedade => propriedade.nome === "Casa")[0].comprada = true;
+
 const acontecimentos: Acontecimento[] = [
 
 ];
 
 let acontecimentoAtual: Acontecimento | null = null;
+let investimentoSelecionadoIndex = 0;
+let propriedadeSelecionadaIndex = 0;
+let bancoSelecionadoIndex = 0;
 
 // const eventos: Evento[] = [
 // ];
@@ -939,10 +949,13 @@ function atualizarAcontecimentoUI(acontecimento: Acontecimento) {
         const button = document.createElement("button");
         button.innerHTML = `
         <p>${opcao.descricao}</p>
-        <p>${opcao.custoAcoes}</p>
+        <p>Preço: ${new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+        }).format(opcao.custoDinheiro)} Ações: ${opcao.custoAcoes}</p>
         `;
         button.addEventListener("click", () => {
-            if (jogo.acoes >= opcao.custoAcoes && jogo.patrimonio.dinheiro >= opcao.custoDinheiro) {
+            if (jogo.acoes >= opcao.custoAcoes && (jogo.patrimonio.dinheiro >= opcao.custoDinheiro || opcao.custoDinheiro === 0)) {
                 opcao.escolher();
                 acontecimentoAtual = gerarAcontecimentoAleatorio();
                 atualizarAcontecimentoUI(acontecimentoAtual);
@@ -971,6 +984,12 @@ function atualizarPatrimonioUI() {
         style: 'currency',
         currency: 'BRL',
     }).format(jogo.patrimonio.rendaAnualTotal)}`;
+    document.getElementById("despesas-anuais-display")!.textContent = `${new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+    }).format(
+        jogo.patrimonio.propriedades.reduce((acc, propriedade) => acc + (propriedade.comprada ? propriedade.despestasAnuais : 0), 0) +
+        jogo.patrimonio.emprestimos.reduce((acc, emprestimo) => acc + emprestimo.valorParcela, 0))}`;
 }
 
 function configurarImagem(imagem: HTMLImageElement, nome: string) {
@@ -989,6 +1008,7 @@ function configurarImagem(imagem: HTMLImageElement, nome: string) {
         "café": "café.png",
         "camila": "Camila.png",
         "carvão": "carvão.png",
+        "capitão-rino": "Capitão Rino.png",
         "casa": "casa.jpg",
         "casa-de-campo": "casa-de-campo.jpg",
         "casa-de-luxo": "casa-de-luxo.jpg",
@@ -999,15 +1019,20 @@ function configurarImagem(imagem: HTMLImageElement, nome: string) {
         "farmacêutica": "farmacêutica.png",
         "fazenda": "fazenda.jpg",
         "ferro": "ferro.png",
+        "gama-torres": "Gama Torres.png",
         "hotel": "hotel.jpg",
+        "inocêncio-braga": "Inocêncio Braga.png",
         "itaipú": "itaipú.jpg",
+        "joaquim": "Joaquim.png",
         "lia": "lia.png",
+        "lemos": "lemos.png",
         "loja": "loja.jpg",
         "madeira": "madeira.png",
         "mansão": "mansão.jpg",
         "milho": "milho.png",
         "mário": "mário.png",
         "nina": "nina.png",
+        "noca": "Noca.png",
         "ouro": "ouro.png",
         "petróleo": "petróleo.png",
         "prédio-comercial": "prédio-comercial.jpg",
@@ -1019,7 +1044,9 @@ function configurarImagem(imagem: HTMLImageElement, nome: string) {
         "teatro": "teatro.jpg",
         "tecnologia": "tecnologia.png",
         "terreno": "terreno.jpg",
-        "trigo": "trigo.png"
+        "trigo": "trigo.png",
+        "dr.-gervásio": "Dr. Gervásio.png",
+        "baronesa-da-lage": "Baronesa da Lage.png"
     };
     const arquivo = arquivos[decodeURIComponent(nomeArquivo)];
 
@@ -1028,7 +1055,9 @@ function configurarImagem(imagem: HTMLImageElement, nome: string) {
         : "/assets/images/memes%20img/cavalo.jpg";
 }
 
-function atualizarInvestimentosUI(investimentoIndex: number = 0) {
+function atualizarInvestimentosUI(investimentoIndex?: number) {
+    investimentoSelecionadoIndex = investimentoIndex ?? investimentoSelecionadoIndex;
+    investimentoIndex = investimentoSelecionadoIndex;
     const investimentoSelecionado = jogo.patrimonio.investimentos[investimentoIndex];
     const listaInvestimentos = document.getElementById("lista-investimentos")!;
     listaInvestimentos.innerHTML = "";
@@ -1175,7 +1204,9 @@ function atualizarInvestimentosUI(investimentoIndex: number = 0) {
     document.getElementById("botao-vender-acoes")!.addEventListener("click", () => negociar("venda"));
 }
 
-function atualizarPropriedadesUI(propriedadeIndex: number = 0) {
+function atualizarPropriedadesUI(propriedadeIndex?: number) {
+    propriedadeSelecionadaIndex = propriedadeIndex ?? propriedadeSelecionadaIndex;
+    propriedadeIndex = propriedadeSelecionadaIndex;
     const propriadedeSelecionado = jogo.patrimonio.propriedades[propriedadeIndex];
     const listaPropriedades = document.getElementById("lista-propriedades")!;
     listaPropriedades.innerHTML = "";
@@ -1228,6 +1259,8 @@ function atualizarPropriedadesUI(propriedadeIndex: number = 0) {
 
     const direita = document.getElementById("direita-propriedades")!;
     const melhoriaDisponivel = propriadedeSelecionado.melhoriaDisponivel;
+    const propriedadesParaReformar = jogo.patrimonio.propriedades.filter(propriedade => propriedade.comprada && propriedade.condicao < 100);
+    const custoTotalReformas = propriedadesParaReformar.reduce((total, propriedade) => total + propriedade.valorReforma, 0);
     direita.innerHTML = `
         <div class="propriedade-acoes">
             <h3>Gerenciar propriedade</h3>
@@ -1243,6 +1276,10 @@ function atualizarPropriedadesUI(propriedadeIndex: number = 0) {
             <button id="botao-reformar-propriedade" type="button" ${!propriadedeSelecionado.comprada || propriadedeSelecionado.condicao >= 100 ? "disabled" : ""}>
                 <span>Reformar</span>
                 <strong>${propriadedeSelecionado.condicao >= 100 ? "Condição máxima" : `R$ ${propriadedeSelecionado.valorReforma.toFixed(2)}`}</strong>
+            </button>
+            <button id="botao-reformar-todas" type="button" ${propriedadesParaReformar.length === 0 ? "disabled" : ""}>
+                <span>Reformar todas</span>
+                <strong>${propriedadesParaReformar.length === 0 ? "Tudo reformado" : `R$ ${custoTotalReformas.toFixed(2)}`}</strong>
             </button>
         </div>
     `;
@@ -1282,6 +1319,26 @@ function atualizarPropriedadesUI(propriedadeIndex: number = 0) {
             direita.querySelector("#mensagem-propriedade")!.textContent = "Não há dinheiro suficiente para reformar.";
         }
     });
+
+    const botaoReformarTodas = direita.querySelector("button#botao-reformar-todas")!;
+    botaoReformarTodas.addEventListener("click", () => {
+        const propriedadesParaReformar = jogo.patrimonio.propriedades.filter(propriedade => propriedade.comprada && propriedade.condicao < 100);
+        const custoTotalReformas = propriedadesParaReformar.reduce((total, propriedade) => total + propriedade.valorReforma, 0);
+
+        if (propriedadesParaReformar.length === 0) {
+            direita.querySelector("#mensagem-propriedade")!.textContent = "Todas as propriedades já estão reformadas.";
+            return;
+        }
+        if (jogo.patrimonio.dinheiro < custoTotalReformas) {
+            direita.querySelector("#mensagem-propriedade")!.textContent = "Dinheiro insuficiente para reformar todas as propriedades.";
+            return;
+        }
+
+        jogo.patrimonio.dinheiro -= custoTotalReformas;
+        propriedadesParaReformar.forEach(propriedade => propriedade.condicao = 100);
+        atualizarPropriedadesUI(propriedadeIndex);
+        atualizarPatrimonioUI();
+    });
 }
 
 // function atualizarBensUI(bemIndex: number = 0) {
@@ -1319,7 +1376,9 @@ function atualizarPropriedadesUI(propriedadeIndex: number = 0) {
 //     emanutencaoBem.textContent = `Manutenção: R$ ${bemSelecionado.valorManutencao.toFixed(2)}`;
 // }
 
-function atualizarEmprestimosUI(bancoIndex: number = 0) {
+function atualizarEmprestimosUI(bancoIndex?: number) {
+    bancoSelecionadoIndex = bancoIndex ?? bancoSelecionadoIndex;
+    bancoIndex = bancoSelecionadoIndex;
     const bancoSelecionado = jogo.bancos[bancoIndex];
     const emprestimoExistente = jogo.patrimonio.emprestimos.some(emprestimo => emprestimo.banco === bancoSelecionado);
     const listaBancos = document.getElementById("lista-bancos")!;
@@ -1521,6 +1580,7 @@ function atualizarConhecidosUI() {
                 <h4>${pessoa.descricao}</h4>
             </div>
         `;
+        configurarImagem(div.querySelector("img")!, pessoa.nome);
         conhecidosContainer.appendChild(div);
     }
 }
