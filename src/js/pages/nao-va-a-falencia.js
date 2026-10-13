@@ -482,8 +482,6 @@ class Opcao {
         this.anotacaoDiario = anotacaoDiario;
     }
     escolher() {
-        if (!(jogo.acoes >= this.custoAcoes && jogo.patrimonio.dinheiro >= this.custoDinheiro))
-            return;
         jogo.acoes -= this.custoAcoes;
         jogo.patrimonio.dinheiro -= this.custoDinheiro;
         this.efeito();
@@ -705,6 +703,9 @@ class Jogo {
         }
         return this.familia.reduce((acc, pessoa) => acc + pessoa.satisfacao, 0) / this.familia.length;
     }
+    get pontos() {
+        return this.patrimonio.total * this.prestigio * this.estabilidadeFamiliar / 100000;
+    }
     proximoAno() {
         if (this.patrimonio.total < 0) {
             new Final("Falência", "Você faliu e perdeu todo o seu patrimônio. O jogo acabou.").acontecer();
@@ -721,22 +722,26 @@ class Jogo {
         acontecimentoAtual = gerarAcontecimentoAleatorio();
         // eventoAtual = gerarEventoAleatorio();
         atualizarUI();
+        mudarAudio();
         if (this.ano === 1914) {
             jogo.patrimonio.investimentos.filter(investimento => investimento.nome === "Café")[0].tendencia = -0.5;
         }
-        let pontos = this.patrimonio.total * this.prestigio * this.estabilidadeFamiliar / 100000;
+        let pontos = this.pontos;
         if (this.ano === 1930) {
-            if (pontos <= 300_000) {
+            if (pontos <= 50_000) {
                 new Final("Final ruim", "Você não conseguiu acumular riqueza suficiente para se tornar um grande empresário.").acontecer();
             }
-            else if (pontos <= 600_000) {
+            else if (pontos <= 250_000) {
                 new Final("Final normal", "Você conseguiu acumular uma boa quantidade de riqueza, mas não se tornou um grande empresário.").acontecer();
             }
             else if (pontos <= 1_000_000) {
                 new Final("Final bom", "Você conseguiu acumular uma grande quantidade de riqueza e se tornou um empresário de sucesso.").acontecer();
             }
-            else {
+            else if (pontos <= 5_000_000) {
                 new Final("Final excelente", "Você conseguiu acumular uma enorme quantidade de riqueza e se tornou um empresário extremamente bem-sucedido.").acontecer();
+            }
+            else {
+                new Final("Final lendário", "Você conseguiu acumular uma quantidade lendária de riqueza e se tornou um empresário de renome mundial. Esse é um feito extraordinário.").acontecer();
             }
         }
     }
@@ -1559,6 +1564,57 @@ function usarTodasAsOpcoes() {
 function começarJogo() {
     document.getElementById("tela-inicial").style.display = "none";
     document.getElementById("jogo").style.display = "flex";
+    mudarAudio();
+}
+let audioAtual = null;
+let audioAtualSrc = null;
+let audioTransicao = null;
+const volumeAudio = 1;
+const duracaoTransicaoAudio = 3000;
+function mudarAudio() {
+    let proximaAudioSrc;
+    let deveRepetir = false;
+    if (jogo.pontos < 50_000) {
+        proximaAudioSrc = "/assets/others/nao-va-a-falencia-triste.wav";
+    }
+    else if (jogo.pontos < 1_000_000) {
+        proximaAudioSrc = "/assets/others/nao-va-a-falencia-neutro.wav";
+        deveRepetir = true;
+    }
+    else {
+        proximaAudioSrc = "/assets/others/I'm-Still-Standing.mp3";
+        deveRepetir = true;
+    }
+    if (audioAtual && audioAtualSrc === proximaAudioSrc) {
+        return;
+    }
+    if (audioTransicao !== null) {
+        window.clearInterval(audioTransicao);
+    }
+    const audioAnterior = audioAtual;
+    const volumeInicialAudioAnterior = audioAnterior?.volume ?? 0;
+    audioAtualSrc = proximaAudioSrc;
+    const novoAudio = new Audio(proximaAudioSrc);
+    novoAudio.loop = deveRepetir;
+    novoAudio.volume = 0;
+    audioAtual = novoAudio;
+    novoAudio.play();
+    const inicioTransicao = performance.now();
+    audioTransicao = window.setInterval(() => {
+        const progresso = Math.min((performance.now() - inicioTransicao) / duracaoTransicaoAudio, 1);
+        if (audioAnterior) {
+            audioAnterior.volume = volumeInicialAudioAnterior * (1 - progresso);
+        }
+        novoAudio.volume = volumeAudio * progresso;
+        if (progresso === 1) {
+            window.clearInterval(audioTransicao);
+            audioTransicao = null;
+            audioAnterior?.pause();
+            if (audioAnterior) {
+                audioAnterior.currentTime = 0;
+            }
+        }
+    }, 20);
 }
 document.getElementById("botao-jogar").addEventListener("click", () => {
     começarJogo();
@@ -1607,6 +1663,15 @@ acontecimentoAtual = gerarAcontecimentoAleatorio();
 buildAcontecimentos().then(() => {
     acontecimentoAtual = gerarAcontecimentoAleatorio();
     atualizarUI();
+    //@ts-ignore
+    window.finalSecreto = () => {
+        acontecimentoAtual = acontecimentos[acontecimentos.length - 1];
+        atualizarAcontecimentoUI(acontecimentoAtual);
+    };
 });
 //@ts-ignore
-window.teste = atualizarTopBarUI();
+window.chooseMoney = () => {
+    let a = prompt();
+    jogo.patrimonio.dinheiro = Number(a);
+    atualizarUI();
+};
