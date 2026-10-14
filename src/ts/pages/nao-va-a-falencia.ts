@@ -1868,4 +1868,3 @@ window.chooseMoney = () => {
     jogo.patrimonio.dinheiro = Number(a);
     atualizarUI();
 };
-
