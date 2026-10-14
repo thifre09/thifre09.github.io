@@ -147,7 +147,7 @@ class Investimento {
             const variacaoCell = document.createElement("td");
 
             anoCell.textContent = this.historico[i].ano.toString();
-            precoCell.textContent = `R$ ${this.historico[i].valor.toFixed(2)}`;
+            precoCell.textContent = `${formatarMoeda(this.historico[i].valor)}`;
             if (i > 0) {
                 const precoAnterior = this.historico[i - 1].valor;
                 const variacao = ((this.historico[i].valor - precoAnterior) / precoAnterior) * 100;
@@ -175,21 +175,21 @@ class Investimento {
             this.acoesPossuidas += qtd;
             this.valorInvestido += custoTotal;
             const listaMensagens: string[] = [
-                `Você comprou ${qtd} ações de ${this.nome} por R$ ${custoTotal.toFixed(2)}.`,
-                `Foram adquiridas ${qtd} ações de ${this.nome}, totalizando R$ ${custoTotal.toFixed(2)}.`,
-                `Você investiu R$ ${custoTotal.toFixed(2)} na compra de ${qtd} ações de ${this.nome}.`,
-                `Você decidiu investir em ${this.nome} e comprou ${qtd} ações por R$ ${custoTotal.toFixed(2)}.`,
-                `Uma nova posição foi aberta: ${qtd} ações de ${this.nome}, ao custo de R$ ${custoTotal.toFixed(2)}.`,
-                `Você aplicou R$ ${custoTotal.toFixed(2)} em ${qtd} ações de ${this.nome}.`,
-                `A compra foi concluída: ${qtd} ações de ${this.nome} por R$ ${custoTotal.toFixed(2)}.`,
-                `Você aumentou seus investimentos com ${qtd} ações de ${this.nome}, gastando R$ ${custoTotal.toFixed(2)}.`,
-                `Seu portfólio recebeu ${qtd} novas ações de ${this.nome}, adquiridas por R$ ${custoTotal.toFixed(2)}.`,
-                `Você apostou no crescimento de ${this.nome} e comprou ${qtd} ações por R$ ${custoTotal.toFixed(2)}.`,
-                `Você colocou R$ ${custoTotal.toFixed(2)} em ${this.nome}, adquirindo ${qtd} ações.`,
+                `Você comprou ${qtd} ações de ${this.nome} por ${formatarMoeda(custoTotal)}.`,
+                `Foram adquiridas ${qtd} ações de ${this.nome}, totalizando ${formatarMoeda(custoTotal)}.`,
+                `Você investiu ${formatarMoeda(custoTotal)} na compra de ${qtd} ações de ${this.nome}.`,
+                `Você decidiu investir em ${this.nome} e comprou ${qtd} ações por ${formatarMoeda(custoTotal)}.`,
+                `Uma nova posição foi aberta: ${qtd} ações de ${this.nome}, ao custo de ${formatarMoeda(custoTotal)}.`,
+                `Você aplicou ${formatarMoeda(custoTotal)} em ${qtd} ações de ${this.nome}.`,
+                `A compra foi concluída: ${qtd} ações de ${this.nome} por ${formatarMoeda(custoTotal)}.`,
+                `Você aumentou seus investimentos com ${qtd} ações de ${this.nome}, gastando ${formatarMoeda(custoTotal)}.`,
+                `Seu portfólio recebeu ${qtd} novas ações de ${this.nome}, adquiridas por ${formatarMoeda(custoTotal)}.`,
+                `Você apostou no crescimento de ${this.nome} e comprou ${qtd} ações por ${formatarMoeda(custoTotal)}.`,
+                `Você colocou ${formatarMoeda(custoTotal)} em ${this.nome}, adquirindo ${qtd} ações.`,
                 `A transação foi realizada. ${qtd} ações de ${this.nome} agora fazem parte dos seus investimentos.`,
                 `Você decidiu apostar em ${this.nome} e adquiriu ${qtd} ações.`,
                 `Seu portfólio cresceu: +${qtd} ações de ${this.nome}.`,
-                `Você investiu R$ ${custoTotal.toFixed(2)} em ${this.nome}.`,
+                `Você investiu ${formatarMoeda(custoTotal)} em ${this.nome}.`,
                 `Uma nova oportunidade surgiu, e você comprou ${qtd} ações de ${this.nome}.`,
                 `Você aumentou sua participação em ${this.nome}, comprando ${qtd} ações.`,
             ];
@@ -212,17 +212,17 @@ class Investimento {
         this.acoesPossuidas -= qtd;
         this.valorInvestido = Math.max(0, this.valorInvestido - (qtd * custoMedio));
         const listaMensagens: string[] = [
-            `Você vendeu ${qtd} ações de ${this.nome} por R$ ${valorTotal.toFixed(2)}.`,
-            `Você se desfez de ${qtd} ações de ${this.nome}, recebendo R$ ${valorTotal.toFixed(2)}.`,
-            `Foram vendidas ${qtd} ações de ${this.nome}, totalizando R$ ${valorTotal.toFixed(2)}.`,
-            `Você decidiu vender ${qtd} ações de ${this.nome} e recebeu R$ ${valorTotal.toFixed(2)}.`,
-            `Você vendeu sua posição de ${qtd} ações de ${this.nome} por R$ ${valorTotal.toFixed(2)}.`,
-            `A venda foi concluída: ${qtd} ações de ${this.nome} por R$ ${valorTotal.toFixed(2)}.`,
-            `Você retirou R$ ${valorTotal.toFixed(2)} de seu investimento em ${this.nome}.`,
-            `Você reduziu sua participação em ${this.nome}, vendendo ${qtd} ações por R$ ${valorTotal.toFixed(2)}.`,
-            `Seu portfólio perdeu ${qtd} ações de ${this.nome}, vendidas por R$ ${valorTotal.toFixed(2)}.`,
-            `Você decidiu realizar o lucro e vendeu ${qtd} ações de ${this.nome} por R$ ${valorTotal.toFixed(2)}.`,
-            `Você encerrou parte do investimento em ${this.nome} e recebeu R$ ${valorTotal.toFixed(2)}.`,
+            `Você vendeu ${qtd} ações de ${this.nome} por ${formatarMoeda(valorTotal)}.`,
+            `Você se desfez de ${qtd} ações de ${this.nome}, recebendo ${formatarMoeda(valorTotal)}.`,
+            `Foram vendidas ${qtd} ações de ${this.nome}, totalizando ${formatarMoeda(valorTotal)}.`,
+            `Você decidiu vender ${qtd} ações de ${this.nome} e recebeu ${formatarMoeda(valorTotal)}.`,
+            `Você vendeu sua posição de ${qtd} ações de ${this.nome} por ${formatarMoeda(valorTotal)}.`,
+            `A venda foi concluída: ${qtd} ações de ${this.nome} por ${formatarMoeda(valorTotal)}.`,
+            `Você retirou ${formatarMoeda(valorTotal)} de seu investimento em ${this.nome}.`,
+            `Você reduziu sua participação em ${this.nome}, vendendo ${qtd} ações por ${formatarMoeda(valorTotal)}.`,
+            `Seu portfólio perdeu ${qtd} ações de ${this.nome}, vendidas por ${formatarMoeda(valorTotal)}.`,
+            `Você decidiu realizar o lucro e vendeu ${qtd} ações de ${this.nome} por ${formatarMoeda(valorTotal)}.`,
+            `Você encerrou parte do investimento em ${this.nome} e recebeu ${formatarMoeda(valorTotal)}.`,
             `A negociação foi realizada. ${qtd} ações de ${this.nome} deixaram seu portfólio.`,
         ];
         const mensagem = listaMensagens[Math.floor(Math.random() * listaMensagens.length)];
@@ -289,29 +289,29 @@ class Propriedade {
             jogo.patrimonio.dinheiro -= this.valor;
             this.comprada = true;
             const listaMensagens: string[] = [
-                `Você comprou a propriedade ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
-                `Você adquiriu a propriedade ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
+                `Você comprou a propriedade ${this.nome} por ${formatarMoeda(this.valor)}.`,
+                `Você adquiriu a propriedade ${this.nome} por ${formatarMoeda(this.valor)}.`,
                 `A propriedade ${this.nome} agora pertence a você.`,
-                `Você decidiu investir em ${this.nome} e pagou R$ ${this.valor.toFixed(2)} pela propriedade.`,
-                `Você fechou negócio e comprou ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
+                `Você decidiu investir em ${this.nome} e pagou ${formatarMoeda(this.valor)} pela propriedade.`,
+                `Você fechou negócio e comprou ${this.nome} por ${formatarMoeda(this.valor)}.`,
                 `Uma nova propriedade entrou para o seu patrimônio: ${this.nome}.`,
-                `Você aumentou seu patrimônio ao adquirir ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
-                `Você aproveitou a oportunidade e comprou ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
+                `Você aumentou seu patrimônio ao adquirir ${this.nome} por ${formatarMoeda(this.valor)}.`,
+                `Você aproveitou a oportunidade e comprou ${this.nome} por ${formatarMoeda(this.valor)}.`,
                 `Você realizou a compra de ${this.nome} e agora é o novo proprietário.`,
-                `Você investiu R$ ${this.valor.toFixed(2)} na aquisição de ${this.nome}.`,
+                `Você investiu ${formatarMoeda(this.valor)} na aquisição de ${this.nome}.`,
                 `Seu patrimônio cresceu. Você adquiriu a propriedade ${this.nome}.`,
                 `Você colocou as mãos em uma nova propriedade: ${this.nome}.`,
                 `Depois de uma negociação, ${this.nome} passou a fazer parte do seu patrimônio.`,
-                `Você decidiu expandir seus negócios e comprou ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
-                `Mais um imóvel para a coleção! Você comprou ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
-                `Você fez uma nova aquisição: ${this.nome}, no valor de R$ ${this.valor.toFixed(2)}.`,
+                `Você decidiu expandir seus negócios e comprou ${this.nome} por ${formatarMoeda(this.valor)}.`,
+                `Mais um imóvel para a coleção! Você comprou ${this.nome} por ${formatarMoeda(this.valor)}.`,
+                `Você fez uma nova aquisição: ${this.nome}, no valor de ${formatarMoeda(this.valor)}.`,
                 `O negócio foi fechado. ${this.nome} agora faz parte dos seus bens.`,
                 `Você encontrou uma boa oportunidade e adquiriu ${this.nome}.`,
                 `Você aplicou parte de sua fortuna na compra de ${this.nome}.`,
                 `Uma nova fonte de renda pode estar surgindo: você comprou ${this.nome}.`,
                 `Você decidiu apostar no futuro e investiu em ${this.nome}.`,
                 `Você ampliou seu patrimônio com a aquisição de ${this.nome}.`,
-                `Você negociou a compra de ${this.nome} e pagou R$ ${this.valor.toFixed(2)}.`,
+                `Você negociou a compra de ${this.nome} e pagou ${formatarMoeda(this.valor)}.`,
                 `Seu patrimônio acaba de ganhar uma nova propriedade: ${this.nome}.`,
                 `Você finalmente fechou o negócio e ${this.nome} agora é seu.`,
             ];
@@ -330,30 +330,30 @@ class Propriedade {
             jogo.patrimonio.dinheiro += this.valor;
             this.comprada = false;
             const listaMensagens: string[] = [
-                `Você vendeu a propriedade ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
-                `Você se desfez da propriedade ${this.nome} e recebeu R$ ${this.valor.toFixed(2)}.`,
-                `A propriedade ${this.nome} foi vendida por R$ ${this.valor.toFixed(2)}.`,
-                `Você decidiu vender ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
-                `Você fechou negócio e vendeu ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
+                `Você vendeu a propriedade ${this.nome} por ${formatarMoeda(this.valor)}.`,
+                `Você se desfez da propriedade ${this.nome} e recebeu ${formatarMoeda(this.valor)}.`,
+                `A propriedade ${this.nome} foi vendida por ${formatarMoeda(this.valor)}.`,
+                `Você decidiu vender ${this.nome} por ${formatarMoeda(this.valor)}.`,
+                `Você fechou negócio e vendeu ${this.nome} por ${formatarMoeda(this.valor)}.`,
                 `A propriedade ${this.nome} deixou de fazer parte do seu patrimônio.`,
-                `Você transformou ${this.nome} em dinheiro, recebendo R$ ${this.valor.toFixed(2)}.`,
-                `Você vendeu ${this.nome} e aumentou seu dinheiro disponível em R$ ${this.valor.toFixed(2)}.`,
-                `Você realizou a venda de ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
-                `Você decidiu se desfazer de ${this.nome} e recebeu R$ ${this.valor.toFixed(2)}.`,
-                `Um negócio foi encerrado: ${this.nome} foi vendido por R$ ${this.valor.toFixed(2)}.`,
-                `Você negociou a venda de ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
-                `Você encontrou um comprador para ${this.nome} e recebeu R$ ${this.valor.toFixed(2)}.`,
+                `Você transformou ${this.nome} em dinheiro, recebendo ${formatarMoeda(this.valor)}.`,
+                `Você vendeu ${this.nome} e aumentou seu dinheiro disponível em ${formatarMoeda(this.valor)}.`,
+                `Você realizou a venda de ${this.nome} por ${formatarMoeda(this.valor)}.`,
+                `Você decidiu se desfazer de ${this.nome} e recebeu ${formatarMoeda(this.valor)}.`,
+                `Um negócio foi encerrado: ${this.nome} foi vendido por ${formatarMoeda(this.valor)}.`,
+                `Você negociou a venda de ${this.nome} por ${formatarMoeda(this.valor)}.`,
+                `Você encontrou um comprador para ${this.nome} e recebeu ${formatarMoeda(this.valor)}.`,
                 `Depois de uma negociação, ${this.nome} deixou de ser sua propriedade.`,
                 `Você colocou ${this.nome} à venda e finalmente fechou o negócio.`,
-                `Você decidiu abrir mão de ${this.nome} em troca de R$ ${this.valor.toFixed(2)}.`,
-                `Seu patrimônio mudou: ${this.nome} foi vendido por R$ ${this.valor.toFixed(2)}.`,
-                `Você liquidou sua propriedade ${this.nome} e recebeu R$ ${this.valor.toFixed(2)}.`,
+                `Você decidiu abrir mão de ${this.nome} em troca de ${formatarMoeda(this.valor)}.`,
+                `Seu patrimônio mudou: ${this.nome} foi vendido por ${formatarMoeda(this.valor)}.`,
+                `Você liquidou sua propriedade ${this.nome} e recebeu ${formatarMoeda(this.valor)}.`,
                 `Você reduziu seu patrimônio imobiliário ao vender ${this.nome}.`,
                 `Mais uma negociação concluída: você vendeu ${this.nome}.`,
-                `Você aproveitou a oportunidade e vendeu ${this.nome} por R$ ${this.valor.toFixed(2)}.`,
+                `Você aproveitou a oportunidade e vendeu ${this.nome} por ${formatarMoeda(this.valor)}.`,
                 `Você decidiu transformar seu investimento em dinheiro e vendeu ${this.nome}.`,
                 `A negociação foi concluída. ${this.nome} agora pertence a outra pessoa.`,
-                `Você encerrou sua posse sobre ${this.nome} após vendê-la por R$ ${this.valor.toFixed(2)}.`,
+                `Você encerrou sua posse sobre ${this.nome} após vendê-la por ${formatarMoeda(this.valor)}.`,
             ];
             const mensagem = listaMensagens[Math.floor(Math.random() * listaMensagens.length)];
             jogo.criarAnotacaoDiario(`Venda de propriedade: ${this.nome}`, mensagem, "purple");
@@ -391,31 +391,31 @@ class Propriedade {
         melhoria.efeito(this);
         melhoria.comprada = true;
         const listaMensagens: string[] = [
-            `Você realizou uma melhoria em ${this.nome} por R$ ${melhoria.custo.toFixed(2)}.`,
-            `Você investiu R$ ${melhoria.custo.toFixed(2)} em melhorias para ${this.nome}.`,
-            `${this.nome} recebeu uma nova melhoria, custando R$ ${melhoria.custo.toFixed(2)}.`,
-            `Você decidiu melhorar ${this.nome} e pagou R$ ${melhoria.custo.toFixed(2)}.`,
-            `Você gastou R$ ${melhoria.custo.toFixed(2)} para melhorar ${this.nome}.`,
-            `Você investiu na estrutura de ${this.nome}, gastando R$ ${melhoria.custo.toFixed(2)}.`,
-            `Você aprimorou ${this.nome} com um investimento de R$ ${melhoria.custo.toFixed(2)}.`,
-            `A propriedade ${this.nome} foi aprimorada após um investimento de R$ ${melhoria.custo.toFixed(2)}.`,
-            `Você aplicou R$ ${melhoria.custo.toFixed(2)} em melhorias na propriedade ${this.nome}.`,
-            `Você tornou ${this.nome} ainda melhor após investir R$ ${melhoria.custo.toFixed(2)}.`,
-            `Você decidiu renovar ${this.nome} e realizou um investimento de R$ ${melhoria.custo.toFixed(2)}.`,
-            `Depois de investir R$ ${melhoria.custo.toFixed(2)}, ${this.nome} recebeu melhorias.`,
-            `Você fez melhorias em ${this.nome}, investindo R$ ${melhoria.custo.toFixed(2)}.`,
-            `Você resolveu dar uma atenção especial a ${this.nome} e investiu R$ ${melhoria.custo.toFixed(2)}.`,
-            `A estrutura de ${this.nome} foi melhorada após um investimento de R$ ${melhoria.custo.toFixed(2)}.`,
-            `Você decidiu valorizar ${this.nome} e investiu R$ ${melhoria.custo.toFixed(2)} em melhorias.`,
-            `Uma nova melhoria foi adicionada a ${this.nome} após um investimento de R$ ${melhoria.custo.toFixed(2)}.`,
-            `Você realizou uma melhoria em ${this.nome}, pagando R$ ${melhoria.custo.toFixed(2)}.`,
-            `Você decidiu investir no futuro de ${this.nome} e gastou R$ ${melhoria.custo.toFixed(2)}.`,
-            `Seu patrimônio recebeu um novo investimento: R$ ${melhoria.custo.toFixed(2)} em ${this.nome}.`,
-            `Você aprimorou sua propriedade ${this.nome} com um investimento de R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você realizou uma melhoria em ${this.nome} por ${formatarMoeda(melhoria.custo)}.`,
+            `Você investiu ${formatarMoeda(melhoria.custo)} em melhorias para ${this.nome}.`,
+            `${this.nome} recebeu uma nova melhoria, custando ${formatarMoeda(melhoria.custo)}.`,
+            `Você decidiu melhorar ${this.nome} e pagou ${formatarMoeda(melhoria.custo)}.`,
+            `Você gastou ${formatarMoeda(melhoria.custo)} para melhorar ${this.nome}.`,
+            `Você investiu na estrutura de ${this.nome}, gastando ${formatarMoeda(melhoria.custo)}.`,
+            `Você aprimorou ${this.nome} com um investimento de ${formatarMoeda(melhoria.custo)}.`,
+            `A propriedade ${this.nome} foi aprimorada após um investimento de ${formatarMoeda(melhoria.custo)}.`,
+            `Você aplicou ${formatarMoeda(melhoria.custo)} em melhorias na propriedade ${this.nome}.`,
+            `Você tornou ${this.nome} ainda melhor após investir ${formatarMoeda(melhoria.custo)}.`,
+            `Você decidiu renovar ${this.nome} e realizou um investimento de ${formatarMoeda(melhoria.custo)}.`,
+            `Depois de investir ${formatarMoeda(melhoria.custo)}, ${this.nome} recebeu melhorias.`,
+            `Você fez melhorias em ${this.nome}, investindo ${formatarMoeda(melhoria.custo)}.`,
+            `Você resolveu dar uma atenção especial a ${this.nome} e investiu ${formatarMoeda(melhoria.custo)}.`,
+            `A estrutura de ${this.nome} foi melhorada após um investimento de ${formatarMoeda(melhoria.custo)}.`,
+            `Você decidiu valorizar ${this.nome} e investiu ${formatarMoeda(melhoria.custo)} em melhorias.`,
+            `Uma nova melhoria foi adicionada a ${this.nome} após um investimento de ${formatarMoeda(melhoria.custo)}.`,
+            `Você realizou uma melhoria em ${this.nome}, pagando ${formatarMoeda(melhoria.custo)}.`,
+            `Você decidiu investir no futuro de ${this.nome} e gastou ${formatarMoeda(melhoria.custo)}.`,
+            `Seu patrimônio recebeu um novo investimento: ${formatarMoeda(melhoria.custo)} em ${this.nome}.`,
+            `Você aprimorou sua propriedade ${this.nome} com um investimento de ${formatarMoeda(melhoria.custo)}.`,
             `Você investiu parte de sua fortuna na melhoria de ${this.nome}.`,
-            `Você fez um novo investimento em ${this.nome}, no valor de R$ ${melhoria.custo.toFixed(2)}.`,
-            `${this.nome} ficou ainda melhor após você investir R$ ${melhoria.custo.toFixed(2)}.`,
-            `Você decidiu não economizar nas melhorias de ${this.nome} e investiu R$ ${melhoria.custo.toFixed(2)}.`,
+            `Você fez um novo investimento em ${this.nome}, no valor de ${formatarMoeda(melhoria.custo)}.`,
+            `${this.nome} ficou ainda melhor após você investir ${formatarMoeda(melhoria.custo)}.`,
+            `Você decidiu não economizar nas melhorias de ${this.nome} e investiu ${formatarMoeda(melhoria.custo)}.`,
         ];
         const mensagem = listaMensagens[Math.floor(Math.random() * listaMensagens.length)];
         jogo.criarAnotacaoDiario(`Melhoria de propriedade: ${this.nome}`, mensagem, "blue");
@@ -1090,7 +1090,7 @@ function atualizarInvestimentosUI(investimentoIndex?: number) {
             </div>
             <div>
                 <h3>${investimento.nome}</h3>
-                <h2>R$ ${atual.toFixed(2)}</h2>
+                <h2>${formatarMoeda(atual)}</h2>
                 <h4>
                     ${variacao <= 0 ? `
                         <svg viewBox="0 -960 960 960" fill="var(--green4)">
@@ -1127,7 +1127,7 @@ function atualizarInvestimentosUI(investimentoIndex?: number) {
                 <div>
                     <div>
                         Preço atual
-                        <h3>R$ ${investimentoSelecionado.valorAtual.toFixed(2)}</h3>
+                        <h3>${formatarMoeda(investimentoSelecionado.valorAtual)}</h3>
                     </div>
                     <div>
                         Variação
@@ -1162,17 +1162,17 @@ function atualizarInvestimentosUI(investimentoIndex?: number) {
     direita.innerHTML = `
         <div>
             <h3>Ações possuídas <span>${investimentoSelecionado.acoesPossuidas}</span></h3>
-            <h3>Valor investido <span>R$ ${investimentoSelecionado.valorInvestido.toFixed(2)}</span></h3>
-            <h3>Valor das ações <span>R$ ${(investimentoSelecionado.acoesPossuidas * investimentoSelecionado.valorAtual).toFixed(2)}</span></h3>
-            <h3>Lucro/Prejuízo <span>R$ ${(investimentoSelecionado.acoesPossuidas * investimentoSelecionado.valorAtual - investimentoSelecionado.valorInvestido).toFixed(2)}</span></h3>
+            <h3>Valor investido <span>${formatarMoeda(investimentoSelecionado.valorInvestido)}</span></h3>
+            <h3>Valor das ações <span>${formatarMoeda((investimentoSelecionado.acoesPossuidas * investimentoSelecionado.valorAtual))}</span></h3>
+            <h3>Lucro/Prejuízo <span>${formatarMoeda((investimentoSelecionado.acoesPossuidas * investimentoSelecionado.valorAtual - investimentoSelecionado.valorInvestido))}</span></h3>
             <h3>Rentabilidade <span>${investimentoSelecionado.valorInvestido > 0 ? (((investimentoSelecionado.acoesPossuidas * investimentoSelecionado.valorAtual - investimentoSelecionado.valorInvestido) / investimentoSelecionado.valorInvestido) * 100).toFixed(2) : "0"}%</span></h3>
         </div>
         <div>
             <h2>Negociar ações</h2>
             <label for="quantidade-acoes">Quantidade</label>
             <input id="quantidade-acoes" type="number" min="1" step="1" value="1">
-            <p id="total-negociacao">Total: R$ ${investimentoSelecionado.valorAtual.toFixed(2)}</p>
-            <p class="caixa-disponivel">Dinheiro disponível: R$ ${jogo.patrimonio.dinheiro.toFixed(2)}</p>
+            <p id="total-negociacao">Total: ${formatarMoeda(investimentoSelecionado.valorAtual)}</p>
+            <p class="caixa-disponivel">Dinheiro disponível: ${formatarMoeda(jogo.patrimonio.dinheiro)}</p>
             <div class="acoes-negociacao">
                 <button id="botao-comprar-acoes" type="button">Comprar</button>
                 <button id="botao-vender-acoes" type="button">Vender</button>
@@ -1187,7 +1187,7 @@ function atualizarInvestimentosUI(investimentoIndex?: number) {
 
     quantidadeAcoes.addEventListener("input", () => {
         const quantidade = Math.max(0, Number.parseInt(quantidadeAcoes.value) || 0);
-        totalNegociacao.textContent = `Total: R$ ${(quantidade * investimentoSelecionado.valorAtual).toFixed(2)}`;
+        totalNegociacao.textContent = `Total: ${formatarMoeda((quantidade * investimentoSelecionado.valorAtual))}`;
     });
 
     const negociar = (tipo: "compra" | "venda") => {
@@ -1235,7 +1235,7 @@ function atualizarPropriedadesUI(propriedadeIndex?: number) {
             </div>
             <div>
                 <h3>${propriedade.nome}</h3>
-                <h2>R$ ${propriedade.valor.toFixed(2)}</h2>
+                <h2>${formatarMoeda(propriedade.valor)}</h2>
             </div>
         `;
         configurarImagem(div.querySelector("img")!, propriedade.nome);
@@ -1252,9 +1252,9 @@ function atualizarPropriedadesUI(propriedadeIndex?: number) {
                 <img src="/assets/images/memes img/cavalo.jpg" alt="${propriadedeSelecionado.nome}" />
             </div>
             <div id="informacoes-propriedade">
-                <div><span>Valor atual</span><strong>R$ ${propriadedeSelecionado.valor.toFixed(2)}</strong></div>
-                <div><span>Renda anual</span><strong>R$ ${propriadedeSelecionado.rendaAnual.toFixed(2)}</strong></div>
-                <div><span>Despesas anuais</span><strong>R$ ${propriadedeSelecionado.despestasAnuais.toFixed(2)}</strong></div>
+                <div><span>Valor atual</span><strong>${formatarMoeda(propriadedeSelecionado.valor)}</strong></div>
+                <div><span>Renda anual</span><strong>${formatarMoeda(propriadedeSelecionado.rendaAnual)}</strong></div>
+                <div><span>Despesas anuais</span><strong>${formatarMoeda(propriadedeSelecionado.despestasAnuais)}</strong></div>
                 <div><span>Condição</span><strong>${propriadedeSelecionado.condicao.toFixed(2)}%</strong></div>
                 <div><span>Luxo</span><strong>${propriadedeSelecionado.luxo.toFixed(2)}</strong></div>
             </div>
@@ -1280,19 +1280,19 @@ function atualizarPropriedadesUI(propriedadeIndex?: number) {
             <p id="mensagem-propriedade" role="status"></p>
             <button id="botao-comprar-vender-propriedade" class="${propriadedeSelecionado.comprada ? "acao-venda" : "acao-principal"}" type="button">
                 <span>${propriadedeSelecionado.comprada ? "Vender propriedade" : "Comprar propriedade"}</span>
-                <strong>R$ ${propriadedeSelecionado.valor.toFixed(2)}</strong>
+                <strong>${formatarMoeda(propriadedeSelecionado.valor)}</strong>
             </button>
             <button id="botao-melhorar-propriedade" type="button" ${!propriadedeSelecionado.comprada || !melhoriaDisponivel ? "disabled" : ""}>
                 <span>Melhorar <small>${melhoriaDisponivel ? melhoriaDisponivel.nome : "Nenhuma melhoria disponível"}</small></span>
-                <strong>${melhoriaDisponivel ? `R$ ${melhoriaDisponivel.custo.toFixed(2)}` : "Sem melhorias"}</strong>
+                <strong>${melhoriaDisponivel ? `${formatarMoeda(melhoriaDisponivel.custo)}` : "Sem melhorias"}</strong>
             </button>
             <button id="botao-reformar-propriedade" type="button" ${!propriadedeSelecionado.comprada || propriadedeSelecionado.condicao >= 100 ? "disabled" : ""}>
                 <span>Reformar</span>
-                <strong>${propriadedeSelecionado.condicao >= 100 ? "Condição máxima" : `R$ ${propriadedeSelecionado.valorReforma.toFixed(2)}`}</strong>
+                <strong>${propriadedeSelecionado.condicao >= 100 ? "Condição máxima" : `${formatarMoeda(propriadedeSelecionado.valorReforma)}`}</strong>
             </button>
             <button id="botao-reformar-todas" type="button" ${propriedadesParaReformar.length === 0 ? "disabled" : ""}>
                 <span>Reformar todas</span>
-                <strong>${propriedadesParaReformar.length === 0 ? "Tudo reformado" : `R$ ${custoTotalReformas.toFixed(2)}`}</strong>
+                <strong>${propriedadesParaReformar.length === 0 ? "Tudo reformado" : `${formatarMoeda(custoTotalReformas)}`}</strong>
             </button>
         </div>
     `;
@@ -1389,8 +1389,8 @@ function atualizarPropriedadesUI(propriedadeIndex?: number) {
 //     nomeBem.textContent = bemSelecionado.nome;
 //     imagemBem.src = "/assets/images/memes img/cavalo.jpg";
 //     descricaoBem.textContent = bemSelecionado.descricao;
-//     valorBem.textContent = `Valor: R$ ${bemSelecionado.valorBase.toFixed(2)}`;
-//     emanutencaoBem.textContent = `Manutenção: R$ ${bemSelecionado.valorManutencao.toFixed(2)}`;
+//     valorBem.textContent = `Valor: ${formatarMoeda(bemSelecionado.valorBase)}`;
+//     emanutencaoBem.textContent = `Manutenção: ${formatarMoeda(bemSelecionado.valorManutencao)}`;
 // }
 
 function atualizarEmprestimosUI(bancoIndex?: number) {
@@ -1436,9 +1436,9 @@ function atualizarEmprestimosUI(bancoIndex?: number) {
             </div>
         </div>
         <div class="limites-emprestimo">
-            <div><span>Limite</span><strong>R$ ${bancoSelecionado.maximoEmprestimo.toFixed(2)}</strong></div>
+            <div><span>Limite</span><strong>${formatarMoeda(bancoSelecionado.maximoEmprestimo)}</strong></div>
             <div><span>Prazo máximo</span><strong>${bancoSelecionado.maximoParcelas} anos</strong></div>
-            <div><span>Caixa atual</span><strong>R$ ${jogo.patrimonio.dinheiro.toFixed(2)}</strong></div>
+            <div><span>Caixa atual</span><strong>${formatarMoeda(jogo.patrimonio.dinheiro)}</strong></div>
         </div>
         <h3 class="titulo-simulador">Simule seu crédito</h3>
         <label for="valor-emprestimo">Valor</label>
@@ -1466,10 +1466,10 @@ function atualizarEmprestimosUI(bancoIndex?: number) {
         const parcelas = Number(parcelasInput.value) || 1;
         const juros = valor * bancoSelecionado.taxaJuros;
         const valorTotal = valor * (1 + bancoSelecionado.taxaJuros);
-        document.getElementById("valor-recebido")!.textContent = `R$ ${valor.toFixed(2)}`;
-        document.getElementById("custo-juros")!.textContent = `R$ ${juros.toFixed(2)}`;
-        document.getElementById("total-a-pagar")!.textContent = `R$ ${valorTotal.toFixed(2)}`;
-        document.getElementById("valor-parcela")!.textContent = `R$ ${(valorTotal / parcelas).toFixed(2)}`;
+        document.getElementById("valor-recebido")!.textContent = `${formatarMoeda(valor)}`;
+        document.getElementById("custo-juros")!.textContent = `${formatarMoeda(juros)}`;
+        document.getElementById("total-a-pagar")!.textContent = `${formatarMoeda(valorTotal)}`;
+        document.getElementById("valor-parcela")!.textContent = `${formatarMoeda((valorTotal / parcelas))}`;
     };
 
     valorInput.addEventListener("input", atualizarResumo);
@@ -1485,7 +1485,7 @@ function atualizarEmprestimosUI(bancoIndex?: number) {
         const valor = Number(valorInput.value);
         const parcelas = Number(parcelasInput.value);
         if (!Number.isFinite(valor) || valor <= 0 || valor > bancoSelecionado.maximoEmprestimo) {
-            mensagem.textContent = `Informe um valor entre R$ 1,00 e R$ ${bancoSelecionado.maximoEmprestimo.toFixed(2)}.`;
+            mensagem.textContent = `Informe um valor entre R$ 1,00 e ${formatarMoeda(bancoSelecionado.maximoEmprestimo)}.`;
             return;
         }
         if (!Number.isInteger(parcelas) || parcelas < 1 || parcelas > bancoSelecionado.maximoParcelas) {
@@ -1496,26 +1496,26 @@ function atualizarEmprestimosUI(bancoIndex?: number) {
         jogo.patrimonio.dinheiro += valor;
         jogo.patrimonio.emprestimos.push(new Emprestimo(valor, bancoSelecionado, parcelas));
         const listaMensagens: string[] = [
-            `Você contratou um empréstimo de R$ ${valor.toFixed(2)} no ${bancoSelecionado.nome}, dividido em ${parcelas} parcelas.`,
-            `Você conseguiu um empréstimo de R$ ${valor.toFixed(2)} com o ${bancoSelecionado.nome}.`,
-            `O ${bancoSelecionado.nome} aprovou seu empréstimo de R$ ${valor.toFixed(2)}.`,
-            `Você assinou um novo empréstimo com o ${bancoSelecionado.nome}, no valor de R$ ${valor.toFixed(2)}.`,
-            `Você decidiu pegar R$ ${valor.toFixed(2)} emprestados com o ${bancoSelecionado.nome}.`,
-            `Uma nova dívida foi adicionada ao seu patrimônio: R$ ${valor.toFixed(2)} com o ${bancoSelecionado.nome}.`,
-            `Você recebeu R$ ${valor.toFixed(2)} do ${bancoSelecionado.nome} através de um novo empréstimo.`,
-            `O banco colocou R$ ${valor.toFixed(2)} à sua disposição. Agora você possui um novo empréstimo.`,
-            `Você recorreu ao ${bancoSelecionado.nome} e contratou um empréstimo de R$ ${valor.toFixed(2)}.`,
-            `Seu pedido foi aprovado! O ${bancoSelecionado.nome} concedeu R$ ${valor.toFixed(2)} em crédito.`,
-            `Você assumiu uma nova dívida de R$ ${valor.toFixed(2)} com o ${bancoSelecionado.nome}.`,
-            `O ${bancoSelecionado.nome} confiou em você e liberou um empréstimo de R$ ${valor.toFixed(2)}.`,
-            `Você aumentou seu dinheiro disponível em R$ ${valor.toFixed(2)}, mas também sua dívida com o banco.`,
-            `Um novo acordo financeiro foi fechado com o ${bancoSelecionado.nome}: R$ ${valor.toFixed(2)} emprestados.`,
-            `Você obteve crédito de R$ ${valor.toFixed(2)} junto ao ${bancoSelecionado.nome}.`,
-            `O dinheiro entrou na sua conta. O ${bancoSelecionado.nome} concedeu seu empréstimo de R$ ${valor.toFixed(2)}.`,
-            `Você decidiu assumir uma dívida de R$ ${valor.toFixed(2)} para financiar seus planos.`,
-            `Você contratou crédito no ${bancoSelecionado.nome}, recebendo R$ ${valor.toFixed(2)}.`,
-            `Mais dinheiro disponível, mais uma dívida: você pegou R$ ${valor.toFixed(2)} emprestados.`,
-            `Você fechou um acordo com o ${bancoSelecionado.nome} e recebeu R$ ${valor.toFixed(2)}.`,
+            `Você contratou um empréstimo de ${formatarMoeda(valor)} no ${bancoSelecionado.nome}, dividido em ${parcelas} parcelas.`,
+            `Você conseguiu um empréstimo de ${formatarMoeda(valor)} com o ${bancoSelecionado.nome}.`,
+            `O ${bancoSelecionado.nome} aprovou seu empréstimo de ${formatarMoeda(valor)}.`,
+            `Você assinou um novo empréstimo com o ${bancoSelecionado.nome}, no valor de ${formatarMoeda(valor)}.`,
+            `Você decidiu pegar ${formatarMoeda(valor)} emprestados com o ${bancoSelecionado.nome}.`,
+            `Uma nova dívida foi adicionada ao seu patrimônio: ${formatarMoeda(valor)} com o ${bancoSelecionado.nome}.`,
+            `Você recebeu ${formatarMoeda(valor)} do ${bancoSelecionado.nome} através de um novo empréstimo.`,
+            `O banco colocou ${formatarMoeda(valor)} à sua disposição. Agora você possui um novo empréstimo.`,
+            `Você recorreu ao ${bancoSelecionado.nome} e contratou um empréstimo de ${formatarMoeda(valor)}.`,
+            `Seu pedido foi aprovado! O ${bancoSelecionado.nome} concedeu ${formatarMoeda(valor)} em crédito.`,
+            `Você assumiu uma nova dívida de ${formatarMoeda(valor)} com o ${bancoSelecionado.nome}.`,
+            `O ${bancoSelecionado.nome} confiou em você e liberou um empréstimo de ${formatarMoeda(valor)}.`,
+            `Você aumentou seu dinheiro disponível em ${formatarMoeda(valor)}, mas também sua dívida com o banco.`,
+            `Um novo acordo financeiro foi fechado com o ${bancoSelecionado.nome}: ${formatarMoeda(valor)} emprestados.`,
+            `Você obteve crédito de ${formatarMoeda(valor)} junto ao ${bancoSelecionado.nome}.`,
+            `O dinheiro entrou na sua conta. O ${bancoSelecionado.nome} concedeu seu empréstimo de ${formatarMoeda(valor)}.`,
+            `Você decidiu assumir uma dívida de ${formatarMoeda(valor)} para financiar seus planos.`,
+            `Você contratou crédito no ${bancoSelecionado.nome}, recebendo ${formatarMoeda(valor)}.`,
+            `Mais dinheiro disponível, mais uma dívida: você pegou ${formatarMoeda(valor)} emprestados.`,
+            `Você fechou um acordo com o ${bancoSelecionado.nome} e recebeu ${formatarMoeda(valor)}.`,
         ];
         const m = listaMensagens[Math.floor(Math.random() * listaMensagens.length)];
         jogo.criarAnotacaoDiario(`Empréstimo: ${bancoSelecionado.nome}`, m, "cyan");
@@ -1530,7 +1530,7 @@ function atualizarEmprestimosUI(bancoIndex?: number) {
     informacoes.innerHTML = `
         <div class="resumo-dividas">
             <div><span>Contratos ativos</span><strong>${jogo.patrimonio.emprestimos.length}</strong></div>
-            <div><span>Total em dívida</span><strong>R$ ${totalEmDivida.toFixed(2)}</strong></div>
+            <div><span>Total em dívida</span><strong>${formatarMoeda(totalEmDivida)}</strong></div>
         </div>
         <h2>Empréstimos ativos</h2>
         ${jogo.patrimonio.emprestimos.length === 0
@@ -1542,8 +1542,8 @@ function atualizarEmprestimosUI(bancoIndex?: number) {
                     <span>${(emprestimo.banco.taxaJuros * 100).toFixed(0)}% juros</span>
                 </div>
                 <div class="emprestimo-ativo-dados">
-                    <p><span>Saldo devedor</span><strong>R$ ${emprestimo.saldoDevedor.toFixed(2)}</strong></p>
-                    <p><span>Parcela anual</span><strong>R$ ${emprestimo.valorParcela.toFixed(2)}</strong></p>
+                    <p><span>Saldo devedor</span><strong>${formatarMoeda(emprestimo.saldoDevedor)}</strong></p>
+                    <p><span>Parcela anual</span><strong>${formatarMoeda(emprestimo.valorParcela)}</strong></p>
                     <p><span>Anos restantes</span><strong>${emprestimo.parcelasRestantes}</strong></p>
                 </div>
             </div>
@@ -1748,7 +1748,7 @@ const duracaoTransicaoAudio = 3000;
 
 function mudarAudio() {
     let proximaAudioSrc: string;
-    let deveRepetir = false;
+    let deveRepetir = true;
 
     if (jogo.pontos < 50_000) {
         proximaAudioSrc = "/assets/others/nao-va-a-falencia-triste.wav";
@@ -1772,7 +1772,24 @@ function mudarAudio() {
     const volumeInicialAudioAnterior = audioAnterior?.volume ?? 0;
     audioAtualSrc = proximaAudioSrc;
     const novoAudio = new Audio(proximaAudioSrc);
-    novoAudio.loop = deveRepetir;
+    novoAudio.loop = false;
+    if (deveRepetir) {
+        novoAudio.addEventListener("ended", () => {
+            novoAudio.currentTime = 0;
+            novoAudio.volume = 0;
+            void novoAudio.play();
+
+            const inicioRepeticao = performance.now();
+            const transicaoRepeticao = window.setInterval(() => {
+                const progresso = Math.min((performance.now() - inicioRepeticao) / duracaoTransicaoAudio, 1);
+                novoAudio.volume = volumeAudio * progresso;
+
+                if (progresso === 1) {
+                    window.clearInterval(transicaoRepeticao);
+                }
+            }, 20);
+        });
+    }
     novoAudio.volume = 0;
     audioAtual = novoAudio;
     novoAudio.play();
@@ -1868,4 +1885,3 @@ window.chooseMoney = () => {
     jogo.patrimonio.dinheiro = Number(a);
     atualizarUI();
 };
-

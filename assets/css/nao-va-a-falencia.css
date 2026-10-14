@@ -112,11 +112,12 @@ svg {
         padding: 10px;
         display: grid;
         grid-template-columns: repeat(12, 1fr);
-        grid-template-rows: 80px minmax(0, 4fr) minmax(0, 4fr);
+        grid-template-rows: minmax(80px, 1fr) minmax(200px, 4fr) minmax(200px, 4fr);
         gap: 10px;
         flex: 1;
         min-height: 0;
         box-sizing: border-box;
+        overflow: auto;
 
         >* {
             background-color: #c0bfb6;
@@ -160,6 +161,10 @@ svg {
     }
 
     #title {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
         h1 {
             margin: 0;
             font-size: var(--fs2);
@@ -333,6 +338,8 @@ svg {
         div#patrimonio {
             flex: 1;
             display: flex;
+            max-height: calc(100% - var(--fs2));
+            justify-content: space-between;
 
             >div {
                 display: flex;
@@ -349,6 +356,7 @@ svg {
                 gap: var(--p3);
                 padding: var(--p4);
                 box-sizing: border-box;
+                overflow: auto;
 
                 >div {
                     height: 100%;
@@ -364,6 +372,7 @@ svg {
                     align-items: center;
                     text-align: center;
                     overflow-x: auto;
+                    min-height: fit-content;
 
                     h3 {
                         color: var(--gray6);
@@ -1803,5 +1812,11 @@ svg {
 
     #jogo #grid #div-patrimonio #patrimonio > div:nth-child(1) {
         grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+
+
+    #jogo #top-bar .top-bar-info >div  h2 {
+        font-size: var(--fs6);
+        font-weight: 100;
     }
 }
