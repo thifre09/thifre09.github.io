@@ -178,6 +178,8 @@ svg {
         align-items: center;
         gap: 12px;
         padding: 10px 12px;
+        overflow-x: auto;
+        overflow-y: hidden;
 
         >* {
             height: fit-content;
@@ -189,7 +191,7 @@ svg {
             align-items: center;
             justify-content: center;
             gap: 10px;
-            min-width: 0;
+            min-width: fit-content;
             border: 1px solid rgba(0, 0, 0, 0.22);
             border-radius: 12px;
             padding: 10px 14px;
