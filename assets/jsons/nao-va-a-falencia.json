@@ -30432,6 +30432,35 @@
                 }
             ],
             "condicoes": "() => { return jogo.ano >= 1920; }"
+        },
+        {
+            "nome": "A Tentação da Bolsa de Valores",
+            "descricao": "Inocêncio Braga e Gama Torres procuram Francisco Teodoro no armazém, entusiasmados com as recentes especulações financeiras no Rio de Janeiro. Eles garantem que manter o capital estocado em sacas de café é um método ultrapassado e insistem para que ele invista pesadamente em ações e títulos da bolsa para multiplicar seu patrimônio rapidamente.",
+            "opcoes": [
+                {
+                    "descricao": "Ceder aos conselhos dos amigos e aplicar uma grande quantia em ações diversificadas.",
+                    "custoAcoes": 0,
+                    "custoDinheiro": 500000,
+                    "efeito": "() => { jogo.patrimonio.dinheiro = -1000000; new Final('Aposta no Mercado de Ações', 'Você se deixou levar pela tentação e investiu pesadamente na bolsa de valores. O risco foi alto e as consequências foram devastadoras. (Você encontrou um final secreto)').acontecer(); atualizarTopBarUI(); atualizarPatrimonioUI() }",
+                    "anotacaoDiario": {
+                        "titulo": "Aposta no Mercado de Ações",
+                        "descricao": "Seduzido pelas promessas de lucros rápidos de Gama Torres e Inocêncio Braga, Francisco aceitou aplicar uma quantia expressiva na bolsa de valores.",
+                        "cor": "yellow"
+                    }
+                },
+                {
+                    "descricao": "Rejeitar a especulação e manter o capital aplicado no tradicional comércio de café.",
+                    "custoAcoes": 2,
+                    "custoDinheiro": 0,
+                    "efeito": "() => { const inv = jogo.patrimonio.investimentos.find(i => i.nome === 'Café'); if (inv) { inv.acoesPossuidas += 200; } const g = jogo.conhecidos.find(c => c.nome === 'Gama Torres'); if (g) g.satisfacao = Math.max(0, g.satisfacao - 10); const i = jogo.conhecidos.find(c => c.nome === 'Inocêncio Braga'); if (i) i.satisfacao = Math.max(0, i.satisfacao - 10); }",
+                    "anotacaoDiario": {
+                        "titulo": "Prudência Comercial",
+                        "descricao": "Francisco preferiu manter sua postura conservadora, recusando os conselhos de especulação e concentrando seus recursos no negócio de café.",
+                        "cor": "green"
+                    }
+                }
+            ],
+            "condicoes": "() => { return jogo.ano >= 1891 && jogo.patrimonio.total >= 500000; }"
         }
     ]
 }
