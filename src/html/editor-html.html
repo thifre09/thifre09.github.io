@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
@@ -7,6 +7,13 @@
     <title>Meu site incrível</title>
     <link rel="stylesheet" href="/assets/css/editor-html.css">
     <link rel="icon" type="image/png" href="/assets/images/links/batatas/batata1.jpg">
+    <script type="importmap">
+        {
+            "imports": {
+                "monaco-editor": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/+esm"
+            }
+        }
+    </script>
 </head>
 
 <body data-title="Editor HTML">
@@ -55,7 +62,7 @@
 
             </aside>
 
-            <div class="separador-vertical" style="cursor: col-resize;"></div>
+            <div id="resizer1" class="separador-vertical" style="cursor: col-resize;"></div>
 
             <section id="dashboard-centro">
 
@@ -85,7 +92,7 @@
 
             </section>
 
-            <div id="resizer2" class="separador-vertical"></div>
+            <div id="resizer2" class="separador-vertical" style="cursor: col-resize;"></div>
             <aside id="dashboard-direita">
 
                 <div class="css-header">
@@ -97,49 +104,6 @@
                 </div>
 
                 <div class="css-rules">
-
-                    <div class="css-rule">
-
-                        <div class="css-rule-header">
-                            <span class="css-rule-selector">
-                                .container
-                            </span>
-                        </div>
-
-                        <div class="css-properties">
-
-                            <div class="css-property">
-                                <span class="css-property-name">
-                                    display
-                                </span>
-
-                                <input class="css-property-value" value="flex">
-                            </div>
-
-                            <div class="css-property">
-                                <span class="css-property-name">
-                                    width
-                                </span>
-
-                                <input class="css-property-value" value="100%">
-                            </div>
-
-                            <div class="css-property">
-                                <span class="css-property-name">
-                                    padding
-                                </span>
-
-                                <input class="css-property-value" value="20px">
-                            </div>
-
-                            <button class="css-add-property">
-                                + adicionar propriedade
-                            </button>
-
-                        </div>
-
-                    </div>
-
                 </div>
 
             </aside>
@@ -170,7 +134,18 @@
             </div>
         </div>
         <div id="codigo">
-
+            <div class="codigo-header">
+                <div class="codigo-abas">
+                    <button id="codigo-tab-html" type="button">HTML</button>
+                    <button id="codigo-tab-css" type="button">CSS</button>
+                </div>
+                <div class="codigo-acoes">
+                    <button id="codigo-formatar" type="button">Formatar</button>
+                    <button id="codigo-aplicar" type="button">Aplicar</button>
+                    <button id="codigo-copy" type="button">Copiar</button>
+                </div>
+            </div>
+            <div id="codigo-conteudo"></div>
         </div>
         <div id="save">
 

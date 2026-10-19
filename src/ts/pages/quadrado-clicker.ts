@@ -1,76 +1,20 @@
 import * as Auth from "../supabase/auth.js";
 import { supabase } from "../supabase/client.js";
+import { setupTabNavigation } from "../others/global.js";
 
 // #region Change navbar
 
-const buttonChangeToGame = document.getElementById("button-header-game")!;
-const buttonChangeToOthers = document.getElementById("button-header-others")!;
-const buttonChangeToSave = document.getElementById("button-header-save")!;
-const buttonChangeToHelp = document.getElementById("button-header-help")!;
-const navBar = document.getElementById("nav-bar")!;
-
-/**
- * Atualiza a posição e a largura do indicador da interface ativa.
- * @param activeButton - Botão atualmente selecionado.
- */
-function updateNavBarIndicator(activeButton: HTMLElement) {
-    const left = activeButton.offsetLeft;
-    const width = activeButton.offsetWidth;
-    navBar.style.setProperty("--indicator-left", `${left}px`);
-    navBar.style.setProperty("--indicator-width", `${width}px`);
-}
-
-/**
- * Troca a interface visível no painel (gráfica, terminal, logical, save ou help).
- * @param id - Identificador da interface a ser exibida.
- */
-function changeTo(id: "game" | "others" | "save" | "help") {
-    document.getElementById("game")!.style.display = "none";
-    document.getElementById("others")!.style.display = "none";
-    document.getElementById("save")!.style.display = "none";
-    document.getElementById("help")!.style.display = "none";
-    document.getElementById(id)!.style.display = "flex";
-    document.querySelector(".nav-bar-ativo")?.classList.remove("nav-bar-ativo");
-    switch (id) {
-        case "game":
-            buttonChangeToGame.classList.add("nav-bar-ativo");
-            updateNavBarIndicator(buttonChangeToGame);
-            break;
-        case "others":
-            buttonChangeToOthers.classList.add("nav-bar-ativo");
-            updateNavBarIndicator(buttonChangeToOthers);
-            conquistas.forEach(conquista => {
-                if (!conquista.conquistada) {
-                    conquista.check();
-                }
+const { changeTo } = setupTabNavigation({
+    menus: ["game", "others", "save", "help"],
+    initial: "game",
+    onEnter: {
+        others: () => {
+            conquistas.forEach((conquista) => {
+                if (!conquista.conquistada) conquista.check();
             });
-            break;
-        case "save":
-            buttonChangeToSave.classList.add("nav-bar-ativo");
-            updateNavBarIndicator(buttonChangeToSave);
-            break;
-        case "help":
-            buttonChangeToHelp.classList.add("nav-bar-ativo");
-            updateNavBarIndicator(buttonChangeToHelp);
-            break;
-    }
-    updateUI();
-}
-
-buttonChangeToGame.addEventListener("click", () => {
-    changeTo("game");
-});
-
-buttonChangeToOthers.addEventListener("click", () => {
-    changeTo("others");
-});
-
-buttonChangeToSave.addEventListener("click", () => {
-    changeTo("save");
-});
-
-buttonChangeToHelp.addEventListener("click", () => {
-    changeTo("help");
+        },
+    },
+    onChange: () => updateUI(),
 });
 
 // #endregion

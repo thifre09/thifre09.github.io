@@ -1,5 +1,6 @@
 import * as Auth from "../supabase/auth.js";
 import { supabase } from "../supabase/client.js";
+import { mover } from "../others/global.js";
 // carega o menu lateral e a barra de navegação
 document.addEventListener('DOMContentLoaded', async () => {
     fetch('/src/global/menu.html')
@@ -29,60 +30,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         mostrarUsuario();
     }
 });
-function mover(objeto) {
-    let draggedElement = null;
-    let shiftX, shiftY;
-    let isDragging = false;
-    let animationFrameId = null;
-    const MOVE_THRESHOLD = 5;
-    // Valores de destino para a animação
-    let targetX = 0;
-    let targetY = 0;
-    const updatePosition = () => {
-        if (!draggedElement)
-            return;
-        // Aplica a posição apenas no momento em que a tela vai atualizar
-        draggedElement.style.left = `${targetX}px`;
-        draggedElement.style.top = `${targetY}px`;
-        animationFrameId = requestAnimationFrame(updatePosition);
-    };
-    objeto.addEventListener('mousedown', (e) => {
-        if (!e)
-            return;
-        draggedElement = objeto;
-        const rect = draggedElement.getBoundingClientRect();
-        shiftX = e.clientX - rect.left;
-        shiftY = e.clientY - rect.top;
-        const startX = e.clientX;
-        const startY = e.clientY;
-        isDragging = false;
-        const onMouseMove = (e) => {
-            if (!isDragging &&
-                (Math.abs(e.clientX - startX) > MOVE_THRESHOLD ||
-                    Math.abs(e.clientY - startY) > MOVE_THRESHOLD)) {
-                isDragging = true;
-                // Inicia o ciclo de animação
-                animationFrameId = requestAnimationFrame(updatePosition);
-            }
-            if (isDragging) {
-                // Em vez de mover o DOM aqui, apenas guardamos as coordenadas
-                targetX = e.pageX - shiftX - window.scrollX;
-                targetY = e.pageY - shiftY - window.scrollY;
-            }
-        };
-        const onMouseUp = () => {
-            document.removeEventListener('mousemove', onMouseMove);
-            document.removeEventListener('mouseup', onMouseUp);
-            if (animationFrameId !== null) {
-                // Para o ciclo de animação
-                cancelAnimationFrame(animationFrameId);
-            }
-            draggedElement = null;
-        };
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
-    });
-}
 function abrirMenu(estado) {
     let barra = document.getElementById("menu-lateral");
     let botao = document.getElementById("botao-menu-lateral-reserva");

@@ -99,7 +99,7 @@ input[type="number"]::-webkit-inner-spin-button {
     }
 }
 
-#interface-grafica {
+#dashboard {
     width: 100%;
     display: flex;
     flex: 1;
@@ -1174,7 +1174,7 @@ input[type="number"]::-webkit-inner-spin-button {
                 display: flex;
                 width: calc(100% - 2*var(--p3));
                 column-gap: var(--p3);
-                row-gap: 10px; 
+                row-gap: 10px;
                 flex-wrap: wrap;
 
                 div {

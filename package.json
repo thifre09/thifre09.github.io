@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.8",
-    "chart.js": "^4.5.1"
+    "chart.js": "^4.5.1",
+    "monaco-editor": "^0.57.0"
   }
 }

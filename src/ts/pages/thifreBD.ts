@@ -1,84 +1,16 @@
 import * as Auth from "../supabase/auth.js";
 import { supabase } from "../supabase/client.js"
+import { setupTabNavigation } from "../others/global.js";
 
-// #region Change interface terminal
-
-const buttonChangeToGrafical = document.getElementById("button-header-interface")!;
-const buttonChangeToTerminal = document.getElementById("button-header-terminal")!;
-const buttonChangeToLogical = document.getElementById("button-header-logical")!;
-const buttonChangeToSave = document.getElementById("button-header-save")!;
-const buttonChangeToHelp = document.getElementById("button-header-help")!;
-const interfaceTerminal = document.getElementById("nav-bar")!;
-
-/**
- * Atualiza a posição e a largura do indicador da interface ativa.
- * @param activeButton - Botão atualmente selecionado.
- */
-function updateInterfaceTerminalIndicator(activeButton: HTMLElement) {
-    const left = activeButton.offsetLeft;
-    const width = activeButton.offsetWidth;
-    interfaceTerminal.style.setProperty("--indicator-left", `${left}px`);
-    interfaceTerminal.style.setProperty("--indicator-width", `${width}px`);
-}
-
-/**
- * Troca a interface visível no painel (gráfica, terminal, logical, save ou help).
- * @param id - Identificador da interface a ser exibida.
- */
-function changeTo(id: "interface-grafica" | "terminal" | "logical" | "save" | "help") {
-    document.getElementById("interface-grafica")!.style.display = "none";
-    document.getElementById("terminal")!.style.display = "none";
-    document.getElementById("logical")!.style.display = "none";
-    document.getElementById("save")!.style.display = "none";
-    document.getElementById("help")!.style.display = "none";
-    document.getElementById(id)!.style.display = "flex";
-    document.querySelector(".nav-bar-ativo")?.classList.remove("nav-bar-ativo");
-    switch (id) {
-        case "interface-grafica":
-            buttonChangeToGrafical.classList.add("nav-bar-ativo");
-            updateInterfaceTerminalIndicator(buttonChangeToGrafical);
-            break;
-        case "terminal":
-            buttonChangeToTerminal.classList.add("nav-bar-ativo");
-            updateInterfaceTerminalIndicator(buttonChangeToTerminal);
-            break;
-        case "logical":
-            buttonChangeToLogical.classList.add("nav-bar-ativo");
-            updateInterfaceTerminalIndicator(buttonChangeToLogical);
-            break;
-        case "save":
-            buttonChangeToSave.classList.add("nav-bar-ativo");
-            updateInterfaceTerminalIndicator(buttonChangeToSave);
-            break;
-        case "help":
-            buttonChangeToHelp.classList.add("nav-bar-ativo");
-            updateInterfaceTerminalIndicator(buttonChangeToHelp);
-            break;
+setupTabNavigation({
+    menus: ["dashboard", "terminal", "logical", "save", "help"],
+    initial: "dashboard",
+    onEnter: {
+        logical: () => {
+            refreshLogical();
+        }
     }
-}
-
-buttonChangeToGrafical.addEventListener("click", () => {
-    changeTo("interface-grafica");
 });
-
-buttonChangeToTerminal.addEventListener("click", () => {
-    changeTo("terminal");
-});
-
-buttonChangeToLogical.addEventListener("click", () => {
-    changeTo("logical");
-    drawConnectionLines();
-});
-
-buttonChangeToSave.addEventListener("click", () => {
-    changeTo("save");
-});
-
-buttonChangeToHelp.addEventListener("click", () => {
-    changeTo("help");
-});
-
-// #endregion
 
 // #region Others
 let timeout: number;
@@ -6495,7 +6427,6 @@ document.getElementById("menus-centrais")!.addEventListener("click", (event) => 
     document.getElementById("menus-centrais")!.style.display = "none";
 });
 
-window.addEventListener('load', () => updateInterfaceTerminalIndicator(buttonChangeToGrafical));
 window.addEventListener("DOMContentLoaded", async () => {
     if (await Auth.isUserLoggedIn()) {
         loadFromSupabase();
@@ -6535,10 +6466,6 @@ document.addEventListener("mousemove", (e) => {
         esquerda.style.width = `${novaLargura}px`;
     }
 });
-
-setTimeout(() => {
-    changeTo("interface-grafica");
-}, 200);
 
 changeLeftSide();
 
