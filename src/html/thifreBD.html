@@ -578,7 +578,7 @@
 
         <div id="save" style="display: none;">
             <div id="acoes-salvar">
-                <div onclick="thifrebd.selectAction(this)" id="save-action" class="acao-escolhida">
+                <div id="save-action" class="acao-escolhida">
                     <svg viewBox="0 -960 960 960" fill="currentColor">
                         <path
                             d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
@@ -588,7 +588,7 @@
                         <p>Salve seu progresso para continuar depois</p>
                     </div>
                 </div>
-                <div onclick="thifrebd.selectAction(this)" id="load-action">
+                <div id="load-action">
                     <svg viewBox="0 -960 960 960" fill="currentColor">
                         <path
                             d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
@@ -600,7 +600,7 @@
                 </div>
             </div>
             <div id="opcoes-salvar">
-                <div onclick="thifrebd.selectOption(this)" id="salvar-local" class="opcao-escolhida">
+                <div id="salvar-local" class="opcao-escolhida">
                     <div>
                         <svg viewBox="0 -960 960 960" fill="currentColor">
                             <path
@@ -612,7 +612,7 @@
                         <p>Salve seu progresso no dispositivo</p>
                     </div>
                 </div>
-                <div onclick="thifrebd.selectOption(this)" id="salvar-json">
+                <div id="salvar-json">
                     <div>
                         <svg viewBox="0 -960 960 960" fill="currentColor">
                             <path
@@ -636,7 +636,7 @@
                         <p>Salve seu progresso em formato SQL</p>
                     </div>
                 </div> -->
-                <div onclick="thifrebd.selectOption(this)" id="salvar-online">
+                <div id="salvar-online">
                     <div>
                         <svg viewBox="0 -960 960 960" fill="currentcolor">
                             <path
@@ -651,7 +651,7 @@
             </div>
 
             <div id="save-button-div">
-                <button onclick="thifrebd.confirmSaveOrLoad()">
+                <button id="confirm-save-load">
                     <svg viewBox="0 -960 960 960" fill="currentColor">
                         <path
                             d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />

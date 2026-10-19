@@ -1,4 +1,4 @@
-export function getElement(id) {
+function getElement(id) {
     const el = document.getElementById(id);
     if (!el)
         throw new Error(`Elemento com id "${id}" não encontrado.`);
@@ -109,4 +109,74 @@ export function mover(objeto) {
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
     });
+}
+export function setupSaveLoadUI({ options, defaultAction = "save", defaultOption, isUserLoggedIn = () => false, saveActionId = "save-action", loadActionId = "load-action", confirmButtonId = "confirm-save-load", autoSaveCheckboxId = "auto-save-checkbox", notificationId = "save-notification", notificationDuration = 3000, saveMessage = "Dados salvos com sucesso!", chosenActionClass = "acao-escolhida", chosenOptionClass = "opcao-escolhida", }) {
+    const optionNames = Object.keys(options);
+    const actionButtons = {
+        save: getElement(saveActionId),
+        load: getElement(loadActionId),
+    };
+    const optionButtons = optionNames.map((name) => ({ name, el: getElement(name) }));
+    let selectedAction;
+    let selectedOption;
+    let notificationTimeout;
+    /** Indica se o checkbox de auto save está marcado. */
+    function isAutoSaveEnabled() {
+        return getElement(autoSaveCheckboxId).checked;
+    }
+    /** Marca visualmente a ação (salvar/carregar) selecionada. */
+    function selectAction(action) {
+        selectedAction = action;
+        document.querySelector(`.${chosenActionClass}`)?.classList.remove(chosenActionClass);
+        actionButtons[action].classList.add(chosenActionClass);
+    }
+    /** Marca visualmente a opção (local/json/sql/online) selecionada. */
+    function selectOption(name) {
+        selectedOption = name;
+        document.querySelector(`.${chosenOptionClass}`)?.classList.remove(chosenOptionClass);
+        optionButtons.find((o) => o.name === name).el.classList.add(chosenOptionClass);
+    }
+    /** Mostra a notificação por alguns segundos. */
+    function showNotification(message) {
+        const notification = getElement(notificationId);
+        notification.querySelector("p").innerText = message;
+        notification.style.display = "block";
+        clearTimeout(notificationTimeout);
+        notificationTimeout = setTimeout(() => {
+            notification.style.display = "none";
+        }, notificationDuration);
+    }
+    /** Executa a ação escolhida (salvar/carregar) com a opção escolhida. */
+    async function confirm() {
+        if (!selectedAction || !selectedOption) {
+            alert("Por favor, selecione uma ação e uma opção.");
+            return;
+        }
+        const option = options[selectedOption];
+        if (option.requiresLogin && !isUserLoggedIn()) {
+            const verb = selectedAction === "save" ? "salvar" : "carregar";
+            alert(`Você precisa estar logado para ${verb} online.`);
+            return;
+        }
+        if (selectedAction === "save") {
+            await option.save();
+            showNotification(saveMessage);
+        }
+        else {
+            await option.load();
+        }
+    }
+    actionButtons.save.addEventListener("click", () => selectAction("save"));
+    actionButtons.load.addEventListener("click", () => selectAction("load"));
+    for (const { name, el } of optionButtons) {
+        el.addEventListener("click", () => selectOption(name));
+    }
+    if (confirmButtonId) {
+        getElement(confirmButtonId).addEventListener("click", confirm);
+    }
+    if (defaultAction)
+        selectAction(defaultAction);
+    if (defaultOption)
+        selectOption(defaultOption);
+    return { isAutoSaveEnabled, selectAction, selectOption, confirm, showNotification };
 }

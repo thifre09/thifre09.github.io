@@ -97,6 +97,11 @@ div#central {
     --bg-animation-name: mudarCuriosidades;
 }
 
+#editor-html {
+    background: no-repeat center;
+    --bg-animation-name: mudarEditorHtml;
+}
+
 #mayor-simulator {
     background: no-repeat center;
     --bg-animation-name: mudarMayorSimulator;

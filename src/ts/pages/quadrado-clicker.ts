@@ -1,6 +1,6 @@
 import * as Auth from "../supabase/auth.js";
 import { supabase } from "../supabase/client.js";
-import { setupTabNavigation } from "../others/global.js";
+import { setupSaveLoadUI, setupTabNavigation } from "../others/global.js";
 
 // #region Change navbar
 
@@ -1116,8 +1116,6 @@ function skinquadrado(action: SkinQuadradoAction): void {
     });
 }
 
-function a() { }
-
 async function resetarTudo() {
     if (confirm("Tem certeza que deseja resetar tudo? Esta ação não pode ser desfeita.")) {
         quadrados = 0;
@@ -1155,62 +1153,16 @@ quadrado.addEventListener("click", click);
 
 // #region save
 
-let timeoutSaveOrLoad: number;
-let autoSave = true;
-
-function confirmSaveOrLoad() {
-    const selectedAction = document.querySelector(".acao-escolhida");
-    const selectedOption = document.querySelector(".opcao-escolhida");
-    if (!selectedAction || !selectedOption) {
-        alert("Por favor, selecione uma ação e uma opção.");
-        return;
-    }
-
-    const notification = document.querySelector("#save-notification") as HTMLDivElement;
-    const action = selectedAction.id;
-    const option = selectedOption.id;
-    if (action === "save-action") {
-        if (option === "salvar-local") {
-            saveToLocalStorage();
-        } else if (option === "salvar-json") {
-            saveToJson();
-        } else if (option === "salvar-online") {
-            if (!Auth.isUserLoggedIn()) {
-                alert("Você precisa estar logado para salvar online.");
-                return;
-            }
-            saveToSupabase();
-        }
-
-        notification.querySelector("p")!.innerText = "Dados salvos com sucesso!";
-        notification.style.display = "block";
-        timeoutSaveOrLoad = setTimeout(() => {
-            notification.style.display = "none";
-        }, 3000);
-    } else if (action === "load-action") {
-        if (option === "salvar-local") {
-            loadFromLocalStorage();
-        } else if (option === "salvar-json") {
-            loadFromJson();
-        } else if (option === "salvar-online") {
-            if (!Auth.isUserLoggedIn()) {
-                alert("Você precisa estar logado para carregar online.");
-                return;
-            }
-            loadFromSupabase();
-        }
-    }
-}
-
-function selectAction(div: HTMLDivElement) {
-    document.querySelector(".acao-escolhida")?.classList.remove("acao-escolhida");
-    div.classList.add("acao-escolhida");
-}
-
-function selectOption(div: HTMLDivElement) {
-    document.querySelector(".opcao-escolhida")?.classList.remove("opcao-escolhida");
-    div.classList.add("opcao-escolhida");
-}
+const { isAutoSaveEnabled, showNotification } =
+    setupSaveLoadUI({
+        defaultOption: "salvar-local",
+        isUserLoggedIn: () => Auth.isUserLoggedIn(),
+        options: {
+            "salvar-local": { save: saveToLocalStorage, load: loadFromLocalStorage },
+            "salvar-json": { save: saveToJson, load: loadFromJson },
+            "salvar-online": { save: saveToSupabase, load: loadFromSupabase, requiresLogin: true },
+        },
+    });
 
 function transformToJson(): string {
     return JSON.stringify({
@@ -1288,19 +1240,9 @@ function transformFromJson(json: string | null): void {
                 conquista.conquistada = c.conquistada;
             }
         }
-        const notification = document.querySelector("#save-notification") as HTMLDivElement;
-        notification.querySelector("p")!.innerText = "Dados carregados com sucesso!";
-        notification.style.display = "block";
-        timeoutSaveOrLoad = setTimeout(() => {
-            notification.style.display = "none";
-        }, 3000);
+        showNotification("Dados carregados com sucesso!");
     } catch (error) {
-        const notification = document.querySelector("#save-notification") as HTMLDivElement;
-        notification.querySelector("p")!.innerText = "Erro ao carregar os dados!";
-        notification.style.display = "block";
-        timeoutSaveOrLoad = setTimeout(() => {
-            notification.style.display = "none";
-        }, 3000);
+        showNotification("Erro ao carregar os dados");
     }
 
 }
@@ -1367,17 +1309,6 @@ async function loadFromSupabase() {
     updateUI();
 }
 
-document.getElementById("save-action")!.addEventListener("click", () => selectAction(document.getElementById("save-action") as HTMLDivElement));
-document.getElementById("load-action")!.addEventListener("click", () => selectAction(document.getElementById("load-action") as HTMLDivElement));
-document.getElementById("salvar-local")!.addEventListener("click", () => selectOption(document.getElementById("salvar-local") as HTMLDivElement));
-document.getElementById("salvar-json")!.addEventListener("click", () => selectOption(document.getElementById("salvar-json") as HTMLDivElement));
-document.getElementById("salvar-online")!.addEventListener("click", () => selectOption(document.getElementById("salvar-online") as HTMLDivElement));
-document.getElementById("auto-save")!.addEventListener("click", () => {
-    autoSave = !autoSave;
-});
-document.getElementById("confirm-save-load-button")!.addEventListener("click", confirmSaveOrLoad);
-
-
 // #endregion
 
 updateUI();
@@ -1388,7 +1319,7 @@ setInterval(() => {
 }, 1000);
 
 setInterval(async () => {
-    if (autoSave) {
+    if (isAutoSaveEnabled()) {
         saveToLocalStorage();
         if (await Auth.isUserLoggedIn()) {
             saveToSupabase();

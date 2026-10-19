@@ -1,4 +1,6 @@
-import { setupTabNavigation } from "../others/global.js";
+import { setupTabNavigation, setupSaveLoadUI } from "../others/global.js";
+import * as Auth from "../supabase/auth.js";
+import { supabase } from "../supabase/client.js";
 import * as monaco from "monaco-editor";
 setupTabNavigation({
     menus: ["dashboard", "codigo", "save", "help"],
@@ -11,11 +13,6 @@ class HTMLProject {
     constructor() {
         this.root = new HTMLElementNode("html");
         this.classes = [];
-        const defaultClass = new CSSClass(".container");
-        defaultClass.properties.set("display", "flex");
-        defaultClass.properties.set("width", "100%");
-        defaultClass.properties.set("padding", "20px");
-        this.classes.push(defaultClass);
     }
 }
 class HTMLElementNode {
@@ -87,7 +84,9 @@ class HTMLElementNode {
         details.appendChild(summary);
         const addTagSvg = summary.querySelector(".add-tag-svg");
         addTagSvg.addEventListener("click", (e) => {
-            e.stopPropagation();
+            if (details.open) {
+                e.preventDefault();
+            }
             selectedElement = this;
             document.getElementById("create-tag").style.display = "block";
             document.querySelector(".selected-element")?.classList.remove("selected-element");
@@ -402,13 +401,20 @@ class HTMLElementNode {
         </svg>
         Deletar componente
         `;
+        const isDocumentStructure = this.tag === "html"
+            || (this.parent === currentProject().root && (this.tag === "head" || this.tag === "body"));
         deleteWindowButton.addEventListener("click", () => {
+            if (isDocumentStructure) {
+                return;
+            }
             this.parent?.children.splice(this.parent.children.indexOf(this), 1);
             removeFloatingWindow(floatingWindow);
             renderProject(currentProject());
             rederTrees();
         });
-        contentDiv.appendChild(deleteWindowButton);
+        if (!isDocumentStructure) {
+            contentDiv.appendChild(deleteWindowButton);
+        }
         const header = floatingWindow.querySelector(".janela-flutuante-header");
         let isDragging = false;
         let offsetX = 0;
@@ -490,7 +496,7 @@ function currentRoot() {
     return currentProject().root;
 }
 // #endregion
-// #region Dashboard
+// #region Tudo :)
 const cssData = await fetch("/assets/jsons/css-data.json").then(r => r.json());
 const htmlData = await fetch("/assets/jsons/html-data.json").then(r => r.json());
 monaco.languages.registerCompletionItemProvider("css", {
@@ -784,9 +790,9 @@ function renderCodePanel() {
             model: activeCodeTab === "html" ? htmlModel : cssModel,
             automaticLayout: true,
             fontSize: 14,
-            minimap: { enabled: false },
-            scrollBeyondLastLine: false,
             wordWrap: "on",
+            tabSize: 4,
+            theme: "vs-dark",
         });
         htmlTab.addEventListener("click", () => {
             activeCodeTab = "html";
@@ -1149,6 +1155,116 @@ closeCreateTagButton.addEventListener("click", () => {
     document.getElementById("create-tag").style.display = "none";
 });
 // #endregion
+// #region Save
+const { isAutoSaveEnabled, showNotification } = setupSaveLoadUI({
+    defaultOption: "salvar-local",
+    isUserLoggedIn: () => Auth.isUserLoggedIn(),
+    options: {
+        "salvar-local": { save: saveToLocalStorage, load: loadFromLocalStorage },
+        "salvar-json": { save: saveToJson, load: loadFromJson },
+        // "salvar-sql":    { save: saveToSql,          load: loadFromSql },
+        "salvar-online": { save: saveToSupabase, load: loadFromSupabase, requiresLogin: true },
+    },
+});
+function transformToJson() {
+    const save = {
+        html: getHtmlCode(currentProject()),
+        css: getCssCode(currentProject()),
+    };
+    return JSON.stringify(save, null, 4);
+}
+function transformFromJson(value) {
+    if (!value) {
+        return;
+    }
+    try {
+        let save;
+        try {
+            const parsed = JSON.parse(value);
+            if (typeof parsed.html !== "string" || typeof parsed.css !== "string") {
+                throw new Error("Formato de salvamento inválido.");
+            }
+            save = parsed;
+        }
+        catch {
+            save = { html: value, css: "" };
+        }
+        const root = parseHtmlCode(save.html);
+        const head = root.children.find(child => typeof child !== "string" && child.tag === "head");
+        const body = root.children.find(child => typeof child !== "string" && child.tag === "body");
+        if (!head || typeof head === "string" || !body || typeof body === "string") {
+            throw new Error("O HTML precisa conter <head> e <body>.");
+        }
+        currentProject().root = root;
+        currentProject().classes = parseCssCode(save.css);
+        selectedElement = body;
+        renderCssEditor();
+        renderProject(currentProject());
+        rederTrees();
+        showNotification("HTML carregado com sucesso");
+    }
+    catch (error) {
+        showNotification("Erro ao carregar o HTML");
+    }
+}
+function saveToLocalStorage() {
+    localStorage.setItem("editor-html", transformToJson());
+}
+function loadFromLocalStorage() {
+    const json = localStorage.getItem("editor-html");
+    if (json) {
+        transformFromJson(json);
+    }
+}
+function saveToJson() {
+    const json = transformToJson();
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "database.json";
+    a.click();
+    URL.revokeObjectURL(url);
+}
+function loadFromJson() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json,application/json";
+    input.onchange = (e) => {
+        const file = e.target.files?.[0];
+        if (!file)
+            return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const json = e.target.result;
+            transformFromJson(json);
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+}
+async function saveToSupabase() {
+    const user = await Auth.getUser();
+    const { error } = await supabase.from("profiles")
+        .update({
+        editor_html_save: JSON.parse(transformToJson())
+    }).eq("id", user.id);
+    console.log(error);
+}
+async function loadFromSupabase() {
+    const user = await Auth.getUser();
+    const { data, error } = await supabase.from("profiles")
+        .select("editor_html_save").eq("id", user.id);
+    if (error)
+        return;
+    const json = JSON.stringify(data[0]["editor_html_save"]);
+    if (json === "null") {
+        showNotification("Nenhum HTML salvo online");
+        return;
+    }
+    transformFromJson(json);
+}
+// #endregion
 widthInput.addEventListener("input", updateIframeSize);
 heightInput.addEventListener("input", updateIframeSize);
 zoomInput.addEventListener("input", () => {
@@ -1193,6 +1309,20 @@ document.addEventListener("pointermove", (e) => {
         direita.style.width = `${larguraLimitada}px`;
     }
 });
+async function loadSavedProject() {
+    if (await Auth.isUserLoggedIn()) {
+        loadFromSupabase();
+    }
+    else {
+        loadFromLocalStorage();
+    }
+}
+if (document.readyState === "loading") {
+    window.addEventListener("DOMContentLoaded", loadSavedProject, { once: true });
+}
+else {
+    loadSavedProject();
+}
 updateIframeSize();
 renderCamera();
 renderCssEditor();

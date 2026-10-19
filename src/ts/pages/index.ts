@@ -24,6 +24,10 @@ const imageSequences: ImageSequences = {
         path: 'assets/images/links/curiosidades/curi',
         extensions: ['jpg', 'jpg', 'png', 'png', 'png', 'jpg', 'png', 'jpg']
     },
+    'editor-html': {
+        path: 'assets/images/links/editor-html/edi',
+        extensions: ['png', 'png', 'png', 'jpg', 'jpg', 'jpg', 'jpg', 'png']
+    },
     'mayor-simulator': {
         path: 'assets/images/links/mayor-simulator/ms',
         extensions: ['jpg', 'jpg', 'jpg', 'jpg', 'jpg', 'jpg', 'jpg', 'jpg']

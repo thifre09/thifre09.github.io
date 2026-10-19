@@ -1,6 +1,6 @@
 import * as Auth from "../supabase/auth.js";
 import { supabase } from "../supabase/client.js";
-import { setupTabNavigation } from "../others/global.js";
+import { setupSaveLoadUI, setupTabNavigation } from "../others/global.js";
 // #region Change navbar
 const { changeTo } = setupTabNavigation({
     menus: ["game", "others", "save", "help"],
@@ -1020,7 +1020,6 @@ function skinquadrado(action) {
         }
     });
 }
-function a() { }
 async function resetarTudo() {
     if (confirm("Tem certeza que deseja resetar tudo? Esta ação não pode ser desfeita.")) {
         quadrados = 0;
@@ -1054,62 +1053,15 @@ function cheat() {
 const quadrado = document.getElementById("quadrado");
 quadrado.addEventListener("click", click);
 // #region save
-let timeoutSaveOrLoad;
-let autoSave = true;
-function confirmSaveOrLoad() {
-    const selectedAction = document.querySelector(".acao-escolhida");
-    const selectedOption = document.querySelector(".opcao-escolhida");
-    if (!selectedAction || !selectedOption) {
-        alert("Por favor, selecione uma ação e uma opção.");
-        return;
-    }
-    const notification = document.querySelector("#save-notification");
-    const action = selectedAction.id;
-    const option = selectedOption.id;
-    if (action === "save-action") {
-        if (option === "salvar-local") {
-            saveToLocalStorage();
-        }
-        else if (option === "salvar-json") {
-            saveToJson();
-        }
-        else if (option === "salvar-online") {
-            if (!Auth.isUserLoggedIn()) {
-                alert("Você precisa estar logado para salvar online.");
-                return;
-            }
-            saveToSupabase();
-        }
-        notification.querySelector("p").innerText = "Dados salvos com sucesso!";
-        notification.style.display = "block";
-        timeoutSaveOrLoad = setTimeout(() => {
-            notification.style.display = "none";
-        }, 3000);
-    }
-    else if (action === "load-action") {
-        if (option === "salvar-local") {
-            loadFromLocalStorage();
-        }
-        else if (option === "salvar-json") {
-            loadFromJson();
-        }
-        else if (option === "salvar-online") {
-            if (!Auth.isUserLoggedIn()) {
-                alert("Você precisa estar logado para carregar online.");
-                return;
-            }
-            loadFromSupabase();
-        }
-    }
-}
-function selectAction(div) {
-    document.querySelector(".acao-escolhida")?.classList.remove("acao-escolhida");
-    div.classList.add("acao-escolhida");
-}
-function selectOption(div) {
-    document.querySelector(".opcao-escolhida")?.classList.remove("opcao-escolhida");
-    div.classList.add("opcao-escolhida");
-}
+const { isAutoSaveEnabled, showNotification } = setupSaveLoadUI({
+    defaultOption: "salvar-local",
+    isUserLoggedIn: () => Auth.isUserLoggedIn(),
+    options: {
+        "salvar-local": { save: saveToLocalStorage, load: loadFromLocalStorage },
+        "salvar-json": { save: saveToJson, load: loadFromJson },
+        "salvar-online": { save: saveToSupabase, load: loadFromSupabase, requiresLogin: true },
+    },
+});
 function transformToJson() {
     return JSON.stringify({
         quadrados: quadrados,
@@ -1182,20 +1134,10 @@ function transformFromJson(json) {
                 conquista.conquistada = c.conquistada;
             }
         }
-        const notification = document.querySelector("#save-notification");
-        notification.querySelector("p").innerText = "Dados carregados com sucesso!";
-        notification.style.display = "block";
-        timeoutSaveOrLoad = setTimeout(() => {
-            notification.style.display = "none";
-        }, 3000);
+        showNotification("Dados carregados com sucesso!");
     }
     catch (error) {
-        const notification = document.querySelector("#save-notification");
-        notification.querySelector("p").innerText = "Erro ao carregar os dados!";
-        notification.style.display = "block";
-        timeoutSaveOrLoad = setTimeout(() => {
-            notification.style.display = "none";
-        }, 3000);
+        showNotification("Erro ao carregar os dados");
     }
 }
 function saveToLocalStorage() {
@@ -1252,15 +1194,6 @@ async function loadFromSupabase() {
     transformFromJson(json);
     updateUI();
 }
-document.getElementById("save-action").addEventListener("click", () => selectAction(document.getElementById("save-action")));
-document.getElementById("load-action").addEventListener("click", () => selectAction(document.getElementById("load-action")));
-document.getElementById("salvar-local").addEventListener("click", () => selectOption(document.getElementById("salvar-local")));
-document.getElementById("salvar-json").addEventListener("click", () => selectOption(document.getElementById("salvar-json")));
-document.getElementById("salvar-online").addEventListener("click", () => selectOption(document.getElementById("salvar-online")));
-document.getElementById("auto-save").addEventListener("click", () => {
-    autoSave = !autoSave;
-});
-document.getElementById("confirm-save-load-button").addEventListener("click", confirmSaveOrLoad);
 // #endregion
 updateUI();
 setInterval(() => {
@@ -1268,7 +1201,7 @@ setInterval(() => {
     document.getElementById("quadrados").textContent = "Quadrados: " + formatNumber(quadrados);
 }, 1000);
 setInterval(async () => {
-    if (autoSave) {
+    if (isAutoSaveEnabled()) {
         saveToLocalStorage();
         if (await Auth.isUserLoggedIn()) {
             saveToSupabase();

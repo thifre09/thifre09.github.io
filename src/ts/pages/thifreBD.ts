@@ -1,6 +1,6 @@
 import * as Auth from "../supabase/auth.js";
 import { supabase } from "../supabase/client.js"
-import { setupTabNavigation } from "../others/global.js";
+import { setupTabNavigation, setupSaveLoadUI } from "../others/global.js";
 
 setupTabNavigation({
     menus: ["dashboard", "terminal", "logical", "save", "help"],
@@ -1002,7 +1002,7 @@ class SGBDFunctions {
         currentTable = null;
         refreshUI();
 
-        if (!autoSaveEnabled) return;
+        if (!isAutoSaveEnabled()) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1012,7 +1012,7 @@ class SGBDFunctions {
         currentSchema = schema.name;
         currentTable = null;
         refreshUI();
-        if (!autoSaveEnabled) return;
+        if (!isAutoSaveEnabled()) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1034,7 +1034,7 @@ class SGBDFunctions {
         db.schemas[schema || currentSchema!].tables[table.name] = table;
         currentTable = table.name;
         refreshUI();
-        if (!autoSaveEnabled) return;
+        if (!isAutoSaveEnabled()) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1107,7 +1107,7 @@ class SGBDFunctions {
         }
 
         refreshUI();
-        if (!autoSaveEnabled) return;
+        if (!isAutoSaveEnabled()) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1136,7 +1136,7 @@ class SGBDFunctions {
             table.indexes[col].get(value)!.push(rowIndex);
         }
         refreshUI();
-        if (!autoSaveEnabled) return;
+        if (!isAutoSaveEnabled()) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1186,7 +1186,7 @@ class SGBDFunctions {
         }
 
         refreshUI();
-        if (!autoSaveEnabled) return;
+        if (!isAutoSaveEnabled()) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1203,7 +1203,7 @@ class SGBDFunctions {
             currentTable = null;
         }
         refreshUI();
-        if (!autoSaveEnabled) return;
+        if (!isAutoSaveEnabled()) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1218,7 +1218,7 @@ class SGBDFunctions {
             currentTable = null;
         }
         refreshUI();
-        if (!autoSaveEnabled) return;
+        if (!isAutoSaveEnabled()) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1241,7 +1241,7 @@ class SGBDFunctions {
         }
 
         refreshUI();
-        if (!autoSaveEnabled) return;
+        if (!isAutoSaveEnabled()) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1269,7 +1269,7 @@ class SGBDFunctions {
         delete table.columns[columnName];
 
         refreshUI();
-        if (!autoSaveEnabled) return;
+        if (!isAutoSaveEnabled()) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1319,7 +1319,7 @@ class SGBDFunctions {
         }
 
         refreshUI();
-        if (!autoSaveEnabled) return;
+        if (!isAutoSaveEnabled()) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1333,7 +1333,7 @@ class SGBDFunctions {
         currentDatabase = newName;
 
         refreshUI();
-        if (!autoSaveEnabled) return;
+        if (!isAutoSaveEnabled()) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1348,7 +1348,7 @@ class SGBDFunctions {
         currentSchema = newName;
 
         refreshUI();
-        if (!autoSaveEnabled) return;
+        if (!isAutoSaveEnabled()) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1370,7 +1370,7 @@ class SGBDFunctions {
         currentTable = newName;
 
         refreshUI();
-        if (!autoSaveEnabled) return;
+        if (!isAutoSaveEnabled()) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -1442,7 +1442,7 @@ class SGBDFunctions {
         }
 
         refreshUI();
-        if (!autoSaveEnabled) return;
+        if (!isAutoSaveEnabled()) return;
         saveToLocalStorage();
         saveToSupabase();
     }
@@ -4618,7 +4618,7 @@ namespace SQL {
                 }
                 if (primaryValidation === 1) {
                     if (!column.isPrimaryKey) {
-                        return {column: null, error: `A coluna "${column.name}" não possui PRIMARY KEY`};
+                        return { column: null, error: `A coluna "${column.name}" não possui PRIMARY KEY` };
                     }
                     newColumn.isPrimaryKey = false;
                 }
@@ -4629,7 +4629,7 @@ namespace SQL {
                 }
                 if (foreignValidation === 1) {
                     if (!column.isForeignKey) {
-                        return {column: null, error: `A coluna "${column.name}" não possui FOREIGN KEY`};
+                        return { column: null, error: `A coluna "${column.name}" não possui FOREIGN KEY` };
                     }
                     newColumn.isForeignKey = false;
                     newColumn.reference = undefined;
@@ -4641,7 +4641,7 @@ namespace SQL {
                 }
                 if (notNullValidation === 1) {
                     if (!column.isNotNull) {
-                        return {column: null, error: `A coluna "${column.name}" não é NOT NULL`};
+                        return { column: null, error: `A coluna "${column.name}" não é NOT NULL` };
                     }
                     newColumn.isNotNull = false;
                 }
@@ -4652,7 +4652,7 @@ namespace SQL {
                 }
                 if (uniqueValidation === 1) {
                     if (!column.isUnique) {
-                        return {column: null, error: `A coluna "${column.name}" não é UNIQUE`};
+                        return { column: null, error: `A coluna "${column.name}" não é UNIQUE` };
                     }
                     newColumn.isUnique = false;
                 }
@@ -4663,7 +4663,7 @@ namespace SQL {
                 }
                 if (autoIncrementValidation === 1) {
                     if (!column.isAutoIncrement) {
-                        return {column: null, error: `A coluna "${column.name}" não é AUTO_INCREMENT`};
+                        return { column: null, error: `A coluna "${column.name}" não é AUTO_INCREMENT` };
                     }
                     newColumn.isAutoIncrement = false;
                 }
@@ -4674,7 +4674,7 @@ namespace SQL {
                 }
                 if (defaultValidation === 1) {
                     if (!column.hasDefault) {
-                        return {column: null, error: `A coluna "${column.name}" não possui DEFAULT`};
+                        return { column: null, error: `A coluna "${column.name}" não possui DEFAULT` };
                     }
                     newColumn.hasDefault = false;
                 }
@@ -4685,26 +4685,26 @@ namespace SQL {
                 }
                 if (currentTimestampValidation === 1) {
                     if (!column.isCurrentTimestamp) {
-                        return {column: null, error: `A coluna "${column.name}" não é CURRENT_TIMESTAMP`};
+                        return { column: null, error: `A coluna "${column.name}" não é CURRENT_TIMESTAMP` };
                     }
                     newColumn.isCurrentTimestamp = false;
                 }
 
                 if (notNullValidation === 1) {
                     if (newColumn.isPrimaryKey) {
-                        return {column: null, error: `Não é possível remover NOT NULL de uma coluna PRIMARY KEY`};
+                        return { column: null, error: `Não é possível remover NOT NULL de uma coluna PRIMARY KEY` };
                     } else if (newColumn.isAutoIncrement) {
-                        return {column: null, error: `Não é possível remover NOT NULL de uma coluna AUTO_INCREMENT`};
+                        return { column: null, error: `Não é possível remover NOT NULL de uma coluna AUTO_INCREMENT` };
                     } else if (newColumn.isCurrentTimestamp) {
-                        return {column: null, error: `Não é possível remover NOT NULL de uma coluna CURRENT_TIMESTAMP`};
+                        return { column: null, error: `Não é possível remover NOT NULL de uma coluna CURRENT_TIMESTAMP` };
                     }
                 }
 
                 if (uniqueValidation === 1) {
                     if (newColumn.isPrimaryKey) {
-                        return {column: null, error: `Não é possível remover UNIQUE de uma coluna PRIMARY KEY`};
+                        return { column: null, error: `Não é possível remover UNIQUE de uma coluna PRIMARY KEY` };
                     } else if (newColumn.isAutoIncrement) {
-                        return {column: null, error: `Não é possível remover UNIQUE de uma coluna AUTO_INCREMENT`};
+                        return { column: null, error: `Não é possível remover UNIQUE de uma coluna AUTO_INCREMENT` };
                     }
                 }
 
@@ -6137,82 +6137,17 @@ document.addEventListener("mouseup", () => {
 
 // #region Save
 
-let autoSaveEnabled = true;
-
-document.getElementById("auto-save-checkbox")?.addEventListener("click", () => {
-    autoSaveEnabled = !autoSaveEnabled;
-});
-
-/**
- * Marca visualmente a ação de salvar/carregar selecionada pela UI.
- * @param div - Elemento que representa a ação clicada.
- */
-function selectAction(div: HTMLDivElement) {
-    document.querySelector(".acao-escolhida")?.classList.remove("acao-escolhida");
-    div.classList.add("acao-escolhida");
-}
-
-/**
- * Marca visualmente a opção (local/json/sql) selecionada pela UI.
- * @param div - Elemento que representa a opção clicada.
- */
-function selectOption(div: HTMLDivElement) {
-    document.querySelector(".opcao-escolhida")?.classList.remove("opcao-escolhida");
-    div.classList.add("opcao-escolhida");
-}
-
-let timeoutSaveOrLoad: number;
-/**
- * Executa a ação de salvar ou carregar baseada nas seleções atuais na interface.
- * Decide entre salvar/carregar localmente, em JSON ou em SQL.
- */
-function confirmSaveOrLoad() {
-    const selectedAction = document.querySelector(".acao-escolhida");
-    const selectedOption = document.querySelector(".opcao-escolhida");
-    if (!selectedAction || !selectedOption) {
-        alert("Por favor, selecione uma ação e uma opção.");
-        return;
-    }
-
-    const notification = document.querySelector("#save-notification") as HTMLDivElement;
-    const action = selectedAction.id;
-    const option = selectedOption.id;
-    if (action === "save-action") {
-        if (option === "salvar-local") {
-            saveToLocalStorage();
-        } else if (option === "salvar-json") {
-            saveToJson();
-        } else if (option === "salvar-sql") {
-            saveToSql();
-        } else if (option === "salvar-online") {
-            if (!Auth.isUserLoggedIn()) {
-                alert("Você precisa estar logado para salvar online.");
-                return;
-            }
-            saveToSupabase();
-        }
-
-        notification.querySelector("p")!.innerText = "Dados salvos com sucesso!";
-        notification.style.display = "block";
-        timeoutSaveOrLoad = setTimeout(() => {
-            notification.style.display = "none";
-        }, 3000);
-    } else if (action === "load-action") {
-        if (option === "salvar-local") {
-            loadFromLocalStorage();
-        } else if (option === "salvar-json") {
-            loadFromJson();
-        } else if (option === "salvar-sql") {
-            loadFromSql();
-        } else if (option === "salvar-online") {
-            if (!Auth.isUserLoggedIn()) {
-                alert("Você precisa estar logado para carregar online.");
-                return;
-            }
-            loadFromSupabase();
-        }
-    }
-}
+const { isAutoSaveEnabled, showNotification } =
+    setupSaveLoadUI({
+        defaultOption: "salvar-local",
+        isUserLoggedIn: () => Auth.isUserLoggedIn(),
+        options: {
+            "salvar-local": { save: saveToLocalStorage, load: loadFromLocalStorage },
+            "salvar-json": { save: saveToJson, load: loadFromJson },
+            // "salvar-sql":    { save: saveToSql,          load: loadFromSql },
+            "salvar-online": { save: saveToSupabase, load: loadFromSupabase, requiresLogin: true },
+        },
+    });
 
 function transformToJson() {
     return JSON.stringify(databases, (key, value) => {
@@ -6244,12 +6179,7 @@ function transformFromJson(json: string | null) {
         }
 
         refreshUI();
-        const notification = document.querySelector("#save-notification") as HTMLDivElement;
-        notification.querySelector("p")!.innerText = "Dados carregados com sucesso!";
-        notification.style.display = "block";
-        timeoutSaveOrLoad = setTimeout(() => {
-            notification.style.display = "none";
-        }, 3000);
+        showNotification("Dados carregados com sucesso!");
     }
     catch (err) {
         console.error("Erro ao carregar databases:", err);
@@ -6488,9 +6418,6 @@ window.thifrebd = {
     insertRowInterface,
     createWhereConditionDiv,
     createTerminalSession,
-    selectAction,
-    selectOption,
-    confirmSaveOrLoad,
     changeEditRowMenu
 }
 

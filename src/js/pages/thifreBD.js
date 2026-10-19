@@ -1,6 +1,6 @@
 import * as Auth from "../supabase/auth.js";
 import { supabase } from "../supabase/client.js";
-import { setupTabNavigation } from "../others/global.js";
+import { setupTabNavigation, setupSaveLoadUI } from "../others/global.js";
 setupTabNavigation({
     menus: ["dashboard", "terminal", "logical", "save", "help"],
     initial: "dashboard",
@@ -868,7 +868,7 @@ class SGBDFunctions {
         currentSchema = null;
         currentTable = null;
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -878,7 +878,7 @@ class SGBDFunctions {
         currentSchema = schema.name;
         currentTable = null;
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -899,7 +899,7 @@ class SGBDFunctions {
         db.schemas[schema || currentSchema].tables[table.name] = table;
         currentTable = table.name;
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -967,7 +967,7 @@ class SGBDFunctions {
             //getCurrentDatabase()!.addForeignKeyReference(currentSchema!, tableName, column.name, column.reference);
         }
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -995,7 +995,7 @@ class SGBDFunctions {
             table.indexes[col].get(value).push(rowIndex);
         }
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1038,7 +1038,7 @@ class SGBDFunctions {
             indexMap.get(newValue).push(oldRowIndex);
         }
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1055,7 +1055,7 @@ class SGBDFunctions {
             currentTable = null;
         }
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1068,7 +1068,7 @@ class SGBDFunctions {
             currentTable = null;
         }
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1089,7 +1089,7 @@ class SGBDFunctions {
             currentTable = null;
         }
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1114,7 +1114,7 @@ class SGBDFunctions {
         }
         delete table.columns[columnName];
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1158,7 +1158,7 @@ class SGBDFunctions {
             }
         }
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1172,7 +1172,7 @@ class SGBDFunctions {
         databases[newName] = db;
         currentDatabase = newName;
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1187,7 +1187,7 @@ class SGBDFunctions {
         db.schemas[newName] = s;
         currentSchema = newName;
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1210,7 +1210,7 @@ class SGBDFunctions {
         schema.tables[newName] = t;
         currentTable = newName;
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1271,7 +1271,7 @@ class SGBDFunctions {
             table.remakeColumnIndex(newColumn.name);
         }
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -5389,83 +5389,16 @@ document.addEventListener("mouseup", () => {
 });
 // #endregion
 // #region Save
-let autoSaveEnabled = true;
-document.getElementById("auto-save-checkbox")?.addEventListener("click", () => {
-    autoSaveEnabled = !autoSaveEnabled;
+const { isAutoSaveEnabled, showNotification } = setupSaveLoadUI({
+    defaultOption: "salvar-local",
+    isUserLoggedIn: () => Auth.isUserLoggedIn(),
+    options: {
+        "salvar-local": { save: saveToLocalStorage, load: loadFromLocalStorage },
+        "salvar-json": { save: saveToJson, load: loadFromJson },
+        // "salvar-sql":    { save: saveToSql,          load: loadFromSql },
+        "salvar-online": { save: saveToSupabase, load: loadFromSupabase, requiresLogin: true },
+    },
 });
-/**
- * Marca visualmente a ação de salvar/carregar selecionada pela UI.
- * @param div - Elemento que representa a ação clicada.
- */
-function selectAction(div) {
-    document.querySelector(".acao-escolhida")?.classList.remove("acao-escolhida");
-    div.classList.add("acao-escolhida");
-}
-/**
- * Marca visualmente a opção (local/json/sql) selecionada pela UI.
- * @param div - Elemento que representa a opção clicada.
- */
-function selectOption(div) {
-    document.querySelector(".opcao-escolhida")?.classList.remove("opcao-escolhida");
-    div.classList.add("opcao-escolhida");
-}
-let timeoutSaveOrLoad;
-/**
- * Executa a ação de salvar ou carregar baseada nas seleções atuais na interface.
- * Decide entre salvar/carregar localmente, em JSON ou em SQL.
- */
-function confirmSaveOrLoad() {
-    const selectedAction = document.querySelector(".acao-escolhida");
-    const selectedOption = document.querySelector(".opcao-escolhida");
-    if (!selectedAction || !selectedOption) {
-        alert("Por favor, selecione uma ação e uma opção.");
-        return;
-    }
-    const notification = document.querySelector("#save-notification");
-    const action = selectedAction.id;
-    const option = selectedOption.id;
-    if (action === "save-action") {
-        if (option === "salvar-local") {
-            saveToLocalStorage();
-        }
-        else if (option === "salvar-json") {
-            saveToJson();
-        }
-        else if (option === "salvar-sql") {
-            saveToSql();
-        }
-        else if (option === "salvar-online") {
-            if (!Auth.isUserLoggedIn()) {
-                alert("Você precisa estar logado para salvar online.");
-                return;
-            }
-            saveToSupabase();
-        }
-        notification.querySelector("p").innerText = "Dados salvos com sucesso!";
-        notification.style.display = "block";
-        timeoutSaveOrLoad = setTimeout(() => {
-            notification.style.display = "none";
-        }, 3000);
-    }
-    else if (action === "load-action") {
-        if (option === "salvar-local") {
-            loadFromLocalStorage();
-        }
-        else if (option === "salvar-json") {
-            loadFromJson();
-        }
-        else if (option === "salvar-sql") {
-            loadFromSql();
-        }
-        else if (option === "salvar-online") {
-            if (!Auth.isUserLoggedIn()) {
-                alert("Você precisa estar logado para carregar online.");
-                return;
-            }
-            loadFromSupabase();
-        }
-    }
-}
 function transformToJson() {
     return JSON.stringify(databases, (key, value) => {
         if (key === "parent")
@@ -5491,12 +5424,7 @@ function transformFromJson(json) {
             databases[name] = d;
         }
         refreshUI();
-        const notification = document.querySelector("#save-notification");
-        notification.querySelector("p").innerText = "Dados carregados com sucesso!";
-        notification.style.display = "block";
-        timeoutSaveOrLoad = setTimeout(() => {
-            notification.style.display = "none";
-        }, 3000);
+        showNotification("Dados carregados com sucesso!");
     }
     catch (err) {
         console.error("Erro ao carregar databases:", err);
@@ -5708,9 +5636,6 @@ window.thifrebd = {
     insertRowInterface,
     createWhereConditionDiv,
     createTerminalSession,
-    selectAction,
-    selectOption,
-    confirmSaveOrLoad,
     changeEditRowMenu
 };
 // To Do

@@ -17,10 +17,10 @@ export interface TabNavigationOptions<T extends string> {
     initial?: T;
 }
 
-export function getElement(id: string): HTMLElement {
+function getElement<E extends HTMLElement = HTMLElement>(id: string): E {
     const el = document.getElementById(id);
     if (!el) throw new Error(`Elemento com id "${id}" não encontrado.`);
-    return el;
+    return el as E;
 }
 
 export function setupTabNavigation<T extends string>({
@@ -157,4 +157,130 @@ export function mover(objeto: HTMLElement) {
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
     });
+}
+
+export interface SaveOption {
+    /** Executada ao confirmar com a ação "salvar". */
+    save: () => void | Promise<void>;
+    /** Executada ao confirmar com a ação "carregar". */
+    load: () => void | Promise<void>;
+    /** Se true, exige usuário logado para salvar/carregar nesta opção. */
+    requiresLogin?: boolean;
+}
+
+export interface SaveLoadUIOptions<T extends string> {
+    /** Uma entrada por opção; a chave é o id do elemento da opção no HTML. */
+    options: Record<T, SaveOption>;
+    /** Ação selecionada inicialmente. Se omitida, nenhuma vem marcada. */
+    defaultAction?: "save" | "load";
+    /** Opção selecionada inicialmente (id do elemento). Se omitida, nenhuma vem marcada. */
+    defaultOption?: NoInfer<T>;
+    /** Usada nas opções com `requiresLogin`. */
+    isUserLoggedIn?: () => any;
+    saveActionId?: string;
+    loadActionId?: string;
+    /** Id do botão de confirmar. Se omitido, chame `confirm()` manualmente. */
+    confirmButtonId?: string;
+    autoSaveCheckboxId?: string;
+    notificationId?: string;
+    /** Tempo (ms) que a notificação fica visível. */
+    notificationDuration?: number;
+    saveMessage?: string;
+    chosenActionClass?: string;
+    chosenOptionClass?: string;
+}
+
+export function setupSaveLoadUI<T extends string>({
+    options,
+    defaultAction = "save",
+    defaultOption,
+    isUserLoggedIn = () => false,
+    saveActionId = "save-action",
+    loadActionId = "load-action",
+    confirmButtonId = "confirm-save-load",
+    autoSaveCheckboxId = "auto-save-checkbox",
+    notificationId = "save-notification",
+    notificationDuration = 3000,
+    saveMessage = "Dados salvos com sucesso!",
+    chosenActionClass = "acao-escolhida",
+    chosenOptionClass = "opcao-escolhida",
+}: SaveLoadUIOptions<T>) {
+    type Action = "save" | "load";
+
+    const optionNames = Object.keys(options) as T[];
+    const actionButtons: Record<Action, HTMLElement> = {
+        save: getElement(saveActionId),
+        load: getElement(loadActionId),
+    };
+    const optionButtons = optionNames.map((name) => ({ name, el: getElement(name) }));
+
+    let selectedAction: Action | undefined;
+    let selectedOption: T | undefined;
+    let notificationTimeout: number | undefined;
+
+    /** Indica se o checkbox de auto save está marcado. */
+    function isAutoSaveEnabled(): boolean {
+        return getElement<HTMLInputElement>(autoSaveCheckboxId).checked;
+    }
+
+    /** Marca visualmente a ação (salvar/carregar) selecionada. */
+    function selectAction(action: Action) {
+        selectedAction = action;
+        document.querySelector(`.${chosenActionClass}`)?.classList.remove(chosenActionClass);
+        actionButtons[action].classList.add(chosenActionClass);
+    }
+
+    /** Marca visualmente a opção (local/json/sql/online) selecionada. */
+    function selectOption(name: T) {
+        selectedOption = name;
+        document.querySelector(`.${chosenOptionClass}`)?.classList.remove(chosenOptionClass);
+        optionButtons.find((o) => o.name === name)!.el.classList.add(chosenOptionClass);
+    }
+
+    /** Mostra a notificação por alguns segundos. */
+    function showNotification(message: string) {
+        const notification = getElement<HTMLDivElement>(notificationId);
+        notification.querySelector("p")!.innerText = message;
+        notification.style.display = "block";
+        clearTimeout(notificationTimeout);
+        notificationTimeout = setTimeout(() => {
+            notification.style.display = "none";
+        }, notificationDuration);
+    }
+
+    /** Executa a ação escolhida (salvar/carregar) com a opção escolhida. */
+    async function confirm() {
+        if (!selectedAction || !selectedOption) {
+            alert("Por favor, selecione uma ação e uma opção.");
+            return;
+        }
+
+        const option = options[selectedOption];
+        if (option.requiresLogin && !isUserLoggedIn()) {
+            const verb = selectedAction === "save" ? "salvar" : "carregar";
+            alert(`Você precisa estar logado para ${verb} online.`);
+            return;
+        }
+
+        if (selectedAction === "save") {
+            await option.save();
+            showNotification(saveMessage);
+        } else {
+            await option.load();
+        }
+    }
+
+    actionButtons.save.addEventListener("click", () => selectAction("save"));
+    actionButtons.load.addEventListener("click", () => selectAction("load"));
+    for (const { name, el } of optionButtons) {
+        el.addEventListener("click", () => selectOption(name));
+    }
+    if (confirmButtonId) {
+        getElement(confirmButtonId).addEventListener("click", confirm);
+    }
+
+    if (defaultAction) selectAction(defaultAction);
+    if (defaultOption) selectOption(defaultOption);
+
+    return { isAutoSaveEnabled, selectAction, selectOption, confirm, showNotification };
 }
