@@ -27,6 +27,7 @@ body {
 
     #dashboard-esquerda {
         width: 15%;
+        
         #tree {
             flex: 1;
             overflow: auto;

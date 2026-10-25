@@ -1498,6 +1498,16 @@ async function loadFromSupabase() {
     transformFromJson(json);
 }
 
+setInterval(async () => {
+    if (isAutoSaveEnabled()) {
+        saveToLocalStorage();
+
+        if(await Auth.isUserLoggedIn()) {
+            saveToSupabase();
+        }
+    }
+}, 60000) // 1 minuto
+
 // #endregion
 
 widthInput.addEventListener("input", updateIframeSize);

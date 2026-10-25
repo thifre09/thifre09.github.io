@@ -1,3 +1,4 @@
+import dagre from "dagre";
 import * as Auth from "../supabase/auth.js";
 import { supabase } from "../supabase/client.js"
 import { setupTabNavigation, setupSaveLoadUI } from "../others/global.js";
@@ -5707,40 +5708,120 @@ const logicalConnections: {
 }[] = [];
 
 function refreshLogical() {
-    camera.innerHTML = "";
     connectionsSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     connectionsSvg.id = "logical-connections";
+    camera.innerHTML = "";
     camera.appendChild(connectionsSvg);
 
-    const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
-    const marker = document.createElementNS("http://www.w3.org/2000/svg", "marker");
+    const tabelas = Object.values(getCurrentDatabase()?.schemas ?? {})
+        .flatMap(schema => Object.values(schema.tables));
 
-    marker.setAttribute("id", "arrow");
-    marker.setAttribute("viewBox", "0 0 10 10");
-    marker.setAttribute("refX", "10");
-    marker.setAttribute("refY", "5");
-    marker.setAttribute("markerWidth", "8");
-    marker.setAttribute("markerHeight", "8");
-    marker.setAttribute("orient", "auto");
+    const camadas = organizarTabelasPorCamada(tabelas);
 
-    const arrow = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    arrow.setAttribute("d", "M 0 0 L 10 5 L 0 10 Z");
-    arrow.setAttribute("fill", "var(--blue6)");
+    logicalConnections.length = 0;
 
-    marker.appendChild(arrow);
-    defs.appendChild(marker);
-    connectionsSvg.appendChild(defs);
+    createSVGPaths();
 
-    const GAP_X = 450;
-    const GAP_Y = 400;
-    let nCol = 0;
-    let nRow = 0;
+    requestAnimationFrame(() => {
+        drawConnectionLines();
+    });
+}
+
+function organizarTabelasPorCamada(tabelas: DB.Table[]): Map<string, number> {
+    const porNome = new Map(tabelas.map(tabela => [tabela.name, tabela]));
+    const camadas = new Map();
+
+    function calcularCamada(tabela: DB.Table, visitando = new Set()) {
+        if (camadas.has(tabela.name)) {
+            return camadas.get(tabela.name);
+        }
+
+        if (visitando.has(tabela.name)) {
+            return 0;
+        }
+
+        visitando.add(tabela.name);
+
+        const referencias = Object.values(tabela.columns)
+            .map(coluna => coluna.reference?.table)
+            .filter((nome): nome is string => nome !== undefined && porNome.has(nome));
+
+        let camada = 0;
+
+        for (const nome of referencias) {
+            camada = Math.max(camada, calcularCamada(porNome.get(nome)!, new Set(visitando)) + 1);
+        }
+
+        camadas.set(tabela.name, camada);
+        return camada;
+    }
+
+    for (const tabela of tabelas) {
+        calcularCamada(tabela);
+    }
+
+    return camadas;
+}
+
+function calculateTablesPositions(): Map<string, { x: number; y: number }> {
+    const graph = new dagre.graphlib.Graph();
+
+    graph.setDefaultEdgeLabel(() => ({}));
+
+    graph.setGraph({
+        rankdir: "LR",
+        nodesep: 40,
+        ranksep: 100,
+        marginx: 40,
+        marginy: 40
+    });
+
+    // Registra cada tabela com suas dimensões reais.
+    for (const [nome, dados] of Object.entries(tablesLogical)) {
+        graph.setNode(nome, {
+            width: dados.element.offsetWidth,
+            height: dados.element.offsetHeight
+        });
+    }
+
+    // Registra as relações entre as tabelas.
+    for (const conexao of logicalConnections) {
+        if (
+            graph.hasNode(conexao.from.table) &&
+            graph.hasNode(conexao.to.table)
+        ) {
+            graph.setEdge(
+                conexao.from.table,
+                conexao.to.table
+            );
+        }
+    }
+
+    dagre.layout(graph);
+
+    const posicoes = new Map<string, { x: number; y: number }>();
+
+    for (const nome of graph.nodes()) {
+        const no = graph.node(nome);
+
+        posicoes.set(nome, {
+            x: no.x - no.width / 2,
+            y: no.y - no.height / 2
+        });
+    }
+
+    return posicoes;
+}
+
+function drawTables(posicoes: Map<string, { x: number; y: number }>) {
     for (const schema of Object.values(getCurrentDatabase()?.schemas ?? {})) {
         for (const table of Object.values(schema.tables)) {
             const divTabelaLogical = document.createElement("div");
             divTabelaLogical.classList.add("tabela-logical");
-            divTabelaLogical.dataset.x = GAP_X * nCol + "";
-            divTabelaLogical.dataset.y = GAP_Y * nRow + "";
+            const posicao = posicoes.get(table.name)!;
+
+            divTabelaLogical.dataset.x = posicao.x + "";
+            divTabelaLogical.dataset.y = posicao.y + "";
             divTabelaLogical.addEventListener("mousedown", (event) => {
                 moved = false;
                 event.stopPropagation();
@@ -5748,12 +5829,7 @@ function refreshLogical() {
                 lastMouseX = event.clientX;
                 lastMouseY = event.clientY;
             });
-            divTabelaLogical.style.transform = `translate(${GAP_X * nCol}px, ${GAP_Y * nRow}px)`;
-            nCol++;
-            if (nCol == 3) {
-                nCol = 0;
-                nRow++;
-            }
+            divTabelaLogical.style.transform = `translate(${posicao.x}px, ${posicao.y}px)`;
             camera.appendChild(divTabelaLogical);
 
             const details = document.createElement("details");
@@ -5908,19 +5984,34 @@ function refreshLogical() {
             }
         }
     }
+}
 
-    logicalConnections.length = 0;
+function createSVGPaths() {
+    const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+    const marker = document.createElementNS("http://www.w3.org/2000/svg", "marker");
+
+    marker.setAttribute("id", "arrow");
+    marker.setAttribute("viewBox", "0 0 10 10");
+    marker.setAttribute("refX", "10");
+    marker.setAttribute("refY", "5");
+    marker.setAttribute("markerWidth", "8");
+    marker.setAttribute("markerHeight", "8");
+    marker.setAttribute("orient", "auto");
+
+    const arrow = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    arrow.setAttribute("d", "M 0 0 L 10 5 L 0 10 Z");
+    arrow.setAttribute("fill", "var(--blue6)");
+
+    marker.appendChild(arrow);
+    defs.appendChild(marker);
+    connectionsSvg.appendChild(defs);
 
     for (const schema of Object.values(getCurrentDatabase()?.schemas ?? {})) {
         for (const table of Object.values(schema.tables)) {
             for (const column of Object.values(table.columns)) {
-
                 if (!column.reference) continue;
 
-                const path = document.createElementNS(
-                    "http://www.w3.org/2000/svg",
-                    "path"
-                );
+                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
 
                 path.setAttribute("fill", "none");
                 path.setAttribute("stroke", "var(--blue6)");
@@ -5946,10 +6037,6 @@ function refreshLogical() {
             }
         }
     }
-
-    requestAnimationFrame(() => {
-        drawConnectionLines();
-    });
 }
 
 function drawConnectionLines() {

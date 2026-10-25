@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "vite build && tsc --noEmit",
     "watch": "tsc --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vite"
@@ -22,6 +22,8 @@
   },
   "homepage": "https://github.com/thifre09/thifre09.github.io#readme",
   "devDependencies": {
+    "@types/dagre": "^0.7.54",
+    "esbuild": "^0.28.2",
     "prettier": "^3.8.3",
     "typescript": "^5.9.3",
     "vite": "^8.2.2"
@@ -29,6 +31,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.110.8",
     "chart.js": "^4.5.1",
-    "monaco-editor": "^0.57.0"
+    "dagre": "^0.8.5",
+    "monaco-editor": "^0.56.0"
   }
 }
