@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu site incrível</title>
-    <link rel="stylesheet" href="/assets/css/quadrado-clicker.css">
-    <link rel="icon" type="image/png" href="/assets/images/links/batatas/batata1.jpg">
+    <link rel="stylesheet" href="/src/css/quadrado-clicker.css">
+    <link rel="icon" type="image/png" href="/src/images/links/batatas/batata1.jpg">
 </head>
 
 <body data-title="Quadrado clicker">
@@ -91,18 +91,23 @@
 
             <div id="botoesOutros">
                 <button onclick="mudarMenu('triangulos-menu')">Triângulos</button>
-                <button id="botao-outros-renascer" onclick="mudarMenu('renascer')" style="display: none;">Renascer</button>
+                <button id="botao-outros-renascer" onclick="mudarMenu('renascer')"
+                    style="display: none;">Renascer</button>
                 <button onclick="mudarMenu('conquistas')">Conquistas</button>
-                <button id="maquinadasorte" onclick="mudarMenu('maquina-da-sorte')" style="display: none;">Máquina da sorte</button>
-                <button id="livromagico" onclick="mudarMenu('livro-magico')" style="display: none;">Livro mágico</button>
-                <button id="quizmatematico" onclick="mudarMenu('quiz-matematico')" style="display: none;">Quiz matemático</button>
+                <button id="maquinadasorte" onclick="mudarMenu('maquina-da-sorte')" style="display: none;">Máquina da
+                    sorte</button>
+                <button id="livromagico" onclick="mudarMenu('livro-magico')" style="display: none;">Livro
+                    mágico</button>
+                <button id="quizmatematico" onclick="mudarMenu('quiz-matematico')" style="display: none;">Quiz
+                    matemático</button>
                 <button id="botao-outros-skin-quadrado" onclick="mudarMenu('skin-quadrado')">Skin do quadrado</button>
             </div>
 
             <div id="menus" style="display: none;">
                 <section id="triangulos-menu" style="display: none;">
                     <h1>Melhorias de triângulos</h1>
-                    <div class="melhorias-div" id="melhorias-triangulos-div" style="grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));"></div>
+                    <div class="melhorias-div" id="melhorias-triangulos-div"
+                        style="grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));"></div>
                 </section>
 
                 <section id="renascer" style="display: none;">
@@ -203,7 +208,8 @@
                             <div class="feitico" role="button" tabindex="0" onclick="mostrarFeitico('Trianglúsio')">
                                 <h2>Trianglúsio</h2>
                             </div>
-                            <div class="feitico" role="button" tabindex="0" onclick="mostrarFeitico('Multiplicos quadrados')">
+                            <div class="feitico" role="button" tabindex="0"
+                                onclick="mostrarFeitico('Multiplicos quadrados')">
                                 <h2>Multiplicos quadrados</h2>
                             </div>
                         </div>
@@ -292,11 +298,15 @@
                             </div>
                             <p>Escolha o estilo que combina com sua skin.</p>
                             <div class="tipos-borda">
-                                <label><input id="solid" type="radio" name="bordatipo" value="solid" checked> Sólida</label>
-                                <label><input id="dotted" type="radio" name="bordatipo" value="dotted"> Pontilhada</label>
-                                <label><input id="dashed" type="radio" name="bordatipo" value="dashed"> Tracejada</label>
+                                <label><input id="solid" type="radio" name="bordatipo" value="solid" checked>
+                                    Sólida</label>
+                                <label><input id="dotted" type="radio" name="bordatipo" value="dotted">
+                                    Pontilhada</label>
+                                <label><input id="dashed" type="radio" name="bordatipo" value="dashed">
+                                    Tracejada</label>
                                 <label><input id="double" type="radio" name="bordatipo" value="double"> Dupla</label>
-                                <label><input id="groove" type="radio" name="bordatipo" value="groove"> Rebaixada</label>
+                                <label><input id="groove" type="radio" name="bordatipo" value="groove">
+                                    Rebaixada</label>
                             </div>
 
                             <button type="button" onclick="skinquadrado('tipoborda')">Mudar tipo da borda</button>
@@ -313,7 +323,8 @@
                             <button type="button" onclick="skinquadrado('imagem')">Mudar imagem</button>
                         </div>
 
-                        <button id="voltaroriginal" type="button" onclick="skinquadrado('original')">Voltar ao original</button>
+                        <button id="voltaroriginal" type="button" onclick="skinquadrado('original')">Voltar ao
+                            original</button>
                         <p id="skin-quadrado-status" role="status" aria-live="polite"></p>
 
                     </div>

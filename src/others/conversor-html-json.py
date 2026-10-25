@@ -1,7 +1,7 @@
 import json
 
-INPUT = "assets/jsons/htmlTags.json"
-OUTPUT = "assets/jsons/html-data.json"
+INPUT = "src/jsons/htmlTags.json"
+OUTPUT = "src/jsons/html-data.json"
 
 with open(INPUT, encoding="utf8") as f:
     tags = json.load(f)

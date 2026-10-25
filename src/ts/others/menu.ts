@@ -622,7 +622,7 @@ function compute() {
 // }
 
 // const conquistasLista = [];
-// const path = "assets/images/conquistas-geral/";
+// const path = "src/images/conquistas-geral/";
 
 // const descricoes = [
 //     "Responda o quiz de batatas",

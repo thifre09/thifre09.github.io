@@ -497,8 +497,8 @@ function currentRoot() {
 }
 // #endregion
 // #region Tudo :)
-const cssData = await fetch("/assets/jsons/css-data.json").then(r => r.json());
-const htmlData = await fetch("/assets/jsons/html-data.json").then(r => r.json());
+const cssData = await fetch("/src/jsons/css-data.json").then(r => r.json());
+const htmlData = await fetch("/src/jsons/html-data.json").then(r => r.json());
 monaco.languages.registerCompletionItemProvider("css", {
     triggerCharacters: ["-"],
     provideCompletionItems(model, position) {

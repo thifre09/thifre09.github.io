@@ -1,7 +1,7 @@
 import json
 
-INPUT_FILE = "assets/jsons/css-schema.json"
-OUTPUT_FILE = "assets/jsons/css-data.json"
+INPUT_FILE = "src/jsons/css-schema.json"
+OUTPUT_FILE = "src/jsons/css-data.json"
 
 # Prefixos que serão removidos
 PREFIXES = (

@@ -26,6 +26,6 @@ function clique() {
         estado = true;
         btn.style.backgroundColor = "red";
         btn.innerText = "Desativar CSS";
-        estilo.href = "/assets/css/poder-do-css.css";
+        estilo.href = "/src/css/poder-do-css.css";
     }
 }

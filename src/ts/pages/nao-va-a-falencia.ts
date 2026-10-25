@@ -830,7 +830,7 @@ class Jogo {
         mudarAudio();
         if (this.ano <= 1905) {
             jogo.patrimonio.investimentos.filter(investimento => investimento.nome === "Café")[0].tendencia = 2;
-        }else if (this.ano === 1905) {
+        } else if (this.ano === 1905) {
             jogo.patrimonio.investimentos.filter(investimento => investimento.nome === "Café")[0].tendencia = -1;
         }
 
@@ -1078,8 +1078,8 @@ function configurarImagem(imagem: HTMLImageElement, nome: string) {
     const arquivo = arquivos[decodeURIComponent(nomeArquivo)];
 
     imagem.src = arquivo
-        ? `/assets/images/nao-va-a-falencia/${encodeURIComponent(arquivo)}`
-        : "/assets/images/memes%20img/cavalo.jpg";
+        ? `/src/images/nao-va-a-falencia/${encodeURIComponent(arquivo)}`
+        : "/src/images/memes%20img/cavalo.jpg";
 }
 
 function atualizarInvestimentosUI(investimentoIndex?: number) {
@@ -1129,12 +1129,12 @@ function atualizarInvestimentosUI(investimentoIndex?: number) {
     const atual = investimentoSelecionado.valorAtual;
     let variacao = 0;
     if (investimentoSelecionado.historico.length > 1) {
-        variacao = ((investimentoSelecionado.historico[investimentoSelecionado.historico.length-1].valor - investimentoSelecionado.historico[investimentoSelecionado.historico.length-2].valor) / investimentoSelecionado.historico[investimentoSelecionado.historico.length-2].valor) * 100;
+        variacao = ((investimentoSelecionado.historico[investimentoSelecionado.historico.length - 1].valor - investimentoSelecionado.historico[investimentoSelecionado.historico.length - 2].valor) / investimentoSelecionado.historico[investimentoSelecionado.historico.length - 2].valor) * 100;
     }
     centro.innerHTML = `
         <div>
             <div>
-                <img src="/assets/images/memes img/cavalo.jpg" alt="Investimentos" />
+                <img src="/src/images/memes img/cavalo.jpg" alt="Investimentos" />
             </div>
 
             <div>
@@ -1246,7 +1246,7 @@ function atualizarPropriedadesUI(propriedadeIndex?: number) {
         }
         div.innerHTML = `
             <div>
-                <img src="/assets/images/memes img/cavalo.jpg" alt="${propriedade.nome}" />
+                <img src="/src/images/memes img/cavalo.jpg" alt="${propriedade.nome}" />
             </div>
             <div>
                 <h3>${propriedade.nome}</h3>
@@ -1264,7 +1264,7 @@ function atualizarPropriedadesUI(propriedadeIndex?: number) {
     centro.innerHTML = `
         <div>
             <div id="imagem-propriedade">
-                <img src="/assets/images/memes img/cavalo.jpg" alt="${propriadedeSelecionado.nome}" />
+                <img src="/src/images/memes img/cavalo.jpg" alt="${propriadedeSelecionado.nome}" />
             </div>
             <div id="informacoes-propriedade">
                 <div><span>Valor atual</span><strong>${formatarMoeda(propriadedeSelecionado.valor)}</strong></div>
@@ -1384,7 +1384,7 @@ function atualizarPropriedadesUI(propriedadeIndex?: number) {
 //         }
 //         div.innerHTML = `
 //             <div>
-//                 <img src="/assets/images/memes img/cavalo.jpg" alt="${bem.nome}" />
+//                 <img src="/src/images/memes img/cavalo.jpg" alt="${bem.nome}" />
 //             </div>
 //             <div>
 //                 <h3>${bem.nome}</h3>
@@ -1402,7 +1402,7 @@ function atualizarPropriedadesUI(propriedadeIndex?: number) {
 //     const valorBem = document.getElementById("valor-bem")!;
 //     const emanutencaoBem = document.getElementById("manutencao-bem")!;
 //     nomeBem.textContent = bemSelecionado.nome;
-//     imagemBem.src = "/assets/images/memes img/cavalo.jpg";
+//     imagemBem.src = "/src/images/memes img/cavalo.jpg";
 //     descricaoBem.textContent = bemSelecionado.descricao;
 //     valorBem.textContent = `Valor: ${formatarMoeda(bemSelecionado.valorBase)}`;
 //     emanutencaoBem.textContent = `Manutenção: ${formatarMoeda(bemSelecionado.valorManutencao)}`;
@@ -1423,7 +1423,7 @@ function atualizarEmprestimosUI(bancoIndex?: number) {
         }
         div.innerHTML = `
             <div>
-                <img src="/assets/images/memes img/cavalo.jpg" alt="${banco.nome}" />
+                <img src="/src/images/memes img/cavalo.jpg" alt="${banco.nome}" />
             </div>
             <div>
                 <h3>${banco.nome}</h3>
@@ -1581,7 +1581,7 @@ function atualizarFamiliaUI() {
         div.innerHTML = `
             <div>
                 <div class="imagem-com-filtro" style="--satisfacao: ${satisfacaoNormalizada}%; --cor-satisfacao: ${cor};">
-                    <img src="/assets/images/memes img/cavalo.jpg" alt="${pessoa.nome}" />
+                    <img src="/src/images/memes img/cavalo.jpg" alt="${pessoa.nome}" />
                     <span class="filtro-satisfacao"></span>
                 </div>
             </div>
@@ -1604,7 +1604,7 @@ function atualizarConhecidosUI() {
         div.innerHTML = `
             <div>
                 <div class="imagem-com-filtro" style="--satisfacao: ${satisfacaoNormalizada}%; --cor-satisfacao: ${cor};">
-                    <img src="/assets/images/memes img/cavalo.jpg" alt="${pessoa.nome}" />
+                    <img src="/src/images/memes img/cavalo.jpg" alt="${pessoa.nome}" />
                     <span class="filtro-satisfacao"></span>
                 </div>
             </div>
@@ -1687,7 +1687,7 @@ function mover(objeto: HTMLElement) {
 }
 
 async function buildAcontecimentos() {
-    const jsonResponse = await fetch("/assets/jsons/nao-va-a-falencia.json").then(response => response.json());
+    const jsonResponse = await fetch("/src/jsons/nao-va-a-falencia.json").then(response => response.json());
     const acontecimentosData = jsonResponse["acontecimentos"];
 
     if (!Array.isArray(acontecimentosData)) {
@@ -1766,13 +1766,13 @@ function mudarAudio(musicaFinal = false) {
     let deveRepetir = !musicaFinal;
 
     if (musicaFinal) {
-        proximaAudioSrc = "/assets/others/I'm-Still-Standing.mp3";
+        proximaAudioSrc = "/src/others/I'm-Still-Standing.mp3";
     } else if (jogo.pontos < 50_000) {
-        proximaAudioSrc = "/assets/others/nao-va-a-falencia-triste.wav";
+        proximaAudioSrc = "/src/others/nao-va-a-falencia-triste.wav";
     } else if (jogo.pontos < 1_000_000) {
-        proximaAudioSrc = "/assets/others/nao-va-a-falencia-neutro.wav";
+        proximaAudioSrc = "/src/others/nao-va-a-falencia-neutro.wav";
     } else {
-        proximaAudioSrc = "/assets/others/nao-va-a-falencia-feliz.wav";
+        proximaAudioSrc = "/src/others/nao-va-a-falencia-feliz.wav";
     }
 
     if (!musicaFinal && audioAtual && audioAtualSrc === proximaAudioSrc) {

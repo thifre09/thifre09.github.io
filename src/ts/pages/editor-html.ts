@@ -619,8 +619,8 @@ function currentRoot() {
 
 // #region Tudo :)
 
-const cssData: CSSDatabase = await fetch("/assets/jsons/css-data.json").then(r => r.json());
-const htmlData: HTMLDatabase = await fetch("/assets/jsons/html-data.json").then(r => r.json());
+const cssData: CSSDatabase = await fetch("/src/jsons/css-data.json").then(r => r.json());
+const htmlData: HTMLDatabase = await fetch("/src/jsons/html-data.json").then(r => r.json());
 
 monaco.languages.registerCompletionItemProvider("css", {
     triggerCharacters: ["-"],
@@ -1502,7 +1502,7 @@ setInterval(async () => {
     if (isAutoSaveEnabled()) {
         saveToLocalStorage();
 
-        if(await Auth.isUserLoggedIn()) {
+        if (await Auth.isUserLoggedIn()) {
             saveToSupabase();
         }
     }

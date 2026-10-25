@@ -67,7 +67,7 @@ function abrirFechar(estado, id) {
  * Cria ou seleciona a database de exemplo com tabelas e registros pré-carregados.
  */
 async function createExempleDatabase() {
-    const response = await fetch("/assets/jsons/exemple_database.json");
+    const response = await fetch("/src/jsons/exemple_database.json");
     const json = await response.text();
     console.log(json);
     transformFromJson(json);

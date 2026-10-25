@@ -32,7 +32,7 @@ svg {
         content: "";
         position: absolute;
         inset: 0;
-        background-image: url("/assets/images/nao-va-a-falencia/rio\ antigo.jpg");
+        background-image: url("/src/images/nao-va-a-falencia/rio\ antigo.jpg");
         background-size: cover;
         background-position: center;
         opacity: 0.5;
@@ -96,7 +96,7 @@ svg {
         content: "";
         position: absolute;
         inset: 0;
-        background-image: url("/assets/images/nao-va-a-falencia/rio\ antigo.jpg");
+        background-image: url("/src/images/nao-va-a-falencia/rio\ antigo.jpg");
         background-size: cover;
         background-position: center;
         opacity: 0.5;
@@ -122,7 +122,7 @@ svg {
         >* {
             background-color: #c0bfb6;
             border-radius: 10px;
-            background-image: url("/assets/images/nao-va-a-falencia/Blank-Patina-Paper-3-GraphicsFairy.jpg");
+            background-image: url("/src/images/nao-va-a-falencia/Blank-Patina-Paper-3-GraphicsFairy.jpg");
             background-size: cover;
             background-position: center;
         }
@@ -732,7 +732,7 @@ svg {
             min-height: 0;
             width: 70%;
             height: 80vh;
-            background-image: url("/assets/images/nao-va-a-falencia/Blank-Patina-Paper-3-GraphicsFairy.jpg");
+            background-image: url("/src/images/nao-va-a-falencia/Blank-Patina-Paper-3-GraphicsFairy.jpg");
             background-size: cover;
             background-position: right;
             top: 50%;
@@ -1797,27 +1797,27 @@ svg {
 }
 
 @media (min-width: 1200px) {
-    #jogo #grid #div-patrimonio #patrimonio > div:nth-child(1) > div h3 {
+    #jogo #grid #div-patrimonio #patrimonio>div:nth-child(1)>div h3 {
         font-size: var(--fs5);
     }
 
-    #jogo #grid #div-patrimonio #patrimonio > div:nth-child(1) > div p {
+    #jogo #grid #div-patrimonio #patrimonio>div:nth-child(1)>div p {
         font-size: var(--fs5);
     }
 }
 
 @media (max-width: 900px) {
-    #jogo #grid #div-patrimonio #patrimonio > div:nth-child(1) > div h3 {
+    #jogo #grid #div-patrimonio #patrimonio>div:nth-child(1)>div h3 {
         font-size: var(--fs8);
         font-weight: 100;
     }
 
-    #jogo #grid #div-patrimonio #patrimonio > div:nth-child(1) {
+    #jogo #grid #div-patrimonio #patrimonio>div:nth-child(1) {
         grid-template-columns: repeat(1, minmax(0, 1fr));
     }
 
 
-    #jogo #top-bar .top-bar-info >div  h2 {
+    #jogo #top-bar .top-bar-info>div h2 {
         font-size: var(--fs6);
         font-weight: 100;
     }
