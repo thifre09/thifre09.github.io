@@ -1,12 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu site incrível</title>
-    <link rel="stylesheet" href="/assets/css/editor-html.css">
-    <link rel="icon" type="image/png" href="/assets/images/links/batatas/batata1.jpg">
+    <link rel="stylesheet" href="/src/css/editor-html.css">
+    <link rel="icon" type="image/png" href="/src/images/links/batatas/batata1.jpg">
+    <script type="importmap">
+        {
+            "imports": {
+                "monaco-editor": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/+esm"
+            }
+        }
+    </script>
 </head>
 
 <body data-title="Editor HTML">
@@ -55,7 +62,7 @@
 
             </aside>
 
-            <div class="separador-vertical" style="cursor: col-resize;"></div>
+            <div id="resizer1" class="separador-vertical" style="cursor: col-resize;"></div>
 
             <section id="dashboard-centro">
 
@@ -85,7 +92,7 @@
 
             </section>
 
-            <div id="resizer2" class="separador-vertical"></div>
+            <div id="resizer2" class="separador-vertical" style="cursor: col-resize;"></div>
             <aside id="dashboard-direita">
 
                 <div class="css-header">
@@ -97,49 +104,6 @@
                 </div>
 
                 <div class="css-rules">
-
-                    <div class="css-rule">
-
-                        <div class="css-rule-header">
-                            <span class="css-rule-selector">
-                                .container
-                            </span>
-                        </div>
-
-                        <div class="css-properties">
-
-                            <div class="css-property">
-                                <span class="css-property-name">
-                                    display
-                                </span>
-
-                                <input class="css-property-value" value="flex">
-                            </div>
-
-                            <div class="css-property">
-                                <span class="css-property-name">
-                                    width
-                                </span>
-
-                                <input class="css-property-value" value="100%">
-                            </div>
-
-                            <div class="css-property">
-                                <span class="css-property-name">
-                                    padding
-                                </span>
-
-                                <input class="css-property-value" value="20px">
-                            </div>
-
-                            <button class="css-add-property">
-                                + adicionar propriedade
-                            </button>
-
-                        </div>
-
-                    </div>
-
                 </div>
 
             </aside>
@@ -169,14 +133,128 @@
                 </div>
             </div>
         </div>
-        <div id="codigo">
-
+        <div id="codigo" style="display: none;">
+            <div class="codigo-header">
+                <div class="codigo-abas">
+                    <button id="codigo-tab-html" type="button">HTML</button>
+                    <button id="codigo-tab-css" type="button">CSS</button>
+                </div>
+                <div class="codigo-acoes">
+                    <button id="codigo-formatar" type="button">Formatar</button>
+                    <button id="codigo-aplicar" type="button">Aplicar</button>
+                    <button id="codigo-copy" type="button">Copiar</button>
+                </div>
+            </div>
+            <div id="codigo-conteudo"></div>
         </div>
-        <div id="save">
+        <div id="save" style="display: none;">
+            <div id="acoes-salvar">
+                <div id="save-action" class="acao-escolhida">
+                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                        <path
+                            d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                    </svg>
+                    <div>
+                        <h2>Salvar</h2>
+                        <p>Salve seu progresso para continuar depois</p>
+                    </div>
+                </div>
+                <div id="load-action">
+                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                        <path
+                            d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                    </svg>
+                    <div>
+                        <h2>Carregar</h2>
+                        <p>Carregue um arquivo existente</p>
+                    </div>
+                </div>
+            </div>
+            <div id="opcoes-salvar">
+                <div id="salvar-local" class="opcao-escolhida">
+                    <div>
+                        <svg viewBox="0 -960 960 960" fill="currentColor">
+                            <path
+                                d="M160-280h640v-240H160v240Zm562.5-77.5Q740-375 740-400t-17.5-42.5Q705-460 680-460t-42.5 17.5Q620-425 620-400t17.5 42.5Q655-340 680-340t42.5-17.5ZM880-600H767l-80-80H273l-80 80H80l137-137q11-11 25.5-17t30.5-6h414q16 0 30.5 6t25.5 17l137 137ZM160-200q-33 0-56.5-23.5T80-280v-320h800v320q0 33-23.5 56.5T800-200H160Z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2>Local</h2>
+                        <p>Salve seu progresso no dispositivo</p>
+                    </div>
+                </div>
+                <div id="salvar-json">
+                    <div>
+                        <svg viewBox="0 -960 960 960" fill="currentColor">
+                            <path
+                                d="M560-160v-80h120q17 0 28.5-11.5T720-280v-80q0-38 22-69t58-44v-14q-36-13-58-44t-22-69v-80q0-17-11.5-28.5T680-720H560v-80h120q50 0 85 35t35 85v80q0 17 11.5 28.5T840-560h40v160h-40q-17 0-28.5 11.5T800-360v80q0 50-35 85t-85 35H560Zm-280 0q-50 0-85-35t-35-85v-80q0-17-11.5-28.5T120-400H80v-160h40q17 0 28.5-11.5T160-600v-80q0-50 35-85t85-35h120v80H280q-17 0-28.5 11.5T240-680v80q0 38-22 69t-58 44v14q36 13 58 44t22 69v80q0 17 11.5 28.5T280-240h120v80H280Z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2>Json</h2>
+                        <p>Salve seu progresso em formato Json</p>
+                    </div>
+                </div>
+                <!-- <div onclick="thifrebd.selectOption(this)" id="salvar-sql">
+                    <div>
+                        <svg viewBox="0 -960 960 960" fill="currentColor">
+                            <path
+                                d="M480-120q-151 0-255.5-46.5T120-280v-400q0-66 105.5-113T480-840q149 0 254.5 47T840-680v400q0 67-104.5 113.5T480-120Zm0-479q89 0 179-25.5T760-679q-11-29-100.5-55T480-760q-91 0-178.5 25.5T200-679q14 30 101.5 55T480-599Zm0 199q42 0 81-4t74.5-11.5q35.5-7.5 67-18.5t57.5-25v-120q-26 14-57.5 25t-67 18.5Q600-528 561-524t-81 4q-42 0-82-4t-75.5-11.5Q287-543 256-554t-56-25v120q25 14 56 25t66.5 18.5Q358-408 398-404t82 4Zm0 200q46 0 93.5-7t87.5-18.5q40-11.5 67-26t32-29.5v-98q-26 14-57.5 25t-67 18.5Q600-328 561-324t-81 4q-42 0-82-4t-75.5-11.5Q287-343 256-354t-56-25v99q5 15 31.5 29t66.5 25.5q40 11.5 88 18.5t94 7Z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2>SQL</h2>
+                        <p>Salve seu progresso em formato SQL</p>
+                    </div>
+                </div> -->
+                <div id="salvar-online">
+                    <div>
+                        <svg viewBox="0 -960 960 960" fill="currentcolor">
+                            <path
+                                d="M325-111.5q-73-31.5-127.5-86t-86-127.5Q80-398 80-480.5t31.5-155q31.5-72.5 86-127t127.5-86Q398-880 480.5-880t155 31.5q72.5 31.5 127 86t86 127Q880-563 880-480.5T848.5-325q-31.5 73-86 127.5t-127 86Q563-80 480.5-80T325-111.5ZM480-162q26-36 45-75t31-83H404q12 44 31 83t45 75Zm-104-16q-18-33-31.5-68.5T322-320H204q29 50 72.5 87t99.5 55Zm208 0q56-18 99.5-55t72.5-87H638q-9 38-22.5 73.5T584-178ZM170-400h136q-3-20-4.5-39.5T300-480q0-21 1.5-40.5T306-560H170q-5 20-7.5 39.5T160-480q0 21 2.5 40.5T170-400Zm216 0h188q3-20 4.5-39.5T580-480q0-21-1.5-40.5T574-560H386q-3 20-4.5 39.5T380-480q0 21 1.5 40.5T386-400Zm268 0h136q5-20 7.5-39.5T800-480q0-21-2.5-40.5T790-560H654q3 20 4.5 39.5T660-480q0 21-1.5 40.5T654-400Zm-16-240h118q-29-50-72.5-87T584-782q18 33 31.5 68.5T638-640Zm-234 0h152q-12-44-31-83t-45-75q-26 36-45 75t-31 83Zm-200 0h118q9-38 22.5-73.5T376-782q-56 18-99.5 55T204-640Z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2>Online</h2>
+                        <p>Salve seu progresso de forma online. OBS: é necessário ter uma conta cadastrada</p>
+                    </div>
+                </div>
+            </div>
 
+            <div id="save-button-div">
+                <button id="confirm-save-load">
+                    <svg viewBox="0 -960 960 960" fill="currentColor">
+                        <path
+                            d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                    </svg>
+                    Confirmar
+                </button>
+            </div>
+
+            <div id="auto-save-checkbox">
+                <label for="auto-save">Salvar automaticamente</label>
+                <input type="checkbox" id="auto-save" name="auto-save" checked>
+            </div>
+
+            <div id="save-notification" style="display: none;">
+                <p>Progresso salvo com sucesso!</p>
+            </div>
         </div>
-        <div id="help">
-
+        <div id="help" style="display: none;">
+            <div id="help-content">
+                <h2>Ajuda</h2>
+                <p>Bem-vindo à seção de ajuda do editor HTML! Aqui você encontrará informações úteis para aproveitar ao
+                    máximo a ferramenta.</p>
+                <ul>
+                    <li><strong>Dashboard:</strong> Acesse a visualização do seu projeto, ajuste o tamanho da tela e o
+                        zoom.</li>
+                    <li><strong>Código:</strong> Edite o código HTML e CSS diretamente, com opções de formatação e
+                        cópia.</li>
+                    <li><strong>Salvar:</strong> Salve seu progresso localmente, em formato JSON ou online.</li>
+                    <li><strong>Ajuda:</strong> Consulte esta seção sempre que precisar de orientação.</li>
+                </ul>
+                <p>Se tiver dúvidas adicionais, entre em contato com o suporte técnico.</p>
+            </div>
         </div>
     </div>
 

@@ -17,7 +17,7 @@
     height: 2px;
     min-height: 2px;
     background-color: var(--gray3);
-    z-index: 10;
+    z-index: 10 !important;
 }
 
 .separador-vertical {
@@ -27,7 +27,7 @@
     align-self: stretch;
     background-color: var(--gray3);
     cursor: var(--cursor, default);
-    z-index: 10;
+    z-index: 10 !important;
 }
 
 nav#troca-de-tela {
@@ -36,7 +36,7 @@ nav#troca-de-tela {
     justify-content: center;
     background-color: var(--gray13);
     z-index: 10;
-    
+
 
     #nav-bar {
         --indicator-left: 0px;
@@ -92,6 +92,7 @@ nav#troca-de-tela {
 #save {
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
 
     div#acoes-salvar {
         display: flex;
@@ -116,13 +117,20 @@ nav#troca-de-tela {
 
             svg {
                 width: 40px;
-                aspect-ratio: calc();
                 transition: var(--transition-time1);
                 cursor: pointer;
             }
 
             &:hover {
                 transform: scale(1.02);
+            }
+
+            &:first-child {
+                margin-right: var(--p1);
+            }
+
+            &:last-child {
+                margin-left: var(--p1);
             }
         }
 
@@ -140,18 +148,17 @@ nav#troca-de-tela {
         gap: var(--p2);
         row-gap: calc(2*var(--p5));
 
-
         >div {
             display: flex;
             align-items: center;
             border: solid 2px var(--gray10);
             border-radius: 10px;
-            padding: var(--p5);
+            padding: var(--p4);
             transition: var(--transition-time1);
             cursor: pointer;
 
             >div:nth-child(1) {
-                padding: var(--p5);
+                padding: var(--p4);
                 border-radius: 10px;
                 margin-right: var(--p3);
 
@@ -194,6 +201,14 @@ nav#troca-de-tela {
                 }
             }
 
+            &#salvar-html>div:nth-child(1) {
+                background-color: var(--orange9);
+
+                svg {
+                    color: var(--orange3);
+                }
+            }
+
             &:hover {
                 transform: scale(1.02);
             }
@@ -206,7 +221,7 @@ nav#troca-de-tela {
     }
 
     #save-button-div {
-        margin-top: var(--p2);
+        margin-top: var(--p1);
         display: flex;
         justify-content: center;
 

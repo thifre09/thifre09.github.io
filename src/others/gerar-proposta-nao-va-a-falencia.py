@@ -6,8 +6,8 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 
 MODELO = "Qwen/Qwen2.5-3B-Instruct"
 
-PROMPT_ARQUIVO = "assets/others/prompt.md"
-NOME_ARQUIVO = "assets/jsons/nao-va-a-falencia.json"
+PROMPT_ARQUIVO = "src/others/prompt.md"
+NOME_ARQUIVO = "src/jsons/nao-va-a-falencia.json"
 
 QUANTIDADE = 1
 PAUSA_ENTRE_GERACOES = 1

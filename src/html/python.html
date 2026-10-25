@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu site incrível</title>
-    <link rel="stylesheet" href="/assets/css/python.css">
-    <link rel="icon" type="image/png" href="/assets/images/links/batatas/batata1.jpg">
+    <link rel="stylesheet" href="/src/css/python.css">
+    <link rel="icon" type="image/png" href="/src/images/links/batatas/batata1.jpg">
 </head>
 
 <body data-title="Python">
@@ -80,7 +80,7 @@
 
 
     <h2 id="conceitos-basicos">Conceitos básicos</h2>
-    
+
     <div class="topico">
         <div class="codigo">
 
@@ -108,7 +108,7 @@
 
             <p>Não é necessário ter outro "#" no final da linha.</p>
 
-            <p>Comentários só tem uma linha, caso você queira um comentário maior, use dois "#", um para 
+            <p>Comentários só tem uma linha, caso você queira um comentário maior, use dois "#", um para
                 cada linha.
             </p>
 
@@ -131,7 +131,7 @@ print("eu tenho",15,"anos.")
         </div>
 
         <div class="explicação">
-            <p>print é uma função(será explicado mais adiante), para usa-la, basta digitar "print" seguido 
+            <p>print é uma função(será explicado mais adiante), para usa-la, basta digitar "print" seguido
                 de parenteses, dentro do parenteses coloque o que você quer que seja imprimido.
             </p>
 
@@ -141,7 +141,7 @@ print("eu tenho",15,"anos.")
 
             <p>Se você quiser misturar os dois casos, separe os diferente tipos de valores com virgulas.</p>
 
-            <p>No console, os exemplos aparecerão da seguinte forma respectivamente: ola, 1, eu tenho 15 
+            <p>No console, os exemplos aparecerão da seguinte forma respectivamente: ola, 1, eu tenho 15
                 anos.
             </p>
         </div>
@@ -214,19 +214,19 @@ b1,b2,b3 = 10
 
         <div class="explicação">
             <p>Para criar uma variável e atribuir um valor a ela, digite o nome que você quer(não pode começar
-                com números ou caracteres especiais com exceção do _ ), digite =, e o valor que você quer 
+                com números ou caracteres especiais com exceção do _ ), digite =, e o valor que você quer
                 dar para essa variável.
             </p>
 
-            <p>Você pode reatribuir um valor a uma variável, como mostra o exemplo do "num", originalmente 
+            <p>Você pode reatribuir um valor a uma variável, como mostra o exemplo do "num", originalmente
                 seu valor era 1, esse valor foi reatribuído e passou a ser 6.
             </p>
 
-            <p>Você também pode atribuir o valor de uma variável a outra variável, no exemplo, x=3 e y=4, 
+            <p>Você também pode atribuir o valor de uma variável a outra variável, no exemplo, x=3 e y=4,
                 e depois o valor de y foi atribuído a x, resultado em x=4.
             </p>
 
-            <p>Você também pode atribuir o valor a mais de uma variável por vez, basta colocar uma virgula 
+            <p>Você também pode atribuir o valor a mais de uma variável por vez, basta colocar uma virgula
                 para cada elemento, então no exemplo, p1=1,p2=2,p3=3 e b1, b2 e b3 valem 10.
             </p>
         </div>
@@ -299,26 +299,26 @@ z = 5
 ex1 = 1 == 1 #True
 ex2 = x == 1 #True
 ex3 = y != 5 #True
-ex4 = 4 < z #True
+ex4 = 4 &lt; z #True
 ex5 = x > z #False
-ex6 = x <= 0 #False
+ex6 = x &lt;= 0 #False
 ex7 = y >= 2 #True
             </pre>
         </div>
 
         <div class="explicação">
             <p>Para comparar dois valores, usa-se o operadores relacionais, eles vão retornar
-                um bool True ou false dependendo do resultado, se a condição for verdadeira como no ex2, 
+                um bool True ou false dependendo do resultado, se a condição for verdadeira como no ex2,
                 retorna True, e ser for falso, como no ex5, retorna False.
             </p>
 
-            <p>O primeiro e segundo exemplos mostra o comparador igual(==), que diz se dois valores são 
+            <p>O primeiro e segundo exemplos mostra o comparador igual(==), que diz se dois valores são
                 iguais, o terceiro exemplo mostra o diferente de(!=), que é o oposto do igual.
             </p>
 
-            <p>O quarto e quinto exemplos mostram o menor que(<) e maior que(>), que indica se o valor é 
-                menor ou maior que o outro, e o sexto e sétimo exemplos mostram o menor ou igual que(<=) 
-                e maior ou igual que(>=), que indica se um valor é maior, menor ou igual a outro.
+            <p>O quarto e quinto exemplos mostram o menor que(&lt;) e maior que(>), que indica se o valor é
+                    menor ou maior que o outro, e o sexto e sétimo exemplos mostram o menor ou igual que(&lt;=) e maior ou
+                        igual que(>=), que indica se um valor é maior, menor ou igual a outro.
             </p>
         </div>
     </div>
@@ -345,11 +345,11 @@ print(lista[2:4]) #aparecerá 3,4
         </div>
 
         <div class="explicação">
-            <p>Para acessar uma lista, basta digitar seu nome, para acessar um item especifico da lista, 
+            <p>Para acessar uma lista, basta digitar seu nome, para acessar um item especifico da lista,
                 você digita o nome da lista, um [], e o número do item da lista(os itens começam no 0).
             </p>
 
-            <p>Então se você quiser acessar o primeiro item de uma lista, coloque 0 nos [], o segundo item 
+            <p>Então se você quiser acessar o primeiro item de uma lista, coloque 0 nos [], o segundo item
                 de lista, coloque 1, e assim sucessivamente.
             </p>
 
@@ -359,9 +359,9 @@ print(lista[2:4]) #aparecerá 3,4
 
             <p>Se você tentar acessar um item que não existe, ocorrerá um erro.</p>
 
-            <p>Outra forma de chamar um item, é usando ":",da seguinte forma: lista[começo:fim], no local 
-                indicado como "começo", coloque o índice do primeiro elemento que você quer chamar, e no 
-                local indicado "fim", coloque o elemento que você quer que pare de chamar, então se você 
+            <p>Outra forma de chamar um item, é usando ":",da seguinte forma: lista[começo:fim], no local
+                indicado como "começo", coloque o índice do primeiro elemento que você quer chamar, e no
+                local indicado "fim", coloque o elemento que você quer que pare de chamar, então se você
                 colocar [0:3], os itens, 0,1 e 2 serão chamados.
             </p>
         </div>
@@ -388,7 +388,7 @@ del numeros
                 para usar um método, coloque um ".", o nome do método, e um ().
             </p>
 
-            <p>O método append simplesmente coloca o que estiver dentro do () no final da lista, então no 
+            <p>O método append simplesmente coloca o que estiver dentro do () no final da lista, então no
                 código exemplo, o "5" será colocado no final da lista.
             </p>
 
@@ -397,8 +397,8 @@ del numeros
                 item da lista).
             </p>
 
-            <p>Para deletar um item de uma lista, ou uma lista toda, você usa a instrução del, como mostra 
-                o exemplo, para deletar um item especifico, basta dizer qual item você quer deletar, e 
+            <p>Para deletar um item de uma lista, ou uma lista toda, você usa a instrução del, como mostra
+                o exemplo, para deletar um item especifico, basta dizer qual item você quer deletar, e
                 para deletar a lista toda, basta colocar o nome da lista.
             </p>
         </div>
@@ -444,18 +444,18 @@ print(dic2) #saída:{"a": 1, "b": 2, "c": 3}
         </div>
 
         <div class="explicação">
-            <p>Um dicionário é uma estrutura de dados que armazena pares de chave-valor, ou seja, tem um 
-                valor associado a uma chave. Ao chamar um item de um dicionário, use a chave, e a saída 
+            <p>Um dicionário é uma estrutura de dados que armazena pares de chave-valor, ou seja, tem um
+                valor associado a uma chave. Ao chamar um item de um dicionário, use a chave, e a saída
                 será o valor associado.
             </p>
 
             <p>Para adicionar um valor e uma chave a um dicionário, digite o nome do dicionário, depois digite
                 [], e dentro deles digite o nome da chave, e depois, digite igual ao valor da chave. Outra forma
-                de adicionar itens em um dicionário é usando o método update, dentro do [], coloque o nome 
+                de adicionar itens em um dicionário é usando o método update, dentro do [], coloque o nome
                 da chave, e seu valor.
             </p>
 
-            <p>Para deletar um item, você pode usar o del, e o a chave associada a um valor, isso deletará, 
+            <p>Para deletar um item, você pode usar o del, e o a chave associada a um valor, isso deletará,
                 a chave e o valor associado.
             </p>
         </div>
@@ -483,13 +483,13 @@ if y > 10:
                 cada um separadamente, então vamos começar com if.
             </p>
 
-            <p>O comando "if" verifica se uma condição é verdadeira, se ela for, o código dentro do "if" 
-                é executado. No código ao lado, temos 2 exemplos, no primeiro, se "x" for igual a 1, a 
-                frase "x vale 1" será impressa, como a variável x foi declarada com o valor 1, então a 
+            <p>O comando "if" verifica se uma condição é verdadeira, se ela for, o código dentro do "if"
+                é executado. No código ao lado, temos 2 exemplos, no primeiro, se "x" for igual a 1, a
+                frase "x vale 1" será impressa, como a variável x foi declarada com o valor 1, então a
                 condição é verdadeira, e o código dentro do "if" será executado.
             </p>
 
-            <p>No segundo exemplo, o código está verificando se "y" é maior que 10, se sim, a frase "y é 
+            <p>No segundo exemplo, o código está verificando se "y" é maior que 10, se sim, a frase "y é
                 maior que 10" será impressa, como "y" vale 2, a condição é falsa, logo, nada acontecerá.
             </p>
         </div>
@@ -502,7 +502,7 @@ x = 2
 y = 3
 if x == y:
     print("ola")
-elif x < y:
+elif x &lt; y:
     print("Jurandy False")
 elif x != y:
     print("batatas são incríveis")
@@ -517,9 +517,8 @@ elif x != y:
             </p>
 
             <p>Como "x" vale 2 e "y" vale 3, a primeira condição é falsa, então o código irá testar a segunda
-                condição(x < y), como 2 é menor que 3, a condição é verdadeira, e o código será executado, 
-                como uma das condições já se mostrou verdadeira, a terceira condição(x !=y) não será testada.     
-            </p>
+                condição(x &lt; y), como 2 é menor que 3, a condição é verdadeira, e o código será executado, como uma das
+                    condições já se mostrou verdadeira, a terceira condição(x !=y) não será testada. </p>
         </div>
 
         <div class="codigo">
@@ -531,7 +530,7 @@ y = 3
 z = 9
 if y > z:
     print("aaaaaa")
-elif x < 0:
+elif x &lt; 0:
     print("bbbbbb")
 else:
     print("cccccc")
@@ -636,7 +635,7 @@ if 1 == 1 and 2 > 0:
     print("Verdade1")
 if not 1 > 4:
     print("Verdade2")
-if 5 > 10 or 1 < 10:
+if 5 > 10 or 1 &lt; 10:
     print("Verdade3")
             </pre>
 
@@ -797,8 +796,8 @@ print("Você se chama ", nome, ",tem", idade, "anos de idade")
             <p>input é uma função muito importante, é por meio dela que o usuário consegue se comunicar
                 com o código, o input serve para que o usuário insira uma informação, e a função retorna
                 ela, então se você digitar: olaaaa, o retorno será a string "olaaaa". Nós podemos atribuir
-                esses valores a uma variável, colocando o valor da variável como input(). Se você quiser 
-                colocar um texto antes do usuário inserir a informação, para esclarecer por exemplo, basta 
+                esses valores a uma variável, colocando o valor da variável como input(). Se você quiser
+                colocar um texto antes do usuário inserir a informação, para esclarecer por exemplo, basta
                 colocar o texto dentro dos parênteses como uma str.
             </p>
 
@@ -808,7 +807,7 @@ print("Você se chama ", nome, ",tem", idade, "anos de idade")
             </p>
 
             <p>No código, a variável idade receberá um int, caso o usuário tente colocar outra coisa, ocorrerá
-                um erro. Já a variável texto recebe um str, qualquer coisa inserida será transformada em um 
+                um erro. Já a variável texto recebe um str, qualquer coisa inserida será transformada em um
                 str.
             </p>
         </div>
@@ -869,7 +868,7 @@ while True:
     print("Olá, mundo!")
 
 i = 0
-while i < 5:
+while i &lt; 5:
     print(i)
     i += 1
             </pre>
@@ -915,7 +914,7 @@ while True:
             <p>Break, continue e pass são instruções que controlam o fluxo de laços (loops) e blocos de
                 código. Break serve para interromper um loop. Continue serve para pular o loop atual e
                 ir para o proximo, ou seja, tudo depois do continue ser usado será pulado, e o loop voltará
-                para a primeira linha. E pass não faz nada, é uma instrução "vazia", usada como um espaço 
+                para a primeira linha. E pass não faz nada, é uma instrução "vazia", usada como um espaço
                 reservado.
             </p>
 
@@ -955,24 +954,24 @@ while True:
         </div>
 
         <div class="explicação">
-            <p>Nesse exemplo, temos um loop que conta até o número 50, como diz o comentário, e a declaração 
-                de uma variável chamada num com o valor 0. Depois é iniciado um loop que se repetira até 
-                houver um break, pois como condição, é dado True. Na primeira linha do loop, o valor de 
+            <p>Nesse exemplo, temos um loop que conta até o número 50, como diz o comentário, e a declaração
+                de uma variável chamada num com o valor 0. Depois é iniciado um loop que se repetira até
+                houver um break, pois como condição, é dado True. Na primeira linha do loop, o valor de
                 num é aumentado em 1.
             </p>
 
-            <p>Depois há um if, ele verifica se num dividido por 10 tem resto 0(divisível por 10) e se num 
-                é diferente de 50. Caso a condição seja verdadeira, será impresso o que está dentro da 
-                função print, e depois o loop reiniciará devido ao continue. No segundo if, o código verifica 
-                se num é igual a 25, se for, será executado o print, e depois um continue. No terceiro if, 
-                é verificado se num é igual a 32, se sim, nada acontece, pois dentro do bloco há um pass. 
-                E no ultimo if, se num for igual a 50, será executado o print dentro do bloco, e depois o 
-                loop será encerrado pelo break. Se nenhuma condição for verdadeira, num será impresso pelo 
+            <p>Depois há um if, ele verifica se num dividido por 10 tem resto 0(divisível por 10) e se num
+                é diferente de 50. Caso a condição seja verdadeira, será impresso o que está dentro da
+                função print, e depois o loop reiniciará devido ao continue. No segundo if, o código verifica
+                se num é igual a 25, se for, será executado o print, e depois um continue. No terceiro if,
+                é verificado se num é igual a 32, se sim, nada acontece, pois dentro do bloco há um pass.
+                E no ultimo if, se num for igual a 50, será executado o print dentro do bloco, e depois o
+                loop será encerrado pelo break. Se nenhuma condição for verdadeira, num será impresso pelo
                 print.
             </p>
 
-            <p>Como resultado do código, teremos todos os números de 1 a 50 impressos em linhas separadas, 
-                com exceção de 10, 20, 25, 30, 40 e 50. Esses números serão impressos de uma forma diferente 
+            <p>Como resultado do código, teremos todos os números de 1 a 50 impressos em linhas separadas,
+                com exceção de 10, 20, 25, 30, 40 e 50. Esses números serão impressos de uma forma diferente
                 de acordo com o print dentro do if.
             </p>
         </div>
@@ -1001,21 +1000,21 @@ def pessoa(idade=15,nome="Batata")
         </div>
 
         <div class="explicação">
-            <p>Funções são blocos de código reutilizáveis que realizam uma tarefa específica. Elas permitem 
-                que você organize seu código de forma modular e reutilize partes dele sem precisar duplicar 
-                o código.Para chamar uma função, basta digitar o nome da função, parênteses, e se houver 
+            <p>Funções são blocos de código reutilizáveis que realizam uma tarefa específica. Elas permitem
+                que você organize seu código de forma modular e reutilize partes dele sem precisar duplicar
+                o código.Para chamar uma função, basta digitar o nome da função, parênteses, e se houver
                 algum parâmetro na função, digite ele dentro do parênteses.
             </p>
 
-            <p>Para criar uma função usa a palavra "def", seguido do nome da função, parênteses e dois 
-                pontos. Depois, dentro da função, escreva o que você quer que ela faça. No primeiro exemplo, 
+            <p>Para criar uma função usa a palavra "def", seguido do nome da função, parênteses e dois
+                pontos. Depois, dentro da função, escreva o que você quer que ela faça. No primeiro exemplo,
                 criamos uma função chamada ola, que quando é chamada, imprime "ola".
             </p>
 
-            <p>Na segunda função, temos algo dentro do parênteses, é um parâmetro(Valores de entrada que 
-                a função pode usar), e no corpo da função esse parâmetro é somado a 1 e depois é usado o 
-                "return"(será visto em breve). Uma função pode ter quantos parâmetros for necessário, e 
-                para cada um, basta separa-los com virgula. Eles também podem ser predefinidos caso o usuário 
+            <p>Na segunda função, temos algo dentro do parênteses, é um parâmetro(Valores de entrada que
+                a função pode usar), e no corpo da função esse parâmetro é somado a 1 e depois é usado o
+                "return"(será visto em breve). Uma função pode ter quantos parâmetros for necessário, e
+                para cada um, basta separa-los com virgula. Eles também podem ser predefinidos caso o usuário
                 não insira eles, como no terceiro exemplo
             </p>
         </div>
@@ -1035,16 +1034,16 @@ func(antecessor(4),var1)
         </div>
 
         <div class="explicação">
-            <p>None é um valor especial que representa a "ausência de valor" ou "nada". Ao tentar usar 
-                esse valor, na maior parte das vezes, ocorrerá um erro. Quando não há um return em uma função 
+            <p>None é um valor especial que representa a "ausência de valor" ou "nada". Ao tentar usar
+                esse valor, na maior parte das vezes, ocorrerá um erro. Quando não há um return em uma função
                 a função retornará um valor None.
             </p>
 
-            <p>return serve para especificar o valor que uma função deve retornar(devolver), como se fosse 
-                o resultado dessa função. Na primeira função, ela retorna o parâmetro "numero" menos 1. 
-                Na segunda função, o valor do primeiro parâmetro é impresso, e o segundo é retornado, e 
-                quando a função é chamada, ela dá o "resultado" da função antecessor com o parâmetro 4 como 
-                parâmetro 1 da função "func" e var1 como segundo parâmetro. Como resultado disso, seria 
+            <p>return serve para especificar o valor que uma função deve retornar(devolver), como se fosse
+                o resultado dessa função. Na primeira função, ela retorna o parâmetro "numero" menos 1.
+                Na segunda função, o valor do primeiro parâmetro é impresso, e o segundo é retornado, e
+                quando a função é chamada, ela dá o "resultado" da função antecessor com o parâmetro 4 como
+                parâmetro 1 da função "func" e var1 como segundo parâmetro. Como resultado disso, seria
                 impresso 3, e retornado None.
             </p>
         </div>
@@ -1066,21 +1065,21 @@ print(var1, ola)
         </div>
 
         <div class="explicação">
-            <p>global é uma palavra-chave em python que serve para declarar dentro de um função se uma 
-                variável existe fora dela, já que por padrão uma variável declarada dentro da função, só 
-                existe dentro da função, então isso quer dizer que é possível ter 2 variáveis com o mesmo 
-                nome? Não! A variável declarada na função só pode ser usada dentro dela, então mesmo se 
-                ela tiver o mesmo nome de outra, fora da função ela terá o valor original. 
+            <p>global é uma palavra-chave em python que serve para declarar dentro de um função se uma
+                variável existe fora dela, já que por padrão uma variável declarada dentro da função, só
+                existe dentro da função, então isso quer dizer que é possível ter 2 variáveis com o mesmo
+                nome? Não! A variável declarada na função só pode ser usada dentro dela, então mesmo se
+                ela tiver o mesmo nome de outra, fora da função ela terá o valor original.
             </p>
 
-            <p>No código de exemplo podemos ver isso com a variável var1, dentro de "incrivel" é declarado uma variável 
-                chamada var1, mas ela ja exite fora da função, então o que acontece quando tentamos imprimi-la? 
-                Se ela for impressa dentro da função, ela terá o valor "batata" e se for impressa fora da função, 
+            <p>No código de exemplo podemos ver isso com a variável var1, dentro de "incrivel" é declarado uma variável
+                chamada var1, mas ela ja exite fora da função, então o que acontece quando tentamos imprimi-la?
+                Se ela for impressa dentro da função, ela terá o valor "batata" e se for impressa fora da função,
                 terá o valor 1.
             </p>
-            
-            <p>Já a variável ola, é definida como global dentro da função, então se ela for alterada dentro 
-                da função, também será alterada fora. Então como resultado do código, será impresso "batata 
+
+            <p>Já a variável ola, é definida como global dentro da função, então se ela for alterada dentro
+                da função, também será alterada fora. Então como resultado do código, será impresso "batata
                 não ola" na primeira linha, e 1 "não ola" na segunda.
             </p>
         </div>
@@ -1090,9 +1089,9 @@ print(var1, ola)
 
             <pre class="caixa">
 def quinzena(dia):
-    if dia >= 1 and dia <= 15:
+    if dia >= 1 and dia &lt;= 15:
         return "Primeira quinzena"
-    elif dia >= 16 and dia <= 31:
+    elif dia >= 16 and dia &lt;= 31:
         return "Segunda quinzena"
     else:
         return "Algo deu errado"
@@ -1101,13 +1100,13 @@ print(quinzena(12))
         </div>
 
         <div class="explicação">
-            <p>Nesse exemplo, estamos verificando qual é a quinzena do mês, e como parâmetro temos o dia. 
-                Se o dia for maior ou igual a 1 e menor ou igual a 15, a função retorna "Primeira quinzena", 
-                se não, se o dia for maior ou igual a 16 e menor ou igual a 31, retorna "Segunda quinzena", 
+            <p>Nesse exemplo, estamos verificando qual é a quinzena do mês, e como parâmetro temos o dia.
+                Se o dia for maior ou igual a 1 e menor ou igual a 15, a função retorna "Primeira quinzena",
+                se não, se o dia for maior ou igual a 16 e menor ou igual a 31, retorna "Segunda quinzena",
                 caso nenhuma condição for verdadeira, retorna "Algo deu errado"
             </p>
 
-            <p>E por ultimo imprimimos o resultado da função quinzena com 12 como parâmetro. Usamos o print 
+            <p>E por ultimo imprimimos o resultado da função quinzena com 12 como parâmetro. Usamos o print
                 pois sozinho o return não imprime o valor. Como resultado teremos "Primeira quinzena".
             </p>
         </div>

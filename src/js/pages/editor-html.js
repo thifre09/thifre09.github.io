@@ -1,62 +1,11 @@
-// #region Change navbar
-const buttonChangeToDashboard = document.getElementById("button-header-dashboard");
-const buttonChangeToCodigo = document.getElementById("button-header-codigo");
-const buttonChangeToSave = document.getElementById("button-header-save");
-const buttonChangeToHelp = document.getElementById("button-header-help");
-const navBar = document.getElementById("nav-bar");
-/**
- * Atualiza a posição e a largura do indicador da interface ativa.
- * @param activeButton - Botão atualmente selecionado.
- */
-function updateInterfaceTerminalIndicator(activeButton) {
-    const left = activeButton.offsetLeft;
-    const width = activeButton.offsetWidth;
-    navBar.style.setProperty("--indicator-left", `${left}px`);
-    navBar.style.setProperty("--indicator-width", `${width}px`);
-}
-/**
- * Troca a interface visível no painel (gráfica, terminal, logical, save ou help).
- * @param id - Identificador da interface a ser exibida.
- */
-function changeTo(id) {
-    document.getElementById("dashboard").style.display = "none";
-    document.getElementById("codigo").style.display = "none";
-    document.getElementById("save").style.display = "none";
-    document.getElementById("help").style.display = "none";
-    document.getElementById(id).style.display = "flex";
-    document.querySelector(".nav-bar-ativo")?.classList.remove("nav-bar-ativo");
-    switch (id) {
-        case "dashboard":
-            buttonChangeToDashboard.classList.add("nav-bar-ativo");
-            updateInterfaceTerminalIndicator(buttonChangeToDashboard);
-            break;
-        case "codigo":
-            buttonChangeToCodigo.classList.add("nav-bar-ativo");
-            updateInterfaceTerminalIndicator(buttonChangeToCodigo);
-            break;
-        case "save":
-            buttonChangeToSave.classList.add("nav-bar-ativo");
-            updateInterfaceTerminalIndicator(buttonChangeToSave);
-            break;
-        case "help":
-            buttonChangeToHelp.classList.add("nav-bar-ativo");
-            updateInterfaceTerminalIndicator(buttonChangeToHelp);
-            break;
-    }
-}
-buttonChangeToDashboard.addEventListener("click", () => {
-    changeTo("dashboard");
+import { setupTabNavigation, setupSaveLoadUI } from "../others/global.js";
+import * as Auth from "../supabase/auth.js";
+import { supabase } from "../supabase/client.js";
+import * as monaco from "monaco-editor";
+setupTabNavigation({
+    menus: ["dashboard", "codigo", "save", "help"],
+    initial: "dashboard",
 });
-buttonChangeToCodigo.addEventListener("click", () => {
-    changeTo("codigo");
-});
-buttonChangeToSave.addEventListener("click", () => {
-    changeTo("save");
-});
-buttonChangeToHelp.addEventListener("click", () => {
-    changeTo("help");
-});
-// #endregion
 // #region Classes, Interfaces and Types
 class HTMLProject {
     root;
@@ -135,7 +84,9 @@ class HTMLElementNode {
         details.appendChild(summary);
         const addTagSvg = summary.querySelector(".add-tag-svg");
         addTagSvg.addEventListener("click", (e) => {
-            e.stopPropagation();
+            if (details.open) {
+                e.preventDefault();
+            }
             selectedElement = this;
             document.getElementById("create-tag").style.display = "block";
             document.querySelector(".selected-element")?.classList.remove("selected-element");
@@ -450,13 +401,20 @@ class HTMLElementNode {
         </svg>
         Deletar componente
         `;
+        const isDocumentStructure = this.tag === "html"
+            || (this.parent === currentProject().root && (this.tag === "head" || this.tag === "body"));
         deleteWindowButton.addEventListener("click", () => {
+            if (isDocumentStructure) {
+                return;
+            }
             this.parent?.children.splice(this.parent.children.indexOf(this), 1);
             removeFloatingWindow(floatingWindow);
             renderProject(currentProject());
             rederTrees();
         });
-        contentDiv.appendChild(deleteWindowButton);
+        if (!isDocumentStructure) {
+            contentDiv.appendChild(deleteWindowButton);
+        }
         const header = floatingWindow.querySelector(".janela-flutuante-header");
         let isDragging = false;
         let offsetX = 0;
@@ -538,9 +496,39 @@ function currentRoot() {
     return currentProject().root;
 }
 // #endregion
-// #region Dashboard
-const cssData = await fetch("/assets/jsons/css-data.json").then(r => r.json());
-const htmlData = await fetch("/assets/jsons/html-data.json").then(r => r.json());
+// #region Tudo :)
+const cssData = await fetch("/src/jsons/css-data.json").then(r => r.json());
+const htmlData = await fetch("/src/jsons/html-data.json").then(r => r.json());
+monaco.languages.registerCompletionItemProvider("css", {
+    triggerCharacters: ["-"],
+    provideCompletionItems(model, position) {
+        const word = model.getWordUntilPosition(position);
+        const range = new monaco.Range(position.lineNumber, word.startColumn, position.lineNumber, word.endColumn);
+        return {
+            suggestions: Object.keys(cssData.properties).map(property => ({
+                label: property,
+                kind: monaco.languages.CompletionItemKind.Property,
+                insertText: property,
+                range,
+            })),
+        };
+    },
+});
+monaco.languages.registerCompletionItemProvider("html", {
+    triggerCharacters: ["<", " ", "/"],
+    provideCompletionItems(model, position) {
+        const word = model.getWordUntilPosition(position);
+        const range = new monaco.Range(position.lineNumber, word.startColumn, position.lineNumber, word.endColumn);
+        return {
+            suggestions: Object.keys(htmlData).map(tag => ({
+                label: tag,
+                kind: monaco.languages.CompletionItemKind.Keyword,
+                insertText: tag,
+                range,
+            })),
+        };
+    },
+});
 const search = document.getElementById("search");
 const suggestions = document.getElementById("suggestions");
 const tooltip = document.getElementById("tooltip");
@@ -609,6 +597,18 @@ function renderSuggestions(tags) {
 function renderProject(project) {
     doc.head.replaceChildren();
     doc.body.replaceChildren();
+    if (project.classes.length > 0) {
+        const style = doc.createElement("style");
+        style.textContent = project.classes
+            .map(cssClass => {
+            const properties = Array.from(cssClass.properties)
+                .map(([name, value]) => `  ${name}: ${value};`)
+                .join("\n");
+            return `${cssClass.name} {\n${properties}\n}`;
+        })
+            .join("\n\n");
+        doc.head.appendChild(style);
+    }
     for (const child of project.root.children) {
         if (typeof child === "string")
             continue;
@@ -633,6 +633,292 @@ function renderProject(project) {
                 }
             }
         }
+    }
+    renderCodePanel();
+}
+let activeCodeTab = "html";
+let codeEditor = null;
+function getCodeValue() {
+    return codeEditor?.getValue() || "";
+}
+function setCodeValue(value) {
+    if (codeEditor && codeEditor.getValue() !== value) {
+        codeEditor.setValue(value);
+    }
+}
+function escapeCode(value) {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+function serializeNode(node, level = 0) {
+    const indentation = "  ".repeat(level);
+    const attributes = Array.from(node.attributes)
+        .map(([name, value]) => ` ${name}="${escapeCode(value)}"`)
+        .join("");
+    const inlineStyle = Array.from(node.style)
+        .map(([name, value]) => `${name}: ${value};`)
+        .join(" ");
+    const styleAttribute = inlineStyle ? ` style="${escapeCode(inlineStyle)}"` : "";
+    const voidTags = new Set(["area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"]);
+    if (voidTags.has(node.tag)) {
+        return `${indentation}<${node.tag}${attributes}${styleAttribute}>`;
+    }
+    if (node.children.length === 0) {
+        return `${indentation}<${node.tag}${attributes}${styleAttribute}></${node.tag}>`;
+    }
+    const children = node.children.map(child => {
+        if (typeof child === "string") {
+            return `${"  ".repeat(level + 1)}${escapeCode(child)}`;
+        }
+        return serializeNode(child, level + 1);
+    }).join("\n");
+    return `${indentation}<${node.tag}${attributes}${styleAttribute}>\n${children}\n${indentation}</${node.tag}>`;
+}
+function getHtmlCode(project) {
+    return `<!DOCTYPE html>\n${serializeNode(project.root)}`;
+}
+function nodeFromElement(element, parent = null) {
+    const node = new HTMLElementNode(element.tagName.toLowerCase());
+    node.parent = parent;
+    for (const attribute of Array.from(element.attributes)) {
+        if (attribute.name === "style") {
+            for (const declaration of attribute.value.split(";")) {
+                const separator = declaration.indexOf(":");
+                if (separator === -1)
+                    continue;
+                const name = declaration.slice(0, separator).trim();
+                const value = declaration.slice(separator + 1).trim();
+                if (name)
+                    node.style.set(name, value);
+            }
+            continue;
+        }
+        node.attributes.set(attribute.name, attribute.value);
+    }
+    for (const child of Array.from(element.childNodes)) {
+        if (child.nodeType === Node.TEXT_NODE) {
+            const text = child.textContent?.trim();
+            if (text)
+                node.children.push(text);
+        }
+        else if (child.nodeType === Node.ELEMENT_NODE) {
+            node.children.push(nodeFromElement(child, node));
+        }
+    }
+    return node;
+}
+function parseHtmlCode(value) {
+    const parsed = new DOMParser().parseFromString(value, "text/html");
+    if (parsed.querySelector("parsererror")) {
+        throw new Error("HTML inválido.");
+    }
+    return nodeFromElement(parsed.documentElement);
+}
+function parseCssCode(value) {
+    const classes = [];
+    const rulePattern = /([^{}]+)\{([^{}]*)\}/g;
+    let match;
+    let consumed = "";
+    while ((match = rulePattern.exec(value)) !== null) {
+        const selector = match[1].trim();
+        if (!selector || selector.startsWith("@"))
+            continue;
+        const cssClass = new CSSClass(selector);
+        for (const declaration of match[2].split(";")) {
+            const separator = declaration.indexOf(":");
+            if (separator === -1)
+                continue;
+            const name = declaration.slice(0, separator).trim();
+            const propertyValue = declaration.slice(separator + 1).trim();
+            if (name && propertyValue)
+                cssClass.properties.set(name, propertyValue);
+        }
+        classes.push(cssClass);
+        consumed += match[0];
+    }
+    if (!classes.length && value.trim())
+        throw new Error("CSS inválido ou sem regras.");
+    if (value.replace(/\/\*[^]*?\*\//g, "").replace(/\s/g, "") && !consumed.trim()) {
+        throw new Error("CSS inválido ou sem regras.");
+    }
+    return classes;
+}
+function applyCodeChanges(code) {
+    try {
+        if (activeCodeTab === "html") {
+            const root = parseHtmlCode(code);
+            const head = root.children.find(child => typeof child !== "string" && child.tag === "head");
+            const body = root.children.find(child => typeof child !== "string" && child.tag === "body");
+            if (!head || typeof head === "string" || !body || typeof body === "string") {
+                throw new Error("O HTML precisa conter <head> e <body>.");
+            }
+            currentProject().root = root;
+            selectedElement = body;
+            rederTrees();
+        }
+        else {
+            currentProject().classes = parseCssCode(code);
+            renderCssEditor();
+        }
+        renderProject(currentProject());
+    }
+    catch (error) {
+        window.alert(error instanceof Error ? error.message : "Não foi possível aplicar o código.");
+    }
+}
+function getCssCode(project) {
+    return project.classes.map(cssClass => {
+        const properties = Array.from(cssClass.properties)
+            .map(([name, value]) => `  ${name}: ${value};`)
+            .join("\n");
+        return `${cssClass.name} {\n${properties}\n}`;
+    }).join("\n\n");
+}
+function renderCodePanel() {
+    const panel = document.getElementById("codigo");
+    const codeContainer = document.getElementById("codigo-conteudo");
+    const htmlTab = document.getElementById("codigo-tab-html");
+    const cssTab = document.getElementById("codigo-tab-css");
+    const formatButton = document.getElementById("codigo-formatar");
+    const applyButton = document.getElementById("codigo-aplicar");
+    const copyButton = document.getElementById("codigo-copy");
+    if (!panel || !codeContainer || !htmlTab || !cssTab || !formatButton || !applyButton || !copyButton)
+        return;
+    if (panel.dataset.initialized !== "true") {
+        const htmlModel = monaco.editor.createModel(getHtmlCode(currentProject()), "html");
+        const cssModel = monaco.editor.createModel(getCssCode(currentProject()), "css");
+        codeEditor = monaco.editor.create(codeContainer, {
+            model: activeCodeTab === "html" ? htmlModel : cssModel,
+            automaticLayout: true,
+            fontSize: 14,
+            wordWrap: "on",
+            tabSize: 4,
+            theme: "vs-dark",
+        });
+        htmlTab.addEventListener("click", () => {
+            activeCodeTab = "html";
+            renderCodePanel();
+        });
+        cssTab.addEventListener("click", () => {
+            activeCodeTab = "css";
+            renderCodePanel();
+        });
+        formatButton.addEventListener("click", () => {
+            try {
+                if (activeCodeTab === "html") {
+                    setCodeValue(getHtmlCode({ ...currentProject(), root: parseHtmlCode(getCodeValue()) }));
+                }
+                else {
+                    setCodeValue(getCssCode({ ...currentProject(), classes: parseCssCode(getCodeValue()) }));
+                }
+            }
+            catch (error) {
+                window.alert(error instanceof Error ? error.message : "Não foi possível formatar o código.");
+            }
+        });
+        applyButton.addEventListener("click", () => applyCodeChanges(getCodeValue()));
+        copyButton.addEventListener("click", async () => {
+            await navigator.clipboard.writeText(getCodeValue());
+            copyButton.textContent = "Copiado";
+            setTimeout(() => copyButton.textContent = "Copiar", 1000);
+        });
+        panel.dataset.initialized = "true";
+    }
+    const model = codeEditor.getModel();
+    const nextModel = activeCodeTab === "html"
+        ? monaco.editor.getModels().find(item => item.getLanguageId() === "html")
+        : monaco.editor.getModels().find(item => item.getLanguageId() === "css");
+    if (model !== nextModel)
+        codeEditor.setModel(nextModel);
+    setCodeValue(activeCodeTab === "html" ? getHtmlCode(currentProject()) : getCssCode(currentProject()));
+    htmlTab.classList.toggle("codigo-aba-ativa", activeCodeTab === "html");
+    cssTab.classList.toggle("codigo-aba-ativa", activeCodeTab === "css");
+}
+function renderCssEditor() {
+    const selectorInput = document.querySelector("#dashboard-direita .css-selector input");
+    const rulesContainer = document.querySelector("#dashboard-direita .css-rules");
+    rulesContainer.replaceChildren();
+    for (const cssClass of currentProject().classes) {
+        const rule = document.createElement("div");
+        rule.className = "css-rule";
+        rule.innerHTML = `
+            <div class="css-rule-header">
+                <span class="css-rule-selector"></span>
+                <button class="css-delete-rule" type="button" title="Deletar seletor">×</button>
+            </div>
+            <div class="css-properties"></div>
+        `;
+        rule.querySelector(".css-rule-selector").textContent = cssClass.name;
+        rule.querySelector(".css-delete-rule").addEventListener("click", () => {
+            const classIndex = currentProject().classes.indexOf(cssClass);
+            if (classIndex !== -1) {
+                currentProject().classes.splice(classIndex, 1);
+            }
+            renderCssEditor();
+            renderProject(currentProject());
+        });
+        const properties = rule.querySelector(".css-properties");
+        for (const [name, value] of cssClass.properties) {
+            appendCssProperty(properties, cssClass, name, value);
+        }
+        const addButton = document.createElement("button");
+        addButton.className = "css-add-property";
+        addButton.type = "button";
+        addButton.textContent = "+ adicionar propriedade";
+        addButton.addEventListener("click", () => {
+            const property = appendCssProperty(properties, cssClass);
+            property.querySelector(".css-property-name")?.focus();
+        });
+        properties.appendChild(addButton);
+        rulesContainer.appendChild(rule);
+    }
+    selectorInput.onkeydown = event => {
+        if (event.key !== "Enter") {
+            return;
+        }
+        const selector = selectorInput.value.trim();
+        if (!selector || currentProject().classes.some(cssClass => cssClass.name === selector)) {
+            return;
+        }
+        currentProject().classes.push(new CSSClass(selector));
+        selectorInput.value = "";
+        renderCssEditor();
+        renderProject(currentProject());
+    };
+    function appendCssProperty(container, cssClass, name = "", value = "") {
+        const property = document.createElement("div");
+        property.className = "css-property";
+        property.innerHTML = `
+            <input class="css-property-name" value="${name}" placeholder="propriedade">
+            <input class="css-property-value" value="${value}" placeholder="valor">
+            <button class="css-delete-property" type="button" title="Deletar propriedade">×</button>
+        `;
+        const nameInput = property.querySelector(".css-property-name");
+        const valueInput = property.querySelector(".css-property-value");
+        const deleteButton = property.querySelector(".css-delete-property");
+        let propertyKey = name;
+        const updateProperty = () => {
+            const propertyName = nameInput.value.trim();
+            if (propertyKey && propertyKey !== propertyName) {
+                cssClass.properties.delete(propertyKey);
+            }
+            if (propertyName) {
+                cssClass.properties.set(propertyName, valueInput.value.trim());
+                propertyKey = propertyName;
+            }
+            renderProject(currentProject());
+        };
+        nameInput.addEventListener("input", updateProperty);
+        valueInput.addEventListener("input", updateProperty);
+        deleteButton.addEventListener("click", () => {
+            if (propertyKey) {
+                cssClass.properties.delete(propertyKey);
+            }
+            property.remove();
+            renderProject(currentProject());
+        });
+        const addButton = container.querySelector(".css-add-property");
+        container.insertBefore(property, addButton);
+        return property;
     }
 }
 function rederTrees() {
@@ -675,7 +961,6 @@ function rederTrees() {
         saveExpanded(previousTree, "", opened);
     }
     leftSide.replaceChildren();
-    previousTree.appendChild(currentProject().root.buildTree());
     const div = document.createElement("div");
     div.id = "tree";
     div.appendChild(currentRoot().buildTree());
@@ -870,9 +1155,124 @@ closeCreateTagButton.addEventListener("click", () => {
     document.getElementById("create-tag").style.display = "none";
 });
 // #endregion
-setTimeout(() => {
-    changeTo("dashboard");
-}, 200);
+// #region Save
+const { isAutoSaveEnabled, showNotification } = setupSaveLoadUI({
+    defaultOption: "salvar-local",
+    isUserLoggedIn: () => Auth.isUserLoggedIn(),
+    options: {
+        "salvar-local": { save: saveToLocalStorage, load: loadFromLocalStorage },
+        "salvar-json": { save: saveToJson, load: loadFromJson },
+        // "salvar-sql":    { save: saveToSql,          load: loadFromSql },
+        "salvar-online": { save: saveToSupabase, load: loadFromSupabase, requiresLogin: true },
+    },
+});
+function transformToJson() {
+    const save = {
+        html: getHtmlCode(currentProject()),
+        css: getCssCode(currentProject()),
+    };
+    return JSON.stringify(save, null, 4);
+}
+function transformFromJson(value) {
+    if (!value) {
+        return;
+    }
+    try {
+        let save;
+        try {
+            const parsed = JSON.parse(value);
+            if (typeof parsed.html !== "string" || typeof parsed.css !== "string") {
+                throw new Error("Formato de salvamento inválido.");
+            }
+            save = parsed;
+        }
+        catch {
+            save = { html: value, css: "" };
+        }
+        const root = parseHtmlCode(save.html);
+        const head = root.children.find(child => typeof child !== "string" && child.tag === "head");
+        const body = root.children.find(child => typeof child !== "string" && child.tag === "body");
+        if (!head || typeof head === "string" || !body || typeof body === "string") {
+            throw new Error("O HTML precisa conter <head> e <body>.");
+        }
+        currentProject().root = root;
+        currentProject().classes = parseCssCode(save.css);
+        selectedElement = body;
+        renderCssEditor();
+        renderProject(currentProject());
+        rederTrees();
+        showNotification("HTML carregado com sucesso");
+    }
+    catch (error) {
+        showNotification("Erro ao carregar o HTML");
+    }
+}
+function saveToLocalStorage() {
+    localStorage.setItem("editor-html", transformToJson());
+}
+function loadFromLocalStorage() {
+    const json = localStorage.getItem("editor-html");
+    if (json) {
+        transformFromJson(json);
+    }
+}
+function saveToJson() {
+    const json = transformToJson();
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "database.json";
+    a.click();
+    URL.revokeObjectURL(url);
+}
+function loadFromJson() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json,application/json";
+    input.onchange = (e) => {
+        const file = e.target.files?.[0];
+        if (!file)
+            return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const json = e.target.result;
+            transformFromJson(json);
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+}
+async function saveToSupabase() {
+    const user = await Auth.getUser();
+    const { error } = await supabase.from("profiles")
+        .update({
+        editor_html_save: JSON.parse(transformToJson())
+    }).eq("id", user.id);
+    console.log(error);
+}
+async function loadFromSupabase() {
+    const user = await Auth.getUser();
+    const { data, error } = await supabase.from("profiles")
+        .select("editor_html_save").eq("id", user.id);
+    if (error)
+        return;
+    const json = JSON.stringify(data[0]["editor_html_save"]);
+    if (json === "null") {
+        showNotification("Nenhum HTML salvo online");
+        return;
+    }
+    transformFromJson(json);
+}
+setInterval(async () => {
+    if (isAutoSaveEnabled()) {
+        saveToLocalStorage();
+        if (await Auth.isUserLoggedIn()) {
+            saveToSupabase();
+        }
+    }
+}, 60000); // 1 minuto
+// #endregion
 widthInput.addEventListener("input", updateIframeSize);
 heightInput.addEventListener("input", updateIframeSize);
 zoomInput.addEventListener("input", () => {
@@ -881,38 +1281,58 @@ zoomInput.addEventListener("input", () => {
 });
 const esquerda = document.getElementById("dashboard-esquerda");
 const direita = document.getElementById("dashboard-direita");
-const separador1 = document.querySelector(".separador-vertical");
+const dashboard = document.getElementById("dashboard");
+const separador1 = document.getElementById("resizer1");
 const separador2 = document.getElementById("resizer2");
-let redimensionando1 = false;
-let redimensionando2 = false;
-separador1.addEventListener("mousedown", () => {
-    redimensionando1 = true;
+let resizerAtivo = null;
+const iniciarRedimensionamento = (tipo, event) => {
+    event.preventDefault();
+    resizerAtivo = tipo;
     document.body.style.cursor = "col-resize";
     document.body.style.userSelect = "none";
-});
-separador2.addEventListener("mousedown", () => {
-    redimensionando2 = true;
-    document.body.style.cursor = "col-resize";
-    document.body.style.userSelect = "none";
-});
-document.addEventListener("mouseup", () => {
-    redimensionando1 = false;
-    redimensionando2 = false;
+    event.currentTarget.setPointerCapture(event.pointerId);
+};
+separador1.addEventListener("pointerdown", event => iniciarRedimensionamento("esquerda", event));
+separador2.addEventListener("pointerdown", event => iniciarRedimensionamento("direita", event));
+const finalizarRedimensionamento = () => {
+    resizerAtivo = null;
     document.body.style.cursor = "";
     document.body.style.userSelect = "";
-});
-document.addEventListener("mousemove", (e) => {
-    if (!redimensionando1 && !redimensionando2)
+};
+document.addEventListener("pointerup", finalizarRedimensionamento);
+document.addEventListener("pointercancel", finalizarRedimensionamento);
+document.addEventListener("pointermove", (e) => {
+    if (!resizerAtivo)
         return;
-    const novaLargura = e.clientX;
-    if (novaLargura >= 75 && novaLargura <= 600 && redimensionando1) {
-        esquerda.style.width = `${novaLargura}px`;
+    const dashboardRect = dashboard.getBoundingClientRect();
+    const maxPanelWidth = Math.min(600, dashboardRect.width - 150);
+    if (resizerAtivo === "esquerda") {
+        const novaLargura = e.clientX - dashboardRect.left;
+        const larguraLimitada = Math.max(75, Math.min(novaLargura, maxPanelWidth));
+        esquerda.style.width = `${larguraLimitada}px`;
     }
-    else if (novaLargura >= 75 && novaLargura <= 600 && redimensionando2) {
-        direita.style.width = `${window.innerWidth - novaLargura}px`;
+    else {
+        const novaLargura = dashboardRect.right - e.clientX;
+        const larguraLimitada = Math.max(75, Math.min(novaLargura, maxPanelWidth));
+        direita.style.width = `${larguraLimitada}px`;
     }
 });
+async function loadSavedProject() {
+    if (await Auth.isUserLoggedIn()) {
+        loadFromSupabase();
+    }
+    else {
+        loadFromLocalStorage();
+    }
+}
+if (document.readyState === "loading") {
+    window.addEventListener("DOMContentLoaded", loadSavedProject, { once: true });
+}
+else {
+    loadSavedProject();
+}
 updateIframeSize();
 renderCamera();
+renderCssEditor();
+renderProject(currentProject());
 rederTrees();
-export {};

@@ -9,23 +9,6 @@ body {
     flex-direction: column;
 }
 
-.teste {
-    color: red;
-}
-
-#conteudo {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    min-height: 0;
-    overflow: hidden;
-    position: relative;
-
-    >* {
-        z-index: 5;
-    }
-}
-
 #dashboard {
     width: 100%;
     display: flex;
@@ -34,6 +17,7 @@ body {
 
     aside {
         width: 20%;
+        flex-shrink: 0;
         min-width: 0;
         height: 100%;
         display: flex;
@@ -42,6 +26,8 @@ body {
     }
 
     #dashboard-esquerda {
+        width: 15%;
+        
         #tree {
             flex: 1;
             overflow: auto;
@@ -107,7 +93,8 @@ body {
     }
 
     #dashboard-centro {
-        width: 60%;
+        flex: 1;
+        min-width: 0;
 
         #ferramentas {
             background-color: var(--white);
@@ -174,7 +161,205 @@ body {
         }
     }
 
-    #dashboard-direita {}
+    #dashboard-direita {
+        border-left: 1px solid var(--gray12);
+        overflow: hidden;
+        color: var(--black);
+
+        .css-header {
+            height: 48px;
+            padding: 0 12px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--gray12);
+            flex-shrink: 0;
+        }
+
+        .css-header h3 {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .css-selector {
+            padding: 10px;
+            border-bottom: 1px solid var(--gray12);
+            flex-shrink: 0;
+
+            input {
+                width: 100%;
+                height: 34px;
+                box-sizing: border-box;
+                padding: 0 10px;
+                border: 1px solid var(--gray11);
+                border-radius: 6px;
+                outline: none;
+                background: white;
+                font-family: monospace;
+                font-size: 13px;
+                transition: border-color .15s, background .15s;
+
+                &:focus {
+                    border-color: var(--gray9);
+                    background: white;
+                }
+
+                &::placeholder {
+                    color: var(--gray10);
+                }
+            }
+        }
+
+        .css-rules {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            padding: 8px;
+        }
+
+        .css-rule {
+            margin-bottom: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .css-rule-header {
+            height: 34px;
+            padding: 0 9px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--gray14);
+            border-bottom: 1px solid var(--gray12);
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .css-rule-selector {
+            color: #555;
+        }
+
+        .css-delete-rule {
+            width: 24px;
+            height: 24px;
+            padding: 0;
+            border: 0;
+            border-radius: 4px;
+            background: transparent;
+            color: var(--gray10);
+            font-size: 18px;
+            line-height: 1;
+            cursor: pointer;
+
+            &:hover {
+                background: var(--gray11);
+                color: var(--gray3);
+            }
+        }
+
+        .css-properties {
+            padding: 5px 7px;
+        }
+
+        .css-property {
+            min-height: 30px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border-radius: 4px;
+
+            &:hover {
+                background: var(--gray14);
+            }
+        }
+
+        .css-property-name {
+            flex: 1;
+            min-width: 0;
+            height: 26px;
+            box-sizing: border-box;
+            padding: 0 5px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            outline: none;
+            background: transparent;
+            color: var(--gray3);
+            font-family: monospace;
+            font-size: 12px;
+
+            &:hover {
+                border-color: var(--gray13);
+                background: white;
+            }
+
+            &:focus {
+                border-color: var(--gray10);
+                background: white;
+            }
+        }
+
+        .css-property-value {
+            flex: 1;
+            min-width: 0;
+            height: 26px;
+            box-sizing: border-box;
+            padding: 0 5px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            outline: none;
+            background: transparent;
+            color: var(--gray3);
+            font-family: monospace;
+            font-size: 12px;
+
+            &:hover {
+                border-color: var(--gray13);
+                background: white;
+            }
+
+            &:focus {
+                border-color: var(--gray10);
+                background: white;
+            }
+        }
+
+        .css-delete-property {
+            width: 24px;
+            height: 24px;
+            padding: 0;
+            border: 0;
+            border-radius: 4px;
+            background: transparent;
+            color: var(--gray10);
+            font-size: 18px;
+            line-height: 1;
+            cursor: pointer;
+
+            &:hover {
+                background: var(--gray14);
+                color: var(--gray4);
+            }
+        }
+
+        .css-add-property {
+            width: 100%;
+            height: 30px;
+            border: none;
+            border-radius: 4px;
+            background: transparent;
+            color: var(--gray9);
+            font-size: 12px;
+            cursor: pointer;
+            text-align: left;
+            padding-left: 5px;
+
+            &:hover {
+                background: var(--gray14);
+                color: var(--gray4);
+            }
+        }
+    }
 
     #tooltip {
         max-width: 300px;
@@ -526,256 +711,56 @@ body {
     }
 }
 
-#dashboard-direita {
-    border-left: 1px solid #ddd;
-    overflow: hidden;
-
-    color: #333;
-}
-
-
-/* =========================
-   Cabeçalho
-========================= */
-
-#dashboard-direita .css-header {
-    height: 48px;
-    padding: 0 12px;
-
-    display: flex;
-    align-items: center;
-
-    border-bottom: 1px solid #ddd;
-
-    flex-shrink: 0;
-}
-
-#dashboard-direita .css-header h3 {
-    margin: 0;
-
-    font-size: 14px;
-    font-weight: 600;
-}
-
-
-/* =========================
-   Seletor
-========================= */
-
-#dashboard-direita .css-selector {
-    padding: 10px;
-
-    border-bottom: 1px solid #ddd;
-
-    flex-shrink: 0;
-}
-
-#dashboard-direita .css-selector input {
-    width: 100%;
-    height: 34px;
-    box-sizing: border-box;
-
-    padding: 0 10px;
-
-    border: 1px solid #ccc;
-    border-radius: 6px;
-
-    outline: none;
-
-    background: #fafafa;
-
-    font-family: monospace;
-    font-size: 13px;
-
-    transition: border-color .15s, background .15s;
-}
-
-#dashboard-direita .css-selector input:focus {
-    border-color: #888;
-    background: white;
-}
-
-#dashboard-direita .css-selector input::placeholder {
-    color: #999;
-}
-
-
-/* =========================
-   Área das regras
-========================= */
-
-#dashboard-direita .css-rules {
+#codigo {
     flex: 1;
     min-height: 0;
+    flex-direction: column;
+    padding: 15px;
+    background-color: var(--gray5);
 
-    overflow-y: auto;
+    .codigo-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
 
-    padding: 8px;
-}
+    .codigo-abas {
+        display: flex;
+        gap: 5px;
+    }
 
+    .codigo-acoes {
+        display: flex;
+        gap: 5px;
+    }
 
-/* =========================
-   Bloco de regras
-========================= */
+    button {
+        border: 1px solid var(--gray8);
+        border-radius: 6px;
+        padding: 7px 12px;
+        background-color: var(--black);
+        color: var(--white);
+        cursor: pointer;
 
-#dashboard-direita .css-rule {
-    margin-bottom: 8px;
+        &:hover,
+        &.codigo-aba-ativa {
+            background-color: var(--gray4);
+        }
+    }
 
-    border: 1px solid #ddd;
-    border-radius: 6px;
-
-    overflow: hidden;
-}
-
-
-/* Cabeçalho da regra */
-
-#dashboard-direita .css-rule-header {
-    height: 34px;
-    padding: 0 9px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    background: #f5f5f5;
-
-    border-bottom: 1px solid #ddd;
-
-    font-family: monospace;
-    font-size: 12px;
-}
-
-#dashboard-direita .css-rule-selector {
-    color: #555;
-}
-
-
-/* =========================
-   Propriedades
-========================= */
-
-#dashboard-direita .css-properties {
-    padding: 5px 7px;
-}
-
-
-/* Uma propriedade */
-
-#dashboard-direita .css-property {
-    min-height: 30px;
-
-    display: flex;
-    align-items: center;
-    gap: 5px;
-
-    border-radius: 4px;
-}
-
-#dashboard-direita .css-property:hover {
-    background: #f5f5f5;
-}
-
-
-/* Nome da propriedade */
-
-#dashboard-direita .css-property-name {
-    width: 45%;
-
-    color: #555;
-
-    font-family: monospace;
-    font-size: 12px;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-
-/* Valor */
-
-#dashboard-direita .css-property-value {
-    flex: 1;
-    min-width: 0;
-
-    height: 26px;
-    box-sizing: border-box;
-
-    padding: 0 5px;
-
-    border: 1px solid transparent;
-    border-radius: 4px;
-
-    outline: none;
-
-    background: transparent;
-
-    color: #222;
-
-    font-family: monospace;
-    font-size: 12px;
-}
-
-#dashboard-direita .css-property-value:hover {
-    border-color: #ddd;
-    background: white;
-}
-
-#dashboard-direita .css-property-value:focus {
-    border-color: #999;
-    background: white;
-}
-
-
-/* =========================
-   Botão adicionar propriedade
-========================= */
-
-#dashboard-direita .css-add-property {
-    width: 100%;
-
-    height: 30px;
-
-    border: none;
-    border-radius: 4px;
-
-    background: transparent;
-
-    color: #888;
-
-    font-size: 12px;
-
-    cursor: pointer;
-
-    text-align: left;
-
-    padding-left: 5px;
-}
-
-#dashboard-direita .css-add-property:hover {
-    background: #eee;
-    color: #333;
-}
-
-
-/* =========================
-   Scrollbar
-========================= */
-
-#dashboard-direita .css-rules::-webkit-scrollbar {
-    width: 7px;
-}
-
-#dashboard-direita .css-rules::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-#dashboard-direita .css-rules::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 10px;
-}
-
-#dashboard-direita .css-rules::-webkit-scrollbar-thumb:hover {
-    background: #aaa;
+    #codigo-conteudo {
+        width: 100%;
+        flex: 1;
+        min-height: 0;
+        box-sizing: border-box;
+        resize: none;
+        padding: 5px;
+        border-radius: 10px;
+        background-color: var(--black);
+        color: var(--black);
+        font-family: monospace;
+        font-size: 14px;
+        line-height: 1.5;
+    }
 }

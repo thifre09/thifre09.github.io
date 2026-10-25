@@ -58,7 +58,8 @@ function marcarRespostaVerdadeira() {
     if (numPergunta > perguntas.length) {
         document.getElementById("buttons")!.style.display = "none";
         document.getElementById('pergunta-texto')!.textContent = `Parabens! você acertou ${respostas.filter(resposta => {return resposta === true}).length}/30 curiosidades! Por incrivel que pareça, todas as curiosidades eram verdadeiras!`;
-    };
+        return;
+    }
     respostas[numPergunta - 1] = true;
     (document.getElementById('perguntas-bottom')!.children[numPergunta - 1] as HTMLElement).style.backgroundColor = 'var(--green5)';
     proximaPergunta();
@@ -73,6 +74,7 @@ function marcarRespostaFalse() {
 
 function proximaPergunta() {
     numPergunta++;
+    console.log(numPergunta);
     document.getElementById('pergunta-texto')!.textContent = perguntas[numPergunta - 1];
     if (numPergunta > perguntas.length) {
         document.getElementById('pergunta-texto')!.textContent = "Deseja responder?";

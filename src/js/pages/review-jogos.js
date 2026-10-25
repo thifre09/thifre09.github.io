@@ -43,7 +43,7 @@ function criarReviews() {
         const divPrincipal = document.createElement("div");
         jogoDiv.appendChild(divPrincipal);
         const img = document.createElement("img");
-        img.src = `/assets/images/jogos reviews img/${review.imagem}`;
+        img.src = `/src/images/jogos reviews img/${review.imagem}`;
         divPrincipal.appendChild(img);
         const tabela = document.createElement("div");
         tabela.classList.add("tabela");
@@ -226,7 +226,7 @@ function setupSearch() {
         searchResults.innerHTML = filteredReviews
             .map((review) => `
                 <div class="search-result-item" onclick="scrollToGame('${review.nome.replace(/'/g, "\\'")}')"  >
-                    <img src="assets/images/jogos reviews img/${review.imagem}" alt="${review.nome}" class="search-result-img">
+                    <img src="src/images/jogos reviews img/${review.imagem}" alt="${review.nome}" class="search-result-img">
                     <span class="search-result-name">${review.nome}</span>
                 </div>
             `)

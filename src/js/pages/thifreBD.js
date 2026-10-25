@@ -1,74 +1,17 @@
+// @ts-ignore
+import dagre from "https://cdn.jsdelivr.net/npm/@dagrejs/dagre/+esm";
 import * as Auth from "../supabase/auth.js";
 import { supabase } from "../supabase/client.js";
-// #region Change interface terminal
-const buttonChangeToGrafical = document.getElementById("button-header-interface");
-const buttonChangeToTerminal = document.getElementById("button-header-terminal");
-const buttonChangeToLogical = document.getElementById("button-header-logical");
-const buttonChangeToSave = document.getElementById("button-header-save");
-const buttonChangeToHelp = document.getElementById("button-header-help");
-const interfaceTerminal = document.getElementById("nav-bar");
-/**
- * Atualiza a posição e a largura do indicador da interface ativa.
- * @param activeButton - Botão atualmente selecionado.
- */
-function updateInterfaceTerminalIndicator(activeButton) {
-    const left = activeButton.offsetLeft;
-    const width = activeButton.offsetWidth;
-    interfaceTerminal.style.setProperty("--indicator-left", `${left}px`);
-    interfaceTerminal.style.setProperty("--indicator-width", `${width}px`);
-}
-/**
- * Troca a interface visível no painel (gráfica, terminal, logical, save ou help).
- * @param id - Identificador da interface a ser exibida.
- */
-function changeTo(id) {
-    document.getElementById("interface-grafica").style.display = "none";
-    document.getElementById("terminal").style.display = "none";
-    document.getElementById("logical").style.display = "none";
-    document.getElementById("save").style.display = "none";
-    document.getElementById("help").style.display = "none";
-    document.getElementById(id).style.display = "flex";
-    document.querySelector(".nav-bar-ativo")?.classList.remove("nav-bar-ativo");
-    switch (id) {
-        case "interface-grafica":
-            buttonChangeToGrafical.classList.add("nav-bar-ativo");
-            updateInterfaceTerminalIndicator(buttonChangeToGrafical);
-            break;
-        case "terminal":
-            buttonChangeToTerminal.classList.add("nav-bar-ativo");
-            updateInterfaceTerminalIndicator(buttonChangeToTerminal);
-            break;
-        case "logical":
-            buttonChangeToLogical.classList.add("nav-bar-ativo");
-            updateInterfaceTerminalIndicator(buttonChangeToLogical);
-            break;
-        case "save":
-            buttonChangeToSave.classList.add("nav-bar-ativo");
-            updateInterfaceTerminalIndicator(buttonChangeToSave);
-            break;
-        case "help":
-            buttonChangeToHelp.classList.add("nav-bar-ativo");
-            updateInterfaceTerminalIndicator(buttonChangeToHelp);
-            break;
+import { setupTabNavigation, setupSaveLoadUI } from "../others/global.js";
+setupTabNavigation({
+    menus: ["dashboard", "terminal", "logical", "save", "help"],
+    initial: "dashboard",
+    onEnter: {
+        logical: () => {
+            refreshLogical();
+        }
     }
-}
-buttonChangeToGrafical.addEventListener("click", () => {
-    changeTo("interface-grafica");
 });
-buttonChangeToTerminal.addEventListener("click", () => {
-    changeTo("terminal");
-});
-buttonChangeToLogical.addEventListener("click", () => {
-    changeTo("logical");
-    drawConnectionLines();
-});
-buttonChangeToSave.addEventListener("click", () => {
-    changeTo("save");
-});
-buttonChangeToHelp.addEventListener("click", () => {
-    changeTo("help");
-});
-// #endregion
 // #region Others
 let timeout;
 /**
@@ -92,7 +35,7 @@ function openNotifications(html) {
     const notificacoes = document.getElementById("notificacoes");
     notificacoes.style.display = "flex";
     notificacoes.innerHTML = html;
-    timeout = setTimeout(() => {
+    timeout = window.setTimeout(() => {
         notificacoes.style.display = "none";
     }, 3000);
 }
@@ -125,7 +68,7 @@ function abrirFechar(estado, id) {
  * Cria ou seleciona a database de exemplo com tabelas e registros pré-carregados.
  */
 async function createExempleDatabase() {
-    const response = await fetch("/assets/jsons/exemple_database.json");
+    const response = await fetch("/src/jsons/exemple_database.json");
     const json = await response.text();
     console.log(json);
     transformFromJson(json);
@@ -927,7 +870,7 @@ class SGBDFunctions {
         currentSchema = null;
         currentTable = null;
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -937,7 +880,7 @@ class SGBDFunctions {
         currentSchema = schema.name;
         currentTable = null;
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -958,7 +901,7 @@ class SGBDFunctions {
         db.schemas[schema || currentSchema].tables[table.name] = table;
         currentTable = table.name;
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1026,7 +969,7 @@ class SGBDFunctions {
             //getCurrentDatabase()!.addForeignKeyReference(currentSchema!, tableName, column.name, column.reference);
         }
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1054,7 +997,7 @@ class SGBDFunctions {
             table.indexes[col].get(value).push(rowIndex);
         }
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1097,7 +1040,7 @@ class SGBDFunctions {
             indexMap.get(newValue).push(oldRowIndex);
         }
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1114,7 +1057,7 @@ class SGBDFunctions {
             currentTable = null;
         }
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1127,7 +1070,7 @@ class SGBDFunctions {
             currentTable = null;
         }
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1148,7 +1091,7 @@ class SGBDFunctions {
             currentTable = null;
         }
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1173,7 +1116,7 @@ class SGBDFunctions {
         }
         delete table.columns[columnName];
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1217,7 +1160,7 @@ class SGBDFunctions {
             }
         }
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1231,7 +1174,7 @@ class SGBDFunctions {
         databases[newName] = db;
         currentDatabase = newName;
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1246,7 +1189,7 @@ class SGBDFunctions {
         db.schemas[newName] = s;
         currentSchema = newName;
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1269,7 +1212,7 @@ class SGBDFunctions {
         schema.tables[newName] = t;
         currentTable = newName;
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1330,7 +1273,7 @@ class SGBDFunctions {
             table.remakeColumnIndex(newColumn.name);
         }
         refreshUI();
-        if (!autoSaveEnabled)
+        if (!isAutoSaveEnabled())
             return;
         saveToLocalStorage();
         saveToSupabase();
@@ -1581,7 +1524,7 @@ var DataTypes;
     DataTypes.VarcharType = VarcharType;
 })(DataTypes || (DataTypes = {}));
 let databases = {};
-const databaseGroup = new DB.NodeGroup("databases", [], () => { abrirFechar(false, "criacao-database"); });
+const databaseGroup = new DB.NodeGroup("Databases", [], () => { abrirFechar(false, "criacao-database"); });
 const types = {
     INTEGER: new DataTypes.IntegerType(),
     FLOAT: new DataTypes.FloatType(),
@@ -5078,34 +5021,77 @@ let tablesLogical = {};
 const logicalConnections = [];
 function refreshLogical() {
     camera.innerHTML = "";
+    tablesLogical = {};
     connectionsSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     connectionsSvg.id = "logical-connections";
     camera.appendChild(connectionsSvg);
-    const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
-    const marker = document.createElementNS("http://www.w3.org/2000/svg", "marker");
-    marker.setAttribute("id", "arrow");
-    marker.setAttribute("viewBox", "0 0 10 10");
-    marker.setAttribute("refX", "10");
-    marker.setAttribute("refY", "5");
-    marker.setAttribute("markerWidth", "8");
-    marker.setAttribute("markerHeight", "8");
-    marker.setAttribute("orient", "auto");
-    const arrow = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    arrow.setAttribute("d", "M 0 0 L 10 5 L 0 10 Z");
-    arrow.setAttribute("fill", "var(--blue6)");
-    marker.appendChild(arrow);
-    defs.appendChild(marker);
-    connectionsSvg.appendChild(defs);
-    const GAP_X = 450;
-    const GAP_Y = 400;
-    let nCol = 0;
-    let nRow = 0;
+    logicalConnections.length = 0;
+    drawTables(new Map());
+    createSVGPaths();
+    requestAnimationFrame(() => {
+        const posicoes = calculateTablesPositions();
+        const tabelas = [...posicoes.entries()];
+        if (tabelas.length === 0) {
+            drawConnectionLines();
+            return;
+        }
+        const largura = Math.max(...tabelas.map(([nome, p]) => p.x + tablesLogical[nome].element.offsetWidth));
+        const altura = Math.max(...tabelas.map(([nome, p]) => p.y + tablesLogical[nome].element.offsetHeight));
+        const deslocamentoX = (camera.clientWidth - largura) / 2;
+        const deslocamentoY = (camera.clientHeight - altura) / 2;
+        for (const [nome, posicao] of tabelas) {
+            const tabela = tablesLogical[nome];
+            if (!tabela)
+                continue;
+            const x = posicao.x + deslocamentoX;
+            const y = posicao.y + deslocamentoY;
+            tabela.element.dataset.x = String(x);
+            tabela.element.dataset.y = String(y);
+            tabela.element.style.transform = `translate(${x}px, ${y}px)`;
+        }
+        drawConnectionLines();
+    });
+}
+function calculateTablesPositions() {
+    const graph = new dagre.graphlib.Graph();
+    graph.setDefaultEdgeLabel(() => ({}));
+    graph.setGraph({
+        rankdir: "LR",
+        nodesep: 40,
+        ranksep: 60,
+        marginx: 100,
+        marginy: 0
+    });
+    for (const [nome, dados] of Object.entries(tablesLogical)) {
+        graph.setNode(nome, {
+            width: dados.element.offsetWidth,
+            height: dados.element.offsetHeight
+        });
+    }
+    for (const conexao of logicalConnections) {
+        if (graph.hasNode(conexao.from.table) && graph.hasNode(conexao.to.table)) {
+            graph.setEdge(conexao.from.table, conexao.to.table);
+        }
+    }
+    dagre.layout(graph);
+    const posicoes = new Map();
+    for (const nome of graph.nodes()) {
+        const no = graph.node(nome);
+        posicoes.set(nome, {
+            x: no.x - no.width / 2,
+            y: no.y - no.height / 2
+        });
+    }
+    return posicoes;
+}
+function drawTables(posicoes) {
     for (const schema of Object.values(getCurrentDatabase()?.schemas ?? {})) {
         for (const table of Object.values(schema.tables)) {
             const divTabelaLogical = document.createElement("div");
             divTabelaLogical.classList.add("tabela-logical");
-            divTabelaLogical.dataset.x = GAP_X * nCol + "";
-            divTabelaLogical.dataset.y = GAP_Y * nRow + "";
+            const posicao = posicoes.get(table.name) ?? { x: 0, y: 0 };
+            divTabelaLogical.dataset.x = posicao.x + "";
+            divTabelaLogical.dataset.y = posicao.y + "";
             divTabelaLogical.addEventListener("mousedown", (event) => {
                 moved = false;
                 event.stopPropagation();
@@ -5113,12 +5099,7 @@ function refreshLogical() {
                 lastMouseX = event.clientX;
                 lastMouseY = event.clientY;
             });
-            divTabelaLogical.style.transform = `translate(${GAP_X * nCol}px, ${GAP_Y * nRow}px)`;
-            nCol++;
-            if (nCol == 3) {
-                nCol = 0;
-                nRow++;
-            }
+            divTabelaLogical.style.transform = `translate(${posicao.x}px, ${posicao.y}px)`;
             camera.appendChild(divTabelaLogical);
             const details = document.createElement("details");
             details.open = true;
@@ -5261,7 +5242,23 @@ function refreshLogical() {
             }
         }
     }
-    logicalConnections.length = 0;
+}
+function createSVGPaths() {
+    const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+    const marker = document.createElementNS("http://www.w3.org/2000/svg", "marker");
+    marker.setAttribute("id", "arrow");
+    marker.setAttribute("viewBox", "0 0 10 10");
+    marker.setAttribute("refX", "10");
+    marker.setAttribute("refY", "5");
+    marker.setAttribute("markerWidth", "8");
+    marker.setAttribute("markerHeight", "8");
+    marker.setAttribute("orient", "auto");
+    const arrow = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    arrow.setAttribute("d", "M 0 0 L 10 5 L 0 10 Z");
+    arrow.setAttribute("fill", "var(--blue6)");
+    marker.appendChild(arrow);
+    defs.appendChild(marker);
+    connectionsSvg.appendChild(defs);
     for (const schema of Object.values(getCurrentDatabase()?.schemas ?? {})) {
         for (const table of Object.values(schema.tables)) {
             for (const column of Object.values(table.columns)) {
@@ -5290,9 +5287,6 @@ function refreshLogical() {
             }
         }
     }
-    requestAnimationFrame(() => {
-        drawConnectionLines();
-    });
 }
 function drawConnectionLines() {
     for (const connection of logicalConnections) {
@@ -5448,83 +5442,16 @@ document.addEventListener("mouseup", () => {
 });
 // #endregion
 // #region Save
-let autoSaveEnabled = true;
-document.getElementById("auto-save-checkbox")?.addEventListener("click", () => {
-    autoSaveEnabled = !autoSaveEnabled;
+const { isAutoSaveEnabled, showNotification } = setupSaveLoadUI({
+    defaultOption: "salvar-local",
+    isUserLoggedIn: () => Auth.isUserLoggedIn(),
+    options: {
+        "salvar-local": { save: saveToLocalStorage, load: loadFromLocalStorage },
+        "salvar-json": { save: saveToJson, load: loadFromJson },
+        // "salvar-sql":    { save: saveToSql,          load: loadFromSql },
+        "salvar-online": { save: saveToSupabase, load: loadFromSupabase, requiresLogin: true },
+    },
 });
-/**
- * Marca visualmente a ação de salvar/carregar selecionada pela UI.
- * @param div - Elemento que representa a ação clicada.
- */
-function selectAction(div) {
-    document.querySelector(".acao-escolhida")?.classList.remove("acao-escolhida");
-    div.classList.add("acao-escolhida");
-}
-/**
- * Marca visualmente a opção (local/json/sql) selecionada pela UI.
- * @param div - Elemento que representa a opção clicada.
- */
-function selectOption(div) {
-    document.querySelector(".opcao-escolhida")?.classList.remove("opcao-escolhida");
-    div.classList.add("opcao-escolhida");
-}
-let timeoutSaveOrLoad;
-/**
- * Executa a ação de salvar ou carregar baseada nas seleções atuais na interface.
- * Decide entre salvar/carregar localmente, em JSON ou em SQL.
- */
-function confirmSaveOrLoad() {
-    const selectedAction = document.querySelector(".acao-escolhida");
-    const selectedOption = document.querySelector(".opcao-escolhida");
-    if (!selectedAction || !selectedOption) {
-        alert("Por favor, selecione uma ação e uma opção.");
-        return;
-    }
-    const notification = document.querySelector("#save-notification");
-    const action = selectedAction.id;
-    const option = selectedOption.id;
-    if (action === "save-action") {
-        if (option === "salvar-local") {
-            saveToLocalStorage();
-        }
-        else if (option === "salvar-json") {
-            saveToJson();
-        }
-        else if (option === "salvar-sql") {
-            saveToSql();
-        }
-        else if (option === "salvar-online") {
-            if (!Auth.isUserLoggedIn()) {
-                alert("Você precisa estar logado para salvar online.");
-                return;
-            }
-            saveToSupabase();
-        }
-        notification.querySelector("p").innerText = "Dados salvos com sucesso!";
-        notification.style.display = "block";
-        timeoutSaveOrLoad = setTimeout(() => {
-            notification.style.display = "none";
-        }, 3000);
-    }
-    else if (action === "load-action") {
-        if (option === "salvar-local") {
-            loadFromLocalStorage();
-        }
-        else if (option === "salvar-json") {
-            loadFromJson();
-        }
-        else if (option === "salvar-sql") {
-            loadFromSql();
-        }
-        else if (option === "salvar-online") {
-            if (!Auth.isUserLoggedIn()) {
-                alert("Você precisa estar logado para carregar online.");
-                return;
-            }
-            loadFromSupabase();
-        }
-    }
-}
 function transformToJson() {
     return JSON.stringify(databases, (key, value) => {
         if (key === "parent")
@@ -5550,12 +5477,7 @@ function transformFromJson(json) {
             databases[name] = d;
         }
         refreshUI();
-        const notification = document.querySelector("#save-notification");
-        notification.querySelector("p").innerText = "Dados carregados com sucesso!";
-        notification.style.display = "block";
-        timeoutSaveOrLoad = setTimeout(() => {
-            notification.style.display = "none";
-        }, 3000);
+        showNotification("Dados carregados com sucesso!");
     }
     catch (err) {
         console.error("Erro ao carregar databases:", err);
@@ -5715,7 +5637,6 @@ document.getElementById("menus-centrais").addEventListener("click", (event) => {
     });
     document.getElementById("menus-centrais").style.display = "none";
 });
-window.addEventListener('load', () => updateInterfaceTerminalIndicator(buttonChangeToGrafical));
 window.addEventListener("DOMContentLoaded", async () => {
     if (await Auth.isUserLoggedIn()) {
         loadFromSupabase();
@@ -5748,9 +5669,6 @@ document.addEventListener("mousemove", (e) => {
         esquerda.style.width = `${novaLargura}px`;
     }
 });
-setTimeout(() => {
-    changeTo("interface-grafica");
-}, 200);
 changeLeftSide();
 //@ts-ignore
 window.thifrebd = {
@@ -5771,9 +5689,6 @@ window.thifrebd = {
     insertRowInterface,
     createWhereConditionDiv,
     createTerminalSession,
-    selectAction,
-    selectOption,
-    confirmSaveOrLoad,
     changeEditRowMenu
 };
 // To Do

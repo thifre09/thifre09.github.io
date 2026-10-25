@@ -1,4 +1,4 @@
-// assets/js/aniversario.js
+// src/js/aniversario.js
 function displayMain() {
     const btn = document.getElementById("btn");
     btn.style.display = "none";

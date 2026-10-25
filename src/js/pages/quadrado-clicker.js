@@ -1,68 +1,18 @@
 import * as Auth from "../supabase/auth.js";
 import { supabase } from "../supabase/client.js";
+import { setupSaveLoadUI, setupTabNavigation } from "../others/global.js";
 // #region Change navbar
-const buttonChangeToGame = document.getElementById("button-header-game");
-const buttonChangeToOthers = document.getElementById("button-header-others");
-const buttonChangeToSave = document.getElementById("button-header-save");
-const buttonChangeToHelp = document.getElementById("button-header-help");
-const navBar = document.getElementById("nav-bar");
-/**
- * Atualiza a posição e a largura do indicador da interface ativa.
- * @param activeButton - Botão atualmente selecionado.
- */
-function updateNavBarIndicator(activeButton) {
-    const left = activeButton.offsetLeft;
-    const width = activeButton.offsetWidth;
-    navBar.style.setProperty("--indicator-left", `${left}px`);
-    navBar.style.setProperty("--indicator-width", `${width}px`);
-}
-/**
- * Troca a interface visível no painel (gráfica, terminal, logical, save ou help).
- * @param id - Identificador da interface a ser exibida.
- */
-function changeTo(id) {
-    document.getElementById("game").style.display = "none";
-    document.getElementById("others").style.display = "none";
-    document.getElementById("save").style.display = "none";
-    document.getElementById("help").style.display = "none";
-    document.getElementById(id).style.display = "flex";
-    document.querySelector(".nav-bar-ativo")?.classList.remove("nav-bar-ativo");
-    switch (id) {
-        case "game":
-            buttonChangeToGame.classList.add("nav-bar-ativo");
-            updateNavBarIndicator(buttonChangeToGame);
-            break;
-        case "others":
-            buttonChangeToOthers.classList.add("nav-bar-ativo");
-            updateNavBarIndicator(buttonChangeToOthers);
-            conquistas.forEach(conquista => {
-                if (!conquista.conquistada) {
+const { changeTo } = setupTabNavigation({
+    menus: ["game", "others", "save", "help"],
+    initial: "game",
+    onEnter: {
+        others: () => {
+            conquistas.forEach((conquista) => {
+                if (!conquista.conquistada)
                     conquista.check();
-                }
             });
-            break;
-        case "save":
-            buttonChangeToSave.classList.add("nav-bar-ativo");
-            updateNavBarIndicator(buttonChangeToSave);
-            break;
-        case "help":
-            buttonChangeToHelp.classList.add("nav-bar-ativo");
-            updateNavBarIndicator(buttonChangeToHelp);
-            break;
-    }
-    updateUI();
-}
-buttonChangeToGame.addEventListener("click", () => {
-    changeTo("game");
-});
-buttonChangeToOthers.addEventListener("click", () => {
-    changeTo("others");
-});
-buttonChangeToSave.addEventListener("click", () => {
-    changeTo("save");
-});
-buttonChangeToHelp.addEventListener("click", () => {
-    changeTo("help");
+        },
+    },
 });
 // #endregion
 // #region classes
@@ -686,7 +636,7 @@ function click() {
     }
     quadrado.classList.add("click-animation");
     clearTimeout(clickAnimationTimeout ? clickAnimationTimeout : undefined);
-    clickAnimationTimeout = setTimeout(() => {
+    clickAnimationTimeout = window.setTimeout(() => {
         quadrado.classList.remove("click-animation");
     }, 150);
     updateUI();
@@ -893,7 +843,7 @@ function usarmagias() {
         clearTimeout(textoLivroTimeout ? textoLivroTimeout : undefined);
         mensagem.style.display = "block";
         mensagem.textContent = "Escolha um feitiço antes de usá-lo.";
-        textoLivroTimeout = setTimeout(() => {
+        textoLivroTimeout = window.setTimeout(() => {
             mensagem.style.display = "none";
         }, 3000);
         return;
@@ -902,7 +852,7 @@ function usarmagias() {
         clearTimeout(textoLivroTimeout ? textoLivroTimeout : undefined);
         mensagem.style.display = "block";
         mensagem.textContent = "Você não tem mana suficiente.";
-        textoLivroTimeout = setTimeout(() => {
+        textoLivroTimeout = window.setTimeout(() => {
             mensagem.style.display = "none";
         }, 3000);
         return;
@@ -911,7 +861,7 @@ function usarmagias() {
     clearTimeout(textoLivroTimeout ? textoLivroTimeout : undefined);
     mensagem.style.display = "block";
     mensagem.textContent = feiticoSelecionado.efeito();
-    textoLivroTimeout = setTimeout(() => {
+    textoLivroTimeout = window.setTimeout(() => {
         mensagem.style.display = "none";
     }, 3000);
     mostrarFeitico(feiticoSelecionado.nome);
@@ -939,7 +889,7 @@ function verificarQuiz(numeroOpcao) {
     updateQuadradosValue(acertou ? quadrados + variacao : Math.max(0, quadrados - variacao));
     document.getElementById("resultado-quiz").style.display = "block";
     clearTimeout(resultadoQuizTimeout ? resultadoQuizTimeout : undefined);
-    resultadoQuizTimeout = setTimeout(() => {
+    resultadoQuizTimeout = window.setTimeout(() => {
         document.getElementById("resultado-quiz").style.display = "none";
     }, 2000);
     if (acertou) {
@@ -1069,7 +1019,6 @@ function skinquadrado(action) {
         }
     });
 }
-function a() { }
 async function resetarTudo() {
     if (confirm("Tem certeza que deseja resetar tudo? Esta ação não pode ser desfeita.")) {
         quadrados = 0;
@@ -1103,62 +1052,15 @@ function cheat() {
 const quadrado = document.getElementById("quadrado");
 quadrado.addEventListener("click", click);
 // #region save
-let timeoutSaveOrLoad;
-let autoSave = true;
-function confirmSaveOrLoad() {
-    const selectedAction = document.querySelector(".acao-escolhida");
-    const selectedOption = document.querySelector(".opcao-escolhida");
-    if (!selectedAction || !selectedOption) {
-        alert("Por favor, selecione uma ação e uma opção.");
-        return;
-    }
-    const notification = document.querySelector("#save-notification");
-    const action = selectedAction.id;
-    const option = selectedOption.id;
-    if (action === "save-action") {
-        if (option === "salvar-local") {
-            saveToLocalStorage();
-        }
-        else if (option === "salvar-json") {
-            saveToJson();
-        }
-        else if (option === "salvar-online") {
-            if (!Auth.isUserLoggedIn()) {
-                alert("Você precisa estar logado para salvar online.");
-                return;
-            }
-            saveToSupabase();
-        }
-        notification.querySelector("p").innerText = "Dados salvos com sucesso!";
-        notification.style.display = "block";
-        timeoutSaveOrLoad = setTimeout(() => {
-            notification.style.display = "none";
-        }, 3000);
-    }
-    else if (action === "load-action") {
-        if (option === "salvar-local") {
-            loadFromLocalStorage();
-        }
-        else if (option === "salvar-json") {
-            loadFromJson();
-        }
-        else if (option === "salvar-online") {
-            if (!Auth.isUserLoggedIn()) {
-                alert("Você precisa estar logado para carregar online.");
-                return;
-            }
-            loadFromSupabase();
-        }
-    }
-}
-function selectAction(div) {
-    document.querySelector(".acao-escolhida")?.classList.remove("acao-escolhida");
-    div.classList.add("acao-escolhida");
-}
-function selectOption(div) {
-    document.querySelector(".opcao-escolhida")?.classList.remove("opcao-escolhida");
-    div.classList.add("opcao-escolhida");
-}
+const { isAutoSaveEnabled, showNotification } = setupSaveLoadUI({
+    defaultOption: "salvar-local",
+    isUserLoggedIn: () => Auth.isUserLoggedIn(),
+    options: {
+        "salvar-local": { save: saveToLocalStorage, load: loadFromLocalStorage },
+        "salvar-json": { save: saveToJson, load: loadFromJson },
+        "salvar-online": { save: saveToSupabase, load: loadFromSupabase, requiresLogin: true },
+    },
+});
 function transformToJson() {
     return JSON.stringify({
         quadrados: quadrados,
@@ -1231,20 +1133,10 @@ function transformFromJson(json) {
                 conquista.conquistada = c.conquistada;
             }
         }
-        const notification = document.querySelector("#save-notification");
-        notification.querySelector("p").innerText = "Dados carregados com sucesso!";
-        notification.style.display = "block";
-        timeoutSaveOrLoad = setTimeout(() => {
-            notification.style.display = "none";
-        }, 3000);
+        showNotification("Dados carregados com sucesso!");
     }
     catch (error) {
-        const notification = document.querySelector("#save-notification");
-        notification.querySelector("p").innerText = "Erro ao carregar os dados!";
-        notification.style.display = "block";
-        timeoutSaveOrLoad = setTimeout(() => {
-            notification.style.display = "none";
-        }, 3000);
+        showNotification("Erro ao carregar os dados");
     }
 }
 function saveToLocalStorage() {
@@ -1301,15 +1193,6 @@ async function loadFromSupabase() {
     transformFromJson(json);
     updateUI();
 }
-document.getElementById("save-action").addEventListener("click", () => selectAction(document.getElementById("save-action")));
-document.getElementById("load-action").addEventListener("click", () => selectAction(document.getElementById("load-action")));
-document.getElementById("salvar-local").addEventListener("click", () => selectOption(document.getElementById("salvar-local")));
-document.getElementById("salvar-json").addEventListener("click", () => selectOption(document.getElementById("salvar-json")));
-document.getElementById("salvar-online").addEventListener("click", () => selectOption(document.getElementById("salvar-online")));
-document.getElementById("auto-save").addEventListener("click", () => {
-    autoSave = !autoSave;
-});
-document.getElementById("confirm-save-load-button").addEventListener("click", confirmSaveOrLoad);
 // #endregion
 updateUI();
 setInterval(() => {
@@ -1317,7 +1200,7 @@ setInterval(() => {
     document.getElementById("quadrados").textContent = "Quadrados: " + formatNumber(quadrados);
 }, 1000);
 setInterval(async () => {
-    if (autoSave) {
+    if (isAutoSaveEnabled()) {
         saveToLocalStorage();
         if (await Auth.isUserLoggedIn()) {
             saveToSupabase();

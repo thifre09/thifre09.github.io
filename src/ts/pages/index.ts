@@ -7,49 +7,59 @@ interface ImageSequences {
     [key: string]: ImageSequenceData;
 }
 
+const pathPrefix = 'src/images/links/';
+
 const imageSequences: ImageSequences = {
     batatas: {
-        path: 'assets/images/links/batatas/batata',
+        path: 'batatas/batata',
         extensions: ['jpg', 'jpg', 'jpg', 'jpg', 'jpg', 'jpg', 'jpg', 'jpg']
     },
     codificador: {
-        path: 'assets/images/links/codificador/cod',
+        path: 'codificador/cod',
         extensions: ['png', 'jfif', 'jfif', 'png', 'jfif', 'jfif', 'jfif', 'jfif']
     },
     cores: {
-        path: 'assets/images/links/cores/cores',
+        path: 'cores/cores',
         extensions: ['jpg', 'jpg', 'jpg', 'jpg', 'jpg', 'png', 'jpg', 'png']
     },
     curiosidades: {
-        path: 'assets/images/links/curiosidades/curi',
+        path: 'curiosidades/curi',
         extensions: ['jpg', 'jpg', 'png', 'png', 'png', 'jpg', 'png', 'jpg']
     },
+    'editor-html': {
+        path: 'editor-html/edi',
+        extensions: ['png', 'png', 'png', 'jpg', 'jpg', 'jpg', 'jpg', 'png']
+    },
     'mayor-simulator': {
-        path: 'assets/images/links/mayor-simulator/ms',
+        path: 'mayor-simulator/ms',
+        extensions: ['jpg', 'jpg', 'jpg', 'jpg', 'jpg', 'jpg', 'jpg', 'jpg']
+    },
+    "nao-va-a-falencia": {
+        path: 'nao-va-a-falencia/fal',
         extensions: ['jpg', 'jpg', 'jpg', 'jpg', 'jpg', 'jpg', 'jpg', 'jpg']
     },
     numeros: {
-        path: 'assets/images/links/numeros/num',
+        path: 'numeros/num',
         extensions: ['png', 'jpg', 'png', 'jpg', 'jpg', 'png', 'jpg', 'png']
     },
     'poder-do-css': {
-        path: 'assets/images/links/poder-do-css/pcs',
+        path: 'poder-do-css/pcs',
         extensions: ['png', 'png', 'jfif', 'png', 'jfif', 'jfif', 'jfif', 'jfif']
     },
     python: {
-        path: 'assets/images/links/python/py',
+        path: 'python/py',
         extensions: ['jpg', 'jpg', 'png', 'jpg', 'jpg', 'jpg', 'png', 'png']
     },
     'quadrado-clicker': {
-        path: 'assets/images/links/quadrado-clicker/qc',
+        path: 'quadrado-clicker/qc',
         extensions: ['png', 'jpg', 'jpg', 'jpg', 'png', 'png', 'png', 'png']
     },
     'review-jogos': {
-        path: 'assets/images/links/review-jogos/jr',
+        path: 'review-jogos/jr',
         extensions: ['jpg', 'jpg', 'jpg', 'jpg', 'jpg', 'jpg', 'jpg', 'jpg']
     },
     thifreBD: {
-        path: 'assets/images/links/thifreBD/tbd',
+        path: 'thifreBD/tbd',
         extensions: ['png', 'jpg', 'jpg', 'png', 'jpg', 'png', 'png', 'jpg']
     }
 };
@@ -72,7 +82,7 @@ function generateAnimationCSS(): void {
             const percentage = (i / 8) * 100;
             const frameNum = i + 1;
             const ext = data.extensions[i] || data.extensions[0];
-            const imageUrl = `${data.path}${frameNum}.${ext}`;
+            const imageUrl = `${pathPrefix}${data.path}${frameNum}.${ext}`;
 
             keyframes += `    ${percentage}% {\n`;
             keyframes += `        background-image: url('${imageUrl}');\n`;
@@ -81,7 +91,7 @@ function generateAnimationCSS(): void {
         }
 
         keyframes += `    100% {\n`;
-        keyframes += `        background-image: url('${data.path}1.${data.extensions[0]}');\n`;
+        keyframes += `        background-image: url('${pathPrefix}${data.path}1.${data.extensions[0]}');\n`;
         keyframes += `        background-size: cover;\n`;
         keyframes += `    }\n`;
         keyframes += `}\n\n`;
