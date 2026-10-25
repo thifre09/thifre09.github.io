@@ -1,4 +1,5 @@
-import dagre from "dagre";
+// @ts-ignore
+import dagre from "https://cdn.jsdelivr.net/npm/@dagrejs/dagre/+esm";
 import * as Auth from "../supabase/auth.js";
 import { supabase } from "../supabase/client.js";
 import { setupTabNavigation, setupSaveLoadUI } from "../others/global.js";
@@ -1523,7 +1524,7 @@ var DataTypes;
     DataTypes.VarcharType = VarcharType;
 })(DataTypes || (DataTypes = {}));
 let databases = {};
-const databaseGroup = new DB.NodeGroup("databases", [], () => { abrirFechar(false, "criacao-database"); });
+const databaseGroup = new DB.NodeGroup("Databases", [], () => { abrirFechar(false, "criacao-database"); });
 const types = {
     INTEGER: new DataTypes.IntegerType(),
     FLOAT: new DataTypes.FloatType(),
@@ -5019,44 +5020,37 @@ let moved = false;
 let tablesLogical = {};
 const logicalConnections = [];
 function refreshLogical() {
+    camera.innerHTML = "";
+    tablesLogical = {};
     connectionsSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     connectionsSvg.id = "logical-connections";
-    camera.innerHTML = "";
     camera.appendChild(connectionsSvg);
-    const tabelas = Object.values(getCurrentDatabase()?.schemas ?? {})
-        .flatMap(schema => Object.values(schema.tables));
-    const camadas = organizarTabelasPorCamada(tabelas);
     logicalConnections.length = 0;
+    drawTables(new Map());
     createSVGPaths();
     requestAnimationFrame(() => {
+        const posicoes = calculateTablesPositions();
+        const tabelas = [...posicoes.entries()];
+        if (tabelas.length === 0) {
+            drawConnectionLines();
+            return;
+        }
+        const largura = Math.max(...tabelas.map(([nome, p]) => p.x + tablesLogical[nome].element.offsetWidth));
+        const altura = Math.max(...tabelas.map(([nome, p]) => p.y + tablesLogical[nome].element.offsetHeight));
+        const deslocamentoX = (camera.clientWidth - largura) / 2;
+        const deslocamentoY = (camera.clientHeight - altura) / 2;
+        for (const [nome, posicao] of tabelas) {
+            const tabela = tablesLogical[nome];
+            if (!tabela)
+                continue;
+            const x = posicao.x + deslocamentoX;
+            const y = posicao.y + deslocamentoY;
+            tabela.element.dataset.x = String(x);
+            tabela.element.dataset.y = String(y);
+            tabela.element.style.transform = `translate(${x}px, ${y}px)`;
+        }
         drawConnectionLines();
     });
-}
-function organizarTabelasPorCamada(tabelas) {
-    const porNome = new Map(tabelas.map(tabela => [tabela.name, tabela]));
-    const camadas = new Map();
-    function calcularCamada(tabela, visitando = new Set()) {
-        if (camadas.has(tabela.name)) {
-            return camadas.get(tabela.name);
-        }
-        if (visitando.has(tabela.name)) {
-            return 0;
-        }
-        visitando.add(tabela.name);
-        const referencias = Object.values(tabela.columns)
-            .map(coluna => coluna.reference?.table)
-            .filter((nome) => nome !== undefined && porNome.has(nome));
-        let camada = 0;
-        for (const nome of referencias) {
-            camada = Math.max(camada, calcularCamada(porNome.get(nome), new Set(visitando)) + 1);
-        }
-        camadas.set(tabela.name, camada);
-        return camada;
-    }
-    for (const tabela of tabelas) {
-        calcularCamada(tabela);
-    }
-    return camadas;
 }
 function calculateTablesPositions() {
     const graph = new dagre.graphlib.Graph();
@@ -5064,21 +5058,18 @@ function calculateTablesPositions() {
     graph.setGraph({
         rankdir: "LR",
         nodesep: 40,
-        ranksep: 100,
-        marginx: 40,
-        marginy: 40
+        ranksep: 60,
+        marginx: 100,
+        marginy: 0
     });
-    // Registra cada tabela com suas dimensões reais.
     for (const [nome, dados] of Object.entries(tablesLogical)) {
         graph.setNode(nome, {
             width: dados.element.offsetWidth,
             height: dados.element.offsetHeight
         });
     }
-    // Registra as relações entre as tabelas.
     for (const conexao of logicalConnections) {
-        if (graph.hasNode(conexao.from.table) &&
-            graph.hasNode(conexao.to.table)) {
+        if (graph.hasNode(conexao.from.table) && graph.hasNode(conexao.to.table)) {
             graph.setEdge(conexao.from.table, conexao.to.table);
         }
     }
@@ -5098,7 +5089,7 @@ function drawTables(posicoes) {
         for (const table of Object.values(schema.tables)) {
             const divTabelaLogical = document.createElement("div");
             divTabelaLogical.classList.add("tabela-logical");
-            const posicao = posicoes.get(table.name);
+            const posicao = posicoes.get(table.name) ?? { x: 0, y: 0 };
             divTabelaLogical.dataset.x = posicao.x + "";
             divTabelaLogical.dataset.y = posicao.y + "";
             divTabelaLogical.addEventListener("mousedown", (event) => {

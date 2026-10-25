@@ -25,6 +25,10 @@ const imageSequences = {
         path: 'mayor-simulator/ms',
         extensions: ['jpg', 'jpg', 'jpg', 'jpg', 'jpg', 'jpg', 'jpg', 'jpg']
     },
+    "nao-va-a-falencia": {
+        path: 'nao-va-a-falencia/fal',
+        extensions: ['jpg', 'jpg', 'jpg', 'jpg', 'jpg', 'jpg', 'jpg', 'jpg']
+    },
     numeros: {
         path: 'numeros/num',
         extensions: ['png', 'jpg', 'png', 'jpg', 'jpg', 'png', 'jpg', 'png']

@@ -78,8 +78,10 @@ var relacionado;
     relacionado["CODIFICADOR"] = "Codificador";
     relacionado["CORES"] = "Cores";
     relacionado["CURIOSIDADES"] = "Curiosidades";
+    relacionado["EDITOR_HTML"] = "Editor HTML";
     relacionado["MAYOR_SIMULATOR"] = "Mayor Simulator";
     relacionado["MEMES"] = "Memes";
+    relacionado["NAO_VA_A_FALENCIA"] = "N\u00E3o v\u00E1 a fal\u00EAncia";
     relacionado["NUMEROS"] = "N\u00FAmeros";
     relacionado["PODER_DO_CSS"] = "Poder do CSS";
     relacionado["PYTHON"] = "Python";
@@ -111,6 +113,12 @@ class Atualizacao {
     }
 }
 const atualizacoes = [
+    new Atualizacao("Beta 4.0", "25/10/2026", [
+        new NotaAtualizacao("Criação da página Editor HTML", "Foi criada a página Editor HTML, que permite criar páginas HTML simples e ver o resultado em tempo real.", tipoNota.NOVO_RECURSO, relacionado.EDITOR_HTML),
+        new NotaAtualizacao("Criação da página Não vá a falência", "Foi criada a página Não vá a falência, que é um jogo de simulação de negócios inspirado no livro A Falência.", tipoNota.NOVO_RECURSO, relacionado.NAO_VA_A_FALENCIA),
+        new NotaAtualizacao("Atualização do ThifreBD", "O menu Lógico foi atualizado, agora seu layout é melhor", tipoNota.ATUALIZACAO, relacionado.THIFREBD),
+        new NotaAtualizacao("Correção de pequenos bugs", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do site.", tipoNota.CORRECAO, relacionado.GERAL)
+    ]),
     new Atualizacao("Beta 3.1.3", "11/10/2026", [
         new NotaAtualizacao("Conquistas e Livro Mágico no Quadrado Clicker", "Agora é possível desbloquear conquistas no Quadrado Clicker novamente. Além disso, o Livro Mágico está disponível para uso, contendo 5 magias.", tipoNota.ATUALIZACAO, relacionado.QUADRADO_CLICKER),
         new NotaAtualizacao("Correção de pequenos bugs", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do site.", tipoNota.CORRECAO, relacionado.GERAL)
@@ -121,7 +129,7 @@ const atualizacoes = [
     ]),
     new Atualizacao("Beta 3.1.1", "30/09/2026", [
         new NotaAtualizacao("Atualização do Quadrado Clicker", "Foi feita uma atualização no Quadrado Clicker, o layout da página foi refeito com um design mais moderno.", tipoNota.ATUALIZACAO, relacionado.QUADRADO_CLICKER),
-        new NotaAtualizacao("Remoção de recursos do Quadrado Clicker", "Devido à falta de tempo para atualizar o Quadrado Clicker, alguns recursos foram removidos, entre eles as melhorias de triângulos, minijogos, conquistas, e opção de salvar progresso. Eles devem voltar em uma atualização futura, com um sistema melhorado.", tipoNota.RECURSO_REMOVIDO, relacionado.QUADRADO_CLICKER),
+        new NotaAtualizacao("Remoção de recursos do Quadrado Clicker", "Vários recursos foram removidos temporariamente, entre eles as melhorias de triângulos, minijogos, conquistas, e opção de salvar progresso. Eles devem voltar em uma atualização futura, com um sistema melhorado.", tipoNota.RECURSO_REMOVIDO, relacionado.QUADRADO_CLICKER),
         new NotaAtualizacao("Atualização da página ThifreBD", "Foram adicionados mais comandos SQL, leves melhorias na interface e a aba lógica", tipoNota.ATUALIZACAO, relacionado.THIFREBD),
         new NotaAtualizacao("Correção do botão de habilitar CSS", "O botão de habilitar CSS agora funciona corretamente, e não causa mais problemas na página O Poder do CSS.", tipoNota.CORRECAO, relacionado.PODER_DO_CSS),
         new NotaAtualizacao("Correção de pequenos bugs", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do site.", tipoNota.CORRECAO, relacionado.GERAL)

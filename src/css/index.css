@@ -39,6 +39,76 @@ div#central {
     }
 }
 
+#batatas {
+    background: no-repeat center;
+    --bg-animation-name: mudarBatatas;
+}
+
+#codificador {
+    background: no-repeat center;
+    --bg-animation-name: mudarCodificador;
+}
+
+#cores {
+    background: no-repeat center;
+    --bg-animation-name: mudarCores;
+}
+
+#curiosidades {
+    background: no-repeat center;
+    --bg-animation-name: mudarCuriosidades;
+}
+
+#editor-html {
+    background: no-repeat center;
+    --bg-animation-name: mudarEditorHtml;
+}
+
+#mayor-simulator {
+    background: no-repeat center;
+    --bg-animation-name: mudarMayorSimulator;
+}
+
+#nao-va-a-falencia {
+    background: no-repeat center;
+    --bg-animation-name: mudarNaoVaAFalencia;
+}
+
+#numeros {
+    background: no-repeat center;
+    --bg-animation-name: mudarNumeros;
+}
+
+#poder-do-css {
+    background: no-repeat center;
+    --bg-animation-name: mudarPoderDoCss;
+}
+
+#python {
+    background: no-repeat center;
+    --bg-animation-name: mudarPython;
+}
+
+#quadrado-clicker {
+    background: no-repeat center;
+    --bg-animation-name: mudarQuadradoClicker;
+}
+
+#review-jogos {
+    background: no-repeat center;
+    --bg-animation-name: mudarReviewJogos;
+}
+
+#thifreBD {
+    background: no-repeat center;
+    --bg-animation-name: mudarThifreBD;
+}
+
+.links:hover {
+    background: #81C784;
+    transform: scale(1.05);
+}
+
 @keyframes texto {
     0% {
         color: red;
@@ -75,69 +145,4 @@ div#central {
     100% {
         color: red;
     }
-}
-
-#batatas {
-    background: no-repeat center;
-    --bg-animation-name: mudarBatatas;
-}
-
-#codificador {
-    background: no-repeat center;
-    --bg-animation-name: mudarCodificador;
-}
-
-#cores {
-    background: no-repeat center;
-    --bg-animation-name: mudarCores;
-}
-
-#curiosidades {
-    background: no-repeat center;
-    --bg-animation-name: mudarCuriosidades;
-}
-
-#editor-html {
-    background: no-repeat center;
-    --bg-animation-name: mudarEditorHtml;
-}
-
-#mayor-simulator {
-    background: no-repeat center;
-    --bg-animation-name: mudarMayorSimulator;
-}
-
-#numeros {
-    background: no-repeat center;
-    --bg-animation-name: mudarNumeros;
-}
-
-#poder-do-css {
-    background: no-repeat center;
-    --bg-animation-name: mudarPoderDoCss;
-}
-
-#python {
-    background: no-repeat center;
-    --bg-animation-name: mudarPython;
-}
-
-#quadrado-clicker {
-    background: no-repeat center;
-    --bg-animation-name: mudarQuadradoClicker;
-}
-
-#review-jogos {
-    background: no-repeat center;
-    --bg-animation-name: mudarReviewJogos;
-}
-
-#thifreBD {
-    background: no-repeat center;
-    --bg-animation-name: mudarThifreBD;
-}
-
-.links:hover {
-    background: #81C784;
-    transform: scale(1.05);
 }
