@@ -14,7 +14,6 @@ const { changeTo } = setupTabNavigation({
             });
         },
     },
-    onChange: () => updateUI(),
 });
 
 // #endregion
@@ -695,7 +694,7 @@ function click() {
     quadrado.classList.add("click-animation");
     clearTimeout(clickAnimationTimeout ? clickAnimationTimeout : undefined);
 
-    clickAnimationTimeout = setTimeout(() => {
+    clickAnimationTimeout = window.setTimeout(() => {
         quadrado.classList.remove("click-animation");
     }, 150);
 
@@ -924,7 +923,7 @@ function usarmagias(): void {
         clearTimeout(textoLivroTimeout ? textoLivroTimeout : undefined);
         mensagem.style.display = "block";
         mensagem.textContent = "Escolha um feitiço antes de usá-lo.";
-        textoLivroTimeout = setTimeout(() => {
+        textoLivroTimeout = window.setTimeout(() => {
             mensagem.style.display = "none";
         }, 3000);
         return;
@@ -933,7 +932,7 @@ function usarmagias(): void {
         clearTimeout(textoLivroTimeout ? textoLivroTimeout : undefined);
         mensagem.style.display = "block";
         mensagem.textContent = "Você não tem mana suficiente.";
-        textoLivroTimeout = setTimeout(() => {
+        textoLivroTimeout = window.setTimeout(() => {
             mensagem.style.display = "none";
         }, 3000);
         return;
@@ -943,7 +942,7 @@ function usarmagias(): void {
     clearTimeout(textoLivroTimeout ? textoLivroTimeout : undefined);
     mensagem.style.display = "block";
     mensagem.textContent = feiticoSelecionado.efeito();
-    textoLivroTimeout = setTimeout(() => {
+    textoLivroTimeout = window.setTimeout(() => {
         mensagem.style.display = "none";
     }, 3000);
     mostrarFeitico(feiticoSelecionado.nome);
@@ -976,7 +975,7 @@ function verificarQuiz(numeroOpcao: number) {
     updateQuadradosValue(acertou ? quadrados + variacao : Math.max(0, quadrados - variacao));
     document.getElementById("resultado-quiz")!.style.display = "block";
     clearTimeout(resultadoQuizTimeout ? resultadoQuizTimeout : undefined);
-    resultadoQuizTimeout = setTimeout(() => {
+    resultadoQuizTimeout = window.setTimeout(() => {
         document.getElementById("resultado-quiz")!.style.display = "none";
     }, 2000);
     if (acertou) {

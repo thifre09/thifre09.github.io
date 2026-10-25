@@ -34,7 +34,7 @@ function openNotifications(html) {
     const notificacoes = document.getElementById("notificacoes");
     notificacoes.style.display = "flex";
     notificacoes.innerHTML = html;
-    timeout = setTimeout(() => {
+    timeout = window.setTimeout(() => {
         notificacoes.style.display = "none";
     }, 3000);
 }

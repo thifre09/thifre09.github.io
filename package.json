@@ -23,6 +23,7 @@
   "homepage": "https://github.com/thifre09/thifre09.github.io#readme",
   "devDependencies": {
     "@types/dagre": "^0.7.54",
+    "@types/node": "^26.6.5",
     "esbuild": "^0.28.2",
     "prettier": "^3.8.3",
     "typescript": "^5.9.3",

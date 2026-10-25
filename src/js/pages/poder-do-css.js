@@ -29,3 +29,4 @@ function clique() {
         estilo.href = "/src/css/poder-do-css.css";
     }
 }
+document.getElementById("botao-css").addEventListener("click", clique);

@@ -87,7 +87,7 @@ function generateAnimationCSS(): void {
         }
 
         keyframes += `    100% {\n`;
-        keyframes += `        background-image: url('${data.path}1.${data.extensions[0]}');\n`;
+        keyframes += `        background-image: url('${pathPrefix}${data.path}1.${data.extensions[0]}');\n`;
         keyframes += `        background-size: cover;\n`;
         keyframes += `    }\n`;
         keyframes += `}\n\n`;

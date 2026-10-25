@@ -37,7 +37,7 @@ function openNotifications(html: string) {
     notificacoes.style.display = "flex";
     notificacoes.innerHTML = html;
 
-    timeout = setTimeout(() => {
+    timeout = window.setTimeout(() => {
         notificacoes.style.display = "none";
     }, 3000);
 }

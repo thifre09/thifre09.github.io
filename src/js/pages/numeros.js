@@ -47,3 +47,5 @@ const divs = document.querySelectorAll('div');
 divs.forEach(div => {
     div.style.borderColor = gerarCorAleatoriaNaoClara(); // Define a cor da borda
 });
+
+document.getElementById("go-to-number").addEventListener("click", goToNumber);

@@ -142,7 +142,7 @@ export function setupSaveLoadUI({ options, defaultAction = "save", defaultOption
         notification.querySelector("p").innerText = message;
         notification.style.display = "block";
         clearTimeout(notificationTimeout);
-        notificationTimeout = setTimeout(() => {
+        notificationTimeout = window.setTimeout(() => {
             notification.style.display = "none";
         }, notificationDuration);
     }

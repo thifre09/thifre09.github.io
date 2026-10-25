@@ -299,9 +299,9 @@ z = 5
 ex1 = 1 == 1 #True
 ex2 = x == 1 #True
 ex3 = y != 5 #True
-ex4 = 4 < z #True
+ex4 = 4 &lt; z #True
 ex5 = x > z #False
-ex6 = x <= 0 #False
+ex6 = x &lt;= 0 #False
 ex7 = y >= 2 #True
             </pre>
         </div>
@@ -316,8 +316,8 @@ ex7 = y >= 2 #True
                 iguais, o terceiro exemplo mostra o diferente de(!=), que é o oposto do igual.
             </p>
 
-            <p>O quarto e quinto exemplos mostram o menor que(<) e maior que(>), que indica se o valor é
-                    menor ou maior que o outro, e o sexto e sétimo exemplos mostram o menor ou igual que(<=) e maior ou
+            <p>O quarto e quinto exemplos mostram o menor que(&lt;) e maior que(>), que indica se o valor é
+                    menor ou maior que o outro, e o sexto e sétimo exemplos mostram o menor ou igual que(&lt;=) e maior ou
                         igual que(>=), que indica se um valor é maior, menor ou igual a outro.
             </p>
         </div>
@@ -502,7 +502,7 @@ x = 2
 y = 3
 if x == y:
     print("ola")
-elif x < y:
+elif x &lt; y:
     print("Jurandy False")
 elif x != y:
     print("batatas são incríveis")
@@ -517,7 +517,7 @@ elif x != y:
             </p>
 
             <p>Como "x" vale 2 e "y" vale 3, a primeira condição é falsa, então o código irá testar a segunda
-                condição(x < y), como 2 é menor que 3, a condição é verdadeira, e o código será executado, como uma das
+                condição(x &lt; y), como 2 é menor que 3, a condição é verdadeira, e o código será executado, como uma das
                     condições já se mostrou verdadeira, a terceira condição(x !=y) não será testada. </p>
         </div>
 
@@ -530,7 +530,7 @@ y = 3
 z = 9
 if y > z:
     print("aaaaaa")
-elif x < 0:
+elif x &lt; 0:
     print("bbbbbb")
 else:
     print("cccccc")
@@ -635,7 +635,7 @@ if 1 == 1 and 2 > 0:
     print("Verdade1")
 if not 1 > 4:
     print("Verdade2")
-if 5 > 10 or 1 < 10:
+if 5 > 10 or 1 &lt; 10:
     print("Verdade3")
             </pre>
 
@@ -868,7 +868,7 @@ while True:
     print("Olá, mundo!")
 
 i = 0
-while i < 5:
+while i &lt; 5:
     print(i)
     i += 1
             </pre>
@@ -1089,9 +1089,9 @@ print(var1, ola)
 
             <pre class="caixa">
 def quinzena(dia):
-    if dia >= 1 and dia <= 15:
+    if dia >= 1 and dia &lt;= 15:
         return "Primeira quinzena"
-    elif dia >= 16 and dia <= 31:
+    elif dia >= 16 and dia &lt;= 31:
         return "Segunda quinzena"
     else:
         return "Algo deu errado"
