@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Um guia interativo sobre hemácias: estrutura, hemoglobina, transporte de oxigênio, formatos, alterações e saúde do sangue.">
+    <meta name="theme-color" content="#fff8f7">
+    <title>Hemácias — As transportadoras de oxigênio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/src/css/hemacias.css">
+    <script src="/src/js/pages/hemacias.js" defer></script>
+</head>
+
+<body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <header class="site-header">
+        <nav class="nav container" aria-label="Navegação principal">
+            <a class="brand" href="#inicio" aria-label="Hemácias, página inicial">
+                <span class="brand-mark" aria-hidden="true"><span></span></span>
+                <span>hemácias<span class="brand-dot">.</span></span>
+            </a>
+            <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="navLinks"
+                aria-label="Abrir menu">
+                <span></span><span></span>
+            </button>
+            <div class="nav-links" id="navLinks">
+                <a href="#fundamentos">O básico</a>
+                <a href="#transporte">Transporte de O₂</a>
+                <a href="#formatos">Formatos</a>
+                <a href="#saude">Saúde</a>
+                <a class="nav-cta" href="#quiz">Testar conhecimentos <span aria-hidden="true">↗</span></a>
+            </div>
+        </nav>
+    </header>
+
+    <main id="conteudo">
+        <section class="hero section" id="inicio">
+            <div class="container hero-grid">
+                <div class="hero-copy">
+                    <div class="eyebrow"><span class="live-dot"></span> BIOLOGIA • GUIA INTERATIVO</div>
+                    <h1>Pequenas células.<br><span>Uma missão vital.</span></h1>
+                    <p class="hero-lede">Conheça as hemácias, as células que levam oxigênio dos pulmões para os tecidos
+                        e ajudam o corpo a funcionar.</p>
+                    <div class="hero-actions">
+                        <a href="#fundamentos" class="button button-primary">Começar a explorar <span
+                                aria-hidden="true">↓</span></a>
+                        <a href="#transporte" class="text-link">Ver como funciona <span aria-hidden="true">↗</span></a>
+                    </div>
+                    <div class="hero-note"><span class="note-icon" aria-hidden="true">i</span><span>Conteúdo educativo.
+                            Não substitui avaliação de profissionais de saúde.</span></div>
+                </div>
+                <div class="hero-art" aria-label="Ilustração de hemácias circulando em um vaso sanguíneo" role="img">
+                    <div class="art-orbit orbit-one"></div>
+                    <div class="art-orbit orbit-two"></div>
+                    <div class="blood-vessel vessel-back"></div>
+                    <div class="cell cell-main"><span class="cell-center"></span><span class="cell-shine"></span></div>
+                    <div class="cell cell-small cell-a"><span class="cell-center"></span></div>
+                    <div class="cell cell-small cell-b"><span class="cell-center"></span></div>
+                    <div class="cell cell-small cell-c"><span class="cell-center"></span></div>
+                    <div class="oxygen oxygen-one">O₂</div>
+                    <div class="oxygen oxygen-two">O₂</div>
+                    <div class="art-label label-top"><span class="label-line"></span><span>Hemoglobina</span></div>
+                    <div class="art-label label-bottom"><span class="label-line"></span><span>Hemácia</span></div>
+                    <div class="art-caption"><span class="caption-dot"></span> ILUSTRAÇÃO ESQUEMÁTICA</div>
+                </div>
+            </div>
+            <div class="hero-bottom container">
+                <span>Role para descobrir</span>
+                <div class="scroll-line"><span></span></div><span class="hero-bottom-index">01 — 06</span>
+            </div>
+        </section>
+
+        <section class="facts-strip" aria-label="Fatos rápidos">
+            <div class="container facts-grid">
+                <div class="fact"><span class="fact-number">~120 <small>dias</small></span><span class="fact-label">vida
+                        média de uma hemácia</span></div>
+                <div class="fact"><span class="fact-number">4 <small>O₂</small></span><span class="fact-label">moléculas
+                        de oxigênio por hemoglobina</span></div>
+                <div class="fact"><span class="fact-number">0</span><span class="fact-label">núcleo em uma hemácia
+                        humana madura</span></div>
+                <div class="fact fact-note"><span class="fact-star" aria-hidden="true">✳</span><span>O formato flexível
+                        ajuda a célula a passar por vasos muito estreitos.</span></div>
+            </div>
+        </section>
+
+        <section class="section fundamentals" id="fundamentos">
+            <div class="container">
+                <div class="section-heading">
+                    <div>
+                        <div class="eyebrow">01 / O BÁSICO</div>
+                        <h2>O que são <span>hemácias?</span></h2>
+                    </div>
+                    <p>Também chamadas de eritrócitos ou glóbulos vermelhos, elas são as células mais abundantes do
+                        sangue e têm uma tarefa principal: transportar gases respiratórios.</p>
+                </div>
+                <div class="fundamentals-grid">
+                    <div class="large-illustration-card">
+                        <div class="illustration-head"><span>VISÃO EM DESTAQUE</span><span class="tiny-badge">CÉLULA
+                                MADURA</span></div>
+                        <div class="large-cell-wrap">
+                            <div class="large-cell">
+                                <div class="large-cell-center"></div>
+                                <div class="large-cell-glow"></div>
+                            </div>
+                        </div>
+                        <div class="illustration-caption"><strong>Formato bicôncavo</strong><span>Mais fina no centro e
+                                mais espessa nas bordas.</span></div>
+                    </div>
+                    <div class="fundamentals-cards">
+                        <article class="info-card">
+                            <div class="card-icon icon-red" aria-hidden="true">↔</div>
+                            <div>
+                                <h3>Formato eficiente</h3>
+                                <p>O disco bicôncavo oferece uma grande área de superfície em relação ao volume,
+                                    favorecendo as trocas gasosas.</p>
+                            </div><span class="card-number">01</span>
+                        </article>
+                        <article class="info-card">
+                            <div class="card-icon icon-pink" aria-hidden="true">◉</div>
+                            <div>
+                                <h3>Sem núcleo</h3>
+                                <p>Na maturação, a hemácia humana perde o núcleo e fica com mais espaço disponível para
+                                    hemoglobina.</p>
+                            </div><span class="card-number">02</span>
+                        </article>
+                        <article class="info-card">
+                            <div class="card-icon icon-peach" aria-hidden="true">⌁</div>
+                            <div>
+                                <h3>Flexível</h3>
+                                <p>Sua membrana e seu citoesqueleto permitem que ela se deforme para atravessar
+                                    capilares estreitos.</p>
+                            </div><span class="card-number">03</span>
+                        </article>
+                        <article class="info-card">
+                            <div class="card-icon icon-lavender" aria-hidden="true">⟳</div>
+                            <div>
+                                <h3>Produção contínua</h3>
+                                <p>As hemácias são produzidas na medula óssea. As antigas são removidas principalmente
+                                    pelo baço e pelo fígado.</p>
+                            </div><span class="card-number">04</span>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section hemoglobin-section" id="hemoglobina">
+            <div class="container hemoglobin-grid">
+                <div class="hemoglobin-copy">
+                    <div class="eyebrow">02 / A PROTEÍNA ESSENCIAL</div>
+                    <h2>Conheça a <span>hemoglobina.</span></h2>
+                    <p>A hemoglobina é uma proteína presente no interior das hemácias. É ela que se liga ao oxigênio de
+                        forma reversível, permitindo carregá-lo e depois liberá-lo nos tecidos.</p>
+                    <div class="hemoglobin-points">
+                        <div class="hemoglobin-point"><span class="point-check">✓</span>
+                            <p><strong>4 cadeias proteicas</strong><br>Na hemoglobina adulta mais comum, elas formam uma
+                                estrutura com quatro grupos heme.</p>
+                        </div>
+                        <div class="hemoglobin-point"><span class="point-check">✓</span>
+                            <p><strong>4 átomos de ferro</strong><br>Cada grupo heme contém um ferro que pode se ligar a
+                                uma molécula de O₂.</p>
+                        </div>
+                        <div class="hemoglobin-point"><span class="point-check">✓</span>
+                            <p><strong>Ligação reversível</strong><br>O oxigênio se liga nos pulmões e é liberado em
+                                locais onde o organismo precisa dele.</p>
+                        </div>
+                    </div>
+                    <div class="science-note"><span aria-hidden="true">✳</span>
+                        <p><strong>Analogia:</strong> a hemácia é o veículo; a hemoglobina é a carga especializada em
+                            transportar oxigênio; o ferro faz parte do local onde o O₂ se liga.</p>
+                    </div>
+                </div>
+                <div class="hemoglobin-model">
+                    <div class="model-topline"><span>MODELO SIMPLIFICADO</span><span>01 MOLÉCULA DE Hb</span></div>
+                    <div class="hb-protein"
+                        aria-label="Modelo didático com quatro grupos heme e quatro átomos de ferro">
+                        <div class="protein-lobe lobe-one"></div>
+                        <div class="protein-lobe lobe-two"></div>
+                        <div class="protein-lobe lobe-three"></div>
+                        <div class="protein-lobe lobe-four"></div>
+                        <button class="heme heme-one" aria-label="Grupo heme 1"><span class="iron">Fe</span><span
+                                class="oxygen-dot">O₂</span></button>
+                        <button class="heme heme-two" aria-label="Grupo heme 2"><span class="iron">Fe</span><span
+                                class="oxygen-dot">O₂</span></button>
+                        <button class="heme heme-three" aria-label="Grupo heme 3"><span class="iron">Fe</span><span
+                                class="oxygen-dot">O₂</span></button>
+                        <button class="heme heme-four" aria-label="Grupo heme 4"><span class="iron">Fe</span><span
+                                class="oxygen-dot">O₂</span></button>
+                    </div>
+                    <div class="model-legend"><span><i class="legend-fe"></i> Ferro (Fe)</span><span><i
+                                class="legend-o2"></i> Oxigênio (O₂)</span></div>
+                    <p class="model-caption">Toque nos grupos heme para destacar os locais de ligação. A forma mostrada
+                        é ilustrativa, não uma representação molecular exata.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section transport-section" id="transporte">
+            <div class="container">
+                <div class="section-heading transport-heading">
+                    <div>
+                        <div class="eyebrow">03 / A VIAGEM DO OXIGÊNIO</div>
+                        <h2>Uma viagem de ida <span>e entrega.</span></h2>
+                    </div>
+                    <p>O oxigênio entra no sangue nos pulmões, viaja ligado à hemoglobina e é liberado nos tecidos.
+                        Experimente acompanhar o trajeto.</p>
+                </div>
+                <div class="transport-lab">
+                    <div class="lab-sidebar">
+                        <div class="lab-step active" data-step="0"><span class="step-num">01</span>
+                            <div><strong>Pulmões</strong><span>O₂ entra no sangue</span></div><span
+                                class="step-arrow">↗</span>
+                        </div>
+                        <div class="lab-step" data-step="1"><span class="step-num">02</span>
+                            <div><strong>Circulação</strong><span>Hemoglobina transporta</span></div><span
+                                class="step-arrow">↗</span>
+                        </div>
+                        <div class="lab-step" data-step="2"><span class="step-num">03</span>
+                            <div><strong>Tecidos</strong><span>O₂ é liberado</span></div><span
+                                class="step-arrow">↗</span>
+                        </div>
+                        <div class="lab-controls"><button class="button button-primary" id="transportNext">Iniciar
+                                percurso <span aria-hidden="true">→</span></button><button class="reset-button"
+                                id="transportReset">Reiniciar</button></div>
+                    </div>
+                    <div class="lab-scene" id="labScene" data-stage="0">
+                        <div class="scene-sunburst" aria-hidden="true"></div>
+                        <div class="scene-label" id="sceneLabel"><span class="scene-label-dot"></span> ETAPA 1 — PULMÕES
+                        </div>
+                        <div class="lungs" aria-hidden="true">
+                            <div class="lung lung-left"></div>
+                            <div class="lung lung-right"></div>
+                            <div class="trachea"></div>
+                        </div>
+                        <div class="capillary-path"><span class="path-dash"></span></div>
+                        <div class="travelling-cell">
+                            <div class="travelling-cell-center"></div><span class="cargo cargo-1">O₂</span><span
+                                class="cargo cargo-2">O₂</span><span class="cargo cargo-3">O₂</span>
+                        </div>
+                        <div class="tissue-cluster" aria-hidden="true">
+                            <span></span><span></span><span></span><span></span></div>
+                        <div class="scene-explanation" id="sceneExplanation">Nos alvéolos pulmonares, o oxigênio passa
+                            para o sangue e se liga à hemoglobina dentro das hemácias.</div>
+                        <div class="scene-progress"><span id="sceneProgressFill"></span></div>
+                    </div>
+                </div>
+                <div class="transport-bottom"><span class="bottom-sparkle">✳</span>
+                    <p><strong>Um detalhe importante:</strong> a maior parte do oxigênio no sangue é transportada ligada
+                        à hemoglobina. Uma pequena fração fica dissolvida no plasma.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section shapes-section" id="formatos">
+            <div class="container">
+                <div class="section-heading">
+                    <div>
+                        <div class="eyebrow">04 / FORMAS DAS HEMÁCIAS</div>
+                        <h2>O formato conta <span>uma história.</span></h2>
+                    </div>
+                    <p>Alterações no formato podem aparecer em exames de sangue. Elas ajudam na investigação, mas não
+                        determinam sozinhas um diagnóstico.</p>
+                </div>
+                <div class="shape-filter" role="group" aria-label="Filtrar formatos de hemácias">
+                    <button class="filter-button active" data-filter="all">Todas <span>6</span></button>
+                    <button class="filter-button" data-filter="normal">Referência <span>1</span></button>
+                    <button class="filter-button" data-filter="alterada">Formatos alterados <span>5</span></button>
+                </div>
+                <div class="shape-grid">
+                    <button class="shape-card" data-kind="normal" data-shape="normal">
+                        <span class="shape-art"><span class="shape-cell shape-normal"><i></i></span></span><span
+                            class="shape-card-top"><span class="shape-tag tag-normal">REFERÊNCIA</span><span
+                                class="shape-open">↗</span></span><strong>Hemácia normal</strong><span
+                            class="shape-short">Disco bicôncavo e flexível.</span>
+                    </button>
+                    <button class="shape-card" data-kind="alterada" data-shape="esferocito">
+                        <span class="shape-art"><span class="shape-cell shape-sphere"><i></i></span></span><span
+                            class="shape-card-top"><span class="shape-tag">ESFERÓCITO</span><span
+                                class="shape-open">↗</span></span><strong>Esferócitos</strong><span
+                            class="shape-short">Mais arredondados, sem palidez central evidente.</span>
+                    </button>
+                    <button class="shape-card" data-kind="alterada" data-shape="dacro">
+                        <span class="shape-art"><span class="shape-cell shape-teardrop"><i></i></span></span><span
+                            class="shape-card-top"><span class="shape-tag">DRAQUIÓCITO</span><span
+                                class="shape-open">↗</span></span><strong>Dacriócitos</strong><span
+                            class="shape-short">Uma ponta lembra o formato de uma lágrima.</span>
+                    </button>
+                    <button class="shape-card" data-kind="alterada" data-shape="eliptocito">
+                        <span class="shape-art"><span class="shape-cell shape-ellipse"><i></i></span></span><span
+                            class="shape-card-top"><span class="shape-tag">ELIPTÓCITO</span><span
+                                class="shape-open">↗</span></span><strong>Eliptócitos</strong><span
+                            class="shape-short">Formato ovalado ou alongado.</span>
+                    </button>
+                    <button class="shape-card" data-kind="alterada" data-shape="esquizocito">
+                        <span class="shape-art"><span class="shape-cell shape-fragment"><i></i></span></span><span
+                            class="shape-card-top"><span class="shape-tag">ESQUIZÓCITO</span><span
+                                class="shape-open">↗</span></span><strong>Esquizócitos</strong><span
+                            class="shape-short">Fragmentos de hemácias, com formas irregulares.</span>
+                    </button>
+                    <button class="shape-card" data-kind="alterada" data-shape="falciforme">
+                        <span class="shape-art"><span class="shape-cell shape-sickle"><i></i></span></span><span
+                            class="shape-card-top"><span class="shape-tag">DREPANÓCITO</span><span
+                                class="shape-open">↗</span></span><strong>Hemácia falciforme</strong><span
+                            class="shape-short">Forma de foice associada à doença falciforme.</span>
+                    </button>
+                </div>
+                <div class="shape-disclaimer"><span aria-hidden="true">ⓘ</span> Desenhos esquemáticos para fins
+                    didáticos. Os formatos reais são observados ao microscópio e podem variar.</div>
+            </div>
+        </section>
+
+        <section class="section health-section" id="saude">
+            <div class="container">
+                <div class="section-heading">
+                    <div>
+                        <div class="eyebrow">05 / HEMÁCIAS E SAÚDE</div>
+                        <h2>Quando algo <span>muda.</span></h2>
+                    </div>
+                    <p>As alterações podem envolver quantidade, tamanho, formato ou hemoglobina. O contexto clínico e os
+                        exames completos fazem diferença.</p>
+                </div>
+                <div class="health-grid">
+                    <article class="health-card health-main">
+                        <div class="health-card-art">
+                            <div class="mini-blood-drops">
+                                <span></span><span></span><span></span><span></span><span></span></div><span
+                                class="health-art-label">SAÚDE DO SANGUE</span>
+                        </div>
+                        <div class="health-card-copy"><span class="health-kicker">CONDIÇÃO</span>
+                            <h3>Anemia</h3>
+                            <p>Ocorre quando a hemoglobina está abaixo do esperado para a pessoa. O sangue pode
+                                transportar menos oxigênio, causando cansaço, fraqueza ou falta de ar.</p>
+                            <div class="health-tags"><span>Hemoglobina baixa</span><span>Várias causas</span></div>
+                        </div>
+                    </article>
+                    <article class="health-card">
+                        <div class="health-icon icon-yellow" aria-hidden="true">Fe</div><span
+                            class="health-kicker">NUTRIÇÃO E SANGUE</span>
+                        <h3>Anemia ferropriva</h3>
+                        <p>A falta de ferro dificulta a produção adequada de hemoglobina. A causa da deficiência deve
+                            ser avaliada por um profissional.</p><a class="health-link"
+                            href="https://bvsms.saude.gov.br/anemia/" target="_blank" rel="noopener noreferrer">Ler
+                            sobre anemia <span>↗</span></a>
+                    </article>
+                    <article class="health-card">
+                        <div class="health-icon icon-purple" aria-hidden="true">DNA</div><span
+                            class="health-kicker">HEREDITÁRIA</span>
+                        <h3>Talassemia</h3>
+                        <p>Grupo de condições genéticas que alteram a produção das cadeias de globina da hemoglobina. A
+                            gravidade varia bastante.</p><a class="health-link"
+                            href="https://medlineplus.gov/thalassemia.html" target="_blank"
+                            rel="noopener noreferrer">Conhecer a talassemia <span>↗</span></a>
+                    </article>
+                    <article class="health-card">
+                        <div class="health-icon icon-orange" aria-hidden="true">↻</div><span
+                            class="health-kicker">DESTRUIÇÃO DE HEMÁCIAS</span>
+                        <h3>Hemólise e icterícia</h3>
+                        <p>A quebra acelerada de hemácias pode aumentar a bilirrubina. Quando ela se acumula, pode
+                            amarelar a pele e a parte branca dos olhos.</p><a class="health-link"
+                            href="https://medlineplus.gov/ency/article/000571.htm" target="_blank"
+                            rel="noopener noreferrer">Entender a icterícia <span>↗</span></a>
+                    </article>
+                </div>
+                <div class="medical-callout">
+                    <div class="callout-symbol">!</div>
+                    <div><strong>Não é possível diagnosticar apenas pelo formato.</strong>
+                        <p>Um resultado de exame deve ser interpretado junto com sintomas, histórico e outros resultados
+                            por um profissional de saúde. Não use este site para se autodiagnosticar.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section quiz-section" id="quiz">
+            <div class="container quiz-layout">
+                <div class="quiz-intro">
+                    <div class="eyebrow">06 / REVISE O QUE APRENDEU</div>
+                    <h2>Hora de testar <span>seu conhecimento.</span></h2>
+                    <p>Responda às perguntas e confira seu resultado. Você pode tentar novamente quando quiser.</p>
+                    <div class="quiz-stats">
+                        <div><strong id="quizQuestionCount">05</strong><span>perguntas</span></div>
+                        <div><strong>∞</strong><span>tentativas</span></div>
+                    </div>
+                </div>
+                <div class="quiz-box" id="quizBox">
+                    <div class="quiz-top"><span id="quizProgressText">PERGUNTA 01 DE 05</span><span
+                            id="quizScoreLabel">0 pontos</span></div>
+                    <div class="quiz-progress"><span id="quizProgress"></span></div>
+                    <div id="quizContent" aria-live="polite">
+                        <h3 id="quizQuestion">Qual é a principal função das hemácias?</h3>
+                        <div class="quiz-answers" id="quizAnswers">
+                            <button class="quiz-answer">Produzir hormônios</button><button
+                                class="quiz-answer">Transportar oxigênio</button><button class="quiz-answer">Combater
+                                todas as bactérias</button>
+                        </div>
+                        <div class="quiz-feedback" id="quizFeedback" hidden></div>
+                        <div class="quiz-footer"><span id="quizHint">Escolha uma resposta.</span><button
+                                class="button button-primary" id="quizNext" disabled>Próxima <span
+                                    aria-hidden="true">→</span></button></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section faq-section" id="duvidas">
+            <div class="container faq-grid">
+                <div>
+                    <div class="eyebrow">AINDA TEM DÚVIDAS?</div>
+                    <h2>Perguntas <span>frequentes.</span></h2>
+                    <p>Respostas rápidas para reforçar os conceitos principais.</p>
+                </div>
+                <div class="faq-list">
+                    <details>
+                        <summary>Hemácia e hemoglobina são a mesma coisa?<span>+</span></summary>
+                        <p>Não. A hemácia é a célula; a hemoglobina é a proteína dentro dela que transporta a maior
+                            parte do oxigênio no sangue.</p>
+                    </details>
+                    <details>
+                        <summary>Por que as hemácias são vermelhas?<span>+</span></summary>
+                        <p>Por causa da hemoglobina, cuja estrutura contém grupos heme com ferro e dá a cor
+                            característica ao sangue.</p>
+                    </details>
+                    <details>
+                        <summary>Todo formato alterado significa uma doença?<span>+</span></summary>
+                        <p>Não necessariamente. A importância depende de quais células aparecem, em que quantidade, dos
+                            demais exames e do contexto da pessoa.</p>
+                    </details>
+                    <details>
+                        <summary>Por que os dacriócitos têm formato de lágrima?<span>+</span></summary>
+                        <p>Podem surgir em diferentes situações que alteram a formação ou a passagem das hemácias. Em
+                            algumas doenças da medula óssea, o ambiente de formação contribui para essa deformação; o
+                            mecanismo não é idêntico em todos os casos.</p>
+                    </details>
+                    <details>
+                        <summary>O que acontece com as hemácias antigas?<span>+</span></summary>
+                        <p>Depois de cerca de 120 dias, em média, são removidas principalmente por células do baço e do
+                            fígado. Componentes como o ferro podem ser reaproveitados pelo organismo.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <section class="sources-section" id="fontes">
+            <div class="container sources-inner">
+                <div>
+                    <div class="eyebrow">PARA IR ALÉM</div>
+                    <h2>Fontes para <span>estudar.</span></h2>
+                </div>
+                <div class="sources-list">
+                    <a href="https://medlineplus.gov/ency/article/000560.htm" target="_blank"
+                        rel="noopener noreferrer"><span>01</span>
+                        <div><strong>MedlinePlus — Anemia</strong><small>Hemácias, hemoglobina e causas de
+                                anemia</small></div><span class="source-arrow">↗</span>
+                    </a>
+                    <a href="https://www.ncbi.nlm.nih.gov/books/NBK263/" target="_blank"
+                        rel="noopener noreferrer"><span>02</span>
+                        <div><strong>NCBI Bookshelf — Peripheral Blood Smear</strong><small>Características e formatos
+                                das hemácias</small></div><span class="source-arrow">↗</span>
+                    </a>
+                    <a href="https://hospitalhandbook.ucsf.edu/content/05-blood-smear-basics" target="_blank"
+                        rel="noopener noreferrer"><span>03</span>
+                        <div><strong>UCSF Hospital Handbook — Blood Smear Basics</strong><small>Alterações morfológicas
+                                e possíveis associações</small></div><span class="source-arrow">↗</span>
+                    </a>
+                    <a href="https://bvsms.saude.gov.br/anemia/" target="_blank"
+                        rel="noopener noreferrer"><span>04</span>
+                        <div><strong>Biblioteca Virtual em Saúde — Ministério da Saúde</strong><small>Informações sobre
+                                anemia e deficiência de ferro</small></div><span class="source-arrow">↗</span>
+                    </a>
+                </div>
+            </div>
+            <div class="container source-note">Material educativo elaborado para estudo. As descrições são simplificadas
+                e não substituem livros de hematologia, exames ou orientação profissional.</div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner"><a class="brand footer-brand" href="#inicio"><span class="brand-mark"
+                    aria-hidden="true"><span></span></span><span>hemácias<span
+                        class="brand-dot">.</span></span></a><span>Uma célula pequena com uma grande missão.</span><a
+                href="#inicio" class="back-top">Voltar ao topo ↑</a></div>
+        <div class="container footer-bottom"><span>Projeto educativo de Biologia</span><span>Feito para aprender,
+                explorar e revisar.</span></div>
+    </footer>
+
+    <dialog class="shape-dialog" id="shapeDialog" aria-labelledby="dialogTitle">
+        <button class="dialog-close" id="dialogClose" aria-label="Fechar detalhes">×</button>
+        <div class="dialog-art" id="dialogArt"><span class="shape-cell shape-normal"><i></i></span></div>
+        <div class="dialog-copy">
+            <div class="eyebrow" id="dialogKicker">FORMATO</div>
+            <h2 id="dialogTitle">Hemácia normal</h2>
+            <p id="dialogDescription"></p>
+            <div class="dialog-detail"><strong>O que isso pode indicar?</strong>
+                <p id="dialogMeaning"></p>
+            </div>
+            <p class="dialog-caution">A aparência isolada não confirma uma doença. A interpretação depende do exame
+                completo e da avaliação clínica.</p>
+        </div>
+    </dialog>
+</body>
+
+</html>
