@@ -2,7 +2,7 @@ import * as Auth from "../supabase/auth.js";
 import { supabase } from "../supabase/client.js";
 import { mover } from "../others/global.js";
 
-// carega o menu lateral e a barra de navegação
+// carrega o menu lateral e a barra de navegação
 document.addEventListener('DOMContentLoaded', async () => {
     fetch('/src/global/menu.html')
         .then(response => response.text())
@@ -220,7 +220,7 @@ const atualizacoes = [
     ]),
     new Atualizacao("Beta 1.0", "??/??/2024", [
         new NotaAtualizacao("Pequenas mudanças no layout", "Algumas páginas tiveram seu layout ajustado para melhorar a experiência do usuário.", tipoNota.ATUALIZACAO, relacionado.PAGINA_INICIAL),
-        new NotaAtualizacao("Continuação do curso de Python", "Adicionado mais seções ao curso de Python. Tabém foi adicionado uma mesagem no final", tipoNota.ATUALIZACAO, relacionado.PYTHON),
+        new NotaAtualizacao("Continuação do curso de Python", "Adicionado mais seções ao curso de Python. Também foi adicionado uma mensagem no final", tipoNota.ATUALIZACAO, relacionado.PYTHON),
         new NotaAtualizacao("Atualizado a seção de Review de jogos", "Adicionada mais reviews de jogos que joguei recentemente.", tipoNota.ATUALIZACAO, relacionado.REVIEW_DE_JOGOS),
         new NotaAtualizacao("Correção de bugs menores", "Foram corrigidos alguns bugs menores relacionados ao layout e funcionalidade do site.", tipoNota.CORRECAO, relacionado.GERAL)
     ]),
