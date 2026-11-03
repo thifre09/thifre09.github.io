@@ -78,10 +78,21 @@ async function createExempleDatabase() {
     transformFromJson(json);
 }
 
+/**
+ * Verifica se dois tipos de dados pertencem à mesma classe.
+ * @param type1 - Primeiro tipo a comparar.
+ * @param type2 - Segundo tipo a comparar.
+ * @returns `true` quando os tipos têm o mesmo construtor.
+ */
 function compareTypes(type1: DataTypes.DataType, type2: DataTypes.DataType): boolean {
     return type1.constructor === type2.constructor;
 }
 
+/**
+ * Verifica se um valor está definido e não é nulo.
+ * @param value - Valor a verificar.
+ * @returns `true` quando o valor pode ser usado.
+ */
 function valueExists(value: any) {
     return value !== null && value !== undefined;
 }
@@ -192,6 +203,10 @@ namespace DB {
     export abstract class TreeItem {
         name: string;
 
+        /**
+         * Cria um item da árvore com o nome informado.
+         * @param name - Nome exibido na árvore.
+         */
         constructor(name: string) {
             this.name = name;
         }
@@ -200,12 +215,19 @@ namespace DB {
 
         abstract buildTree(): HTMLElement;
 
+        /** Executa a ação associada ao clique no item. */
         clickBehavior(): void { }
     }
 
     export abstract class Node extends TreeItem {
         parent: Node | null
         onConfig: (() => void) | null;
+        /**
+         * Cria um nó vinculado ao seu nó pai.
+         * @param name - Nome exibido na árvore.
+         * @param parent - Nó pai ou `null` quando não houver.
+         * @param onConfig - Ação executada ao abrir a configuração do nó.
+         */
         constructor(name: string, parent: Node | null, onConfig: (() => void) | null = null) {
             super(name);
             this.onConfig = onConfig;
@@ -219,6 +241,7 @@ namespace DB {
             return "";
         }
 
+        /** Constrói o elemento HTML que representa o nó e seus descendentes. */
         buildTree(): HTMLElement {
             if (this.children.length === 0) {
                 const summary = document.createElement("summary");
@@ -288,6 +311,7 @@ namespace DB {
             return details;
         }
 
+        /** Recalcula recursivamente os vínculos de parentesco dos descendentes. */
         rebuildParent() {
             for (let ch of this.children) {
                 if (ch instanceof Node) {
@@ -312,6 +336,7 @@ namespace DB {
             return this.c;
         }
 
+        /** Constrói o elemento HTML que representa o grupo de nós. */
         buildTree(): HTMLElement {
             if (this.children.length === 0) {
                 const summary = document.createElement("summary");
@@ -440,7 +465,11 @@ namespace DB {
                 abrirFechar(false, "configurar-database");
             });
             databaseGroup.c.push(this);
-            this.schemas = {};
+            this.schemas = {
+                "public": new Schema("public", this)
+            };
+            currentSchema = "public";
+            currentTable = null;
         }
 
         // createKey(schemaName: string, tableName: string, columnName: string): string {
@@ -535,6 +564,7 @@ namespace DB {
             `;
         }
 
+        /** Seleciona esta database e atualiza a interface. */
         clickBehavior(): void {
             currentDatabase = this.name;
             currentSchema = null;
@@ -542,6 +572,11 @@ namespace DB {
             refreshUI();
         }
 
+        /**
+         * Reconstrói uma database a partir de um objeto JSON.
+         * @param json - Dados serializados da database.
+         * @returns Database reconstruída ou `null` quando os dados são inválidos.
+         */
         static fromJSON(json: any): Database | null {
             if (!json.name || !json.schemas) {
                 return null;
@@ -592,6 +627,7 @@ namespace DB {
             `;
         }
 
+        /** Seleciona este schema e atualiza a interface. */
         clickBehavior(): void {
             currentDatabase = this.parent!.name;
             currentSchema = this.name;
@@ -599,6 +635,12 @@ namespace DB {
             refreshUI();
         }
 
+        /**
+         * Reconstrói um schema e suas tabelas a partir de JSON.
+         * @param json - Dados serializados do schema.
+         * @param parent - Nó pai do schema.
+         * @returns Schema reconstruído.
+         */
         static fromJSON(json: any, parent: Node): Schema {
             const schema = new Schema(json.name, parent);
             for (const [name, tableObj] of Object.entries(json.tables)) {
@@ -644,6 +686,7 @@ namespace DB {
             }
         }
 
+        /** Recria os índices de todas as colunas usando as linhas atuais. */
         remakeIndexes() {
             this.indexes = {};
 
@@ -667,6 +710,10 @@ namespace DB {
             }
         }
 
+        /**
+         * Recria o índice de uma coluna específica.
+         * @param columnName - Nome da coluna indexada.
+         */
         remakeColumnIndex(columnName: string) {
             const indexMap = new Map<any, number[]>();
 
@@ -706,6 +753,7 @@ namespace DB {
             `;
         }
 
+        /** Seleciona esta tabela e atualiza a interface. */
         clickBehavior(): void {
             currentDatabase = this.parent!.parent!.name;
             currentSchema = this.parent!.name;
@@ -713,6 +761,12 @@ namespace DB {
             refreshUI();
         }
 
+        /**
+         * Reconstrói uma tabela, suas colunas, linhas e índices a partir de JSON.
+         * @param obj - Dados serializados da tabela.
+         * @param parent - Nó pai da tabela.
+         * @returns Tabela reconstruída.
+         */
         static fromJSON(obj: any, parent: Node): Table {
             const table = new Table(obj.name, parent);
 
@@ -871,6 +925,12 @@ namespace DB {
             }
         }
 
+        /**
+         * Reconstrói uma coluna a partir de sua representação JSON.
+         * @param obj - Dados serializados da coluna.
+         * @param parent - Tabela que contém a coluna.
+         * @returns Coluna reconstruída.
+         */
         static fromJSON(obj: any, parent: Node): Column {
             let type
             if (obj.type.name === "ENUM") {
@@ -906,6 +966,11 @@ namespace DB {
         static counter = 1;
         values: Record<string, any>;
 
+        /**
+         * Cria uma linha com os valores informados.
+         * @param parent - Tabela que contém a linha.
+         * @param values - Valores indexados pelo nome da coluna.
+         */
         constructor(parent: Node, values: Record<string, any>) {
             super(`Linha ${Row.counter}`, parent);
             this.values = values;
@@ -921,6 +986,12 @@ namespace DB {
             `;
         }
 
+        /**
+         * Reconstrói uma linha e converte seus valores pelos tipos das colunas.
+         * @param obj - Dados serializados da linha.
+         * @param parent - Tabela que contém a linha.
+         * @returns Linha reconstruída.
+         */
         static fromJSON(obj: any, parent: Node): Row {
             let v: Record<string, any> = {};
             for (const [columnName, value] of Object.entries(obj.values)) {
@@ -963,6 +1034,12 @@ class TerminalSession {
      * @param output - Linhas de saída.
      * @param type - Tipo visual da entrada.
      */
+    /**
+     * Registra um comando e sua saída no histórico da sessão.
+     * @param command - Comando executado.
+     * @param output - Linhas produzidas pelo comando.
+     * @param type - Categoria visual da saída.
+     */
     createEntry(command: string, output: string[], type: "success" | "error" | "info") {
         this.history.push({ database: currentDatabase, command: command, output, type, timestamp: new Date() });
         this.updateTerminalUI();
@@ -971,6 +1048,7 @@ class TerminalSession {
     /**
      * Re-renderiza o histórico da sessão na interface.
      */
+    /** Atualiza o histórico renderizado do terminal. */
     updateTerminalUI() {
         const terminalHistoryDiv = document.getElementById("terminal-history")!;
         terminalHistoryDiv.innerHTML = "";
@@ -1009,6 +1087,10 @@ class SGBDFunctions {
         saveToSupabase();
     }
 
+    /**
+     * Registra um schema na database atual.
+     * @param schema - Schema a ser criado.
+     */
     static createSchema(schema: DB.Schema) {
         databases[currentDatabase!]!.schemas[schema.name] = schema;
         currentSchema = schema.name;
@@ -1034,6 +1116,7 @@ class SGBDFunctions {
             //db.addForeignKeyReference(currentSchema!, table.name, columnName, table.columns[columnName].reference!);
         }
         db.schemas[schema || currentSchema!].tables[table.name] = table;
+        currentSchema = schema || currentSchema!;
         currentTable = table.name;
         refreshUI();
         if (!isAutoSaveEnabled()) return;
@@ -1210,6 +1293,10 @@ class SGBDFunctions {
         saveToSupabase();
     }
 
+    /**
+     * Remove um schema da database atual.
+     * @param schemaName - Nome do schema a remover.
+     */
     static deleteSchema(schemaName: string) {
         const db = getCurrentDatabase()!;
         delete db.schemas[schemaName];
@@ -1326,6 +1413,11 @@ class SGBDFunctions {
         saveToSupabase();
     }
 
+    /**
+     * Renomeia uma database existente.
+     * @param oldName - Nome atual da database.
+     * @param newName - Novo nome da database.
+     */
     static renameDatabase(oldName: string, newName: string) {
         const db = databases[oldName];
         if (!db) return;
@@ -1340,6 +1432,11 @@ class SGBDFunctions {
         saveToSupabase();
     }
 
+    /**
+     * Renomeia um schema da database atual.
+     * @param oldName - Nome atual do schema.
+     * @param newName - Novo nome do schema.
+     */
     static renameSchema(oldName: string, newName: string) {
         const db = getCurrentDatabase()!;
         const s = db.schemas[oldName];
@@ -1355,6 +1452,12 @@ class SGBDFunctions {
         saveToSupabase();
     }
 
+    /**
+     * Renomeia uma tabela do schema selecionado.
+     * @param oldName - Nome atual da tabela.
+     * @param newName - Novo nome da tabela.
+     * @param schemaName - Schema da tabela, quando diferente do selecionado.
+     */
     static renameTable(oldName: string, newName: string, schemaName?: string) {
         let schema: DB.Schema;
         let t: DB.Table;
@@ -1392,6 +1495,7 @@ class SGBDFunctions {
             return newType.parse(value);
         }
 
+        /** Serializa uma coluna ignorando o vínculo com sua tabela pai. */
         function transformColumnToJson(column: DB.Column): string {
             return JSON.stringify(column, (key, value) => {
                 if (key === "parent") return undefined;
@@ -1455,12 +1559,19 @@ class SQLTime {
     minutes: number;
     seconds: number;
 
+    /**
+     * Cria um horário SQL.
+     * @param hours - Horas do horário.
+     * @param minutes - Minutos do horário.
+     * @param seconds - Segundos do horário.
+     */
     constructor(hours: number, minutes: number = 0, seconds: number = 0) {
         this.hours = hours;
         this.minutes = minutes;
         this.seconds = seconds;
     }
 
+    /** Converte uma string no formato `HH:MM:SS` em horário SQL. */
     static fromString(value: string): SQLTime | null {
 
         const match = value.match(/^(\d{2}):(\d{2}):(\d{2})$/);
@@ -1481,6 +1592,7 @@ class SQLTime {
 
     }
 
+    /** Converte segundos desde meia-noite em horário SQL. */
     static fromNumber(value: number): SQLTime | null {
         if (!Number.isFinite(value))
             return null;
@@ -1499,12 +1611,15 @@ class SQLTime {
         return new SQLTime(hours, minutes, seconds);
     }
 
+    /** Retorna o horário local atual. */
     static now(): SQLTime {
         const now = new Date();
         return new SQLTime(now.getHours(), now.getMinutes(), now.getSeconds());
     }
 
+    /** Formata um horário SQL como `HH:MM:SS`. */
     static toString(time: SQLTime): string {
+        if (!time) return "null";
         return [
             time.hours.toString().padStart(2, "0"),
             time.minutes.toString().padStart(2, "0"),
@@ -1518,12 +1633,19 @@ class SQLDate {
     month: number;
     day: number;
 
+    /**
+     * Cria uma data SQL.
+     * @param year - Ano da data.
+     * @param month - Mês da data.
+     * @param day - Dia da data.
+     */
     constructor(year: number, month: number = 1, day: number = 1) {
         this.year = year;
         this.month = month;
         this.day = day;
     }
 
+    /** Converte uma string no formato `AAAA-MM-DD` em data SQL. */
     static fromString(value: string): SQLDate | null {
         const match = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
 
@@ -1540,6 +1662,7 @@ class SQLDate {
         return new SQLDate(y, m, d);
     }
 
+    /** Converte um objeto `Date` em data SQL. */
     static fromDate(value: Date): SQLDate | null {
         let y = value.getFullYear();
         let m = value.getMonth();
@@ -1548,12 +1671,15 @@ class SQLDate {
         return new SQLDate(y, m, d);
     }
 
+    /** Retorna a data local atual. */
     static now(): SQLDate {
         const now = new Date();
         return new SQLDate(now.getFullYear(), now.getMonth() + 1, now.getDate());
     }
 
+    /** Formata uma data SQL como `AAAA-MM-DD`. */
     static toString(date: SQLDate): string {
+        if (!date) return "null";
         return [
             date.year.toString().padStart(4, "0"),
             date.month.toString().padStart(2, "0"),
@@ -1571,6 +1697,13 @@ namespace DataTypes {
         abstract parse(value: any): any;
     }
 
+    /**
+     * Cria uma instância de tipo de dados a partir do nome SQL.
+     * @param type - Nome do tipo SQL.
+     * @param enumValues - Valores permitidos para ENUM.
+     * @param varcharLength - Tamanho máximo de VARCHAR.
+     * @returns Instância correspondente ao tipo informado.
+     */
     export function createDataTypeFromString(type: TDataTypeAsString, enumValues: string[] = [], varcharLength: number = 255): DataType {
         switch (type) {
             case "TEXT":
@@ -1596,10 +1729,12 @@ namespace DataTypes {
         readonly name = "TEXT";
         readonly color = "green5";
 
+        /** Verifica se o valor é texto. */
         validate(value: any): boolean {
             return typeof value === "string";
         }
 
+        /** Converte um valor para texto. */
         parse(value: any): string {
             return String(value);
         }
@@ -1609,12 +1744,15 @@ namespace DataTypes {
         readonly name = "INTEGER";
         readonly color = "blue3";
 
+        /** Verifica se o valor é um número inteiro. */
         validate(value: any): boolean {
             return typeof value === "number" && Number.isInteger(value);
         }
 
-        parse(value: any): number {
-            return parseInt(value);
+        /** Converte um valor para inteiro ou retorna `null` se inválido. */
+        parse(value: any): number | null {
+            const parsed = parseInt(value);
+            return isNaN(parsed) ? null : parsed;
         }
     }
 
@@ -1622,10 +1760,12 @@ namespace DataTypes {
         readonly name = "FLOAT";
         readonly color = "cyan6";
 
+        /** Verifica se o valor é um número finito. */
         validate(value: any): boolean {
             return typeof value === "number" && Number.isFinite(value);
         }
 
+        /** Converte um valor para número de ponto flutuante. */
         parse(value: any): number {
             return parseFloat(value);
         }
@@ -1635,6 +1775,7 @@ namespace DataTypes {
         readonly name = "BOOLEAN";
         readonly color = "purple5";
 
+        /** Verifica se o valor representa um booleano. */
         validate(value: any): boolean {
             value = typeof value === "string" ? value.trim().toLowerCase() : value;
             return value === true ||
@@ -1643,6 +1784,7 @@ namespace DataTypes {
                 value === "false";
         }
 
+        /** Converte um valor para booleano ou retorna `null` se inválido. */
         parse(value: any): boolean | null {
             value = typeof value === "string" ? value.trim() : value;
             if (value === true || (typeof value === "string" && value.toLowerCase() === "true"))
@@ -1659,10 +1801,12 @@ namespace DataTypes {
         readonly name = "DATE";
         readonly color = "orange5";
 
+        /** Verifica se o valor representa uma data SQL válida. */
         validate(value: any): boolean {
             return value instanceof SQLDate || (typeof value === "string" && SQLDate.fromString(value) !== null);
         }
 
+        /** Converte um valor para uma data SQL. */
         parse(value: any): SQLDate | null {
             if (value && typeof value === "object" && typeof value.year === "number" &&
                 typeof value.month === "number" && typeof value.day === "number") {
@@ -1680,11 +1824,13 @@ namespace DataTypes {
         readonly name = "TIME";
         readonly color = "yellow4";
 
+        /** Verifica se o valor representa um horário SQL válido. */
         validate(value: any): boolean {
             return value instanceof SQLTime || (typeof value === "string" && SQLTime.fromString(value) !== null)
                 || (typeof value === "number" && SQLTime.fromNumber(value) !== null);
         }
 
+        /** Converte um valor para um horário SQL. */
         parse(value: any): SQLTime | null {
 
             if (value && typeof value === "object" && typeof value.hours === "number" &&
@@ -1708,23 +1854,31 @@ namespace DataTypes {
         readonly color = "pink5";
         private allowedValues: string[];
 
+        /**
+         * Cria um tipo ENUM com os valores permitidos.
+         * @param allowedValues - Valores aceitos pelo enum.
+         */
         constructor(allowedValues: string[]) {
             super();
             this.allowedValues = allowedValues;
         }
 
+        /** Verifica se o valor pertence aos valores permitidos. */
         validate(value: any): boolean {
             return typeof value === "string" && this.allowedValues.includes(value);
         }
 
+        /** Converte um valor para texto do enum. */
         parse(value: any): string {
             return String(value);
         }
 
+        /** Retorna os valores permitidos pelo enum. */
         getAllowedValues(): string[] {
             return this.allowedValues;
         }
 
+        /** Atualiza os valores permitidos pelo enum. */
         setAllowedValues(newValues: string[]): void {
             this.allowedValues = newValues;
         }
@@ -1735,23 +1889,31 @@ namespace DataTypes {
         readonly color = "green2";
         private maxLength: number;
 
+        /**
+         * Cria um tipo VARCHAR com limite de tamanho.
+         * @param maxLength - Número máximo de caracteres.
+         */
         constructor(maxLength: number) {
             super();
             this.maxLength = maxLength;
         }
 
+        /** Verifica se o texto respeita o limite de tamanho. */
         validate(value: any): boolean {
             return typeof value === "string" && value.length <= this.maxLength;
         }
 
+        /** Converte um valor para texto. */
         parse(value: any): string {
             return String(value);
         }
 
+        /** Retorna o tamanho máximo configurado. */
         getMaxLength(): number {
             return this.maxLength;
         }
 
+        /** Atualiza o tamanho máximo permitido. */
         setMaxLength(newLength: number): void {
             this.maxLength = newLength;
         }
@@ -1826,18 +1988,27 @@ let currentTable: string | null = null;
 let terminalSessions: TerminalSession[] = [];
 let currentTerminalSession: number = 0;
 
+/** Retorna a database atualmente selecionada. */
 function getCurrentDatabase(): DB.Database | null {
     return currentDatabase ? databases[currentDatabase] : null;
 }
 
+/** Retorna o schema atualmente selecionado. */
 function getCurrentSchema(): DB.Schema | null {
     return currentDatabase && currentSchema ? getCurrentDatabase()!.schemas[currentSchema!] : null;
 }
 
+/** Retorna a tabela atualmente selecionada. */
 function getCurrentTable(): DB.Table | null {
     return currentDatabase && currentSchema && currentTable ? getCurrentSchema()!.tables[currentTable] : null;
 }
 
+/**
+ * Busca uma tabela pelo nome no schema selecionado ou informado.
+ * @param tableName - Nome da tabela.
+ * @param schemaName - Schema onde a busca será feita.
+ * @returns Tabela encontrada ou `null`.
+ */
 function getTable(tableName: string, schemaName?: string): DB.Table | null {
     return currentDatabase && (schemaName || currentSchema) ? getCurrentDatabase()!.schemas[schemaName || currentSchema!].tables[tableName] || null : null;
 }
@@ -1846,9 +2017,7 @@ function getTable(tableName: string, schemaName?: string): DB.Table | null {
 
 // #region Interface functions
 
-/**
- * Cria uma nova database a partir do campo de entrada da interface.
- */
+/** Cria uma database a partir dos dados preenchidos na interface. */
 function createDatabaseInterface() {
     const databaseNameInput = document.getElementById("nome-database-input") as HTMLInputElement;
     const databaseName = databaseNameInput.value.trim();
@@ -1869,6 +2038,7 @@ function createDatabaseInterface() {
     openNotifications(`<p style='color: var(--green4)'>Database "${databaseName}" criada com sucesso!</p>`);
 }
 
+/** Cria um schema a partir dos dados preenchidos na interface. */
 function createSchemaInterface() {
     const schemaNameInput = document.getElementById("nome-schema-input") as HTMLInputElement;
     const schemaName = schemaNameInput.value.trim();
@@ -1892,9 +2062,7 @@ function createSchemaInterface() {
     openNotifications(`<p style='color: var(--green4)'>Schema "${schemaName}" criada com sucesso!</p>`);
 }
 
-/**
- * Cria uma nova tabela com as colunas definidas na interface.
- */
+/** Cria uma tabela com as colunas preenchidas na interface. */
 function createTableInterface() {
     const tableNameInput = document.getElementById("nome-tabela-input") as HTMLInputElement;
     const tableName = tableNameInput.value.trim();
@@ -1933,9 +2101,7 @@ function createTableInterface() {
     openNotifications(`<p style='color: var(--green5)'>Tabela "${tableName}" criada com sucesso!</p>`);
 }
 
-/**
- * Adiciona colunas à tabela atualmente selecionada.
- */
+/** Adiciona à tabela selecionada as colunas preenchidas na interface. */
 function addColumnsInterface() {
     if (currentDatabase === null) {
         openNotifications("<p style='color: var(--red5)'>Nenhuma database selecionada.</p>");
@@ -1966,9 +2132,7 @@ function addColumnsInterface() {
     openNotifications(`<p style='color: var(--green5)'>Colunas adicionadas com sucesso!</p>`);
 }
 
-/**
- * Lê os campos do formulário e insere uma nova linha na tabela atual.
- */
+/** Insere na tabela selecionada uma linha preenchida na interface. */
 function insertRowInterface() {
     if (currentDatabase === null) {
         openNotifications("<p style='color: var(--red5)'>Nenhuma database selecionada.</p>");
@@ -2025,9 +2189,7 @@ function insertRowInterface() {
 
         const value = column.type.parse(rawValue);
         if (value === null) {
-            openNotifications(
-                `<p style='color: var(--red5)'>Valor inválido para a coluna "${columnName}".</p>`
-            );
+            openNotifications(`<p style='color: var(--red5)'>Valor inválido para a coluna "${columnName}".</p>`);
 
             table.revertAutoIncrementValues(valuesBeforeIncrement);
             return;
@@ -2121,9 +2283,7 @@ function editRowInterface(rowIndex: number) {
     openNotifications(`<p style='color: var(--green5)'>Linha editada com sucesso!</p>`);
 }
 
-/**
- * Renomeia a database atualmente selecionada.
- */
+/** Renomeia a database selecionada usando o campo da interface. */
 function renameDatabaseInterface() {
     if (currentDatabase === null) {
         openNotifications("<p style='color: var(--red5)'>Nenhuma database selecionada.</p>");
@@ -2146,6 +2306,7 @@ function renameDatabaseInterface() {
     }
 }
 
+/** Renomeia o schema selecionado usando o campo da interface. */
 function renameSchemaInterface() {
     if (currentDatabase === null) {
         openNotifications("<p style='color: var(--red5)'>Nenhuma database selecionada.</p>");
@@ -2170,9 +2331,7 @@ function renameSchemaInterface() {
     refreshUI();
 }
 
-/**
- * Renomeia a tabela atualmente selecionada.
- */
+/** Renomeia a tabela selecionada usando o campo da interface. */
 function renameTableInterface() {
     if (currentDatabase === null) {
         openNotifications("<p style='color: var(--red5)'>Nenhuma database selecionada.</p>");
@@ -2197,6 +2356,7 @@ function renameTableInterface() {
     refreshUI();
 }
 
+/** Valida e aplica as alterações preenchidas para as colunas da tabela. */
 function alterColumnsInterface() {
     const table = getCurrentTable()!;
     const columnsUl = document.getElementById("lista-colunas-existentes")!;
@@ -2264,10 +2424,11 @@ function alterColumnsInterface() {
             }
         }
 
-        if (compareTypes(newColumn.type, table.columns[oldColumnName].type)) {
+        if (!compareTypes(newColumn.type, table.columns[oldColumnName].type)) {
             for (const row of table.rows) {
                 const value = row.values[oldColumnName];
-                if (!newColumn.type.validate(newColumn.type.parse(value))) {
+                const valid = newColumn.type.validate(newColumn.type.parse(value));
+                if (!valid && !newColumn.type.parse(value) === null) {
                     openNotifications("<p style='color: var(--red5)'>Existem valores inválidos na coluna \"" + newColumn.name + "\".</p>");
                     return;
                 }
@@ -2285,18 +2446,22 @@ function alterColumnsInterface() {
 
 // Other interface 
 
+/** Recria a árvore lateral e restaura os nós que estavam expandidos. */
 function changeLeftSide() {
+    /** Retorna o texto exibido no resumo de um nó da árvore. */
     function getDetailsLabel(details: HTMLDetailsElement): string {
         const summary = details.querySelector("summary");
         const label = summary?.querySelector("div > p")?.textContent?.trim();
         return label || "";
     }
 
+    /** Monta o caminho hierárquico usado para identificar um nó. */
     function buildPath(parentPath: string, details: HTMLDetailsElement): string {
         const label = getDetailsLabel(details);
         return parentPath ? `${parentPath}/${label}` : label;
     }
 
+    /** Salva os caminhos dos nós atualmente expandidos. */
     function saveExpanded(root: HTMLElement, parentPath: string, opened: Set<string>) {
         for (const child of Array.from(root.children)) {
             if (child.tagName !== "DETAILS") continue;
@@ -2312,6 +2477,7 @@ function changeLeftSide() {
         }
     }
 
+    /** Reabre os nós cujos caminhos foram salvos anteriormente. */
     function restoreExpanded(root: HTMLElement, parentPath: string, opened: Set<string>) {
         for (const child of Array.from(root.children)) {
             if (child.tagName !== "DETAILS") continue;
@@ -2348,6 +2514,7 @@ function changeLeftSide() {
 /**
  * Re-renderiza a visualização detalhada da tabela selecionada.
  */
+/** Re-renderiza a tabela e as ações da tabela selecionada. */
 function changeTabelaSelecionadaTabela() {
     if (currentDatabase === null) {
         document.getElementById("nenhuma-tabela-selecionada")!.style.display = "flex";
@@ -2506,6 +2673,9 @@ function buildColumnFromInputs(columnInputs: IColumnInputs, knownColumns: Set<st
         return null;
     } else if (knownColumns.has(columnInputs.columnName)) {
         openNotifications("<p style='color: var(--red5)'>Já existe uma coluna com esse nome.</p>");
+        return null;
+    } else if (!isValidSQLName(columnInputs.columnName)) {
+        openNotifications("<p style='color: var(--red5)'>O nome da coluna não segue o padrão permitido.</p>");
         return null;
     }
 
@@ -2863,6 +3033,7 @@ function deleteColumnCreationDiv(button: HTMLElement) {
 /**
  * Cria um bloco visual para montar uma condição de busca.
  */
+/** Cria um bloco visual para montar uma condição de busca. */
 function createWhereConditionDiv() {
     const whereConditionsContainer = document.getElementById("where-conditions")!;
     const mainDiv = document.createElement("div");
@@ -2941,6 +3112,7 @@ function createWhereConditionDiv() {
 /**
  * Atualiza o campo do menu de configuração de database.
  */
+/** Preenche o menu de configuração da database selecionada. */
 function changeConfigurarDatabaseMenu() {
     const menu = document.getElementById("configurar-database")!;
     if (currentDatabase === null) {
@@ -2950,6 +3122,7 @@ function changeConfigurarDatabaseMenu() {
     menu.querySelector("input")!.value = currentDatabase;
 }
 
+/** Preenche o menu de configuração do schema selecionado. */
 function changeConfigurarSchemaMenu() {
     const menu = document.getElementById("configurar-schema")!;
     if (currentDatabase === null || currentSchema === null) {
@@ -2975,6 +3148,7 @@ function changeConfigurarTabelaMenu() {
 /**
  * Recria o menu de edição de colunas da tabela atual.
  */
+/** Recria o menu de edição das colunas da tabela atual. */
 function changeEditColumnsMenu() {
     if (currentDatabase === null) return;
     const menu = document.getElementById("lista-colunas-existentes")!;
@@ -3227,6 +3401,7 @@ function changeEditColumnsMenu() {
 /**
  * Recria o menu de inserção de linhas da tabela atual.
  */
+/** Recria o menu de inserção de linha da tabela atual. */
 function changeInsertRowMenu() {
     if (currentDatabase === null) return;
     const menuUl = document.querySelector("#colunas-inserir-linha")!;
@@ -3346,6 +3521,10 @@ function changeInsertRowMenu() {
 
 /**
  * Recria o menu de edição de uma linha específica.
+ * @param rowIndex - Índice da linha que será editada.
+ */
+/**
+ * Recria o menu de edição para uma linha específica.
  * @param rowIndex - Índice da linha que será editada.
  */
 function changeEditRowMenu(rowIndex: number) {
@@ -3474,6 +3653,7 @@ function changeEditRowMenu(rowIndex: number) {
 /**
  * Recria o menu de pesquisa e suas opções de join.
  */
+/** Atualiza o menu de busca conforme a tabela selecionada. */
 function changeSearchMenu() {
     const searchColumnsDiv = document.getElementById("colunas-pesquisa")!;
     searchColumnsDiv.innerHTML = "";
@@ -3510,6 +3690,12 @@ function changeSearchMenu() {
 /**
  * Prepara a confirmação de exclusão para database, tabela, coluna ou linha.
  * @param type - Tipo do item que será removido.
+ * @param rowIndex - Índice da linha, quando aplicável.
+ * @param columnName - Nome da coluna, quando aplicável.
+ */
+/**
+ * Configura a confirmação de exclusão para o item escolhido.
+ * @param type - Tipo de item que será excluído.
  * @param rowIndex - Índice da linha, quando aplicável.
  * @param columnName - Nome da coluna, quando aplicável.
  */
@@ -3635,6 +3821,7 @@ function changeConfirmDeleteMenu(type: "database" | "schema" | "table" | "column
  * Atualiza a exibição e as restrições dos campos de características da coluna.
  * @param parentDiv - Container do bloco de criação/edição da coluna.
  */
+/** Atualiza os controles de restrições conforme o tipo e as opções da coluna. */
 function updateCharacteristics(parentDiv: Element) {
     console.log("updateCharacteristics called");
     // pegar inputs
@@ -3740,6 +3927,7 @@ function updateCharacteristics(parentDiv: Element) {
  * Troca o tipo do campo de valor padrão conforme o tipo da coluna.
  * @param parentDiv - Container do bloco de criação/edição da coluna.
  */
+/** Atualiza o campo de valor padrão da coluna. */
 function updateDefaultInput(parentDiv: Element, initialValue?: any) {
     const type = (parentDiv.querySelector(".custom-dropdown button") as HTMLElement).textContent!.toLowerCase();
     if (type == "boolean") {
@@ -3801,6 +3989,7 @@ function updateDefaultInput(parentDiv: Element, initialValue?: any) {
     }
 }
 
+/** Atualiza o campo específico para ENUM ou VARCHAR. */
 function updateTypeInput(parentDiv: Element) {
     const type = (parentDiv.querySelector(".custom-dropdown button") as HTMLElement).textContent!.toLowerCase();
     const typeDiv = parentDiv.querySelector("div.type-values") as HTMLElement;
@@ -3818,6 +4007,7 @@ function updateTypeInput(parentDiv: Element) {
  * Atualiza os schemas disponíveis para referência de chave estrangeira.
  * @param parentDiv - Container do bloco de criação/edição da coluna.
  */
+/** Atualiza as opções de schema para uma referência de chave estrangeira. */
 function updateForeignKeyReferenceSchemaOptions(parentDiv: Element) {
     const database = getCurrentDatabase()!;
 
@@ -3844,6 +4034,7 @@ function updateForeignKeyReferenceSchemaOptions(parentDiv: Element) {
  * Atualiza as tabelas disponíveis para referência de chave estrangeira.
  * @param parentDiv - Container do bloco de criação/edição da coluna.
  */
+/** Atualiza as opções de tabela da referência selecionada. */
 function updateForeignKeyReferenceTableOptions(parentDiv: Element) {
     const database = getCurrentDatabase()!;
     const tableSelect = parentDiv.querySelector(".referencia :nth-child(3) .custom-dropdown-menu") as HTMLElement;
@@ -3879,6 +4070,7 @@ function updateForeignKeyReferenceTableOptions(parentDiv: Element) {
  * Atualiza as colunas disponíveis na tabela de referência selecionada.
  * @param parentDiv - Container do bloco de criação/edição da coluna.
  */
+/** Atualiza as opções de coluna da referência selecionada. */
 function updateForeignKeyReferenceColumnOptions(parentDiv: Element) {
     const schema = getCurrentSchema()!;
     const columnSelect = parentDiv.querySelector(".referencia :nth-child(4) .custom-dropdown-menu") as HTMLElement;
@@ -3916,27 +4108,20 @@ function updateForeignKeyReferenceColumnOptions(parentDiv: Element) {
 
 // #region Terminal
 
-/**
- * Retorna a sessão de terminal atualmente ativa.
- * @returns Sessão selecionada.
- */
+/** Retorna a sessão de terminal atualmente ativa. */
 function getCurrentTerminalSession(): TerminalSession {
     return terminalSessions[currentTerminalSession];
 }
 
 const commandTextarea = document.querySelector("#terminal-input-field") as HTMLTextAreaElement;
 
-/**
- * Executa o comando digitado no terminal SQL.
- */
+/** Executa o comando SQL informado no terminal atual. */
 function executeCommand() {
     const command = commandTextarea.value.trim();
     SQL.execute(command);
 }
 
-/**
- * Cria uma nova aba de terminal e a torna ativa.
- */
+/** Cria uma sessão de terminal e a seleciona. */
 function createTerminalSession() {
     const terminalSession = new TerminalSession(`Terminal ${TerminalSession.sessionCount}`);
     terminalSessions.push(terminalSession);
@@ -3978,11 +4163,59 @@ namespace SQL {
      * @param fullCommand - Texto original digitado.
      */
     export function execute(fullCommand: string) {
-        const commands = fullCommand.split(";").map(command => command.trim()).filter(command => command.length > 0);
+        const commands: string[] = [];
+
+        let current = "";
+        let quote: string | null = null;
+
+        for (let i = 0; i < fullCommand.length; i++) {
+
+            const char = fullCommand[i];
+
+            if (quote !== null) {
+
+                current += char;
+
+                // Trata aspas escapadas: 'João''s'
+                if (char === quote) {
+
+                    if (fullCommand[i + 1] === quote) {
+                        current += fullCommand[i + 1];
+                        i++;
+                    } else {
+                        quote = null;
+                    }
+                }
+
+                continue;
+            }
+
+            if (char === "'" || char === '"') {
+                quote = char;
+                current += char;
+                continue;
+            }
+
+            if (char === ";") {
+                if (current.trim()) {
+                    commands.push(current.trim());
+                }
+
+                current = "";
+                continue;
+            }
+
+            current += char;
+        }
+
+        if (current.trim()) {
+            commands.push(current.trim());
+        }
+
         for (const commandText of commands) {
             const tokens = tokenizeSQL(commandText);
 
-            if (tokens.length === 0) return;
+            if (tokens.length === 0) continue;
             const command = tokens[0]?.toLowerCase();
 
             switch (command) {
@@ -3995,23 +4228,27 @@ namespace SQL {
                     break;
 
                 case "delete":
+                    new SQLDelete(commandText, tokens).execute();
                     break;
 
                 case "drop":
+                    new SQLDrop(commandText, tokens).execute();
                     break;
 
                 case "insert":
-                    new SQLInsert(commandText, tokens).insert();
+                    new SQLInsert(commandText, tokens).execute();
                     break;
 
                 case "select":
+                    new SQLSelect(commandText, tokens).execute();
                     break;
 
                 case "update":
+                    new SQLUpdate(commandText, tokens).execute();
                     break;
 
                 case "use":
-                    new SystemCommands(commandText, tokens).use();
+                    new SystemCommands(commandText, tokens).execute();
                     break;
 
                 default:
@@ -4020,16 +4257,25 @@ namespace SQL {
         }
     }
 
-    export class SQLAlter {
-        private fullCommand: string;
-        private tokens: string[];
+    export abstract class SQLCommand {
+        fullCommand: string;
+        tokens: string[];
 
         constructor(fullCommand: string, tokens: string[]) {
             this.fullCommand = fullCommand;
             this.tokens = tokens;
         }
 
-        execute() {
+        abstract execute(): void;
+    }
+
+    export class SQLAlter extends SQLCommand {
+
+        constructor(fullCommand: string, tokens: string[]) {
+            super(fullCommand, tokens);
+        }
+
+        execute(): void {
             if (this.tokens.length < 6) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER incorreto", "Sintaxe incorreta"], "error");
                 return;
@@ -4041,6 +4287,10 @@ namespace SQL {
                     this.database();
                     break;
 
+                case "schema":
+                    this.schema();
+                    break;
+
                 case "table":
                     this.table();
                     break;
@@ -4050,7 +4300,7 @@ namespace SQL {
             }
         }
 
-        database() {
+        database(): void {
             if (this.tokens.length < 6 || this.tokens.length > 6) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER DATABASE incorreto", "Sintaxe incorreta"], "error");
                 return;
@@ -4075,7 +4325,7 @@ namespace SQL {
             getCurrentTerminalSession().createEntry(this.fullCommand, [`Database "${this.tokens[2]}" renomeada para "${this.tokens[5]}" com sucesso!`], "success");
         }
 
-        schema() {
+        schema(): void {
             if (currentDatabase === null) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhuma database selecionada"], "error");
                 return;
@@ -4104,11 +4354,12 @@ namespace SQL {
             getCurrentTerminalSession().createEntry(this.fullCommand, [`Schema "${this.tokens[2]}" renomeado para "${this.tokens[5]}" com sucesso!`], "success");
         }
 
-        table() {
+        table(): void {
             const name = this.tokens[2];
             const { schemaName, tableName, error } = verifySchemaTableName(name);
             if (error) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, [error], "error");
+                return
             }
             if (!schemaName || !tableName) return;
 
@@ -4134,7 +4385,7 @@ namespace SQL {
             }
         }
 
-        rename() {
+        rename(): void {
             const word5 = this.tokens[4]?.toLowerCase();
             const name = this.tokens[2];
             const { schemaName, tableName, error } = verifySchemaTableName(name);
@@ -4154,7 +4405,7 @@ namespace SQL {
                     getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da tabela inválido"], "error");
                     return;
                 }
-                if (getCurrentSchema()!.tables[newName]) {
+                if (getTable(newName, schemaName)) {
                     getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma tabela com o nome "${newName}" nesse schema`], "error");
                     return;
                 }
@@ -4182,11 +4433,11 @@ namespace SQL {
                     getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da coluna inválido"], "error");
                     return;
                 }
-                if (getTable(this.tokens[2])!.columns[newName] !== undefined) {
+                if (getTable(tableName, schemaName)!.columns[newName] !== undefined) {
                     getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma coluna com o nome "${newName}" na tabela "${this.tokens[2]}"`], "error");
                     return;
                 }
-                const newColumn: DB.Column = getTable(this.tokens[2])!.columns[columnName].clone();
+                const newColumn: DB.Column = getTable(tableName, schemaName)!.columns[columnName].clone();
                 newColumn.name = newName;
                 SGBDFunctions.alterColumn(tableName, columnName, newColumn, schemaName);
                 getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${columnName}" renomeado para "${newName}" com sucesso!`], "success");
@@ -4196,7 +4447,7 @@ namespace SQL {
             }
         }
 
-        setSchema() {
+        setSchema(): void {
             const name = this.tokens[2];
             const { schemaName, tableName, error } = verifySchemaTableName(name);
             if (error) {
@@ -4232,7 +4483,7 @@ namespace SQL {
             refreshUI();
         }
 
-        addColumn() {
+        addColumn(): void {
             const name = this.tokens[2];
             const { schemaName, tableName, error } = verifySchemaTableName(name);
             if (error) {
@@ -4251,9 +4502,9 @@ namespace SQL {
                 return;
             }
 
-            const result = parseColumn(this.tokens.slice(5));
+            const result = parseColumn(this.tokens.slice(5), getCurrentDatabase()!.schemas[schemaName].tables[tableName]);
             if (result.error) {
-                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando CREATE TABLE incorreto", result.error], "error");
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE ADD COLUMN incorreto", result.error], "error");
                 return;
             }
             if (!result.column) return;
@@ -4267,7 +4518,7 @@ namespace SQL {
             getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${result.column.name}" adicionada com sucesso`], "success");
         }
 
-        dropColumn() {
+        dropColumn(): void {
             const name = this.tokens[2];
             const { schemaName, tableName, error } = verifySchemaTableName(name);
             if (error) {
@@ -4277,11 +4528,11 @@ namespace SQL {
             if (!schemaName || !tableName) return;
             const word5 = this.tokens[4]?.toLowerCase();
             if (word5 !== "column") {
-                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "ADD deve ser seguido de COLUMN"], "error");
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "DROP deve ser seguido de COLUMN"], "error");
                 return;
             }
 
-            if (this.tokens.length < 6) {
+            if (this.tokens.length !== 6) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
                 return;
             }
@@ -4296,7 +4547,7 @@ namespace SQL {
             getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${columnName}" removida com sucesso`], "success");
         }
 
-        alterColumn() {
+        alterColumn(): void {
             const name = this.tokens[2];
             const { schemaName, tableName, error } = verifySchemaTableName(name);
             if (error) {
@@ -4306,7 +4557,7 @@ namespace SQL {
             if (!schemaName || !tableName) return;
             const word5 = this.tokens[4]?.toLowerCase();
             if (word5 !== "column") {
-                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "ADD deve ser seguido de COLUMN"], "error");
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "ALTER deve ser seguido de COLUMN"], "error");
                 return;
             }
 
@@ -4348,35 +4599,45 @@ namespace SQL {
                 if (compareTypes(columnType, types.ENUM([]))) {
                     const enumStartIndex = this.tokens.findIndex(token => token === "(");
                     if (enumStartIndex === -1) {
-                        return { column: null, error: "ENUM inválido: falta parêntese de abertura" };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "ENUM inválido: falta parêntese de abertura"], "error");
+                        return;
                     }
 
                     const enumEndIndex = this.tokens.findIndex(token => token === ")");
                     if (enumEndIndex === -1) {
-                        return { column: null, error: "ENUM inválido: falta parêntese de fechamento" };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "ENUM inválido: falta parêntese de fechamento"], "error");
+                        return;
+                    }
+                    if (enumEndIndex !== this.tokens.length - 1) {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta após a definição do ENUM"], "error");
+                        return;
                     }
 
                     const enumValues = this.tokens.slice(enumStartIndex + 1, enumEndIndex);
                     if (enumValues.length === 0) {
-                        return { column: null, error: "ENUM deve possuir pelo menos um valor" };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "ENUM deve possuir pelo menos um valor"], "error");
+                        return;
                     }
 
                     for (let i = 0; i < enumValues.length; i++) {
                         const token = enumValues[i];
                         if (i % 2 === 0) {
                             if (token === ",") {
-                                return { column: null, error: "Valor ENUM inválido" };
+                                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Valor ENUM inválido"], "error");
+                                return;
                             }
                             if (!token.startsWith('"') || !token.endsWith('"')) {
-                                return { column: null, error: "Valores ENUM devem estar entre aspas" };
+                                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Valores ENUM devem estar entre aspas"], "error");
+                                return;
                             }
                         } else {
                             if (token !== ",") {
-                                return { column: null, error: "Valores ENUM devem ser separados por vírgula" };
+                                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Valores ENUM devem ser separados por vírgula"], "error");
+                                return;
                             }
                         }
                     }
-                    (column.type as DataTypes.EnumType).setAllowedValues(
+                    (newColumn.type as DataTypes.EnumType).setAllowedValues(
                         enumValues.filter(token => token !== ",").map(token => {
                             if (token.startsWith('"') && token.endsWith('"')) {
                                 return token.slice(1, -1);
@@ -4387,43 +4648,54 @@ namespace SQL {
                 } else if (compareTypes(columnType, types.VARCHAR(0))) {
                     const varcharStartIndex = this.tokens.findIndex(token => token === "(");
                     if (varcharStartIndex === -1) {
-                        return { column: null, error: "VARCHAR inválido: falta parêntese de abertura" };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "VARCHAR inválido: falta parêntese de abertura"], "error");
+                        return;
                     }
 
                     const varcharEndIndex = this.tokens.findIndex(token => token === ")");
                     if (varcharEndIndex === -1) {
-                        return { column: null, error: "VARCHAR inválido: falta parêntese de fechamento" };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "VARCHAR inválido: falta parêntese de fechamento"], "error");
+                        return;
+                    }
+                    if (varcharEndIndex !== this.tokens.length - 1) {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta após a definição do VARCHAR"], "error");
+                        return;
                     }
 
                     const varcharValues = this.tokens.slice(varcharStartIndex + 1, varcharEndIndex);
                     if (varcharValues.length === 0) {
-                        return { column: null, error: "VARCHAR deve possuir um valor máximo" };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "VARCHAR inválido: falta valor máximo"], "error");
+                        return;
                     }
 
                     if (varcharValues.length !== 1) {
-                        return { column: null, error: "VARCHAR deve possuir apenas um valor máximo" };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "VARCHAR deve possuir apenas um valor máximo"], "error");
+                        return;
                     }
                     const varcharValue = varcharValues[0];
                     if (!/^\d+$/.test(varcharValue)) {
-                        return { column: null, error: "Valor máximo de VARCHAR deve ser um número" };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Valor máximo de VARCHAR deve ser um número"], "error");
+                        return;
                     }
                     const varcharMaxLength = parseInt(varcharValue);
                     if (isNaN(varcharMaxLength) || varcharMaxLength <= 0) {
-                        return { column: null, error: "Valor máximo de VARCHAR inválido" };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Valor máximo de VARCHAR inválido"], "error");
+                        return;
                     }
-                    (column.type as DataTypes.VarcharType).setMaxLength(varcharMaxLength);
+                    newColumn.type = types.VARCHAR(varcharMaxLength);
                 }
 
                 if (this.tokens.length > 8 && !compareTypes(columnType, types.ENUM([])) && !compareTypes(columnType, types.VARCHAR(0))) {
                     getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
                     return;
-                } else if (this.tokens.length > 10 && (compareTypes(columnType, types.ENUM([])) || compareTypes(columnType, types.VARCHAR(0)))) {
+                } else if (this.tokens.length > 11 && compareTypes(columnType, types.VARCHAR(0))) {
                     getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
                     return;
                 }
 
-                for (let row of getCurrentSchema()!.tables[tableName].rows) {
-                    if (!columnType.validate(row.values[columnName])) {
+                for (let row of getTable(tableName, schemaName)!.rows) {
+                    const v = row.values[columnName];
+                    if (!columnType.validate(v) && valueExists(v)) {
                         getCurrentTerminalSession().createEntry(this.fullCommand, [`Não é possível alterar o tipo da coluna "${columnName}" para "${columnType.name}" porque existem valores incompatíveis na tabela`], "error");
                         return;
                     }
@@ -4433,174 +4705,215 @@ namespace SQL {
                 getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${columnName}" alterada com sucesso`], "success");
 
             } else if (word7 === "set") {
-                let words = this.tokens.slice(7).map(token => token.toLowerCase());
+                let words = this.tokens.slice(7);
                 if (words.length < 1) {
                     getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
                     return;
                 }
-                const primaryValidation = validateCompoundKeyword("primary", "key", "PRIMARY KEY", words);
+                const optionsError = validateColumnOptionTokens(words, true);
+                if (optionsError) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", optionsError], "error");
+                    return;
+                }
+                const primaryValidation = validateCompoundKeyword("primary", "key", "PRIMARY KEY", words.map(t => t.toLowerCase()));
                 if (typeof primaryValidation === "string") {
-                    return { column: null, error: primaryValidation };
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", primaryValidation], "error");
+                    return;
                 }
-                newColumn.isPrimaryKey = primaryValidation === 1;
+                if (primaryValidation === 1) {
+                    newColumn.isPrimaryKey = true;
+                }
 
-                const foreignValidation = validateCompoundKeyword("foreign", "key", "FOREIGN KEY", words);
+                const foreignValidation = validateCompoundKeyword("foreign", "key", "FOREIGN KEY", words.map(t => t.toLowerCase()));
                 if (typeof foreignValidation === "string") {
-                    return { column: null, error: foreignValidation };
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", foreignValidation], "error");
+                    return;
                 }
-                newColumn.isForeignKey = foreignValidation === 1;
-
-                const notNullValidation = validateCompoundKeyword("not", "null", "NOT NULL", words);
-                if (typeof notNullValidation === "string") {
-                    return { column: null, error: notNullValidation };
-                }
-                newColumn.isNotNull = notNullValidation === 1;
-
-                const uniqueValidation = validateSingleKeyword("unique", "UNIQUE", words);
-                if (typeof uniqueValidation === "string") {
-                    return { column: null, error: uniqueValidation };
-                }
-                newColumn.isUnique = uniqueValidation === 1;
-
-                const autoIncrementValidation = validateSingleKeyword("auto_increment", "AUTO_INCREMENT", words);
-                if (typeof autoIncrementValidation === "string") {
-                    return { column: null, error: autoIncrementValidation };
-                }
-                newColumn.isAutoIncrement = autoIncrementValidation === 1;
-
-                const defaultValidation = validateSingleKeyword("default", "DEFAULT", words);
-                if (typeof defaultValidation === "string") {
-                    return { column: null, error: defaultValidation };
-                }
-                newColumn.hasDefault = defaultValidation === 1;
-
-                const currentTimestampValidation = validateSingleKeyword("current_timestamp", "CURRENT_TIMESTAMP", words);
-                if (typeof currentTimestampValidation === "string") {
-                    return { column: null, error: currentTimestampValidation };
-                }
-                newColumn.isCurrentTimestamp = currentTimestampValidation === 1;
-
-                if (newColumn.hasDefault) {
-                    const defaultIndex = words.findIndex(token => token.toLowerCase() === "default");
-                    if (defaultIndex === -1 || defaultIndex === words.length - 1) {
-                        return { column: null, error: "DEFAULT deve ser seguido de um valor" };
-                    }
-                    const defaultValue = words[defaultIndex + 1];
-
-                    if (compareTypes(column.type, types.TEXT) || compareTypes(column.type, types.DATE) || compareTypes(column.type, types.TIME)) {
-                        if (!(defaultValue.startsWith("'") && defaultValue.endsWith("'") || defaultValue.startsWith('"') && defaultValue.endsWith('"'))) {
-                            return { column: null, error: "Tipo deve começar e acabar com \" ou \'" }
-                        }
-                    }
-                    const parsedDefaultValue = column.type.parse(defaultValue);
-                    if (!valueExists(parsedDefaultValue) || isNaN(parsedDefaultValue)) {
-                        return { column: null, error: `Valor DEFAULT inválido para ${column.type.name}` }
-                    }
-
-                    column.defaultValue = parsedDefaultValue;
-                }
-
-                const hasReferences = words.some(token => token.toLowerCase() === "references");
-
-                if (hasReferences && !column.isForeignKey) {
-                    return { column: null, error: "REFERENCES só pode ser usado com FOREIGN KEY" };
-                }
-
-                if (column.isForeignKey) {
+                if (foreignValidation === 1) {
+                    newColumn.isForeignKey = true;
                     const referencesCount = words.filter(token => token.toLowerCase() === "references").length;
                     if (referencesCount > 1) {
-                        return { column: null, error: "Apenas um REFERENCES é permitido" };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Apenas um REFERENCES é permitido"], "error");
+                        return;
                     }
                     const referencesIndex = words.findIndex(token => token.toLowerCase() === "references");
                     if (referencesIndex <= 0 || words[referencesIndex - 1].toLowerCase() !== "key") {
-                        return { column: null, error: "FOREIGN KEY deve ser seguido de REFERENCES" };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "FOREIGN KEY deve ser seguido de REFERENCES"], "error");
+                        return;
                     }
                     if (referencesIndex + 4 >= words.length || words[referencesIndex + 2] !== "(" ||
                         words[referencesIndex + 4] !== ")") {
-                        return { column: null, error: "REFERENCES inválido" };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "REFERENCES inválido"], "error");
+                        return;
                     }
 
                     const name = words[referencesIndex + 1];
                     const { schemaName, tableName, error } = verifySchemaTableName(name);
                     if (error) {
                         getCurrentTerminalSession().createEntry(this.fullCommand, [error], "error");
+                        return;
                     }
                     if (!schemaName || !tableName) return;
                     const refTable = getCurrentDatabase()!.schemas[schemaName].tables[tableName];
 
                     if (refTable === null) {
-                        return { column: null, error: `Tabela de referência "${tableName}" não existe no schema "${schemaName}"` };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", `Tabela de referência "${tableName}" não existe no schema "${schemaName}"`], "error");
+                        return;
                     }
                     const refColumn = refTable.columns[words[referencesIndex + 3]];
                     if (refColumn === undefined) {
-                        return { column: null, error: `Coluna de referência "${words[referencesIndex + 3]}" não existe na tabela "${words[referencesIndex + 1]}"` };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", `Coluna de referência "${words[referencesIndex + 3]}" não existe na tabela "${words[referencesIndex + 1]}"`], "error");
+                        return;
                     }
-                    if (refColumn.type !== column.type) {
-                        return { column: null, error: `Tipo da coluna de referência "${words[referencesIndex + 3]}" na tabela "${words[referencesIndex + 1]}" não corresponde ao tipo da coluna atual` };
+                    if (!compareTypes(refColumn.type, column.type)) {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", `Tipo da coluna de referência "${words[referencesIndex + 3]}" na tabela "${words[referencesIndex + 1]}" não corresponde ao tipo da coluna atual`], "error");
+                        return;
                     }
                     if (!refColumn.isUnique && !refColumn.isPrimaryKey) {
-                        return { column: null, error: `Coluna de referência "${words[referencesIndex + 3]}" na tabela "${words[referencesIndex + 1]}" não é UNIQUE` };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", `Coluna de referência "${words[referencesIndex + 3]}" na tabela "${words[referencesIndex + 1]}" não é UNIQUE`], "error");
+                        return;
                     }
 
-                    column.reference = {
+                    newColumn.reference = {
                         schema: schemaName,
                         table: tableName,
                         column: refColumn.name
                     };
                 }
 
+                const notNullValidation = validateCompoundKeyword("not", "null", "NOT NULL", words.map(t => t.toLowerCase()));
+                if (typeof notNullValidation === "string") {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", notNullValidation], "error");
+                    return;
+                }
+                if (notNullValidation === 1) {
+                    newColumn.isNotNull = true;
+                }
+
+                const uniqueValidation = validateSingleKeyword("unique", "UNIQUE", words.map(t => t.toLowerCase()));
+                if (typeof uniqueValidation === "string") {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", uniqueValidation], "error");
+                    return;
+                }
+                if (uniqueValidation === 1) {
+                    newColumn.isUnique = true;
+                }
+
+                const autoIncrementValidation = validateSingleKeyword("auto_increment", "AUTO_INCREMENT", words.map(t => t.toLowerCase()));
+                if (typeof autoIncrementValidation === "string") {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", autoIncrementValidation], "error");
+                    return;
+                }
+                if (autoIncrementValidation === 1) {
+                    newColumn.isAutoIncrement = true;
+                }
+
+                const defaultValidation = validateSingleKeyword("default", "DEFAULT", words.map(t => t.toLowerCase()));
+                if (typeof defaultValidation === "string") {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", defaultValidation], "error");
+                    return;
+                }
+                if (defaultValidation === 1) {
+                    newColumn.hasDefault = true;
+                    const defaultIndex = words.findIndex(token => token.toLowerCase() === "default");
+                    if (defaultIndex === -1 || defaultIndex === words.length - 1) {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "DEFAULT deve ser seguido de um valor"], "error");
+                        return;
+                    }
+                    const defaultValue = words[defaultIndex + 1];
+
+                    if (compareTypes(column.type, types.TEXT) || compareTypes(column.type, types.DATE) || compareTypes(column.type, types.TIME)) {
+                        if (!(defaultValue.startsWith("'") && defaultValue.endsWith("'") || defaultValue.startsWith('"') && defaultValue.endsWith('"'))) {
+                            getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Tipo deve começar e acabar com \" ou \'"], "error");
+                            return;
+                        }
+                    }
+                    const parsedDefaultValue = newColumn.type.parse(defaultValue);
+                    if (!valueExists(parsedDefaultValue) || !newColumn.type.validate(parsedDefaultValue)) {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", `Valor DEFAULT inválido para ${column.type.name}`], "error");
+                        return;
+                    }
+
+                    newColumn.defaultValue = parsedDefaultValue;
+                }
+
+                const currentTimestampValidation = validateSingleKeyword("current_timestamp", "CURRENT_TIMESTAMP", words.map(t => t.toLowerCase()));
+                if (typeof currentTimestampValidation === "string") {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", currentTimestampValidation], "error");
+                    return;
+                }
+                if (currentTimestampValidation === 1) {
+                    newColumn.isCurrentTimestamp = true;
+                }
+
+                const hasReferences = words.some(token => token.toLowerCase() === "references");
+
+                if (hasReferences && !newColumn.isForeignKey) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "REFERENCES só pode ser usado com FOREIGN KEY"], "error");
+                    return;
+                }
+
                 // Verificação da integridade com outras características da coluna
 
                 // PRIMARY KEY implica NOT NULL
-                if (column.isPrimaryKey) {
-                    column.isNotNull = true;
-                    column.isUnique = true;
+                if (newColumn.isPrimaryKey) {
+                    newColumn.isNotNull = true;
+                    newColumn.isUnique = true;
                 }
 
                 // AUTO_INCREMENT
-                if (column.isAutoIncrement) {
-                    if (!compareTypes(column.type, types.INTEGER)) {
-                        return { column: null, error: "AUTO_INCREMENT só pode ser usado em colunas INTEGER" };
+                if (newColumn.isAutoIncrement) {
+                    if (!compareTypes(newColumn.type, types.INTEGER)) {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "AUTO_INCREMENT só pode ser usado em colunas INTEGER"], "error");
+                        return;
                     }
 
-                    if (column.isForeignKey) {
-                        return { column: null, error: "AUTO_INCREMENT não pode ser usado com FOREIGN KEY" };
+                    if (newColumn.isForeignKey) {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "AUTO_INCREMENT não pode ser usado com FOREIGN KEY"], "error");
+                        return;
                     }
 
-                    if (column.hasDefault) {
-                        return { column: null, error: "AUTO_INCREMENT não pode ser usado com DEFAULT" };
+                    if (newColumn.hasDefault) {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "AUTO_INCREMENT não pode ser usado com DEFAULT"], "error");
+                        return;
                     }
 
-                    if (column.isCurrentTimestamp) {
-                        return { column: null, error: "AUTO_INCREMENT não pode ser usado com CURRENT_TIMESTAMP" };
+                    if (newColumn.isCurrentTimestamp) {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "AUTO_INCREMENT não pode ser usado com CURRENT_TIMESTAMP"], "error");
+                        return;
                     }
 
-                    column.isNotNull = true;
+                    newColumn.isNotNull = true;
                 }
 
                 // CURRENT_TIMESTAMP
-                if (column.isCurrentTimestamp) {
-                    if (!compareTypes(column.type, types.DATE) && !compareTypes(column.type, types.TIME)) {
-                        return { column: null, error: "CURRENT_TIMESTAMP só pode ser usado em colunas DATE ou TIME" };
+                if (newColumn.isCurrentTimestamp) {
+                    if (!compareTypes(newColumn.type, types.DATE) && !compareTypes(newColumn.type, types.TIME)) {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "CURRENT_TIMESTAMP só pode ser usado em colunas DATE ou TIME"], "error");
+                        return;
                     }
 
-                    if (column.isForeignKey) {
-                        return { column: null, error: "CURRENT_TIMESTAMP não pode ser usado com FOREIGN KEY" };
+                    if (newColumn.isForeignKey) {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "CURRENT_TIMESTAMP não pode ser usado com FOREIGN KEY"], "error");
+                        return;
                     }
 
-                    if (column.hasDefault) {
-                        return { column: null, error: "CURRENT_TIMESTAMP não pode ser usado com DEFAULT" };
+                    if (newColumn.hasDefault) {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "CURRENT_TIMESTAMP não pode ser usado com DEFAULT"], "error");
+                        return;
                     }
                 }
 
                 // FOREIGN KEY
-                if (column.isForeignKey) {
-                    if (column.isAutoIncrement) {
-                        return { column: null, error: "FOREIGN KEY não pode ser usado com AUTO_INCREMENT" };
+                if (newColumn.isForeignKey) {
+                    if (newColumn.isAutoIncrement) {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "FOREIGN KEY não pode ser usado com AUTO_INCREMENT"], "error");
+                        return;
                     }
 
-                    if (column.isCurrentTimestamp) {
-                        return { column: null, error: "FOREIGN KEY não pode ser usado com CURRENT_TIMESTAMP" };
+                    if (newColumn.isCurrentTimestamp) {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "FOREIGN KEY não pode ser usado com CURRENT_TIMESTAMP"], "error");
+                        return;
                     }
                 }
 
@@ -4613,25 +4926,34 @@ namespace SQL {
                     getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
                     return;
                 }
+                const optionsError = validateColumnOptionTokens(words, false);
+                if (optionsError) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", optionsError], "error");
+                    return;
+                }
 
                 const primaryValidation = validateCompoundKeyword("primary", "key", "PRIMARY KEY", words);
                 if (typeof primaryValidation === "string") {
-                    return { column: null, error: primaryValidation };
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", primaryValidation], "error");
+                    return;
                 }
                 if (primaryValidation === 1) {
                     if (!column.isPrimaryKey) {
-                        return { column: null, error: `A coluna "${column.name}" não possui PRIMARY KEY` };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", `A coluna "${column.name}" não possui PRIMARY KEY`], "error");
+                        return;
                     }
                     newColumn.isPrimaryKey = false;
                 }
 
                 const foreignValidation = validateCompoundKeyword("foreign", "key", "FOREIGN KEY", words);
                 if (typeof foreignValidation === "string") {
-                    return { column: null, error: foreignValidation };
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", foreignValidation], "error");
+                    return;
                 }
                 if (foreignValidation === 1) {
                     if (!column.isForeignKey) {
-                        return { column: null, error: `A coluna "${column.name}" não possui FOREIGN KEY` };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", `A coluna "${column.name}" não possui FOREIGN KEY`], "error");
+                        return;
                     }
                     newColumn.isForeignKey = false;
                     newColumn.reference = undefined;
@@ -4639,74 +4961,90 @@ namespace SQL {
 
                 const notNullValidation = validateCompoundKeyword("not", "null", "NOT NULL", words);
                 if (typeof notNullValidation === "string") {
-                    return { column: null, error: notNullValidation };
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", notNullValidation], "error");
+                    return;
                 }
                 if (notNullValidation === 1) {
                     if (!column.isNotNull) {
-                        return { column: null, error: `A coluna "${column.name}" não é NOT NULL` };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", `A coluna "${column.name}" não é NOT NULL`], "error");
+                        return;
                     }
                     newColumn.isNotNull = false;
                 }
 
                 const uniqueValidation = validateSingleKeyword("unique", "UNIQUE", words);
                 if (typeof uniqueValidation === "string") {
-                    return { column: null, error: uniqueValidation };
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", uniqueValidation], "error");
+                    return;
                 }
                 if (uniqueValidation === 1) {
                     if (!column.isUnique) {
-                        return { column: null, error: `A coluna "${column.name}" não é UNIQUE` };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", `A coluna "${column.name}" não é UNIQUE`], "error");
+                        return;
                     }
                     newColumn.isUnique = false;
                 }
 
                 const autoIncrementValidation = validateSingleKeyword("auto_increment", "AUTO_INCREMENT", words);
                 if (typeof autoIncrementValidation === "string") {
-                    return { column: null, error: autoIncrementValidation };
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", autoIncrementValidation], "error");
+                    return;
                 }
                 if (autoIncrementValidation === 1) {
                     if (!column.isAutoIncrement) {
-                        return { column: null, error: `A coluna "${column.name}" não é AUTO_INCREMENT` };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", `A coluna "${column.name}" não é AUTO_INCREMENT`], "error");
+                        return;
                     }
                     newColumn.isAutoIncrement = false;
                 }
 
                 const defaultValidation = validateSingleKeyword("default", "DEFAULT", words);
                 if (typeof defaultValidation === "string") {
-                    return { column: null, error: defaultValidation };
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", defaultValidation], "error");
+                    return;
                 }
                 if (defaultValidation === 1) {
                     if (!column.hasDefault) {
-                        return { column: null, error: `A coluna "${column.name}" não possui DEFAULT` };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", `A coluna "${column.name}" não possui DEFAULT`], "error");
+                        return;
                     }
                     newColumn.hasDefault = false;
+                    newColumn.defaultValue = undefined;
                 }
 
                 const currentTimestampValidation = validateSingleKeyword("current_timestamp", "CURRENT_TIMESTAMP", words);
                 if (typeof currentTimestampValidation === "string") {
-                    return { column: null, error: currentTimestampValidation };
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", currentTimestampValidation], "error");
+                    return;
                 }
                 if (currentTimestampValidation === 1) {
                     if (!column.isCurrentTimestamp) {
-                        return { column: null, error: `A coluna "${column.name}" não é CURRENT_TIMESTAMP` };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", `A coluna "${column.name}" não é CURRENT_TIMESTAMP`], "error");
+                        return;
                     }
                     newColumn.isCurrentTimestamp = false;
                 }
 
                 if (notNullValidation === 1) {
                     if (newColumn.isPrimaryKey) {
-                        return { column: null, error: `Não é possível remover NOT NULL de uma coluna PRIMARY KEY` };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", `Não é possível remover NOT NULL de uma coluna PRIMARY KEY`], "error");
+                        return;
                     } else if (newColumn.isAutoIncrement) {
-                        return { column: null, error: `Não é possível remover NOT NULL de uma coluna AUTO_INCREMENT` };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", `Não é possível remover NOT NULL de uma coluna AUTO_INCREMENT`], "error");
+                        return;
                     } else if (newColumn.isCurrentTimestamp) {
-                        return { column: null, error: `Não é possível remover NOT NULL de uma coluna CURRENT_TIMESTAMP` };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", `Não é possível remover NOT NULL de uma coluna CURRENT_TIMESTAMP`], "error");
+                        return;
                     }
                 }
 
                 if (uniqueValidation === 1) {
                     if (newColumn.isPrimaryKey) {
-                        return { column: null, error: `Não é possível remover UNIQUE de uma coluna PRIMARY KEY` };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", `Não é possível remover UNIQUE de uma coluna PRIMARY KEY`], "error");
+                        return;
                     } else if (newColumn.isAutoIncrement) {
-                        return { column: null, error: `Não é possível remover UNIQUE de uma coluna AUTO_INCREMENT` };
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", `Não é possível remover UNIQUE de uma coluna AUTO_INCREMENT`], "error");
+                        return;
                     }
                 }
 
@@ -4722,24 +5060,22 @@ namespace SQL {
     /**
      * Implementa o comando SQL CREATE.
      */
-    export class SQLCreate {
-        private fullCommand: string;
-        private tokens: string[];
+    export class SQLCreate extends SQLCommand {
 
         constructor(fullCommand: string, tokens: string[]) {
-            this.fullCommand = fullCommand;
-            this.tokens = tokens;
+            super(fullCommand, tokens);
         }
         /**
          * Direciona o comando CREATE para database ou table.
          */
-        execute() {
+        execute(): void {
             const target = this.tokens[1]?.toLowerCase();
 
             switch (target) {
                 case "database":
                     this.database();
                     break;
+
                 case "schema":
                     this.schema();
                     break;
@@ -4756,7 +5092,7 @@ namespace SQL {
         /**
          * Executa CREATE DATABASE.
          */
-        database() {
+        database(): void {
             if (this.tokens.length < 3) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando CREATE DATABASE incorreto", "Nome da database é obrigatório"], "error");
                 return;
@@ -4773,10 +5109,6 @@ namespace SQL {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da database inválido"], "error");
                 return;
             }
-            if (databases[this.tokens[2]]) {
-                getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma database com o nome "${this.tokens[2]}"`], "error");
-                return;
-            }
 
             const databaseName = this.tokens[2];
             SGBDFunctions.createDatabase(new DB.Database(databaseName));
@@ -4786,7 +5118,7 @@ namespace SQL {
         /**
          * Executa CREATE SCHEMA.
          */
-        schema() {
+        schema(): void {
             if (currentDatabase === null) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhuma database selecionada"], "error");
                 return;
@@ -4816,18 +5148,17 @@ namespace SQL {
         /**
          * Executa CREATE TABLE.
          */
-        table() {
-            const tableName = this.tokens[2];
+        table(): void {
+            const name = this.tokens[2];
+            const { schemaName, tableName, error } = verifySchemaTableName(name, false);
+            if (error) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [error], "error");
+                return;
+            }
+            if (!schemaName || !tableName) return;
+            console.log("Schema:", schemaName, "Table:", tableName);
             if (currentDatabase == null) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhuma database selecionada"], "error");
-                return;
-            }
-            if (currentSchema == null) {
-                getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhum schema selecionado"], "error");
-                return;
-            }
-            if (tableName.includes(".")) {
-                getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da tabela inválido"], "error");
                 return;
             }
             if (!isValidSQLName(tableName)) {
@@ -4842,12 +5173,16 @@ namespace SQL {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da tabela é uma palavra-chave reservada"], "error");
                 return;
             }
+            if (getCurrentDatabase()!.schemas[schemaName].tables[tableName]) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma tabela com o nome "${tableName}" no schema "${schemaName}"`], "error");
+                return;
+            }
 
-            let table = new DB.Table(tableName, getCurrentSchema()!);
+            let table = new DB.Table(tableName, getCurrentDatabase()!.schemas[schemaName]);
             const columnDefs = splitColumnDefinitions(this.tokens.slice(4, -1));
 
             for (const columnDef of columnDefs) {
-                const { column, error } = parseColumn(columnDef);
+                const { column, error } = parseColumn(columnDef, table);
                 if (error) {
                     getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando CREATE TABLE incorreto", error], "error");
                     return;
@@ -4855,21 +5190,42 @@ namespace SQL {
                 table.columns[column!.name] = column!;
             }
 
-            SGBDFunctions.createTable(table);
+            SGBDFunctions.createTable(table, schemaName);
             getCurrentTerminalSession().createEntry(this.fullCommand, [`Tabela "${tableName}" criada com sucesso!`], "success");
         }
     }
 
-    export class SQLInsert {
-        private fullCommand: string;
-        private tokens: string[];
+    export class SQLDelete extends SQLCommand {
 
         constructor(fullCommand: string, tokens: string[]) {
-            this.fullCommand = fullCommand;
-            this.tokens = tokens;
+            super(fullCommand, tokens);
         }
 
-        insert() {
+        execute(): void {
+            getCurrentTerminalSession().createEntry(this.fullCommand, [`Comando DELETE não implementado`], "info");
+            return;
+        }
+    }
+
+    export class SQLDrop extends SQLCommand {
+
+        constructor(fullCommand: string, tokens: string[]) {
+            super(fullCommand, tokens);
+        }
+
+        execute(): void {
+            getCurrentTerminalSession().createEntry(this.fullCommand, [`Comando DROP não implementado`], "info");
+            return;
+        }
+    }
+
+    export class SQLInsert extends SQLCommand {
+
+        constructor(fullCommand: string, tokens: string[]) {
+            super(fullCommand, tokens);
+        }
+
+        execute(): void {
             const t = this.tokens;
             if (t.length < 7 || t[1]?.toLowerCase() !== "into") {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Sintaxe inválida"], "error");
@@ -4879,6 +5235,7 @@ namespace SQL {
             const { schemaName, tableName, error } = verifySchemaTableName(name);
             if (error) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, [error], "error");
+                return;
             }
             if (!schemaName || !tableName) return;
             const table = getCurrentDatabase()!.schemas[schemaName].tables[tableName];
@@ -4891,7 +5248,7 @@ namespace SQL {
                     return;
                 }
 
-                const columnValues = t.slice(3 + 1, endValuesIndex);
+                const columnValues = t.slice(4, endValuesIndex);
                 if (columnValues.length === 0) {
                     getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Valores inválidos: nenhum valor fornecido"], "error");
                     return;
@@ -4961,7 +5318,7 @@ namespace SQL {
                 if (token === "(") {
                     depth++;
                     if (depth === 1) {
-                        row = new DB.Row(getCurrentTable()!, {});
+                        row = new DB.Row(getTable(tableName, schemaName)!, {});
                         columnIndex = 0;
                         value = "";
                     }
@@ -4984,6 +5341,10 @@ namespace SQL {
                     row = null;
                     columnIndex = 0;
                     value = "";
+                    if (depth === 0 && i + 1 < t.length && t[i + 1] !== ",") {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Sintaxe inválida: valores devem ser separados por vírgula"], "error");
+                        return;
+                    }
                     continue;
                 }
 
@@ -5000,6 +5361,10 @@ namespace SQL {
 
                 if (token === "," && depth === 0) {
                     continue;
+                }
+                if (depth === 0) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", "Sintaxe inválida após os valores"], "error");
+                    return;
                 }
                 value += token;
             }
@@ -5028,6 +5393,13 @@ namespace SQL {
                 for (const columnName in table.columns) {
                     let col = table.columns[columnName]
                     if (!columnsToBeInserted.includes(columnName)) {
+                        if (col.isCurrentTimestamp) {
+                            if (compareTypes(col.type, types.DATE))
+                                validatedRows[i].values[columnName] = SQLDate.now();
+                            if (compareTypes(col.type, types.TIME))
+                                validatedRows[i].values[columnName] = SQLTime.now();
+                            continue;
+                        }
                         if (col.isNotNull) {
                             if (col.defaultValue !== undefined) {
                                 validatedRows[i].values[columnName] = col.defaultValue;
@@ -5045,13 +5417,6 @@ namespace SQL {
                         if (col.isAutoIncrement) {
                             valuesBeforeIncrement.push({ column: columnName, value: col.incrementCounter });
                             validatedRows[i].values[columnName] = col.increment();
-                            continue;
-                        }
-                        if (col.isCurrentTimestamp) {
-                            if (compareTypes(col.type, types.DATE))
-                                validatedRows[i].values[columnName] = SQLDate.now();
-                            if (compareTypes(col.type, types.TIME))
-                                validatedRows[i].values[columnName] = SQLTime.now();
                             continue;
                         }
                         if (col.defaultValue !== undefined) {
@@ -5102,7 +5467,7 @@ namespace SQL {
                 }
 
                 if (table.columns[columnName].isForeignKey) {
-                    const referencedTable = getTable(table.columns[columnName].reference!.table)!;
+                    const referencedTable = getTable(table.columns[columnName].reference!.table, table.columns[columnName].reference!.schema)!;
                     const referencedColumn = table.columns[columnName].reference!.column;
                     if (!referencedTable) {
                         getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando INSERT incorreto", `Coluna "${columnName}" é FOREIGN KEY e a tabela referenciada "${table.columns[columnName].reference!.table}" não existe`], "error");
@@ -5137,25 +5502,23 @@ namespace SQL {
         validateRowsTypes(rows: DB.Row[], table: DB.Table): DB.Row[] | string {
             const newRows: DB.Row[] = [];
             for (const row of rows) {
-                const newRow: DB.Row = new DB.Row(getCurrentTable()!, {})
+                const newRow: DB.Row = new DB.Row(table, {})
                 for (const columnName in row.values) {
                     if (typeof row.values[columnName] === "string" && row.values[columnName].toUpperCase() === "NULL") {
                         newRow.values[columnName] = null;
                         continue;
                     }
                     const colType = table.columns[columnName].type;
-                    let parsed = row.values[columnName];
+                    let value = row.values[columnName];
                     if (compareTypes(colType, types.TEXT) || compareTypes(colType, types.DATE)
                         || compareTypes(colType, types.TIME) || compareTypes(colType, types.VARCHAR(0))) {
-                        if (!(parsed.startsWith("'") && parsed.endsWith("'") || parsed.startsWith('"') && parsed.endsWith('"'))) {
+                        if (!(value.startsWith("'") && value.endsWith("'") || value.startsWith('"') && value.endsWith('"'))) {
                             return "Tipo deve começar e acabar com \" ou \'"
                         }
-                        parsed = (parsed as string).slice(1, parsed.length - 1);
+                        value = (value as string).slice(1, value.length - 1).replace("''", "'").replace('""', '"');
                     }
-                    if (!table.columns[columnName].type.validate(parsed)) {
-                        return `Valor inválido para a coluna "${columnName}"`
-                    }
-                    parsed = colType.parse(parsed);
+
+                    const parsed = colType.parse(value);
                     if (!valueExists(parsed)) {
                         return `Valor inválido para a coluna "${columnName}"`
                     }
@@ -5171,12 +5534,34 @@ namespace SQL {
         }
     }
 
+    export class SQLSelect extends SQLCommand {
+
+        constructor(fullCommand: string, tokens: string[]) {
+            super(fullCommand, tokens);
+        }
+
+        execute() {
+            getCurrentTerminalSession().createEntry(this.fullCommand, [`Comando SELECT não implementado`], "info");
+            return;
+        }
+    }
+
+    export class SQLUpdate extends SQLCommand {
+
+        constructor(fullCommand: string, tokens: string[]) {
+            super(fullCommand, tokens);
+        }
+
+        execute() {
+            getCurrentTerminalSession().createEntry(this.fullCommand, [`Comando UPDATE não implementado`], "info");
+            return;
+        }
+    }
+
     /**
      * Agrupa comandos de sistema como USE.
      */
-    export class SystemCommands {
-        private fullCommand: string;
-        private tokens: string[];
+    export class SystemCommands extends SQLCommand {
 
         /**
          * Cria um executor para comandos de sistema tokenizados.
@@ -5184,17 +5569,22 @@ namespace SQL {
          * @param tokens - Tokens gerados a partir do comando.
          */
         constructor(fullCommand: string, tokens: string[]) {
-            this.fullCommand = fullCommand;
-            this.tokens = tokens;
+            super(fullCommand, tokens);
+        }
+
+        execute() {
+            if (this.tokens[0]?.toLowerCase() === "use") {
+                this.use();
+            }
         }
 
         /**
          * Executa o comando USE para trocar a database ativa.
          */
         use() {
+            console.log(databases);
             const type = this.tokens[1]?.toLowerCase();
-            const target = this.tokens[2]?.toLowerCase();
-
+            const target = this.tokens[2];
 
             if (type !== "database" && type !== "schema") {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando USE incorreto", "Tipo de objeto inválido. Use 'DATABASE' ou 'SCHEMA'."], "error");
@@ -5239,15 +5629,25 @@ namespace SQL {
         }
     }
 
-    export function verifySchemaTableName(name: string): { schemaName: string | null, tableName: string | null, error: string | null } {
+    /**
+     * Resolve e valida um nome de tabela com ou sem schema explícito.
+     * @param name - Nome no formato `tabela` ou `schema.tabela`.
+     * @param shouldVerifyTable - Indica se a existência da tabela deve ser validada.
+     * @returns Nomes resolvidos e uma mensagem de erro, quando houver.
+     */
+    export function verifySchemaTableName(name: string, shouldVerifyTable: boolean = true): { schemaName: string | null, tableName: string | null, error: string | null } {
         let schemaName: string;
         let tableName: string;
         if (currentDatabase == null) {
             return { schemaName: null, tableName: null, error: "Nenhuma database selecionada" };
         }
         if (name.includes(".")) {
-            schemaName = name.split(".")[0]?.toLowerCase();
-            tableName = name.split(".")[1]?.toLowerCase();
+            if (name.split(".").length !== 2) {
+                return { schemaName: null, tableName: null, error: "Nome de tabela inválido. Use o formato SCHEMA.TABELA" };
+            }
+
+            schemaName = name.split(".")[0];
+            tableName = name.split(".")[1];
 
             if (!getCurrentDatabase()!.schemas[schemaName]) {
                 return { schemaName: null, tableName: null, error: `Schema "${schemaName}" não existe na database "${currentDatabase}"` };
@@ -5257,9 +5657,9 @@ namespace SQL {
                 return { schemaName: null, tableName: null, error: "Nenhum schema selecionado" };
             }
             schemaName = currentSchema!;
-            tableName = name.toLowerCase();
+            tableName = name;
         }
-        if (!getCurrentDatabase()!.schemas[schemaName].tables[tableName]) {
+        if (shouldVerifyTable && !getCurrentDatabase()!.schemas[schemaName].tables[tableName]) {
             return { schemaName: null, tableName: null, error: `Tabela "${tableName}" não existe no schema "${currentSchema}"` };
         }
         return { schemaName: schemaName, tableName: tableName, error: null };
@@ -5270,7 +5670,7 @@ namespace SQL {
      * @param columnDef - Tokens que compõem a definição da coluna.
      * @returns Coluna parseada ou mensagem de erro.
      */
-    export function parseColumn(columnDef: string[]): { column: DB.Column | null, error: string | null } {
+    export function parseColumn(columnDef: string[], table: DB.Table): { column: DB.Column | null, error: string | null } {
         if (columnDef.length < 2) {
             return { column: null, error: "Definição de coluna inválida" };
         }
@@ -5293,7 +5693,7 @@ namespace SQL {
             return { column: null, error: `Tipo de coluna inválido: "${columnDef[1]}"` };
         }
 
-        const column = new DB.Column(columnName, getCurrentTable()!, columnType);
+        const column = new DB.Column(columnName, table, columnType);
 
         if (compareTypes(columnType, types.ENUM([]))) {
             const enumStartIndex = columnDef.findIndex(token => token === "(");
@@ -5366,6 +5766,14 @@ namespace SQL {
             (column.type as DataTypes.VarcharType).setMaxLength(varcharMaxLength);
         }
 
+        const optionsStart = compareTypes(columnType, types.ENUM([])) || compareTypes(columnType, types.VARCHAR(0))
+            ? columnDef.findIndex(token => token === ")") + 1
+            : 2;
+        const optionsError = validateColumnOptionTokens(columnDef.slice(optionsStart), true);
+        if (optionsError) {
+            return { column: null, error: optionsError };
+        }
+
         const primaryValidation = validateCompoundKeyword("primary", "key", "PRIMARY KEY", columnDef);
         if (typeof primaryValidation === "string") {
             return { column: null, error: primaryValidation };
@@ -5421,7 +5829,7 @@ namespace SQL {
                 }
             }
             const parsedDefaultValue = columnType.parse(defaultValue);
-            if (!valueExists(parsedDefaultValue) || isNaN(parsedDefaultValue)) {
+            if (!valueExists(parsedDefaultValue) || columnType.validate(parsedDefaultValue) === false) {
                 return { column: null, error: `Valor DEFAULT inválido para ${columnType.name}` }
             }
 
@@ -5463,7 +5871,7 @@ namespace SQL {
             if (refColumn === undefined) {
                 return { column: null, error: `Coluna de referência "${columnDef[referencesIndex + 3]}" não existe na tabela "${columnDef[referencesIndex + 1]}"` };
             }
-            if (refColumn.type !== columnType) {
+            if (!compareTypes(refColumn.type, columnType)) {
                 return { column: null, error: `Tipo da coluna de referência "${columnDef[referencesIndex + 3]}" na tabela "${columnDef[referencesIndex + 1]}" não corresponde ao tipo da coluna atual` };
             }
             if (!refColumn.isUnique && !refColumn.isPrimaryKey) {
@@ -5508,6 +5916,7 @@ namespace SQL {
 
         // CURRENT_TIMESTAMP
         if (column.isCurrentTimestamp) {
+            column.isNotNull = true;
             if (!compareTypes(columnType, types.DATE) && !compareTypes(columnType, types.TIME)) {
                 return { column: null, error: "CURRENT_TIMESTAMP só pode ser usado em colunas DATE ou TIME" };
             }
@@ -5562,6 +5971,51 @@ namespace SQL {
     }
 
     /**
+     * Valida opções de coluna.
+     */
+    export function validateColumnOptionTokens(words: string[], isSet: boolean): string | null {
+        let index = 0;
+        let recognized = 0;
+
+        while (index < words.length) {
+            const token = words[index].toLowerCase();
+            if (token === "primary" || token === "not" || token === "foreign") {
+                const second = words[index + 1]?.toLowerCase();
+                if (second !== (token === "not" ? "null" : "key")) {
+                    return `Opção inválida: "${words[index]}"`;
+                }
+                index += 2;
+                recognized++;
+                if (token === "foreign" && isSet) {
+                    if (words[index]?.toLowerCase() !== "references" || index + 4 >= words.length ||
+                        words[index + 2] !== "(" || words[index + 4] !== ")") {
+                        return "FOREIGN KEY deve ser seguido de REFERENCES válido";
+                    }
+                    index += 5;
+                }
+                continue;
+            }
+            if (token === "unique" || token === "auto_increment" || token === "current_timestamp") {
+                index++;
+                recognized++;
+                continue;
+            }
+            if (token === "default") {
+                index++;
+                recognized++;
+                if (isSet) {
+                    if (index >= words.length) return "DEFAULT deve ser seguido de um valor";
+                    index++;
+                }
+                continue;
+            }
+            return `Opção inválida: "${words[index]}"`;
+        }
+
+        return recognized === 0 ? "Nenhuma opção de coluna foi reconhecida" : null;
+    }
+
+    /**
      * Conta quantas vezes uma sequência de tokens aparece.
      * @param tokens - Lista de tokens de entrada.
      * @param sequence - Sequência a ser procurada.
@@ -5611,7 +6065,7 @@ namespace SQL {
             current.push(token);
         }
 
-        if (current.length > 0) {
+        if (current.length > 0 || tokens[tokens.length - 1] === ",") {
             columns.push(current);
         }
 
@@ -5619,19 +6073,50 @@ namespace SQL {
     }
 
     /**
-     * Tokeniza uma string SQL em palavras e símbolos relevantes.
-     * @param sql - Texto SQL original.
-     * @returns Lista de tokens resultantes.
-     */
+ * Tokeniza uma string SQL em palavras e símbolos relevantes.
+ * @param sql - Texto SQL original.
+ * @returns Lista de tokens resultantes.
+ */
     export function tokenizeSQL(sql: string): string[] {
 
         const tokens: string[] = [];
 
         let current = "";
+        let quote: string | null = null;
 
         for (let i = 0; i < sql.length; i++) {
 
             const char = sql[i];
+
+            if (quote !== null) {
+
+                current += char;
+
+                if (char === quote) {
+
+                    if (sql[i + 1] === quote) {
+                        current += sql[i + 1];
+                        i++;
+                    } else {
+                        quote = null;
+                    }
+                }
+
+                continue;
+            }
+
+            if (char === "'" || char === '"') {
+
+                if (current) {
+                    tokens.push(current);
+                    current = "";
+                }
+
+                quote = char;
+                current += char;
+
+                continue;
+            }
 
             if (/\s/.test(char)) {
 
@@ -5708,6 +6193,7 @@ const logicalConnections: {
     toSide: "left" | "right";
 }[] = [];
 
+/** Atualiza o diagrama lógico da database selecionada. */
 function refreshLogical() {
     camera.innerHTML = "";
     tablesLogical = {};
@@ -5752,6 +6238,7 @@ function refreshLogical() {
     });
 }
 
+/** Calcula as posições das tabelas no diagrama lógico. */
 function calculateTablesPositions(): Map<string, { x: number; y: number }> {
     const graph = new dagre.graphlib.Graph();
 
@@ -5794,6 +6281,7 @@ function calculateTablesPositions(): Map<string, { x: number; y: number }> {
     return posicoes;
 }
 
+/** Desenha as tabelas nas posições calculadas do diagrama. */
 function drawTables(posicoes: Map<string, { x: number; y: number }>) {
     for (const schema of Object.values(getCurrentDatabase()?.schemas ?? {})) {
         for (const table of Object.values(schema.tables)) {
@@ -5967,6 +6455,7 @@ function drawTables(posicoes: Map<string, { x: number; y: number }>) {
     }
 }
 
+/** Cria os caminhos SVG usados pelas conexões do diagrama. */
 function createSVGPaths() {
     const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
     const marker = document.createElementNS("http://www.w3.org/2000/svg", "marker");
@@ -6020,6 +6509,7 @@ function createSVGPaths() {
     }
 }
 
+/** Desenha as linhas que conectam tabelas relacionadas. */
 function drawConnectionLines() {
 
     for (const connection of logicalConnections) {
@@ -6153,6 +6643,7 @@ document.addEventListener("mousemove", (event) => {
     drawConnectionLines();
 });
 
+/** Aplica a transformação atual da câmera ao diagrama lógico. */
 function renderCamera() {
     camera.style.transformOrigin = "0 0";
     camera.style.transform = `matrix(${zoom}, 0, 0, ${zoom}, ${cameraX}, ${cameraY})`;
@@ -6217,6 +6708,7 @@ const { isAutoSaveEnabled, showNotification } =
         },
     });
 
+/** Serializa o estado atual do banco para JSON. */
 function transformToJson() {
     return JSON.stringify(databases, (key, value) => {
         if (key === "parent") return undefined;
@@ -6229,6 +6721,7 @@ function transformToJson() {
     });
 }
 
+/** Restaura o estado do banco a partir de uma string JSON. */
 function transformFromJson(json: string | null) {
     if (json == null) {
         databases = {};
@@ -6258,6 +6751,7 @@ function transformFromJson(json: string | null) {
 /**
  * Persiste o estado atual de `databases` no `localStorage` do navegador.
  */
+/** Salva o estado atual no armazenamento local do navegador. */
 function saveToLocalStorage() {
     localStorage.setItem("databases", transformToJson());
 }
@@ -6265,12 +6759,14 @@ function saveToLocalStorage() {
 /**
  * Restaura o estado de `databases` a partir do `localStorage`.
  */
+/** Carrega o estado salvo no armazenamento local do navegador. */
 function loadFromLocalStorage() {
     const json = localStorage.getItem("databases");
 
     transformFromJson(json);
 }
 
+/** Exporta o banco atual como arquivo JSON. */
 function saveToJson() {
     const json = transformToJson();
     const blob = new Blob([json], { type: "application/json" });
@@ -6288,6 +6784,7 @@ function saveToJson() {
  * Abre um seletor de arquivo para carregar um arquivo JSON com o estado das databases
  * e aplica os dados carregados ao estado em memória.
  */
+/** Importa um banco a partir de um arquivo JSON escolhido pelo usuário. */
 function loadFromJson() {
     const input = document.createElement("input");
     input.type = "file";
@@ -6309,6 +6806,7 @@ function loadFromJson() {
 /**
  * Exporta os dados atuais para SQL (não implementado atualmente).
  */
+/** Exporta o banco atual como comandos SQL. */
 function saveToSql() {
     alert("Função de exportação para SQL ainda não implementada.");
 }
@@ -6316,10 +6814,12 @@ function saveToSql() {
 /**
  * Importa dados a partir de um arquivo SQL (não implementado atualmente).
  */
+/** Importa e executa comandos SQL de um arquivo selecionado. */
 function loadFromSql() {
     alert("Função de importação de SQL ainda não implementada.");
 }
 
+/** Salva o estado atual no Supabase quando o usuário está autenticado. */
 async function saveToSupabase() {
     const user = await Auth.getUser();
     const { error } = await supabase.from("profiles")
@@ -6329,6 +6829,7 @@ async function saveToSupabase() {
     console.log(error);
 }
 
+/** Carrega do Supabase o banco salvo pelo usuário autenticado. */
 async function loadFromSupabase() {
     const user = await Auth.getUser();
     const { data, error } = await supabase.from("profiles")
@@ -6343,6 +6844,7 @@ async function loadFromSupabase() {
 
 // #region Help
 
+/** Cria os controles de navegação do conteúdo de ajuda. */
 function createHelpButtons() {
     const helpButtons = document.querySelectorAll("#help-left > div");
     helpButtons.forEach((button, index) => {
@@ -6350,6 +6852,7 @@ function createHelpButtons() {
     });
 }
 
+/** Exibe a seção de ajuda correspondente ao índice informado. */
 function showHelp(index: number) {
     const helpRight = document.getElementById("help-right")!;
     const helpButtons = document.querySelectorAll("#help-left > div");
@@ -6467,6 +6970,11 @@ document.addEventListener("mousemove", (e) => {
 
 changeLeftSide();
 
+/** Executa a rotina de teste manual da página. */
+function teste() {
+    console.log(databases)
+}
+
 //@ts-ignore
 window.thifrebd = {
     showHideTabelaSelecionadaLinhaColuna,
@@ -6486,7 +6994,10 @@ window.thifrebd = {
     insertRowInterface,
     createWhereConditionDiv,
     createTerminalSession,
-    changeEditRowMenu
+    changeEditRowMenu,
+    DB,
+    DataTypes,
+    teste
 }
 
 // To Do

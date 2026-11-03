@@ -198,7 +198,7 @@ export function setupSaveLoadUI<T extends string>({
     saveActionId = "save-action",
     loadActionId = "load-action",
     confirmButtonId = "confirm-save-load",
-    autoSaveCheckboxId = "auto-save-checkbox",
+    autoSaveCheckboxId = "auto-save",
     notificationId = "save-notification",
     notificationDuration = 3000,
     saveMessage = "Dados salvos com sucesso!",

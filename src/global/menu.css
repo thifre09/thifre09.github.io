@@ -49,10 +49,10 @@ div#title-div {
             text-decoration: none;
             text-align: center;
         }
-    }
 
-    h1#title:hover {
-        transform: scale(1.1);
+        &:hover {
+            transform: scale(1.1);
+        }
     }
 }
 

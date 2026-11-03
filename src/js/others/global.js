@@ -110,7 +110,7 @@ export function mover(objeto) {
         document.addEventListener('mouseup', onMouseUp);
     });
 }
-export function setupSaveLoadUI({ options, defaultAction = "save", defaultOption, isUserLoggedIn = () => false, saveActionId = "save-action", loadActionId = "load-action", confirmButtonId = "confirm-save-load", autoSaveCheckboxId = "auto-save-checkbox", notificationId = "save-notification", notificationDuration = 3000, saveMessage = "Dados salvos com sucesso!", chosenActionClass = "acao-escolhida", chosenOptionClass = "opcao-escolhida", }) {
+export function setupSaveLoadUI({ options, defaultAction = "save", defaultOption, isUserLoggedIn = () => false, saveActionId = "save-action", loadActionId = "load-action", confirmButtonId = "confirm-save-load", autoSaveCheckboxId = "auto-save", notificationId = "save-notification", notificationDuration = 3000, saveMessage = "Dados salvos com sucesso!", chosenActionClass = "acao-escolhida", chosenOptionClass = "opcao-escolhida", }) {
     const optionNames = Object.keys(options);
     const actionButtons = {
         save: getElement(saveActionId),
