@@ -174,7 +174,7 @@ function onDropdownChange(dropdown) {
 }
 updateCustomDropdowns();
 // #endregion
-// #region classes and variables
+// #region namespaces, classes and variables
 var DB;
 (function (DB) {
     class TreeItem {
@@ -396,7 +396,7 @@ var DB;
          *
          * }
          */
-        // foreignKeyMap: Record<string, TReference[]> = {};
+        foreignKeyMap = {};
         /**
          * Cria uma database vazia com o nome informado.
          * @param name - Nome da database.
@@ -414,67 +414,60 @@ var DB;
             currentSchema = "public";
             currentTable = null;
         }
-        // createKey(schemaName: string, tableName: string, columnName: string): string {
-        //     return `${schemaName}.${tableName}.${columnName}`;
-        // }
-        // addForeignKeyReference(schemaName: string, tableName: string, columnName: string, reference: TReference) {
-        //     const key = this.createKey(schemaName, tableName, columnName);
-        //     if (!this.foreignKeyMap[key]) {
-        //         this.foreignKeyMap[key] = [];
-        //     }
-        //     this.foreignKeyMap[key].push(reference);
-        // }
-        // /**
-        //  * Remove uma entrada do mapa de chaves estrangeiras.
-        //  * 
-        //  * Usado para remover referências quando uma tabela ou coluna é excluída.
-        //  * @param schema Schema da tabela que contém a chave estrangeira.
-        //  * @param table Tabela que contém a chave estrangeira.
-        //  * @param column Coluna que contém a chave estrangeira.
-        //  */
-        // removeForeignKeyEntry(schema: string, table: string, column: string) {
-        //     delete this.foreignKeyMap[
-        //         this.createKey(schema, table, column)
-        //     ];
-        // }
-        // /**
-        //  * Remove uma referência de chave estrangeira do mapa.
-        //  *
-        //  * @param schemaName - Schema da tabela referenciada.
-        //  * @param tableName - Tabela referenciada.
-        //  * @param columnName - Coluna referenciada.
-        //  * @param reference - Referência que deve ser removida.
-        //  */
-        // removeForeignKeyReference(schemaName: string, tableName: string, columnName: string, reference: TReference) {
-        //     const key = this.createKey(schemaName, tableName, columnName);
-        //     const references = this.foreignKeyMap[key];
-        //     if (!references) return;
-        //     this.foreignKeyMap[key] = references.filter(ref =>
-        //         !(
-        //             ref.schema === reference.schema &&
-        //             ref.table === reference.table &&
-        //             ref.column === reference.column
-        //         )
-        //     );
-        //     if (this.foreignKeyMap[key].length === 0) {
-        //         delete this.foreignKeyMap[key];
-        //     }
-        // }
-        // getReferencesToTable(schemaName: string, tableName: string): TReference[] {
-        //     const prefix = `${schemaName}.${tableName}.`;
-        //     const references: TReference[] = [];
-        //     for (const key in this.foreignKeyMap) {
-        //         if (!key.startsWith(prefix))
-        //             continue;
-        //         references.push(...this.foreignKeyMap[key]);
-        //     }
-        //     return references;
-        // }
-        // getReferencesToColumn(schemaName: string, tableName: string, columnName: string): TReference[] {
-        //     return this.foreignKeyMap[
-        //         this.createKey(schemaName, tableName, columnName)
-        //     ] ?? [];
-        // }
+        createKey(schemaName, tableName, columnName) {
+            return `${schemaName}.${tableName}.${columnName}`;
+        }
+        addForeignKeyReference(schemaName, tableName, columnName, reference) {
+            const key = this.createKey(schemaName, tableName, columnName);
+            if (!this.foreignKeyMap[key]) {
+                this.foreignKeyMap[key] = [];
+            }
+            this.foreignKeyMap[key].push(reference);
+        }
+        /**
+         * Remove uma entrada do mapa de chaves estrangeiras.
+         *
+         * Usado para remover referências quando uma tabela ou coluna é excluída.
+         * @param schema Schema da tabela que contém a chave estrangeira.
+         * @param table Tabela que contém a chave estrangeira.
+         * @param column Coluna que contém a chave estrangeira.
+         */
+        removeForeignKeyEntry(schema, table, column) {
+            delete this.foreignKeyMap[this.createKey(schema, table, column)];
+        }
+        /**
+         * Remove uma referência de chave estrangeira do mapa.
+         *
+         * @param schemaName - Schema da tabela referenciada.
+         * @param tableName - Tabela referenciada.
+         * @param columnName - Coluna referenciada.
+         * @param reference - Referência que deve ser removida.
+         */
+        removeForeignKeyReference(schemaName, tableName, columnName, reference) {
+            const key = this.createKey(schemaName, tableName, columnName);
+            const references = this.foreignKeyMap[key];
+            if (!references)
+                return;
+            this.foreignKeyMap[key] = references.filter(ref => !(ref.schema === reference.schema &&
+                ref.table === reference.table &&
+                ref.column === reference.column));
+            if (this.foreignKeyMap[key].length === 0) {
+                delete this.foreignKeyMap[key];
+            }
+        }
+        getReferencesToTable(schemaName, tableName) {
+            const prefix = `${schemaName}.${tableName}.`;
+            const references = [];
+            for (const key in this.foreignKeyMap) {
+                if (!key.startsWith(prefix))
+                    continue;
+                references.push(...this.foreignKeyMap[key]);
+            }
+            return references;
+        }
+        getReferencesToColumn(schemaName, tableName, columnName) {
+            return this.foreignKeyMap[this.createKey(schemaName, tableName, columnName)] ?? [];
+        }
         get children() {
             return [
                 new NodeGroup("Schemas", Object.values(this.schemas), () => {
@@ -635,6 +628,56 @@ var DB;
             }
             this.indexes[columnName] = indexMap;
         }
+        /** Seleciona esta tabela e atualiza a interface. */
+        clickBehavior() {
+            currentDatabase = this.parent.parent.name;
+            currentSchema = this.parent.name;
+            currentTable = this.name;
+            refreshUI();
+        }
+        /** Verifica a restrição de não nulo em uma ou mais colunas. */
+        verifyNotNullConstraint(columns) {
+            for (const column of columns) {
+                for (const row of this.rows) {
+                    if (row.values[column] === null || row.values[column] === undefined) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        verifyUniqueConstraint(columns) {
+            for (const column of columns) {
+                const values = new Set();
+                for (const row of this.rows) {
+                    const value = row.values[column];
+                    if (values.has(value)) {
+                        return false;
+                    }
+                    values.add(value);
+                }
+            }
+            return true;
+        }
+        /**
+         * Reconstrói uma tabela, suas colunas, linhas e índices a partir de JSON.
+         * @param obj - Dados serializados da tabela.
+         * @param parent - Nó pai da tabela.
+         * @returns Tabela reconstruída.
+         */
+        static fromJSON(obj, parent) {
+            const table = new Table(obj.name, parent);
+            table.columns = {};
+            for (const [name, columnObj] of Object.entries(obj.columns)) {
+                table.columns[name] = Column.fromJSON(columnObj, table);
+            }
+            table.rows = obj.rows.map((row) => Row.fromJSON(row, table));
+            table.indexes = {};
+            for (const [column, index] of Object.entries(obj.indexes)) {
+                table.indexes[column] = new Map(index);
+            }
+            return table;
+        }
         get children() {
             return [
                 new NodeGroup("Colunas", Object.values(this.columns), () => {
@@ -655,32 +698,6 @@ var DB;
                     d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm240-240H200v160h240v-160Zm80 0v160h240v-160H520Zm-80-80v-160H200v160h240Zm80 0h240v-160H520v160ZM200-680h560v-80H200v80Z" />
             </svg>
             `;
-        }
-        /** Seleciona esta tabela e atualiza a interface. */
-        clickBehavior() {
-            currentDatabase = this.parent.parent.name;
-            currentSchema = this.parent.name;
-            currentTable = this.name;
-            refreshUI();
-        }
-        /**
-         * Reconstrói uma tabela, suas colunas, linhas e índices a partir de JSON.
-         * @param obj - Dados serializados da tabela.
-         * @param parent - Nó pai da tabela.
-         * @returns Tabela reconstruída.
-         */
-        static fromJSON(obj, parent) {
-            const table = new Table(obj.name, parent);
-            table.columns = {};
-            for (const [name, columnObj] of Object.entries(obj.columns)) {
-                table.columns[name] = Column.fromJSON(columnObj, table);
-            }
-            table.rows = obj.rows.map((row) => Row.fromJSON(row, table));
-            table.indexes = {};
-            for (const [column, index] of Object.entries(obj.indexes)) {
-                table.indexes[column] = new Map(index);
-            }
-            return table;
         }
     }
     DB.Table = Table;
@@ -898,12 +915,6 @@ class TerminalSession {
         TerminalSession.sessionCount++;
     }
     /**
-     * Adiciona uma entrada ao histórico da sessão.
-     * @param command - Comando executado.
-     * @param output - Linhas de saída.
-     * @param type - Tipo visual da entrada.
-     */
-    /**
      * Registra um comando e sua saída no histórico da sessão.
      * @param command - Comando executado.
      * @param output - Linhas produzidas pelo comando.
@@ -913,9 +924,6 @@ class TerminalSession {
         this.history.push({ database: currentDatabase, command: command, output, type, timestamp: new Date() });
         this.updateTerminalUI();
     }
-    /**
-     * Re-renderiza o histórico da sessão na interface.
-     */
     /** Atualiza o histórico renderizado do terminal. */
     updateTerminalUI() {
         const terminalHistoryDiv = document.getElementById("terminal-history");
@@ -924,14 +932,16 @@ class TerminalSession {
             const entryElement = document.createElement("div");
             entryElement.classList.add("terminal-entry");
             entryElement.innerHTML = `
-                <div class="terminal-command terminal-content-green">$ ${entry.command}</div>
+                <div class="terminal-command terminal-content-green"></div>
                 <div class="command-output">
                     ${entry.output.map(line => `<p class="terminal-content-${entry.type === "success" ? "blue" : entry.type === "error" ? "red" : "gray"}">${line}</p>`).join('')}
                 </div>
                 <p class="command-timestamp terminal-content-gray">${entry.timestamp.toLocaleTimeString()}</p>
             `;
             terminalHistoryDiv.appendChild(entryElement);
+            entryElement.querySelector(".terminal-command").textContent = `$ ${entry.command}`;
         });
+        terminalHistoryDiv.scrollTop = terminalHistoryDiv.scrollHeight;
     }
 }
 /**
@@ -1058,26 +1068,29 @@ class SGBDFunctions {
         saveToSupabase();
     }
     /**
-     * Insere uma linha e atualiza os índices da tabela.
+     * Insere uma lista de linhas e atualiza os índices da tabela.
      * @param tableName - Nome da tabela alvo.
      * @param row - Dados da nova linha.
+     * @param schemaName - Nome do schema onde a tabela está localizada (opcional).
      */
-    static insertRow(tableName, row, schemaName) {
-        let table;
-        if (schemaName !== undefined) {
-            table = getTable(tableName, schemaName);
-        }
-        else {
-            table = getTable(tableName);
-        }
-        const rowIndex = table.rows.length;
-        table.rows.push(row);
-        for (const col in table.indexes) {
-            const value = row.values[col];
-            if (!table.indexes[col].has(value)) {
-                table.indexes[col].set(value, []);
+    static insertRows(tableName, rows, schemaName) {
+        for (const row of rows) {
+            let table;
+            if (schemaName !== undefined) {
+                table = getTable(tableName, schemaName);
             }
-            table.indexes[col].get(value).push(rowIndex);
+            else {
+                table = getTable(tableName);
+            }
+            const rowIndex = table.rows.length;
+            table.rows.push(row);
+            for (const col in table.indexes) {
+                const value = row.values[col];
+                if (!table.indexes[col].has(value)) {
+                    table.indexes[col].set(value, []);
+                }
+                table.indexes[col].get(value).push(rowIndex);
+            }
         }
         refreshUI();
         if (!isAutoSaveEnabled())
@@ -1841,6 +1854,19 @@ function addColumnsInterface() {
             openNotifications(`<p style='color: var(--red5)'>Não é possível adicionar a coluna "${column.name}" com NOT NULL sem valor padrão.</p>`);
             return;
         }
+        if (column.isUnique && column.hasDefault) {
+            if (table.rows.length > 1) {
+                openNotifications(`<p style='color: var(--red5)'>Não é possível adicionar a coluna "${column.name}" com UNIQUE e valor padrão, pois já existem múltiplas linhas na tabela.</p>`);
+                return;
+            }
+            else {
+                const defaultValue = column.type.parse(column.defaultValue);
+                if (table.indexes[column.name]?.has(defaultValue)) {
+                    openNotifications(`<p style='color: var(--red5)'>Não é possível adicionar a coluna "${column.name}" com UNIQUE e valor padrão, pois o valor padrão já existe na tabela.</p>`);
+                    return;
+                }
+            }
+        }
     }
     for (const column of columnsToAdd) {
         SGBDFunctions.addColumn(table.name, column);
@@ -1896,16 +1922,26 @@ function insertRowInterface() {
         else {
             rawValue = columnElement.querySelector("input").value.trim();
         }
+        let value = null;
         if (rawValue === "") {
+            if (column.hasDefault) {
+                value = column.defaultValue;
+                if (table.columns[columnName].isUnique && table.indexes[columnName].has(value)) {
+                    openNotifications(`<p style='color: var(--red5)'>O valor "${value}" já existe para a coluna "${columnName}".</p>`);
+                    table.revertAutoIncrementValues(valuesBeforeIncrement);
+                    return;
+                }
+                row.values[columnName] = value;
+                continue;
+            }
             if (column.isNotNull) {
                 openNotifications(`<p style='color: var(--red5)'>A coluna "${columnName}" não pode ser nula.</p>`);
                 table.revertAutoIncrementValues(valuesBeforeIncrement);
                 return;
             }
-            row.values[columnName] = column.hasDefault ? column.defaultValue : null;
             continue;
         }
-        const value = column.type.parse(rawValue);
+        value = column.type.parse(rawValue);
         if (value === null) {
             openNotifications(`<p style='color: var(--red5)'>Valor inválido para a coluna "${columnName}".</p>`);
             table.revertAutoIncrementValues(valuesBeforeIncrement);
@@ -1923,7 +1959,7 @@ function insertRowInterface() {
         }
         row.values[columnName] = value;
     }
-    SGBDFunctions.insertRow(currentTable, row, currentSchema);
+    SGBDFunctions.insertRows(currentTable, [row], currentSchema);
     changeInsertRowMenu();
     openNotifications(`<p style='color: var(--green5)'>Linha inserida com sucesso!</p>`);
 }
@@ -2090,22 +2126,15 @@ function alterColumnsInterface() {
             return;
         }
         if (newColumn.isNotNull) {
-            for (const row of table.rows) {
-                if (row.values[oldColumnName] === null || row.values[oldColumnName] === undefined) {
-                    openNotifications("<p style='color: var(--red5)'>Existem valores nulos nessa coluna.</p>");
-                    return;
-                }
+            if (!table.verifyNotNullConstraint([oldColumnName])) {
+                openNotifications("<p style='color: var(--red5)'>Existem valores nulos na coluna " + oldColumnName + ".</p>");
+                return;
             }
         }
         if (newColumn.isUnique) {
-            const values = new Set();
-            for (const row of table.rows) {
-                const value = row.values[oldColumnName];
-                if (values.has(value)) {
-                    openNotifications("<p style='color: var(--red5)'>Existem valores duplicados nessa coluna.</p>");
-                    return;
-                }
-                values.add(value);
+            if (!table.verifyUniqueConstraint([oldColumnName])) {
+                openNotifications("<p style='color: var(--red5)'>Existem valores duplicados na coluna " + oldColumnName + ".</p>");
+                return;
             }
         }
         if (newColumn.reference) {
@@ -2200,9 +2229,6 @@ function changeLeftSide() {
     leftSide.appendChild(div);
     restoreExpanded(div, "", opened);
 }
-/**
- * Re-renderiza a visualização detalhada da tabela selecionada.
- */
 /** Re-renderiza a tabela e as ações da tabela selecionada. */
 function changeTabelaSelecionadaTabela() {
     if (currentDatabase === null) {
@@ -2648,9 +2674,6 @@ function deleteColumnCreationDiv(button) {
     const div = button.parentElement.parentElement;
     div.remove();
 }
-/**
- * Cria um bloco visual para montar uma condição de busca.
- */
 /** Cria um bloco visual para montar uma condição de busca. */
 function createWhereConditionDiv() {
     const whereConditionsContainer = document.getElementById("where-conditions");
@@ -2719,9 +2742,6 @@ function createWhereConditionDiv() {
     bottomDiv.appendChild(deleteDiv);
     updateCustomDropdowns();
 }
-/**
- * Atualiza o campo do menu de configuração de database.
- */
 /** Preenche o menu de configuração da database selecionada. */
 function changeConfigurarDatabaseMenu() {
     const menu = document.getElementById("configurar-database");
@@ -2751,9 +2771,6 @@ function changeConfigurarTabelaMenu() {
     }
     menu.querySelector("input").value = currentTable;
 }
-/**
- * Recria o menu de edição de colunas da tabela atual.
- */
 /** Recria o menu de edição das colunas da tabela atual. */
 function changeEditColumnsMenu() {
     if (currentDatabase === null)
@@ -2959,9 +2976,6 @@ function changeEditColumnsMenu() {
     createColumnCreationDiv(criacaoColunasEdit);
     updateCustomDropdowns();
 }
-/**
- * Recria o menu de inserção de linhas da tabela atual.
- */
 /** Recria o menu de inserção de linha da tabela atual. */
 function changeInsertRowMenu() {
     if (currentDatabase === null)
@@ -3083,10 +3097,6 @@ function changeInsertRowMenu() {
         }
     });
 }
-/**
- * Recria o menu de edição de uma linha específica.
- * @param rowIndex - Índice da linha que será editada.
- */
 /**
  * Recria o menu de edição para uma linha específica.
  * @param rowIndex - Índice da linha que será editada.
@@ -3211,9 +3221,6 @@ function changeEditRowMenu(rowIndex) {
         }
     });
 }
-/**
- * Recria o menu de pesquisa e suas opções de join.
- */
 /** Atualiza o menu de busca conforme a tabela selecionada. */
 function changeSearchMenu() {
     const searchColumnsDiv = document.getElementById("colunas-pesquisa");
@@ -3248,12 +3255,6 @@ function changeSearchMenu() {
         searchColumnsDiv.appendChild(label);
     });
 }
-/**
- * Prepara a confirmação de exclusão para database, tabela, coluna ou linha.
- * @param type - Tipo do item que será removido.
- * @param rowIndex - Índice da linha, quando aplicável.
- * @param columnName - Nome da coluna, quando aplicável.
- */
 /**
  * Configura a confirmação de exclusão para o item escolhido.
  * @param type - Tipo de item que será excluído.
@@ -3378,10 +3379,7 @@ function changeConfirmDeleteMenu(type, rowIndex, columnName) {
  * Atualiza a exibição e as restrições dos campos de características da coluna.
  * @param parentDiv - Container do bloco de criação/edição da coluna.
  */
-/** Atualiza os controles de restrições conforme o tipo e as opções da coluna. */
 function updateCharacteristics(parentDiv) {
-    console.log("updateCharacteristics called");
-    // pegar inputs
     const pkInput = parentDiv.querySelector("input.primary-key");
     const fkInput = parentDiv.querySelector("input.foreign-key");
     const notNullInput = parentDiv.querySelector("input.not-null");
@@ -3466,7 +3464,6 @@ function updateCharacteristics(parentDiv) {
  * Troca o tipo do campo de valor padrão conforme o tipo da coluna.
  * @param parentDiv - Container do bloco de criação/edição da coluna.
  */
-/** Atualiza o campo de valor padrão da coluna. */
 function updateDefaultInput(parentDiv, initialValue) {
     const type = parentDiv.querySelector(".custom-dropdown button").textContent.toLowerCase();
     if (type == "boolean") {
@@ -3544,7 +3541,6 @@ function updateTypeInput(parentDiv) {
  * Atualiza os schemas disponíveis para referência de chave estrangeira.
  * @param parentDiv - Container do bloco de criação/edição da coluna.
  */
-/** Atualiza as opções de schema para uma referência de chave estrangeira. */
 function updateForeignKeyReferenceSchemaOptions(parentDiv) {
     const database = getCurrentDatabase();
     const availableTables = Object.keys(database.schemas);
@@ -3568,7 +3564,6 @@ function updateForeignKeyReferenceSchemaOptions(parentDiv) {
  * Atualiza as tabelas disponíveis para referência de chave estrangeira.
  * @param parentDiv - Container do bloco de criação/edição da coluna.
  */
-/** Atualiza as opções de tabela da referência selecionada. */
 function updateForeignKeyReferenceTableOptions(parentDiv) {
     const database = getCurrentDatabase();
     const tableSelect = parentDiv.querySelector(".referencia :nth-child(3) .custom-dropdown-menu");
@@ -3600,7 +3595,6 @@ function updateForeignKeyReferenceTableOptions(parentDiv) {
  * Atualiza as colunas disponíveis na tabela de referência selecionada.
  * @param parentDiv - Container do bloco de criação/edição da coluna.
  */
-/** Atualiza as opções de coluna da referência selecionada. */
 function updateForeignKeyReferenceColumnOptions(parentDiv) {
     const schema = getCurrentSchema();
     const columnSelect = parentDiv.querySelector(".referencia :nth-child(4) .custom-dropdown-menu");
@@ -3790,6 +3784,10 @@ var SQL;
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER DATABASE incorreto", "Sintaxe incorreta"], "error");
                 return;
             }
+            if (this.tokens[3]?.toLowerCase() !== "rename" || this.tokens[4]?.toLowerCase() !== "to") {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER DATABASE incorreto", "Sintaxe incorreta"], "error");
+                return;
+            }
             if (!isValidSQLName(this.tokens[5])) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome da database inválido"], "error");
                 return;
@@ -3800,10 +3798,6 @@ var SQL;
             }
             if (databases[this.tokens[2]] === undefined) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, [`Database "${this.tokens[2]}" não existe`], "error");
-                return;
-            }
-            if (this.tokens[3]?.toLowerCase() !== "rename" || this.tokens[4]?.toLowerCase() !== "to") {
-                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER DATABASE incorreto", "Sintaxe incorreta"], "error");
                 return;
             }
             SGBDFunctions.renameDatabase(this.tokens[2], this.tokens[5]);
@@ -3818,6 +3812,10 @@ var SQL;
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER SCHEMA incorreto", "Sintaxe incorreta"], "error");
                 return;
             }
+            if (this.tokens[3]?.toLowerCase() !== "rename" || this.tokens[4]?.toLowerCase() !== "to") {
+                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER SCHEMA incorreto", "Sintaxe incorreta"], "error");
+                return;
+            }
             if (!isValidSQLName(this.tokens[5])) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Nome do schema inválido"], "error");
                 return;
@@ -3828,10 +3826,6 @@ var SQL;
             }
             if (getCurrentDatabase()?.schemas[this.tokens[2]] === undefined) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, [`Schema "${this.tokens[2]}" não existe`], "error");
-                return;
-            }
-            if (this.tokens[3]?.toLowerCase() !== "rename" || this.tokens[4]?.toLowerCase() !== "to") {
-                getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER SCHEMA incorreto", "Sintaxe incorreta"], "error");
                 return;
             }
             SGBDFunctions.renameSchema(this.tokens[2], this.tokens[5]);
@@ -3979,18 +3973,36 @@ var SQL;
                 return;
             }
             const result = parseColumn(this.tokens.slice(5), getCurrentDatabase().schemas[schemaName].tables[tableName]);
+            const column = result.column;
             if (result.error) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE ADD COLUMN incorreto", result.error], "error");
                 return;
             }
-            if (!result.column)
+            if (!column)
                 return;
-            if (getTable(tableName, schemaName).columns[result.column.name]) {
-                getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma coluna com o nome "${result.column.name}" na tabela "${tableName}"`], "error");
+            if (getTable(tableName, schemaName).columns[column.name]) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Já existe uma coluna com o nome "${column.name}" na tabela "${tableName}"`], "error");
                 return;
             }
-            SGBDFunctions.addColumn(tableName, result.column, schemaName);
-            getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${result.column.name}" adicionada com sucesso`], "success");
+            if (column.isNotNull && !column.hasDefault && !column.isAutoIncrement && !column.isCurrentTimestamp) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Não é possível adicionar a coluna "${column.name}" com NOT NULL sem valor padrão`], "error");
+                return;
+            }
+            if (column.isUnique && column.hasDefault) {
+                if (getTable(tableName, schemaName).rows.length > 1) {
+                    getCurrentTerminalSession().createEntry(this.fullCommand, [`Não é possível adicionar a coluna "${column.name}" com UNIQUE e valor padrão, pois já existem múltiplas linhas na tabela.`], "error");
+                    return;
+                }
+                else {
+                    const defaultValue = column.type.parse(column.defaultValue);
+                    if (getTable(tableName, schemaName).indexes[column.name]?.has(defaultValue)) {
+                        getCurrentTerminalSession().createEntry(this.fullCommand, [`Não é possível adicionar a coluna "${column.name}" com UNIQUE e valor padrão, pois o valor padrão já existe na tabela.`], "error");
+                        return;
+                    }
+                }
+            }
+            SGBDFunctions.addColumn(tableName, column, schemaName);
+            getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${column.name}" adicionada com sucesso`], "success");
         }
         dropColumn() {
             const name = this.tokens[2];
@@ -4037,12 +4049,13 @@ var SQL;
                 return;
             }
             const columnName = this.tokens[5];
-            if (!getTable(tableName, schemaName).columns[columnName]) {
+            const table = getTable(tableName, schemaName);
+            if (!table.columns[columnName]) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${columnName}" não existe na tabela "${tableName}"`], "error");
                 return;
             }
             const word7 = this.tokens[6]?.toLowerCase();
-            const column = getTable(tableName, schemaName).columns[columnName];
+            const column = table.columns[columnName];
             const newColumn = column.clone();
             if (this.tokens.length < 8) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "Sintaxe incorreta"], "error");
@@ -4299,12 +4312,10 @@ var SQL;
                     return;
                 }
                 // Verificação da integridade com outras características da coluna
-                // PRIMARY KEY implica NOT NULL
                 if (newColumn.isPrimaryKey) {
                     newColumn.isNotNull = true;
                     newColumn.isUnique = true;
                 }
-                // AUTO_INCREMENT
                 if (newColumn.isAutoIncrement) {
                     if (!compareTypes(newColumn.type, types.INTEGER)) {
                         getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "AUTO_INCREMENT só pode ser usado em colunas INTEGER"], "error");
@@ -4324,7 +4335,6 @@ var SQL;
                     }
                     newColumn.isNotNull = true;
                 }
-                // CURRENT_TIMESTAMP
                 if (newColumn.isCurrentTimestamp) {
                     if (!compareTypes(newColumn.type, types.DATE) && !compareTypes(newColumn.type, types.TIME)) {
                         getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "CURRENT_TIMESTAMP só pode ser usado em colunas DATE ou TIME"], "error");
@@ -4339,7 +4349,6 @@ var SQL;
                         return;
                     }
                 }
-                // FOREIGN KEY
                 if (newColumn.isForeignKey) {
                     if (newColumn.isAutoIncrement) {
                         getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "FOREIGN KEY não pode ser usado com AUTO_INCREMENT"], "error");
@@ -4347,6 +4356,18 @@ var SQL;
                     }
                     if (newColumn.isCurrentTimestamp) {
                         getCurrentTerminalSession().createEntry(this.fullCommand, ["Comando ALTER TABLE incorreto", "FOREIGN KEY não pode ser usado com CURRENT_TIMESTAMP"], "error");
+                        return;
+                    }
+                }
+                if (newColumn.isNotNull) {
+                    if (!table.verifyNotNullConstraint([newColumn.name])) {
+                        openNotifications("<p style='color: var(--red5)'>Existem valores nulos nessa coluna.</p>");
+                        return;
+                    }
+                }
+                if (newColumn.isUnique) {
+                    if (!table.verifyUniqueConstraint([newColumn.name])) {
+                        openNotifications("<p style='color: var(--red5)'>Existem valores duplicados nessa coluna.</p>");
                         return;
                     }
                 }
@@ -4573,7 +4594,6 @@ var SQL;
             }
             if (!schemaName || !tableName)
                 return;
-            console.log("Schema:", schemaName, "Table:", tableName);
             if (currentDatabase == null) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, ["Nenhuma database selecionada"], "error");
                 return;
@@ -4882,9 +4902,7 @@ var SQL;
                     }
                 }
             }
-            for (const row of validatedRows) {
-                SGBDFunctions.insertRow(tableName, row, schemaName);
-            }
+            SGBDFunctions.insertRows(tableName, validatedRows, schemaName);
             getCurrentTerminalSession().createEntry(this.fullCommand, [`${validatedRows.length} linha(s) inserida(s) na tabela "${tableName}"`], "success");
         }
         validateRowsTypes(rows, table) {
@@ -4903,7 +4921,7 @@ var SQL;
                         if (!(value.startsWith("'") && value.endsWith("'") || value.startsWith('"') && value.endsWith('"'))) {
                             return "Tipo deve começar e acabar com \" ou \'";
                         }
-                        value = value.slice(1, value.length - 1).replace("''", "'").replace('""', '"');
+                        value = value.replaceAll("''", "'").replace('""', '"').slice(1, value.length - 1);
                     }
                     const parsed = colType.parse(value);
                     if (!valueExists(parsed)) {
@@ -4961,7 +4979,6 @@ var SQL;
          * Executa o comando USE para trocar a database ativa.
          */
         use() {
-            console.log(databases);
             const type = this.tokens[1]?.toLowerCase();
             const target = this.tokens[2];
             if (type !== "database" && type !== "schema") {
@@ -5033,7 +5050,7 @@ var SQL;
             tableName = name;
         }
         if (shouldVerifyTable && !getCurrentDatabase().schemas[schemaName].tables[tableName]) {
-            return { schemaName: null, tableName: null, error: `Tabela "${tableName}" não existe no schema "${currentSchema}"` };
+            return { schemaName: null, tableName: null, error: `Tabela "${tableName}" não existe no schema "${schemaName}"` };
         }
         return { schemaName: schemaName, tableName: tableName, error: null };
     }
@@ -5129,8 +5146,7 @@ var SQL;
             column.type.setMaxLength(varcharMaxLength);
         }
         const optionsStart = compareTypes(columnType, types.ENUM([])) || compareTypes(columnType, types.VARCHAR(0))
-            ? columnDef.findIndex(token => token === ")") + 1
-            : 2;
+            ? columnDef.findIndex(token => token === ")") + 1 : 2;
         const optionsError = validateColumnOptionTokens(columnDef.slice(optionsStart), true);
         if (optionsError) {
             return { column: null, error: optionsError };
@@ -5232,12 +5248,10 @@ var SQL;
             };
         }
         // Verificação da integridade com outras características da coluna
-        // PRIMARY KEY implica NOT NULL
         if (column.isPrimaryKey) {
             column.isNotNull = true;
             column.isUnique = true;
         }
-        // AUTO_INCREMENT
         if (column.isAutoIncrement) {
             if (!compareTypes(columnType, types.INTEGER)) {
                 return { column: null, error: "AUTO_INCREMENT só pode ser usado em colunas INTEGER" };
@@ -5252,8 +5266,8 @@ var SQL;
                 return { column: null, error: "AUTO_INCREMENT não pode ser usado com CURRENT_TIMESTAMP" };
             }
             column.isNotNull = true;
+            column.isUnique = true;
         }
-        // CURRENT_TIMESTAMP
         if (column.isCurrentTimestamp) {
             column.isNotNull = true;
             if (!compareTypes(columnType, types.DATE) && !compareTypes(columnType, types.TIME)) {
@@ -5266,13 +5280,23 @@ var SQL;
                 return { column: null, error: "CURRENT_TIMESTAMP não pode ser usado com DEFAULT" };
             }
         }
-        // FOREIGN KEY
         if (column.isForeignKey) {
             if (column.isAutoIncrement) {
                 return { column: null, error: "FOREIGN KEY não pode ser usado com AUTO_INCREMENT" };
             }
             if (column.isCurrentTimestamp) {
                 return { column: null, error: "FOREIGN KEY não pode ser usado com CURRENT_TIMESTAMP" };
+            }
+        }
+        if (column.isUnique && column.hasDefault) {
+            if (table.rows.length > 1) {
+                return { column: null, error: `Não é possível adicionar a coluna "${column.name}" com UNIQUE e valor padrão, pois já existem múltiplas linhas na tabela.` };
+            }
+            else {
+                const defaultValue = column.type.parse(column.defaultValue);
+                if (table.indexes[column.name]?.has(defaultValue)) {
+                    return { column: null, error: `Não é possível adicionar a coluna "${column.name}" com UNIQUE e valor padrão, pois o valor padrão já existe na tabela.` };
+                }
             }
         }
         return { column: column, error: null };
@@ -5308,44 +5332,68 @@ var SQL;
      * Valida opções de coluna.
      */
     function validateColumnOptionTokens(words, isSet) {
+        const seen = new Set();
         let index = 0;
-        let recognized = 0;
+        const markSeen = (option) => {
+            if (seen.has(option))
+                return `${option} definido mais de uma vez`;
+            seen.add(option);
+            return null;
+        };
         while (index < words.length) {
-            const token = words[index].toLowerCase();
-            if (token === "primary" || token === "not" || token === "foreign") {
+            const original = words[index];
+            const token = original.toLowerCase();
+            // Opções compostas: PRIMARY KEY, FOREIGN KEY, NOT NULL
+            if (token === "primary" || token === "foreign" || token === "not") {
+                const expectedSecond = token === "not" ? "null" : "key";
                 const second = words[index + 1]?.toLowerCase();
-                if (second !== (token === "not" ? "null" : "key")) {
-                    return `Opção inválida: "${words[index]}"`;
+                if (second !== expectedSecond) {
+                    return `${token.toUpperCase()} deve ser seguido de ${expectedSecond.toUpperCase()}`;
                 }
+                const optionName = `${token.toUpperCase()} ${expectedSecond.toUpperCase()}`;
+                const duplicated = markSeen(optionName);
+                if (duplicated)
+                    return duplicated;
                 index += 2;
-                recognized++;
+                // FOREIGN KEY REFERENCES tabela ( coluna )
                 if (token === "foreign" && isSet) {
-                    if (words[index]?.toLowerCase() !== "references" || index + 4 >= words.length ||
-                        words[index + 2] !== "(" || words[index + 4] !== ")") {
-                        return "FOREIGN KEY deve ser seguido de REFERENCES válido";
+                    const refIndex = index;
+                    const hasValidReferences = words[refIndex]?.toLowerCase() === "references" &&
+                        words[refIndex + 1] !== undefined &&
+                        words[refIndex + 2] === "(" &&
+                        words[refIndex + 3] !== undefined &&
+                        words[refIndex + 4] === ")";
+                    if (!hasValidReferences) {
+                        return "FOREIGN KEY deve ser seguido de REFERENCES tabela ( coluna )";
                     }
                     index += 5;
                 }
                 continue;
             }
+            // Opções simples
             if (token === "unique" || token === "auto_increment" || token === "current_timestamp") {
+                const duplicated = markSeen(token.toUpperCase());
+                if (duplicated)
+                    return duplicated;
                 index++;
-                recognized++;
                 continue;
             }
+            // DEFAULT [valor]
             if (token === "default") {
+                const duplicated = markSeen("DEFAULT");
+                if (duplicated)
+                    return duplicated;
                 index++;
-                recognized++;
                 if (isSet) {
                     if (index >= words.length)
                         return "DEFAULT deve ser seguido de um valor";
-                    index++;
+                    index++; // pula o valor, que pode coincidir com uma palavra-chave
                 }
                 continue;
             }
-            return `Opção inválida: "${words[index]}"`;
+            return `Opção inválida: "${original}"`;
         }
-        return recognized === 0 ? "Nenhuma opção de coluna foi reconhecida" : null;
+        return null;
     }
     SQL.validateColumnOptionTokens = validateColumnOptionTokens;
     /**

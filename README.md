@@ -94,3 +94,7 @@ npm run build
 ## Licença e créditos
 
 Este repositório é um projeto pessoal. Consulte [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) para informações sobre componentes e recursos de terceiros utilizados no projeto.
+
+## Como contribuir
+
+Você não não contribui :)
