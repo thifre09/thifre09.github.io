@@ -71,7 +71,24 @@ async function createExempleDatabase() {
     const response = await fetch("/src/jsons/exemple_database.json");
     const json = await response.text();
     console.log(json);
-    transformFromJson(json);
+    if (json == null) {
+        console.error("Erro ao carregar o arquivo de exemplo.");
+        return;
+    }
+    try {
+        const data = JSON.parse(json);
+        for (const [name, db] of Object.entries(data)) {
+            const d = DB.Database.fromJSON(db);
+            if (!d)
+                return;
+            databases[name] = d;
+        }
+        refreshUI();
+        showNotification("Dados carregados com sucesso!");
+    }
+    catch (err) {
+        console.error("Erro ao carregar databases:", err);
+    }
 }
 /**
  * Verifica se dois tipos de dados pertencem à mesma classe.
@@ -307,8 +324,8 @@ var DB;
                 <svg viewBox="0 -960 960 960">
                     <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640H447l-80-80H160v480l96-320h684L837-217q-8 26-29.5 41.5T760-160H160Zm84-80h516l72-240H316l-72 240Zm0 0 72-240-72 240Zm-84-400v-80 80Z"/>
                 </svg>
-                ${this.name}
                 `;
+                p.appendChild(document.createTextNode(this.name));
                 summaryDiv.appendChild(p);
                 const plusIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
                 plusIcon.setAttribute("viewBox", "0 -960 960 960");
@@ -342,8 +359,8 @@ var DB;
             <svg viewBox="0 -960 960 960">
                 <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640H447l-80-80H160v480l96-320h684L837-217q-8 26-29.5 41.5T760-160H160Zm84-80h516l72-240H316l-72 240Zm0 0 72-240-72 240Zm-84-400v-80 80Z"/>
             </svg>
-            ${this.name}
             `;
+            p.appendChild(document.createTextNode(this.name));
             summaryDiv.appendChild(p);
             const plusIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
             plusIcon.setAttribute("viewBox", "0 -960 960 960");
@@ -414,47 +431,78 @@ var DB;
             currentSchema = "public";
             currentTable = null;
         }
-        createKey(schemaName, tableName, columnName) {
-            return `${schemaName}.${tableName}.${columnName}`;
+        /**
+         * Cria uma chave única para identificar uma referência de chave estrangeira.
+         *
+         * @param reference - Referência de chave estrangeira.
+         * @returns A chave única.
+         */
+        createKey(reference) {
+            return `${reference.schema}.${reference.table}.${reference.column}`;
         }
-        addForeignKeyReference(schemaName, tableName, columnName, reference) {
-            const key = this.createKey(schemaName, tableName, columnName);
+        /**
+         * Adiciona uma referência de chave estrangeira ao mapa.
+         *
+         * @param referencingColumn - Coluna que referencia outra coluna.
+         * @param referencedColumn - Coluna referenciada (propriedade "reference" de uma DB.Column).
+         */
+        addForeignKeyReference(referencingColumn, referencedColumn) {
+            const key = this.createKey(referencedColumn);
             if (!this.foreignKeyMap[key]) {
                 this.foreignKeyMap[key] = [];
             }
-            this.foreignKeyMap[key].push(reference);
+            this.foreignKeyMap[key].push(referencingColumn);
         }
         /**
          * Remove uma entrada do mapa de chaves estrangeiras.
          *
          * Usado para remover referências quando uma tabela ou coluna é excluída.
-         * @param schema Schema da tabela que contém a chave estrangeira.
-         * @param table Tabela que contém a chave estrangeira.
-         * @param column Coluna que contém a chave estrangeira.
+         * @param reference - Referência que deve ser removida do mapa.
          */
-        removeForeignKeyEntry(schema, table, column) {
-            delete this.foreignKeyMap[this.createKey(schema, table, column)];
+        removeForeignKeyEntry(reference) {
+            delete this.foreignKeyMap[this.createKey(reference)];
         }
         /**
-         * Remove uma referência de chave estrangeira do mapa.
+         * Remove uma referência de chave estrangeira de uma coluna.
          *
-         * @param schemaName - Schema da tabela referenciada.
-         * @param tableName - Tabela referenciada.
-         * @param columnName - Coluna referenciada.
-         * @param reference - Referência que deve ser removida.
+         * @param originalColumn - Coluna que contém a chave estrangeira.
+         * @param referencedColumn - Coluna referenciada.
          */
-        removeForeignKeyReference(schemaName, tableName, columnName, reference) {
-            const key = this.createKey(schemaName, tableName, columnName);
+        removeForeignKeyReferenceInColumn(columnToBeDeleted, referencedColumn) {
+            const key = this.createKey(referencedColumn);
             const references = this.foreignKeyMap[key];
             if (!references)
                 return;
-            this.foreignKeyMap[key] = references.filter(ref => !(ref.schema === reference.schema &&
-                ref.table === reference.table &&
-                ref.column === reference.column));
+            this.foreignKeyMap[key] = references.filter(ref => !(ref.schema === columnToBeDeleted.schema &&
+                ref.table === columnToBeDeleted.table &&
+                ref.column === columnToBeDeleted.column));
             if (this.foreignKeyMap[key].length === 0) {
                 delete this.foreignKeyMap[key];
             }
         }
+        /**
+         * Retorna as referências para um esquema em outros esquemas.
+         *
+         * @param schemaName - Nome do esquema.
+         * @returns Lista de referências para o esquema em outros esquemas.
+         */
+        getReferencesToSchemaInOtherSchemas(schemaName) {
+            const prefix = `${schemaName}.`;
+            const references = [];
+            for (const key in this.foreignKeyMap) {
+                if (!key.startsWith(prefix))
+                    continue;
+                references.push(...this.foreignKeyMap[key].filter(ref => ref.schema !== schemaName));
+            }
+            return references;
+        }
+        /**
+         * Retorna as referências para uma tabela em outros esquemas.
+         *
+         * @param schemaName - Nome do esquema.
+         * @param tableName - Nome da tabela.
+         * @returns Lista de referências para a tabela em outros esquemas.
+         */
         getReferencesToTable(schemaName, tableName) {
             const prefix = `${schemaName}.${tableName}.`;
             const references = [];
@@ -465,8 +513,31 @@ var DB;
             }
             return references;
         }
-        getReferencesToColumn(schemaName, tableName, columnName) {
-            return this.foreignKeyMap[this.createKey(schemaName, tableName, columnName)] ?? [];
+        /**
+         * Retorna as referências para uma coluna.
+         *
+         * @param reference - Referência de chave estrangeira.
+         * @returns Lista de referências para a coluna.
+         */
+        getReferencesToColumn(reference) {
+            return this.foreignKeyMap[this.createKey(reference)] ?? [];
+        }
+        /** Reconstrói o mapa de chaves estrangeiras a partir das tabelas e colunas existentes. */
+        recreateForeignKeyMap() {
+            this.foreignKeyMap = {};
+            for (const schema of Object.values(this.schemas)) {
+                for (const table of Object.values(schema.tables)) {
+                    for (const column of Object.values(table.columns)) {
+                        if (column.isForeignKey && column.reference) {
+                            this.addForeignKeyReference({
+                                schema: schema.name,
+                                table: table.name,
+                                column: column.name
+                            }, column.reference);
+                        }
+                    }
+                }
+            }
         }
         get children() {
             return [
@@ -502,6 +573,12 @@ var DB;
             const db = new Database(json.name);
             for (const [name, schemaObj] of Object.entries(json.schemas)) {
                 db.schemas[name] = Schema.fromJSON(schemaObj, db);
+            }
+            if (json.foreignKeyMap) {
+                db.foreignKeyMap = json.foreignKeyMap;
+            }
+            else {
+                db.recreateForeignKeyMap();
             }
             return db;
         }
@@ -731,7 +808,10 @@ var DB;
          * @param reference - Referência usada por FOREIGN KEY.
          */
         constructor(name, parent, type, isPrimaryKey = false, isForeignKey = false, isNotNull = false, isUnique = false, isAutoIncrement = false, hasDefault = false, isCurrentTimestamp = false, reference, defaultValue) {
-            super(name, parent);
+            super(name, parent, () => {
+                changeEditColumnsMenu(this);
+                abrirFechar(false, "alterar-colunas");
+            });
             this.type = type;
             this.isPrimaryKey = isPrimaryKey;
             this.isForeignKey = isForeignKey;
@@ -762,6 +842,28 @@ var DB;
             copy.incrementCounter = this.incrementCounter;
             copy.defaultValue = this.defaultValue;
             return copy;
+        }
+        /**
+         * Reconstrói uma coluna a partir de sua representação JSON.
+         * @param obj - Dados serializados da coluna.
+         * @param parent - Tabela que contém a coluna.
+         * @returns Coluna reconstruída.
+         */
+        static fromJSON(obj, parent) {
+            let type;
+            if (obj.type.name === "ENUM") {
+                type = types.ENUM(obj.type.allowedValues);
+            }
+            else if (obj.type.name === "VARCHAR") {
+                type = types.VARCHAR(obj.type.maxLength);
+            }
+            else {
+                type = DataTypes.createDataTypeFromString(obj.type.name);
+            }
+            const column = new Column(obj.name, parent, type, obj.isPrimaryKey, obj.isForeignKey, obj.isNotNull, obj.isUnique, obj.isAutoIncrement, obj.hasDefault, obj.isCurrentTimestamp, obj.reference);
+            column.incrementCounter = obj.incrementCounter;
+            column.defaultValue = obj.defaultValue;
+            return column;
         }
         get icon() {
             if (this.isPrimaryKey) {
@@ -828,28 +930,6 @@ var DB;
                     </svg>
                     `;
             }
-        }
-        /**
-         * Reconstrói uma coluna a partir de sua representação JSON.
-         * @param obj - Dados serializados da coluna.
-         * @param parent - Tabela que contém a coluna.
-         * @returns Coluna reconstruída.
-         */
-        static fromJSON(obj, parent) {
-            let type;
-            if (obj.type.name === "ENUM") {
-                type = types.ENUM(obj.type.allowedValues);
-            }
-            else if (obj.type.name === "VARCHAR") {
-                type = types.VARCHAR(obj.type.maxLength);
-            }
-            else {
-                type = DataTypes.createDataTypeFromString(obj.type.name);
-            }
-            const column = new Column(obj.name, parent, type, obj.isPrimaryKey, obj.isForeignKey, obj.isNotNull, obj.isUnique, obj.isAutoIncrement, obj.hasDefault, obj.isCurrentTimestamp, obj.reference);
-            column.incrementCounter = obj.incrementCounter;
-            column.defaultValue = obj.defaultValue;
-            return column;
         }
     }
     DB.Column = Column;
@@ -988,7 +1068,7 @@ class SGBDFunctions {
             table.indexes[columnName] = new Map();
             if (!table.columns[columnName].reference)
                 continue;
-            //db.addForeignKeyReference(currentSchema!, table.name, columnName, table.columns[columnName].reference!);
+            db.addForeignKeyReference({ schema: currentSchema, table: table.name, column: columnName }, table.columns[columnName].reference);
         }
         db.schemas[schema || currentSchema].tables[table.name] = table;
         currentSchema = schema || currentSchema;
@@ -1059,7 +1139,7 @@ class SGBDFunctions {
             });
         }
         if (column.reference) {
-            //getCurrentDatabase()!.addForeignKeyReference(currentSchema!, tableName, column.name, column.reference);
+            getCurrentDatabase().addForeignKeyReference({ schema: currentSchema, table: tableName, column: column.name }, column.reference);
         }
         refreshUI();
         if (!isAutoSaveEnabled())
@@ -1164,6 +1244,19 @@ class SGBDFunctions {
      */
     static deleteSchema(schemaName) {
         const db = getCurrentDatabase();
+        const schema = db.schemas[schemaName];
+        for (const table of Object.values(schema.tables)) {
+            for (const column of Object.values(table.columns)) {
+                if (column.isForeignKey && column.reference) {
+                    const columnToBeDeleted = {
+                        schema: schemaName,
+                        table: table.name,
+                        column: column.name
+                    };
+                    db.removeForeignKeyReferenceInColumn(columnToBeDeleted, column.reference);
+                }
+            }
+        }
         delete db.schemas[schemaName];
         if (currentSchema === schemaName) {
             currentSchema = null;
@@ -1181,6 +1274,18 @@ class SGBDFunctions {
      */
     static deleteTable(tableName, schemaName) {
         const db = getCurrentDatabase();
+        for (const columnName in getTable(tableName, schemaName).columns) {
+            const column = getTable(tableName, schemaName).columns[columnName];
+            if (column.isForeignKey && column.reference) {
+                const columnToBeDeleted = {
+                    schema: column.parent.parent.name,
+                    table: column.parent.name,
+                    column: column.name
+                };
+                const reference = column.reference;
+                db.removeForeignKeyReferenceInColumn(columnToBeDeleted, reference);
+            }
+        }
         if (schemaName !== undefined) {
             delete db.schemas[schemaName].tables[tableName];
         }
@@ -1213,6 +1318,15 @@ class SGBDFunctions {
         delete table.indexes[columnName];
         for (const row of table.rows) {
             delete row.values[columnName];
+        }
+        if (table.columns[columnName].isForeignKey) {
+            const columnToBeDeleted = {
+                schema: table.columns[columnName].parent.parent.name,
+                table: table.columns[columnName].parent.name,
+                column: table.columns[columnName].name
+            };
+            const reference = table.columns[columnName].reference;
+            getCurrentDatabase().removeForeignKeyReferenceInColumn(columnToBeDeleted, reference);
         }
         delete table.columns[columnName];
         refreshUI();
@@ -1298,6 +1412,7 @@ class SGBDFunctions {
         s.name = newName;
         db.schemas[newName] = s;
         currentSchema = newName;
+        db.recreateForeignKeyMap();
         refreshUI();
         if (!isAutoSaveEnabled())
             return;
@@ -1311,6 +1426,7 @@ class SGBDFunctions {
      * @param schemaName - Schema da tabela, quando diferente do selecionado.
      */
     static renameTable(oldName, newName, schemaName) {
+        const db = getCurrentDatabase();
         let schema;
         let t;
         if (schemaName !== undefined) {
@@ -1321,8 +1437,32 @@ class SGBDFunctions {
             schema = getCurrentSchema();
             t = getTable(oldName);
         }
-        if (!t)
-            return;
+        const currentSchemaName = schema.name;
+        for (const column of Object.values(t.columns)) {
+            if (column.isForeignKey && column.reference?.table === oldName &&
+                column.reference.schema === currentSchemaName) {
+                column.reference.table = newName;
+            }
+        }
+        for (const column of Object.values(t.columns)) {
+            const oldReference = {
+                schema: currentSchemaName,
+                table: oldName,
+                column: column.name
+            };
+            const references = db.getReferencesToColumn(oldReference);
+            if (references.length === 0)
+                continue;
+            const newReference = {
+                schema: currentSchemaName,
+                table: newName,
+                column: column.name
+            };
+            for (const reference of references) {
+                db.removeForeignKeyReferenceInColumn(reference, oldReference);
+                db.addForeignKeyReference(reference, newReference);
+            }
+        }
         delete schema.tables[oldName];
         t.name = newName;
         schema.tables[newName] = t;
@@ -1483,7 +1623,7 @@ class SQLDate {
     /** Converte um objeto `Date` em data SQL. */
     static fromDate(value) {
         let y = value.getFullYear();
-        let m = value.getMonth();
+        let m = value.getMonth() + 1;
         let d = value.getDay();
         return new SQLDate(y, m, d);
     }
@@ -2012,7 +2152,7 @@ function editRowInterface(rowIndex) {
             openNotifications(`<p style='color: var(--red5)'>Valor inválido para a coluna "${columnName}".</p>`);
             return;
         }
-        if (table.columns[columnName].isUnique && table.indexes[columnName].has(value)) {
+        if (table.columns[columnName].isUnique && table.indexes[columnName].has(value) && table.rows[rowIndex].values[columnName] !== value) {
             openNotifications(`<p style='color: var(--red5)'>O valor "${value}" já existe para a coluna "${columnName}".</p>`);
             return;
         }
@@ -2161,7 +2301,8 @@ function alterColumnsInterface() {
             for (const row of table.rows) {
                 const value = row.values[oldColumnName];
                 const valid = newColumn.type.validate(newColumn.type.parse(value));
-                if (!valid && !newColumn.type.parse(value) === null) {
+                const parsedValue = newColumn.type.parse(value);
+                if (!valid || parsedValue === null) {
                     openNotifications("<p style='color: var(--red5)'>Existem valores inválidos na coluna \"" + newColumn.name + "\".</p>");
                     return;
                 }
@@ -2772,7 +2913,7 @@ function changeConfigurarTabelaMenu() {
     menu.querySelector("input").value = currentTable;
 }
 /** Recria o menu de edição das colunas da tabela atual. */
-function changeEditColumnsMenu() {
+function changeEditColumnsMenu(column) {
     if (currentDatabase === null)
         return;
     const menu = document.getElementById("lista-colunas-existentes");
@@ -2785,7 +2926,7 @@ function changeEditColumnsMenu() {
         menu.innerHTML = "<p>Não há colunas nessa tabela</p>";
         return;
     }
-    Object.values(getTable(currentTable).columns).forEach((column) => {
+    function createColumnDiv(column) {
         const mainDiv = document.createElement("div");
         mainDiv.className = "outlined";
         mainDiv.setAttribute("column-name", column.name);
@@ -2970,7 +3111,13 @@ function changeEditColumnsMenu() {
         updateCharacteristics(mainDiv);
         updateCustomDropdowns();
         updateTypeInput(mainDiv);
-    });
+    }
+    if (column) {
+        createColumnDiv(column);
+    }
+    else {
+        Object.values(getTable(currentTable).columns).forEach((column) => { createColumnDiv(column); });
+    }
     const criacaoColunasEdit = document.getElementById("criacao-colunas-edit");
     criacaoColunasEdit.innerHTML = "";
     createColumnCreationDiv(criacaoColunasEdit);
@@ -3353,14 +3500,29 @@ function changeConfirmDeleteMenu(type, rowIndex, columnName) {
             openNotifications("<p style='color: var(--green5)'>Database deletada com sucesso!</p>");
         }
         else if (type === "schema") {
+            const references = getCurrentDatabase().getReferencesToSchemaInOtherSchemas(currentSchema);
+            if (references.length > 0) {
+                openNotifications("<p style='color: var(--red5)'>Não é possível deletar o schema, pois existem referências a ele em outros schemas: " + references.map((r) => r.schema).join(", ") + ".</p>");
+                return;
+            }
             SGBDFunctions.deleteSchema(currentSchema);
             openNotifications("<p style='color: var(--green5)'>Schema deletado com sucesso!</p>");
         }
         else if (type === "table") {
+            const references = getCurrentDatabase().getReferencesToTable(currentSchema, currentTable);
+            if (references.length > 0) {
+                openNotifications("<p style='color: var(--red5)'>Não é possível deletar a tabela, pois existem referências a ela nas tabelas: " + references.map((r) => r.table).join(", ") + ".</p>");
+                return;
+            }
             SGBDFunctions.deleteTable(currentTable);
             openNotifications("<p style='color: var(--green5)'>Tabela deletada com sucesso!</p>");
         }
         else if (type === "column") {
+            const references = getCurrentDatabase().getReferencesToColumn({ schema: currentSchema, table: currentTable, column: columnName });
+            if (references.length > 0) {
+                openNotifications("<p style='color: var(--red5)'>Não é possível deletar a coluna, pois existem referências a ela nas colunas: " + references.map((r) => r.column).join(", ") + ".</p>");
+                return;
+            }
             SGBDFunctions.deleteColumn(currentTable, columnName);
             openNotifications("<p style='color: var(--green5)'>Coluna deletada com sucesso!</p>");
         }
@@ -3608,19 +3770,24 @@ function updateForeignKeyReferenceColumnOptions(parentDiv) {
         return;
     }
     let i = 0;
+    let firstValidColumn = null;
     for (let columnName in referencedTable.columns) {
         if (referencedTable.columns[columnName].isPrimaryKey || referencedTable.columns[columnName].isUnique) {
             columnSelect.innerHTML += `
-                <li class="custom-dropdown-option ${i === 0 ? "custom-dropdown-option-selected" : ""}">${columnName}</li>
+                <li class="custom-dropdown-option ${i === 0 ? "custom-dropdown-option-selected" : ""}"></li>
             `;
+            columnSelect.querySelector(`.custom-dropdown-option:last-child`).textContent = columnName;
+            if (firstValidColumn === null) {
+                firstValidColumn = columnName;
+            }
         }
         i++;
     }
-    if (Object.keys(referencedTable.columns).length === 0) {
+    if (Object.keys(referencedTable.columns).length === 0 || !firstValidColumn) {
         refButton.textContent = "Selecione uma coluna";
     }
     else {
-        refButton.textContent = Object.keys(referencedTable.columns)[0];
+        refButton.textContent = referencedTable.columns[firstValidColumn].name;
     }
     updateCustomDropdowns();
 }
@@ -4025,6 +4192,11 @@ var SQL;
             const columnName = this.tokens[5];
             if (!getTable(tableName, schemaName).columns[columnName]) {
                 getCurrentTerminalSession().createEntry(this.fullCommand, [`Coluna "${columnName}" não existe na tabela "${tableName}"`], "error");
+                return;
+            }
+            const references = getCurrentDatabase().getReferencesToColumn({ schema: schemaName, table: tableName, column: columnName });
+            if (references.length > 0) {
+                getCurrentTerminalSession().createEntry(this.fullCommand, [`Não é possível deletar a coluna "${columnName}" da tabela "${tableName}", pois existem referências a ela nas colunas: ${references.map((r) => r.column).join(", ")}`], "error");
                 return;
             }
             SGBDFunctions.deleteColumn(tableName, columnName, schemaName);
@@ -6002,9 +6174,6 @@ function transformFromJson(json) {
 function saveToLocalStorage() {
     localStorage.setItem("databases", transformToJson());
 }
-/**
- * Restaura o estado de `databases` a partir do `localStorage`.
- */
 /** Carrega o estado salvo no armazenamento local do navegador. */
 function loadFromLocalStorage() {
     const json = localStorage.getItem("databases");
@@ -6021,10 +6190,6 @@ function saveToJson() {
     a.click();
     URL.revokeObjectURL(url);
 }
-/**
- * Abre um seletor de arquivo para carregar um arquivo JSON com o estado das databases
- * e aplica os dados carregados ao estado em memória.
- */
 /** Importa um banco a partir de um arquivo JSON escolhido pelo usuário. */
 function loadFromJson() {
     const input = document.createElement("input");
@@ -6043,16 +6208,10 @@ function loadFromJson() {
     };
     input.click();
 }
-/**
- * Exporta os dados atuais para SQL (não implementado atualmente).
- */
 /** Exporta o banco atual como comandos SQL. */
 function saveToSql() {
     alert("Função de exportação para SQL ainda não implementada.");
 }
-/**
- * Importa dados a partir de um arquivo SQL (não implementado atualmente).
- */
 /** Importa e executa comandos SQL de um arquivo selecionado. */
 function loadFromSql() {
     alert("Função de importação de SQL ainda não implementada.");

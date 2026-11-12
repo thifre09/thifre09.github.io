@@ -177,7 +177,7 @@ let reviews = [
     new Review("Fall guys", "fall guys.jpeg", new Notas(6, "N/A", 7, 8.5, "+12h", 5, 4, 5.5), "Eu me arrependo de ter comprado esse jogo"),
     new Review("Forager", "forager.jpg", new Notas(8, "N/A", 9, 8, "Não sei", 2, 8.5, 8), "Eu sinto que esse jogo tinha muito potencial, mas ele é bem curto"),
     new Review("Fortnite", "fortnite.jpeg", new Notas(9.5, "N/A", 9.5, 9.5, "+4400h", "6-10", 9, 9.5), "Esse é definitivamente o meu jogo multiplayer favorito"),
-    new Review("Geometry Dash", "geometry dash.png", new Notas(9, "N/A", 8, 10, "Não sei", 7, 8.5, 8.5), "Esse jogo tem 1 botão, e mesmo assim é bem viciante"),
+    new Review("Geometry Dash", "geometry dash.png", new Notas(9, "N/A", 8, 10, "Não sei", "5-10", 8.5, 8.5), "Esse jogo tem 1 botão, e mesmo assim é bem viciante"),
     new Review("Ghost of Tsushima", "ghost of tsushima.jpeg", new Notas(9.5, 7, 9.5, 8, "72h", 3, 9.5, 9.5), "O combate é bem satisfatório quando você aprende a defender"),
     new Review("God of war 1", "god of war 1.jpeg", new Notas(8, 9, 9.5, 9.5, "Não sei", 4, 9, 9.5), "Um dos primeiros jogos que eu joguei. Ele sempre será lembrado com carinho"),
     new Review("God of war 2", "god of war 2.jpeg", new Notas(8, 8, 9.5, 9.5, "Não sei", 4, 9, 8.5), "Eu odeio a Ponte de Ícaros, eu só conseguir zerar pelo emulador"),
@@ -226,7 +226,7 @@ function setupSearch() {
         searchResults.innerHTML = filteredReviews
             .map((review) => `
                 <div class="search-result-item" onclick="scrollToGame('${review.nome.replace(/'/g, "\\'")}')"  >
-                    <img src="src/images/jogos reviews img/${review.imagem}" alt="${review.nome}" class="search-result-img">
+                    <img src="/src/images/jogos reviews img/${review.imagem}" alt="${review.nome}" class="search-result-img">
                     <span class="search-result-name">${review.nome}</span>
                 </div>
             `)
@@ -247,5 +247,6 @@ function scrollToGame(gameName) {
         document.getElementById("searchResults").classList.remove("active");
     }
 }
+window.scrollToGame = scrollToGame;
 criarReviews();
 setupSearch();

@@ -11,9 +11,9 @@
                             "id": {
                                 "name": "id",
                                 "onConfig": null,
-                                "incrementCounter": 16,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": true,
                                 "isForeignKey": false,
@@ -21,14 +21,15 @@
                                 "isUnique": true,
                                 "isAutoIncrement": true,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 16
                             },
                             "matricula": {
                                 "name": "matricula",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
                                     "name": "VARCHAR",
+                                    "color": "green2",
                                     "maxLength": 14
                                 },
                                 "isPrimaryKey": false,
@@ -37,14 +38,15 @@
                                 "isUnique": true,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "nome": {
                                 "name": "nome",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "TEXT"
+                                    "name": "TEXT",
+                                    "color": "green5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -52,14 +54,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "idade": {
                                 "name": "idade",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -67,14 +70,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "ativo": {
                                 "name": "ativo",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "BOOLEAN"
+                                    "name": "BOOLEAN",
+                                    "color": "purple5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -82,14 +86,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "sexo": {
                                 "name": "sexo",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
                                     "name": "ENUM",
+                                    "color": "pink5",
                                     "allowedValues": [
                                         "Masculino",
                                         "Feminino",
@@ -102,14 +107,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "cpf": {
                                 "name": "cpf",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
                                     "name": "VARCHAR",
+                                    "color": "green2",
                                     "maxLength": 11
                                 },
                                 "isPrimaryKey": false,
@@ -118,14 +124,15 @@
                                 "isUnique": true,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "email": {
                                 "name": "email",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "TEXT"
+                                    "name": "TEXT",
+                                    "color": "green5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -133,14 +140,15 @@
                                 "isUnique": true,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "cor": {
                                 "name": "cor",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
                                     "name": "ENUM",
+                                    "color": "pink5",
                                     "allowedValues": [
                                         "Branco",
                                         "Pardo",
@@ -154,14 +162,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "nome_pai": {
                                 "name": "nome_pai",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "TEXT"
+                                    "name": "TEXT",
+                                    "color": "green5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -169,14 +178,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "nome_mae": {
                                 "name": "nome_mae",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "TEXT"
+                                    "name": "TEXT",
+                                    "color": "green5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -184,14 +194,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "telefone": {
                                 "name": "telefone",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
                                     "name": "VARCHAR",
+                                    "color": "green2",
                                     "maxLength": 13
                                 },
                                 "isPrimaryKey": false,
@@ -200,14 +211,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "data_criacao": {
                                 "name": "data_criacao",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "DATE"
+                                    "name": "DATE",
+                                    "color": "orange5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -215,14 +227,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": true
+                                "isCurrentTimestamp": true,
+                                "incrementCounter": 1
                             },
                             "horario_criacao": {
                                 "name": "horario_criacao",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "TIME"
+                                    "name": "TIME",
+                                    "color": "yellow4"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -230,7 +243,8 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": true
+                                "isCurrentTimestamp": true,
+                                "incrementCounter": 1
                             }
                         },
                         "rows": [
@@ -1772,9 +1786,9 @@
                             "pessoa_id": {
                                 "name": "pessoa_id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": true,
                                 "isForeignKey": true,
@@ -1787,14 +1801,15 @@
                                     "schema": "public",
                                     "table": "tb_pessoa",
                                     "column": "id"
-                                }
+                                },
+                                "incrementCounter": 1
                             },
                             "TCC": {
                                 "name": "TCC",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "TEXT"
+                                    "name": "TEXT",
+                                    "color": "green5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -1802,14 +1817,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "turma_id": {
                                 "name": "turma_id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -1822,7 +1838,8 @@
                                     "schema": "public",
                                     "table": "tb_turma",
                                     "column": "id"
-                                }
+                                },
+                                "incrementCounter": 1
                             }
                         },
                         "rows": [
@@ -1831,7 +1848,7 @@
                                 "onConfig": null,
                                 "values": {
                                     "pessoa_id": 3,
-                                    "TCC": null,
+                                    "TCC": "null",
                                     "turma_id": 4
                                 }
                             },
@@ -1840,7 +1857,7 @@
                                 "onConfig": null,
                                 "values": {
                                     "pessoa_id": 4,
-                                    "TCC": null,
+                                    "TCC": "null",
                                     "turma_id": 4
                                 }
                             },
@@ -1849,7 +1866,7 @@
                                 "onConfig": null,
                                 "values": {
                                     "pessoa_id": 5,
-                                    "TCC": null,
+                                    "TCC": "null",
                                     "turma_id": 3
                                 }
                             },
@@ -1858,7 +1875,7 @@
                                 "onConfig": null,
                                 "values": {
                                     "pessoa_id": 7,
-                                    "TCC": null,
+                                    "TCC": "null",
                                     "turma_id": 2
                                 }
                             },
@@ -1867,7 +1884,7 @@
                                 "onConfig": null,
                                 "values": {
                                     "pessoa_id": 10,
-                                    "TCC": null,
+                                    "TCC": "null",
                                     "turma_id": 2
                                 }
                             },
@@ -1876,7 +1893,7 @@
                                 "onConfig": null,
                                 "values": {
                                     "pessoa_id": 11,
-                                    "TCC": null,
+                                    "TCC": "null",
                                     "turma_id": 3
                                 }
                             },
@@ -1885,7 +1902,7 @@
                                 "onConfig": null,
                                 "values": {
                                     "pessoa_id": 13,
-                                    "TCC": null,
+                                    "TCC": "null",
                                     "turma_id": 1
                                 }
                             },
@@ -1894,7 +1911,7 @@
                                 "onConfig": null,
                                 "values": {
                                     "pessoa_id": 14,
-                                    "TCC": null,
+                                    "TCC": "null",
                                     "turma_id": 4
                                 }
                             }
@@ -2003,9 +2020,9 @@
                             "pessoa_id": {
                                 "name": "pessoa_id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": true,
                                 "isForeignKey": true,
@@ -2018,14 +2035,15 @@
                                     "schema": "public",
                                     "table": "tb_pessoa",
                                     "column": "id"
-                                }
+                                },
+                                "incrementCounter": 1
                             },
                             "formacao": {
                                 "name": "formacao",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
                                     "name": "ENUM",
+                                    "color": "pink5",
                                     "allowedValues": [
                                         "Graduação",
                                         "Mestrado",
@@ -2039,14 +2057,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "salario": {
                                 "name": "salario",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "FLOAT"
+                                    "name": "FLOAT",
+                                    "color": "cyan6"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -2054,7 +2073,8 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             }
                         },
                         "rows": [
@@ -2177,9 +2197,9 @@
                             "pessoa_id": {
                                 "name": "pessoa_id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": true,
                                 "isForeignKey": true,
@@ -2192,14 +2212,15 @@
                                     "schema": "public",
                                     "table": "tb_pessoa",
                                     "column": "id"
-                                }
+                                },
+                                "incrementCounter": 1
                             },
                             "salario": {
                                 "name": "salario",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "FLOAT"
+                                    "name": "FLOAT",
+                                    "color": "cyan6"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -2207,7 +2228,8 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             }
                         },
                         "rows": [
@@ -2285,9 +2307,9 @@
                             "id": {
                                 "name": "id",
                                 "onConfig": null,
-                                "incrementCounter": 5,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": true,
                                 "isForeignKey": false,
@@ -2295,14 +2317,15 @@
                                 "isUnique": true,
                                 "isAutoIncrement": true,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 5
                             },
                             "nome": {
                                 "name": "nome",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "TEXT"
+                                    "name": "TEXT",
+                                    "color": "green5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -2310,14 +2333,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "descricao": {
                                 "name": "descricao",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "TEXT"
+                                    "name": "TEXT",
+                                    "color": "green5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -2325,14 +2349,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "carga_horaria": {
                                 "name": "carga_horaria",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -2340,14 +2365,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "turno": {
                                 "name": "turno",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
                                     "name": "ENUM",
+                                    "color": "pink5",
                                     "allowedValues": [
                                         "Matutino",
                                         "Vespertino",
@@ -2360,14 +2386,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "tipo": {
                                 "name": "tipo",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
                                     "name": "ENUM",
+                                    "color": "pink5",
                                     "allowedValues": [
                                         "Técnico",
                                         "Subsequente",
@@ -2380,7 +2407,8 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             }
                         },
                         "rows": [
@@ -2563,9 +2591,9 @@
                             "id": {
                                 "name": "id",
                                 "onConfig": null,
-                                "incrementCounter": 5,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": true,
                                 "isForeignKey": false,
@@ -2573,14 +2601,15 @@
                                 "isUnique": true,
                                 "isAutoIncrement": true,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 5
                             },
                             "Periodo": {
                                 "name": "Periodo",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
                                     "name": "ENUM",
+                                    "color": "pink5",
                                     "allowedValues": [
                                         "1",
                                         "2",
@@ -2598,14 +2627,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "curso_id": {
                                 "name": "curso_id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -2618,7 +2648,8 @@
                                     "schema": "public",
                                     "table": "tb_curso",
                                     "column": "id"
-                                }
+                                },
+                                "incrementCounter": 1
                             }
                         },
                         "rows": [
@@ -2736,9 +2767,9 @@
                             "id": {
                                 "name": "id",
                                 "onConfig": null,
-                                "incrementCounter": 9,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": true,
                                 "isForeignKey": false,
@@ -2746,14 +2777,15 @@
                                 "isUnique": true,
                                 "isAutoIncrement": true,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 9
                             },
                             "nome": {
                                 "name": "nome",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "TEXT"
+                                    "name": "TEXT",
+                                    "color": "green5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -2761,14 +2793,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "descricao": {
                                 "name": "descricao",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "TEXT"
+                                    "name": "TEXT",
+                                    "color": "green5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -2776,14 +2809,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "carga_horaria": {
                                 "name": "carga_horaria",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -2791,14 +2825,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "periodo_oferecido": {
                                 "name": "periodo_oferecido",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
                                     "name": "ENUM",
+                                    "color": "pink5",
                                     "allowedValues": [
                                         "1",
                                         "2",
@@ -2816,14 +2851,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "duracao": {
                                 "name": "duracao",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
                                     "name": "ENUM",
+                                    "color": "pink5",
                                     "allowedValues": [
                                         "semestral",
                                         "anual"
@@ -2835,7 +2871,8 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             }
                         },
                         "rows": [
@@ -3165,9 +3202,9 @@
                             "id": {
                                 "name": "id",
                                 "onConfig": null,
-                                "incrementCounter": 6,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": true,
                                 "isForeignKey": false,
@@ -3175,14 +3212,15 @@
                                 "isUnique": true,
                                 "isAutoIncrement": true,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 6
                             },
                             "descricao": {
                                 "name": "descricao",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "TEXT"
+                                    "name": "TEXT",
+                                    "color": "green5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -3190,14 +3228,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "data": {
                                 "name": "data",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "DATE"
+                                    "name": "DATE",
+                                    "color": "orange5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -3205,14 +3244,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "horario": {
                                 "name": "horario",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
                                     "name": "ENUM",
+                                    "color": "pink5",
                                     "allowedValues": [
                                         "1",
                                         "2",
@@ -3232,14 +3272,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "disciplina_id": {
                                 "name": "disciplina_id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -3252,14 +3293,15 @@
                                     "schema": "public",
                                     "table": "tb_disciplina",
                                     "column": "id"
-                                }
+                                },
+                                "incrementCounter": 1
                             },
                             "professor_id": {
                                 "name": "professor_id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -3272,14 +3314,15 @@
                                     "schema": "public",
                                     "table": "tb_professor",
                                     "column": "pessoa_id"
-                                }
+                                },
+                                "incrementCounter": 1
                             },
                             "turma_id": {
                                 "name": "turma_id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -3292,7 +3335,8 @@
                                     "schema": "public",
                                     "table": "tb_turma",
                                     "column": "id"
-                                }
+                                },
+                                "incrementCounter": 1
                             }
                         },
                         "rows": [
@@ -3605,9 +3649,9 @@
                             "id": {
                                 "name": "id",
                                 "onConfig": null,
-                                "incrementCounter": 5,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": true,
                                 "isForeignKey": false,
@@ -3615,14 +3659,15 @@
                                 "isUnique": true,
                                 "isAutoIncrement": true,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 5
                             },
                             "faltas": {
                                 "name": "faltas",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -3630,14 +3675,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "aluno_id": {
                                 "name": "aluno_id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": true,
@@ -3650,14 +3696,15 @@
                                     "schema": "public",
                                     "table": "tb_aluno",
                                     "column": "pessoa_id"
-                                }
+                                },
+                                "incrementCounter": 1
                             },
                             "disciplina_id": {
                                 "name": "disciplina_id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": true,
@@ -3670,7 +3717,8 @@
                                     "schema": "public",
                                     "table": "tb_disciplina",
                                     "column": "id"
-                                }
+                                },
+                                "incrementCounter": 1
                             }
                         },
                         "rows": [
@@ -3823,9 +3871,9 @@
                             "id": {
                                 "name": "id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": true,
                                 "isForeignKey": false,
@@ -3833,14 +3881,15 @@
                                 "isUnique": true,
                                 "isAutoIncrement": true,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "disciplina_id": {
                                 "name": "disciplina_id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": true,
@@ -3853,14 +3902,15 @@
                                     "schema": "public",
                                     "table": "tb_disciplina",
                                     "column": "id"
-                                }
+                                },
+                                "incrementCounter": 1
                             },
                             "boletim_id": {
                                 "name": "boletim_id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": true,
@@ -3873,7 +3923,8 @@
                                     "schema": "notas",
                                     "table": "tb_boletim",
                                     "column": "id"
-                                }
+                                },
+                                "incrementCounter": 1
                             }
                         },
                         "rows": [
@@ -4045,9 +4096,9 @@
                             "id": {
                                 "name": "id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": true,
                                 "isForeignKey": false,
@@ -4055,14 +4106,15 @@
                                 "isUnique": true,
                                 "isAutoIncrement": true,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "nome": {
                                 "name": "nome",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "TEXT"
+                                    "name": "TEXT",
+                                    "color": "green5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -4070,14 +4122,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "descricao": {
                                 "name": "descricao",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "TEXT"
+                                    "name": "TEXT",
+                                    "color": "green5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -4085,14 +4138,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "data": {
                                 "name": "data",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "DATE"
+                                    "name": "DATE",
+                                    "color": "orange5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -4100,14 +4154,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "peso": {
                                 "name": "peso",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -4115,14 +4170,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "valor": {
                                 "name": "valor",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "FLOAT"
+                                    "name": "FLOAT",
+                                    "color": "cyan6"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -4130,14 +4186,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "nota_id": {
                                 "name": "nota_id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": true,
@@ -4150,7 +4207,8 @@
                                     "schema": "notas",
                                     "table": "tb_nota",
                                     "column": "id"
-                                }
+                                },
+                                "incrementCounter": 1
                             }
                         },
                         "rows": [
@@ -4410,9 +4468,9 @@
                             "id": {
                                 "name": "id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": true,
                                 "isForeignKey": false,
@@ -4420,14 +4478,15 @@
                                 "isUnique": true,
                                 "isAutoIncrement": true,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "aluno_id": {
                                 "name": "aluno_id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": true,
@@ -4440,7 +4499,8 @@
                                     "schema": "public",
                                     "table": "tb_aluno",
                                     "column": "pessoa_id"
-                                }
+                                },
+                                "incrementCounter": 1
                             }
                         },
                         "rows": [
@@ -4623,9 +4683,9 @@
                             "id": {
                                 "name": "id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": true,
                                 "isForeignKey": false,
@@ -4633,14 +4693,15 @@
                                 "isUnique": true,
                                 "isAutoIncrement": true,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "nome": {
                                 "name": "nome",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "TEXT"
+                                    "name": "TEXT",
+                                    "color": "green5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -4648,14 +4709,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "endereco": {
                                 "name": "endereco",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "TEXT"
+                                    "name": "TEXT",
+                                    "color": "green5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -4663,14 +4725,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "telefone": {
                                 "name": "telefone",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
                                     "name": "VARCHAR",
+                                    "color": "green2",
                                     "maxLength": 15
                                 },
                                 "isPrimaryKey": false,
@@ -4679,7 +4742,8 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             }
                         },
                         "rows": [],
@@ -4696,9 +4760,9 @@
                             "id": {
                                 "name": "id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": true,
                                 "isForeignKey": false,
@@ -4706,14 +4770,15 @@
                                 "isUnique": true,
                                 "isAutoIncrement": true,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "nome": {
                                 "name": "nome",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "TEXT"
+                                    "name": "TEXT",
+                                    "color": "green5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -4721,14 +4786,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "campus_id": {
                                 "name": "campus_id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": true,
@@ -4741,7 +4807,8 @@
                                     "schema": "admin",
                                     "table": "tb_campus",
                                     "column": "id"
-                                }
+                                },
+                                "incrementCounter": 1
                             }
                         },
                         "rows": [],
@@ -4757,9 +4824,9 @@
                             "id": {
                                 "name": "id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": true,
                                 "isForeignKey": false,
@@ -4767,14 +4834,15 @@
                                 "isUnique": true,
                                 "isAutoIncrement": true,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "nome": {
                                 "name": "nome",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "TEXT"
+                                    "name": "TEXT",
+                                    "color": "green5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -4782,14 +4850,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "campus_id": {
                                 "name": "campus_id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": true,
@@ -4802,14 +4871,15 @@
                                     "schema": "admin",
                                     "table": "tb_campus",
                                     "column": "id"
-                                }
+                                },
+                                "incrementCounter": 1
                             },
                             "coordenador_id": {
                                 "name": "coordenador_id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": true,
@@ -4822,7 +4892,8 @@
                                     "schema": "public",
                                     "table": "tb_pessoa",
                                     "column": "id"
-                                }
+                                },
+                                "incrementCounter": 1
                             }
                         },
                         "rows": [],
@@ -4839,9 +4910,9 @@
                             "id": {
                                 "name": "id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": true,
                                 "isForeignKey": false,
@@ -4849,14 +4920,15 @@
                                 "isUnique": true,
                                 "isAutoIncrement": true,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "nome": {
                                 "name": "nome",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "TEXT"
+                                    "name": "TEXT",
+                                    "color": "green5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -4864,14 +4936,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "descricao": {
                                 "name": "descricao",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "TEXT"
+                                    "name": "TEXT",
+                                    "color": "green5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -4879,14 +4952,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "data": {
                                 "name": "data",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "DATE"
+                                    "name": "DATE",
+                                    "color": "orange5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -4894,14 +4968,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "horario": {
                                 "name": "horario",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "TIME"
+                                    "name": "TIME",
+                                    "color": "yellow4"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -4909,14 +4984,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "local": {
                                 "name": "local",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "TEXT"
+                                    "name": "TEXT",
+                                    "color": "green5"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": false,
@@ -4924,14 +5000,15 @@
                                 "isUnique": false,
                                 "isAutoIncrement": false,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "campus_id": {
                                 "name": "campus_id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": true,
@@ -4944,7 +5021,8 @@
                                     "schema": "admin",
                                     "table": "tb_campus",
                                     "column": "id"
-                                }
+                                },
+                                "incrementCounter": 1
                             }
                         },
                         "rows": [],
@@ -4964,9 +5042,9 @@
                             "id": {
                                 "name": "id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": true,
                                 "isForeignKey": false,
@@ -4974,14 +5052,15 @@
                                 "isUnique": true,
                                 "isAutoIncrement": true,
                                 "hasDefault": false,
-                                "isCurrentTimestamp": false
+                                "isCurrentTimestamp": false,
+                                "incrementCounter": 1
                             },
                             "curso_id": {
                                 "name": "curso_id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": true,
@@ -4994,14 +5073,15 @@
                                     "schema": "public",
                                     "table": "tb_curso",
                                     "column": "id"
-                                }
+                                },
+                                "incrementCounter": 1
                             },
                             "campus_id": {
                                 "name": "campus_id",
                                 "onConfig": null,
-                                "incrementCounter": 1,
                                 "type": {
-                                    "name": "INTEGER"
+                                    "name": "INTEGER",
+                                    "color": "blue3"
                                 },
                                 "isPrimaryKey": false,
                                 "isForeignKey": true,
@@ -5014,7 +5094,8 @@
                                     "schema": "admin",
                                     "table": "tb_campus",
                                     "column": "id"
-                                }
+                                },
+                                "incrementCounter": 1
                             }
                         },
                         "rows": [],
@@ -5026,6 +5107,97 @@
                     }
                 }
             }
+        },
+        "foreignKeyMap": {
+            "public.tb_pessoa.id": [
+                {
+                    "schema": "public",
+                    "table": "tb_aluno",
+                    "column": "pessoa_id"
+                },
+                {
+                    "schema": "public",
+                    "table": "tb_professor",
+                    "column": "pessoa_id"
+                },
+                {
+                    "schema": "public",
+                    "table": "tb_servidor",
+                    "column": "pessoa_id"
+                },
+                {
+                    "schema": "admin",
+                    "table": "tb_coordenacao",
+                    "column": "coordenador_id"
+                }
+            ],
+            "public.tb_aluno.pessoa_id": [
+                {
+                    "schema": "public",
+                    "table": "tb_aluno_disciplina",
+                    "column": "aluno_id"
+                },
+                {
+                    "schema": "notas",
+                    "table": "tb_boletim",
+                    "column": "aluno_id"
+                }
+            ],
+            "public.tb_disciplina.id": [
+                {
+                    "schema": "public",
+                    "table": "tb_aluno_disciplina",
+                    "column": "disciplina_id"
+                },
+                {
+                    "schema": "notas",
+                    "table": "tb_nota",
+                    "column": "disciplina_id"
+                }
+            ],
+            "notas.tb_boletim.id": [
+                {
+                    "schema": "notas",
+                    "table": "tb_nota",
+                    "column": "boletim_id"
+                }
+            ],
+            "notas.tb_nota.id": [
+                {
+                    "schema": "notas",
+                    "table": "tb_atividade",
+                    "column": "nota_id"
+                }
+            ],
+            "admin.tb_campus.id": [
+                {
+                    "schema": "admin",
+                    "table": "tb_sala",
+                    "column": "campus_id"
+                },
+                {
+                    "schema": "admin",
+                    "table": "tb_coordenacao",
+                    "column": "campus_id"
+                },
+                {
+                    "schema": "admin",
+                    "table": "tb_evento",
+                    "column": "campus_id"
+                },
+                {
+                    "schema": "admin",
+                    "table": "tb_curso_campus",
+                    "column": "campus_id"
+                }
+            ],
+            "public.tb_curso.id": [
+                {
+                    "schema": "admin",
+                    "table": "tb_curso_campus",
+                    "column": "curso_id"
+                }
+            ]
         }
     }
 }

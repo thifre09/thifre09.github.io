@@ -1,0 +1,370 @@
+
+#regras {
+    --rules-background: #f8f7f4;
+    --rules-surface: #ffffff;
+    --rules-hover: #f2f0eb;
+
+    --rules-text: #292822;
+    --rules-secondary: #77756d;
+    --rules-muted: #a5a197;
+
+    --rules-border: #e9e6df;
+
+    --rules-accent: #987442;
+    --rules-accent-light: #f4eee3;
+
+    display: flex;
+    width: 100%;
+    min-height: 100%;
+    background: var(--rules-background);
+    color: var(--rules-text);
+}
+
+/* SIDEBAR */
+
+#regras .rules-sidebar {
+    width: 270px;
+    flex-shrink: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    background: var(--rules-surface);
+    border-right: 1px solid var(--rules-border);
+}
+
+#regras .rules-sidebar-header {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    padding: 28px 22px 20px;
+}
+
+#regras .rules-eyebrow {
+    color: var(--rules-accent);
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+}
+
+#regras .rules-subtitle {
+    color: var(--rules-muted);
+    font-size: 12px;
+}
+
+/* SEARCH */
+
+#regras .rules-search {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    margin: 0 16px 20px;
+    padding: 9px 11px;
+
+    background: var(--rules-background);
+    border: 1px solid var(--rules-border);
+    border-radius: 7px;
+
+    color: var(--rules-muted);
+}
+
+#regras .rules-search input {
+    width: 100%;
+    min-width: 0;
+
+    background: transparent;
+    border: none;
+    outline: none;
+
+    color: var(--rules-text);
+    font-size: 12px;
+}
+
+#regras .rules-search input::placeholder {
+    color: var(--rules-muted);
+}
+
+/* NAVIGATION */
+
+#regras .rules-navigation {
+    flex: 1;
+    padding: 0 12px;
+}
+
+#regras .rules-nav-group {
+    margin-bottom: 22px;
+}
+
+#regras .rules-nav-group-title {
+    padding: 0 10px;
+    margin-bottom: 8px;
+
+    color: var(--rules-muted);
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1.2px;
+}
+
+#regras .rules-nav-item {
+    width: 100%;
+    padding: 9px 10px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    background: transparent;
+    border: none;
+    border-radius: 5px;
+
+    text-align: left;
+    color: var(--rules-secondary);
+    font-size: 13px;
+
+    cursor: pointer;
+    transition: 0.15s;
+}
+
+#regras .rules-nav-item:hover {
+    background: var(--rules-hover);
+    color: var(--rules-text);
+}
+
+#regras .rules-nav-item.active {
+    background: var(--rules-accent-light);
+    color: var(--rules-accent);
+    font-weight: 600;
+}
+
+#regras .rules-nav-icon {
+    width: 18px;
+    text-align: center;
+    font-size: 15px;
+}
+
+#regras .rules-sidebar-footer {
+    padding: 17px 22px;
+    border-top: 1px solid var(--rules-border);
+
+    color: var(--rules-muted);
+    font-size: 11px;
+}
+
+/* MAIN */
+
+#regras .rules-main {
+    flex: 1;
+    min-width: 0;
+    max-width: 1100px;
+
+    margin: 0 auto;
+    padding: 35px 55px;
+}
+
+#regras .rules-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    margin-bottom: 35px;
+
+    color: var(--rules-muted);
+    font-size: 12px;
+}
+
+#regras .rules-breadcrumb strong {
+    color: var(--rules-secondary);
+    font-weight: 500;
+}
+
+/* HEADER */
+
+#regras .rules-header {
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--rules-border);
+}
+
+#regras .rules-header h1 {
+    margin: 12px 0;
+
+    font-family: Georgia, serif;
+    font-size: 38px;
+    font-weight: normal;
+}
+
+#regras .rules-header p {
+    max-width: 650px;
+
+    color: var(--rules-secondary);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* CONTENT */
+
+#regras .rules-content {
+    padding: 30px 0;
+}
+
+#regras .rule-section {
+    margin-bottom: 35px;
+}
+
+#regras .rule-section h2 {
+    margin-bottom: 13px;
+
+    font-family: Georgia, serif;
+    font-size: 23px;
+    font-weight: normal;
+}
+
+#regras .rule-section h3 {
+    margin: 20px 0 10px;
+    font-size: 16px;
+}
+
+#regras .rule-section p {
+    margin-bottom: 12px;
+
+    color: var(--rules-secondary);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+#regras .rule-section ul {
+    padding-left: 22px;
+
+    color: var(--rules-secondary);
+    font-size: 14px;
+    line-height: 2;
+}
+
+/* HIGHLIGHT */
+
+#regras .rule-highlight {
+    margin: 20px 0;
+    padding: 17px 20px;
+
+    background: var(--rules-accent-light);
+    border-left: 3px solid var(--rules-accent);
+    border-radius: 3px;
+
+    color: var(--rules-text);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* TABLE */
+
+#regras .rule-table {
+    width: 100%;
+    margin: 18px 0;
+
+    border-collapse: collapse;
+    background: var(--rules-surface);
+
+    font-size: 13px;
+}
+
+#regras .rule-table th,
+#regras .rule-table td {
+    padding: 13px 15px;
+    border-bottom: 1px solid var(--rules-border);
+    text-align: left;
+}
+
+#regras .rule-table th {
+    background: var(--rules-hover);
+    color: var(--rules-secondary);
+    font-weight: 600;
+}
+
+#regras .rule-table td {
+    color: var(--rules-secondary);
+}
+
+/* FOOTER */
+
+#regras .rules-footer {
+    padding: 20px 0;
+    border-top: 1px solid var(--rules-border);
+
+    color: var(--rules-muted);
+    font-size: 11px;
+}
+
+/* EMPTY SEARCH */
+
+#regras .rules-empty {
+    padding: 40px 10px;
+    text-align: center;
+
+    color: var(--rules-muted);
+    font-size: 13px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 800px) {
+    #regras .rules-sidebar {
+        width: 220px;
+    }
+
+    #regras .rules-main {
+        padding: 30px 25px;
+    }
+}
+
+@media (max-width: 600px) {
+    #regras {
+        flex-direction: column;
+    }
+
+    #regras .rules-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--rules-border);
+    }
+
+    #regras .rules-sidebar-header {
+        padding: 18px 18px 12px;
+    }
+
+    #regras .rules-navigation {
+        display: flex;
+        overflow-x: auto;
+        gap: 5px;
+        padding-bottom: 12px;
+    }
+
+    #regras .rules-nav-group {
+        display: flex;
+        gap: 5px;
+        margin: 0;
+    }
+
+    #regras .rules-nav-group-title,
+    #regras .rules-sidebar-footer {
+        display: none;
+    }
+
+    #regras .rules-nav-item {
+        width: auto;
+        white-space: nowrap;
+    }
+
+    #regras .rules-main {
+        padding: 25px 20px;
+    }
+
+    #regras .rules-header h1 {
+        font-size: 30px;
+    }
+
+    #regras .rule-table {
+        display: block;
+        overflow-x: auto;
+    }
+}

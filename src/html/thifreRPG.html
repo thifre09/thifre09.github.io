@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu site incrível</title>
+    <link rel="stylesheet" href="/src/css/thifreRPG.css">
+    <link rel="icon" type="image/png" href="/src/images/links/batatas/batata1.jpg">
+</head>
+
+<body data-title="ThifreRPG">
+    <div id="conteudo">
+        <nav id="troca-de-tela">
+            <div id="nav-bar">
+                <div class="nav-bar-indicator"></div>
+                <button id="button-header-regras">
+                    <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--blue4)">
+                        <path
+                            d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h240v-560H200v560Zm320 0h240v-280H520v280Zm0-360h240v-200H520v200Z" />
+                    </svg>
+                    Regras
+                </button>
+                <button id="button-header-personagem">
+                    <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--green4)">
+                        <path
+                            d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H160v400Zm140-40-56-56 103-104-104-104 57-56 160 160-160 160Zm180 0v-80h240v80H480Z" />
+                    </svg>
+                    Personagem
+                </button>
+                <button id="button-header-save">
+                    <svg height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--orange4)">
+                        <path
+                            d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160Zm-80 34L646-760H200v560h560v-446ZM565-275q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35ZM240-560h360v-160H240v160Zm-40-86v446-560 114Z" />
+                    </svg>
+                    Salvar
+                </button>
+            </div>
+        </nav>
+
+        <div class="separador-horizontal"></div>
+
+
+        <div id="regras" class="aba">
+
+            <aside class="rules-sidebar">
+
+                <div class="rules-sidebar-header">
+                    <span class="rules-eyebrow">COMPÊNDIO</span>
+                    <span class="rules-subtitle">Manual do sistema</span>
+                </div>
+
+                <div class="rules-search">
+                    <span>⌕</span>
+                    <input type="search" id="rules-search" placeholder="Pesquisar regras...">
+                </div>
+
+                <nav id="rules-navigation" class="rules-navigation">
+                    <!-- Gerado pelo TypeScript -->
+                </nav>
+
+                <div class="rules-sidebar-footer">
+                    Manual do sistema de RPG
+                </div>
+
+            </aside>
+
+            <main class="rules-main">
+
+                <div class="rules-breadcrumb">
+                    <span>Compêndio</span>
+                    <span>/</span>
+                    <strong id="rules-breadcrumb">Introdução</strong>
+                </div>
+
+                <header class="rules-header">
+                    <span class="rules-eyebrow">LIVRO DE REGRAS</span>
+
+                    <h1 id="rules-title">Introdução</h1>
+
+                    <p id="rules-description">
+                        Conheça os fundamentos do sistema e prepare-se
+                        para suas aventuras.
+                    </p>
+                </header>
+
+                <article id="rules-content" class="rules-content">
+                    <!-- Conteúdo gerado pelo TypeScript -->
+                </article>
+
+                <footer class="rules-footer">
+                    <span>Manual do Sistema de RPG</span>
+                </footer>
+
+            </main>
+
+        </div>
+
+        <div id="personagem"></div>
+        <div id="save"></div>
+
+    </div>
+    <script type="module" src="/src/js/pages/thifreRPG.js"></script>
+    <script type="module" src="/src/js/others/menu.js"></script>
+</body>
