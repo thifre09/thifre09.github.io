@@ -60,10 +60,6 @@
                 <nav id="rules-navigation" class="rules-navigation">
                     <!-- Gerado pelo TypeScript -->
                 </nav>
-
-                <div class="rules-sidebafooter">
-                    Manual do sistema de RPG
-                </div>
             </aside>
 
             <div class="separador-vertical"></div>
@@ -71,9 +67,9 @@
             <main id="rules-main">
 
                 <div id="rules-location">
-                    <span>Compêndio</span>
+                    <span id="parents-location">Compêndio</span>
                     <span>/</span>
-                    <strong id="location">Demonstração do framework</strong>
+                    <strong id="current-location">Demonstração do framework</strong>
                 </div>
 
                 <div id="rules-content">
@@ -81,7 +77,6 @@
                         <h1>Demonstração do framework</h1>
 
                         <div class="container">
-
                             <!-- ========================================
                                 1. TÍTULOS
                             ========================================= -->
@@ -117,9 +112,7 @@
 
                             </section>
 
-
-                            <hr class="divider">
-
+                            <hr>
 
                             <!-- ========================================
                                 2. TEXTOS
@@ -179,9 +172,7 @@
 
                             </section>
 
-
-                            <hr class="divider">
-
+                            <hr>
 
                             <!-- ========================================
                                 3. LISTAS
@@ -193,7 +184,7 @@
 
                                 <h3 class="title-3">Lista não ordenada</h3>
 
-                                <ul class="list list-unordered">
+                                <ul class="list-unordered">
                                     <li>Guerreiro</li>
                                     <li>Arcanista</li>
                                     <li>Especialista</li>
@@ -201,7 +192,7 @@
 
                                 <h3 class="title-3">Lista ordenada</h3>
 
-                                <ol class="list list-ordered">
+                                <ol class="list-ordered">
                                     <li>Determine a iniciativa.</li>
                                     <li>Organize os participantes.</li>
                                     <li>Inicie o combate.</li>
@@ -209,7 +200,7 @@
 
                                 <h3 class="title-3">Lista alfabética</h3>
 
-                                <ol class="list list-alpha">
+                                <ol class="list-alpha">
                                     <li>Força</li>
                                     <li>Destreza</li>
                                     <li>Constituição</li>
@@ -217,7 +208,7 @@
 
                                 <h3 class="title-3">Lista romana</h3>
 
-                                <ol class="list list-roman">
+                                <ol class="list-roman">
                                     <li>Preparação</li>
                                     <li>Execução</li>
                                     <li>Conclusão</li>
@@ -225,7 +216,7 @@
 
                                 <h3 class="title-3">Lista sem marcadores</h3>
 
-                                <ul class="list list-none">
+                                <ul class="list-none">
                                     <li>Vida: 30</li>
                                     <li>Mana: 15</li>
                                     <li>Defesa: 12</li>
@@ -233,7 +224,7 @@
 
                                 <h3 class="title-3">Lista de verificação</h3>
 
-                                <ul class="list list-check">
+                                <ul class="list-check">
                                     <li>Personagem criado</li>
                                     <li>Atributos distribuídos</li>
                                     <li>Equipamentos selecionados</li>
@@ -241,9 +232,7 @@
 
                             </section>
 
-
-                            <hr class="divider">
-
+                            <hr>
 
                             <!-- ========================================
                                 4. TABELAS
@@ -526,9 +515,7 @@
 
                             </section>
 
-
-                            <hr class="divider">
-
+                            <hr>
 
                             <!-- ========================================
                                 5. CITAÇÕES
@@ -558,9 +545,7 @@
 
                             </section>
 
-
-                            <hr class="divider">
-
+                            <hr>
 
                             <!-- ========================================
                                 6. CAIXAS INFORMATIVAS
@@ -602,9 +587,7 @@
 
                             </section>
 
-
-                            <hr class="divider">
-
+                            <hr>
 
                             <!-- ========================================
                                 7. BADGES
@@ -632,9 +615,7 @@
 
                             </section>
 
-
-                            <hr class="divider">
-
+                            <hr>
 
                             <!-- ========================================
                                 8. CÓDIGOS E FÓRMULAS
@@ -660,9 +641,7 @@ Se resultado >= CA:
 
                             </section>
 
-
-                            <hr class="divider">
-
+                            <hr>
 
                             <!-- ========================================
                                 9. SEPARADORES
@@ -689,9 +668,7 @@ Se resultado >= CA:
 
                             </section>
 
-
-                            <hr class="divider">
-
+                            <hr>
 
                             <!-- ========================================
                                 10. IMAGENS
@@ -714,9 +691,7 @@ Se resultado >= CA:
 
                             </section>
 
-
-                            <hr class="divider">
-
+                            <hr>
 
                             <!-- ========================================
                                 11. UTILITÁRIOS
@@ -797,9 +772,7 @@ Se resultado >= CA:
 
                             </section>
 
-
-                            <hr class="divider">
-
+                            <hr>
 
                             <!-- ========================================
                                 12. COMBINAÇÃO DE CLASSES
@@ -893,6 +866,769 @@ Se resultado >= CA:
 
                     <div id="introducao">
                         <h1>Introdução</h1>
+                    </div>
+
+                    <div id="classes">
+                        <h1>Classes</h1>
+                        <p>Existem 12 classes. Cada uma possui uma nova habilidade em cada nível (menos nos níveis 4 e
+                            15). Além disso, nos níveis 5, 10, 15 e 20 o personagem recebe +1 em algum atributo de sua
+                            escolha. A tabela abaixo mostra os recursos que o personagem recebe em cada nível
+                            independente da classe escolhida.</p>
+                        </p>
+                        <div class="table-wrapper">
+                            <table class="table-hover table-compact">
+                                <thead>
+                                    <tr>
+                                        <th>Nível</th>
+                                        <th>Recursos</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Especialização (1)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>5</td>
+                                        <td>+1 em algum atributo</td>
+                                    </tr>
+                                    <tr>
+                                        <td>6</td>
+                                        <td>—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>7</td>
+                                        <td>—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>8</td>
+                                        <td>—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>9</td>
+                                        <td>—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>10</td>
+                                        <td>+1 em algum atributo</td>
+                                    </tr>
+                                    <tr>
+                                        <td>11</td>
+                                        <td>—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>12</td>
+                                        <td>—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>13</td>
+                                        <td>—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>14</td>
+                                        <td>—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>15</td>
+                                        <td>Especialização (2) e +1 em algum atributo</td>
+                                    </tr>
+                                    <tr>
+                                        <td>16</td>
+                                        <td>—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>17</td>
+                                        <td>—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>18</td>
+                                        <td>—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>19</td>
+                                        <td>—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>20</td>
+                                        <td>+1 em algum atributo</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                    <div id="artifice">
+                        <h1>Artifice</h1>
+                        <p class="quote quote-primary">O artífice é uma classe para quem gosta de invenção, criatividade
+                            e da união entre magia e tecnologia. Ele utiliza ferramentas, engenhocas e infusões mágicas
+                            para criar itens, fortalecer aliados e adaptar o campo de batalha às suas necessidades.
+                            Diferente dos conjuradores tradicionais, o artífice transforma conhecimento e experimentação
+                            em poder, sendo um personagem que resolve problemas com inteligência, preparação e soluções
+                            pouco convencionais.
+                        </p>
+
+                        <h2>Atributos</h2>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Atributo</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Constituição</td>
+                                        <td>8</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Destreza</td>
+                                        <td>12</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Força</td>
+                                        <td>10</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Inteligência</td>
+                                        <td>16</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sabedoria</td>
+                                        <td>14</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Carisma</td>
+                                        <td>6</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h2>Níveis</h2>
+                        <div class="flex gap-3">
+                            <div class="table-wrapper h-fit-content">
+                                <table class="table-hover table-compact">
+                                    <thead>
+                                        <tr>
+                                            <th>Nível</th>
+                                            <th>Recursos</th>
+                                            <th>Pontos de Criação</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Criações Mágicas (1)</td>
+                                            <td>1</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Engenharia reversa</td>
+                                            <td>1</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Desconto de Alcance</td>
+                                            <td>1</td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>—</td>
+                                            <td>2</td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td>Magia Acelerada</td>
+                                            <td>2</td>
+                                        </tr>
+                                        <tr>
+                                            <td>6</td>
+                                            <td>Criações Mágicas (2)</td>
+                                            <td>2</td>
+                                        </tr>
+                                        <tr>
+                                            <td>7</td>
+                                            <td>Aprimoramento de Equipamentos</td>
+                                            <td>2</td>
+                                        </tr>
+                                        <tr>
+                                            <td>8</td>
+                                            <td>Mini Dispositivos (1)</td>
+                                            <td>2</td>
+                                        </tr>
+                                        <tr>
+                                            <td>9</td>
+                                            <td>Preparação de campo</td>
+                                            <td>3</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>Sobrecarga</td>
+                                            <td>3</td>
+                                        </tr>
+                                        <tr>
+                                            <td>11</td>
+                                            <td>Gerador de Portais Avançados</td>
+                                            <td>3</td>
+                                        </tr>
+                                        <tr>
+                                            <td>12</td>
+                                            <td>Criações Mágicas (3)</td>
+                                            <td>3</td>
+                                        </tr>
+                                        <tr>
+                                            <td>13</td>
+                                            <td>Simulador de Realidade</td>
+                                            <td>3</td>
+                                        </tr>
+                                        <tr>
+                                            <td>14</td>
+                                            <td>Engenharia de combate</td>
+                                            <td>4</td>
+                                        </tr>
+                                        <tr>
+                                            <td>15</td>
+                                            <td>—</td>
+                                            <td>4</td>
+                                        </tr>
+                                        <tr>
+                                            <td>16</td>
+                                            <td>Dispositivos de Proteção Avançados </td>
+                                            <td>4</td>
+                                        </tr>
+                                        <tr>
+                                            <td>17</td>
+                                            <td>Fabricação improvisada</td>
+                                            <td>4</td>
+                                        </tr>
+                                        <tr>
+                                            <td>18</td>
+                                            <td>Mini Dispositivos (2)</td>
+                                            <td>4</td>
+                                        </tr>
+                                        <tr>
+                                            <td>19</td>
+                                            <td>Criações Mágicas (4)</td>
+                                            <td>5</td>
+                                        </tr>
+                                        <tr>
+                                            <td>20</td>
+                                            <td>Inventor supremo</td>
+                                            <td>5</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="table-wrapper">
+                                <table class="table-compact table-bordered">
+                                    <caption>Espaços de Magia</caption>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>1</th>
+                                            <th>2</th>
+                                            <th>3</th>
+                                            <th>4</th>
+                                            <th>5</th>
+                                            <th>6</th>
+                                            <th>7</th>
+                                            <th>8</th>
+                                            <th>9</th>
+                                            <th>10</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>3</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>3</td>
+                                            <td>2</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>4</td>
+                                            <td>3</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td>4</td>
+                                            <td>3</td>
+                                            <td>2</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>6</td>
+                                            <td>4</td>
+                                            <td>3</td>
+                                            <td>3</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>7</td>
+                                            <td>4</td>
+                                            <td>4</td>
+                                            <td>3</td>
+                                            <td>1</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>8</td>
+                                            <td>4</td>
+                                            <td>4</td>
+                                            <td>3</td>
+                                            <td>2</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>9</td>
+                                            <td>4</td>
+                                            <td>4</td>
+                                            <td>3</td>
+                                            <td>2</td>
+                                            <td>1</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>4</td>
+                                            <td>4</td>
+                                            <td>3</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>11</td>
+                                            <td>4</td>
+                                            <td>4</td>
+                                            <td>3</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>1</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>12</td>
+                                            <td>5</td>
+                                            <td>4</td>
+                                            <td>3</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>13</td>
+                                            <td>5</td>
+                                            <td>4</td>
+                                            <td>3</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>1</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>14</td>
+                                            <td>5</td>
+                                            <td>4</td>
+                                            <td>3</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>15</td>
+                                            <td>5</td>
+                                            <td>4</td>
+                                            <td>3</td>
+                                            <td>3</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>1</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>16</td>
+                                            <td>5</td>
+                                            <td>4</td>
+                                            <td>3</td>
+                                            <td>3</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>17</td>
+                                            <td>5</td>
+                                            <td>4</td>
+                                            <td>3</td>
+                                            <td>3</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>1</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>18</td>
+                                            <td>5</td>
+                                            <td>4</td>
+                                            <td>3</td>
+                                            <td>3</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>19</td>
+                                            <td>5</td>
+                                            <td>4</td>
+                                            <td>4</td>
+                                            <td>3</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>1</td>
+                                        </tr>
+                                        <tr>
+                                            <td>20</td>
+                                            <td>5</td>
+                                            <td>4</td>
+                                            <td>4</td>
+                                            <td>3</td>
+                                            <td>3</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>2</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <h2>Habilidades</h2>
+
+                        <h3>Pontos de Criação</h3>
+                        <p>Usado para criar ou melhorar objetos magicamente. São recuperados a cada descanso.</p>
+
+                        <h3>Criações Mágicas</h3>
+                        <p>Permite construir dispositivos, ferramentas e objetos especiais. O jogador pode apresentar
+                            suas invenções ao DM, que determina seus materiais, custos e limitações. Gasta 1 Ponto de
+                            Criação.</p>
+                        <p>Alguns EXEMPLOS:</p>
+                        <ul>
+                            <li><span class="text-bold">Lança-chamas:</span> Libera uma rajada de fogo.</li>
+                            <li><span class="text-bold">Propulsor:</span> Permite realizar deslocamentos
+                                extraordinários.</li>
+                            <li><span class="text-bold">Braço mecânico:</span> Permite manipular objetos a distância.
+                            </li>
+                            <li><span class="text-bold">Gerador de escudo:</span> Cria uma barreira protetora.</li>
+                            <li><span class="text-bold">Óculos especiais:</span> Permite enxergar através de
+                                determinadas ilusões.</li>
+                            <li><span class="text-bold">Gancho mecânico:</span> Permite alcançar locais distantes.</li>
+                            <li><span class="text-bold">Mina de pressão:</span> Explode quando uma criatura se aproxima.
+                            </li>
+                            <li><span class="text-bold">Drone:</span> Pequena máquina que pode explorar regiões.</li>
+                            <li><span class="text-bold">Dispositivo de camuflagem:</span> Torna o usuário
+                                temporariamente difícil de detectar.</li>
+                            <li><span class="text-bold">Injetor medicinal:</span> Aplica substâncias restauradoras.</li>
+                        </ul>
+                        <div class="table-wrapper">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Nível</th>
+                                        <th>Efeito</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Permite se criar objetos pequenos e comuns.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Pode criar objetos médios, com porte máximo de um ser humano.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Pode criar objetos grandes, com grande poder.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Pode criar objetos extraordinários, respeitando os limites do sistema.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3>Engenharia reversa</h3>
+                        <p>Consegue estudar um dispositivo ou mecanismo para compreender seu funcionamento.</p>
+
+                        <h3>Desconto de Alcance</h3>
+                        <p>Você tem 50% de desconto na categoria de Alcance na criação de ataques</p>
+
+                        <h3>Magia Acelerada</h3>
+                        <p>Você pode realizar um feitiço como ação bônus, em vez de usar sua ação normal. Só pode ser
+                            usada uma vez por batalha.</p>
+
+                        <h3>Aprimoramento de Equipamentos</h3>
+                        <p>Permite modificar equipamentos existentes, concedendo propriedades especiais ou
+                            melhorando eles. Gasta 1 Ponto de Criação.</p>
+
+                        <h3>Mini Dispositivos</h3>
+                        <p>Escolha 1 pequeno dispositivo especial. Ele pode ser usado como uma Ação Bônus em uma
+                            batalha. Você pode falar com o DM para criar um dispositivo customizado. Ao usar um
+                            dispositivo, ele não pode ser usado novamente até um descanso.</p>
+                        <p>Alguns EXEMPLOS:</p>
+                        <div class="table-wrapper">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Dispositivo</th>
+                                        <th>Efeito</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Campo de força</td>
+                                        <td>Cria um escudo que bloqueia ataques. A barreira tem 4m de largura e
+                                            altura e 30 de vida.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Propulsão emergencial</td>
+                                        <td>Joga você 6m para a frente.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Maleta armada</td>
+                                        <td>Joga uma maleta que se transforma em uma torreta e atira em quem
+                                            estiver a 6m dela, causando 5d2 de dano. A maleta tem 15 de vida.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Torreta absorvedora</td>
+                                        <td>Absorve 50% do dano que você e seus aliados levarem. A torreta tem 25 de
+                                            vida.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Máquina de gás</td>
+                                        <td>Solta gás, causando envenenamento de 1d4 por 3 turnos a todos em uma
+                                            área de 2m. A máquina tem 15 de vida.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Granada</td>
+                                        <td>Causa 1d20 de dano em uma área de 3m.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Campo de Repulsão</td>
+                                        <td>Afasta todos, incluindo o usuário, em até 6m. O jogador escolhe o
+                                            alcance.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p>A diferença entre um Mini Dispositivo e uma Criação Mágica é seu poder: um Mini Dispositivo
+                            é bem mais fraco e temporário.</p>
+                        <p>No nível 2, permite escolher 3 Mini Dispositivos e levá-los para uma batalha.</p>
+
+                        <h3>Preparação de campo</h3>
+                        <p>Antes de um combate, o Artífice pode preparar mecanismos no ambiente.</p>
+                        <ul>
+                            <li>Armadilhas automatizadas.</li>
+                            <li>Torres de defesa.</li>
+                            <li>Barreiras mecânicas.</li>
+                            <li>Sensores de proximidade.</li>
+                            <li>Sistemas de iluminação e vigilância.</li>
+                        </ul>
+                        <p><span class="text-bold">Exemplos:</span> colocar uma mina que causa Lentidão; colocar uma
+                            barreira de 3m de largura.</p>
+
+                        <h3>Sobrecarga</h3>
+                        <p>Eleva o poder de uma de suas criações ao limite, aumentando seu poder drasticamente por um
+                            curto período de tempo e, depois, destruindo-a.</p>
+
+                        <h3>Gerador de Portais Avançados</h3>
+                        <p>Você adquiriu a capacidade de construir um dispositivo capaz de abrir um portal para
+                            qualquer lugar em qualquer dimensão. Essa máquina só consegue funcionar durante 5min;
+                            depois disso, ela quebra. Gasta 1 Ponto de Criação.</p>
+
+                        <h3>Simulador de Realidade</h3>
+                        <p>Cria um dispositivo capaz de criar ilusões ou até mesmo mudar a realidade.</p>
+
+                        <h3>Engenharia de combate</h3>
+                        <p>Permite recuperar 1 Ponto de Criação no começo de um combate. Se o Ponto de Criação não for
+                            usado, no final da batalha, você perde esse Ponto.</p>
+
+                        <h3>Dispositivos de Proteção Avançados</h3>
+                        <p>Você recebe 3 dispositivos. Eles recarregam a cada descanso:</p>
+                        <ul>
+                            <li><span class="text-bold">Injeção Passa Dor:</span> cura 3d6.</li>
+                            <li><span class="text-bold">Escudo Super Frágil:</span> bloqueia completamente 1 dano.</li>
+                            <li><span class="text-bold">Espelho Meio Quebrado:</span> tem 50% de chance de refletir
+                                metade do dano e 50% de chance de amplificar o dano em 50%.</li>
+                        </ul>
+
+                        <h3>Fabricação improvisada</h3>
+                        <p>Permite criar objetos simples sem usar um Ponto de Criação.</p>
+
+                        <h3>Inventor supremo</h3>
+                        <p>Desenvolve um dispositivo capaz de realizar algo considerado impossível pelas leis naturais.
+                            Não gasta 1 Ponto de Criação.</p>
+
+                    </div>
+
+                    <div id="barbaro">
+                        <h1>Bárbaro</h1>
+                    </div>
+
+                    <div id="bardo">
+                        <h1>Bardo</h1>
+                    </div>
+
+                    <div id="bruxo">
+                        <h1>Bruxo</h1>
+                    </div>
+
+                    <div id="clerigo">
+                        <h1>Clérigo</h1>
+                    </div>
+                    <div id="druida">
+                        <h1>Druida</h1>
+                    </div>
+
+                    <div id="feiticeiro">
+                        <h1>Feiticeiro</h1>
+                    </div>
+
+                    <div id="guerreiro">
+                        <h1>Guerreiro</h1>
+                    </div>
+
+                    <div id="ladino">
+                        <h1>Ladino</h1>
+                    </div>
+
+                    <div id="mago">
+                        <h1>Mago</h1>
+                    </div>
+
+                    <div id="monge">
+                        <h1>Monge</h1>
+                    </div>
+
+                    <div id="paladino">
+                        <h1>Paladino</h1>
                     </div>
                 </div>
             </main>
